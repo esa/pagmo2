@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>MINLP Rastrigin &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Luksan Vlcek 1" href="luksan_vlcek1.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -183,7 +176,7 @@
 <h1>MINLP Rastrigin<a class="headerlink" href="#minlp-rastrigin" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo15minlp_rastriginE">
-<span id="pagmo::minlp_rastrigin"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin"></span><em class="property">struct </em><code class="descclassname">pagmo::</code><code class="descname">minlp_rastrigin</code><a class="headerlink" href="#_CPPv2N5pagmo15minlp_rastriginE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin"></span><span class="target" id="structpagmo_1_1minlp__rastrigin"></span><em class="property">struct </em><code class="descclassname">pagmo::</code><code class="descname">minlp_rastrigin</code><a class="headerlink" href="#_CPPv2N5pagmo15minlp_rastriginE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A MINLP version of the Rastrigin problem. </p>
 <p><img alt="../../../_images/rastrigin.png" src="../../../_images/rastrigin.png" /></p>
 <p>This is a scalable, box-constrained, mixed integer nonlinear programmng (MINLP) problem. The objective function is the generalised n-dimensional Rastrigin function: <div class="math">
@@ -199,7 +192,7 @@
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv2N5pagmo15minlp_rastrigin15minlp_rastriginEjj">
-<span id="pagmo::minlp_rastrigin::minlp_rastrigin__unsigned.unsigned"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1a35b77e6da745be89755c3320c98abf6f"></span><code class="descname">minlp_rastrigin</code><span class="sig-paren">(</span>unsigned <em>dim_c</em> = 1u, unsigned <em>dim_i</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo15minlp_rastrigin15minlp_rastriginEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::minlp_rastrigin__unsigned.unsigned"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1a35b77e6da745be89755c3320c98abf6f"></span><code class="descname">minlp_rastrigin</code><span class="sig-paren">(</span>unsigned <em>dim_c</em> = 1u, unsigned <em>dim_i</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo15minlp_rastrigin15minlp_rastriginEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from continuous and integer dimension. </p>
 <p>Constructs a MINLP Rastrigin problem.</p>
 <p><dl class="docutils">
@@ -220,7 +213,7 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin7fitnessERK13vector_double">
-<span id="pagmo::minlp_rastrigin::fitness__vector_doubleCRC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1afb3f3712d13544378bd42b4c228aa6c9"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1afb3f3712d13544378bd42b4c228aa6c9"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP.</p>
 <p><dl class="docutils">
@@ -237,7 +230,7 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin10get_boundsEv">
-<span id="pagmo::minlp_rastrigin::get_boundsC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1a3f53fd55a0c52a45a7917938a9d85d72"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::get_boundsC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1a3f53fd55a0c52a45a7917938a9d85d72"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
 <p><dl class="docutils">
@@ -249,7 +242,7 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin7get_nixEv">
-<span id="pagmo::minlp_rastrigin::get_nixC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1a0e03d6605987c0ec551d6c8c990b2443"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::get_nixC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1a0e03d6605987c0ec551d6c8c990b2443"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Integer dimension. </p>
 <p>It returns the integer dimension of the problem.</p>
 <p><dl class="docutils">
@@ -261,10 +254,10 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin8gradientERK13vector_double">
-<span id="pagmo::minlp_rastrigin::gradient__vector_doubleCRC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1a5a4a87d43ef6e8961067663ea7fe550d"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1a5a4a87d43ef6e8961067663ea7fe550d"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradients. </p>
 <p>It returns the fitness gradient for this UDP.</p>
-<p>The gradient is represented in a sparse form as required by <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem_1a3fb8d8bb7b34477509eb9df3cd7b6e2e"><span class="std std-ref">problem::gradient()</span></a>.</p>
+<p>The gradient is represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a3fb8d8bb7b34477509eb9df3cd7b6e2e"><span class="std std-ref">problem::gradient()</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the gradient of the fitness function </dd>
@@ -279,10 +272,10 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin8hessiansERK13vector_double">
-<span id="pagmo::minlp_rastrigin::hessians__vector_doubleCRC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1a2b3a321109f2ec366b4ab1de9555d569"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::hessians__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1a2b3a321109f2ec366b4ab1de9555d569"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians. </p>
 <p>It returns the hessians for this UDP.</p>
-<p>The hessians are represented in a sparse form as required by <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem_1a5ccf5719ef8d91d53599fba84cdb1674"><span class="std std-ref">problem::hessians()</span></a>.</p>
+<p>The hessians are represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a5ccf5719ef8d91d53599fba84cdb1674"><span class="std std-ref">problem::hessians()</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the hessians of the fitness function </dd>
@@ -297,10 +290,10 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin17hessians_sparsityEv">
-<span id="pagmo::minlp_rastrigin::hessians_sparsityC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1ae0a44206f8f9864f97b08f59565c705b"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::hessians_sparsityC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1ae0a44206f8f9864f97b08f59565c705b"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians sparsity (only the diagonal elements are non zero) </p>
 <p>It returns the hessian sparisty structure for this UDP.</p>
-<p>The hessian sparisty is represented in the form required by <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a>.</p>
+<p>The hessian sparisty is represented in the form required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the hessians of the fitness function </dd>
@@ -310,7 +303,7 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin8get_nameEv">
-<span id="pagmo::minlp_rastrigin::get_nameC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1ab37891deab308e40cd190ca98263c891"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::get_nameC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1ab37891deab308e40cd190ca98263c891"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -321,7 +314,7 @@
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo15minlp_rastrigin14get_extra_infoEv">
-<span id="pagmo::minlp_rastrigin::get_extra_infoC"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1aa4b061ee406d72583e3199251bb5391e"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::get_extra_infoC"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1aa4b061ee406d72583e3199251bb5391e"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo15minlp_rastrigin14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -334,7 +327,7 @@
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo15minlp_rastrigin9serializeER7Archive">
-<span id="pagmo::minlp_rastrigin::serialize__ArchiveR"></span><span class="target" id="pagmostructpagmo_1_1minlp__rastrigin_1a9adc1c63582224436110874ea4a291af"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo15minlp_rastrigin9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::minlp_rastrigin::serialize__ArchiveR"></span><span class="target" id="structpagmo_1_1minlp__rastrigin_1a9adc1c63582224436110874ea4a291af"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo15minlp_rastrigin9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">
@@ -370,7 +363,7 @@
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

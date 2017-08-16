@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Problem class &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Algorithm class" href="py_algorithm.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -271,22 +264,22 @@ full list of UDPs already coded in pygmo).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>udp</strong> &#8211; a user-defined problem (either C++ or Python - note that <em>udp</em> will be deep-copied
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>udp</strong> – a user-defined problem (either C++ or Python - note that <em>udp</em> will be deep-copied
 and stored inside the <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> instance)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if <em>udp</em> does not implement the mandatory methods detailed above</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; in the following cases:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if <em>udp</em> does not implement the mandatory methods detailed above</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – in the following cases:<ul>
 <li>the number of objectives of the UDP is zero,</li>
 <li>the number of objectives, equality or inequality constraints is larger than an implementation-defined value,</li>
 <li>the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
 different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),</li>
 <li>the <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> and <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> methods of the UDP fail basic sanity checks
-(e.g., they return vectors with repeated indices, they contain indices exceeding the problem&#8217;s dimensions, etc.)</li>
+(e.g., they return vectors with repeated indices, they contain indices exceeding the problem’s dimensions, etc.)</li>
 </ul>
 </li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
 <li>methods of the UDP invoked during construction,</li>
 <li>the deep copy of the UDP,</li>
 <li>the constructor of the underlying C++ class,</li>
@@ -317,9 +310,9 @@ construction.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, the size of the input array differs from the number
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if, when setting this property, the size of the input array differs from the number
 of constraints of the problem or if any element of the array is negative or NaN</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -338,11 +331,11 @@ the internal user-defined problem will be returned. Otherwise, <code class="docu
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) &#8211; the type of the user-defined problem to extract</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) – the type of the user-defined problem to extract</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined problem if it is of type <em>t</em>, or <code class="docutils literal"><span class="pre">None</span></code> otherwise</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>t</em> is not a type</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>t</em> is not a type</td>
 </tr>
 </tbody>
 </table>
@@ -357,13 +350,13 @@ the internal user-defined problem will be returned. Otherwise, <code class="docu
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>array-like object</em>) &#8211; a fitness vector</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>array-like object</em>) – a fitness vector</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if the fitness vector is feasible, <code class="docutils literal"><span class="pre">False</span></code> otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the size of <em>f</em> is not the same as the output of
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the size of <em>f</em> is not the same as the output of
 <a class="reference internal" href="#pygmo.problem.get_nf" title="pygmo.problem.get_nf"><code class="xref py py-func docutils literal"><span class="pre">get_nf()</span></code></a></td>
 </tr>
 </tbody>
@@ -380,13 +373,13 @@ the tolerances returned by <a class="reference internal" href="#pygmo.problem.c_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dv</strong> (<em>array-like object</em>) &#8211; a decision vector</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dv</strong> (<em>array-like object</em>) – a decision vector</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if <em>x</em> results in a feasible fitness, <code class="docutils literal"><span class="pre">False</span></code> otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="#pygmo.problem.feasibility_f" title="pygmo.problem.feasibility_f"><code class="xref py py-func docutils literal"><span class="pre">feasibility_f()</span></code></a> or
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.problem.feasibility_f" title="pygmo.problem.feasibility_f"><code class="xref py py-func docutils literal"><span class="pre">feasibility_f()</span></code></a> or
 <a class="reference internal" href="#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">fitness()</span></code></a></td>
 </tr>
 </tbody>
@@ -412,7 +405,7 @@ return the fitness vector as an iterable Python object (e.g., 1D NumPy array, li
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) &#8211; the decision vector (chromosome) to be evaluated</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) – the decision vector (chromosome) to be evaluated</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the fitness of <em>dv</em></p>
@@ -422,9 +415,9 @@ return the fitness vector as an iterable Python object (e.g., 1D NumPy array, li
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
 the length of the returned fitness vector differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nf" title="pygmo.problem.get_nf"><code class="xref py py-func docutils literal"><span class="pre">get_nf()</span></code></a></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, or by failures at the intersection
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">fitness()</span></code> method of the UDP, or by failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -451,7 +444,7 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">tuple</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the invoked method of the underlying C++ class, or failures at the
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the invoked method of the underlying C++ class, or failures at the
 intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -461,7 +454,7 @@ intersection between C++ and Python (e.g., type conversion errors, mismatched fu
 <dl class="method">
 <dt id="pygmo.problem.get_extra_info">
 <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_extra_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Problem&#8217;s extra info.</p>
+<dd><p>Problem’s extra info.</p>
 <p>If the UDP provides a <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code>
 method. Otherwise, an empty string will be returned.</p>
 <p>The <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
@@ -473,7 +466,7 @@ method. Otherwise, an empty string will be returned.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDP</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDP</td>
 </tr>
 </tbody>
 </table>
@@ -539,7 +532,7 @@ reset. Copy operations copy the counter as well.</p>
 <dl class="method">
 <dt id="pygmo.problem.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Problem&#8217;s name.</p>
+<dd><p>Problem’s name.</p>
 <p>If the UDP provides a <code class="docutils literal"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method.
 Otherwise, an implementation-defined name based on the type of the UDP will be returned.</p>
 <p>The <code class="docutils literal"><span class="pre">get_name()</span></code> method of the UDP must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
@@ -547,7 +540,7 @@ Otherwise, an implementation-defined name based on the type of the UDP will be r
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the problem&#8217;s name</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the problem’s name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
 </tr>
@@ -709,7 +702,7 @@ the bounds returned by <a class="reference internal" href="#pygmo.problem.get_bo
 <dl class="method">
 <dt id="pygmo.problem.get_thread_safety">
 <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_thread_safety" title="Permalink to this definition">¶</a></dt>
-<dd><p>Problem&#8217;s thread safety level.</p>
+<dd><p>Problem’s thread safety level.</p>
 <p>This method will return a value of the enum <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a> which indicates the thread safety level
 of the UDP. Unlike in C++, in Python it is not possible to re-implement this method in the UDP. That is, for C++
 UDPs, the returned value will be the value returned by the <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method of the UDP. For Python
@@ -748,7 +741,7 @@ list, tuple, etc.).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) &#8211; the decision vector whose gradient will be computed</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) – the decision vector whose gradient will be computed</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the gradient of <em>dv</em></p>
@@ -758,11 +751,11 @@ list, tuple, etc.).</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
 the returned gradient vector does not have the same size as the vector returned by
 <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal"><span class="pre">gradient_sparsity()</span></code></a></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">gradient()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP, or by failures at the intersection
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDP does not provide a <code class="docutils literal"><span class="pre">gradient()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">gradient()</span></code> method of the UDP, or by failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -798,7 +791,7 @@ containing each exactly 2 elements representing the indices <span class="math">\
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; in the following cases:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – in the following cases:<ul>
 <li>the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
 shape, dimensions, etc.),</li>
 <li>at least one element of the returned iterable Python object does not consist of a collection of exactly
@@ -808,9 +801,9 @@ or if the indices in the pattern are incompatible with the properties of the pro
 returned pattern is different from the size recorded upon construction)</li>
 </ul>
 </li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the NumPy array returned by the UDP contains integer values which are negative or outside an
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the NumPy array returned by the UDP contains integer values which are negative or outside an
 implementation-defined range</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
 <li>the underlying C++ function,</li>
 <li>the <code class="docutils literal"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API,</li>
 <li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
@@ -993,7 +986,7 @@ array, and it must return the hessians vector as an iterable Python object (e.g.
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) &#8211; the decision vector whose hessians will be computed</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dv</strong> (<em>array-like object</em>) – the decision vector whose hessians will be computed</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the hessians of <em>dv</em></p>
@@ -1003,11 +996,11 @@ array, and it must return the hessians vector as an iterable Python object (e.g.
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal"><span class="pre">get_nx()</span></code></a>, or
 the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions, or
 the size of the return value is not equal to the fitness dimension</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">hessians()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP, or by failures at the intersection
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDP does not provide a <code class="docutils literal"><span class="pre">hessians()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">hessians()</span></code> method of the UDP, or by failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1046,7 +1039,7 @@ containing each exactly 2 elements representing the indices <span class="math">\
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; in the following cases:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – in the following cases:<ul>
 <li>the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
 shape, dimensions, etc.),</li>
 <li>at least one element of a returned iterable Python object does not consist of a collection of exactly
@@ -1056,9 +1049,9 @@ if the indices in the pattern are incompatible with the properties of the proble
 differs from the size recorded upon construction)</li>
 </ul>
 </li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
 implementation-defined range</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
 <li>the underlying C++ function,</li>
 <li>the <code class="docutils literal"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API,</li>
 <li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
@@ -1082,13 +1075,13 @@ returned. Otherwise, <code class="docutils literal"><span class="pre">False</spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) &#8211; the type of the user-defined problem to extract</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) – the type of the user-defined problem to extract</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">whether the user-defined problem is of type <em>t</em> or not</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>t</em> is not a type</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>t</em> is not a type</td>
 </tr>
 </tbody>
 </table>
@@ -1113,13 +1106,13 @@ The <em>seed</em> parameter must be non-negative.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the desired seed value</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the desired seed value</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDP does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>seed</em> is negative</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDP or failures at the intersection
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDP does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>seed</em> is negative</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDP or failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1145,7 +1138,7 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

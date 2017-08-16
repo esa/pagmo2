@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Archipelago &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Island" href="island.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -183,23 +176,23 @@
 <h1>Archipelago<a class="headerlink" href="#archipelago" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo11archipelagoE">
-<span id="pagmo::archipelago"></span><span class="target" id="pagmoclasspagmo_1_1archipelago"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">archipelago</code><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago"></span><span class="target" id="classpagmo_1_1archipelago"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">archipelago</code><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Archipelago. </p>
 <p><img alt="../../_images/archi_no_text.png" src="../../_images/archi_no_text.png" /></p>
-<p>An archipelago is a collection of <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> objects which provides a convenient way to perform multiple optimisations in parallel.</p>
-<p>The interface of <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a> mirrors partially the interface of <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>: the evolution is initiated by a call to <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abc5387cdb2d4ed095ceb25b2d114d61e"><span class="std std-ref">evolve()</span></a>, and at any time the user can query the state of the archipelago and access its island members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a> methods. The status of ongoing evolutions in the archipelago can be queried via <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a>. </p>
+<p>An archipelago is a collection of <a class="reference internal" href="island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> objects which provides a convenient way to perform multiple optimisations in parallel.</p>
+<p>The interface of <a class="reference internal" href="#classpagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a> mirrors partially the interface of <a class="reference internal" href="island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>: the evolution is initiated by a call to <a class="reference internal" href="#classpagmo_1_1archipelago_1abc5387cdb2d4ed095ceb25b2d114d61e"><span class="std std-ref">evolve()</span></a>, and at any time the user can query the state of the archipelago and access its island members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a> and <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a> methods. The status of ongoing evolutions in the archipelago can be queried via <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv2N5pagmo11archipelago9size_typeE">
-<span class="target" id="pagmoclasspagmo_1_1archipelago_1a16b60eff7da09b3bda3dffd4259250c3"></span><em class="property">using </em><code class="descname">size_type</code> = size_type_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="classpagmo_1_1archipelago_1a16b60eff7da09b3bda3dffd4259250c3"></span><em class="property">using </em><code class="descname">size_type</code> = size_type_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The size type of the archipelago. </p>
 <p>This is an unsigned integer type used to represent the number of islands in the archipelago. </p>
 </dd></dl>
 
 <dl class="type">
 <dt id="_CPPv2N5pagmo11archipelago8iteratorE">
-<span class="target" id="pagmoclasspagmo_1_1archipelago_1a39b9c4cae4e003a89ec3fbbaa59b8bad"></span><em class="property">using </em><code class="descname">iterator</code> = iterator_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="classpagmo_1_1archipelago_1a39b9c4cae4e003a89ec3fbbaa59b8bad"></span><em class="property">using </em><code class="descname">iterator</code> = iterator_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable iterator. </p>
 <p>Dereferencing a mutable iterator will yield a reference to an island within the archipelago.</p>
 <p><div class="admonition note">
@@ -212,7 +205,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="type">
 <dt id="_CPPv2N5pagmo11archipelago14const_iteratorE">
-<span class="target" id="pagmoclasspagmo_1_1archipelago_1ab79f78f4f56b0261aca7faae2e640506"></span><em class="property">using </em><code class="descname">const_iterator</code> = const_iterator_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="classpagmo_1_1archipelago_1ab79f78f4f56b0261aca7faae2e640506"></span><em class="property">using </em><code class="descname">const_iterator</code> = const_iterator_implementation<a class="headerlink" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const iterator. </p>
 <p>Dereferencing a const iterator will yield a const reference to an island within the archipelago. </p>
 </dd></dl>
@@ -222,16 +215,16 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago11archipelagoEv">
-<span id="pagmo::archipelago::archipelago"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a6e4c9432ed87fae29c2d48fd16db9165"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::archipelago"></span><span class="target" id="classpagmo_1_1archipelago_1a6e4c9432ed87fae29c2d48fd16db9165"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor will initialise an empty archipelago. </p>
 </dd></dl>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago11archipelagoERK11archipelago">
-<span id="pagmo::archipelago::archipelago__archipelagoCR"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a3714536daa6bd185cf0cb4582eac6524"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11archipelago11archipelagoEv" title="pagmo::archipelago::archipelago">archipelago</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::archipelago__archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1a3714536daa6bd185cf0cb4582eac6524"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11archipelago11archipelagoEv" title="pagmo::archipelago::archipelago">archipelago</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy constructor. </p>
-<p>The islands of <code class="docutils literal"><span class="pre">other</span></code> will be copied into <code class="docutils literal"><span class="pre">this</span></code> via <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">archipelago::push_back()</span></a>.</p>
+<p>The islands of <code class="docutils literal"><span class="pre">other</span></code> will be copied into <code class="docutils literal"><span class="pre">this</span></code> via <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">archipelago::push_back()</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -240,7 +233,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">archipelago::push_back()</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">archipelago::push_back()</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -249,7 +242,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago11archipelagoERR11archipelago">
-<span id="pagmo::archipelago::archipelago__archipelagoRR"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a952b51bc7315f77bd62451e1d3e6ef48"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago11archipelagoEv" title="pagmo::archipelago::archipelago">archipelago</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::archipelago__archipelagoRR"></span><span class="target" id="classpagmo_1_1archipelago_1a952b51bc7315f77bd62451e1d3e6ef48"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago11archipelagoEv" title="pagmo::archipelago::archipelago">archipelago</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move constructor. </p>
 <p>The move constructor will wait for any ongoing evolution in <code class="docutils literal"><span class="pre">other</span></code> to finish and it will then transfer the state of <code class="docutils literal"><span class="pre">other</span></code> into <code class="docutils literal"><span class="pre">this</span></code>. After the move, <code class="docutils literal"><span class="pre">other</span></code> is left in an unspecified but valid state.</p>
 <p><dl class="docutils">
@@ -264,9 +257,9 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt>
-<em class="property">template </em>&lt;typename... <em>Args</em>, n_ctor_enabler&lt; Args... &gt; = 0&gt;</dt>
+<em class="property">template </em>&lt;typename… <em>Args</em>, n_ctor_enabler&lt; Args… &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo11archipelago11archipelagoE9size_typeDpRR4Args">
-<span id="pagmo::archipelago::archipelago__size_type.ArgsRRDp"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a5c8be76058879b8ee6391383d1b8841d"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>n</em>, Args&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoE9size_typeDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::archipelago__size_type.ArgsRRDp"></span><span class="target" id="classpagmo_1_1archipelago_1a5c8be76058879b8ee6391383d1b8841d"></span><code class="descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>n</em>, Args&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago11archipelagoE9size_typeDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from <code class="docutils literal"><span class="pre">n</span></code> islands. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -274,7 +267,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 can be used to construct a <a class="reference internal" href="island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::island</span></code></a>.</p>
 </div>
 </p>
-<p>This constructor will forward <code class="docutils literal"><span class="pre">n</span></code> times the input arguments <code class="docutils literal"><span class="pre">args</span></code> to the <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> method. If, however, the parameter pack contains an argument which would be interpreted as a seed by the invoked island constructor, then this seed will be used to initialise a random number generator that in turn will be used to generate the seeds of populations of the islands that will be created within the archipelago. In other words, passing a seed argument to this constructor will not generate <code class="docutils literal"><span class="pre">n</span></code> islands with the same seed, but <code class="docutils literal"><span class="pre">n</span></code> islands whose population seeds have been randomly generated starting from the supplied seed argument.</p>
+<p>This constructor will forward <code class="docutils literal"><span class="pre">n</span></code> times the input arguments <code class="docutils literal"><span class="pre">args</span></code> to the <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> method. If, however, the parameter pack contains an argument which would be interpreted as a seed by the invoked island constructor, then this seed will be used to initialise a random number generator that in turn will be used to generate the seeds of populations of the islands that will be created within the archipelago. In other words, passing a seed argument to this constructor will not generate <code class="docutils literal"><span class="pre">n</span></code> islands with the same seed, but <code class="docutils literal"><span class="pre">n</span></code> islands whose population seeds have been randomly generated starting from the supplied seed argument.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -284,7 +277,7 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the invoked <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> constructor or by <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">archipelago::push_back()</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the invoked <a class="reference internal" href="island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> constructor or by <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">archipelago::push_back()</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -293,7 +286,7 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelagoaSERK11archipelago">
-<span id="pagmo::archipelago::assign-operator__archipelagoCR"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1aaa5877175144ba994bd8f6b97047955c"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoaSERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::assign-operator__archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1aaa5877175144ba994bd8f6b97047955c"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoaSERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy assignment. </p>
 <p>Copy assignment is implemented as copy construction followed by a move assignment.</p>
 <p><dl class="docutils">
@@ -315,7 +308,7 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelagoaSERR11archipelago">
-<span id="pagmo::archipelago::assign-operator__archipelagoRR"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a2a738805a710aef5a425b3440d6cde2d"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoaSERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::assign-operator__archipelagoRR"></span><span class="target" id="classpagmo_1_1archipelago_1a2a738805a710aef5a425b3440d6cde2d"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoaSERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move assignment. </p>
 <p>Move assignment will transfer the state of <code class="docutils literal"><span class="pre">other</span></code> into <code class="docutils literal"><span class="pre">this</span></code>, after any ongoing evolution in <code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">other</span></code> has finished.</p>
 <p><dl class="docutils">
@@ -332,16 +325,16 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelagoD0Ev">
-<span id="pagmo::archipelago::~archipelago"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a61c915ffa4616a3afe8b802d04db99ff"></span><code class="descname">~archipelago</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::~archipelago"></span><span class="target" id="classpagmo_1_1archipelago_1a61c915ffa4616a3afe8b802d04db99ff"></span><code class="descname">~archipelago</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Destructor. </p>
-<p>The destructor will call <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">archipelago::wait_check()</span></a> internally, ignoring any exception that might be thrown, and run checks in debug mode. </p>
+<p>The destructor will call <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">archipelago::wait_check()</span></a> internally, ignoring any exception that might be thrown, and run checks in debug mode. </p>
 </dd></dl>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelagoixE9size_type">
-<span id="pagmo::archipelago::subscript-operator__size_type"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a75b4c35b9985c6d6752d9fa9f0c1f1c5"></span><a class="reference internal" href="island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::subscript-operator__size_type"></span><span class="target" id="classpagmo_1_1archipelago_1a75b4c35b9985c6d6752d9fa9f0c1f1c5"></span><a class="reference internal" href="island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable island access. </p>
-<p>This subscript operator can be used to access the <code class="docutils literal"><span class="pre">i</span></code>-th island of the archipelago (that is, the <code class="docutils literal"><span class="pre">i</span></code>-th island that was inserted via <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a>). References returned by this method are valid even after a <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> invocation. Assignment and destruction of the archipelago will invalidate island references obtained via this method.</p>
+<p>This subscript operator can be used to access the <code class="docutils literal"><span class="pre">i</span></code>-th island of the archipelago (that is, the <code class="docutils literal"><span class="pre">i</span></code>-th island that was inserted via <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a>). References returned by this method are valid even after a <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> invocation. Assignment and destruction of the archipelago will invalidate island references obtained via this method.</p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The mutable version of the subscript operator exists solely to allow calling non-const methods
@@ -368,9 +361,9 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelagoixE9size_type">
-<span id="pagmo::archipelago::subscript-operator__size_typeC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1abd66aaa4475ca168409622e4d965d4d5"></span><em class="property">const</em> <a class="reference internal" href="island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::subscript-operator__size_typeC"></span><span class="target" id="classpagmo_1_1archipelago_1abd66aaa4475ca168409622e4d965d4d5"></span><em class="property">const</em> <a class="reference internal" href="island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const island access. </p>
-<p>This subscript operator can be used to access the <code class="docutils literal"><span class="pre">i</span></code>-th island of the archipelago (that is, the <code class="docutils literal"><span class="pre">i</span></code>-th island that was inserted via <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a>). References returned by this method are valid even after a <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> invocation. Assignment and destruction of the archipelago will invalidate island references obtained via this method.</p>
+<p>This subscript operator can be used to access the <code class="docutils literal"><span class="pre">i</span></code>-th island of the archipelago (that is, the <code class="docutils literal"><span class="pre">i</span></code>-th island that was inserted via <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a>). References returned by this method are valid even after a <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> invocation. Assignment and destruction of the archipelago will invalidate island references obtained via this method.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a const reference to the <code class="docutils literal"><span class="pre">i</span></code>-th island of the archipelago.</dd>
@@ -390,7 +383,7 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelago4sizeEv">
-<span id="pagmo::archipelago::sizeC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <code class="descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::sizeC"></span><span class="target" id="classpagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <code class="descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Size. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -401,9 +394,9 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt>
-<em class="property">template </em>&lt;typename... <em>Args</em>, push_back_enabler&lt; Args... &gt; = 0&gt;</dt>
+<em class="property">template </em>&lt;typename… <em>Args</em>, push_back_enabler&lt; Args… &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo11archipelago9push_backEDpRR4Args">
-<span id="pagmo::archipelago::push_back__ArgsRRDp"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"></span>void <code class="descname">push_back</code><span class="sig-paren">(</span>Args&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago9push_backEDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::push_back__ArgsRRDp"></span><span class="target" id="classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"></span>void <code class="descname">push_back</code><span class="sig-paren">(</span>Args&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago9push_backEDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add island. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -411,7 +404,7 @@ in undefined behaviour.</p>
 can be used to construct a <a class="reference internal" href="island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::island</span></code></a>.</p>
 </div>
 </p>
-<p>This method will construct an island from the supplied arguments and add it to the archipelago. Islands are added at the end of the archipelago (that is, the new island will have an index equal to the value of <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> before the call to this method).</p>
+<p>This method will construct an island from the supplied arguments and add it to the archipelago. Islands are added at the end of the archipelago (that is, the new island will have an index equal to the value of <a class="reference internal" href="#classpagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> before the call to this method).</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -420,7 +413,7 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory allocation errors or by the invoked constructor of <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory allocation errors or by the invoked constructor of <a class="reference internal" href="island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -429,18 +422,18 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago6evolveEj">
-<span id="pagmo::archipelago::evolve__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1abc5387cdb2d4ed095ceb25b2d114d61e"></span>void <code class="descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::evolve__unsigned"></span><span class="target" id="classpagmo_1_1archipelago_1abc5387cdb2d4ed095ceb25b2d114d61e"></span>void <code class="descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve archipelago. </p>
-<p>This method will call <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> on all the islands of the archipelago. The input parameter <code class="docutils literal"><span class="pre">n</span></code> will be passed to the invocations of <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> for each island. <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">archipelago::status()</span></a> can be used to query the status of the asynchronous operations in the archipelago.</p>
+<p>This method will call <a class="reference internal" href="island.html#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> on all the islands of the archipelago. The input parameter <code class="docutils literal"><span class="pre">n</span></code> will be passed to the invocations of <a class="reference internal" href="island.html#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> for each island. <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">archipelago::status()</span></a> can be used to query the status of the asynchronous operations in the archipelago.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the parameter that will be passed to <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a>.</li>
+<li><code class="docutils literal"><span class="pre">n</span></code>: the parameter that will be passed to <a class="reference internal" href="island.html#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a>.</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="island.html#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -449,21 +442,21 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago4waitEv">
-<span id="pagmo::archipelago::wait"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"></span>void <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago4waitEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::wait"></span><span class="target" id="classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"></span>void <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago4waitEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until all evolutions have finished. </p>
-<p>This method will call <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> on all the islands of the archipelago. Exceptions thrown by island evolutions can be re-raised via <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>: they will <strong>not</strong> be re-thrown by this method. Also, contrary to <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, this method will <strong>not</strong> reset the status of the archipelago: after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>. </p>
+<p>This method will call <a class="reference internal" href="island.html#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> on all the islands of the archipelago. Exceptions thrown by island evolutions can be re-raised via <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>: they will <strong>not</strong> be re-thrown by this method. Also, contrary to <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, this method will <strong>not</strong> reset the status of the archipelago: after a call to <a class="reference internal" href="#classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>. </p>
 </dd></dl>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago10wait_checkEv">
-<span id="pagmo::archipelago::wait_check"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"></span>void <code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago10wait_checkEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::wait_check"></span><span class="target" id="classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"></span>void <code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago10wait_checkEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until all evolutions have finished and raise the first exception that was encountered. </p>
-<p>This method will call <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> on all the islands of the archipelago (following the order in which the islands were inserted into the archipelago). The first exception raised by <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> will be re-raised by this method, and all the exceptions thrown by the other calls to <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> will be ignored.</p>
-<p>Note that <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a> resets the status of the archipelago: after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>.</p>
+<p>This method will call <a class="reference internal" href="island.html#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> on all the islands of the archipelago (following the order in which the islands were inserted into the archipelago). The first exception raised by <a class="reference internal" href="island.html#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> will be re-raised by this method, and all the exceptions thrown by the other calls to <a class="reference internal" href="island.html#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> will be ignored.</p>
+<p>Note that <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a> resets the status of the archipelago: after a call to <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by any evolution task queued in the archipelago&#8217;s islands. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by any evolution task queued in the archipelago’s islands. </li>
 </ul>
 </dd>
 </dl>
@@ -472,17 +465,17 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelago6statusEv">
-<span id="pagmo::archipelago::statusC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"></span><a class="reference internal" href="island.html#_CPPv2N5pagmo13evolve_statusE" title="pagmo::evolve_status">evolve_status</a> <code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago6statusEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::statusC"></span><span class="target" id="classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"></span><a class="reference internal" href="island.html#_CPPv2N5pagmo13evolve_statusE" title="pagmo::evolve_status">evolve_status</a> <code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago6statusEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Status of the archipelago. </p>
-<p>This method will return a <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43af"><span class="std std-ref">pagmo::evolve_status</span></a> flag indicating the current status of asynchronous operations in the archipelago. The flag will be:</p>
+<p>This method will return a <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43af"><span class="std std-ref">pagmo::evolve_status</span></a> flag indicating the current status of asynchronous operations in the archipelago. The flag will be:</p>
 <p><ul class="simple">
-<li><a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> if, for all the islands in the archipelago, <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>;</li>
-<li><a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a> if, for at least one island in the archipelago, <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a>, and for no island <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns an error status;</li>
-<li><a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a> if no island in the archipelago is busy and for at least one island <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>;</li>
-<li><a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"><span class="std std-ref">evolve_status::busy_error</span></a> if, for at least one island in the archipelago, <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns an error status and at least one island is busy.</li>
+<li><a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> if, for all the islands in the archipelago, <a class="reference internal" href="island.html#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>;</li>
+<li><a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a> if, for at least one island in the archipelago, <a class="reference internal" href="island.html#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a>, and for no island <a class="reference internal" href="island.html#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns an error status;</li>
+<li><a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a> if no island in the archipelago is busy and for at least one island <a class="reference internal" href="island.html#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>;</li>
+<li><a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"><span class="std std-ref">evolve_status::busy_error</span></a> if, for at least one island in the archipelago, <a class="reference internal" href="island.html#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> returns an error status and at least one island is busy.</li>
 </ul>
 </p>
-<p>Note that after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>, and after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="island.html#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>.</p>
+<p>Note that after a call to <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>, and after a call to <a class="reference internal" href="#classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a flag indicating the current status of asynchronous operations in the archipelago. </dd>
@@ -492,9 +485,9 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago5beginEv">
-<span id="pagmo::archipelago::begin"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a3ba80d233c2d080280c61d207d12ce79"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::begin"></span><span class="target" id="classpagmo_1_1archipelago_1a3ba80d233c2d080280c61d207d12ce79"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable begin iterator. </p>
-<p>This method will return a mutable iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"><span class="std std-ref">archipelago::end()</span></a> (is <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is zero).</p>
+<p>This method will return a mutable iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#classpagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#classpagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"><span class="std std-ref">archipelago::end()</span></a> (is <a class="reference internal" href="#classpagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is zero).</p>
 <p>Adding an island to the archipelago will invalidate all existing iterators.</p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -511,7 +504,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo11archipelago3endEv">
-<span id="pagmo::archipelago::end"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::end"></span><span class="target" id="classpagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable end iterator. </p>
 <p>This method will return a mutable iterator pointing to the end of the internal island container.</p>
 <p>Adding an island to the archipelago will invalidate all existing iterators.</p>
@@ -530,9 +523,9 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelago5beginEv">
-<span id="pagmo::archipelago::beginC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a9da1d5dfadeac29db788564dedfafad4"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::beginC"></span><span class="target" id="classpagmo_1_1archipelago_1a9da1d5dfadeac29db788564dedfafad4"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const begin iterator. </p>
-<p>This method will return a const iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"><span class="std std-ref">archipelago::end() const </span></a>(is <a class="reference internal" href="#pagmoclasspagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is zero).</p>
+<p>This method will return a const iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#classpagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#classpagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"><span class="std std-ref">archipelago::end() const </span></a>(is <a class="reference internal" href="#classpagmo_1_1archipelago_1a0f5a6cf44f5b3fb6d7ad9113cab0ec6b"><span class="std std-ref">size()</span></a> is zero).</p>
 <p>Adding an island to the archipelago will invalidate all existing iterators.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -543,7 +536,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelago3endEv">
-<span id="pagmo::archipelago::endC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::endC"></span><span class="target" id="classpagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"></span><a class="reference internal" href="#_CPPv2N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const end iterator. </p>
 <p>This method will return a const iterator pointing to the end of the internal island container.</p>
 <p>Adding an island to the archipelago will invalidate all existing iterators.</p>
@@ -556,14 +549,14 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelago15get_champions_fEv">
-<span id="pagmo::archipelago::get_champions_fC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a965712f18f7b7ac9ee2243af03403e63"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_champions_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago15get_champions_fEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the fitness vectors of the islands&#8217; champions. </p>
+<span id="pagmo::archipelago::get_champions_fC"></span><span class="target" id="classpagmo_1_1archipelago_1a965712f18f7b7ac9ee2243af03403e63"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_champions_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago15get_champions_fEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the fitness vectors of the islands’ champions. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a collection of the fitness vectors of the islands&#8217; champions.</dd>
+<dd>a collection of the fitness vectors of the islands’ champions.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population_1a775980b4c4e94153e5e1f50c97681816"><span class="std std-ref">population::champion_f()</span></a> or by memory errors in standard containers. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="population.html#classpagmo_1_1population_1a775980b4c4e94153e5e1f50c97681816"><span class="std std-ref">population::champion_f()</span></a> or by memory errors in standard containers. </li>
 </ul>
 </dd>
 </dl>
@@ -572,14 +565,14 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11archipelago15get_champions_xEv">
-<span id="pagmo::archipelago::get_champions_xC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a19ec05b4c96e57a847866785e406fe14"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_champions_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago15get_champions_xEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the decision vectors of the islands&#8217; champions. </p>
+<span id="pagmo::archipelago::get_champions_xC"></span><span class="target" id="classpagmo_1_1archipelago_1a19ec05b4c96e57a847866785e406fe14"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_champions_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago15get_champions_xEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the decision vectors of the islands’ champions. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a collection of the decision vectors of the islands&#8217; champions.</dd>
+<dd>a collection of the decision vectors of the islands’ champions.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population_1a292747373029eeac75b14c57055a19c2"><span class="std std-ref">population::champion_x()</span></a> or by memory errors in standard containers. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="population.html#classpagmo_1_1population_1a292747373029eeac75b14c57055a19c2"><span class="std std-ref">population::champion_x()</span></a> or by memory errors in standard containers. </li>
 </ul>
 </dd>
 </dl>
@@ -590,7 +583,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2NK5pagmo11archipelago4saveER7Archive">
-<span id="pagmo::archipelago::save__ArchiveRC"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1a320a61e1daecbbf3c5d49ac26513459d"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::save__ArchiveRC"></span><span class="target" id="classpagmo_1_1archipelago_1a320a61e1daecbbf3c5d49ac26513459d"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11archipelago4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
 <p>This method will save to <code class="docutils literal"><span class="pre">ar</span></code> the islands of the archipelago.</p>
 <p><dl class="docutils">
@@ -601,7 +594,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of <a class="reference internal" href="island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -612,7 +605,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo11archipelago4loadER7Archive">
-<span id="pagmo::archipelago::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1ab1b3d9dd1ec96d51cdfe98d77bdad61f"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::archipelago::load__ArchiveR"></span><span class="target" id="classpagmo_1_1archipelago_1ab1b3d9dd1ec96d51cdfe98d77bdad61f"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11archipelago4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
 <p>This method will load into <code class="docutils literal"><span class="pre">this</span></code> the content of <code class="docutils literal"><span class="pre">ar</span></code>, after any ongoing evolution in <code class="docutils literal"><span class="pre">this</span></code> has finished.</p>
 <p><dl class="docutils">
@@ -623,7 +616,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of <a class="reference internal" href="island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -635,7 +628,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 <p class="breathe-sectiondef-title rubric">Friends</p>
 <dl class="function">
 <dt id="_CPPv2lsRNSt7ostreamERK11archipelago">
-<span id="lshift-operator__osR.archipelagoCR"></span><span class="target" id="pagmoclasspagmo_1_1archipelago_1ad72e76ef8f85825499b975800d9eaa07"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> archipelago &amp;<em>archi</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="lshift-operator__osR.archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1ad72e76ef8f85825499b975800d9eaa07"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> archipelago &amp;<em>archi</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Stream operator. </p>
 <p>This operator will stream to <code class="docutils literal"><span class="pre">os</span></code> a human-readable representation of the input archipelago <code class="docutils literal"><span class="pre">archi</span></code>.</p>
 <p><dl class="docutils">
@@ -651,7 +644,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
 <li>the streaming of primitive types,</li>
-<li><a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">island::get_algorithm()</span></a>, <a class="reference internal" href="island.html#pagmoclasspagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">island::get_population()</span></a>. </li>
+<li><a class="reference internal" href="island.html#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">island::get_algorithm()</span></a>, <a class="reference internal" href="island.html#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">island::get_population()</span></a>. </li>
 </ul>
 </li>
 </ul>
@@ -678,7 +671,7 @@ on the islands. Assigning an island via a mutable iterator will be undefined beh
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

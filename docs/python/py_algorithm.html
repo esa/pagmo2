@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Algorithm class &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Python Documentation" href="python_docs.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -229,13 +222,13 @@ full list of UDAs already coded in pygmo).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uda</strong> &#8211; a user-defined algorithm (either C++ or Python - note that <em>uda</em> will be deep-copied
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uda</strong> – a user-defined algorithm (either C++ or Python - note that <em>uda</em> will be deep-copied
 and stored inside the <a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> instance)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if <em>uda</em> does not implement the mandatory method detailed above</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if <em>uda</em> does not implement the mandatory method detailed above</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
 <li>methods of the UDA invoked during construction,</li>
 <li>the deep copy of the UDA,</li>
 <li>the constructor of the underlying C++ class,</li>
@@ -257,13 +250,13 @@ signatures, etc.)</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; starting population</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) – starting population</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">evolved population</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA or by failures at the
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA or by failures at the
 intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -280,11 +273,11 @@ the internal user-defined algorithm will be returned. Otherwise, <code class="do
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) &#8211; the type of the user-defined algorithm to extract</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) – the type of the user-defined algorithm to extract</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined algorithm if it is of type <em>t</em>, or <code class="docutils literal"><span class="pre">None</span></code> otherwise</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>t</em> is not a type</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>t</em> is not a type</td>
 </tr>
 </tbody>
 </table>
@@ -293,7 +286,7 @@ the internal user-defined algorithm will be returned. Otherwise, <code class="do
 <dl class="method">
 <dt id="pygmo.algorithm.get_extra_info">
 <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.get_extra_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Algorithm&#8217;s extra info.</p>
+<dd><p>Algorithm’s extra info.</p>
 <p>If the UDA provides a <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code>
 method. Otherwise, an empty string will be returned.</p>
 <p>The <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDA must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
@@ -305,7 +298,7 @@ method. Otherwise, an empty string will be returned.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDA</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDA</td>
 </tr>
 </tbody>
 </table>
@@ -314,7 +307,7 @@ method. Otherwise, an empty string will be returned.</p>
 <dl class="method">
 <dt id="pygmo.algorithm.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Algorithm&#8217;s name.</p>
+<dd><p>Algorithm’s name.</p>
 <p>If the UDA provides a <code class="docutils literal"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method.
 Otherwise, an implementation-defined name based on the type of the UDA will be returned.</p>
 <p>The <code class="docutils literal"><span class="pre">get_name()</span></code> method of the UDA must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
@@ -322,7 +315,7 @@ Otherwise, an implementation-defined name based on the type of the UDA will be r
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the algorithm&#8217;s name</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the algorithm’s name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
 </tr>
@@ -333,7 +326,7 @@ Otherwise, an implementation-defined name based on the type of the UDA will be r
 <dl class="method">
 <dt id="pygmo.algorithm.get_thread_safety">
 <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.get_thread_safety" title="Permalink to this definition">¶</a></dt>
-<dd><p>Algorithm&#8217;s thread safety level.</p>
+<dd><p>Algorithm’s thread safety level.</p>
 <p>This method will return a value of the enum <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a> which indicates the thread safety level
 of the UDA. Unlike in C++, in Python it is not possible to re-implement this method in the UDA. That is, for C++
 UDAs, the returned value will be the value returned by the <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method of the UDA. For Python
@@ -414,13 +407,13 @@ returned. Otherwise, <code class="docutils literal"><span class="pre">False</spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) &#8211; the type of the user-defined algorithm to extract</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<code class="docutils literal"><span class="pre">type</span></code>) – the type of the user-defined algorithm to extract</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">whether the user-defined algorithm is of type <em>t</em> or not</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>t</em> is not a type</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>t</em> is not a type</td>
 </tr>
 </tbody>
 </table>
@@ -444,12 +437,12 @@ raised. The <em>seed</em> parameter must be non-negative.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the random seed</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDA does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA or failures at the intersection
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA or failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -470,12 +463,12 @@ then its <code class="docutils literal"><span class="pre">set_verbosity()</span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the desired verbosity level</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the desired verbosity level</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; if the UDA does not provide a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception raised by the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA or failures at the intersection
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA or failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -501,7 +494,7 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

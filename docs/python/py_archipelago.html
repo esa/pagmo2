@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Archipelago class &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Island class" href="py_island.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -209,25 +202,25 @@ of the populations will be random and non-deterministic.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of islands in the archipelago</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of islands in the archipelago</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
-<li><strong>udi</strong> &#8211; a user-defined island (either Python or C++ - note that <em>udi</em> will be deep-copied
+<li><strong>udi</strong> – a user-defined island (either Python or C++ - note that <em>udi</em> will be deep-copied
 and stored inside the <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> instances)</li>
-<li><strong>algo</strong> &#8211; a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></li>
-<li><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; a population</li>
-<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></li>
-<li><strong>pop_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of individuals for each island</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the random seed</li>
+<li><strong>algo</strong> – a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></li>
+<li><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) – a population</li>
+<li><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></li>
+<li><strong>pop_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of individuals for each island</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed</li>
 </ul>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>n</em> is not an integral type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>n</em> is negative</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>n</em> is not an integral type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>n</em> is negative</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
 or by the underlying C++ constructor</li>
 </ul>
 </td>
@@ -296,9 +289,9 @@ archipelago.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -307,16 +300,16 @@ archipelago.</p>
 <dl class="method">
 <dt id="pygmo.archipelago.get_champions_f">
 <code class="descname">get_champions_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get_champions_f" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the fitness vectors of the islands&#8217; champions.</p>
+<dd><p>Get the fitness vectors of the islands’ champions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the fitness vectors of the islands&#8217; champions</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the fitness vectors of the islands’ champions</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float arrays</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
 mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -326,16 +319,16 @@ mismatched function signatures, etc.)</td>
 <dl class="method">
 <dt id="pygmo.archipelago.get_champions_x">
 <code class="descname">get_champions_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get_champions_x" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the decision vectors of the islands&#8217; champions.</p>
+<dd><p>Get the decision vectors of the islands’ champions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the decision vectors of the islands&#8217; champions</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the decision vectors of the islands’ champions</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float arrays</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
 mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -355,7 +348,7 @@ equal to the size of the archipelago before the call to this method).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> or by
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> or by
 the underlying C++ method</td>
 </tr>
 </tbody>
@@ -419,7 +412,7 @@ always return <a class="reference internal" href="py_misc.html#pygmo.evolve_stat
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by any evolution task queued in the archipelago&#8217;s
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by any evolution task queued in the archipelago’s
 islands</td>
 </tr>
 </tbody>
@@ -443,7 +436,7 @@ islands</td>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

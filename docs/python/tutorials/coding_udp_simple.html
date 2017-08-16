@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Coding a simple User Defined Problem &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Evolving a population" href="evolving_a_population.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -186,7 +179,7 @@
   <div class="section" id="coding-a-simple-user-defined-problem">
 <span id="py-tutorial-coding-udp-simple"></span><h1>Coding a simple User Defined Problem<a class="headerlink" href="#coding-a-simple-user-defined-problem" title="Permalink to this headline">¶</a></h1>
 <p>While pagmo provides a number of UDPs (see <a class="reference internal" href="../../problem_list.html#problems"><span class="std std-ref">List of problems (UDPs) available in pagmo/pygmo</span></a>) to help you test your own optimization strategy or user defined algorithm, the possibility
-to write your own UDP is at the core of pygmo&#8217;s use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used
+to write your own UDP is at the core of pygmo’s use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used
 to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> can solve. See <a class="reference internal" href="using_algorithm.html#py-tutorial-using-algorithm"><span class="std std-ref">Use of the class algorithm</span></a> and
 <a class="reference internal" href="using_problem.html#py-tutorial-using-problem"><span class="std std-ref">Use of the class problem</span></a> to learn the use of these core classes.</p>
 <p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to have a detailed list of methods that can be, or have to be,
@@ -213,8 +206,8 @@ will be inferred by the return value of the second, while the actual fitness of 
 and passing as argument <code class="docutils literal"><span class="pre">x</span></code> as a NumPy array. It is important to remember that <code class="docutils literal"><span class="pre">x</span></code> is a NumPy array, so that the NumPy
 array arithmetic applies in the body of <code class="docutils literal"><span class="pre">fitness()</span></code>. Note also how to define a UDP we do not need to inherit from some other
 pygmo related class.  Since we do not define, in this case, any other method pygmo will assume a single objective, no constraints,
-no gradients etc...</p>
-<p>Let&#8217;s now build a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from our new UDP.</p>
+no gradients etc…</p>
+<p>Let’s now build a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from our new UDP.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">sphere_function</span><span class="p">())</span>
 </pre></div>
@@ -241,7 +234,7 @@ no gradients etc...</p>
 <span class="go">    Thread safety: none</span>
 </pre></div>
 </div>
-<p>Let&#8217;s now add some (mild) complexity. We want our UDP to be scalable:</p>
+<p>Let’s now add some (mild) complexity. We want our UDP to be scalable:</p>
 <div class="math">
 \[\begin{split}\begin{array}{ll}
   \mbox{minimize: } &amp; \sum_i x_i^2 \\
@@ -288,7 +281,7 @@ no gradients etc...</p>
 <span class="go">    Dimensions: 3</span>
 </pre></div>
 </div>
-<p>Well that was easy, but now have a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to solve ...</p>
+<p>Well that was easy, but now have a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to solve …</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">bee_colony</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
@@ -300,7 +293,7 @@ no gradients etc...</p>
 <div class="section" id="possible-pitfalls">
 <h2>Possible pitfalls<a class="headerlink" href="#possible-pitfalls" title="Permalink to this headline">¶</a></h2>
 <p>Well that was nice as it worked like a charm. But the UDP can also be a rather complex class and the chances
-that it is somehow malformed are high. Let&#8217;s see some common mistakes.</p>
+that it is somehow malformed are high. Let’s see some common mistakes.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)]</span>
@@ -338,7 +331,7 @@ about the wrong return type the first time the <code class="docutils literal"><s
 <p>The most performant way to write a UDP is to code it in C++ and expose it to python. Most UDPs that
 are included in pygmo (see <a class="reference internal" href="../problems/py_problems.html#py-problems"><span class="std std-ref">List of problems available in pygmo</span></a>) are like that. When writing your own UDP, though, it is often quicker and less
 painful to code, as shown in this tutorial, directly in python. What effect does this have w.r.t. the ideal
-situation? Well, Let&#8217;s see, on a test machine, a simple example: the scalable Rosenbrock function:</p>
+situation? Well, Let’s see, on a test machine, a simple example: the scalable Rosenbrock function:</p>
 <div class="math">
 \[\begin{split}\begin{array}{ll}
   \mbox{minimize: } &amp; \sum_{i=1}^{N-1} 100 (x_{i+1} - x_i^2 )^2 + (1-x_i)^2 \\
@@ -369,8 +362,8 @@ situation? Well, Let&#8217;s see, on a test machine, a simple example: the scala
 <span class="go">0.0114226...</span>
 </pre></div>
 </div>
-<p>wait a minute ... really? Python is two orders of magnitude slower than cpp? Do not panic. This is a very large problem and that for loop is not going to be
-super optimized in python. Let&#8217;s see if we can do better in these cases .... Let us use the jit decorator from numba to compile
+<p>wait a minute … really? Python is two orders of magnitude slower than cpp? Do not panic. This is a very large problem and that for loop is not going to be
+super optimized in python. Let’s see if we can do better in these cases …. Let us use the jit decorator from numba to compile
 our fitness method into C code.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">jit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">jit_rosenbrock</span><span class="p">:</span>
@@ -433,7 +426,7 @@ In particular, note that only a limited part of NumPy and the python language in
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Coding a User Defined Problem with an integer part (MINLP) &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Coding a User Defined Problem with constraints (NLP)" href="coding_udp_constrained.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -199,8 +192,8 @@ the mathematical formulation of problem is the following:</p>
 &amp; 8x_6(x_6^2-x_5)-2(1-x_6)             +x_5^2-x_4+x_4^2 &gt;= x_5 \\
 &amp; x_5, x_6 \in \mathbb Z
 \end{array}\end{split}\]</div>
-<p>which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. &#8220;Sparse and partially separable test problems
-for unconstrained and equality constrained optimization.&#8221; (1999). The modification is in the constraints that are,
+<p>which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. “Sparse and partially separable test problems
+for unconstrained and equality constrained optimization.” (1999). The modification is in the constraints that are,
 for the purpose of this tutorial, considered as inequalities rather than equalities and in constraining the last two
 variables of the decision vector to be integers. The final problem, in the taxonomy of optimization problems, is categorized
 as a mixed integer non linear programming (MINLP) problem.</p>
@@ -292,7 +285,7 @@ and constraints. So we add them:</p>
 <p>Note that, in this UDP, taking the gradient with respect to the integer part of the decision vector makes sense as it contains
 relevant information, but that is not always the case. Whenever the gradient of your UDP does not contain any information,
 relaxation techniques are not really an option and some global heuristic approach (e.g. evolutionary) may be the only way to go.</p>
-<p>Pygmo&#8217;s support for MINLP problems is built around the idea of making integer relaxation very easy. So we can
+<p>Pygmo’s support for MINLP problems is built around the idea of making integer relaxation very easy. So we can
 call an NLP solver (or any other suitable algorithm) on our MINLP and the relaxed version of the problem will be solved
 returning a population with decision vectors that violate the integer constraints.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># We run 20 instances of the optimization in parallel via a default archipelago setup</span>
@@ -356,7 +349,7 @@ to then feedback the optimal decision vector into a MINLP solution strategy.</p>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

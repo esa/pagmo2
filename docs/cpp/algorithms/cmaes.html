@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES) &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Artificial Bee Colony" href="bee_colony.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -183,10 +176,10 @@
 <h1>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)<a class="headerlink" href="#covariance-matrix-adaptation-evolutionary-strategy-cma-es" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo5cmaesE">
-<span id="pagmo::cmaes"></span><span class="target" id="pagmoclasspagmo_1_1cmaes"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">cmaes</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">cmaes</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Covariance Matrix Adaptation Evolutionary Strategy. </p>
 <p><img alt="../../../_images/cmaes.png" src="../../../_images/cmaes.png" /></p>
-<p>CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization. The version implemented in PaGMO is the &#8220;classic&#8221; version described in the 2006 paper titled &#8220;The CMA evolution strategy: a comparing review.&#8221;.</p>
+<p>CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization. The version implemented in PaGMO is the “classic” version described in the 2006 paper titled “The CMA evolution strategy: a comparing review.”.</p>
 <p><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">A moved-from pagmo::cmaes is destructible and assignable. Any other operation will result
@@ -205,7 +198,7 @@ plot of the population best fitness may not be perfectly monotonically decreasin
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">Hansen, Nikolaus. &#8220;The CMA evolution strategy: a comparing review.&#8221; Towards a new evolutionary computation.
+<p class="last">Hansen, Nikolaus. “The CMA evolution strategy: a comparing review.” Towards a new evolutionary computation.
 Springer Berlin Heidelberg, 2006. 75-102.</p>
 </div>
  </p>
@@ -213,13 +206,13 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv2N5pagmo5cmaes13log_line_typeE">
-<span id="pagmo::cmaes::log_line_type"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1a90a94e6e99c6eab5329b7cf9c0e4031a"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::log_line_type"></span><span class="target" id="classpagmo_1_1cmaes_1a90a94e6e99c6eab5329b7cf9c0e4031a"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, dx, df, sigma) </p>
 </dd></dl>
 
 <dl class="type">
 <dt id="_CPPv2N5pagmo5cmaes8log_typeE">
-<span id="pagmo::cmaes::log_type"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1ac89577e5fc6ecf0593b3aed4b1ce3b09"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo5cmaes13log_line_typeE" title="pagmo::cmaes::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::log_type"></span><span class="target" id="classpagmo_1_1cmaes_1ac89577e5fc6ecf0593b3aed4b1ce3b09"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo5cmaes13log_line_typeE" title="pagmo::cmaes::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -228,7 +221,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv2N5pagmo5cmaes5cmaesEjdddddddbj">
-<span id="pagmo::cmaes::cmaes__unsigned-i.double.double.double.double.double.double.double.b.unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1abb7ae0bb358a510610adb30ffe9fd16b"></span><code class="descname">cmaes</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1, double <em>cc</em> = -1, double <em>cs</em> = -1, double <em>c1</em> = -1, double <em>cmu</em> = -1, double <em>sigma0</em> = 0.5, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes5cmaesEjdddddddbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::cmaes__unsigned-i.double.double.double.double.double.double.double.b.unsigned-i"></span><span class="target" id="classpagmo_1_1cmaes_1abb7ae0bb358a510610adb30ffe9fd16b"></span><code class="descname">cmaes</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1, double <em>cc</em> = -1, double <em>cs</em> = -1, double <em>c1</em> = -1, double <em>cmu</em> = -1, double <em>sigma0</em> = 0.5, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes5cmaesEjdddddddbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs cmaes</p>
 <p><dl class="docutils">
@@ -257,7 +250,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes6evolveE10population">
-<span id="pagmo::cmaes::evolve__populationC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1a4726f20a1c938ee77b7c9644108812d5"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::evolve__populationC"></span><span class="target" id="classpagmo_1_1cmaes_1a4726f20a1c938ee77b7c9644108812d5"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <p><dl class="docutils">
@@ -281,7 +274,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo5cmaes8set_seedEj">
-<span id="pagmo::cmaes::set_seed__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1aae0a542328e41baec5e3226e3e5f8c16"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1cmaes_1aae0a542328e41baec5e3226e3e5f8c16"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -295,7 +288,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes8get_seedEv">
-<span id="pagmo::cmaes::get_seedC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1aaedbd9c23dba9d6a90c26b8d62db6baf"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::get_seedC"></span><span class="target" id="classpagmo_1_1cmaes_1aaedbd9c23dba9d6a90c26b8d62db6baf"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -306,9 +299,9 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo5cmaes13set_verbosityEj">
-<span id="pagmo::cmaes::set_verbosity__unsigned-i"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1a93e6608164cb5de7157ddf4945b6d6eb"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1cmaes_1a93e6608164cb5de7157ddf4945b6d6eb"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#pagmoclasspagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
 <li>0: no verbosity</li>
 <li>&gt;0: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
 </ul>
@@ -338,7 +331,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes13get_verbosityEv">
-<span id="pagmo::cmaes::get_verbosityC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1aaf25369e4370fc2dd94de098050976a7"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::get_verbosityC"></span><span class="target" id="classpagmo_1_1cmaes_1aaf25369e4370fc2dd94de098050976a7"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -349,7 +342,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes7get_genEv">
-<span id="pagmo::cmaes::get_genC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1aa5d829550b7242bfbeb898bde4241867"></span>unsigned int <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::get_genC"></span><span class="target" id="classpagmo_1_1cmaes_1aa5d829550b7242bfbeb898bde4241867"></span>unsigned int <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -360,7 +353,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes8get_nameEv">
-<span id="pagmo::cmaes::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1ab0cdd96f967001586b26a7ba1de1e67e"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::get_nameC"></span><span class="target" id="classpagmo_1_1cmaes_1ab0cdd96f967001586b26a7ba1de1e67e"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="docutils">
@@ -372,7 +365,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes14get_extra_infoEv">
-<span id="pagmo::cmaes::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1ab170be072ec464872e7adabcc9d7f276"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cmaes_1ab170be072ec464872e7adabcc9d7f276"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="docutils">
@@ -384,11 +377,11 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo5cmaes7get_logEv">
-<span id="pagmo::cmaes::get_logC"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5cmaes8log_typeE" title="pagmo::cmaes::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::get_logC"></span><span class="target" id="classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5cmaes8log_typeE" title="pagmo::cmaes::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5cmaes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#pagmoclasspagmo_1_1cmaes_1a90a94e6e99c6eab5329b7cf9c0e4031a"><span class="std std-ref">cmaes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#pagmoclasspagmo_1_1cmaes_1a93e6608164cb5de7157ddf4945b6d6eb"><span class="std std-ref">cmaes::set_verbosity</span></a> <dl class="docutils">
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1cmaes_1a90a94e6e99c6eab5329b7cf9c0e4031a"><span class="std std-ref">cmaes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1cmaes_1a93e6608164cb5de7157ddf4945b6d6eb"><span class="std std-ref">cmaes::set_verbosity</span></a> <dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#pagmoclasspagmo_1_1cmaes_1a90a94e6e99c6eab5329b7cf9c0e4031a"><span class="std std-ref">cmaes::log_line_type</span></a> containing the logged values Gen, Fevals, Best, dx, df, sigma </dd>
+<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1cmaes_1a90a94e6e99c6eab5329b7cf9c0e4031a"><span class="std std-ref">cmaes::log_line_type</span></a> containing the logged values Gen, Fevals, Best, dx, df, sigma </dd>
 </dl>
 </p>
 </dd></dl>
@@ -397,7 +390,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo5cmaes9serializeER7Archive">
-<span id="pagmo::cmaes::serialize__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1cmaes_1a1865c08d1625a91bd8c6d1a1dc17a169"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1cmaes_1a1865c08d1625a91bd8c6d1a1dc17a169"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">
@@ -433,7 +426,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

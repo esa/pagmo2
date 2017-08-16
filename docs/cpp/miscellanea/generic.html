@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Generic utilities &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Utilities for gradient and hessians" href="../utils/gradient_and_hessians.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -185,7 +178,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE">
-<span id="pagmo::uniform_real_from_range__double.double.detail::random_engine_typeR"></span><span class="target" id="pagmonamespacepagmo_1ad65ef1a7b6c32f708387f82db4012037"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::uniform_real_from_range__double.double.detail::random_engine_typeR"></span><span class="target" id="namespacepagmo_1ad65ef1a7b6c32f708387f82db4012037"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generates a random number within some lower and upper bounds. </p>
 <p>Creates a random number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x &lt; ub\)</span>. If <span class="math">\(lb == ub\)</span> then <span class="math">\(lb\)</span> is returned.</p>
 <p><div class="admonition note">
@@ -227,9 +220,9 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE">
-<span id="pagmo::random_decision_vector__std::pair:vector_double.vector_double:CR.detail::random_engine_typeR.vector_double::size_type"></span><span class="target" id="pagmonamespacepagmo_1a1a56fc4c21217673c67fd1454fe33e6f"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>bounds</em>, detail::random_engine_type &amp;<em>r_engine</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::random_decision_vector__std::pair:vector_double.vector_double:CR.detail::random_engine_typeR.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a1a56fc4c21217673c67fd1454fe33e6f"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>bounds</em>, detail::random_engine_type &amp;<em>r_engine</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generates a random decision vector. </p>
-<p>Creates a random decision vector within some bounds. If both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th component of the randomly generated <a class="reference internal" href="../types.html#pagmonamespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned. If an integer part is specified then the corresponding components are guaranteed to be integers.</p>
+<p>Creates a random decision vector within some bounds. If both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th component of the randomly generated <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned. If an integer part is specified then the corresponding components are guaranteed to be integers.</p>
 <p>Example:</p>
 <p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">}},</span> <span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">vector</span>
@@ -240,7 +233,7 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a <a class="reference internal" href="../types.html#pagmonamespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
+<dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">bounds</span></code>: an <code class="docutils literal"><span class="pre">std::pair</span></code> containing the bounds </li>
@@ -264,9 +257,9 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE">
-<span id="pagmo::random_decision_vector__vector_doubleCR.vector_doubleCR.detail::random_engine_typeR.vector_double::size_type"></span><span class="target" id="pagmonamespacepagmo_1a81071f23fb126f795ac2f11e34e55afe"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>lb</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::random_decision_vector__vector_doubleCR.vector_doubleCR.detail::random_engine_typeR.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a81071f23fb126f795ac2f11e34e55afe"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>lb</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generates a random decision vector. </p>
-<p>Creates a random decision vector within some bounds. If both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th component of the randomly generated <a class="reference internal" href="../types.html#pagmonamespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned. If an integer part is specified then the corresponding components are guaranteed to be integers.</p>
+<p>Creates a random decision vector within some bounds. If both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th component of the randomly generated <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned. If an integer part is specified then the corresponding components are guaranteed to be integers.</p>
 <p>Example:</p>
 <p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">},</span> <span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">vector</span>
@@ -277,7 +270,7 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a <a class="reference internal" href="../types.html#pagmonamespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
+<dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">lb</span></code>: a vector_double containing the lower bounds </li>
@@ -302,7 +295,7 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
-<span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="pagmonamespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span>double <code class="descclassname">pagmo::</code><code class="descname">binomial_coefficient</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span>double <code class="descclassname">pagmo::</code><code class="descname">binomial_coefficient</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Binomial coefficient. </p>
 <p>An implementation of the binomial coefficient using gamma functions <dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -320,7 +313,7 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE">
-<span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="pagmonamespacepagmo_1af2b07dbd57d21c3286796a46d9f19391"></span>std::vector&lt;std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt;&gt; <code class="descclassname">pagmo::</code><code class="descname">kNN</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em>, std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt;::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1af2b07dbd57d21c3286796a46d9f19391"></span>std::vector&lt;std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt;&gt; <code class="descclassname">pagmo::</code><code class="descname">kNN</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em>, std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt;::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>K-Nearest Neighbours. </p>
 <p>Computes the indexes of the k nearest neighbours (euclidean distance) to each of the input points. The algorithm complexity (naive implementation) is <span class="math">\( O(MN^2)\)</span> where <span class="math">\(N\)</span> is the number of points and <span class="math">\(M\)</span> their dimensionality</p>
 <p>Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="n">res</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mf">3.1</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">},</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">}},</span> <span class="mi">2</span><span class="n">u</span><span class="p">);</span>
@@ -360,7 +353,7 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

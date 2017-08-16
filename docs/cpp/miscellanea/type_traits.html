@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Type traits and enums &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Generic utilities" href="generic.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -184,19 +177,19 @@
 <p>Type traits and enums used in PaGMO</p>
 <dl class="type">
 <dt id="_CPPv2N5pagmo13thread_safetyE">
-<span id="pagmo::thread_safety"></span><span class="target" id="pagmonamespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1"></span><em class="property">enum </em><code class="descclassname">pagmo::</code><code class="descname">thread_safety</code><a class="headerlink" href="#_CPPv2N5pagmo13thread_safetyE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::thread_safety"></span><span class="target" id="namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1"></span><em class="property">enum </em><code class="descclassname">pagmo::</code><code class="descname">thread_safety</code><a class="headerlink" href="#_CPPv2N5pagmo13thread_safetyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread safety levels. </p>
 <p>This enum defines a set of values that can be used to specify the thread safety of problems, algorithms, etc. </p>
 <p><em>Values:</em></p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo4noneE">
-<span id="pagmo::none"></span><span class="target" id="pagmonamespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1a334c4a4c42fdb79d7ebc3e73b517e6f8"></span><code class="descname">none</code><a class="headerlink" href="#_CPPv2N5pagmo4noneE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::none"></span><span class="target" id="namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1a334c4a4c42fdb79d7ebc3e73b517e6f8"></span><code class="descname">none</code><a class="headerlink" href="#_CPPv2N5pagmo4noneE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>No thread safety: any concurrent operation on distinct instances is unsafe. </p>
 </dd></dl>
 
 <dl class="member">
 <dt id="_CPPv2N5pagmo5basicE">
-<span id="pagmo::basic"></span><span class="target" id="pagmonamespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"></span><code class="descname">basic</code><a class="headerlink" href="#_CPPv2N5pagmo5basicE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::basic"></span><span class="target" id="namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"></span><code class="descname">basic</code><a class="headerlink" href="#_CPPv2N5pagmo5basicE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Basic thread safety: any concurrent operation on distinct instances is safe. </p>
 </dd></dl>
 
@@ -204,17 +197,17 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1is__udp"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1is__udp"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo6is_udpE">
 <span id="pagmo::is_udp"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">is_udp</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udpE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect user-defined problems (UDP). </p>
-<p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#pagmoclasspagmo_1_1has__fitness"><span class="std std-ref">pagmo::has_fitness</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1has__bounds"><span class="std std-ref">pagmo::has_bounds</span></a> type traits.</p>
-<p>Types satisfying this type trait can be used as user-defined problems (UDP) in <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
+<p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__fitness"><span class="std std-ref">pagmo::has_fitness</span></a> and <a class="reference internal" href="#classpagmo_1_1has__bounds"><span class="std std-ref">pagmo::has_bounds</span></a> type traits.</p>
+<p>Types satisfying this type trait can be used as user-defined problems (UDP) in <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo6is_udp5valueE">
-<span id="pagmo::is_udp::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1is__udp_1a28532072094c9bb693c3281df0d930e7"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo6is_udp5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::is_udp::value__bC"></span><span class="target" id="classpagmo_1_1is__udp_1a28532072094c9bb693c3281df0d930e7"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo6is_udp5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -223,17 +216,17 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1is__uda"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1is__uda"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo6is_udaE">
 <span id="pagmo::is_uda"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">is_uda</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect user-defined algorithms (UDA). </p>
-<p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#pagmoclasspagmo_1_1has__evolve"><span class="std std-ref">pagmo::has_evolve</span></a> type trait.</p>
-<p>Types satisfying this type trait can be used as user-defined algorithms (UDA) in <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
+<p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__evolve"><span class="std std-ref">pagmo::has_evolve</span></a> type trait.</p>
+<p>Types satisfying this type trait can be used as user-defined algorithms (UDA) in <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo6is_uda5valueE">
-<span id="pagmo::is_uda::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1is__uda_1a61dec3c0599b94e627d02b3a46920c7f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo6is_uda5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::is_uda::value__bC"></span><span class="target" id="classpagmo_1_1is__uda_1a61dec3c0599b94e627d02b3a46920c7f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo6is_uda5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -242,19 +235,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__fitness"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__fitness"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo11has_fitnessE">
 <span id="pagmo::has_fitness"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_fitness</code><a class="headerlink" href="#_CPPv2N5pagmo11has_fitnessE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">fitness()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="n">fitness</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">fitness()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">fitness()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo11has_fitness5valueE">
-<span id="pagmo::has_fitness::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__fitness_1aaf2ad63b1fbbbb970d30285eba0c3726"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo11has_fitness5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_fitness::value__bC"></span><span class="target" id="classpagmo_1_1has__fitness_1aaf2ad63b1fbbbb970d30285eba0c3726"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo11has_fitness5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -263,19 +256,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__bounds"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__bounds"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo10has_boundsE">
 <span id="pagmo::has_bounds"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_bounds</code><a class="headerlink" href="#_CPPv2N5pagmo10has_boundsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_bounds()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span> <span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">get_bounds</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_bounds()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_bounds()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo10has_bounds5valueE">
-<span id="pagmo::has_bounds::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__bounds_1acea3dcdfc02adcd0813c75c90c9b345f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo10has_bounds5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_bounds::value__bC"></span><span class="target" id="classpagmo_1_1has__bounds_1acea3dcdfc02adcd0813c75c90c9b345f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo10has_bounds5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -284,19 +277,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__e__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__e__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo17has_e_constraintsE">
 <span id="pagmo::has_e_constraints"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_e_constraints</code><a class="headerlink" href="#_CPPv2N5pagmo17has_e_constraintsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nec()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nec</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_nec()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_nec()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo17has_e_constraints5valueE">
-<span id="pagmo::has_e_constraints::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__e__constraints_1a4bd147ac6a55e7df11921db37546f4a2"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo17has_e_constraints5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_e_constraints::value__bC"></span><span class="target" id="classpagmo_1_1has__e__constraints_1a4bd147ac6a55e7df11921db37546f4a2"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo17has_e_constraints5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -305,19 +298,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__i__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__i__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo17has_i_constraintsE">
 <span id="pagmo::has_i_constraints"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_i_constraints</code><a class="headerlink" href="#_CPPv2N5pagmo17has_i_constraintsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nic()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nic</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_nic()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_nic()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo17has_i_constraints5valueE">
-<span id="pagmo::has_i_constraints::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__i__constraints_1a7189031d81a97dfb903e44a2182a01e2"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo17has_i_constraints5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_i_constraints::value__bC"></span><span class="target" id="classpagmo_1_1has__i__constraints_1a7189031d81a97dfb903e44a2182a01e2"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo17has_i_constraints5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -326,19 +319,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__integer__part"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__integer__part"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo16has_integer_partE">
 <span id="pagmo::has_integer_part"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_integer_part</code><a class="headerlink" href="#_CPPv2N5pagmo16has_integer_partE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nix()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nix</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_nix()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_nix()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo16has_integer_part5valueE">
-<span id="pagmo::has_integer_part::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__integer__part_1a435efd8807c1ec14aac317fdc09c0c17"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo16has_integer_part5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_integer_part::value__bC"></span><span class="target" id="classpagmo_1_1has__integer__part_1a435efd8807c1ec14aac317fdc09c0c17"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo16has_integer_part5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -347,19 +340,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__name"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__name"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo8has_nameE">
 <span id="pagmo::has_name"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_name</code><a class="headerlink" href="#_CPPv2N5pagmo8has_nameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_name()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_name()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_name()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo8has_name5valueE">
-<span id="pagmo::has_name::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__name_1ad6dec4c03dfe2947a30535d89fdf2d02"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo8has_name5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_name::value__bC"></span><span class="target" id="classpagmo_1_1has__name_1ad6dec4c03dfe2947a30535d89fdf2d02"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo8has_name5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -368,19 +361,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__extra__info"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__extra__info"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo14has_extra_infoE">
 <span id="pagmo::has_extra_info"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_extra_info</code><a class="headerlink" href="#_CPPv2N5pagmo14has_extra_infoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo14has_extra_info5valueE">
-<span id="pagmo::has_extra_info::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__extra__info_1abf8c33bdf88ad2a91d2b5e2ef6085fa3"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo14has_extra_info5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_extra_info::value__bC"></span><span class="target" id="classpagmo_1_1has__extra__info_1abf8c33bdf88ad2a91d2b5e2ef6085fa3"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo14has_extra_info5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -389,19 +382,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__get__thread__safety"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__get__thread__safety"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21has_get_thread_safetyE">
 <span id="pagmo::has_get_thread_safety"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_get_thread_safety</code><a class="headerlink" href="#_CPPv2N5pagmo21has_get_thread_safetyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pagmo</span><span class="p">::</span><span class="n">thread_safety</span> <span class="n">get_thread_safety</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo21has_get_thread_safety5valueE">
-<span id="pagmo::has_get_thread_safety::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__get__thread__safety_1ad6a0398459d9431e74938d8d6a94a22b"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21has_get_thread_safety5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_get_thread_safety::value__bC"></span><span class="target" id="classpagmo_1_1has__get__thread__safety_1ad6a0398459d9431e74938d8d6a94a22b"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21has_get_thread_safety5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -410,19 +403,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__gradient"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__gradient"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_gradientE">
 <span id="pagmo::has_gradient"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_gradient</code><a class="headerlink" href="#_CPPv2N5pagmo12has_gradientE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">gradient()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="n">gradient</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">gradient()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">gradient()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo12has_gradient5valueE">
-<span id="pagmo::has_gradient::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__gradient_1a55d951be0fad3df2ab7398b3468a414f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_gradient5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_gradient::value__bC"></span><span class="target" id="classpagmo_1_1has__gradient_1a55d951be0fad3df2ab7398b3468a414f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_gradient5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -431,19 +424,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1override__has__gradient"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
+<span class="target" id="classpagmo_1_1override__has__gradient"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo21override_has_gradientE">
 <span id="pagmo::override_has_gradient"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_gradient</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_gradientE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_gradient()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_gradient</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">has_gradient()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">has_gradient()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo21override_has_gradient5valueE">
-<span id="pagmo::override_has_gradient::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1override__has__gradient_1aa4cbd2717097e55046dcf7eda248a15e"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21override_has_gradient5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_gradient::value__bC"></span><span class="target" id="classpagmo_1_1override__has__gradient_1aa4cbd2717097e55046dcf7eda248a15e"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21override_has_gradient5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -452,19 +445,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__gradient__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__gradient__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21has_gradient_sparsityE">
 <span id="pagmo::has_gradient_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_gradient_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo21has_gradient_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sparsity_pattern</span> <span class="n">gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo21has_gradient_sparsity5valueE">
-<span id="pagmo::has_gradient_sparsity::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__gradient__sparsity_1a6447d9ace5de433285a3aeb14c76a755"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21has_gradient_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_gradient_sparsity::value__bC"></span><span class="target" id="classpagmo_1_1has__gradient__sparsity_1a6447d9ace5de433285a3aeb14c76a755"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21has_gradient_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -473,19 +466,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1override__has__gradient__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
+<span class="target" id="classpagmo_1_1override__has__gradient__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo30override_has_gradient_sparsityE">
 <span id="pagmo::override_has_gradient_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_gradient_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo30override_has_gradient_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo30override_has_gradient_sparsity5valueE">
-<span id="pagmo::override_has_gradient_sparsity::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1override__has__gradient__sparsity_1a3570299d3ddcf4d21243cdf922a08775"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo30override_has_gradient_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_gradient_sparsity::value__bC"></span><span class="target" id="classpagmo_1_1override__has__gradient__sparsity_1a3570299d3ddcf4d21243cdf922a08775"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo30override_has_gradient_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -494,19 +487,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__hessians"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__hessians"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_hessiansE">
 <span id="pagmo::has_hessians"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_hessians</code><a class="headerlink" href="#_CPPv2N5pagmo12has_hessiansE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">hessians()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">hessians</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">hessians()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">hessians()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo12has_hessians5valueE">
-<span id="pagmo::has_hessians::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__hessians_1a2e6b8c340171dc84574182063e89656f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_hessians5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_hessians::value__bC"></span><span class="target" id="classpagmo_1_1has__hessians_1a2e6b8c340171dc84574182063e89656f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_hessians5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -515,19 +508,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1override__has__hessians"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
+<span class="target" id="classpagmo_1_1override__has__hessians"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo21override_has_hessiansE">
 <span id="pagmo::override_has_hessians"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_hessians</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_hessiansE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_hessians()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_hessians</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">has_hessians()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">has_hessians()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo21override_has_hessians5valueE">
-<span id="pagmo::override_has_hessians::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1override__has__hessians_1a2db71b06c299723fa00abf3c8330e7fa"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21override_has_hessians5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_hessians::value__bC"></span><span class="target" id="classpagmo_1_1override__has__hessians_1a2db71b06c299723fa00abf3c8330e7fa"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21override_has_hessians5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -536,19 +529,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__hessians__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__hessians__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21has_hessians_sparsityE">
 <span id="pagmo::has_hessians_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_hessians_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo21has_hessians_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sparsity_pattern</span><span class="o">&gt;</span> <span class="n">hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo21has_hessians_sparsity5valueE">
-<span id="pagmo::has_hessians_sparsity::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__hessians__sparsity_1af0111a7c5fe03f24252cae6c1a71886f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21has_hessians_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_hessians_sparsity::value__bC"></span><span class="target" id="classpagmo_1_1has__hessians__sparsity_1af0111a7c5fe03f24252cae6c1a71886f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21has_hessians_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -557,19 +550,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1override__has__hessians__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
+<span class="target" id="classpagmo_1_1override__has__hessians__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo30override_has_hessians_sparsityE">
 <span id="pagmo::override_has_hessians_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_hessians_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo30override_has_hessians_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo30override_has_hessians_sparsity5valueE">
-<span id="pagmo::override_has_hessians_sparsity::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1override__has__hessians__sparsity_1a62c655a84fa833fef5a70d26f2408046"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo30override_has_hessians_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_hessians_sparsity::value__bC"></span><span class="target" id="classpagmo_1_1override__has__hessians__sparsity_1a62c655a84fa833fef5a70d26f2408046"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo30override_has_hessians_sparsity5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -578,19 +571,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__set__verbosity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__set__verbosity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo17has_set_verbosityE">
 <span id="pagmo::has_set_verbosity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_set_verbosity</code><a class="headerlink" href="#_CPPv2N5pagmo17has_set_verbosityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">set_verbosity</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo17has_set_verbosity5valueE">
-<span id="pagmo::has_set_verbosity::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__set__verbosity_1a48c31642f4a3304c5aa29c5d8e8ad8dd"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo17has_set_verbosity5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_set_verbosity::value__bC"></span><span class="target" id="classpagmo_1_1has__set__verbosity_1a48c31642f4a3304c5aa29c5d8e8ad8dd"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo17has_set_verbosity5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -599,19 +592,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1override__has__set__verbosity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
+<span class="target" id="classpagmo_1_1override__has__set__verbosity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo26override_has_set_verbosityE">
 <span id="pagmo::override_has_set_verbosity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_set_verbosity</code><a class="headerlink" href="#_CPPv2N5pagmo26override_has_set_verbosityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_set_verbosity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo26override_has_set_verbosity5valueE">
-<span id="pagmo::override_has_set_verbosity::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1override__has__set__verbosity_1ac5ad7bf6b0c1bc39f0cb70eb7740b082"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo26override_has_set_verbosity5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_set_verbosity::value__bC"></span><span class="target" id="classpagmo_1_1override__has__set__verbosity_1ac5ad7bf6b0c1bc39f0cb70eb7740b082"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo26override_has_set_verbosity5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -620,19 +613,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo10has_evolveE">
 <span id="pagmo::has_evolve"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_evolve</code><a class="headerlink" href="#_CPPv2N5pagmo10has_evolveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">evolve()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">population</span> <span class="n">evolve</span><span class="p">(</span><span class="n">const</span> <span class="n">population</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">evolve()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">evolve()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo10has_evolve5valueE">
-<span id="pagmo::has_evolve::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__evolve_1a6cec6c21792a681b117b68bf90f29319"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo10has_evolve5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_evolve::value__bC"></span><span class="target" id="classpagmo_1_1has__evolve_1a6cec6c21792a681b117b68bf90f29319"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo10has_evolve5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -641,19 +634,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__get__nobj"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__get__nobj"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_get_nobjE">
 <span id="pagmo::has_get_nobj"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_get_nobj</code><a class="headerlink" href="#_CPPv2N5pagmo12has_get_nobjE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nobj()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nobj</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">get_nobj()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">get_nobj()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo12has_get_nobj5valueE">
-<span id="pagmo::has_get_nobj::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__get__nobj_1a1746c8bc4fc64ee3459954042be2fd0e"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_get_nobj5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_get_nobj::value__bC"></span><span class="target" id="classpagmo_1_1has__get__nobj_1a1746c8bc4fc64ee3459954042be2fd0e"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_get_nobj5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -662,19 +655,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__set__seed"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__set__seed"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_set_seedE">
 <span id="pagmo::has_set_seed"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_set_seed</code><a class="headerlink" href="#_CPPv2N5pagmo12has_set_seedE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">set_seed()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">set_seed</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">set_seed()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">set_seed()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo12has_set_seed5valueE">
-<span id="pagmo::has_set_seed::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__set__seed_1a5015031b15def7ea1cb070f066326b5b"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_set_seed5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_set_seed::value__bC"></span><span class="target" id="classpagmo_1_1has__set__seed_1a5015031b15def7ea1cb070f066326b5b"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo12has_set_seed5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -683,19 +676,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1override__has__set__seed"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
+<span class="target" id="classpagmo_1_1override__has__set__seed"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo21override_has_set_seedE">
 <span id="pagmo::override_has_set_seed"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_set_seed</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_set_seedE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_set_seed</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#pagmoclasspagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo21override_has_set_seed5valueE">
-<span id="pagmo::override_has_set_seed::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1override__has__set__seed_1ab3ad473209bdeaa95ed2cc531181303f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21override_has_set_seed5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_set_seed::value__bC"></span><span class="target" id="classpagmo_1_1override__has__set__seed_1ab3ad473209bdeaa95ed2cc531181303f"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo21override_has_set_seed5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -704,19 +697,19 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1has__run__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1has__run__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo14has_run_evolveE">
 <span id="pagmo::has_run_evolve"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_run_evolve</code><a class="headerlink" href="#_CPPv2N5pagmo14has_run_evolveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">run_evolve()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
- The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method is part of the interface for the definition of an island (see <a class="reference internal" href="../island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>). </p>
+ The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method is part of the interface for the definition of an island (see <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>). </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo14has_run_evolve5valueE">
-<span id="pagmo::has_run_evolve::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1has__run__evolve_1a1ab55080366e240f0d0ae51f8fffbea6"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo14has_run_evolve5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_run_evolve::value__bC"></span><span class="target" id="classpagmo_1_1has__run__evolve_1a1ab55080366e240f0d0ae51f8fffbea6"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo14has_run_evolve5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -725,17 +718,17 @@
 
 <dl class="class">
 <dt>
-<span class="target" id="pagmoclasspagmo_1_1is__udi"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
+<span class="target" id="classpagmo_1_1is__udi"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo6is_udiE">
 <span id="pagmo::is_udi"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">is_udi</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udiE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect user-defined islands (UDI). </p>
-<p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#pagmoclasspagmo_1_1has__run__evolve"><span class="std std-ref">pagmo::has_run_evolve</span></a> type trait.</p>
-<p>Types satisfying this type trait can be used as user-defined islands (UDI) in <a class="reference internal" href="../island.html#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
+<p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__run__evolve"><span class="std std-ref">pagmo::has_run_evolve</span></a> type trait.</p>
+<p>Types satisfying this type trait can be used as user-defined islands (UDI) in <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo6is_udi5valueE">
-<span id="pagmo::is_udi::value__bC"></span><span class="target" id="pagmoclasspagmo_1_1is__udi_1adfbf0ddd235f015ad003ba73e6f5d190"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo6is_udi5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::is_udi::value__bC"></span><span class="target" id="classpagmo_1_1is__udi_1adfbf0ddd235f015ad003ba73e6f5d190"></span><em class="property">const</em> bool <code class="descname">value</code> = implementation_defined<a class="headerlink" href="#_CPPv2N5pagmo6is_udi5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -757,7 +750,7 @@
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

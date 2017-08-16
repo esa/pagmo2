@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Multi-objective optimization utilities &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Generic optimization utilities" href="py_generic_utils.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -189,12 +182,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) &#8211; the input points</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>points</em> is malformed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>points</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>points</em> is malformed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>points</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -231,12 +224,12 @@ value of the objective function in the points of the non-dominated front.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) &#8211; the input points</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>points</em> is malformed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>points</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>points</em> is malformed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>points</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -261,12 +254,12 @@ component, the minimum value of the objective functions of the input points.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) &#8211; the input points</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>points</em> is malformed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>points</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>points</em> is malformed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>points</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -294,14 +287,14 @@ but at least one is different, <code class="docutils literal"><span class="pre">
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj1</strong> (<em>array-like object</em>) &#8211; the first list of objectives</li>
-<li><strong>obj2</strong> (<em>array-like object</em>) &#8211; the second list of objectives</li>
+<li><strong>obj1</strong> (<em>array-like object</em>) – the first list of objectives</li>
+<li><strong>obj2</strong> (<em>array-like object</em>) – the second list of objectives</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the dimensions of <em>obj1</em> and <em>obj2</em> are different</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>obj1</em> or <em>obj2</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the dimensions of <em>obj1</em> and <em>obj2</em> are different</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>obj1</em> or <em>obj2</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -327,18 +320,18 @@ but at least one is different, <code class="docutils literal"><span class="pre">
 <code class="descclassname">pygmo.</code><code class="descname">non_dominated_front_2d</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.non_dominated_front_2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the non dominated front of a set of two dimensional objectives. Complexity is <span class="math">\(\mathcal{O}(N \log N)\)</span>
 and is thus lower than the complexity of calling <a class="reference internal" href="#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-func docutils literal"><span class="pre">fast_non_dominated_sorting()</span></code></a></p>
-<p>See: Jensen, Mikkel T. &#8220;Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms.&#8221;
+<p>See: Jensen, Mikkel T. “Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms.”
 IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) &#8211; the input points</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>points</em> contain anything else than 2 dimensional objectives</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>points</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>points</em> contain anything else than 2 dimensional objectives</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>points</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -381,12 +374,12 @@ of size 1, in which case, though, it is more efficient to sort using python buil
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) &#8211; the input objective vectors</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>points</strong> (<em>2d-array-like object</em>) – the input objective vectors</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>points</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>points</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -423,14 +416,14 @@ non-dominated front containing individuals included in the best N.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>2d-array-like object</em>) &#8211; the input objective vectors</li>
-<li><strong>N</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; The size of the returned list of bests.</li>
+<li><strong>points</strong> (<em>2d-array-like object</em>) – the input objective vectors</li>
+<li><strong>N</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – The size of the returned list of bests.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; all exceptions thrown by <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv2N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="pagmo::fast_non_dominated_sorting"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv2N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="pagmo::crowding_distance"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::crowding_distance()</span></code></a></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>points</em> cannot be converted to a vector of vector floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – all exceptions thrown by <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv2N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="pagmo::fast_non_dominated_sorting"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv2N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="pagmo::crowding_distance"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::crowding_distance()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>points</em> cannot be converted to a vector of vector floats</li>
 </ul>
 </td>
 </tr>
@@ -482,16 +475,16 @@ z^*_n)\)</span> an <span class="math">\(n\)</span>-dimensional reference point. 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>objs</strong> (<em>array-like object</em>) &#8211; the objective vectors</li>
-<li><strong>weights</strong> (<em>array-like object</em>) &#8211; the weights <span class="math">\(\boldsymbol \lambda\)</span></li>
-<li><strong>ref_point</strong> (<em>array-like object</em>) &#8211; the reference point <span class="math">\(\mathbf z^*\)</span> . It is not used if <em>method</em> is <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code></li>
-<li><strong>method</strong> (<code class="docutils literal"><span class="pre">string</span></code>) &#8211; the decomposition method: one of <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bi&quot;</span></code></li>
+<li><strong>objs</strong> (<em>array-like object</em>) – the objective vectors</li>
+<li><strong>weights</strong> (<em>array-like object</em>) – the weights <span class="math">\(\boldsymbol \lambda\)</span></li>
+<li><strong>ref_point</strong> (<em>array-like object</em>) – the reference point <span class="math">\(\mathbf z^*\)</span> . It is not used if <em>method</em> is <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code></li>
+<li><strong>method</strong> (<code class="docutils literal"><span class="pre">string</span></code>) – the decomposition method: one of <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bi&quot;</span></code></li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>objs</em>, <em>weight</em> and <em>ref_point</em> have different sizes or if <em>method</em> is not one of <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bi&quot;</span></code>.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>weights</em> or <em>ref_point</em> or <em>objs</em> cannot be converted to a vector of floats.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>objs</em>, <em>weight</em> and <em>ref_point</em> have different sizes or if <em>method</em> is not one of <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bi&quot;</span></code>.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>weights</em> or <em>ref_point</em> or <em>objs</em> cannot be converted to a vector of floats.</li>
 </ul>
 </td>
 </tr>
@@ -526,23 +519,23 @@ low dimensionalities are expected in the number of objectives (i.e. less than 20
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">All methods are guaranteed to generate weights on the simplex (<span class="math">\(\sum_i \lambda_i = 1\)</span>). All weight generation methods are guaranteed
-to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.</p>
+to generate the canonical weights [1,0,0,…], [0,1,0,..], … first.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n_f</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the objective vectors</li>
-<li><strong>n_w</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the weights <span class="math">\(\boldsymbol \lambda\)</span></li>
-<li><strong>method</strong> (<code class="docutils literal"><span class="pre">string</span></code>) &#8211; the reference point <span class="math">\(\mathbf z^*\)</span>. It is not used if <em>method</em> is <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code></li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the decomposition method: one of <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bi&quot;</span></code></li>
+<li><strong>n_f</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the objective vectors</li>
+<li><strong>n_w</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the weights <span class="math">\(\boldsymbol \lambda\)</span></li>
+<li><strong>method</strong> (<code class="docutils literal"><span class="pre">string</span></code>) – the reference point <span class="math">\(\mathbf z^*\)</span>. It is not used if <em>method</em> is <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code></li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the decomposition method: one of <code class="docutils literal"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bi&quot;</span></code></li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>n_f</em>, <em>n_w</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>n_f</em> and <em>n_w</em> are not compatible with the selected weight generation method or if <em>method</em> is not</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>n_f</em>, <em>n_w</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>n_f</em> and <em>n_w</em> are not compatible with the selected weight generation method or if <em>method</em> is not</li>
 <li>one of <code class="docutils literal"><span class="pre">&quot;grid&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;low</span> <span class="pre">discrepancy&quot;</span></code></li>
 </ul>
 </td>
@@ -583,7 +576,7 @@ to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.</p>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

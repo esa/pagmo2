@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Advanced hypervolume computation and analysis &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Getting started with hypervolumes" href="hypervolume.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -221,7 +214,7 @@ algorithms are available in pygmo:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Some algorithms may not provide certain functionalities, e.g.: <em>bf_fpras</em> algorithm is designed for efficient approxmation
-of high dimensional hypervolumes, supports only the &#8220;compute&#8221; method.</p>
+of high dimensional hypervolumes, supports only the “compute” method.</p>
 </div>
 <p>We will discuss the details on the approximated hypervolume in the tutorial <a class="reference internal" href="hypervolume_approx.html#py-tutorial-hypervolume-approx"><span class="std std-ref">Approximating the hypervolume</span></a>.
 In this tutorial, instead, we focus only on the exact methods.</p>
@@ -247,7 +240,7 @@ execution time for various settings of <code class="docutils literal"><span clas
 of computing the front of a DTLZ-2 problem. Plot below, the worst case scenario (maximal time of 10 runs for given <code class="docutils literal"><span class="pre">Front</span> <span class="pre">size</span></code>
 and <code class="docutils literal"><span class="pre">Dimension</span></code>). The Z axis as well as the color indicate the execution time in seconds.
 As you can see, computation of the hypervolume of 100 points and below is pretty fast, even when facing a 10-dimensional problem.
-When you&#8217;re designing your own experiment, be wary that the worst case complexity of hypervolume algorithms is exponential.</p>
+When you’re designing your own experiment, be wary that the worst case complexity of hypervolume algorithms is exponential.</p>
 <p>Although the hypervolume indicator is a very common quality indicator for pareto fronts, many multiple-objective optimizers
 require a slightly different figure that evaluates the quality of a given individual within the population.
 This is resolved by computing the exclusive contribution of a given individual to the population, and in most cases
@@ -374,7 +367,7 @@ reported below, where the hv3d algorithm shows to have a much lower complexity w
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

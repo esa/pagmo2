@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Installation guide &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Pagmo &amp; Pygmo" href="index.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -209,7 +202,7 @@ command:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/esa/pagmo2.git
 </pre></div>
 </div>
-<p>Once you are in pagmo&#8217;s source tree, you must configure your build using <code class="docutils literal"><span class="pre">cmake</span></code>. This will allow
+<p>Once you are in pagmo’s source tree, you must configure your build using <code class="docutils literal"><span class="pre">cmake</span></code>. This will allow
 you to enable support for optional dependencies, configure the install destination, etc. When done,
 you can install pagmo via the command</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install
@@ -232,7 +225,7 @@ your conda installation.</p>
 <p>The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://www.numpy.org/">NumPy</a>, the standard Python array library</li>
-<li><a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>, a package that extends Python&#8217;s serialization
+<li><a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>, a package that extends Python’s serialization
 capabilities.</li>
 </ul>
 <p>There are various options for the installation of pygmo:</p>
@@ -316,7 +309,7 @@ and then we can immediately install pygmo:</p>
 conda install pygmo
 </pre></div>
 </div>
-<p>conda will automatically install all of pygmo&#8217;s dependencies for you. Please refer to the <a class="reference external" href="https://conda.io/docs/">conda documentation</a>
+<p>conda will automatically install all of pygmo’s dependencies for you. Please refer to the <a class="reference external" href="https://conda.io/docs/">conda documentation</a>
 for instructions on how to setup and manage your conda installation.</p>
 </div>
 <div class="section" id="installation-with-pip">
@@ -325,7 +318,7 @@ for instructions on how to setup and manage your conda installation.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install pygmo
 </pre></div>
 </div>
-<p>Like conda, also pip will automatically install all of pygmo&#8217;s dependencies for you. If you want to install pygmo for a single user instead of
+<p>Like conda, also pip will automatically install all of pygmo’s dependencies for you. If you want to install pygmo for a single user instead of
 system-wide, which is in general a good idea, you can do:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>pip install --user pygmo
 </pre></div>
@@ -338,7 +331,7 @@ system-wide, which is in general a good idea, you can do:</p>
 <li>pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
 to compile pygmo),</li>
 <li><a class="reference external" href="http://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html">Boost.Python</a></li>
-<li><a class="reference external" href="http://www.numpy.org/">NumPy</a> (note that NumPy&#8217;s development headers must be installed as well).</li>
+<li><a class="reference external" href="http://www.numpy.org/">NumPy</a> (note that NumPy’s development headers must be installed as well).</li>
 </ul>
 <p>Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
 to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
@@ -369,7 +362,7 @@ The <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

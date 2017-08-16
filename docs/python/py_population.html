@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Population class &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Problem class" href="py_problem.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -204,17 +197,17 @@ an individual currently in the population. The <em>champion</em> is only defined
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prob</strong> &#8211; a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+<li><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
 (if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="problems/py_problems.html#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
-<li><strong>size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the number of individuals</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the random seed (if <code class="docutils literal"><span class="pre">None</span></code>, it will be randomly-generated)</li>
+<li><strong>size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of individuals</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed (if <code class="docutils literal"><span class="pre">None</span></code>, it will be randomly-generated)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>size</em> is not an <code class="docutils literal"><span class="pre">int</span></code> or <em>seed</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; is <em>size</em> or <em>seed</em> are negative</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the invoked C++ constructors or by the constructor of
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>size</em> is not an <code class="docutils literal"><span class="pre">int</span></code> or <em>seed</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – is <em>size</em> or <em>seed</em> are negative</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the invoked C++ constructors or by the constructor of
 <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, or by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
@@ -235,8 +228,8 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>tol</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; scalar tolerance or vector of tolerances to be applied to each constraints. By default, the c_tol attribute</li>
-<li><strong>the population problem is used.</strong> (<em>from</em>) &#8211; </li>
+<li><strong>tol</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) – scalar tolerance or vector of tolerances to be applied to each constraints. By default, the c_tol attribute</li>
+<li><strong>the population problem is used.</strong> (<em>from</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -247,8 +240,8 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a></li>
 </ul>
 </td>
 </tr>
@@ -259,8 +252,8 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 <dl class="attribute">
 <dt id="pygmo.population.champion_f">
 <code class="descname">champion_f</code><a class="headerlink" href="#pygmo.population.champion_f" title="Permalink to this definition">¶</a></dt>
-<dd><p>Champion&#8217;s fitness vector.</p>
-<p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the fitness vector of the population&#8217;s champion.</p>
+<dd><p>Champion’s fitness vector.</p>
+<p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the fitness vector of the population’s champion.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If the problem is stochastic, the champion is the individual that had the lowest fitness for
@@ -271,15 +264,15 @@ fitness.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the champion&#8217;s fitness vector</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the champion’s fitness vector</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the current problem is not single objective</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the current problem is not single objective</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -291,8 +284,8 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 <dl class="attribute">
 <dt id="pygmo.population.champion_x">
 <code class="descname">champion_x</code><a class="headerlink" href="#pygmo.population.champion_x" title="Permalink to this definition">¶</a></dt>
-<dd><p>Champion&#8217;s decision vector.</p>
-<p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the decision vector of the population&#8217;s champion.</p>
+<dd><p>Champion’s decision vector.</p>
+<p>This read-only property contains an array of <code class="docutils literal"><span class="pre">float</span></code> representing the decision vector of the population’s champion.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If the problem is stochastic the champion is the individual that had the lowest fitness for
@@ -303,15 +296,15 @@ fitness.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the champion&#8217;s decision vector</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the champion’s decision vector</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">1D NumPy float array</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the current problem is not single objective</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the current problem is not single objective</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -334,7 +327,7 @@ population.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy int array</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -355,7 +348,7 @@ population.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">2D NumPy float array</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -392,7 +385,7 @@ population.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">2D NumPy float array</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -402,7 +395,7 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 <dl class="attribute">
 <dt id="pygmo.population.problem">
 <code class="descname">problem</code><a class="headerlink" href="#pygmo.population.problem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Population&#8217;s problem.</p>
+<dd><p>Population’s problem.</p>
 <p>This read-only property gives direct access to the <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within the population.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -422,18 +415,18 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 <dd><p>Adds one decision vector (chromosome) to the population.</p>
 <p>This method will append a new chromosome <em>x</em> to the population, creating a new unique identifier for the newly born individual
 and, if <em>f</em> is not provided, evaluating its fitness. If <em>f</em> is provided, the fitness of the new individual will be set to <em>f</em>.
-It is the user&#8217;s responsibility to ensure that <em>f</em> actually corresponds to the fitness of <em>x</em>.</p>
+It is the user’s responsibility to ensure that <em>f</em> actually corresponds to the fitness of <em>x</em>.</p>
 <p>In case of exceptions, the population will not be altered.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> (<em>array-like object</em>) &#8211; decision vector to be added to the population</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> (<em>array-like object</em>) – decision vector to be added to the population</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the dimensions of <em>x</em> or <em>f</em> (if provided) are incompatible with the population&#8217;s problem</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the dimensions of <em>x</em> or <em>f</em> (if provided) are incompatible with the population’s problem</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -445,7 +438,7 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 <dl class="method">
 <dt id="pygmo.population.random_decision_vector">
 <code class="descname">random_decision_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.population.random_decision_vector" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method will create a random decision vector within the problem&#8217;s bounds.</p>
+<dd><p>This method will create a random decision vector within the problem’s bounds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -454,7 +447,7 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy float array</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -466,7 +459,7 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 <code class="descname">set_x</code><span class="sig-paren">(</span><em>i</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.population.set_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the <span class="math">\(i\)</span>-th individual decision vector.</p>
 <p>Sets the chromosome of the <span class="math">\(i\)</span>-th individual to the value <em>x</em> and changes its fitness accordingly. The
-individual&#8217;s ID remains the same.</p>
+individual’s ID remains the same.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">A call to this method triggers one fitness function evaluation.</p>
@@ -476,15 +469,15 @@ individual&#8217;s ID remains the same.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; individual’s index in the population</li>
-<li><strong>x</strong> (<em>array-like object</em>) &#8211; a decision vector (chromosome)</li>
+<li><strong>i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – individual’s index in the population</li>
+<li><strong>x</strong> (<em>array-like object</em>) – a decision vector (chromosome)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>i</em> is invalid, or if <em>x</em> has the wrong dimensions (i.e., the dimension is
-inconsistent with the problem&#8217;s properties)</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>i</em> is invalid, or if <em>x</em> has the wrong dimensions (i.e., the dimension is
+inconsistent with the problem’s properties)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -507,16 +500,16 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; individual’s index in the population</li>
-<li><strong>x</strong> (<em>array-like object</em>) &#8211; a decision vector (chromosome)</li>
-<li><strong>f</strong> (<em>array-like object</em>) &#8211; a fitness vector</li>
+<li><strong>i</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – individual’s index in the population</li>
+<li><strong>x</strong> (<em>array-like object</em>) – a decision vector (chromosome)</li>
+<li><strong>f</strong> (<em>array-like object</em>) – a fitness vector</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>i</em> is invalid, or if <em>x</em> or <em>f</em> have the wrong dimensions (i.e., their dimensions are
-inconsistent with the problem&#8217;s properties)</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>i</em> is invalid, or if <em>x</em> or <em>f</em> have the wrong dimensions (i.e., their dimensions are
+inconsistent with the problem’s properties)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -537,7 +530,7 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tol</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; scalar tolerance or vector of tolerances to be applied to each constraints</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tol</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) – scalar tolerance or vector of tolerances to be applied to each constraints</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the index of the worst individual</p>
@@ -547,8 +540,8 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="utils/py_con_utils.html#pygmo.sort_population_con" title="pygmo.sort_population_con"><code class="xref py py-func docutils literal"><span class="pre">pygmo.sort_population_con()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="utils/py_con_utils.html#pygmo.sort_population_con" title="pygmo.sort_population_con"><code class="xref py py-func docutils literal"><span class="pre">pygmo.sort_population_con()</span></code></a></li>
 </ul>
 </td>
 </tr>
@@ -573,7 +566,7 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

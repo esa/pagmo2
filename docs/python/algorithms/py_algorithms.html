@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>List of algorithms available in pygmo &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="List of problems available in pygmo" href="../problems/py_problems.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -247,7 +240,7 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <td>S-U (sto)</td>
 <td>Exposed from C++</td>
 </tr>
-<tr class="row-odd"><td>Corana&#8217;s Simulated Annealing (SA)</td>
+<tr class="row-odd"><td>Corana’s Simulated Annealing (SA)</td>
 <td><a class="reference internal" href="#pygmo.simulated_annealing" title="pygmo.simulated_annealing"><code class="xref py py-class docutils literal"><span class="pre">pygmo.simulated_annealing</span></code></a></td>
 <td>S-U</td>
 <td>Exposed from C++</td>
@@ -421,15 +414,15 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>limit</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; maximum number of trials for abandoning a source</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>limit</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – maximum number of trials for abandoning a source</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em>, <em>limit</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>limit</em> is not greater than 0</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em>, <em>limit</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>limit</em> is not greater than 0</li>
 </ul>
 </td>
 </tr>
@@ -507,19 +500,19 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>F</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; weight coefficient (dafault value is 0.8)</li>
-<li><strong>CR</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; crossover probability (dafault value is 0.9)</li>
-<li><strong>variant</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; mutation variant (dafault variant is 2: /rand/1/exp)</li>
-<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the x tolerance (default is 1e-6)</li>
-<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the f tolerance (default is 1e-6)</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>F</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – weight coefficient (dafault value is 0.8)</li>
+<li><strong>CR</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – crossover probability (dafault value is 0.9)</li>
+<li><strong>variant</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – mutation variant (dafault variant is 2: /rand/1/exp)</li>
+<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the x tolerance (default is 1e-6)</li>
+<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the f tolerance (default is 1e-6)</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em>, <em>variant</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>F</em>, <em>CR</em> are not in [0,1] or <em>variant</em> is not in [1, 10]</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em>, <em>variant</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>F</em>, <em>CR</em> are not in [0,1] or <em>variant</em> is not in [1, 10]</li>
 </ul>
 </td>
 </tr>
@@ -623,14 +616,14 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations to consider (each generation will compute the objective function once)</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations to consider (each generation will compute the objective function once)</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python
 (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -716,7 +709,7 @@ A verbosity equal to 1 will produce a log woth one entry at each improvement of 
 </div>
 <p>Approximately during the same decades as Evolutionary Strategies (see <a class="reference internal" href="#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">sea</span></code></a>) were studied,
 a different group led by John Holland, and later by his student David Goldberg, introduced and
-studied an algorithmic framework called &#8220;genetic algorithms&#8221; that were, essentially, leveraging on
+studied an algorithmic framework called “genetic algorithms” that were, essentially, leveraging on
 the same idea but introducing also crossover as a genetic operator. This led to a few decades of
 confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on
 whether the crossover was a useful operator or mutation only algorithms were to be preferred.</p>
@@ -761,26 +754,26 @@ The various mutation and crossover strategies will do different things on an int
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations.</li>
-<li><strong>cr</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; crossover probability.</li>
-<li><strong>eta_c</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index for <code class="docutils literal"><span class="pre">sbx</span></code> crossover. This parameter is inactive if other types of crossover are selected.</li>
-<li><strong>m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; mutation probability.</li>
-<li><strong>param_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index (<code class="docutils literal"><span class="pre">polynomial</span></code> mutation), gaussian width (<code class="docutils literal"><span class="pre">gaussian</span></code> mutation) or inactive (<code class="docutils literal"><span class="pre">uniform</span></code> mutation)</li>
-<li><strong>param_s</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; the number of best individuals to use in &#8220;truncated&#8221; selection or the size of the tournament in <code class="docutils literal"><span class="pre">tournament</span></code> selection.</li>
-<li><strong>crossover</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the crossover strategy. One of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">single</span></code> or <code class="docutils literal"><span class="pre">sbx</span></code></li>
-<li><strong>mutation</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the mutation strategy. One of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">polynomial</span></code> or <code class="docutils literal"><span class="pre">uniform</span></code>.</li>
-<li><strong>selection</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the selection strategy. One of <code class="docutils literal"><span class="pre">tournament</span></code>, &#8220;truncated&#8221;.</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations.</li>
+<li><strong>cr</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – crossover probability.</li>
+<li><strong>eta_c</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – distribution index for <code class="docutils literal"><span class="pre">sbx</span></code> crossover. This parameter is inactive if other types of crossover are selected.</li>
+<li><strong>m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – mutation probability.</li>
+<li><strong>param_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – distribution index (<code class="docutils literal"><span class="pre">polynomial</span></code> mutation), gaussian width (<code class="docutils literal"><span class="pre">gaussian</span></code> mutation) or inactive (<code class="docutils literal"><span class="pre">uniform</span></code> mutation)</li>
+<li><strong>param_s</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – the number of best individuals to use in “truncated” selection or the size of the tournament in <code class="docutils literal"><span class="pre">tournament</span></code> selection.</li>
+<li><strong>crossover</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the crossover strategy. One of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">single</span></code> or <code class="docutils literal"><span class="pre">sbx</span></code></li>
+<li><strong>mutation</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the mutation strategy. One of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">polynomial</span></code> or <code class="docutils literal"><span class="pre">uniform</span></code>.</li>
+<li><strong>selection</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the selection strategy. One of <code class="docutils literal"><span class="pre">tournament</span></code>, “truncated”.</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
-is not one of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">uniform</span></code> or <code class="docutils literal"><span class="pre">polynomial</span></code>, if <em>selection</em> not one of &#8220;roulette&#8221;,
-&#8220;truncated&#8221; or <em>crossover</em> is not one of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">sbx</span></code>, <code class="docutils literal"><span class="pre">single</span></code>, if <em>param_m</em> is
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
+is not one of <code class="docutils literal"><span class="pre">gaussian</span></code>, <code class="docutils literal"><span class="pre">uniform</span></code> or <code class="docutils literal"><span class="pre">polynomial</span></code>, if <em>selection</em> not one of “roulette”,
+“truncated” or <em>crossover</em> is not one of <code class="docutils literal"><span class="pre">exponential</span></code>, <code class="docutils literal"><span class="pre">binomial</span></code>, <code class="docutils literal"><span class="pre">sbx</span></code>, <code class="docutils literal"><span class="pre">single</span></code>, if <em>param_m</em> is
 not in [0,1] and <em>mutation</em> is not <code class="docutils literal"><span class="pre">polynomial</span></code>, if <em>mutation</em> is not in [1,100] and <em>mutation</em> is <code class="docutils literal"><span class="pre">polynomial</span></code>.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python
 (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -865,19 +858,19 @@ A verbosity equal to 1 will produce a log woth one entry at each improvement of 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>variant</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; mutation variant (dafault variant is 2: /rand/1/exp)</li>
-<li><strong>variant_adptv</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; F and CR parameter adaptation scheme to be used (one of 1..2)</li>
-<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the x tolerance (default is 1e-6)</li>
-<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the f tolerance (default is 1e-6)</li>
-<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; when true the adapted parameters CR anf F are not reset between successive calls to the evolve method</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>variant</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – mutation variant (dafault variant is 2: /rand/1/exp)</li>
+<li><strong>variant_adptv</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – F and CR parameter adaptation scheme to be used (one of 1..2)</li>
+<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the x tolerance (default is 1e-6)</li>
+<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the f tolerance (default is 1e-6)</li>
+<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the adapted parameters CR anf F are not reset between successive calls to the evolve method</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>variant</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>variant</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</li>
 </ul>
 </td>
 </tr>
@@ -1008,19 +1001,19 @@ The adaptation of the mutation variant is added to <a class="reference internal"
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>allowed_variants</strong> (<em>array-like object</em>) &#8211; allowed mutation variants, each one being a number in [1, 18]</li>
-<li><strong>variant_adptv</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; <em>F</em> and <em>CR</em> parameter adaptation scheme to be used (one of 1..2)</li>
-<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the x tolerance (default is 1e-6)</li>
-<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the f tolerance (default is 1e-6)</li>
-<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; when true the adapted parameters <em>CR</em> anf <em>F</em> are not reset between successive calls to the evolve method</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>allowed_variants</strong> (<em>array-like object</em>) – allowed mutation variants, each one being a number in [1, 18]</li>
+<li><strong>variant_adptv</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – <em>F</em> and <em>CR</em> parameter adaptation scheme to be used (one of 1..2)</li>
+<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the x tolerance (default is 1e-6)</li>
+<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the f tolerance (default is 1e-6)</li>
+<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the adapted parameters <em>CR</em> anf <em>F</em> are not reset between successive calls to the evolve method</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if each id in <em>variant_adptv</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if each id in <em>variant_adptv</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</li>
 </ul>
 </td>
 </tr>
@@ -1151,22 +1144,22 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>cc</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; backward time horizon for the evolution path (by default is automatically assigned)</li>
-<li><strong>cs</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)</li>
-<li><strong>c1</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)</li>
-<li><strong>cmu</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)</li>
-<li><strong>sigma0</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; initial step-size</li>
-<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the x tolerance</li>
-<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stopping criteria on the f tolerance</li>
-<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; when true the adapted parameters are not reset between successive calls to the evolve method</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>cc</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – backward time horizon for the evolution path (by default is automatically assigned)</li>
+<li><strong>cs</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)</li>
+<li><strong>c1</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)</li>
+<li><strong>cmu</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)</li>
+<li><strong>sigma0</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – initial step-size</li>
+<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the x tolerance</li>
+<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the f tolerance</li>
+<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the adapted parameters are not reset between successive calls to the evolve method</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>cc</em>, <em>cs</em>, <em>c1</em>, <em>cmu</em> are not in [0,1] or -1</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>cc</em>, <em>cs</em>, <em>c1</em>, <em>cmu</em> are not in [0,1] or -1</li>
 </ul>
 </td>
 </tr>
@@ -1247,25 +1240,25 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>weight_generation</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; method used to generate the weights, one of &#8220;grid&#8221;, &#8220;low discrepancy&#8221; or &#8220;random&#8221;</li>
-<li><strong>decomposition</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; method used to decompose the objectives, one of &#8220;tchebycheff&#8221;, &#8220;weighted&#8221; or &#8220;bi&#8221;</li>
-<li><strong>neighbours</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; size of the weight&#8217;s neighborhood</li>
-<li><strong>CR</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; crossover parameter in the Differential Evolution operator</li>
-<li><strong>F</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; parameter for the Differential Evolution operator</li>
-<li><strong>eta_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index used by the polynomial mutation</li>
-<li><strong>realb</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)</li>
-<li><strong>limit</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)</li>
-<li><strong>preserve_diversity</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; when true activates diversity preservation mechanisms</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>weight_generation</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – method used to generate the weights, one of “grid”, “low discrepancy” or “random”</li>
+<li><strong>decomposition</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – method used to decompose the objectives, one of “tchebycheff”, “weighted” or “bi”</li>
+<li><strong>neighbours</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – size of the weight’s neighborhood</li>
+<li><strong>CR</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – crossover parameter in the Differential Evolution operator</li>
+<li><strong>F</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – parameter for the Differential Evolution operator</li>
+<li><strong>eta_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – distribution index used by the polynomial mutation</li>
+<li><strong>realb</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)</li>
+<li><strong>limit</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)</li>
+<li><strong>preserve_diversity</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true activates diversity preservation mechanisms</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em>, <em>neighbours</em>, <em>seed</em> or <em>limit</em> are negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either:<ul>
-<li><em>decomposition</em> is not one of &#8216;tchebycheff&#8217;, &#8216;weighted&#8217; or &#8216;bi&#8217;.</li>
-<li><em>weight_generation</em> is not one of &#8216;random&#8217;, &#8216;low discrepancy&#8217; or &#8216;grid&#8217;.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em>, <em>neighbours</em>, <em>seed</em> or <em>limit</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if either:<ul>
+<li><em>decomposition</em> is not one of ‘tchebycheff’, ‘weighted’ or ‘bi’.</li>
+<li><em>weight_generation</em> is not one of ‘random’, ‘low discrepancy’ or ‘grid’.</li>
 <li><em>CR</em> or <em>F</em> or <em>realb</em> are not in [0.,1.]</li>
 <li><em>eta_m</em> is negative</li>
 </ul>
@@ -1347,16 +1340,16 @@ constructed with a <a class="reference internal" href="#pygmo.moead" title="pygm
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>max_fevals</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; maximum number of function evaluation</li>
-<li><strong>start_range</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; start range (dafault value is .1)</li>
-<li><strong>stop_range</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; stop range (dafault value is .01)</li>
-<li><strong>reduction_coeff</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; range reduction coefficient (dafault value is .5)</li>
+<li><strong>max_fevals</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – maximum number of function evaluation</li>
+<li><strong>start_range</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – start range (dafault value is .1)</li>
+<li><strong>stop_range</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stop range (dafault value is .01)</li>
+<li><strong>reduction_coeff</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – range reduction coefficient (dafault value is .5)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>max_fevals</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>start_range</em> is not in (0, 1], if <em>stop_range</em> is not in (<em>start_range</em>, 1] or if <em>reduction_coeff</em> is not in (0,1)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>max_fevals</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>start_range</em> is not in (0, 1], if <em>stop_range</em> is not in (<em>start_range</em>, 1] or if <em>reduction_coeff</em> is not in (0,1)</li>
 </ul>
 </td>
 </tr>
@@ -1454,10 +1447,10 @@ replaced by the optimised individual.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1493,10 +1486,10 @@ for optimisation.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1513,14 +1506,14 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.compass_search.selection" title="pygmo.compass_search.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.compass_search.replacement" title="pygmo.compass_search.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1535,26 +1528,26 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <dl class="class">
 <dt id="pygmo.simulated_annealing">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">simulated_annealing</code><span class="sig-paren">(</span><em>Ts = 10.</em>, <em>Tf = .1</em>, <em>n_T_adj = 10</em>, <em>n_range_adj = 10</em>, <em>bin_size = 10</em>, <em>start_range = 1.</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.simulated_annealing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simulated Annealing (Corana&#8217;s version)</p>
+<dd><p>Simulated Annealing (Corana’s version)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>Ts</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; starting temperature</li>
-<li><strong>Tf</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; final temperature</li>
-<li><strong>n_T_adj</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of temperature adjustments in the annealing schedule</li>
-<li><strong>n_range_adj</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of adjustments of the search range performed at a constant temperature</li>
-<li><strong>bin_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of mutations that are used to compute the acceptance rate</li>
-<li><strong>start_range</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; starting range for mutating the decision vector</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>Ts</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – starting temperature</li>
+<li><strong>Tf</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – final temperature</li>
+<li><strong>n_T_adj</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of temperature adjustments in the annealing schedule</li>
+<li><strong>n_range_adj</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of adjustments of the search range performed at a constant temperature</li>
+<li><strong>bin_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of mutations that are used to compute the acceptance rate</li>
+<li><strong>start_range</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – starting range for mutating the decision vector</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>n_T_adj</em>, <em>n_range_adj</em> or <em>bin_size</em> are negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>Ts</em> is not in (0, inf), if <em>Tf</em> is not in (0, inf), if <em>Tf</em> &gt; <em>Ts</em> or if <em>start_range</em> is not in (0,1]</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>n_T_adj</em> is not strictly positive or if <em>n_range_adj</em> is not strictly positive</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>n_T_adj</em>, <em>n_range_adj</em> or <em>bin_size</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>Ts</em> is not in (0, inf), if <em>Tf</em> is not in (0, inf), if <em>Tf</em> &gt; <em>Ts</em> or if <em>start_range</em> is not in (0,1]</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>n_T_adj</em> is not strictly positive or if <em>n_range_adj</em> is not strictly positive</li>
 </ul>
 </td>
 </tr>
@@ -1665,10 +1658,10 @@ replaced by the optimised individual.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1704,10 +1697,10 @@ for optimisation.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1724,14 +1717,14 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.simulated_annealing.selection" title="pygmo.simulated_annealing.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.simulated_annealing.replacement" title="pygmo.simulated_annealing.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -1752,23 +1745,23 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>omega</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; inertia weight (or constriction factor)</li>
-<li><strong>eta1</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; social component</li>
-<li><strong>eta2</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; cognitive component</li>
-<li><strong>max_vel</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; maximum allowed particle velocities (normalized with respect to the bounds width)</li>
-<li><strong>variant</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; algoritmic variant</li>
-<li><strong>neighb_type</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; swarm topology (defining each particle&#8217;s neighbours)</li>
-<li><strong>neighb_param</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; topology parameter (defines how many neighbours to consider)</li>
-<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; when true the velocities are not reset between successive calls to the evolve method</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>omega</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – inertia weight (or constriction factor)</li>
+<li><strong>eta1</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – social component</li>
+<li><strong>eta2</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – cognitive component</li>
+<li><strong>max_vel</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – maximum allowed particle velocities (normalized with respect to the bounds width)</li>
+<li><strong>variant</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – algoritmic variant</li>
+<li><strong>neighb_type</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – swarm topology (defining each particle’s neighbours)</li>
+<li><strong>neighb_param</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – topology parameter (defines how many neighbours to consider)</li>
+<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the velocities are not reset between successive calls to the evolve method</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>omega</em> is not in the [0,1] interval, if <em>eta1</em>, <em>eta2</em> are not in the [0,1] interval, if <em>max_vel</em> is not in ]0,1]</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; <em>variant</em> is not one of 1 .. 6, if <em>neighb_type</em> is not one of 1 .. 4 or if <em>neighb_param</em> is zero</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> or <em>seed</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>omega</em> is not in the [0,1] interval, if <em>eta1</em>, <em>eta2</em> are not in the [0,1] interval, if <em>max_vel</em> is not in ]0,1]</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – <em>variant</em> is not one of 1 .. 6, if <em>neighb_type</em> is not one of 1 .. 4 or if <em>neighb_param</em> is zero</li>
 </ul>
 </td>
 </tr>
@@ -1887,18 +1880,18 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of generations</li>
-<li><strong>cr</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; crossover probability</li>
-<li><strong>eta_c</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index for crossover</li>
-<li><strong>m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; mutation probability</li>
-<li><strong>eta_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; distribution index for mutation</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator (default is random)</li>
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>cr</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – crossover probability</li>
+<li><strong>eta_c</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – distribution index for crossover</li>
+<li><strong>m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – mutation probability</li>
+<li><strong>eta_m</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – distribution index for mutation</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if either:<ul>
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if either:<ul>
 <li><em>cr</em> is not in [0,1[.</li>
 <li><em>eta_c</em> is not in [0,100[.</li>
 <li><em>m</em> is not in [0,1].</li>
@@ -2006,19 +1999,19 @@ cluster optimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>algo</strong> &#8211; an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that
+<li><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that
 <em>algo</em> will be deep-copied and stored inside the <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
-<li><strong>stop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; consecutive runs of the inner algorithm that need to result in no improvement for
+<li><strong>stop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – consecutive runs of the inner algorithm that need to result in no improvement for
 <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> to stop</li>
-<li><strong>perturb</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) &#8211; perturb the perturbation to be applied to each component</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+<li><strong>perturb</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) – perturb the perturbation to be applied to each component</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>perturb</em> (or one of its components, if <em>perturb</em> is an array) is not in the
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>perturb</em> (or one of its components, if <em>perturb</em> is an array) is not in the
 (0,1] range</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a>, or by
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a>, or by
 failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
 signatures, etc.)</li>
 </ul>
@@ -2142,9 +2135,9 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>perturb</strong> (<em>array-like object</em>) &#8211; perturb the perturbation to be applied to each component</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>perturb</strong> (<em>array-like object</em>) – perturb the perturbation to be applied to each component</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
 mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -2210,7 +2203,7 @@ algorithm employed and in particular to its parameters (generations / iterations
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">Farmani, Raziyeh, and Jonathan A. Wright. &#8220;Self-adaptive fitness formulation for constrained optimization.&#8221; IEEE
+<p class="last">Farmani, Raziyeh, and Jonathan A. Wright. “Self-adaptive fitness formulation for constrained optimization.” IEEE
 Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 </div>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/cstrs_self_adaptive.html#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a>.</p>
@@ -2219,16 +2212,16 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>iter</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; number of iterations (i.e. calls to the innel algorithm evolve)</li>
-<li><strong>algo</strong> &#8211; an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that <em>algo</em>
+<li><strong>iter</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of iterations (i.e. calls to the innel algorithm evolve)</li>
+<li><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that <em>algo</em>
 will be deep-copied and stored inside the <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; seed used by the internal random number generator</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>iters</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a>, or by
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>iters</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a>, or by
 failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
 signatures, etc.)</li>
 </ul>
@@ -2335,7 +2328,7 @@ is satisfied. By default, only the <code class="docutils literal"><span class="p
 <p>All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
 Some solvers support equality and/or inequality constraints.</p>
-<p>In order to support pygmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
+<p>In order to support pygmo’s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
 a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised by the NLopt solver.
 If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/py_con_utils.html#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal"><span class="pre">compare_fc()</span></code></a>),
 the optimised individual will be inserted back into the population.
@@ -2436,13 +2429,13 @@ description of each supported solver.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>solver</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>solver</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a> object</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> &#8211; if the NLopt version is not at least 2</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>solver</em> is not one of the allowed algorithm names</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> – if the NLopt version is not at least 2</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>solver</em> is not one of the allowed algorithm names</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2514,8 +2507,8 @@ Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2542,8 +2535,8 @@ function value. Defaults to 0 (that is, this stopping criterion is disabled by d
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2564,7 +2557,7 @@ type conversion errors, mismatched function signatures, etc.)</li>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -2591,7 +2584,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -2610,7 +2603,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -2644,7 +2637,7 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python
 (e.g., type conversion errors, mismatched function signatures, etc.), when setting the property</td>
 </tr>
 </tbody>
@@ -2665,7 +2658,7 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -2686,7 +2679,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -2720,10 +2713,10 @@ replaced by the optimised individual.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2759,10 +2752,10 @@ for optimisation.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2779,14 +2772,14 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.nlopt.selection" title="pygmo.nlopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.nlopt.replacement" title="pygmo.nlopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2813,8 +2806,8 @@ is disabled by default).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2841,8 +2834,8 @@ by default).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2869,8 +2862,8 @@ Defaults to 1E-8.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if, when setting this property, a <code class="docutils literal"><span class="pre">NaN</span></code> is passed</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -2895,7 +2888,7 @@ is able to handle robustly and efficiently constrained nonlinear opimization pro
 <p>Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the
 optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt
 can estimate numerically the Hessians if needed).</p>
-<p>In order to support pygmo&#8217;s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
+<p>In order to support pygmo’s population-based optimisation model, the <code class="docutils literal"><span class="pre">evolve()</span></code> method will select
 a single individual from the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> to be optimised.
 If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/py_con_utils.html#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal"><span class="pre">compare_fc()</span></code></a>),
 the optimised individual will be inserted back into the population. The selection and replacement strategies
@@ -2911,7 +2904,7 @@ are divided into three categories:</p>
 <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> allows to configure any Ipopt option via methods such as <a class="reference internal" href="#pygmo.ipopt.set_string_options" title="pygmo.ipopt.set_string_options"><code class="xref py py-func docutils literal"><span class="pre">set_string_options()</span></code></a>,
 <a class="reference internal" href="#pygmo.ipopt.set_string_option" title="pygmo.ipopt.set_string_option"><code class="xref py py-func docutils literal"><span class="pre">set_string_option()</span></code></a>, <a class="reference internal" href="#pygmo.ipopt.set_integer_options" title="pygmo.ipopt.set_integer_options"><code class="xref py py-func docutils literal"><span class="pre">set_integer_options()</span></code></a>, etc., which need to be used before
 invoking the <code class="docutils literal"><span class="pre">evolve()</span></code> method.</p>
-<p>If the user does not set any option, <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> use Ipopt&#8217;s default values for the options (see the
+<p>If the user does not set any option, <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a> use Ipopt’s default values for the options (see the
 <a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">documentation</a>), with the following
 modifications:</p>
 <ul class="simple">
@@ -3020,7 +3013,7 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -3054,7 +3047,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -3063,13 +3056,13 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <p class="first admonition-title">Warning</p>
 <p class="last">The number of constraints violated, the constraints violation norm and the feasibility flag stored in the log
 are all determined via the facilities and the tolerances specified within <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>. That
-is, they might not necessarily be consistent with Ipopt&#8217;s notion of feasibility. See the explanation
+is, they might not necessarily be consistent with Ipopt’s notion of feasibility. See the explanation
 of how the <code class="docutils literal"><span class="pre">&quot;constr_viol_tol&quot;</span></code> numeric option is handled in <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a>.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Ipopt supports its own logging format and protocol, including the ability to print to screen and write to file.
-Ipopt&#8217;s screen logging is disabled by default (i.e., the Ipopt verbosity setting is set to 0 - see
+Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity setting is set to 0 - see
 <a class="reference internal" href="#pygmo.ipopt" title="pygmo.ipopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipopt</span></code></a>). On-screen logging can be enabled via the <code class="docutils literal"><span class="pre">&quot;print_level&quot;</span></code> string option.</p>
 </div>
 </dd></dl>
@@ -3149,10 +3142,10 @@ replaced by the optimised individual.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -3239,10 +3232,10 @@ for optimisation.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the attribute is set to an invalid string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the attribute is set to a value of an invalid type</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the attribute is set to an invalid string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the attribute is set to a value of an invalid type</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -3262,12 +3255,12 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the option</li>
-<li><strong>value</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value of the option</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the name of the option</li>
+<li><strong>value</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the value of the option</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</p>
 </td>
 </tr>
@@ -3302,9 +3295,9 @@ as arguments.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">int</span></code> pairs) &#8211; the name-value map that will be used to set the options</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">int</span></code> pairs) – the name-value map that will be used to set the options</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -3338,12 +3331,12 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the option</li>
-<li><strong>value</strong> (<code class="docutils literal"><span class="pre">float</span></code>) &#8211; the value of the option</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the name of the option</li>
+<li><strong>value</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – the value of the option</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</p>
 </td>
 </tr>
@@ -3378,9 +3371,9 @@ as arguments.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">float</span></code> pairs) &#8211; the name-value map that will be used to set the options</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">float</span></code> pairs) – the name-value map that will be used to set the options</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -3411,14 +3404,14 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.ipopt.selection" title="pygmo.ipopt.selection"><code class="xref py py-attr docutils literal"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.ipopt.replacement" title="pygmo.ipopt.replacement"><code class="xref py py-attr docutils literal"><span class="pre">replacement</span></code></a>)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> &#8211; if the attribute is set to an integer which is negative or too large</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if the attribute is set to an integer which is negative or too large</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
 </td>
@@ -3438,12 +3431,12 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the name of the option</li>
-<li><strong>value</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the value of the option</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the name of the option</li>
+<li><strong>value</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – the value of the option</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</p>
 </td>
 </tr>
@@ -3478,9 +3471,9 @@ as arguments.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">str</span></code> pairs) &#8211; the name-value map that will be used to set the options</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>opts</strong> (<code class="docutils literal"><span class="pre">dict</span></code> of <code class="docutils literal"><span class="pre">str</span></code>-<code class="docutils literal"><span class="pre">str</span></code> pairs) – the name-value map that will be used to set the options</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
 type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
@@ -3521,7 +3514,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

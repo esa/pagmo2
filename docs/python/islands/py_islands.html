@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>List of islands available in pygmo &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="List of algorithms available in pygmo" href="../algorithms/py_algorithms.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -212,7 +205,7 @@ different instances of <a class="reference internal" href="#pygmo.mp_island" tit
 either implicitly by the construction of the first <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>
 object or explicitly via the <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a> static method.
 The default number of processes in the pool is equal to the number of logical CPUs on the
-current machine. The pool&#8217;s size can be queried via <a class="reference internal" href="#pygmo.mp_island.get_pool_size" title="pygmo.mp_island.get_pool_size"><code class="xref py py-func docutils literal"><span class="pre">get_pool_size()</span></code></a>,
+current machine. The pool’s size can be queried via <a class="reference internal" href="#pygmo.mp_island.get_pool_size" title="pygmo.mp_island.get_pool_size"><code class="xref py py-func docutils literal"><span class="pre">get_pool_size()</span></code></a>,
 and changed via <a class="reference internal" href="#pygmo.mp_island.resize_pool" title="pygmo.mp_island.resize_pool"><code class="xref py py-func docutils literal"><span class="pre">resize_pool()</span></code></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -231,14 +224,14 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="pygmo.mp_island.get_extra_info">
 <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Island&#8217;s extra info.</p>
+<dd><p>Island’s extra info.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -254,7 +247,7 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 <dl class="method">
 <dt id="pygmo.mp_island.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Island&#8217;s name.</p>
+<dd><p>Island’s name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -293,15 +286,15 @@ has not been initialised yet. Otherwise, this method will have no effects.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>processes</strong> (<code class="docutils literal"><span class="pre">None</span></code> or an <code class="docutils literal"><span class="pre">int</span></code>) &#8211; the size of the pool (if <code class="docutils literal"><span class="pre">None</span></code>, the size of the pool will be
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>processes</strong> (<code class="docutils literal"><span class="pre">None</span></code> or an <code class="docutils literal"><span class="pre">int</span></code>) – the size of the pool (if <code class="docutils literal"><span class="pre">None</span></code>, the size of the pool will be
 equal to the number of logical CPUs on the system)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the pool does not exist yet and the function is being called from a thread different
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the pool does not exist yet and the function is being called from a thread different
 from the main one, or if <em>processes</em> is a non-positive value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> &#8211; if the current platform or Python version is not supported</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>processes</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> – if the current platform or Python version is not supported</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>processes</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
 </ul>
 </td>
 </tr>
@@ -318,13 +311,13 @@ from the main one, or if <em>processes</em> is a non-positive value</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>processes</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the desired number of processes in the pool</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>processes</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the desired number of processes in the pool</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if the <em>processes</em> argument is not an <code class="docutils literal"><span class="pre">int</span></code></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if the <em>processes</em> argument is not strictly positive</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if the <em>processes</em> argument is not an <code class="docutils literal"><span class="pre">int</span></code></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the <em>processes</em> argument is not strictly positive</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></li>
 </ul>
 </td>
 </tr>
@@ -344,8 +337,8 @@ is run on one of the processes of the pool backing backing <a class="reference i
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; the input population</li>
-<li><strong>algo</strong> (<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>) &#8211; the input algorithm</li>
+<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) – the input population</li>
+<li><strong>algo</strong> (<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>) – the input algorithm</li>
 </ul>
 </td>
 </tr>
@@ -355,7 +348,7 @@ is run on one of the processes of the pool backing backing <a class="reference i
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown during the evolution, or by the public interface of the
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown during the evolution, or by the public interface of the
 process pool</p>
 </td>
 </tr>
@@ -382,7 +375,7 @@ object that will be created internally.</p>
 <dl class="method">
 <dt id="pygmo.ipyparallel_island.get_extra_info">
 <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Island&#8217;s extra info.</p>
+<dd><p>Island’s extra info.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -398,7 +391,7 @@ object that will be created internally.</p>
 <dl class="method">
 <dt id="pygmo.ipyparallel_island.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Island&#8217;s name.</p>
+<dd><p>Island’s name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -424,8 +417,8 @@ instance initialised during the construction of the island.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) &#8211; the input population</li>
-<li><strong>algo</strong> (<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>) &#8211; the input algorithm</li>
+<li><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) – the input population</li>
+<li><strong>algo</strong> (<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>) – the input algorithm</li>
 </ul>
 </td>
 </tr>
@@ -435,7 +428,7 @@ instance initialised during the construction of the island.</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> &#8211; any exception thrown during the evolution, or by submitting the evolution task
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown during the evolution, or by submitting the evolution task
 to the ipyparallel cluster</p>
 </td>
 </tr>
@@ -461,7 +454,7 @@ to the ipyparallel cluster</p>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

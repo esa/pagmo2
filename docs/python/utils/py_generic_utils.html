@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Generic optimization utilities &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="List of islands available in pygmo" href="../islands/py_islands.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -185,7 +178,7 @@
 <dt id="pygmo.random_decision_vector">
 <code class="descclassname">pygmo.</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.random_decision_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>random_decision_vector_docstring(lb, ub, nix = 0)</p>
-<p>Creates a random decision vector within some bounds using pygmo&#8217;s global rng. If
+<p>Creates a random decision vector within some bounds using pygmo’s global rng. If
 both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th
 component of the randomly generated pagmo::vector_double will be such that
 <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is
@@ -196,16 +189,16 @@ are guaranteed to be integers within the specified (integer) bounds.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lb</strong> (<em>array-like object</em>) &#8211; the lower bounds</li>
-<li><strong>ub</strong> (<em>array-like object</em>) &#8211; the upper bounds</li>
-<li><strong>nix</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the integer size</li>
+<li><strong>lb</strong> (<em>array-like object</em>) – the lower bounds</li>
+<li><strong>ub</strong> (<em>array-like object</em>) – the upper bounds</li>
+<li><strong>nix</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the integer size</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>nix</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; if <em>lb</em> and <em>ub</em> are malformed (unequal lenght, zero size, <em>nix</em> larger than <code class="docutils literal"><span class="pre">len(lb)</span></code> or bounds are not integers in their last <em>nix</em> components)</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; if <em>lb</em> or <em>ub</em> cannot be converted to a vector of floats</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>nix</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>lb</em> and <em>ub</em> are malformed (unequal lenght, zero size, <em>nix</em> larger than <code class="docutils literal"><span class="pre">len(lb)</span></code> or bounds are not integers in their last <em>nix</em> components)</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>lb</em> or <em>ub</em> cannot be converted to a vector of floats</li>
 </ul>
 </td>
 </tr>
@@ -261,7 +254,7 @@ be reproduced deterministically.</p>
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Changelog &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -37,7 +30,7 @@
     <link rel="prev" title="Credits" href="credits.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -230,7 +223,7 @@ and ask there if you are interested in it (<a class="reference external" href="h
 <li>pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
 source, you will need first to install the pagmo C++ headers. Users of pip/conda are <strong>not</strong> affected by this change (as
 pip and conda manage dependencies automatically).</li>
-<li><strong>BREAKING</strong>: as a consequence of the overhaul of (mixed) integer programming support in pagmo, the problem&#8217;s integer part is no
+<li><strong>BREAKING</strong>: as a consequence of the overhaul of (mixed) integer programming support in pagmo, the problem’s integer part is no
 longer available as an argument when constructing algorithms such as <a class="reference internal" href="docs/cpp/algorithms/sga.html#_CPPv2N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sga</span></code></a> and <a class="reference internal" href="docs/cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nsga2</span></code></a>, it
 must instead be specified in the definition of the UDP via the optional <code class="docutils literal"><span class="pre">get_nix()</span></code> method.</li>
 </ul>
@@ -300,7 +293,7 @@ must instead be specified in the definition of the UDP via the optional <code cl
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

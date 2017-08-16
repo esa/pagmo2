@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Coding a User Defined Problem with constraints (NLP) &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Coding a simple User Defined Problem" href="coding_udp_simple.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -198,8 +191,8 @@ We assume that the mathematical formulation of problem is the following:</p>
 &amp; 8x_5(x_5^2-x_4)-2(1-x_5)+4(x_5-x_6)^2+x_4^2-x_3+x_6+x_3^2-x_2 &lt;= 0 \\
 &amp; 8x_6(x_6^2-x_5)-2(1-x_6)             +x_5^2-x_4+x_4^2 &gt;= x_5 \\
 \end{array}\end{split}\]</div>
-<p>which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. &#8220;Sparse and partially separable test problems
-for unconstrained and equality constrained optimization.&#8221; (1999). The modification is in the last two constraints that are,
+<p>which is a modified instance of the problem 5.9 in Luksan, L., and Jan Vlcek. “Sparse and partially separable test problems
+for unconstrained and equality constrained optimization.” (1999). The modification is in the last two constraints that are,
 for the purpose of this tutorial, considered as inequalities rather than equality constraints.</p>
 <p>The problem at hand has box bounds, 4 equality constraints, two inequalities (note the different form of these) and one objective and,
 in the taxonomy of optimization problems, can be categorized as a non linear programming (NLP) problem.</p>
@@ -274,7 +267,7 @@ are in the form <span class="math">\(g(x) = 0\)</span>, while inequalities <span
 <p>All seems in order. The dimensions are corresponding to what we wanted, the gradient is detected etc.</p>
 <div class="section" id="solving-your-constrained-udp">
 <h2>Solving your constrained UDP<a class="headerlink" href="#solving-your-constrained-udp" title="Permalink to this headline">¶</a></h2>
-<p>So we now have a UDP with constraints and a numerical gradient. Let&#8217;s solve it. Many different startegies can be deployed
+<p>So we now have a UDP with constraints and a numerical gradient. Let’s solve it. Many different startegies can be deployed
 and we here will just try two a) using the augmented lagrangian method b) using monotonic basin hopping.
 Consider the following script:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#METHOD A</span>
@@ -347,7 +340,7 @@ strategies from different initial populations, the value of 1.60799 is sometimes
 <h2>Do not use a black-box solver if you do not have to<a class="headerlink" href="#do-not-use-a-black-box-solver-if-you-do-not-have-to" title="Permalink to this headline">¶</a></h2>
 <p>We conclude this tutorial arguing how, contrary to common (bad) practices of part of the scientific community,
 the use of appropriate local optimization algorithms is always to be preferred and heuristic approaches should only
-be used in situations where they are needed as they otherwise are just a bad idea. Let&#8217;s consider here the problem
+be used in situations where they are needed as they otherwise are just a bad idea. Let’s consider here the problem
 suite in constrained optimization that was used during the CEC2006 competition. In pygmo, we have implemented such an UDP
 in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2006" title="pygmo.cec2006"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cec2006</span></code></a>. Such a class does not implement a gradient since the competition was intended for
 heuristic optimization. So we quickly code a meta-UDP that adds numerical gradients to a UDP without gradients:</p>
@@ -388,8 +381,8 @@ Consider here only one case: the problem <code class="docutils literal"><span cl
 </div>
 <p>The total number of evaluations made to solve the problem (at a precision of 1e-8) is thus 1155 + 1022 * 2 = 3599.
 To compare, as an example, with what an heuristic method could deliver we check the table that appears in:</p>
-<p>Huang, Vicky Ling, A. Kai Qin, and Ponnuthurai N. Suganthan. &#8220;Self-adaptive differential evolution algorithm
-for constrained real-parameter optimization.&#8221; Evolutionary Computation, 2006. CEC 2006. IEEE Congress on. IEEE, 2006.</p>
+<p>Huang, Vicky Ling, A. Kai Qin, and Ponnuthurai N. Suganthan. “Self-adaptive differential evolution algorithm
+for constrained real-parameter optimization.” Evolutionary Computation, 2006. CEC 2006. IEEE Congress on. IEEE, 2006.</p>
 <p>to find that after 5000 fitness evaluations this particular problem is still not solved by the heuristic approach there introduced.</p>
 </div>
 </div>
@@ -407,7 +400,7 @@ for constrained real-parameter optimization.&#8221; Evolutionary Computation, 20
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

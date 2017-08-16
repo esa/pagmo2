@@ -1,18 +1,11 @@
  <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Island &#8212; pagmo 2.4 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -26,10 +19,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -38,7 +31,7 @@
     <link rel="prev" title="Population" href="population.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -183,27 +176,27 @@
 <h1>Island<a class="headerlink" href="#island" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo6islandE">
-<span id="pagmo::island"></span><span class="target" id="pagmoclasspagmo_1_1island"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">island</code><a class="headerlink" href="#_CPPv2N5pagmo6islandE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island"></span><span class="target" id="classpagmo_1_1island"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">island</code><a class="headerlink" href="#_CPPv2N5pagmo6islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Island class. </p>
 <p><img alt="../../_images/island_no_text.png" src="../../_images/island_no_text.png" /></p>
 <p>In the pagmo jargon, an island is a class that encapsulates three entities:<ul class="simple">
 <li>a user-defined island (UDI),</li>
-<li>a <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>,</li>
-<li>a <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</li>
+<li>a <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>,</li>
+<li>a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</li>
 </ul>
 </p>
-<p>Through the UDI, the island class manages the asynchronous evolution (or optimisation) of its <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> via the algorithm&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>), in a separate process or even in a separate machine. The evolution is always asynchronous (i.e., running in the &#8220;background&#8221;) and it is initiated by a call to the <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">evolve()</span></a> method. At any time the user can query the state of the island and fetch its internal data members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> methods. The status of ongoing evolutions in the island can be queried via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a>.</p>
-<p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>) in conjunction with this class, but advanced users can implement their own UDI types. A user-defined island must implement the following method: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
+<p>Through the UDI, the island class manages the asynchronous evolution (or optimisation) of its <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> via the algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>), in a separate process or even in a separate machine. The evolution is always asynchronous (i.e., running in the “background”) and it is initiated by a call to the <a class="reference internal" href="#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">evolve()</span></a> method. At any time the user can query the state of the island and fetch its internal data members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a> and <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> methods. The status of ongoing evolutions in the island can be queried via <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a>.</p>
+<p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>) in conjunction with this class, but advanced users can implement their own UDI types. A user-defined island must implement the following method: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
 </p>
-<p>The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island&#8217;s <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and, once the evolution is finished, will replace the population of the input island with the evolved population. Since internally the <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or call the <code class="docutils literal"><span class="pre">get_name()</span></code>, <code class="docutils literal"><span class="pre">get_extra_info()</span></code> methods, etc.), otherwise the behaviour will be undefined.</p>
+<p>The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and, once the evolution is finished, will replace the population of the input island with the evolved population. Since internally the <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or call the <code class="docutils literal"><span class="pre">get_name()</span></code>, <code class="docutils literal"><span class="pre">get_extra_info()</span></code> methods, etc.), otherwise the behaviour will be undefined.</p>
 <p>In addition to the mandatory <code class="docutils literal"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
 </p>
-<p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDI are used by <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>.</p>
+<p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDI are used by <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>.</p>
 <p><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">A moved-from <a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::island</span></code></a> is destructible and assignable. Any other operation will result
@@ -214,9 +207,9 @@ in undefined behaviour.</p>
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island6islandEv">
-<span id="pagmo::island::island"></span><span class="target" id="pagmoclasspagmo_1_1island_1a716b2228d12ffeeaadbc6471cfded0e3"></span><code class="descname">island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island"></span><span class="target" id="classpagmo_1_1island_1a716b2228d12ffeeaadbc6471cfded0e3"></span><code class="descname">island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
-<p>The default constructor will initialise an island containing a UDI of type <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>, and default-constructed <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</p>
+<p>The default constructor will initialise an island containing a UDI of type <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>, and default-constructed <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -229,9 +222,9 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island6islandERK6island">
-<span id="pagmo::island::island__islandCR"></span><span class="target" id="pagmoclasspagmo_1_1island_1a8e694e237e5739b13fdca923698e96e4"></span><code class="descname">island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERK6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island__islandCR"></span><span class="target" id="classpagmo_1_1island_1a8e694e237e5739b13fdca923698e96e4"></span><code class="descname">island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERK6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy constructor. </p>
-<p>The copy constructor will initialise an island containing a copy of <code class="docutils literal"><span class="pre">other</span></code>&#8216;s UDI, population and algorithm. It is safe to call this constructor while <code class="docutils literal"><span class="pre">other</span></code> is evolving.</p>
+<p>The copy constructor will initialise an island containing a copy of <code class="docutils literal"><span class="pre">other</span></code>’s UDI, population and algorithm. It is safe to call this constructor while <code class="docutils literal"><span class="pre">other</span></code> is evolving.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -241,9 +234,9 @@ in undefined behaviour.</p>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li><a class="reference internal" href="#pagmoclasspagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">get_population()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">get_algorithm()</span></a>,</li>
+<li><a class="reference internal" href="#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">get_population()</span></a> and <a class="reference internal" href="#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">get_algorithm()</span></a>,</li>
 <li>memory allocation errors,</li>
-<li>the copy constructors of <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </li>
+<li>the copy constructors of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </li>
 </ul>
 </li>
 </ul>
@@ -254,7 +247,7 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island6islandERR6island">
-<span id="pagmo::island::island__islandRR"></span><span class="target" id="pagmoclasspagmo_1_1island_1a45761001fc726c6e1175911112b440c7"></span><code class="descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island__islandRR"></span><span class="target" id="classpagmo_1_1island_1a45761001fc726c6e1175911112b440c7"></span><code class="descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move constructor. </p>
 <p>The move constructor will transfer the state of <code class="docutils literal"><span class="pre">other</span></code> into <code class="docutils literal"><span class="pre">this</span></code>, after any ongoing evolution in <code class="docutils literal"><span class="pre">other</span></code> is finished.</p>
 <p><dl class="docutils">
@@ -271,7 +264,7 @@ in undefined behaviour.</p>
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Algo, <em class="property">typename</em> Pop, algo_pop_enabler&lt; Algo, Pop &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo6island6islandERR4AlgoRR3Pop">
-<span id="pagmo::island::island__AlgoRR.PopRR"></span><span class="target" id="pagmoclasspagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"></span><code class="descname">island</code><span class="sig-paren">(</span>Algo &amp;&amp;<em>a</em>, Pop &amp;&amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR4AlgoRR3Pop" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island__AlgoRR.PopRR"></span><span class="target" id="classpagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"></span><code class="descname">island</code><span class="sig-paren">(</span>Algo &amp;&amp;<em>a</em>, Pop &amp;&amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR4AlgoRR3Pop" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from algorithm and population. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -279,7 +272,7 @@ in undefined behaviour.</p>
 :cpp:class`pagmo::algorithm` and <code class="xref cpp cpp-class docutils literal"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
 </div>
 </p>
-<p>This constructor will use <code class="docutils literal"><span class="pre">a</span></code> to construct the internal algorithm, and <code class="docutils literal"><span class="pre">p</span></code> to construct the internal population. A default-constructed <a class="reference internal" href="islands/thread_island.html#pagmoclasspagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a> will be the internal UDI.</p>
+<p>This constructor will use <code class="docutils literal"><span class="pre">a</span></code> to construct the internal algorithm, and <code class="docutils literal"><span class="pre">p</span></code> to construct the internal population. A default-constructed <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a> will be the internal UDI.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -291,7 +284,7 @@ in undefined behaviour.</p>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
 <li>memory allocation errors,</li>
-<li>the constructors of <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </li>
+<li>the constructors of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </li>
 </ul>
 </li>
 </ul>
@@ -304,7 +297,7 @@ in undefined behaviour.</p>
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Isl, <em class="property">typename</em> Algo, <em class="property">typename</em> Pop, isl_algo_pop_enabler&lt; Isl, Algo, Pop &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo6island6islandERR3IslRR4AlgoRR3Pop">
-<span id="pagmo::island::island__IslRR.AlgoRR.PopRR"></span><span class="target" id="pagmoclasspagmo_1_1island_1a89c4f0c74c2221f230359fce0a33c9d0"></span><code class="descname">island</code><span class="sig-paren">(</span>Isl &amp;&amp;<em>isl</em>, Algo &amp;&amp;<em>a</em>, Pop &amp;&amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR3IslRR4AlgoRR3Pop" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island__IslRR.AlgoRR.PopRR"></span><span class="target" id="classpagmo_1_1island_1a89c4f0c74c2221f230359fce0a33c9d0"></span><code class="descname">island</code><span class="sig-paren">(</span>Isl &amp;&amp;<em>isl</em>, Algo &amp;&amp;<em>a</em>, Pop &amp;&amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR3IslRR4AlgoRR3Pop" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from UDI, algorithm and population. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -332,7 +325,7 @@ in undefined behaviour.</p>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
 <li>memory allocation errors,</li>
-<li>the constructors of <code class="docutils literal"><span class="pre">Isl</span></code>, <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </li>
+<li>the constructors of <code class="docutils literal"><span class="pre">Isl</span></code>, <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </li>
 </ul>
 </li>
 </ul>
@@ -345,7 +338,7 @@ in undefined behaviour.</p>
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Algo, <em class="property">typename</em> Prob, algo_prob_enabler&lt; Algo, Prob &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj">
-<span id="pagmo::island::island__AlgoRR.ProbRR.population::size_type.unsigned"></span><span class="target" id="pagmoclasspagmo_1_1island_1aa81988f971e7e9f55f04c278ea10b095"></span><code class="descname">island</code><span class="sig-paren">(</span>Algo &amp;&amp;<em>a</em>, Prob &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island__AlgoRR.ProbRR.population::size_type.unsigned"></span><span class="target" id="classpagmo_1_1island_1aa81988f971e7e9f55f04c278ea10b095"></span><code class="descname">island</code><span class="sig-paren">(</span>Algo &amp;&amp;<em>a</em>, Prob &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from algorithm, problem, size and seed. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -353,7 +346,7 @@ in undefined behaviour.</p>
 pagmo::algorithm, and <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code> can be used to construct a <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
 </div>
 </p>
-<p>This constructor will construct a <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> <code class="docutils literal"><span class="pre">pop</span></code> from <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code>, and it will then invoke <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a> with <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">pop</span></code> as arguments.</p>
+<p>This constructor will construct a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> <code class="docutils literal"><span class="pre">pop</span></code> from <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code>, and it will then invoke <a class="reference internal" href="#classpagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a> with <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">pop</span></code> as arguments.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -365,7 +358,7 @@ pagmo::algorithm, and <code class="docutils literal"><span class="pre">p</span><
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the invoked <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> constructor or by <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a>. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the invoked <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> constructor or by <a class="reference internal" href="#classpagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a>. </li>
 </ul>
 </dd>
 </dl>
@@ -376,7 +369,7 @@ pagmo::algorithm, and <code class="docutils literal"><span class="pre">p</span><
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Isl, <em class="property">typename</em> Algo, <em class="property">typename</em> Prob, isl_algo_prob_enabler&lt; Isl, Algo, Prob &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeEj">
-<span id="pagmo::island::island__IslRR.AlgoRR.ProbRR.population::size_type.unsigned"></span><span class="target" id="pagmoclasspagmo_1_1island_1a9fb06fa4c4624968d26e3fd9212edf9e"></span><code class="descname">island</code><span class="sig-paren">(</span>Isl &amp;&amp;<em>isl</em>, Algo &amp;&amp;<em>a</em>, Prob &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::island__IslRR.AlgoRR.ProbRR.population::size_type.unsigned"></span><span class="target" id="classpagmo_1_1island_1a9fb06fa4c4624968d26e3fd9212edf9e"></span><code class="descname">island</code><span class="sig-paren">(</span>Isl &amp;&amp;<em>isl</em>, Algo &amp;&amp;<em>a</em>, Prob &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from UDI, algorithm, problem, size and seed. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -385,7 +378,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
 </div>
 </p>
-<p>This constructor will construct a <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> <code class="docutils literal"><span class="pre">pop</span></code> from <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code>, and it will then invoke <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a89c4f0c74c2221f230359fce0a33c9d0"><span class="std std-ref">island(Isl &amp;&amp;, Algo &amp;&amp;, Pop &amp;&amp;)</span></a> with <code class="docutils literal"><span class="pre">isl</span></code>, <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">pop</span></code> as arguments.</p>
+<p>This constructor will construct a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> <code class="docutils literal"><span class="pre">pop</span></code> from <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code>, and it will then invoke <a class="reference internal" href="#classpagmo_1_1island_1a89c4f0c74c2221f230359fce0a33c9d0"><span class="std std-ref">island(Isl &amp;&amp;, Algo &amp;&amp;, Pop &amp;&amp;)</span></a> with <code class="docutils literal"><span class="pre">isl</span></code>, <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">pop</span></code> as arguments.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -399,8 +392,8 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li>the invoked <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> constructor,</li>
-<li><a class="reference internal" href="#pagmoclasspagmo_1_1island_1a89c4f0c74c2221f230359fce0a33c9d0"><span class="std std-ref">island(Isl &amp;&amp;, Algo &amp;&amp;, Pop &amp;&amp;)</span></a>,</li>
+<li>the invoked <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> constructor,</li>
+<li><a class="reference internal" href="#classpagmo_1_1island_1a89c4f0c74c2221f230359fce0a33c9d0"><span class="std std-ref">island(Isl &amp;&amp;, Algo &amp;&amp;, Pop &amp;&amp;)</span></a>,</li>
 <li>the invoked constructor of <code class="docutils literal"><span class="pre">Isl</span></code>. </li>
 </ul>
 </li>
@@ -412,14 +405,14 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6islandD0Ev">
-<span id="pagmo::island::~island"></span><span class="target" id="pagmoclasspagmo_1_1island_1aa5c469fff8c1ce0588e1f4d56c874fe5"></span><code class="descname">~island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::~island"></span><span class="target" id="classpagmo_1_1island_1aa5c469fff8c1ce0588e1f4d56c874fe5"></span><code class="descname">~island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Destructor. </p>
-<p>If the island has not been moved-from, the destructor will call <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a>, ignoring any exception that might be thrown. </p>
+<p>If the island has not been moved-from, the destructor will call <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a>, ignoring any exception that might be thrown. </p>
 </dd></dl>
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6islandaSERR6island">
-<span id="pagmo::island::assign-operator__islandRR"></span><span class="target" id="pagmoclasspagmo_1_1island_1a88c3289adf8d3e45fe85be0a41c41b8d"></span><a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandaSERR6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::assign-operator__islandRR"></span><span class="target" id="classpagmo_1_1island_1a88c3289adf8d3e45fe85be0a41c41b8d"></span><a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandaSERR6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move assignment. </p>
 <p>Move assignment will transfer the state of <code class="docutils literal"><span class="pre">other</span></code> into <code class="docutils literal"><span class="pre">this</span></code>, after any ongoing evolution in <code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">other</span></code> is finished.</p>
 <p><dl class="docutils">
@@ -436,7 +429,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6islandaSERK6island">
-<span id="pagmo::island::assign-operator__islandCR"></span><span class="target" id="pagmoclasspagmo_1_1island_1a6765c786f500317ac5002003b9221608"></span><a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandaSERK6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::assign-operator__islandCR"></span><span class="target" id="classpagmo_1_1island_1a6765c786f500317ac5002003b9221608"></span><a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6islandaSERK6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy assignment. </p>
 <p>Copy assignment is implemented as copy construction followed by move assignment.</p>
 <p><dl class="docutils">
@@ -458,10 +451,10 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island6evolveEj">
-<span id="pagmo::island::evolve__unsigned"></span><span class="target" id="pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"></span>void <code class="descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::evolve__unsigned"></span><span class="target" id="classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"></span>void <code class="descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Launch evolution. </p>
-<p>This method will evolve the island&#8217;s <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using the island&#8217;s <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The evolution happens asynchronously: a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> will create an evolution task that will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution managed by the <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> object. Each task will invoke the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI <code class="docutils literal"><span class="pre">n</span></code> times consecutively to perform the actual evolution. The island&#8217;s population will be updated at the end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</p>
-<p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in first-out) fashion. The user may call <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> or <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks. <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> can be used to query the status of the asynchronous operations in the island.</p>
+<p>This method will evolve the island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using the island’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The evolution happens asynchronously: a call to <a class="reference internal" href="#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> will create an evolution task that will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution managed by the <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> object. Each task will invoke the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI <code class="docutils literal"><span class="pre">n</span></code> times consecutively to perform the actual evolution. The island’s population will be updated at the end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</p>
+<p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in first-out) fashion. The user may call <a class="reference internal" href="#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> or <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks. <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> can be used to query the status of the asynchronous operations in the island.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -484,10 +477,10 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island10wait_checkEv">
-<span id="pagmo::island::wait_check"></span><span class="target" id="pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"></span>void <code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island10wait_checkEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::wait_check"></span><span class="target" id="classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"></span>void <code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island10wait_checkEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until evolution ends and re-raise the first stored exception. </p>
-<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. If one task enqueued after the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> threw an exception, the exception will be re-thrown by this method. If more than one task enqueued after the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> threw an exception, this method will re-throw the exception raised by the first enqueued task that threw, and the exceptions from all the other tasks that threw will be ignored.</p>
-<p>Note that <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> resets the status of the island: after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>.</p>
+<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. If one task enqueued after the last call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> threw an exception, the exception will be re-thrown by this method. If more than one task enqueued after the last call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> threw an exception, this method will re-throw the exception raised by the first enqueued task that threw, and the exceptions from all the other tasks that threw will be ignored.</p>
+<p>Note that <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> resets the status of the island: after a call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -500,24 +493,24 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island4waitEv">
-<span id="pagmo::island::wait"></span><span class="target" id="pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"></span>void <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island4waitEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::wait"></span><span class="target" id="classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"></span>void <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island4waitEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until evolution ends. </p>
-<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. Exceptions thrown by the enqueued tasks can be re-raised via <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>: they will <strong>not</strong> be re-thrown by this method. Also, contrary to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, this method will <strong>not</strong> reset the status of the island: after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>. </p>
+<p>This method will block until all the evolution tasks enqueued via <a class="reference internal" href="#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> have been completed. Exceptions thrown by the enqueued tasks can be re-raised via <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>: they will <strong>not</strong> be re-thrown by this method. Also, contrary to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, this method will <strong>not</strong> reset the status of the island: after a call to <a class="reference internal" href="#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>. </p>
 </dd></dl>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island6statusEv">
-<span id="pagmo::island::statusC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"></span><a class="reference internal" href="#_CPPv2N5pagmo13evolve_statusE" title="pagmo::evolve_status">evolve_status</a> <code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island6statusEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::statusC"></span><span class="target" id="classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"></span><a class="reference internal" href="#_CPPv2N5pagmo13evolve_statusE" title="pagmo::evolve_status">evolve_status</a> <code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island6statusEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Status of the island. </p>
-<p>This method will return a <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43af"><span class="std std-ref">pagmo::evolve_status</span></a> flag indicating the current status of asynchronous operations in the island. The flag will be:</p>
+<p>This method will return a <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43af"><span class="std std-ref">pagmo::evolve_status</span></a> flag indicating the current status of asynchronous operations in the island. The flag will be:</p>
 <p><ul class="simple">
-<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> if the island is currently not evolving and no exceptions were thrown by evolution tasks since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
-<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a> if the island is evolving and no exceptions have (yet) been thrown by evolution tasks since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
-<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a> if the island is currently not evolving and at least one evolution task threw an exception since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
-<li><a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"><span class="std std-ref">evolve_status::busy_error</span></a> if the island is currently evolving and at least one evolution task has already thrown an exception since the last call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</li>
+<li><a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> if the island is currently not evolving and no exceptions were thrown by evolution tasks since the last call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
+<li><a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"><span class="std std-ref">evolve_status::busy</span></a> if the island is evolving and no exceptions have (yet) been thrown by evolution tasks since the last call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
+<li><a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a> if the island is currently not evolving and at least one evolution task threw an exception since the last call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>;</li>
+<li><a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"><span class="std std-ref">evolve_status::busy_error</span></a> if the island is currently evolving and at least one evolution task has already thrown an exception since the last call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</li>
 </ul>
 </p>
-<p>Note that after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>, and after a call to <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="#pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>.</p>
+<p>Note that after a call to <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a>, and after a call to <a class="reference internal" href="#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a flag indicating the current status of asynchronous operations in the island. </dd>
@@ -527,12 +520,12 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island13get_algorithmEv">
-<span id="pagmo::island::get_algorithmC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"></span><a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <code class="descname">get_algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island13get_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::get_algorithmC"></span><span class="target" id="classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"></span><a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <code class="descname">get_algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island13get_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the algorithm. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a copy of the island&#8217;s algorithm.</dd>
+<dd>a copy of the island’s algorithm.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives or by the invoked copy constructor. </li>
@@ -544,7 +537,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island13set_algorithmE9algorithm">
-<span id="pagmo::island::set_algorithm__algorithm"></span><span class="target" id="pagmoclasspagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"></span>void <code class="descname">set_algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island13set_algorithmE9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::set_algorithm__algorithm"></span><span class="target" id="classpagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"></span>void <code class="descname">set_algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island13set_algorithmE9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the algorithm. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
@@ -564,12 +557,12 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island14get_populationEv">
-<span id="pagmo::island::get_populationC"></span><span class="target" id="pagmoclasspagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"></span><a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">get_population</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island14get_populationEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::get_populationC"></span><span class="target" id="classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"></span><a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">get_population</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island14get_populationEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the population. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a copy of the island&#8217;s population.</dd>
+<dd>a copy of the island’s population.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives or by the invoked copy constructor. </li>
@@ -581,7 +574,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island14set_populationE10population">
-<span id="pagmo::island::set_population__population"></span><span class="target" id="pagmoclasspagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"></span>void <code class="descname">set_population</code><span class="sig-paren">(</span><a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island14set_populationE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::set_population__population"></span><span class="target" id="classpagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"></span>void <code class="descname">set_population</code><span class="sig-paren">(</span><a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island14set_populationE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the population. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
@@ -601,12 +594,12 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island17get_thread_safetyEv">
-<span id="pagmo::island::get_thread_safetyC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a748492007501f46e25db93e037e1c8fa"></span>std::array&lt;<a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a>, 2&gt; <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the thread safety of the island&#8217;s members. </p>
+<span id="pagmo::island::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1island_1a748492007501f46e25db93e037e1c8fa"></span>std::array&lt;<a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a>, 2&gt; <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the thread safety of the island’s members. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>an array containing the <a class="reference internal" href="miscellanea/type_traits.html#pagmonamespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1"><span class="std std-ref">pagmo::thread_safety</span></a> values for the internal algorithm and population&#8217;s problem (as returned by <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"><span class="std std-ref">pagmo::algorithm::get_thread_safety()</span></a> and <a class="reference internal" href="problem.html#pagmoclasspagmo_1_1problem_1a3a4b11756d597508afdd2ef0c3c4c4dc"><span class="std std-ref">pagmo::problem::get_thread_safety()</span></a>).</dd>
+<dd>an array containing the <a class="reference internal" href="miscellanea/type_traits.html#namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1"><span class="std std-ref">pagmo::thread_safety</span></a> values for the internal algorithm and population’s problem (as returned by <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"><span class="std std-ref">pagmo::algorithm::get_thread_safety()</span></a> and <a class="reference internal" href="problem.html#classpagmo_1_1problem_1a3a4b11756d597508afdd2ef0c3c4c4dc"><span class="std std-ref">pagmo::problem::get_thread_safety()</span></a>).</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives. </li>
@@ -618,9 +611,9 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island8get_nameEv">
-<span id="pagmo::island::get_nameC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a2bb0d85b664867d7f53d2f2c804aa4e0"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Island&#8217;s name. </p>
-<p>If the UDI satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__name"><span class="std std-ref">pagmo::has_name</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method. Otherwise, an implementation-defined name based on the type of the UDI will be returned.</p>
+<span id="pagmo::island::get_nameC"></span><span class="target" id="classpagmo_1_1island_1a2bb0d85b664867d7f53d2f2c804aa4e0"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Island’s name. </p>
+<p>If the UDI satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__name"><span class="std std-ref">pagmo::has_name</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method. Otherwise, an implementation-defined name based on the type of the UDI will be returned.</p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -636,9 +629,9 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island14get_extra_infoEv">
-<span id="pagmo::island::get_extra_infoC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a05d14fc114bdf533da94d2d30575e35f"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Island&#8217;s extra info. </p>
-<p>If the UDI satisfies <a class="reference internal" href="miscellanea/type_traits.html#pagmoclasspagmo_1_1has__extra__info"><span class="std std-ref">pagmo::has_extra_info</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method. Otherwise, an empty string will be returned.</p>
+<span id="pagmo::island::get_extra_infoC"></span><span class="target" id="classpagmo_1_1island_1a05d14fc114bdf533da94d2d30575e35f"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Island’s extra info. </p>
+<p>If the UDI satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__extra__info"><span class="std std-ref">pagmo::has_extra_info</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method. Otherwise, an empty string will be returned.</p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
@@ -656,7 +649,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2NK5pagmo6island4saveER7Archive">
-<span id="pagmo::island::save__ArchiveRC"></span><span class="target" id="pagmoclasspagmo_1_1island_1a5d89f6c8068c029f73f95b0c50d90783"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::save__ArchiveRC"></span><span class="target" id="classpagmo_1_1island_1a5d89f6c8068c029f73f95b0c50d90783"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
 <p>This method will save <code class="docutils literal"><span class="pre">this</span></code> to the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p>It is safe to call this method while the island is evolving.</p>
@@ -669,8 +662,8 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li>the serialization of <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type,</li>
-<li><a class="reference internal" href="#pagmoclasspagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">get_algorithm()</span></a> and <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">get_population()</span></a>. </li>
+<li>the serialization of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type,</li>
+<li><a class="reference internal" href="#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">get_algorithm()</span></a> and <a class="reference internal" href="#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">get_population()</span></a>. </li>
 </ul>
 </li>
 </ul>
@@ -683,7 +676,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <dt>
 <em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo6island4loadER7Archive">
-<span id="pagmo::island::load__ArchiveR"></span><span class="target" id="pagmoclasspagmo_1_1island_1affd8a750e52bf579d0729a4a0b227c2d"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::load__ArchiveR"></span><span class="target" id="classpagmo_1_1island_1affd8a750e52bf579d0729a4a0b227c2d"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
 <p>This method will load into <code class="docutils literal"><span class="pre">this</span></code> the content of <code class="docutils literal"><span class="pre">ar</span></code>. This method will wait until any ongoing evolution in <code class="docutils literal"><span class="pre">this</span></code> is finished before returning.</p>
 <p><dl class="docutils">
@@ -694,7 +687,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type. </li>
 </ul>
 </dd>
 </dl>
@@ -706,8 +699,8 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <p class="breathe-sectiondef-title rubric">Friends</p>
 <dl class="function">
 <dt id="_CPPv2lsRNSt7ostreamERK6island">
-<span id="lshift-operator__osR.islandCR"></span><span class="target" id="pagmoclasspagmo_1_1island_1afe8c627eb931e63133f8b0d922a68eb8"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> island &amp;<em>isl</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK6island" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Stream operator for <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
+<span id="lshift-operator__osR.islandCR"></span><span class="target" id="classpagmo_1_1island_1afe8c627eb931e63133f8b0d922a68eb8"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> island &amp;<em>isl</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK6island" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Stream operator for <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
 <p>This operator will stream to <code class="docutils literal"><span class="pre">os</span></code> a human-readable representation of <code class="docutils literal"><span class="pre">isl</span></code>.</p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="docutils">
@@ -722,8 +715,8 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li>the stream operators of fundamental types, <a class="reference internal" href="algorithm.html#pagmoclasspagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#pagmoclasspagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>,</li>
-<li><a class="reference internal" href="#pagmoclasspagmo_1_1island_1a05d14fc114bdf533da94d2d30575e35f"><span class="std std-ref">pagmo::island::get_extra_info()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">pagmo::island::get_algorithm()</span></a>, <a class="reference internal" href="#pagmoclasspagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">pagmo::island::get_population()</span></a>. </li>
+<li>the stream operators of fundamental types, <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>,</li>
+<li><a class="reference internal" href="#classpagmo_1_1island_1a05d14fc114bdf533da94d2d30575e35f"><span class="std std-ref">pagmo::island::get_extra_info()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">pagmo::island::get_algorithm()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">pagmo::island::get_population()</span></a>. </li>
 </ul>
 </li>
 </ul>
@@ -737,9 +730,9 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="type">
 <dt id="_CPPv2N5pagmo13evolve_statusE">
-<span id="pagmo::evolve_status"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43af"></span><em class="property">enum </em><code class="descclassname">pagmo::</code><code class="descname">evolve_status</code><a class="headerlink" href="#_CPPv2N5pagmo13evolve_statusE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::evolve_status"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43af"></span><em class="property">enum </em><code class="descclassname">pagmo::</code><code class="descname">evolve_status</code><a class="headerlink" href="#_CPPv2N5pagmo13evolve_statusE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolution status. </p>
-<p>This enumeration contains status flags used to represent the current status of asynchronous evolution/optimisation in <a class="reference internal" href="#pagmoclasspagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> and <a class="reference internal" href="archipelago.html#pagmoclasspagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a>.</p>
+<p>This enumeration contains status flags used to represent the current status of asynchronous evolution/optimisation in <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> and <a class="reference internal" href="archipelago.html#classpagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a>.</p>
 <p><div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#_CPPv2NK5pagmo6island6statusEv" title="pagmo::island::status"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::island::status()</span></code></a> and <a class="reference internal" href="archipelago.html#_CPPv2NK5pagmo11archipelago6statusEv" title="pagmo::archipelago::status"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::archipelago::status()</span></code></a>.</p>
@@ -748,25 +741,25 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 <p><em>Values:</em></p>
 <dl class="member">
 <dt id="_CPPv2N5pagmo4idleE">
-<span id="pagmo::idle"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"></span><code class="descname">idle</code> = 0<a class="headerlink" href="#_CPPv2N5pagmo4idleE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::idle"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"></span><code class="descname">idle</code> = 0<a class="headerlink" href="#_CPPv2N5pagmo4idleE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>No asynchronous operations are ongoing, and no error was generated by an asynchronous operation in the past </p>
 </dd></dl>
 
 <dl class="member">
 <dt id="_CPPv2N5pagmo4busyE">
-<span id="pagmo::busy"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"></span><code class="descname">busy</code> = 1<a class="headerlink" href="#_CPPv2N5pagmo4busyE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::busy"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43afa8bc1b2f84252c3df4edd53e4aad097a7"></span><code class="descname">busy</code> = 1<a class="headerlink" href="#_CPPv2N5pagmo4busyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Asynchronous operations are ongoing, and no error was generated by an asynchronous operation in the past </p>
 </dd></dl>
 
 <dl class="member">
 <dt id="_CPPv2N5pagmo10idle_errorE">
-<span id="pagmo::idle_error"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"></span><code class="descname">idle_error</code> = 2<a class="headerlink" href="#_CPPv2N5pagmo10idle_errorE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::idle_error"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"></span><code class="descname">idle_error</code> = 2<a class="headerlink" href="#_CPPv2N5pagmo10idle_errorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Idle with error: no asynchronous operations are ongoing, but an error was generated by an asynchronous operation in the past </p>
 </dd></dl>
 
 <dl class="member">
 <dt id="_CPPv2N5pagmo10busy_errorE">
-<span id="pagmo::busy_error"></span><span class="target" id="pagmonamespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"></span><code class="descname">busy_error</code> = 3<a class="headerlink" href="#_CPPv2N5pagmo10busy_errorE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::busy_error"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43afa58a98eff293532aae63491d2cdc0ef6e"></span><code class="descname">busy_error</code> = 3<a class="headerlink" href="#_CPPv2N5pagmo10busy_errorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Busy with error: asynchronous operations are ongoing, and an error was generated by an asynchronous operation in the past </p>
 </dd></dl>
 
@@ -787,7 +780,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>
