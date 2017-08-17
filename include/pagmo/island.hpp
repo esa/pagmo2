@@ -1219,6 +1219,11 @@ public:
      * archipelago.
      */
     using size_type = size_type_implementation;
+
+private:
+    using idx_map_t = std::unordered_map<const island *, size_type>;
+
+public:
     /// Mutable iterator.
     /**
      * Dereferencing a mutable iterator will yield a reference to an island within the archipelago.
@@ -1257,7 +1262,7 @@ public:
     {
         for (const auto &iptr : other.m_islands) {
             // This will end up copying the island members,
-            // and assign the archi pointer as well.
+            // assign the archi pointer, and associating ids to island pointers.
             // NOTE: on construction the topology of this will be unconnected,
             // it will be overridden below.
             push_back(*iptr);
@@ -1280,16 +1285,24 @@ public:
         // island evolutions are interacting with their hosting archi 'other'.
         // We cannot just move in the vector of islands.
         other.wait_check_ignore();
-        // Move in the islands.
+        // Move in the islands, make sure other is cleared.
         m_islands = std::move(other.m_islands);
+        other.m_islands.clear();
         // Re-direct the archi pointers to point to this.
         for (const auto &iptr : m_islands) {
             iptr->m_ptr->archi_ptr = this;
         }
-        // Move over the topology.
+        // Move over the indices, clear other.
+        // NOTE: the indices are still valid as above we just moved in a vector
+        // of unique_ptrs, without changing their content.
+        m_idx_map = std::move(other.m_idx_map);
+        other.m_idx_map.clear();
+        // Move over the topology. No need to clear here as we know
+        // in which state the topology will be in after the move.
         m_topo = std::move(other.m_topo);
-        // Move over the emigrants.
+        // Move over the emigrants, clear other.
         m_emigrants = std::move(other.m_emigrants);
+        other.m_emigrants.clear();
     }
 
 private:
@@ -1404,16 +1417,21 @@ public:
             // This mirrors the island's behaviour.
             wait_check_ignore();
             other.wait_check_ignore();
-            // Move in the islands.
+            // Move in the islands, clear other.
             m_islands = std::move(other.m_islands);
+            other.m_islands.clear();
             // Re-direct the archi pointers to point to this.
             for (const auto &iptr : m_islands) {
                 iptr->m_ptr->archi_ptr = this;
             }
+            // Move the indices map, clear other.
+            m_idx_map = std::move(other.m_idx_map);
+            other.m_idx_map.clear();
             // Move over the topology.
             m_topo = std::move(other.m_topo);
-            // Move over the emigrants.
+            // Move over the emigrants, clear other.
             m_emigrants = std::move(other.m_emigrants);
+            other.m_emigrants.clear();
         }
         return *this;
     }
@@ -1427,8 +1445,18 @@ public:
         // NOTE: this is not strictly necessary, but it will not hurt. And, if we add further
         // sanity checks, we know the archi is stopped.
         wait_check_ignore();
+        // NOTE: we made sure in the move ctor/assignment that the island vector, the emigrants and the indices
+        // map are all cleared out after a move. Thus we can safely assert the following.
         assert(std::all_of(m_islands.begin(), m_islands.end(),
                            [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
+        assert(m_emigrants.size() == m_islands.size());
+        assert(m_idx_map.size() == m_islands.size());
+#if !defined(NDEBUG)
+        for (size_type i = 0; i < m_islands.size(); ++i) {
+            assert(m_idx_map.find(m_islands[i].get()) != m_idx_map.end());
+            assert(m_idx_map.find(m_islands[i].get())->second == i);
+        }
+#endif
     }
     /// Mutable island access.
     /**
@@ -1527,6 +1555,19 @@ public:
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
         // This is noexcept.
         m_islands.back()->m_ptr->archi_ptr = this;
+
+        // Map the new island to its index. Needs to be protected.
+        try {
+            std::lock_guard<std::mutex> lock(m_idx_map_mutex);
+            assert(m_idx_map.find(m_islands.back().get()) == m_idx_map.end());
+            m_idx_map.emplace(m_islands.back().get(), m_islands.size() - 1u);
+        } catch (...) {
+            // NOTE: this can throw either via lock_guard, or via the emplace. In any
+            // case, we will not have modified m_idx_map. We can safely pop back the recently
+            // added island before rethrowing.
+            m_islands.pop_back();
+            throw;
+        }
 
         // NOTE: at this point, the new island has been added but it is not yet connected
         // and thus it will not participate yet in migration. We'll try to connect now.
@@ -1852,23 +1893,58 @@ public:
      * @param ar the input archive.
      *
      * @throws unspecified any exception thrown by the deserialization of pagmo::island, pagmo::topology
-     * or primitive types.
+     * or primitive types, or by memory errors in standard containers.
      */
     template <typename Archive>
     void load(Archive &ar)
     {
+        // NOTE: the idea here is that we will be loading the member of archi one by one in
+        // separate variables, move assign the loaded data into a tmp archi and finally move-assign
+        // the tmp archi into this. This allows the method to be exception safe, and to have
+        // archi objects always in a consistent state at every stage of the deserialization.
+
+        // The tmp archi. This is def-cted and idle, we will be able to move-in data without
+        // worrying about synchronization.
         archipelago tmp;
-        // NOTE: no need to lock anything, tmp is idle.
-        ar(tmp.m_islands, tmp.m_topo, tmp.m_emigrants);
+
+        // The islands.
+        container_t tmp_islands;
+        ar(tmp_islands);
+
+        // Map the islands to indices.
+        idx_map_t tmp_idx_map;
+        for (size_type i = 0; i < tmp_islands.size(); ++i) {
+            tmp_idx_map.emplace(tmp_islands[i].get(), i);
+        }
+
+        // The topology.
+        topology tmp_topo;
+        ar(tmp_topo);
+
+        // The emigrants.
+        std::vector<std::vector<vector_double>> tmp_emigrants;
+        ar(tmp_emigrants);
+
+        // From now on, everything is noexcept.
+        tmp.m_islands = std::move(tmp_islands);
+        tmp.m_idx_map = std::move(tmp_idx_map);
+        tmp.m_topo = std::move(tmp_topo);
+        tmp.m_emigrants = std::move(tmp_emigrants);
+
+        // NOTE: this final assignment will take care of setting the islands' archi pointers
+        // appropriately via archi's move assignment operator.
         *this = std::move(tmp);
     }
 
 private:
     // The islands.
     container_t m_islands;
+    // The map from island pointers to indices in the archi.
+    mutable std::mutex m_idx_map_mutex;
+    idx_map_t m_idx_map;
     // The topology.
     topology m_topo = topology{unconnected{}};
-    // The emigrants container.
+    // The emigrants.
     mutable std::mutex m_emigrants_mutex;
     std::vector<std::vector<vector_double>> m_emigrants;
 };
