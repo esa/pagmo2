@@ -100,7 +100,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
     endif()
 
     # Common configuration for GCC, clang and Intel.
-    if ((YACMA_COMPILER_IS_CLANGXX AND NOT YACMA_COMPILER_IS_MSVC) OR YACMA_COMPILER_IS_INTELXX OR YACMA_COMPILER_IS_GNUCXX)
+    if((YACMA_COMPILER_IS_CLANGXX AND NOT YACMA_COMPILER_IS_MSVC) OR YACMA_COMPILER_IS_INTELXX OR YACMA_COMPILER_IS_GNUCXX)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wall)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnon-virtual-dtor)
@@ -135,6 +135,14 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wduplicated-branches)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wrestrict)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Waligned-new)
+        if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "5.999")
+            # NOTE: GCC >= 6 seems to be wrongly warning about visibility attributes
+            # in some situations:
+            # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80947
+            # Let's just disable the warning for now.
+            message(STATUS "Activating the '-Wno-attributes' workaround for GCC >= 6.")
+            _YACMA_CHECK_ENABLE_CXX_FLAG(-Wno-attributes)
+        endif()
     endif()
 
     # MSVC setup.
