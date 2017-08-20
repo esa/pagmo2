@@ -7,6 +7,8 @@ Changelog
 Fix
 ~~~
 
+- Various build fixes for recent GCC versions (`#129 <https://github.com/esa/pagmo2/pull/129>`__).
+
 - Various documentation fixes and improvements (`#121 <https://github.com/esa/pagmo2/pull/121>`__).
 
 2.4 (2017-06-09)
