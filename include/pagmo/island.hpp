@@ -1184,7 +1184,7 @@ inline void thread_island::run_evolve(island &isl) const
  * ongoing evolutions in the archipelago can be queried via status().
  *
  * \verbatim embed:rst:leading-asterisk
- * .. note::
+ * .. warning::
  *
  *    A moved-from :cpp:class:`pagmo::archipelago` is destructible and assignable. Any other operation will result
  *    in undefined behaviour.
@@ -1229,7 +1229,7 @@ public:
      * Dereferencing a mutable iterator will yield a reference to an island within the archipelago.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
      *    on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.
@@ -1466,7 +1466,7 @@ public:
      * obtained via this method.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    The mutable version of the subscript operator exists solely to allow calling non-const methods
      *    on the islands. Assigning an island via a reference obtained through this operator will result
@@ -1722,7 +1722,7 @@ public:
      * Adding an island to the archipelago will invalidate all existing iterators.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
      *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
@@ -1742,7 +1742,7 @@ public:
      * Adding an island to the archipelago will invalidate all existing iterators.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
      *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
