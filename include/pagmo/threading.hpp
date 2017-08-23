@@ -40,8 +40,8 @@ namespace pagmo
  * the thread safety of problems, algorithms, etc.
  */
 enum class thread_safety {
-    none, ///< No thread safety: any concurrent operation on distinct instances is unsafe
-    basic ///< Basic thread safety: any concurrent operation on distinct instances is safe
+    none, ///< No thread safety: concurrent operations on distinct instances are unsafe
+    basic ///< Basic thread safety: concurrent operations on distinct instances are safe
 };
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
