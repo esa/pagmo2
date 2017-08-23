@@ -40,6 +40,8 @@ see https://www.gnu.org/licenses/. */
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
+#include <typeinfo>
 #include <utility>
 
 #include <pagmo/detail/custom_comparisons.hpp>
@@ -224,8 +226,9 @@ inline double binomial_coefficient(vector_double::size_type n, vector_double::si
         return std::round(std::exp(std::lgamma(static_cast<double>(n) + 1.) - std::lgamma(static_cast<double>(k) + 1.)
                                    - std::lgamma(static_cast<double>(n) - static_cast<double>(k) + 1.)));
     } else {
-        pagmo_throw(std::invalid_argument, "The binomial coefficient is only defined for k<=n, you requested n="
-                                               + std::to_string(n) + " and k=" + std::to_string(k));
+        pagmo_throw(std::invalid_argument,
+                    "The binomial coefficient is only defined for k<=n, you requested n=" + std::to_string(n)
+                        + " and k=" + std::to_string(k));
     }
 }
 
@@ -332,6 +335,20 @@ inline void force_bounds_stick(vector_double &x, const vector_double &lb, const 
             x[j] = ub[j];
         }
     }
+}
+
+// A small helper to safely increment by one an integral value. It will error out if
+// overflow occurs.
+template <typename T>
+inline T safe_increment(T n)
+{
+    static_assert(std::is_integral<T>::value, "Invalid type.");
+    if (n == std::numeric_limits<T>::max()) {
+        pagmo_throw(std::overflow_error,
+                    std::string("Cannot increment by one a value of type '") + typeid(T).name()
+                        + "', as it would result in overflow");
+    }
+    return static_cast<T>(n + T(1));
 }
 } // namespace detail
 

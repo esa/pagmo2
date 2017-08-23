@@ -33,18 +33,22 @@ see https://www.gnu.org/licenses/. */
 #include <array>
 #include <boost/any.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 #include <chrono>
 #include <cstddef>
+#include <cstdlib>
 #include <exception>
 #include <functional>
 #include <future>
 #include <initializer_list>
 #include <iostream>
+#include <iterator>
 #include <memory>
 #include <mutex>
 #include <random>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
@@ -766,57 +770,7 @@ public:
         }
         return *this;
     }
-    /// Launch evolution.
-    /**
-     * This method will evolve the island's pagmo::population using the
-     * island's pagmo::algorithm. The evolution happens asynchronously:
-     * a call to island::evolve() will create an evolution task that will be pushed
-     * to a queue, and then return immediately.
-     * The tasks in the queue are consumed
-     * by a separate thread of execution managed by the pagmo::island object.
-     * Each task will invoke the <tt>run_evolve()</tt>
-     * method of the UDI \p n times consecutively to perform the actual evolution.
-     * The island's population will be updated at the end of each <tt>run_evolve()</tt>
-     * invocation. Exceptions raised inside the
-     * tasks are stored within the island object, and can be re-raised by calling wait_check().
-     *
-     * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
-     * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::wait_check()
-     * to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
-     * island::status() can be used to query the status of the asynchronous operations in the island.
-     *
-     * @param n the number of times the <tt>run_evolve()</tt> method of the UDI will be called
-     * within the evolution task.
-     *
-     * @throws unspecified any exception thrown by:
-     * - threading primitives,
-     * - memory allocation errors,
-     * - the public interface of \p std::future.
-     */
-    void evolve(unsigned n = 1)
-    {
-        // First add an empty future, so that if an exception is thrown
-        // we will not have modified m_futures, nor we will have a future
-        // in flight which we cannot wait upon.
-        m_ptr->futures.emplace_back();
-        try {
-            // Move assign a new future provided by the enqueue() method.
-            // NOTE: enqueue either returns a valid future, or throws without
-            // having enqueued any task.
-            m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
-                for (auto i = 0u; i < n; ++i) {
-                    this->m_ptr->isl_ptr->run_evolve(*this);
-                }
-            });
-            // LCOV_EXCL_START
-        } catch (...) {
-            // We end up here only if enqueue threw. In such a case, we need to cleanup
-            // the empty future we added above before re-throwing and exiting.
-            m_ptr->futures.pop_back();
-            throw;
-            // LCOV_EXCL_STOP
-        }
-    }
+    void evolve(unsigned = 1);
     /// Block until evolution ends and re-raise the first stored exception.
     /**
      * This method will block until all the evolution tasks enqueued via island::evolve() have been completed.
@@ -1219,6 +1173,26 @@ public:
      * archipelago.
      */
     using size_type = size_type_implementation;
+    /// Group of migrating individuals.
+    /**
+     * \rststar
+     * This triple is used to represent groups of individuals migrating within the archipelago.
+     * The three elements of the tuple represent, respectively, the IDs, decision vectors and
+     * fitness vectors of the migrants. This type, in other words, is a stripped down version
+     * of :cpp:class:`pagmo::population` containing only the data necessary for migration.
+     * \endrststar
+     */
+    using emigrants_t
+        = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
+    /// Database of migrating individuals.
+    /**
+     * \rststar
+     * An emigrants database is a vector whose :math:`i`-th entry
+     * contains the group of individuals (represented as an :cpp:type:`~pagmo::archipelago::emigrants_t`)
+     * that have been selected for outward migration from the :math:`i`-th island of the archipelago.
+     * \endrststar
+     */
+    using emigrants_db_t = std::vector<emigrants_t>;
 
 private:
     using idx_map_t = std::unordered_map<const island *, size_type>;
@@ -1256,7 +1230,7 @@ public:
      * @throws unspecified any exception thrown by:
      * - archipelago::push_back(),
      * - archipelago::get_topology(),
-     * - archipelago::get_emigrants().
+     * - archipelago::get_emigrants_db().
      */
     archipelago(const archipelago &other)
     {
@@ -1270,7 +1244,7 @@ public:
         // Set the topology.
         m_topo = other.get_topology();
         // Set the emigrants.
-        m_emigrants = other.get_emigrants();
+        m_emigrants = other.get_emigrants_db();
     }
     /// Move constructor.
     /**
@@ -1453,6 +1427,8 @@ public:
         assert(m_idx_map.size() == m_islands.size());
 #if !defined(NDEBUG)
         for (size_type i = 0; i < m_islands.size(); ++i) {
+            assert(std::get<0>(m_emigrants[i]).size() == std::get<1>(m_emigrants[i]).size());
+            assert(std::get<1>(m_emigrants[i]).size() == std::get<2>(m_emigrants[i]).size());
             assert(m_idx_map.find(m_islands[i].get()) != m_idx_map.end());
             assert(m_idx_map.find(m_islands[i].get())->second == i);
         }
@@ -1542,6 +1518,8 @@ public:
      *
      * @param args the arguments that will be used for the construction of the island.
      *
+     * @throws std::overflow_error if the size of the archipelago is greater than an
+     * implementation-defined maximum.
      * @throws unspecified any exception thrown by:
      * - memory allocation errors,
      * - threading primitives,
@@ -1551,50 +1529,49 @@ public:
     template <typename... Args, push_back_enabler<Args...> = 0>
     void push_back(Args &&... args)
     {
-        // Add the new island. This will either succeed or throw without modifying m_islands.
-        m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
-        // This is noexcept.
-        m_islands.back()->m_ptr->archi_ptr = this;
+        // Construct the new island and assign the pointer into this.
+        auto new_island = detail::make_unique<island>(std::forward<Args>(args)...);
+        new_island->m_ptr->archi_ptr = this;
 
-        // Map the new island to its index. Needs to be protected.
-        try {
+        // Try to make space for the new island in the islands vector
+        // and in the migration db.
+        m_islands.reserve(detail::safe_increment(m_islands.size()));
+        {
+            std::lock_guard<std::mutex> lock(m_emigrants_mutex);
+            m_emigrants.reserve(detail::safe_increment(m_emigrants.size()));
+        }
+
+        // Map the new island idx.
+        {
+            // NOTE: if anything fails here, we won't have modified the state of the archi
+            // (apart from reserving memory).
             std::lock_guard<std::mutex> lock(m_idx_map_mutex);
-            assert(m_idx_map.find(m_islands.back().get()) == m_idx_map.end());
-            m_idx_map.emplace(m_islands.back().get(), m_islands.size() - 1u);
-        } catch (...) {
-            // NOTE: this can throw either via lock_guard, or via the emplace. In any
-            // case, we will not have modified m_idx_map. We can safely pop back the recently
-            // added island before rethrowing.
-            m_islands.pop_back();
-            throw;
+            assert(m_idx_map.find(new_island.get()) == m_idx_map.end());
+            m_idx_map.emplace(new_island.get(), m_islands.size());
         }
 
-        // NOTE: at this point, the new island has been added but it is not yet connected
-        // and thus it will not participate yet in migration. We'll try to connect now.
-        // NOTE: push_back() is required to be thread-safe, no need for locking.
-        try {
-            m_topo.push_back();
-        } catch (...) {
-            // In case of any error connecting the island, remove the added
-            // island before re-throwing.
-            m_islands.pop_back();
-            throw;
-        }
-
-        // Add an empty entry to the emigrants vector. Needs to be protected
-        // as evolution might be ongoing.
+        // Add an empty entry to the migrants db.
         try {
             std::lock_guard<std::mutex> lock(m_emigrants_mutex);
             m_emigrants.emplace_back();
         } catch (...) {
-            // NOTE: if the emplace_back()/lock throws, we will erase the recently-added island,
-            // so that the emigrants vector size is consistent with the number of island. But we
-            // don't do anything about the topology: we cannot roll back the addition of an element
-            // and in any case we can always set bogus topologies via set_topology(). For the topology,
-            // we must never assume it makes sense.
-            m_islands.pop_back();
-            throw;
+            // LCOV_EXCL_START
+            // NOTE: we get here only if the lock throws, because we made space for the
+            // new migrants above already. Better to abort in such case, as we have no
+            // reasonable path for recovering from this.
+            std::cerr << "An unrecoverable error arose while adding an island to the archipelago, aborting now."
+                      << std::endl;
+            std::abort();
+            // LCOV_EXCL_STOP
         }
+
+        // Actually add the island. This cannot fail as we already reserved space.
+        m_islands.emplace_back(std::move(new_island));
+
+        // Finally, push back the topology. This is required to be thread safe, no need for locks.
+        // If this fails, we will have a possibly *bad* topology in the archi, but this can
+        // always happen via a bogus set_topology() and there's nothing we can do about it.
+        m_topo.push_back();
     }
     /// Evolve archipelago.
     /**
@@ -1865,11 +1842,98 @@ public:
         wait_check_ignore();
         m_topo = std::move(topo);
     }
-    /// Get the current emigrants.
-    std::vector<std::vector<vector_double>> get_emigrants() const
+    /// Get the emigrants database.
+    /**
+     * This method will return the database of migrating individuals. See the description
+     * of archipelago::emigrants_db_t for information on the content of the returned object.
+     *
+     * Each element of the emigrants database is guaranteed to contain a triple of vectors
+     * of equal sizes.
+     *
+     * @return a copy of the database of migrating individuals.
+     *
+     * @throws unspecified any exception thrown by failures in threading primitives.
+     */
+    emigrants_db_t get_emigrants_db() const
     {
         std::lock_guard<std::mutex> lock(m_emigrants_mutex);
         return m_emigrants;
+    }
+    /// Get the emigrants from a specific island.
+    /**
+     * This method will return the group of individuals that are currently in the emigration
+     * queue for the \f$ i \f$-th island.
+     *
+     * The returned triple is guaranteed to contain vectors of equal size.
+     *
+     * @param i the index of the island whose emigrants will be returned.
+     *
+     * @return a copy of the emigrants from the \f$ i \f$-th island of the archipelago.
+     *
+     * @throws std::out_of_range if \p i is not less than the size of the migration database.
+     * @throws unspecified any exception thrown by failures in threading primitives.
+     */
+    emigrants_t get_emigrants(size_type i) const
+    {
+        std::lock_guard<std::mutex> lock(m_emigrants_mutex);
+        if (i >= m_emigrants.size()) {
+            pagmo_throw(std::out_of_range,
+                        "cannot access the emigrants of the island at index " + std::to_string(i)
+                            + ": the emigrants database has a size of only " + std::to_string(m_emigrants.size()));
+        }
+        return m_emigrants[i];
+    }
+    /// Get the connections to an island.
+    /**
+     * This method will return a pair containing the indices of the islands connecting into the
+     * \f$ i \f$-th island, together with the weights of the connections. Internally, it will use
+     * topology::get_connections(), and thus it is guaranteed that the returned vectors are of
+     * equal size.
+     *
+     * @param i the index of the island whose connections will be returned.
+     *
+     * @return a pair representing the connections to the \f$ i \f$-th island and their weights.
+     *
+     * @throws unspecified any exception thrown by:
+     * - topology::get_connections(),
+     * - memory errors in standard containers,
+     * - ``boost::numeric_cast()``.
+     */
+    std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type i) const
+    {
+        // NOTE: we need to go through this conversion as technically we cannot be certain
+        // that size_t and size_type are the same type.
+        // NOTE: get_connections() is required to be thread-safe.
+        auto tmp = m_topo.get_connections(boost::numeric_cast<std::size_t>(i));
+        std::pair<std::vector<size_type>, vector_double> retval;
+        retval.first.reserve(static_cast<decltype(retval.first.size())>(tmp.first.size()));
+        std::transform(tmp.first.begin(), tmp.first.end(), std::back_inserter(retval.first),
+                       [](const std::size_t &n) { return boost::numeric_cast<size_type>(n); });
+        retval.second = std::move(tmp.second);
+        return retval;
+    }
+    /// Get the index of an island.
+    /**
+     * This method will return the index of the island \p isl in the archipelago. If \p isl does
+     * not belong to the archipelago, an error will be reaised.
+     *
+     * @param isl the island whose index will be returned.
+     *
+     * @return the index of \p isl in the archipelago.
+     *
+     * @throws std::invalid_argument if \p isl does not belong to the archipelago.
+     * @throws unspecified any exception thrown by failures in threading primitives.
+     */
+    size_type get_island_idx(const island &isl) const
+    {
+        std::lock_guard<std::mutex> lock(m_idx_map_mutex);
+        const auto ret = m_idx_map.find(&isl);
+        if (ret == m_idx_map.end()) {
+            pagmo_throw(
+                std::invalid_argument,
+                "the index of an island in an archipelago was requested, but the island is not in the archipelago");
+        }
+        return ret->second;
     }
     /// Save to archive.
     /**
@@ -1883,7 +1947,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_islands, get_topology(), get_emigrants());
+        ar(m_islands, get_topology(), get_emigrants_db());
     }
     /// Load from archive.
     /**
@@ -1922,7 +1986,7 @@ public:
         ar(tmp_topo);
 
         // The emigrants.
-        std::vector<std::vector<vector_double>> tmp_emigrants;
+        emigrants_db_t tmp_emigrants;
         ar(tmp_emigrants);
 
         // From now on, everything is noexcept.
@@ -1946,8 +2010,75 @@ private:
     topology m_topo = topology{unconnected{}};
     // The emigrants.
     mutable std::mutex m_emigrants_mutex;
-    std::vector<std::vector<vector_double>> m_emigrants;
+    emigrants_db_t m_emigrants;
 };
+
+/// Launch evolution.
+/**
+ * This method will evolve the island's pagmo::population using the
+ * island's pagmo::algorithm. The evolution happens asynchronously:
+ * a call to island::evolve() will create an evolution task that will be pushed
+ * to a queue, and then return immediately.
+ * The tasks in the queue are consumed
+ * by a separate thread of execution managed by the pagmo::island object.
+ * Each task will invoke the <tt>run_evolve()</tt>
+ * method of the UDI \p n times consecutively to perform the actual evolution.
+ * The island's population will be updated at the end of each <tt>run_evolve()</tt>
+ * invocation. Exceptions raised inside the
+ * tasks are stored within the island object, and can be re-raised by calling wait_check().
+ *
+ * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
+ * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::wait_check()
+ * to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
+ * island::status() can be used to query the status of the asynchronous operations in the island.
+ *
+ * @param n the number of times the <tt>run_evolve()</tt> method of the UDI will be called
+ * within the evolution task.
+ *
+ * @throws unspecified any exception thrown by:
+ * - threading primitives,
+ * - memory allocation errors,
+ * - the public interface of \p std::future.
+ */
+inline void island::evolve(unsigned n)
+{
+    // First add an empty future, so that if an exception is thrown
+    // we will not have modified m_futures, nor we will have a future
+    // in flight which we cannot wait upon.
+    m_ptr->futures.emplace_back();
+    try {
+        // Move assign a new future provided by the enqueue() method.
+        // NOTE: enqueue either returns a valid future, or throws without
+        // having enqueued any task.
+        m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+            // Cache the archi pointer.
+            const auto aptr = this->m_ptr->archi_ptr;
+            // Figure out what is the island's index in the archi, if we are
+            // in an archi. Otherwise, this variable will be unused.
+            const auto isl_idx = aptr ? aptr->get_island_idx(*this) : 0u;
+            for (auto i = 0u; i < n; ++i) {
+                if (aptr) {
+                    // Pre-evolution hook for an island belonging to an archi.
+                    // Get all the connections into the islands. This will return
+                    // a pair with the incoming connections and their weights (i.e.,
+                    // the migration probabilities).
+                    const auto connections = aptr->get_island_connections(isl_idx);
+                    if (connections.first.size()) {
+                        // Do something only if we actually have incoming connections.
+                    }
+                }
+                this->m_ptr->isl_ptr->run_evolve(*this);
+            }
+        });
+        // LCOV_EXCL_START
+    } catch (...) {
+        // We end up here only if enqueue threw. In such a case, we need to cleanup
+        // the empty future we added above before re-throwing and exiting.
+        m_ptr->futures.pop_back();
+        throw;
+        // LCOV_EXCL_STOP
+    }
+}
 }
 
 PAGMO_REGISTER_ISLAND(pagmo::thread_island)
