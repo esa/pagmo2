@@ -94,6 +94,15 @@ namespace pagmo
 // Fwd declaration.
 class island;
 
+/// Group of migrating individuals.
+/**
+ * This triple is used to represent groups of individuals migrating within a pagmo::archipelago.
+ * The three elements of the tuple represent, respectively, the IDs, decision vectors and
+ * fitness vectors of the migrants. This type, in other words, is a stripped down version
+ * of pagmo::population containing only the data necessary for migration.
+ */
+typedef std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>> migrants_t;
+
 /// Detect \p run_evolve() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -1173,26 +1182,15 @@ public:
      * archipelago.
      */
     using size_type = size_type_implementation;
-    /// Group of migrating individuals.
-    /**
-     * \rststar
-     * This triple is used to represent groups of individuals migrating within the archipelago.
-     * The three elements of the tuple represent, respectively, the IDs, decision vectors and
-     * fitness vectors of the migrants. This type, in other words, is a stripped down version
-     * of :cpp:class:`pagmo::population` containing only the data necessary for migration.
-     * \endrststar
-     */
-    using emigrants_t
-        = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
     /// Database of migrating individuals.
     /**
      * \rststar
-     * An emigrants database is a vector whose :math:`i`-th entry
-     * contains the group of individuals (represented as an :cpp:type:`~pagmo::archipelago::emigrants_t`)
-     * that have been selected for outward migration from the :math:`i`-th island of the archipelago.
+     * A migrants database is a vector whose :math:`i`-th entry
+     * contains the group of individuals (represented as a :cpp:type:`~pagmo::migrants_t`)
+     * that have been selected for migration from the :math:`i`-th island of the archipelago.
      * \endrststar
      */
-    using emigrants_db_t = std::vector<emigrants_t>;
+    using migrants_db_t = std::vector<migrants_t>;
 
 private:
     using idx_map_t = std::unordered_map<const island *, size_type>;
@@ -1230,7 +1228,7 @@ public:
      * @throws unspecified any exception thrown by:
      * - archipelago::push_back(),
      * - archipelago::get_topology(),
-     * - archipelago::get_emigrants_db().
+     * - archipelago::get_migrants_db().
      */
     archipelago(const archipelago &other)
     {
@@ -1243,8 +1241,8 @@ public:
         }
         // Set the topology.
         m_topo = other.get_topology();
-        // Set the emigrants.
-        m_emigrants = other.get_emigrants_db();
+        // Set the migrants.
+        m_migrants = other.get_migrants_db();
     }
     /// Move constructor.
     /**
@@ -1274,9 +1272,9 @@ public:
         // Move over the topology. No need to clear here as we know
         // in which state the topology will be in after the move.
         m_topo = std::move(other.m_topo);
-        // Move over the emigrants, clear other.
-        m_emigrants = std::move(other.m_emigrants);
-        other.m_emigrants.clear();
+        // Move over the migrants, clear other.
+        m_migrants = std::move(other.m_migrants);
+        other.m_migrants.clear();
     }
 
 private:
@@ -1403,9 +1401,9 @@ public:
             other.m_idx_map.clear();
             // Move over the topology.
             m_topo = std::move(other.m_topo);
-            // Move over the emigrants, clear other.
-            m_emigrants = std::move(other.m_emigrants);
-            other.m_emigrants.clear();
+            // Move over the migrants, clear other.
+            m_migrants = std::move(other.m_migrants);
+            other.m_migrants.clear();
         }
         return *this;
     }
@@ -1419,16 +1417,16 @@ public:
         // NOTE: this is not strictly necessary, but it will not hurt. And, if we add further
         // sanity checks, we know the archi is stopped.
         wait_check_ignore();
-        // NOTE: we made sure in the move ctor/assignment that the island vector, the emigrants and the indices
+        // NOTE: we made sure in the move ctor/assignment that the island vector, the migrants and the indices
         // map are all cleared out after a move. Thus we can safely assert the following.
         assert(std::all_of(m_islands.begin(), m_islands.end(),
                            [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
-        assert(m_emigrants.size() == m_islands.size());
+        assert(m_migrants.size() == m_islands.size());
         assert(m_idx_map.size() == m_islands.size());
 #if !defined(NDEBUG)
         for (size_type i = 0; i < m_islands.size(); ++i) {
-            assert(std::get<0>(m_emigrants[i]).size() == std::get<1>(m_emigrants[i]).size());
-            assert(std::get<1>(m_emigrants[i]).size() == std::get<2>(m_emigrants[i]).size());
+            assert(std::get<0>(m_migrants[i]).size() == std::get<1>(m_migrants[i]).size());
+            assert(std::get<1>(m_migrants[i]).size() == std::get<2>(m_migrants[i]).size());
             assert(m_idx_map.find(m_islands[i].get()) != m_idx_map.end());
             assert(m_idx_map.find(m_islands[i].get())->second == i);
         }
@@ -1537,8 +1535,8 @@ public:
         // and in the migration db.
         m_islands.reserve(detail::safe_increment(m_islands.size()));
         {
-            std::lock_guard<std::mutex> lock(m_emigrants_mutex);
-            m_emigrants.reserve(detail::safe_increment(m_emigrants.size()));
+            std::lock_guard<std::mutex> lock(m_migrants_mutex);
+            m_migrants.reserve(detail::safe_increment(m_migrants.size()));
         }
 
         // Map the new island idx.
@@ -1552,8 +1550,8 @@ public:
 
         // Add an empty entry to the migrants db.
         try {
-            std::lock_guard<std::mutex> lock(m_emigrants_mutex);
-            m_emigrants.emplace_back();
+            std::lock_guard<std::mutex> lock(m_migrants_mutex);
+            m_migrants.emplace_back();
         } catch (...) {
             // LCOV_EXCL_START
             // NOTE: we get here only if the lock throws, because we made space for the
@@ -1842,46 +1840,46 @@ public:
         wait_check_ignore();
         m_topo = std::move(topo);
     }
-    /// Get the emigrants database.
+    /// Get the migrants database.
     /**
      * This method will return the database of migrating individuals. See the description
-     * of archipelago::emigrants_db_t for information on the content of the returned object.
+     * of archipelago::migrants_db_t for information on the content of the returned object.
      *
-     * Each element of the emigrants database is guaranteed to contain a triple of vectors
+     * Each element of the migrants database is guaranteed to contain a triple of vectors
      * of equal sizes.
      *
      * @return a copy of the database of migrating individuals.
      *
      * @throws unspecified any exception thrown by failures in threading primitives.
      */
-    emigrants_db_t get_emigrants_db() const
+    migrants_db_t get_migrants_db() const
     {
-        std::lock_guard<std::mutex> lock(m_emigrants_mutex);
-        return m_emigrants;
+        std::lock_guard<std::mutex> lock(m_migrants_mutex);
+        return m_migrants;
     }
-    /// Get the emigrants from a specific island.
+    /// Get the migrants from a specific island.
     /**
-     * This method will return the group of individuals that are currently in the emigration
+     * This method will return the group of individuals that are currently in the migration
      * queue for the \f$ i \f$-th island.
      *
      * The returned triple is guaranteed to contain vectors of equal size.
      *
-     * @param i the index of the island whose emigrants will be returned.
+     * @param i the index of the island whose migrants will be returned.
      *
-     * @return a copy of the emigrants from the \f$ i \f$-th island of the archipelago.
+     * @return a copy of the migrants from the \f$ i \f$-th island of the archipelago.
      *
      * @throws std::out_of_range if \p i is not less than the size of the migration database.
      * @throws unspecified any exception thrown by failures in threading primitives.
      */
-    emigrants_t get_emigrants(size_type i) const
+    migrants_t get_migrants(size_type i) const
     {
-        std::lock_guard<std::mutex> lock(m_emigrants_mutex);
-        if (i >= m_emigrants.size()) {
+        std::lock_guard<std::mutex> lock(m_migrants_mutex);
+        if (i >= m_migrants.size()) {
             pagmo_throw(std::out_of_range,
-                        "cannot access the emigrants of the island at index " + std::to_string(i)
-                            + ": the emigrants database has a size of only " + std::to_string(m_emigrants.size()));
+                        "cannot access the migrants of the island at index " + std::to_string(i)
+                            + ": the migrants database has a size of only " + std::to_string(m_migrants.size()));
         }
-        return m_emigrants[i];
+        return m_migrants[i];
     }
     /// Get the connections to an island.
     /**
@@ -1947,7 +1945,7 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_islands, get_topology(), get_emigrants_db());
+        ar(m_islands, get_topology(), get_migrants_db());
     }
     /// Load from archive.
     /**
@@ -1985,15 +1983,15 @@ public:
         topology tmp_topo;
         ar(tmp_topo);
 
-        // The emigrants.
-        emigrants_db_t tmp_emigrants;
-        ar(tmp_emigrants);
+        // The migrants.
+        migrants_db_t tmp_migrants;
+        ar(tmp_migrants);
 
         // From now on, everything is noexcept.
         tmp.m_islands = std::move(tmp_islands);
         tmp.m_idx_map = std::move(tmp_idx_map);
         tmp.m_topo = std::move(tmp_topo);
-        tmp.m_emigrants = std::move(tmp_emigrants);
+        tmp.m_migrants = std::move(tmp_migrants);
 
         // NOTE: this final assignment will take care of setting the islands' archi pointers
         // appropriately via archi's move assignment operator.
@@ -2008,9 +2006,9 @@ private:
     idx_map_t m_idx_map;
     // The topology.
     topology m_topo = topology{unconnected{}};
-    // The emigrants.
-    mutable std::mutex m_emigrants_mutex;
-    emigrants_db_t m_emigrants;
+    // The migrants.
+    mutable std::mutex m_migrants_mutex;
+    migrants_db_t m_migrants;
 };
 
 /// Launch evolution.
@@ -2051,20 +2049,35 @@ inline void island::evolve(unsigned n)
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
         m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+            // Init a random engine, it will be used to randomly pick
+            // migrants from island connecting to this island in an archi.
+            std::mt19937 eng(static_cast<std::mt19937::result_type>(pagmo::random_device::next()));
+            // Migration probability distribution.
+            std::uniform_real_distribution<double> pdist(0., 1.);
             // Cache the archi pointer.
             const auto aptr = this->m_ptr->archi_ptr;
             // Figure out what is the island's index in the archi, if we are
             // in an archi. Otherwise, this variable will be unused.
             const auto isl_idx = aptr ? aptr->get_island_idx(*this) : 0u;
             for (auto i = 0u; i < n; ++i) {
+                // A vector of migrants. It will remain empty if the island
+                // is not in an archi or if there's no candidate migrants.
+                migrants_t migrants;
                 if (aptr) {
                     // Pre-evolution hook for an island belonging to an archi.
                     // Get all the connections into the islands. This will return
                     // a pair with the incoming connections and their weights (i.e.,
                     // the migration probabilities).
                     const auto connections = aptr->get_island_connections(isl_idx);
+                    assert(connections.first.size() == connections.second.size());
                     if (connections.first.size()) {
                         // Do something only if we actually have incoming connections.
+                        // Pick a random island index among the island connecting to this.
+                        std::uniform_int_distribution<decltype(connections.first.size())> idist(
+                            0u, connections.first.size() - 1u);
+                        const auto idx = idist(eng);
+                        if (pdist(eng) < connections.second[static_cast<decltype(connections.second.size())>(idx)]) {
+                        }
                     }
                 }
                 this->m_ptr->isl_ptr->run_evolve(*this);
