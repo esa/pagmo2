@@ -158,6 +158,15 @@ public:
         return m_problem.get_nic();
     }
 
+    /// Integer dimension
+    /**
+     * @return the integer dimension of the inner problem.
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_problem.get_nix();
+    }
+
     /// Checks if the inner problem has gradients.
     /**
      * The <tt>has_gradient()</tt> computation is forwarded to the inner problem.

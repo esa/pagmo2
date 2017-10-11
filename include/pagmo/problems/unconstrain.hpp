@@ -117,8 +117,9 @@ public:
         }
         // 2 - We throw if the method weighted is selected but the weight vector has the wrong size
         if (weights.size() != nc && method == "weighted") {
-            pagmo_throw(std::invalid_argument, "Length of weight vector is: " + std::to_string(weights.size())
-                                                   + " while the problem constraints are: " + std::to_string(nc));
+            pagmo_throw(std::invalid_argument,
+                        "Length of weight vector is: " + std::to_string(weights.size())
+                            + " while the problem constraints are: " + std::to_string(nc));
         }
         // 3 - We throw if the method selected is not supported
         if (method != "death penalty" && method != "kuri" && method != "weighted" && method != "ignore_c"
@@ -242,7 +243,7 @@ public:
 
     /// Number of objectives.
     /**
-     * @return the number of objectives of the new meta-problem.
+     * @return the number of objectives of the inner problem.
      */
     vector_double::size_type get_nobj() const
     {
@@ -251,6 +252,15 @@ public:
         } else {
             return 1u;
         }
+    }
+
+    /// Integer dimension
+    /**
+     * @return the integer dimension of the inner problem.
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_problem.get_nix();
     }
 
     /// Box-bounds.
