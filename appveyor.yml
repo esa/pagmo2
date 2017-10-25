@@ -2,19 +2,19 @@ environment:
   TWINE_PASSWORD:
     secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
   matrix:
-    - BUILD_TYPE: "MSVC_64_Python35"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
+    #- BUILD_TYPE: "MSVC_64_Python35"
+    #  COMPILER: MSVC15
+    #  PLATFORM: "x64"
     - BUILD_TYPE: "MSVC_64_Python36"
       COMPILER: MSVC15
       PLATFORM: "x64"
-    - BUILD_TYPE: "MSVC_64_Debug"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
-    - BUILD_TYPE: "MinGW_64_Debug"
-    - BUILD_TYPE: "MinGW_64_Python27"
-    - BUILD_TYPE: "MinGW_64_Python35"
-    - BUILD_TYPE: "MinGW_64_Python36"
+    #- BUILD_TYPE: "MSVC_64_Debug"
+    #  COMPILER: MSVC15
+    #  PLATFORM: "x64"
+    #- BUILD_TYPE: "MinGW_64_Debug"
+    #- BUILD_TYPE: "MinGW_64_Python27"
+    #- BUILD_TYPE: "MinGW_64_Python35"
+    #- BUILD_TYPE: "MinGW_64_Python36"
   global:
     PLATFORMTOOLSET: "v140"
 
@@ -30,15 +30,17 @@ install:
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] set PATH=C:\Miniconda35-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda upgrade --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --packages -y
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --all
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost eigen nlopt numpy cloudpickle ipyparallel
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda upgrade --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --packages -y
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --all
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update conda
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update --all
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt numpy cloudpickle ipyparallel
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pagmo
