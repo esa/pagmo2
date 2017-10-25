@@ -21,8 +21,9 @@ environment:
 install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda upgrade --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda clean --packages -y
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda clean --all -y
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update conda -y
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
 
 # NOTE: need to use "call" because otherwise it won't work within an if block.
