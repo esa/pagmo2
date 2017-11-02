@@ -161,6 +161,7 @@ void check_inheritance(T udp, const vector_double &t)
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nobj(), problem(udp).get_nobj());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nec(), problem(udp).get_nec());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nic(), problem(udp).get_nic());
+    BOOST_CHECK_EQUAL(problem(translate(udp, t)).get_nix(), problem(udp).get_nix());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient(), problem(udp).has_gradient());
     BOOST_CHECK(translate(udp, t).gradient_sparsity() == problem(udp).gradient_sparsity());
     BOOST_CHECK_EQUAL(problem(translate(udp, t)).has_gradient_sparsity(), problem(udp).has_gradient_sparsity());
@@ -175,6 +176,11 @@ BOOST_AUTO_TEST_CASE(translate_inheritance_test)
     check_inheritance(hock_schittkowsky_71{}, vector_double(4, 0.5));
     check_inheritance(cec2006{1}, vector_double(13, 0.5));
     check_inheritance(cec2009{1}, vector_double(30, 0.5));
+    // We check the forwarding of the integer dimension. The translation needs to be integer too as to
+    // not create a non integer bound.
+    check_inheritance(null_problem{2,2,3,1}, vector_double(1, 1));
+    check_inheritance(null_problem{2,2,3,0}, vector_double(1, 1));
+    
     // We check if set_seed is working
     problem p{translate{inventory{10u, 10u, 1234567u}, vector_double(10, 1.)}};
     std::ostringstream ss1, ss2;

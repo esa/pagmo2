@@ -154,9 +154,10 @@ public:
             pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems");
         }
         if (m_problem.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to unconstrained problems, it seems "
-                                               "you are trying to decompose a problem with "
-                                                   + std::to_string(m_problem.get_nc()) + " constraints");
+            pagmo_throw(std::invalid_argument,
+                        "Decomposition can only be applied to unconstrained problems, it seems "
+                        "you are trying to decompose a problem with "
+                            + std::to_string(m_problem.get_nc()) + " constraints");
         }
         // 1 - we check that the decomposition method is one of "weighted", "tchebycheff" or "bi"
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
@@ -193,16 +194,17 @@ public:
         // 3 - we check that the weight vector is normalized.
         auto sum = std::accumulate(weight.begin(), weight.end(), 0.);
         if (std::abs(sum - 1.0) > 1E-8) {
-            pagmo_throw(std::invalid_argument, "The weight vector must sum to 1 with a tolerance of 1E-8. The sum of "
-                                               "the weight vector components was detected to be: "
-                                                   + std::to_string(sum));
+            pagmo_throw(std::invalid_argument,
+                        "The weight vector must sum to 1 with a tolerance of 1E-8. The sum of "
+                        "the weight vector components was detected to be: "
+                            + std::to_string(sum));
         }
         // 4 - we check the weight vector only contains positive numbers
         for (decltype(m_weight.size()) i = 0u; i < m_weight.size(); ++i) {
             if (m_weight[i] < 0.) {
-                pagmo_throw(std::invalid_argument, "The weight vector may contain only non negative values. A value of "
-                                                       + std::to_string(m_weight[i]) + " was detected at index "
-                                                       + std::to_string(i));
+                pagmo_throw(std::invalid_argument,
+                            "The weight vector may contain only non negative values. A value of "
+                                + std::to_string(m_weight[i]) + " was detected at index " + std::to_string(i));
             }
         }
     }
@@ -255,6 +257,7 @@ public:
         // We call the fitness of the original multiobjective problem
         return m_problem.fitness(x);
     }
+
     /// Number of objectives.
     /**
      * @return one.
@@ -263,6 +266,16 @@ public:
     {
         return 1u;
     }
+
+    /// Integer dimension
+    /**
+     * @return the integer dimension of the inner problem.
+     */
+    vector_double::size_type get_nix() const
+    {
+        return m_problem.get_nix();
+    }
+
     /// Box-bounds.
     /**
      * Forwards the bounds computations to the inner pagmo::problem.
@@ -275,6 +288,7 @@ public:
     {
         return m_problem.get_bounds();
     }
+
     /// Gets the current reference point.
     /**
      * The reference point to be used for the decomposition. This is only
@@ -293,6 +307,7 @@ public:
     {
         return m_z;
     }
+
     /// Problem name.
     /**
      * This method will append <tt>[decomposed]</tt> to the name of the inner problem.
@@ -303,6 +318,7 @@ public:
     {
         return m_problem.get_name() + " [decomposed]";
     }
+    
     /// Extra information.
     /**
      * This method will add info about the decomposition method to the extra info provided
