@@ -39,7 +39,7 @@ matrix:
           - gcc-4.8
           - g++-4.8
           - binutils-gold
-    - env: PAGMO_BUILD="CoverageGCC5" SPLIT_TEST_NUM="0" TEST_NSPLIT="2"
+    - env: PAGMO_BUILD="CoverageGCC5" SPLIT_TEST_NUM="0" TEST_NSPLIT="4"
       compiler: gcc
       os: linux
       addons:
@@ -50,7 +50,29 @@ matrix:
           - gcc-5
           - g++-5
           - binutils-gold
-    - env: PAGMO_BUILD="CoverageGCC5" SPLIT_TEST_NUM="1" TEST_NSPLIT="2"
+    - env: PAGMO_BUILD="CoverageGCC5" SPLIT_TEST_NUM="1" TEST_NSPLIT="4"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-5
+          - g++-5
+          - binutils-gold
+    - env: PAGMO_BUILD="CoverageGCC5" SPLIT_TEST_NUM="2" TEST_NSPLIT="4"
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - gcc-5
+          - g++-5
+          - binutils-gold
+    - env: PAGMO_BUILD="CoverageGCC5" SPLIT_TEST_NUM="3" TEST_NSPLIT="4"
       compiler: gcc
       os: linux
       addons:
