@@ -34,7 +34,9 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #pragma GCC diagnostic ignored "-Wdeprecated"
+#if __GNUC__ >= 7
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
 #endif
 
 // Enable thread-safety in cereal. See:

@@ -2,6 +2,13 @@
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/hypervolume_test_data/" DESTINATION "${CMAKE_BINARY_DIR}/tests/hypervolume_test_data/")
 
 function(ADD_PAGMO_TESTCASE arg1)
+    if(PAGMO_TEST_NSPLIT)
+        math(EXPR __PAGMO_TEST_NUM "(${_PAGMO_TEST_NUM} + 1) % ${PAGMO_TEST_NSPLIT}")
+        set(_PAGMO_TEST_NUM ${__PAGMO_TEST_NUM} PARENT_SCOPE)
+    endif()
+    if(PAGMO_TEST_NSPLIT AND "${PAGMO_TEST_SPLIT_NUM}" STREQUAL "${_PAGMO_TEST_NUM}")
+        return()
+    endif()
     add_executable(${arg1} ${arg1}.cpp)
     target_link_libraries(${arg1} pagmo)
     target_compile_options(${arg1} PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
