@@ -28,7 +28,6 @@ Pagmo & Pygmo
    :width: 15%
 
 
-
 Pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built
 around the idea of providing a unified interface to optimization algorithms and to optimization problems and to
 make their deployment in massively parallel environments easy.
@@ -41,6 +40,9 @@ Pagmo and pygmo can be used to solve constrained, unconstrained, single objectiv
 problems, as well as to perform research on novel algorithms and paradigms and easily compare them to state of the
 art implementations of established ones.
 
+If you are using pagmo/pygmo as part of your research, teaching, or other activities, we would be grateful if you could star
+the repository and/or cite our work. The DOI of the latest version and other citation resources are available
+at `this link <https://doi.org/10.5281/zenodo.1045336>`__.
 
 Contents:
 
