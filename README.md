@@ -17,8 +17,6 @@ If you are using pagmo/pygmo as part of your research, teaching, or other activi
 the repository and/or cite our work. The DOI of the latest version and other citation resources are available
 at [this link](https://doi.org/10.5281/zenodo.1045336).
 
-https://doi.org/10.5281/zenodo.1043579
-
 The full documentation can be found [here](https://esa.github.io/pagmo2/).
 
 Upgrading from pagmo 1.x.x
