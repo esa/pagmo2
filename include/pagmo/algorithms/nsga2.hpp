@@ -537,7 +537,7 @@ private:
         for (decltype(D) j = Dc; j < D; ++j) {
             if (drng(m_e) < m_m) {
                 // We need to draw a random integer in [lb, ub]. Since these are floats we
-                // cannot use integer disctributions without risking overflows, hence we use the 
+                // cannot use integer distributions without risking overflows, hence we use the 
                 // pagmo utility which takes care of it random_decision_vector
                 auto mutated = random_decision_vector({{lb[j]},{ub[j]}}, m_e, 1u);
                 child[j] = mutated[0];
