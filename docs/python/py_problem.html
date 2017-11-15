@@ -228,6 +228,8 @@ methods:</p>
   <span class="o">...</span>
 <span class="k">def</span> <span class="nf">get_nic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
   <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_nix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
 <span class="k">def</span> <span class="nf">has_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
   <span class="o">...</span>
 <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
@@ -569,7 +571,7 @@ Otherwise, an implementation-defined name based on the type of the UDP will be r
 <dl class="method">
 <dt id="pygmo.problem.get_ncx">
 <code class="descname">get_ncx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_ncx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conrinuous dimension of the problem.</p>
+<dd><p>Continuous dimension of the problem.</p>
 <p>This method will return <span class="math">\(n_{cx}\)</span>, the continuous dimension of the problem.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -648,6 +650,10 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <code class="descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_nix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer dimension of the problem.</p>
 <p>This method will return <span class="math">\(n_{ix}\)</span>, the integer dimension of the problem.</p>
+<p>The optional <code class="docutils literal"><span class="pre">get_nix()</span></code> method of the UDP must return the problem’s integer dimension as an <code class="docutils literal"><span class="pre">int</span></code>.
+If the UDP does not implement the <code class="docutils literal"><span class="pre">get_nix()</span></code> method, a zero integer dimension will be assumed.
+The integer dimension returned by the UDP is checked upon the construction
+of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
