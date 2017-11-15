@@ -159,15 +159,7 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
         // adding 1 tot he upper bound so that e.g.
         // [0,1] -> draw a float from [0,2] and floor it (that is 0. or 1. with 50%)
         // [3,3] -> draw a float from [3,4] and floor it (that is always 3.)
-        // NOTE: to pursue this approach we need to make sure the upper bound is at least 1 away from infinity
-        // otherwise some sick corner case could either result in a non uniform int distrubution or UB
         double lb = bounds.first[i], ub = bounds.second[i];
-        if (!std::isfinite(ub + 1.)) {
-            pagmo_throw(std::invalid_argument,
-                        "The upper bound of the integer part is too large for the decision vector index "
-                            + std::to_string(i));
-        }
-
         auto tmp = uniform_real_from_range(lb, ub + 1, r_engine);
         retval[i] = std::floor(tmp);
     }
