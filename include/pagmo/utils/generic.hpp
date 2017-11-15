@@ -162,11 +162,11 @@ inline vector_double random_decision_vector(const std::pair<vector_double, vecto
         // NOTE: to pursue this approach we need to make sure the upper bound is at least 1 away from infinity
         // otherwise some sick corner case could either result in a non uniform int distrubution or UB
         double lb = bounds.first[i], ub = bounds.second[i];
-        if (!std::isfinite(ub + 1.)) {
-            pagmo_throw(std::invalid_argument,
-                        "The upper bound of the integer part is too large for the decision vector index "
-                            + std::to_string(i));
-        }
+        //if (!std::isfinite(ub + 1.)) {
+        //    pagmo_throw(std::invalid_argument,
+        //                "The upper bound of the integer part is too large for the decision vector index "
+        //                    + std::to_string(i));
+        //}
 
         auto tmp = uniform_real_from_range(lb, ub + 1, r_engine);
         retval[i] = std::floor(tmp);

@@ -548,7 +548,7 @@ Integer dimension of the problem.
 
 This method will return :math:`n_{ix}`, the integer dimension of the problem.
 
-The optional ``get_nix()`` method of the UDP must return the number of equality constraints as an ``int``.
+The optional ``get_nix()`` method of the UDP must return the problem's integer dimension as an ``int``.
 If the UDP does not implement the ``get_nix()`` method, a zero integer dimension will be assumed.
 The integer dimension returned by the UDP is checked upon the construction
 of a :class:`~pygmo.problem`.
@@ -563,7 +563,7 @@ std::string problem_get_ncx_docstring()
 {
     return R"(get_ncx()
 
-Conrinuous dimension of the problem.
+Continuous dimension of the problem.
 
 This method will return :math:`n_{cx}`, the continuous dimension of the problem.
 

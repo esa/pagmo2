@@ -44,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
-#include <pagmo/utils/generic.hpp> // radnom_decision_vector
+#include <pagmo/utils/generic.hpp> // uniform_real_from_range
 
 namespace pagmo
 {
@@ -537,10 +537,10 @@ private:
         for (decltype(D) j = Dc; j < D; ++j) {
             if (drng(m_e) < m_m) {
                 // We need to draw a random integer in [lb, ub]. Since these are floats we
-                // cannot use integer distributions without risking overflows, hence we use the 
-                // pagmo utility which takes care of it random_decision_vector
-                auto mutated = random_decision_vector({{lb[j]},{ub[j]}}, m_e, 1u);
-                child[j] = mutated[0];
+                // cannot use integer distributions without risking overflows, hence we use a real
+                // distribution
+                auto mutated = std::floor(uniform_real_from_range(lb[j], ub[j] + 1, m_e));
+                child[j] = mutated;
             }
         }
     }
