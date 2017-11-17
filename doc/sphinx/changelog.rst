@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.6 (unreleased)
+----------------
+
+Fix
+~~~
+
+- Fix a bug in NSGA2 when the bounds of the problem contain negative values (`#139 <https://github.com/esa/pagmo2/pull/139>`__).
+
+- Various documentation fixes and improvements (`#139 <https://github.com/esa/pagmo2/pull/139>`__).
+
 2.5 (2017-11-12)
 ----------------
 
