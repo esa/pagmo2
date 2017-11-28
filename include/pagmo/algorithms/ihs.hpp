@@ -162,6 +162,10 @@ public:
                         "Multiple objectives and non linear constraints detected in the " + prob.get_name()
                             + " instance. " + get_name() + " cannot deal with this type of problem.");
         }
+        if (prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,
+                        "The problem appears to be stochastic " + get_name() + " cannot deal with it");
+        }
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
@@ -411,8 +415,8 @@ private:
             // The best
             ideal_point.push_back(pop.champion_f()[0]);
         } else { // In a multiple objective problem df and dx are not defined and constraints are not present
-            dx = std::nan("");
-            df = std::nan("");
+            dx = -1.;
+            df = -1.;
             n = 0;
             l = 0;
             ideal_point = ideal(pop.get_f());
