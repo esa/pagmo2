@@ -176,7 +176,7 @@ public:
             lu_diff[i] = ub[i] - lb[i];
         }
         // Distributions used
-        std::uniform_int_distribution<unsigned> uni_int(0, pop.size() - 1u); // to pick an individual
+        std::uniform_int_distribution<unsigned long> uni_int(0, pop.size() - 1u); // to pick an individual
         std::uniform_real_distribution<double> drng(0., 1.);                 // to generate a number in [0, 1)
 
         // Used for parameter control
@@ -223,8 +223,10 @@ public:
                         new_x[i] += std::uniform_real_distribution<>(new_x[i] - pitch, new_x[i] + pitch)(m_e);
                     }
                 } else {
-                    // Pick randomly within the bounds.
-                    new_x[i] = std::uniform_int_distribution<>(lb[i], ub[i])(m_e);
+                    // We need to draw a random integer in [lb, ub]. Since these are floats we
+                    // cannot use integer distributions without risking overflows, hence we use a real
+                    // distribution                 
+                    new_x[i] =  std::floor(uniform_real_from_range(lb[i], ub[i] + 1, m_e));
                 }
             }
 
@@ -264,7 +266,7 @@ public:
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
                 if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                    log_a_line(pop, count, gen, fevals0, ppar_cur, bw_cur);
+                    log_a_line(pop, count, fevals0, ppar_cur, bw_cur);
                 }
             }
         }
@@ -380,7 +382,7 @@ public:
 
 private:
     // logging is complex as the algorithm is an "any-problem" wannabe
-    void log_a_line(const population &pop, unsigned &count, unsigned gen, unsigned fevals0, double ppar_cur,
+    void log_a_line(const population &pop, unsigned &count, unsigned long long fevals0, double ppar_cur,
                     double bw_cur) const
     {
         const auto &prob = pop.get_problem();
