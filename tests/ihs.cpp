@@ -35,7 +35,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
 #include <pagmo/problems/schwefel.hpp>
+#include <pagmo/problems/hock_schittkowsky_71.hpp>
 
 using namespace pagmo;
 using namespace std;
@@ -76,11 +78,13 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
         BOOST_CHECK(ihs{0u}.evolve(pop1).get_x()[0] == pop1.get_x()[0]);
     }
     {
-        population pop{rosenbrock{10u}, 20u};
-        algorithm algo(ihs{1000u, 0.85, 0.35, 0.99, 1e-5, 1.});
+        problem prob(hock_schittkowsky_71{});
+        prob.set_c_tol(1e-3);
+        population pop{prob, 20u};
+        algorithm algo(ihs{10000u, 0.85, 0.35, 0.99, 1e-5, 1.});
         algo.set_verbosity(100u);
         pop = algo.evolve(pop);
-        print("Best: ", pop.champion_f()[0], "\n");
+        // print("Best: ", pop.champion_f()[0], "\n");
     }
 }
 
