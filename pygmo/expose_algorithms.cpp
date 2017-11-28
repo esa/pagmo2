@@ -85,6 +85,7 @@ see https://www.gnu.org/licenses/. */
 #if defined(PAGMO_WITH_NLOPT)
 #include <pagmo/algorithms/nlopt.hpp>
 #endif
+#include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
@@ -318,6 +319,26 @@ void expose_algorithms()
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
+    // IHS
+    auto ihs_ = expose_algorithm_pygmo<ihs>("ihs", ihs_docstring().c_str());
+    ihs_.def(bp::init<unsigned, double, double, double, double, double>(
+        (bp::arg("gen") = 1u, bp::arg("phmcr") = 0.85, bp::arg("ppar_min") = 0.35, bp::arg("ppar_max") = 0.99,
+         bp::arg("bw_min") = 1E-5, bp::arg("bw_max") = 1.)));
+    ihs_.def(bp::init<unsigned, double, double, double, double, double, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("phmcr") = 0.85, bp::arg("ppar_min") = 0.35, bp::arg("ppar_max") = 0.99,
+         bp::arg("bw_min") = 1E-5, bp::arg("bw_max") = 1., bp::arg("seed"))));
+    // ihs needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    ihs_.def("get_log", lcast([](const ihs &a) -> bp::list {
+                 bp::list retval;
+                 for (const auto &t : a.get_log()) {
+                     retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t),
+                                                  std::get<4>(t), std::get<5>(t), std::get<6>(t),
+                                                  v_to_a(std::get<7>(t))));
+                 }
+                 return retval;
+             }),
+             nsga2_get_log_docstring().c_str());
+    ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
     sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(

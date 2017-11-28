@@ -18,7 +18,7 @@ Common Name                                                Docs of the C++ class
 ========================================================== ========================================= ========================================= ===============
 The null algorithm                                         :cpp:class:`pagmo::null_algorithm`        :class:`pygmo.null_algorithm`             SM-CU          
 Differential Evolution (DE)                                :cpp:class:`pagmo::de`                    :class:`pygmo.de`                         S-U            
-Improved Harmony Serach                                    :cpp:class:`pagmo::ihs`                   :class:`pygmo.ihs`                        SM-CU-I (sto)    
+Improved Harmony Serach                                    :cpp:class:`pagmo::ihs`                   :class:`pygmo.ihs`                        SM-CU-I
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U            
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U            
 Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::pso`                   :class:`pygmo.pso`                        S-U            

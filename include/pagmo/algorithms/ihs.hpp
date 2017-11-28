@@ -89,11 +89,29 @@ namespace pagmo
 class ihs
 {
 public:
-    /// Single entry of the log (fevals, ppar, bw, dx, df, n. constraints violated, violation norm, ideal [or best])
+    /// Single data line for the algorithm's log.
+    /**
+     * A log data line is a tuple consisting of:
+     * - the number of objective function evaluations made so far,
+     * - the pitch adjustment rate,
+     * - the distance bandwidth
+     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst
+     * individual (or -1 in a multiobjective case),
+     * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+     * (or -1 in a multiobjective case),
+     * - the number of constraints violated by the current decision vector,
+     * - the constraints violation norm for the current decision vector,
+     * - the objective value of the best solution or, in the multiobjective case, the ideal point
+     */
     typedef std::tuple<unsigned long long, double, double, double, double, vector_double::size_type, double,
                        vector_double>
         log_line_type;
-    /// The log
+    /// Log type.
+    /**
+     * The algorithm log is a collection of ihs::log_line_type data lines, stored in chronological order
+     * during the optimisation if the verbosity of the algorithm is set to a nonzero value
+     * (see ihs::set_verbosity()).
+     */
     typedef std::vector<log_line_type> log_type;
 
     /// Constructor
@@ -177,7 +195,7 @@ public:
         }
         // Distributions used
         std::uniform_int_distribution<unsigned long> uni_int(0, pop.size() - 1u); // to pick an individual
-        std::uniform_real_distribution<double> drng(0., 1.);                 // to generate a number in [0, 1)
+        std::uniform_real_distribution<double> drng(0., 1.);                      // to generate a number in [0, 1)
 
         // Used for parameter control
         const double c = std::log(m_bw_min / m_bw_max) / m_gen;
@@ -225,8 +243,8 @@ public:
                 } else {
                     // We need to draw a random integer in [lb, ub]. Since these are floats we
                     // cannot use integer distributions without risking overflows, hence we use a real
-                    // distribution                 
-                    new_x[i] =  std::floor(uniform_real_from_range(lb[i], ub[i] + 1, m_e));
+                    // distribution
+                    new_x[i] = std::floor(uniform_real_from_range(lb[i], ub[i] + 1, m_e));
                 }
             }
 
@@ -272,28 +290,32 @@ public:
         }
         return pop;
     };
-    /// Sets the algorithm verbosity
+    /// Set verbosity.
     /**
-     * Sets the verbosity level of the screen output and of the
-     * log returned by get_log(). \p level can be:
-     * - 0: no verbosity
-     * - 1: will only print and log when the population is improved
-     * - >1: will print and log one line each \p level generations.
+     * This method will set the algorithm's verbosity. If \p n is zero, no output is produced during the optimisation
+     * and no logging is performed. If \p n is nonzero, then every \p n objective function evaluations the status
+     * of the optimisation will be both printed to screen and recorded internally. See ihs::log_line_type and
+     * ihs::log_type for information on the logging format. The internal log can be fetched via get_log().
      *
-     * Example (verbosity 1):
+     * Example (verbosity 100, a constrained problem):
      * @code{.unparsed}
-     * Gen:        Fevals:          Best:   Improvement:     Mutations:
-     * 632           3797        1464.31        51.0203              1
-     * 633           3803        1463.23        13.4503              1
-     * 635           3815        1562.02        31.0434              3
-     * 667           4007         1481.6        24.1889              1
-     * 668           4013        1487.34        73.2677              2
+     * Fevals:          ppar:            bw:            dx:            df:      Violated:    Viol. Norm:        ideal1:
+     *       1        0.35064       0.988553        5.17002        68.4027              1      0.0495288        85.1946
+     *     101        0.41464       0.312608        4.21626         46.248              1      0.0495288        85.1946
+     *     201        0.47864      0.0988553        2.27851        8.00679              1      0.0495288        85.1946
+     *     301        0.54264      0.0312608        3.94453        31.9834              1      0.0495288        85.1946
+     *     401        0.60664     0.00988553        4.74834         40.188              1      0.0495288        85.1946
+     *     501        0.67064     0.00312608        2.91583        6.53575              1     0.00904482        90.3601
+     *     601        0.73464    0.000988553        2.98691        10.6425              1    0.000760728        110.121
+     *     701        0.79864    0.000312608        2.27775        39.7507              1    0.000760728        110.121
+     *     801        0.86264    9.88553e-05       0.265908         4.5488              1    0.000760728        110.121
+     *     901        0.92664    3.12608e-05       0.566348       0.354253              1    0.000760728        110.121
      * @endcode
-     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness
-     * function currently in the population, Improvement is the improvement made by the last mutation and Mutations
-     * is the number of mutated components of the decision vector
+     * Feasibility is checked against the problem's tolerance.
      *
-     * @param level verbosity level
+     * By default, the verbosity level is zero.
+     *
+     * @param n the desired verbosity level.
      */
     void set_verbosity(unsigned int level)
     {
@@ -354,13 +376,12 @@ public:
         return ss.str();
     }
 
-    /// Get log
+    /// Get the optimisation log.
     /**
-     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a ihs::log_line_type containing: Gen, Fevals, Best, ppar, bw, dx, df as described
-     * in ihs::set_verbosity
-     * @return an <tt>std::vector</tt> of ihs::log_line_type containing the logged values Gen, Fevals, Best, ppar, bw,
-     * dx, df
+     * See ihs::log_type for a description of the optimisation log. Logging is turned on/off via
+     * set_verbosity().
+     *
+     * @return a const reference to the log.
      */
     const log_type &get_log() const
     {
@@ -381,7 +402,7 @@ public:
     }
 
 private:
-    // logging is complex as the algorithm is an "any-problem" wannabe
+    // logging is complex fir ihs as the algorithm is an "any-problem" wannabe
     void log_a_line(const population &pop, unsigned &count, unsigned long long fevals0, double ppar_cur,
                     double bw_cur) const
     {
