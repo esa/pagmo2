@@ -89,8 +89,10 @@ namespace pagmo
 class ihs
 {
 public:
-    /// Single entry of the log (gen, fevals, best, ppar, bw, dx, df)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
+    /// Single entry of the log (fevals, ppar, bw, dx, df, n. constraints violated, violation norm, ideal [or best])
+    typedef std::tuple<unsigned long long, double, double, double, double, vector_double::size_type, double,
+                       vector_double>
+        log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -181,7 +183,7 @@ public:
         std::vector<vector_double::size_type> best_idxs(pop.size());
 
         // Main loop
-        for (decltype(m_gen) gen = 0u; gen < m_gen; ++gen) {
+        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
             // 1 - We adjust the algorithm parameters (parameter control)
             const double ppar_cur = m_ppar_min + ((m_ppar_max - m_ppar_min) * gen) / m_gen;
             const double bw_cur = m_bw_max * std::exp(c * gen);
@@ -258,27 +260,7 @@ public:
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
                 if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                    auto best_idx = pop.best_idx();
-                    auto worst_idx = pop.worst_idx();
-                    auto dx = 0.;
-                    // The population flattness in chromosome
-                    for (decltype(dim) i = 0u; i < dim; ++i) {
-                        dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
-                    }
-                    // The population flattness in fitness
-                    auto df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                    // Every 50 lines print the column names
-                    if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
-                              "Best:", std::setw(15), "ppar:", std::setw(15), "bw:", std::setw(15),
-                              "dx:", std::setw(15), "df:", '\n');
-                    }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          pop.get_f()[best_idx][0], std::setw(15), ppar_cur, std::setw(15), bw_cur, std::setw(15), dx, std::setw(15), df, '\n');
-                    ++count;
-                    // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], ppar_cur, bw_cur, dx,
-                                       df);
+                    log_a_line(pop, count, gen, fevals0, ppar_cur, bw_cur);
                 }
             }
         }
@@ -393,6 +375,79 @@ public:
     }
 
 private:
+    // logging is complex as the algorithm is an "any-problem" wannabe
+    void log_a_line(const population &pop, unsigned &count, unsigned gen, unsigned fevals0, double ppar_cur,
+                    double bw_cur) const
+    {
+        const auto &prob = pop.get_problem();
+        auto dim = prob.get_nx();
+        auto nec = prob.get_nec();
+        decltype(dim) best_idx;
+        decltype(dim) worst_idx;
+
+        auto dx = 0.;    // pop flatness
+        auto df = 0.;    // fitness flatness
+        decltype(dim) n; // number of violated constraints
+        double l;        // violation norm
+        vector_double ideal_point;
+
+        if (prob.get_nobj() == 1u) {
+            best_idx = pop.best_idx();
+            worst_idx = pop.worst_idx();
+            // The population flattness in chromosome
+            for (decltype(dim) i = 0u; i < dim; ++i) {
+                dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+            }
+            // The population flattness in fitness
+            df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+            // Constraints stuff
+            auto cur_best_f = pop.get_f()[pop.best_idx()];
+            auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + nec,
+                                                    prob.get_c_tol().data());
+            auto c1ineq = detail::test_ineq_constraints(
+                cur_best_f.data() + 1 + nec, cur_best_f.data() + cur_best_f.size(), prob.get_c_tol().data() + nec);
+            n = prob.get_nc() - c1eq.first - c1ineq.first;
+            l = c1eq.second + c1ineq.second;
+            // The best
+            ideal_point.push_back(pop.champion_f()[0]);
+        } else { // In a multiple objective problem df and dx are not defined and constraints are not present
+            dx = std::nan("");
+            df = std::nan("");
+            n = 0;
+            l = 0;
+            ideal_point = ideal(pop.get_f());
+        }
+
+        // Every 50 lines print the column names (fevals, ppar, bw, dx, df, n. constraints violated, violation norm,
+        // ideal [or best])
+        if (count % 50u == 1u) {
+            print("\n", std::setw(7), "Fevals:", std::setw(15), "ppar:", std::setw(15), "bw:", std::setw(15),
+                  "dx:", std::setw(15), "df:", std::setw(15), "Violated:", std::setw(15), "Viol. Norm:");
+            for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
+                if (i >= 5u) {
+                    print(std::setw(15), "... :");
+                    break;
+                }
+                print(std::setw(15), "ideal" + std::to_string(i + 1u) + ":");
+            }
+            print('\n');
+        }
+
+        print(std::setw(7), prob.get_fevals() - fevals0, std::setw(15), ppar_cur, std::setw(15), bw_cur, std::setw(15),
+              dx, std::setw(15), df, std::setw(15), n, std::setw(15), l);
+        for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
+            if (i >= 5u) {
+                break;
+            }
+            print(std::setw(15), ideal_point[i]);
+        }
+        print('\n');
+
+        ++count;
+        // Logs
+        m_log.emplace_back(prob.get_fevals() - fevals0, ppar_cur, bw_cur, dx, df, n, l, ideal_point);
+    }
+
     unsigned m_gen;
     double m_phmcr;
     double m_ppar_min;

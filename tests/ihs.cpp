@@ -77,8 +77,8 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
     }
     {
         population pop{rosenbrock{10u}, 20u};
-        algorithm algo(ihs{1000000u, 0.85, 0.35, 0.99, 1e-5, 1.});
-        algo.set_verbosity(1000u);
+        algorithm algo(ihs{1000u, 0.85, 0.35, 0.99, 1e-5, 1.});
+        algo.set_verbosity(100u);
         pop = algo.evolve(pop);
         print("Best: ", pop.champion_f()[0], "\n");
     }
