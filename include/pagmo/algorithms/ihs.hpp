@@ -29,27 +29,26 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_IHS_HPP
 #define PAGMO_ALGORITHMS_IHS_HPP
 
+#include <cmath>  // log, etc..
+#include <random> // uniform_int, etc..
+
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/types.hpp>                 // vector_double
+#include <pagmo/utils/generic.hpp>         // force_bounds_reflection
+#include <pagmo/utils/multi_objective.hpp> // select_best_N_mo
 
 namespace pagmo
 {
 
-/// Imporved Harmony Search
+/// Improved Harmony Search
 /**
  * \image html ihs.gif
  *
  * Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians.
  * In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value)
  * for finding a best harmony (i.e., the global optimum) all together.
- *
- * The algorithm has been heavily criticized in the scientific literature, not for its performances
- * rather for the use of a metaphor that does not add anything to existing ones. The HS 
- * algorithm essentially applies mutation and crossover operators to a background population and as such
- * should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
- * in that context. The use of the musicians metaphor only obscures its internal functioning
- * making theoretical results from ES and GA erroneously seem as unapplicable to HS. 
  *
  * This code implements the so-called improved harmony search algorithm (IHS), in which the probability
  * of picking the variables from the decision vector and the amount of mutation to which they are subject
@@ -58,16 +57,24 @@ namespace pagmo
  * In this algorithm the number of fitness function evaluations is equal to the number of iterations.
  * All the individuals in the input population participate in the evolution. A new individual is generated
  * at every iteration, substituting the current worst individual of the population if better.
- *
- * This algorithm is suitable for continuous, constrained, mixed-integer and multi-objective optimisation.
+ **
  *
  * \verbatim embed:rst:leading-asterisk
  *
  * .. warning::
  *
- *    This algorithm is suitable for continuous, constrained, mixed-integer and
- *    multi-objective optimisation.
+ *    The HS algorithm can and has been  criticized, not for its performances,
+ *    but for the use of a metaphor that does not add anything to existing ones. The HS
+ *    algorithm essentially applies mutation and crossover operators to a background population and as such
+ *    should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
+ *    in that context. The use of the musicians metaphor only obscures its internal functioning
+ *    making theoretical results from ES and GA erroneously seem as unapplicable to HS.
  *
+ * .. note::
+ *
+ *    The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
+ *    In pagmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly)
+ *    and stochastic problems. Such extension is original with pagmo.
  *
  * .. seealso::
  *
@@ -82,10 +89,10 @@ namespace pagmo
 class ihs
 {
 public:
-    /// Single entry of the log (gen, fevals, best, improvement, mutations)
-    // typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
+    /// Single entry of the log (gen, fevals, best, ppar, bw, dx, df)
+    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
     /// The log
-    // typedef std::vector<log_line_type> log_type;
+    typedef std::vector<log_line_type> log_type;
 
     /// Constructor
     /**
@@ -132,11 +139,12 @@ public:
         // We store some useful properties
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed
-        const auto dim = prob.get_nx();       // This getter does not return a const reference but a copy
+        auto dim = prob.get_nx();
+        auto int_dim = prob.get_nix();
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
-        auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+        auto fevals0 = prob.get_fevals(); // discount for the already made fevals
         unsigned int count = 1u;          // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
@@ -147,11 +155,133 @@ public:
         if (!pop.size()) {
             pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
         }
+        if (prob.get_nc() != 0u && prob.get_nobj() > 1u) {
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives and non linear constraints detected in the " + prob.get_name()
+                            + " instance. " + get_name() + " cannot deal with this type of problem.");
+        }
         // ---------------------------------------------------------------------------------------------------------
 
         // No throws, all valid: we clear the logs
-        // m_log.clear();
-        
+        m_log.clear();
+
+        vector_double lu_diff(dim);
+        for (decltype(dim) i = 0u; i < dim; ++i) {
+            lu_diff[i] = ub[i] - lb[i];
+        }
+        // Distributions used
+        std::uniform_int_distribution<unsigned> uni_int(0, pop.size() - 1u); // to pick an individual
+        std::uniform_real_distribution<double> drng(0., 1.);                 // to generate a number in [0, 1)
+
+        // Used for parameter control
+        const double c = std::log(m_bw_min / m_bw_max) / m_gen;
+
+        // Declarations
+        vector_double new_x(dim, 0.);
+        std::vector<vector_double::size_type> best_idxs(pop.size());
+
+        // Main loop
+        for (decltype(m_gen) gen = 0u; gen < m_gen; ++gen) {
+            // 1 - We adjust the algorithm parameters (parameter control)
+            const double ppar_cur = m_ppar_min + ((m_ppar_max - m_ppar_min) * gen) / m_gen;
+            const double bw_cur = m_bw_max * std::exp(c * gen);
+
+            // 2 - We create a new decision vector
+            // Continuous part.
+            for (decltype(dim) i = 0u; i < dim - int_dim; ++i) {
+                if (drng(m_e) < m_phmcr) {
+                    // new_x's i-th chromosome element is the one from a randomly chosen individual.
+                    new_x[i] = pop.get_x()[uni_int(m_e)][i];
+                    // Do pitch adjustment with ppar_cur probability.
+                    if (drng(m_e) < ppar_cur) {
+                        // Randomly, add or subtract pitch from the current chromosome element.
+                        new_x[i] += 2. * (0.5 - drng(m_e)) * bw_cur * lu_diff[i];
+                    }
+                } else {
+                    // Pick randomly within the bounds.
+                    new_x[i] = std::uniform_real_distribution<>(lb[i], ub[i])(m_e);
+                }
+            }
+
+            // Integer Part
+            for (decltype(dim) i = dim - int_dim; i < dim; ++i) {
+                if (drng(m_e) < m_phmcr) {
+                    // new_x's i-th chromosome element is the one from a randomly chosen individual.
+                    new_x[i] = pop.get_x()[uni_int(m_e)][i];
+                    // Do pitch adjustment with ppar_cur probability.
+                    if (drng(m_e) < ppar_cur) {
+                        // This generates minimum 1 and, only if bw_cur ==1 the pitch will be bigger
+                        // than the width. WHich is anyway dealt with later by the bound reflection
+                        unsigned pitch = static_cast<unsigned>(1u + bw_cur * lu_diff[i]);
+                        // Randomly, add or subtract pitch from the current chromosome element.
+                        new_x[i] += std::uniform_real_distribution<>(new_x[i] - pitch, new_x[i] + pitch)(m_e);
+                    }
+                } else {
+                    // Pick randomly within the bounds.
+                    new_x[i] = std::uniform_int_distribution<>(lb[i], ub[i])(m_e);
+                }
+            }
+
+            // 4 - We fix the new decision vector within the bounds and evaluate
+            detail::force_bounds_reflection(new_x, lb, ub);
+            auto new_f = prob.fitness(new_x);
+
+            // 5 - We insert the new decision vector in the population
+            if (prob.get_nobj() == 1u) {      // Single objective case
+                auto w_idx = pop.worst_idx(); // this is always defined by pagmo for single-objective cases
+                if (prob.get_nc() == 0u) {    // unconstrained, we simply check fnew < fworst
+                    if (pop.get_f()[w_idx][0] >= new_f[0]) {
+                        pop.set_xf(w_idx, new_x, new_f);
+                    }
+                } else { // constrained, we use compare_fc
+                    if (compare_fc(new_f, pop.get_f()[w_idx], prob.get_nec(), prob.get_c_tol())) {
+                        pop.set_xf(w_idx, new_x, new_f);
+                    }
+                }
+            } else { // multiobjective case
+                auto fitnesses = pop.get_f();
+                // we augment the list with the new fitness
+                fitnesses.push_back(new_f);
+                // select the best pop.size() individuals
+                best_idxs = select_best_N_mo(fitnesses, pop.size());
+                // define the new population
+                for (population::size_type i = 0u; i < pop.size(); ++i) {
+                    if (best_idxs[i] == pop.size()) { // this is the new guy
+                        pop.set_xf(i, new_x, new_f);
+                    } else { // these were already in the pop somewhere
+                        pop.set_xf(i, pop.get_x()[best_idxs[i]], pop.get_f()[best_idxs[i]]);
+                    }
+                }
+            }
+
+            // 6 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            if (m_verbosity > 0u) {
+                // Every m_verbosity generations print a log line
+                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                    auto best_idx = pop.best_idx();
+                    auto worst_idx = pop.worst_idx();
+                    auto dx = 0.;
+                    // The population flattness in chromosome
+                    for (decltype(dim) i = 0u; i < dim; ++i) {
+                        dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+                    }
+                    // The population flattness in fitness
+                    auto df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+                    // Every 50 lines print the column names
+                    if (count % 50u == 1u) {
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "ppar:", std::setw(15), "bw:", std::setw(15),
+                              "dx:", std::setw(15), "df:", '\n');
+                    }
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
+                          pop.get_f()[best_idx][0], std::setw(15), ppar_cur, std::setw(15), bw_cur, std::setw(15), dx, std::setw(15), df, '\n');
+                    ++count;
+                    // Logs
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], ppar_cur, bw_cur, dx,
+                                       df);
+                }
+            }
+        }
         return pop;
     };
     /// Sets the algorithm verbosity
@@ -239,15 +369,15 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a ihs::log_line_type containing: Gen, Fevals, Best, Improvement, Mutations as described
+     * <tt>std::vector</tt> is a ihs::log_line_type containing: Gen, Fevals, Best, ppar, bw, dx, df as described
      * in ihs::set_verbosity
-     * @return an <tt>std::vector</tt> of ihs::log_line_type containing the logged values Gen, Fevals, Best,
-     * Improvement, Mutations
+     * @return an <tt>std::vector</tt> of ihs::log_line_type containing the logged values Gen, Fevals, Best, ppar, bw,
+     * dx, df
      */
-    // const log_type &get_log() const
-    //{
-    //    return m_log;
-    //}
+    const log_type &get_log() const
+    {
+        return m_log;
+    }
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
@@ -259,7 +389,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_phmcr, m_ppar_min, m_ppar_max, m_bw_min, m_bw_max, m_e, m_seed, m_verbosity);
+        ar(m_gen, m_phmcr, m_ppar_min, m_ppar_max, m_bw_min, m_bw_max, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -272,7 +402,7 @@ private:
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
-    // mutable log_type m_log;
+    mutable log_type m_log;
 };
 
 } // namespace pagmo

@@ -33,7 +33,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/schwefel.hpp>
 
 using namespace pagmo;
 using namespace std;
@@ -45,7 +47,7 @@ BOOST_AUTO_TEST_CASE(ihs_algorithm_construction)
         ihs user_algo{1u, 0.85, 0.35, 0.99, 1e-5, 1., 42u};
         BOOST_CHECK(user_algo.get_verbosity() == 0u);
         BOOST_CHECK(user_algo.get_seed() == 42u);
-        // BOOST_CHECK((user_algo.get_log() == ihs::log_type{}));
+        BOOST_CHECK((user_algo.get_log() == ihs::log_type{}));
     }
 
     // Here we construct invalid ihs udas and test that construction fails
@@ -63,13 +65,22 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
 {
     // We test for unsuitable populations
     {
-        population pop2{rosenbrock{25u}};
+        population pop{rosenbrock{25u}};
+        BOOST_CHECK_THROW(ihs{15u}.evolve(pop), std::invalid_argument);
+        population pop2{null_problem{2u, 3u, 4u}};
         BOOST_CHECK_THROW(ihs{15u}.evolve(pop2), std::invalid_argument);
     }
     // And a clean exit for 0 generations
     {
         population pop1{rosenbrock{25u}, 10u};
         BOOST_CHECK(ihs{0u}.evolve(pop1).get_x()[0] == pop1.get_x()[0]);
+    }
+    {
+        population pop{rosenbrock{10u}, 20u};
+        algorithm algo(ihs{1000000u, 0.85, 0.35, 0.99, 1e-5, 1.});
+        algo.set_verbosity(1000u);
+        pop = algo.evolve(pop);
+        print("Best: ", pop.champion_f()[0], "\n");
     }
 }
 
@@ -82,5 +93,5 @@ BOOST_AUTO_TEST_CASE(ihs_setters_getters_test)
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK(user_algo.get_name().find("Improved Harmony Search") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Maximum distance bandwidth") != std::string::npos);
-    // BOOST_CHECK_NO_THROW(user_algo.get_log());
+    BOOST_CHECK_NO_THROW(user_algo.get_log());
 }
