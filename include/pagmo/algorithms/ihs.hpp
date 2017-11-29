@@ -319,7 +319,7 @@ public:
      */
     void set_verbosity(unsigned int n)
     {
-        m_verbosity = level;
+        m_verbosity = n;
     };
     /// Gets the verbosity level
     /**
