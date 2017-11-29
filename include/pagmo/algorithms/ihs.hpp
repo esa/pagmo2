@@ -194,7 +194,7 @@ public:
             lu_diff[i] = ub[i] - lb[i];
         }
         // Distributions used
-        std::uniform_int_distribution<unsigned long> uni_int(0, pop.size() - 1u); // to pick an individual
+        std::uniform_int_distribution<size_t> uni_int(0, pop.size() - 1u); // to pick an individual
         std::uniform_real_distribution<double> drng(0., 1.);                      // to generate a number in [0, 1)
 
         // Used for parameter control
@@ -317,7 +317,7 @@ public:
      *
      * @param n the desired verbosity level.
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned int n)
     {
         m_verbosity = level;
     };
