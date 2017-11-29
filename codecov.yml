@@ -1,8 +1,8 @@
 coverage:
   ignore:
-  - tests/.*
-  - tutorials/.*
-  - include/pagmo/external/.*
+  - "tests/.*"
+  - "tutorials/.*"
+  - "include/pagmo/external"
 
   notify:
     gitter:

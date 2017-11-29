@@ -222,6 +222,7 @@ template <typename T>
 void check_inheritance(T udp, const vector_double &w, const vector_double &r)
 {
     BOOST_CHECK_EQUAL(problem(decompose(udp, w, r)).get_nobj(), 1u);
+    BOOST_CHECK_EQUAL(problem(decompose(udp, w, r)).get_nix(), problem(udp).get_nix());    
     BOOST_CHECK(problem(decompose(udp, w, r)).get_bounds() == problem(udp).get_bounds());
     BOOST_CHECK_EQUAL(problem(decompose(udp, w, r)).has_set_seed(), problem(udp).has_set_seed());
 }
@@ -256,6 +257,10 @@ struct smobjp {
 BOOST_AUTO_TEST_CASE(decompose_inheritance_test)
 {
     check_inheritance(zdt{1u, 2u}, vector_double{0.5, 0.5}, vector_double{1.5, 1.5});
+    // We check the forwarding of the integer dimension
+    check_inheritance(null_problem{2u, 0u, 0u, 1u}, vector_double{0.5, 0.5}, vector_double{1.5, 1.5});
+    check_inheritance(null_problem{2u, 0u, 0u, 0u}, vector_double{0.5, 0.5}, vector_double{1.5, 1.5});
+    
     // We check set_seed is working
     problem p{decompose{smobjp(1234567u), vector_double{0.5, 0.5}, vector_double{1.5, 1.5}}};
     std::ostringstream ss1, ss2;

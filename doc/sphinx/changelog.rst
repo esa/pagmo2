@@ -1,11 +1,26 @@
 Changelog
 =========
 
-2.5 (unreleased)
+2.6 (2017-11-18)
 ----------------
 
 Fix
 ~~~
+
+- Fix a bug in NSGA2 when the bounds of the problem contain negative values (`#139 <https://github.com/esa/pagmo2/pull/139>`__).
+
+- Various documentation fixes and improvements (`#139 <https://github.com/esa/pagmo2/pull/139>`__).
+
+2.5 (2017-11-12)
+----------------
+
+Fix
+~~~
+
+- Fix meta-problems not forwarding the integer dimension (`#134 <https://github.com/esa/pagmo2/pull/134>`__).
+
+- Various continuous integration fixes (`#134 <https://github.com/esa/pagmo2/pull/134>`__,
+  `#136 <https://github.com/esa/pagmo2/pull/136>`__).
 
 - Various build fixes for recent GCC versions (`#129 <https://github.com/esa/pagmo2/pull/129>`__).
 

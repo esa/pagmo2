@@ -198,6 +198,7 @@ void check_inheritance(T udp)
     BOOST_CHECK_EQUAL(problem(unconstrain(udp)).get_nc(), 0u);
     BOOST_CHECK(problem(unconstrain(udp)).get_bounds() == problem(udp).get_bounds());
     BOOST_CHECK_EQUAL(problem(unconstrain(udp)).has_set_seed(), problem(udp).has_set_seed());
+    BOOST_CHECK_EQUAL(problem(unconstrain(udp)).get_nix(), problem(udp).get_nix());
 }
 
 struct sconp {
@@ -235,6 +236,8 @@ BOOST_AUTO_TEST_CASE(unconstrain_inheritance_test)
 {
     check_inheritance(my_udp{});
     check_inheritance(null_problem{2, 3, 4});
+    check_inheritance(null_problem{2, 3, 4, 1});
+    check_inheritance(null_problem{2, 3, 4, 0});
     check_inheritance(cec2006{2});
     check_inheritance(cec2009{4, true});
     // We check set_seed is working

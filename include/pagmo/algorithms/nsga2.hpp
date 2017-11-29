@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
+#include <pagmo/utils/generic.hpp> // uniform_real_from_range
 
 namespace pagmo
 {
@@ -534,10 +535,12 @@ private:
 
         // This implements the integer mutation for an individual
         for (decltype(D) j = Dc; j < D; ++j) {
-            if (drng(m_e) <= m_m) {
-                std::uniform_int_distribution<vector_double::size_type> ra_num(
-                    static_cast<vector_double::size_type>(lb[j]), static_cast<vector_double::size_type>(ub[j]));
-                child[j] = static_cast<double>(ra_num(m_e));
+            if (drng(m_e) < m_m) {
+                // We need to draw a random integer in [lb, ub]. Since these are floats we
+                // cannot use integer distributions without risking overflows, hence we use a real
+                // distribution
+                auto mutated = std::floor(uniform_real_from_range(lb[j], ub[j] + 1, m_e));
+                child[j] = mutated;
             }
         }
     }

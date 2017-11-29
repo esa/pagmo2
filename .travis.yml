@@ -1,6 +1,5 @@
 language: cpp
-
-sudo: false
+sudo: required
 
 # Do not build branches of the form "pr/*". By prefixing pull requests coming
 # from branches inside the repository with pr/, this avoids building both the
@@ -31,6 +30,7 @@ matrix:
     - env: PAGMO_BUILD="ReleaseGCC48"
       compiler: gcc
       os: linux
+      dist: precise
       addons:
         apt:
           sources:
@@ -53,6 +53,7 @@ matrix:
     - env: PAGMO_BUILD="DebugGCC6"
       compiler: gcc
       os: linux
+      dist: precise
       addons:
         apt:
           sources:
@@ -129,6 +130,8 @@ matrix:
       sudo: required
       services:
       - docker
+  allow_failures:
+      - env: PAGMO_BUILD="CoverageGCC5"
 
 script:
     - mkdir build
