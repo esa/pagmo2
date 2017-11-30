@@ -54,14 +54,23 @@ BOOST_AUTO_TEST_CASE(xnes_algorithm_construction)
 BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 {
     {
+        unsigned dim = 2u;
+        unsigned popsize = 20u;
+        detail::random_engine_type m_e(pagmo::random_device::next());
         // Here we only test that evolution is deterministic if the
         // seed is controlled
-        problem prob{rosenbrock{2u}};
-        population pop1{prob, 7u};
-        population pop2{prob, 7u, 23u};
-        population pop3{prob, 7u, 23u};
+        problem prob{rosenbrock{dim}};
+        population pop1{prob};
+        std::normal_distribution<double> normally_distributed_number(1., 1.);
+        std::vector<double> tmp(dim);
+        for (int i =0; i< popsize;++i) {
+            for (decltype(dim) j = 0u; j < dim; ++j) {
+                tmp[j] = 1. + normally_distributed_number(m_e);
+            }
+            pop1.push_back(tmp);
+        }
 
-        xnes user_algo1{400u, -1, -1, -1, 0.25, 1e-10, 1e-10, false};
+        xnes user_algo1{400u, -1, -1, -1, 1., 1e-8, 1e-8, false};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
         print("Bestx: ", pop1.champion_x());

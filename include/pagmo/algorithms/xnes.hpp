@@ -235,11 +235,10 @@ public:
             sum += u[i];
         }
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-            u[i] = u[i] / sum; // - 1. / lam; //REMEMBER TO TRY uniformBaseline
+            u[i] = u[i] / sum - 1. / lam; // without the uniform baselines seems to improve (get rid of 1/lam?)
         }
-        // If m_memory is false we redefine mutable members
-        // erasing the memory of past calls. This is also done
-        // if the problem dimension has changed
+        // If m_memory is false we redefine mutable members erasing the memory of past calls. 
+        // This is also done if the problem dimension has changed
         if ((mean.size() != dim) || (m_memory == false)) {
             if (sigma == -1) {
                 sigma = std::pow(1., 1. / N);
