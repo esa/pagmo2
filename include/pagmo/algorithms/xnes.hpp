@@ -77,14 +77,14 @@ namespace pagmo
  * .. note::
  *
  *    We introduced two changes to the original algorithm in order to simplify its use for the generic user.
- *    1 - when a decision vector is sampled outside the problem bounds it will be forced back in. 
+ *    1 - when a decision vector is sampled outside the problem bounds it will be forced back in.
  *    2 - the initial covariance matrix depends on the bounds width so that heterogenously scaled variables
  *    are not a problem: the width along the i-th direction will be w_i = sigma_0 * (ub_i - lb_i)
  *
  * .. note::
  *
  *    Since at each generation all newly generated individuals sampled from the adapted distribution are
- *    reinserted into the population, xNES may not preserve the best individual (not elitist). 
+ *    reinserted into the population, xNES may not preserve the best individual (not elitist).
  *    As a consequence the plot of the population best fitness may not be perfectly monotonically decreasing.
  *
  * .. seealso::
@@ -103,7 +103,8 @@ public:
      * - the generation number,
      * - the number of function evaluations
      * - the best fitness vector so far,
-     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual,
+     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst
+     * individual,
      * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
      */
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
@@ -249,7 +250,7 @@ public:
         if ((mean.size() != dim) || (m_memory == false)) {
             if (m_sigma0 == -1) {
                 sigma = 1.;
-            } else{
+            } else {
                 sigma = m_sigma0;
             }
             A = Eigen::MatrixXd::Identity(_(dim), _(dim));
