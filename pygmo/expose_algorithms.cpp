@@ -70,6 +70,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
+#include <pagmo/algorithms/xnes.hpp>
 #endif
 #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
@@ -385,8 +386,8 @@ void expose_algorithms()
                                       bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
-// CMA-ES
 #if defined(PAGMO_WITH_EIGEN3)
+    // CMA-ES
     auto cmaes_ = expose_algorithm_pygmo<cmaes>("cmaes", cmaes_docstring().c_str());
     cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
@@ -397,6 +398,17 @@ void expose_algorithms()
          bp::arg("seed"))));
     expose_algo_log(cmaes_, cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
+    // xNES
+    auto xnes_ = expose_algorithm_pygmo<xnes>("xnes", xnes_docstring().c_str());
+    xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool>(
+        (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
+         bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
+         xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
+         bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+         bp::arg("seed"))));
+    expose_algo_log(xnes_, xnes_get_log_docstring().c_str());
+    xnes_.def("get_seed", &xnes::get_seed, generic_uda_get_seed_docstring().c_str());
 #endif
     // MOEA/D - DE
     auto moead_ = expose_algorithm_pygmo<moead>("moead", moead_docstring().c_str());

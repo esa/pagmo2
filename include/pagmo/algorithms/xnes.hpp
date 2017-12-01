@@ -126,7 +126,7 @@ public:
      * @param eta_mu learning rate for mean update (if -1 will be automatically selected to be 1)
      * @param eta_sigma learning rate for step-size update (if -1 will be automatically selected)
      * @param eta_b  learning rate for the covariance matrix update (if -1 will be automatically selected)
-     * @param sigma0 the initial search width will be sigma0 * (ub - lb)
+     * @param sigma0 the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
@@ -509,9 +509,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a cmaes::log_line_type containing: Gen, Fevals, Best, dx, df, sigma
-     * as described in cmaes::set_verbosity
-     * @return an <tt>std::vector</tt> of cmaes::log_line_type containing the logged values Gen, Fevals, Best, dx, df,
+     * <tt>std::vector</tt> is a xnes::log_line_type containing: Gen, Fevals, Best, dx, df, sigma
+     * as described in xnes::set_verbosity
+     * @return an <tt>std::vector</tt> of xnes::log_line_type containing the logged values Gen, Fevals, Best, dx, df,
      * sigma
      */
     const log_type &get_log() const

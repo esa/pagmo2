@@ -396,6 +396,22 @@ class cmaes_test_case(_ut.TestCase):
         seed = uda.get_seed()
 
 
+class xnes_test_case(_ut.TestCase):
+    """Test case for the UDA xnes
+
+    """
+
+    def runTest(self):
+        from .core import xnes
+        uda = xnes()
+        uda = xnes(gen=1, eta_mu=-1, eta_sigma=-1, eta_b=-1, 
+                    sigma0=-1, ftol=1e-6, xtol=1e-6, memory=False)
+        uda = xnes(gen=1, eta_mu=-1, eta_sigma=-1, eta_b=-1, sigma0=-1,
+                    ftol=1e-6, xtol=1e-6, memory=False, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
+
+
 class sga_test_case(_ut.TestCase):
     """Test case for the UDA sga
 
@@ -1608,6 +1624,11 @@ def run_test_suite(level=0):
     try:
         from .core import cmaes
         suite.addTest(cmaes_test_case())
+    except ImportError:
+        pass
+    try:
+        from .core import xnes
+        suite.addTest(xnes_test_case())
     except ImportError:
         pass
     suite.addTest(dtlz_test_case())

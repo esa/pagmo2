@@ -118,6 +118,8 @@ std::string generic_udp_inner_problem_docstring();
 std::string null_algorithm_docstring();
 std::string cmaes_docstring();
 std::string cmaes_get_log_docstring();
+std::string xnes_docstring();
+std::string xnes_get_log_docstring();
 std::string compass_search_docstring();
 std::string compass_search_get_log_docstring();
 std::string bee_colony_docstring();
