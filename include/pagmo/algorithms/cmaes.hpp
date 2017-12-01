@@ -83,8 +83,22 @@ class cmaes
 {
 public:
     /// Single entry of the log (gen, fevals, best, dx, df, sigma)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
-    /// The log
+    /// Single data line for the algorithm's log.
+    /**
+     * A log data line is a tuple consisting of:
+     * - the generation number,
+     * - the number of function evaluations
+     * - the best fitness vector so far,
+     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst
+     * individual,
+     * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
+     */    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
+    /// Log type.
+    /**
+     * The algorithm log is a collection of nlopt::log_line_type data lines, stored in chronological order
+     * during the optimisation if the verbosity of the algorithm is set to a nonzero value
+     * (see cmaes::set_verbosity()).
+     */
     typedef std::vector<log_line_type> log_type;
 
     /// Constructor.

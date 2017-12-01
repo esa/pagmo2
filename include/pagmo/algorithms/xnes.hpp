@@ -91,7 +91,8 @@ namespace pagmo
  *
  *    Glasmachers, T., Schaul, T., Yi, S., Wierstra, D., & Schmidhuber, J. (2010, July). Exponential natural
  *    evolution strategies. In Proceedings of the 12th annual conference on Genetic and evolutionary computation (pp.
- * 393-400). ACM. \endverbatim
+ *    393-400). ACM. 
+ * \endverbatim
  */
 class xnes
 {
@@ -130,7 +131,7 @@ public:
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
      * @param seed seed used by the internal random number generator (default is random)
 
-     * @throws std::invalid_argument if eta_mu, eta_sigma, eta_b and sigma0 are not in [0, 1] or -1
+     * @throws std::invalid_argument if eta_mu, eta_sigma, eta_b and sigma0 are not in ]0, 1] or -1
      */
     xnes(unsigned int gen = 1, double eta_mu = -1, double eta_sigma = -1, double eta_b = -1, double sigma0 = -1,
          double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next())
@@ -204,6 +205,18 @@ public:
         if (lam < 4u) {
             pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
                                                    + std::to_string(lam) + " detected");
+        }
+        for (auto num : lb) {
+            if (!std::isfinite(num)) {
+                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the lower bounds, "
+                                                       + this->get_name() + " cannot deal with it.");
+            }
+        }
+        for (auto num : ub) {
+            if (!std::isfinite(num)) {
+                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the upper bounds, "
+                                                       + this->get_name() + " cannot deal with it.");
+            }
         }
         // Get out if there is nothing to do.
         if (m_gen == 0u) {
@@ -470,18 +483,21 @@ public:
             stream(ss, "auto");
         else
             stream(ss, m_eta_mu);
-        stream(ss, "\n\tm_eta_sigma: ");
+        stream(ss, "\n\teta_sigma: ");
         if (m_eta_sigma == -1)
             stream(ss, "auto");
         else
             stream(ss, m_eta_sigma);
-        stream(ss, "\n\tm_eta_b: ");
+        stream(ss, "\n\teta_b: ");
         if (m_eta_b == -1)
             stream(ss, "auto");
         else
             stream(ss, m_eta_b);
-        stream(ss, "\n\tcmu: ");
-        stream(ss, "\n\tsigma0: ", m_sigma0);
+        stream(ss, "\n\tsigma0: ");
+        if (m_sigma0 == -1)
+            stream(ss, "auto");
+        else
+            stream(ss, m_eta_b);
         stream(ss, "\n\tStopping xtol: ", m_xtol);
         stream(ss, "\n\tStopping ftol: ", m_ftol);
         stream(ss, "\n\tMemory: ", m_memory);
