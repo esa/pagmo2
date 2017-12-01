@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
             pop1.push_back(tmp);
         }
 
-        xnes user_algo1{4000u, -1, -1, -1, -1, 1e-8, 1e-8, false};
+        xnes user_algo1{4000u, -1, -1, -1, 1./15., 1e-8, 1e-8, false};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
         print("Bestx: ", pop1.get_x()[pop1.best_idx()]);

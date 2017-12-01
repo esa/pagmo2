@@ -75,9 +75,17 @@ namespace pagmo
  *    enabled (see the :ref:`installation instructions <install>`).
  *
  * .. note::
+ *
+ *    We introduced two changes to the original algorithm in order to simplify its use for the generic user.
+ *    1 - when a decision vector is sampled outside the problem bounds it will be forced back in. 
+ *    2 - the initial covariance matrix depends on the bounds width so that heterogenously scaled variables
+ *    are not a problem: the width along the i-th direction will be w_i = sigma_0 * (ub_i - lb_i)
+ *
+ * .. note::
+ *
  *    Since at each generation all newly generated individuals sampled from the adapted distribution are
- *    reinserted into the population, CMA-ES may not preserve the best individual (not elitist). As a consequence the
- *    plot of the population best fitness may not be perfectly monotonically decreasing.
+ *    reinserted into the population, xNES may not preserve the best individual (not elitist). 
+ *    As a consequence the plot of the population best fitness may not be perfectly monotonically decreasing.
  *
  * .. seealso::
  *
@@ -95,8 +103,7 @@ public:
      * - the generation number,
      * - the number of function evaluations
      * - the best fitness vector so far,
-     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst
-     * individual,
+     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual,
      * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
      */
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
@@ -116,7 +123,7 @@ public:
      * @param eta_mu learning rate for mean update (if -1 will be automatically selected to be 1)
      * @param eta_sigma learning rate for step-size update (if -1 will be automatically selected)
      * @param eta_b  learning rate for the covariance matrix update (if -1 will be automatically selected)
-     * @param sigma0 initial step-size (if -1 will be automatically selected to be 1)
+     * @param sigma0 the initial search width will be sigma0 * (ub - lb)
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
@@ -245,7 +252,12 @@ public:
             } else{
                 sigma = m_sigma0;
             }
-            A = Eigen::MatrixXd::Identity(_(dim), _(dim)) * sigma;
+            A = Eigen::MatrixXd::Identity(_(dim), _(dim));
+            // The diagonal of the initial covariance matrix A defines the search width in all directions.
+            // By default we set this to be sigma times the witdh of the box bounds or 1e-6 if too small.
+            for (decltype(dim) j = 0u; j < dim; ++j) {
+                A(_(j), _(j)) = std::max((ub[j] - lb[j]), 1e-6) * sigma;
+            }
             mean.resize(_(dim));
             auto idx_b = pop.best_idx();
             for (decltype(dim) i = 0u; i < dim; ++i) {
@@ -283,12 +295,14 @@ public:
                 }
                 // 1b - and store its transformed value in the new chromosomes
                 x[i] = mean + A * z[i];
-                // We fix the bounds (TODO: careful as z is not updated)
-                // for (decltype(dim) j = 0u; j < dim; ++j) {
-                //    if ((x[i][_(j)] < lb[j]) || (x[i][_(j)] > ub[j])) {
-                //        x[i][_(j)] = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
-                //    }
-                //}
+                // We fix the bounds (only x is changed, not z)
+                bool changed = false;
+                for (decltype(dim) j = 0u; j < dim; ++j) {
+                    if ((x[i][_(j)] < lb[j]) || (x[i][_(j)] > ub[j])) {
+                        x[i][_(j)] = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
+                        changed = true;
+                    }
+                }
                 for (decltype(dim) j = 0u; j < dim; ++j) {
                     dumb[j] = x[i](_(j));
                 }
