@@ -61,7 +61,8 @@ namespace pagmo
  * and using the new sampled points to update the distribution parameters. Naively this could be done following
  * the gradient of the expected fitness as approximated by a finite number of sampled points. While this idea
  * offers a powerful lead on algorithmic construction it has some major drawbacks that are solved in the so-called
- * Natural Evolution Strategies class of algorithms by adopting, instead, the natural gradient.
+ * Natural Evolution Strategies class of algorithms by adopting, instead, the natural gradient. xNES is one of
+ * the most performing variants in this class.
  *
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
@@ -176,7 +177,7 @@ public:
      * @return evolved population
      * @throws std::invalid_argument if the problem is multi-objective or constrained
      * @throws std::invalid_argument if the problem is unbounded
-     * @throws std::invalid_argument if the population size is not at least 5
+     * @throws std::invalid_argument if the population size is not at least 4
      */
     population evolve(population pop) const
     {
