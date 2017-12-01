@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(xnes_algorithm_construction)
 BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 {
     {
-        unsigned dim = 2u;
-        unsigned popsize = 20u;
+        unsigned dim = 10u;
+        unsigned popsize = 10u;
         detail::random_engine_type m_e(pagmo::random_device::next());
         // Here we only test that evolution is deterministic if the
         // seed is controlled
@@ -70,9 +70,9 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
             pop1.push_back(tmp);
         }
 
-        xnes user_algo1{400u, -1, -1, -1, 1., 1e-8, 1e-8, false};
+        xnes user_algo1{4000u, -1, -1, -1, -1, 1e-8, 1e-8, false};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
-        print("Bestx: ", pop1.champion_x());
+        print("Bestx: ", pop1.get_x()[pop1.best_idx()]);
     }
 }

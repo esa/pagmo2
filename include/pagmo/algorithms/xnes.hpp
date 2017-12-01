@@ -113,10 +113,10 @@ public:
      * Constructs xnes
      *
      * @param gen number of generations.
-     * @param eta_mu learning rate for mean update (if -1 will be automatically selected)
+     * @param eta_mu learning rate for mean update (if -1 will be automatically selected to be 1)
      * @param eta_sigma learning rate for step-size update (if -1 will be automatically selected)
      * @param eta_b  learning rate for the covariance matrix update (if -1 will be automatically selected)
-     * @param sigma0 initial step-size (if -1 will be automatically selected)
+     * @param sigma0 initial step-size (if -1 will be automatically selected to be 1)
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
@@ -129,32 +129,32 @@ public:
         : m_gen(gen), m_eta_mu(eta_mu), m_eta_sigma(eta_sigma), m_eta_b(eta_b), m_sigma0(sigma0), m_ftol(ftol),
           m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
-        if (((eta_mu < 0.) || (eta_mu > 1.)) && !(eta_mu == -1)) {
+        if (((eta_mu <= 0.) || (eta_mu > 1.)) && !(eta_mu == -1)) {
             pagmo_throw(std::invalid_argument,
-                        "eta_mu must be in [0,1] or -1 if its value has to be initialized automatically, a value of "
+                        "eta_mu must be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                             + std::to_string(eta_mu) + " was detected");
         }
-        if (((eta_sigma < 0.) || (eta_sigma > 1.)) && !(eta_sigma == -1)) {
+        if (((eta_sigma <= 0.) || (eta_sigma > 1.)) && !(eta_sigma == -1)) {
             pagmo_throw(
                 std::invalid_argument,
-                "eta_sigma needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of "
+                "eta_sigma needs to be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                     + std::to_string(eta_sigma) + " was detected");
         }
-        if (((eta_b < 0.) || (eta_b > 1.)) && !(eta_b == -1)) {
+        if (((eta_b <= 0.) || (eta_b > 1.)) && !(eta_b == -1)) {
             pagmo_throw(std::invalid_argument,
-                        "eta_b needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of "
+                        "eta_b needs to be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                             + std::to_string(eta_b) + " was detected");
         }
-        if (((sigma0 < 0.) || (sigma0 > 1.)) && !(sigma0 == -1)) {
+        if (((sigma0 <= 0.) || (sigma0 > 1.)) && !(sigma0 == -1)) {
             pagmo_throw(
                 std::invalid_argument,
-                "sigma0 needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of "
+                "sigma0 needs to be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                     + std::to_string(sigma0) + " was detected");
         }
         // Initialize explicitly the algorithm memory
         sigma = m_sigma0;
         mean = Eigen::VectorXd::Zero(1);
-        B = Eigen::MatrixXd::Identity(1, 1);
+        A = Eigen::MatrixXd::Identity(1, 1);
     }
 
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -237,13 +237,15 @@ public:
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
             u[i] = u[i] / sum - 1. / lam; // without the uniform baselines seems to improve (get rid of 1/lam?)
         }
-        // If m_memory is false we redefine mutable members erasing the memory of past calls. 
+        // If m_memory is false we redefine mutable members erasing the memory of past calls.
         // This is also done if the problem dimension has changed
         if ((mean.size() != dim) || (m_memory == false)) {
-            if (sigma == -1) {
-                sigma = std::pow(1., 1. / N);
+            if (m_sigma0 == -1) {
+                sigma = 1.;
+            } else{
+                sigma = m_sigma0;
             }
-            B = Eigen::MatrixXd::Identity(_(dim), _(dim)) / sigma;
+            A = Eigen::MatrixXd::Identity(_(dim), _(dim)) * sigma;
             mean.resize(_(dim));
             auto idx_b = pop.best_idx();
             for (decltype(dim) i = 0u; i < dim; ++i) {
@@ -280,7 +282,13 @@ public:
                     z[i](_(j)) = normally_distributed_number(m_e);
                 }
                 // 1b - and store its transformed value in the new chromosomes
-                x[i] = mean + sigma * B * z[i];
+                x[i] = mean + A * z[i];
+                // We fix the bounds (TODO: careful as z is not updated)
+                // for (decltype(dim) j = 0u; j < dim; ++j) {
+                //    if ((x[i][_(j)] < lb[j]) || (x[i][_(j)] > ub[j])) {
+                //        x[i][_(j)] = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
+                //    }
+                //}
                 for (decltype(dim) j = 0u; j < dim; ++j) {
                     dumb[j] = x[i](_(j));
                 }
@@ -290,7 +298,7 @@ public:
             // 2 - Check the exit conditions (every 10 generations) and logs
             if (gen % 10u == 0u) {
                 // Exit condition on xtol
-                if ((sigma * B * z[0]).norm() < m_xtol) {
+                if ((A * z[0]).norm() < m_xtol) {
                     if (m_verbosity > 0u) {
                         std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
                     }
@@ -312,7 +320,7 @@ public:
                 // Every m_verbosity generations print a log line
                 if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                     // The population flattness in chromosome
-                    auto dx = (sigma * B * z[0]).norm();
+                    auto dx = (A * z[0]).norm();
                     // The population flattness in fitness
                     auto idx_b = pop.best_idx();
                     auto idx_w = pop.worst_idx();
@@ -338,20 +346,21 @@ public:
             });
             // 4 - We update the distribution parameters mu, sigma and B following the xnes rules
             Eigen::MatrixXd I = Eigen::MatrixXd::Identity(dim, dim);
-            Eigen::VectorXd G_delta = u[0] * z[s_idx[0]];
+            Eigen::VectorXd d_center = u[0] * z[s_idx[0]];
             for (decltype(u.size()) i = 1u; i < u.size(); ++i) {
-                G_delta += u[i] * z[s_idx[i]];
+                d_center += u[i] * z[s_idx[i]];
             }
-            Eigen::MatrixXd G_M = u[0] * (z[s_idx[0]] * z[s_idx[0]].transpose() - I);
+            Eigen::MatrixXd cov_grad = u[0] * (z[s_idx[0]] * z[s_idx[0]].transpose() - I);
             for (decltype(u.size()) i = 1u; i < u.size(); ++i) {
-                G_M += u[i] * (z[s_idx[i]] * z[s_idx[i]].transpose() - I);
+                cov_grad += u[i] * (z[s_idx[i]] * z[s_idx[i]].transpose() - I);
             }
-            double G_sigma = G_M.trace() / dim;
-            Eigen::MatrixXd G_B = G_M - G_sigma * I;
-            mean = mean + eta_mu * sigma * B * G_delta;
-            sigma = sigma * std::exp(eta_sigma / 2. * G_sigma);
-            B = B * (std::exp(eta_b / 2) * G_B ).exp();
-        } // end of generation loop
+            double cov_trace = cov_grad.trace();
+            cov_grad = cov_grad - cov_trace / dim * I;
+            Eigen::MatrixXd d_A = 0.5 * (eta_sigma * cov_trace / dim * I + eta_b * cov_grad);
+            mean = mean + eta_mu * A * d_center;
+            A = A * d_A.exp();
+            sigma = sigma * std::exp(eta_sigma / 2. * cov_trace / dim); // used only for cmaes comparisons
+        }
         if (m_verbosity) {
             std::cout << "Exit condition -- generations = " << m_gen << std::endl;
         }
@@ -488,7 +497,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_eta_mu, m_eta_sigma, m_eta_b, m_sigma0, m_ftol, m_xtol, m_memory, sigma, mean, B, m_e, m_seed,
+        ar(m_gen, m_eta_mu, m_eta_sigma, m_eta_b, m_sigma0, m_ftol, m_xtol, m_memory, sigma, mean, A, m_e, m_seed,
            m_verbosity, m_log);
     }
 
@@ -516,7 +525,7 @@ private:
     // "Memory" data members (these are adapted during each evolve call and may be remembered if m_memory is true)
     mutable double sigma;
     mutable Eigen::VectorXd mean;
-    mutable Eigen::MatrixXd B;
+    mutable Eigen::MatrixXd A;
 
     // "Common" data members
     mutable detail::random_engine_type m_e;
