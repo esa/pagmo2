@@ -77,9 +77,8 @@ namespace pagmo
  *
  * .. note::
  *
- *    We introduced two changes to the original algorithm in order to simplify its use for the generic user.
- *    1 - when a decision vector is sampled outside the problem bounds it will be forced back in.
- *    2 - the initial covariance matrix depends on the bounds width so that heterogenously scaled variables
+ *    We introduced one change to the original algorithm in order to simplify its use for the generic user.
+ *    The initial covariance matrix depends on the bounds width so that heterogenously scaled variables
  *    are not a problem: the width along the i-th direction will be w_i = sigma_0 * (ub_i - lb_i)
  *
  * .. note::
@@ -126,7 +125,7 @@ public:
      * @param eta_mu learning rate for mean update (if -1 will be automatically selected to be 1)
      * @param eta_sigma learning rate for step-size update (if -1 will be automatically selected)
      * @param eta_b  learning rate for the covariance matrix update (if -1 will be automatically selected)
-     * @param sigma0 the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)
+     * @param sigma0 the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 0.5)
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
@@ -265,7 +264,7 @@ public:
         // This is also done if the problem dimension has changed
         if ((mean.size() != _(dim)) || (m_memory == false)) {
             if (m_sigma0 == -1) {
-                sigma = 1.;
+                sigma = 0.5;
             } else {
                 sigma = m_sigma0;
             }
@@ -304,7 +303,7 @@ public:
                 // is forbidden being prob a const ref.
                 pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
             }
-            // 1 - We generate lam new individuals uing the current probability distribution
+            // 1 - We generate lam new individuals using the current probability distribution
             for (decltype(lam) i = 0u; i < lam; ++i) {
                 // 1a - we create a randomly normal distributed vector
                 for (decltype(dim) j = 0u; j < dim; ++j) {
@@ -312,12 +311,6 @@ public:
                 }
                 // 1b - and store its transformed value in the new chromosomes
                 x[i] = mean + A * z[i];
-                // We fix the bounds
-                for (decltype(dim) j = 0u; j < dim; ++j) {
-                    if ((x[i][_(j)] < lb[j]) || (x[i][_(j)] > ub[j])) {
-                        x[i][_(j)] = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
-                    }
-                }
                 for (decltype(dim) j = 0u; j < dim; ++j) {
                     dumb[j] = x[i](_(j));
                 }

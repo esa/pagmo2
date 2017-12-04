@@ -311,9 +311,6 @@ public:
         // ----------------------------------------------//
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
-        auto best_x = pop.get_x()[pop.best_idx()];
-        auto best_f = pop.get_f()[pop.best_idx()];
-
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
             // 1 - We generate and evaluate lam new individuals
@@ -362,23 +359,22 @@ public:
                         print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
                               "Best:", std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:", '\n');
                     }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), best_f[0],
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), pop.get_f()[idx_b][0],
                           std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
                     ++count;
                     // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma);
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[idx_b][0], dx, df, sigma);
                 }
             }
             // 2 - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a
-            // chromosome
-            // via an Eigen matrix. Maybe iterators could be used to generalize that util?
-            for (decltype(lam) i = 0u; i < lam; ++i) {
-                for (decltype(dim) j = 0u; j < dim; ++j) {
-                    if ((newpop[i](_(j)) < lb[j]) || (newpop[i](_(j)) > ub[j])) {
-                        newpop[i](_(j)) = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
-                    }
-                }
-            }
+            // chromosome via an Eigen matrix. Maybe iterators could be used to generalize that util?
+            //for (decltype(lam) i = 0u; i < lam; ++i) {
+            //    for (decltype(dim) j = 0u; j < dim; ++j) {
+            //        if ((newpop[i](_(j)) < lb[j]) || (newpop[i](_(j)) > ub[j])) {
+            //            newpop[i](_(j)) = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
+            //        }
+            //    }
+            //}
             // 3 - We Evaluate the new population (if the problem is stochastic change seed first)
             if (prob.is_stochastic()) {
                 // change the problem seed. This is done via the population_set_seed method as prob.set_seed
@@ -391,10 +387,6 @@ public:
                     dumb[j] = newpop[i](_(j));
                 }
                 pop.set_x(i, dumb);
-                if (pop.get_f()[i][0] <= best_f[0]) {
-                    best_f = pop.get_f()[i];
-                    best_x = pop.get_x()[i];
-                }
             }
             counteval += lam;
             // 4 - We extract the elite from this generation.
