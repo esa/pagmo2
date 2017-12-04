@@ -236,32 +236,34 @@ public:
         std::normal_distribution<double> normally_distributed_number(0., 1.);
         // Initialize default values for the learning rates
         double N = static_cast<double>(dim);
+        double NP = static_cast<double>(lam);
+        
         double eta_mu(m_eta_mu), eta_sigma(m_eta_sigma), eta_b(m_eta_b);
-        if (eta_mu = -1) {
+        if (eta_mu == -1) {
             eta_mu = 1.;
         }
         double common_default = 0.6 * (3. + std::log(N)) / (N * std::sqrt(N));
-        if (eta_sigma = -1) {
+        if (eta_sigma == -1) {
             eta_sigma = common_default;
         }
-        if (eta_b = -1) {
+        if (eta_b == -1) {
             eta_b = common_default;
         }
         // Initialize the utility function u
         std::vector<double> u(lam);
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-            u[i] = std::max(0., std::log(lam / 2. + 1.) - std::log(i + 1));
+            u[i] = std::max(0., std::log(NP / 2. + 1.) - std::log(i + 1));
         }
         double sum = 0.;
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
             sum += u[i];
         }
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-            u[i] = u[i] / sum - 1. / lam; // without the uniform baselines seems to improve (get rid of 1/lam?)
+            u[i] = u[i] / sum - 1. / NP; // Give an option to turn off the unifrm baseline (i.e. -1/NP) ?
         }
         // If m_memory is false we redefine mutable members erasing the memory of past calls.
         // This is also done if the problem dimension has changed
-        if ((mean.size() != dim) || (m_memory == false)) {
+        if ((mean.size() != _(dim)) || (m_memory == false)) {
             if (m_sigma0 == -1) {
                 sigma = 1.;
             } else {
@@ -310,12 +312,10 @@ public:
                 }
                 // 1b - and store its transformed value in the new chromosomes
                 x[i] = mean + A * z[i];
-                // We fix the bounds (only x is changed, not z)
-                bool changed = false;
+                // We fix the bounds
                 for (decltype(dim) j = 0u; j < dim; ++j) {
                     if ((x[i][_(j)] < lb[j]) || (x[i][_(j)] > ub[j])) {
                         x[i][_(j)] = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
-                        changed = true;
                     }
                 }
                 for (decltype(dim) j = 0u; j < dim; ++j) {
@@ -384,11 +384,11 @@ public:
                 cov_grad += u[i] * (z[s_idx[i]] * z[s_idx[i]].transpose() - I);
             }
             double cov_trace = cov_grad.trace();
-            cov_grad = cov_grad - cov_trace / dim * I;
-            Eigen::MatrixXd d_A = 0.5 * (eta_sigma * cov_trace / dim * I + eta_b * cov_grad);
+            cov_grad = cov_grad - cov_trace / N * I;
+            Eigen::MatrixXd d_A = 0.5 * (eta_sigma * cov_trace / N * I + eta_b * cov_grad);
             mean = mean + eta_mu * A * d_center;
             A = A * d_A.exp();
-            sigma = sigma * std::exp(eta_sigma / 2. * cov_trace / dim); // used only for cmaes comparisons
+            sigma = sigma * std::exp(eta_sigma / 2. * cov_trace / N); // used only for cmaes comparisons
         }
         if (m_verbosity) {
             std::cout << "Exit condition -- generations = " << m_gen << std::endl;
