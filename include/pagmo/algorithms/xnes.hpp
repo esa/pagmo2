@@ -382,7 +382,7 @@ public:
                 return pop.get_f()[a][0] < pop.get_f()[b][0];
             });
             // 4 - We update the distribution parameters mu, sigma and B following the xnes rules
-            Eigen::MatrixXd I = Eigen::MatrixXd::Identity(dim, dim);
+            Eigen::MatrixXd I = Eigen::MatrixXd::Identity(_(dim), _(dim));
             Eigen::VectorXd d_center = u[0] * z[s_idx[0]];
             for (decltype(u.size()) i = 1u; i < u.size(); ++i) {
                 d_center += u[i] * z[s_idx[i]];
