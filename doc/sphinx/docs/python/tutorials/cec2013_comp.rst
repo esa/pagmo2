@@ -1,4 +1,4 @@
-.. _py_tutorial_cec2013_copm:
+.. _py_tutorial_cec2013_comp:
 
 Participating to the CEC2013 Competition
 ===============================================
