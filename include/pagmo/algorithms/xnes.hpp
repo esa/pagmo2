@@ -91,7 +91,7 @@ namespace pagmo
  *
  *    Glasmachers, T., Schaul, T., Yi, S., Wierstra, D., & Schmidhuber, J. (2010, July). Exponential natural
  *    evolution strategies. In Proceedings of the 12th annual conference on Genetic and evolutionary computation (pp.
- *    393-400). ACM. 
+ *    393-400). ACM.
  * \endverbatim
  */
 class xnes
@@ -105,7 +105,7 @@ public:
      * - the number of function evaluations
      * - the best fitness vector so far,
      * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst
-     * individual,
+     *   individual,
      * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
      */
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
@@ -125,18 +125,22 @@ public:
      * @param eta_mu learning rate for mean update (if -1 will be automatically selected to be 1)
      * @param eta_sigma learning rate for step-size update (if -1 will be automatically selected)
      * @param eta_b  learning rate for the covariance matrix update (if -1 will be automatically selected)
-     * @param sigma0 the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 0.5)
+     * @param sigma0 the initial search width will be sigma0 * (ub - lb) (if -1 will be selected to be 0.5)
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
+     * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the
+     *        bounds but the covariance matrix adaptation  mechanism will worsen
      * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if eta_mu, eta_sigma, eta_b and sigma0 are not in ]0, 1] or -1
      */
     xnes(unsigned int gen = 1, double eta_mu = -1, double eta_sigma = -1, double eta_b = -1, double sigma0 = -1,
-         double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next())
+         double ftol = 1e-6, double xtol = 1e-6, bool memory = false, bool force_bounds = false,
+         unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_eta_mu(eta_mu), m_eta_sigma(eta_sigma), m_eta_b(eta_b), m_sigma0(sigma0), m_ftol(ftol),
-          m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+          m_xtol(xtol), m_memory(memory), m_force_bounds(force_bounds), m_e(seed), m_seed(seed), m_verbosity(0u),
+          m_log()
     {
         if (((eta_mu <= 0.) || (eta_mu > 1.)) && !(eta_mu == -1)) {
             pagmo_throw(std::invalid_argument,
@@ -234,9 +238,9 @@ public:
         std::uniform_real_distribution<double> randomly_distributed_number(0., 1.); // to generate a number in [0, 1)
         std::normal_distribution<double> normally_distributed_number(0., 1.);
         // Initialize default values for the learning rates
-        double dim_d= static_cast<double>(dim);
+        double dim_d = static_cast<double>(dim);
         double lam_d = static_cast<double>(lam);
-        
+
         double eta_mu(m_eta_mu), eta_sigma(m_eta_sigma), eta_b(m_eta_b);
         if (eta_mu == -1) {
             eta_mu = 1.;
@@ -311,6 +315,17 @@ public:
                 }
                 // 1b - and store its transformed value in the new chromosomes
                 x[i] = mean + A * z[i];
+                if (m_force_bounds) {
+                    // We fix the bounds. Note that this screws up the whole covariance matrix machinery and worsen
+                    // performances considerably.
+                    for (decltype(dim) j = 0u; j < dim; ++j) {
+                        if (x[i](_(j)) < lb[j]) {
+                            x[i](_(j)) = lb[j];
+                        } else if (x[i](_(j)) > ub[j]) {
+                            x[i](_(j)) = ub[j];
+                        }
+                    }
+                }
                 for (decltype(dim) j = 0u; j < dim; ++j) {
                     dumb[j] = x[i](_(j));
                 }
@@ -495,6 +510,7 @@ public:
         stream(ss, "\n\tStopping xtol: ", m_xtol);
         stream(ss, "\n\tStopping ftol: ", m_ftol);
         stream(ss, "\n\tMemory: ", m_memory);
+        stream(ss, "\n\tForce bounds: ", m_force_bounds);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
         stream(ss, "\n\tSeed: ", m_seed);
         return ss.str();
@@ -522,8 +538,8 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_eta_mu, m_eta_sigma, m_eta_b, m_sigma0, m_ftol, m_xtol, m_memory, sigma, mean, A, m_e, m_seed,
-           m_verbosity, m_log);
+        ar(m_gen, m_eta_mu, m_eta_sigma, m_eta_b, m_sigma0, m_ftol, m_xtol, m_memory, m_force_bounds, sigma, mean, A,
+           m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -546,6 +562,7 @@ private:
     double m_ftol;
     double m_xtol;
     bool m_memory;
+    bool m_force_bounds;
 
     // "Memory" data members (these are adapted during each evolve call and may be remembered if m_memory is true)
     mutable double sigma;

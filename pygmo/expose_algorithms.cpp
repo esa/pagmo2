@@ -389,24 +389,26 @@ void expose_algorithms()
 #if defined(PAGMO_WITH_EIGEN3)
     // CMA-ES
     auto cmaes_ = expose_algorithm_pygmo<cmaes>("cmaes", cmaes_docstring().c_str());
-    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool>(
-        (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
-         bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
-    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool, unsigned>(
+    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool, bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
-         bp::arg("seed"))));
+         bp::arg("force_bounds") = false)));
+    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
+         bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+         bp::arg("force_bounds") = false, bp::arg("seed"))));
     expose_algo_log(cmaes_, cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
     // xNES
     auto xnes_ = expose_algorithm_pygmo<xnes>("xnes", xnes_docstring().c_str());
-    xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool>(
-        (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
-         bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
-         xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, unsigned>(
+    xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool>(
         (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
          bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
-         bp::arg("seed"))));
+         bp::arg("force_bounds") = false)));
+    xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
+         bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+         bp::arg("force_bounds") = false, bp::arg("seed"))));
     expose_algo_log(xnes_, xnes_get_log_docstring().c_str());
     xnes_.def("get_seed", &xnes::get_seed, generic_uda_get_seed_docstring().c_str());
 #endif
@@ -470,16 +472,17 @@ void expose_algorithms()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
-                                                              bp::return_internal_reference<>()),
-                 lcast([](nlopt &n, const nlopt *ptr) {
-                     if (ptr) {
-                         n.set_local_optimizer(*ptr);
-                     } else {
-                         n.unset_local_optimizer();
-                     }
-                 }),
-                 nlopt_local_optimizer_docstring().c_str());
+    add_property(
+        nlopt_, "local_optimizer",
+        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
+        lcast([](nlopt &n, const nlopt *ptr) {
+            if (ptr) {
+                n.set_local_optimizer(*ptr);
+            } else {
+                n.unset_local_optimizer();
+            }
+        }),
+        nlopt_local_optimizer_docstring().c_str());
 #endif
 
 #if defined(PAGMO_WITH_IPOPT)

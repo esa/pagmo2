@@ -2381,7 +2381,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log()`
 
 std::string cmaes_docstring()
 {
-    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
 
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
@@ -2395,6 +2395,7 @@ Args:
     ftol (``float``): stopping criteria on the x tolerance
     xtol (``float``): stopping criteria on the f tolerance
     memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    force_bounds (``bool``): when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -2449,7 +2450,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log()`
 
 std::string xnes_docstring()
 {
-    return R"(__init__(gen = 1, eta_mu = -1, eta_sigma = -1, eta_b = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
+    return R"(__init__(gen = 1, eta_mu = -1, eta_sigma = -1, eta_b = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
 
 Exponential Evolution Strategies
 Args:
@@ -2461,6 +2462,7 @@ Args:
     ftol (``float``): stopping criteria on the x tolerance
     xtol (``float``): stopping criteria on the f tolerance
     memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    force_bounds (``bool``): when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:

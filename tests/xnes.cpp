@@ -50,19 +50,19 @@ BOOST_AUTO_TEST_CASE(xnes_algorithm_construction)
 {
     // We test the construction of xnes with standard parameters
     // And that the UDA can be used to construct an algorithm
-    BOOST_CHECK_NO_THROW((xnes{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 32u}));
-    BOOST_CHECK_NO_THROW((algorithm{xnes{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 32u}}));
+    BOOST_CHECK_NO_THROW((xnes{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 32u}));
+    BOOST_CHECK_NO_THROW((algorithm{xnes{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 32u}}));
     // We test that wrong parameters will result in an error
-    BOOST_CHECK_THROW(xnes(10u, -0.6, -1, -1, -1, 1e-6, 1e-6, false, 32u), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, 1.6, -1, -1, -1, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, -1, -0.6, -1, -1, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, -1, 1.6, -1, -1, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, -1, -1, -0.6, -1, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, -1, -1, 1.6, -1, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, -1, -1, -1, -0.6, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
-    BOOST_CHECK_THROW((xnes{10u, -1, -1, 1, 1.6, 1e-6, 1e-6, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW(xnes(10u, -0.6, -1, -1, -1, 1e-6, 1e-6, false, false, 32u), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, 1.6, -1, -1, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -0.6, -1, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, 1.6, -1, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -1, -0.6, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -1, 1.6, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -1, -1, -0.6, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -1, 1, 1.6, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
     // We test the defaults are correctly
-    xnes user_algo{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 32u};
+    xnes user_algo{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 32u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 32u);
     BOOST_CHECK((user_algo.get_log() == xnes::log_type{}));
@@ -104,13 +104,13 @@ BOOST_AUTO_TEST_CASE(xnes_evolve_test)
         population pop2{prob, 5u, 23u};
         population pop3{prob, 5u, 23u};
 
-        xnes user_algo1{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u};
+        xnes user_algo1{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
 
         BOOST_CHECK(user_algo1.get_log().size() > 0u);
 
-        xnes user_algo2{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u};
+        xnes user_algo2{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u};
         user_algo2.set_verbosity(1u);
         pop2 = user_algo2.evolve(pop2);
 
@@ -129,11 +129,11 @@ BOOST_AUTO_TEST_CASE(xnes_evolve_test)
         population pop1{prob, 5u, 23u};
         population pop2{prob, 5u, 23u};
 
-        xnes user_algo1{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u};
+        xnes user_algo1{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u};
         user_algo1.set_verbosity(1u);
         pop1 = user_algo1.evolve(pop1);
 
-        xnes user_algo2{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u};
+        xnes user_algo2{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u};
         user_algo2.set_verbosity(1u);
         pop2 = user_algo2.evolve(pop2);
 
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(xnes_evolve_test)
     // Here we check that the exit condition of ftol and xtol actually provoke an exit within 5000 gen (rosenbrock{2} is
     // used)
     {
-        xnes user_algo{5000u, -1, -1, -1, -1, 1e-6, 1e-16, false, 23u};
+        xnes user_algo{5000u, -1, -1, -1, -1, 1e-6, 1e-16, false, false, 23u};
         user_algo.set_verbosity(1u);
         problem prob{rosenbrock{2u}};
         population pop{prob, 20u, 23u};
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(xnes_evolve_test)
         BOOST_CHECK(user_algo.get_log().size() < 5000u);
     }
     {
-        xnes user_algo{5000u, -1, -1, -1, -1, 1e-16, 1e-6, false, 23u};
+        xnes user_algo{5000u, -1, -1, -1, -1, 1e-16, 1e-6, false, false, 23u};
         user_algo.set_verbosity(1u);
         problem prob{rosenbrock{2u}};
         population pop{prob, 20u, 23u};
@@ -184,8 +184,8 @@ BOOST_AUTO_TEST_CASE(xnes_evolve_test)
 
 BOOST_AUTO_TEST_CASE(xnes_setters_getters_test)
 {
-    xnes user_algo{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u};
-    xnes user_algo2{10u, .5, .5, .5, .5, 1e-6, 1e-6, false, 23u};
+    xnes user_algo{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u};
+    xnes user_algo2{10u, .5, .5, .5, .5, 1e-6, 1e-6, false, false, 23u};
     user_algo.set_verbosity(23u);
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(xnes_serialization_test)
     // Make one evolution
     problem prob{rosenbrock{25u}};
     population pop{prob, 10u, 23u};
-    algorithm algo{xnes{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u}};
+    algorithm algo{xnes{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 
@@ -241,14 +241,14 @@ BOOST_AUTO_TEST_CASE(xnes_memory_test)
 {
     // We check here that when memory is true calling evolve(pop) two times on 1 gen
     // is the same as calling 1 time evolve with 2 gens
-    xnes user_algo{1u, -1, -1, -1, -1, 1e-6, 1e-6, true, 23u};
+    xnes user_algo{1u, -1, -1, -1, -1, 1e-6, 1e-6, true, false, 23u};
     user_algo.set_verbosity(1u);
     problem prob{rosenbrock{25u}};
     population pop{prob, 10u, 23u};
     pop = user_algo.evolve(pop);
     pop = user_algo.evolve(pop);
 
-    xnes user_algo2{2u, -1, -1, -1, -1, 1e-6, 1e-6, false, 23u};
+    xnes user_algo2{2u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 23u};
     user_algo2.set_verbosity(1u);
     problem prob2{rosenbrock{25u}};
     population pop2{prob2, 10u, 23u};
