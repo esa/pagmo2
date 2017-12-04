@@ -235,14 +235,14 @@ public:
         std::uniform_real_distribution<double> randomly_distributed_number(0., 1.); // to generate a number in [0, 1)
         std::normal_distribution<double> normally_distributed_number(0., 1.);
         // Initialize default values for the learning rates
-        double N = static_cast<double>(dim);
-        double NP = static_cast<double>(lam);
+        double dim_d= static_cast<double>(dim);
+        double lam_d = static_cast<double>(lam);
         
         double eta_mu(m_eta_mu), eta_sigma(m_eta_sigma), eta_b(m_eta_b);
         if (eta_mu == -1) {
             eta_mu = 1.;
         }
-        double common_default = 0.6 * (3. + std::log(N)) / (N * std::sqrt(N));
+        double common_default = 0.6 * (3. + std::log(dim_d)) / (dim_d * std::sqrt(dim_d));
         if (eta_sigma == -1) {
             eta_sigma = common_default;
         }
@@ -252,14 +252,14 @@ public:
         // Initialize the utility function u
         std::vector<double> u(lam);
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-            u[i] = std::max(0., std::log(NP / 2. + 1.) - std::log(i + 1));
+            u[i] = std::max(0., std::log(lam_d / 2. + 1.) - std::log(i + 1));
         }
         double sum = 0.;
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
             sum += u[i];
         }
         for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-            u[i] = u[i] / sum - 1. / NP; // Give an option to turn off the unifrm baseline (i.e. -1/NP) ?
+            u[i] = u[i] / sum - 1. / lam_d; // Give an option to turn off the unifrm baseline (i.e. -1/lam_d) ?
         }
         // If m_memory is false we redefine mutable members erasing the memory of past calls.
         // This is also done if the problem dimension has changed
@@ -384,11 +384,11 @@ public:
                 cov_grad += u[i] * (z[s_idx[i]] * z[s_idx[i]].transpose() - I);
             }
             double cov_trace = cov_grad.trace();
-            cov_grad = cov_grad - cov_trace / N * I;
-            Eigen::MatrixXd d_A = 0.5 * (eta_sigma * cov_trace / N * I + eta_b * cov_grad);
+            cov_grad = cov_grad - cov_trace / dim_d * I;
+            Eigen::MatrixXd d_A = 0.5 * (eta_sigma * cov_trace / dim_d * I + eta_b * cov_grad);
             mean = mean + eta_mu * A * d_center;
             A = A * d_A.exp();
-            sigma = sigma * std::exp(eta_sigma / 2. * cov_trace / N); // used only for cmaes comparisons
+            sigma = sigma * std::exp(eta_sigma / 2. * cov_trace / dim_d); // used only for cmaes comparisons
         }
         if (m_verbosity) {
             std::cout << "Exit condition -- generations = " << m_gen << std::endl;
