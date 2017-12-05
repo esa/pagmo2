@@ -52,7 +52,7 @@ namespace pagmo
  *
  * This code implements the so-called improved harmony search algorithm (IHS), in which the probability
  * of picking the variables from the decision vector and the amount of mutation to which they are subject
- * vary (respectively linearly and exponentially) at each call of the evolve() method.
+ * vary (respectively linearly and exponentially) at each call of the ``evolve()`` method.
  *
  * In this algorithm the number of fitness function evaluations is equal to the number of iterations.
  * All the individuals in the input population participate in the evolution. A new individual is generated
@@ -176,9 +176,9 @@ public:
             pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
         }
         if (prob.get_nc() != 0u && prob.get_nobj() > 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple objectives and non linear constraints detected in the " + prob.get_name()
-                            + " instance. " + get_name() + " cannot deal with this type of problem.");
+            pagmo_throw(std::invalid_argument, "Multiple objectives and non linear constraints detected in the "
+                                                   + prob.get_name() + " instance. " + get_name()
+                                                   + " cannot deal with this type of problem.");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -195,7 +195,7 @@ public:
         }
         // Distributions used
         std::uniform_int_distribution<size_t> uni_int(0, pop.size() - 1u); // to pick an individual
-        std::uniform_real_distribution<double> drng(0., 1.);                      // to generate a number in [0, 1)
+        std::uniform_real_distribution<double> drng(0., 1.);               // to generate a number in [0, 1)
 
         // Used for parameter control
         const double c = std::log(m_bw_min / m_bw_max) / m_gen;

@@ -1150,8 +1150,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )"
-           + name + R"( problem
+    1D NumPy float array: the best known solution for the )" + name + R"( problem
 
 )";
 }
@@ -4518,8 +4517,7 @@ Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
       election/replacement policies (see :attr:`~pygmo.)"
            + algo + R"(.selection` and
-      :attr:`~pygmo.)"
-           + algo + R"(.replacement`)
+      :attr:`~pygmo.)" + algo + R"(.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large
@@ -4691,7 +4689,7 @@ for finding a best harmony (i.e., the global optimum) all together.
 
 This pygmo UDA implements the so-called improved harmony search algorithm (IHS), in which the probability
 of picking the variables from the decision vector and the amount of mutation to which they are subject
-vary (respectively linearly and exponentially) at each call of the evolve() method.
+vary (respectively linearly and exponentially) at each call of the ``evolve()`` method.
 
 In this algorithm the number of fitness function evaluations is equal to the number of iterations.
 All the individuals in the input population participate in the evolution. A new individual is generated
@@ -4709,7 +4707,7 @@ at every iteration, substituting the current worst individual of the population 
 .. note::
 
    The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
-   In pygmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly.
+   In pygmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly).
    Such extension is original with pygmo.
 
 Args:
@@ -4840,12 +4838,6 @@ all parents and children are put in the same pool and only the best are passed t
 .. note:
 
    This algorithm will work only for box bounded problems.
-
-.. note:
-
-   Specifying the parameter *int_dim* a part of the decision vector (at the end) will be treated as integers
-   This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
-   The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
 
 Args:
     gen (``int``): number of generations.
