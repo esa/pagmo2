@@ -433,6 +433,25 @@ in undefined behaviour.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv2NK5pagmo10population9worst_idxEv">
+<span id="pagmo::population::worst_idxC"></span><span class="target" id="classpagmo_1_1population_1a70fc0097798288a5d29135de6d05490f"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">worst_idx</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population9worst_idxEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Index of the worst individual. </p>
+<p>If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem is, instead, single objective, but with constraints, the worst individual will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#namespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single worst is not defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#namespacepagmo_1a564410c4164043e81c3c0d2d44f34b44"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
+<p>The pagmo::population::get_c_tol() tolerances are accounted by default. If different tolerances are required the other overloads can be used.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the index of the worst individual.</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#namespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv2NK5pagmo10population9worst_idxERK13vector_double">
 <span id="pagmo::population::worst_idx__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1population_1a997570eee98e774ed0c704b24a89995c"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">worst_idx</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population9worst_idxERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Index of the worst individual (accounting for a vector tolerance) </p>
@@ -457,7 +476,7 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo10population9worst_idxEd">
-<span id="pagmo::population::worst_idx__doubleC"></span><span class="target" id="classpagmo_1_1population_1afa9b185577a5704f32c7e97d3f09e509"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">worst_idx</code><span class="sig-paren">(</span>double <em>tol</em> = 0.<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population9worst_idxEd" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::population::worst_idx__doubleC"></span><span class="target" id="classpagmo_1_1population_1a7209d7bfc38040c6c3c296466d11b1bf"></span><a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="descname">worst_idx</code><span class="sig-paren">(</span>double <em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population9worst_idxEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Index of the worst individual (accounting for a scalar tolerance) </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>

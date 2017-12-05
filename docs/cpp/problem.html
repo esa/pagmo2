@@ -720,7 +720,7 @@ sparsity pattern of the hessians is dense. See <code class="xref cpp cpp-func do
 <dl class="function">
 <dt id="_CPPv2N5pagmo7problem9set_c_tolERK13vector_double">
 <span id="pagmo::problem::set_c_tol__vector_doubleCR"></span><span class="target" id="classpagmo_1_1problem_1a1a55cca40f93b8268c8bc5c1d33b2201"></span>void <code class="descname">set_c_tol</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>c_tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem9set_c_tolERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the constraint tolerance. </p>
+<dd><p>Set the constraint tolerance (from a vector of doubles). </p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -730,6 +730,25 @@ sparsity pattern of the hessians is dense. See <code class="xref cpp cpp-func do
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the size of <code class="docutils literal"><span class="pre">c_tol</span></code> differs from the number of constraints, or if any of its elements is negative or NaN. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo7problem9set_c_tolEd">
+<span id="pagmo::problem::set_c_tol__double"></span><span class="target" id="classpagmo_1_1problem_1ae63fb5fe830f50c4b6761f633ad55977"></span>void <code class="descname">set_c_tol</code><span class="sig-paren">(</span>double <em>c_tol</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7problem9set_c_tolEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the constraint tolerance (from a single double value). </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">c_tol</span></code>: the tolerance to use when checking for all constraint feasibilities.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">c_tol</span></code> is negative or NaN. </li>
 </ul>
 </dd>
 </dl>

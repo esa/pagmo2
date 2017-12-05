@@ -1,0 +1,433 @@
+ <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Improved Harmony Search (IHS) &#8212; pagmo 2.6 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Ipopt" href="ipopt.html" />
+    <link rel="prev" title="Self-adaptive Differential Evolution (DE 1220 aka pDE)" href="de1220.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Improved Harmony Search (IHS)</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="improved-harmony-search-ihs">
+<h1>Improved Harmony Search (IHS)<a class="headerlink" href="#improved-harmony-search-ihs" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo3ihsE">
+<span id="pagmo::ihs"></span><span class="target" id="classpagmo_1_1ihs"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">ihs</code><a class="headerlink" href="#_CPPv2N5pagmo3ihsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Improved Harmony Search. </p>
+<p><img alt="../../../_images/ihs.gif" src="../../../_images/ihs.gif" /></p>
+<p>Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians. In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value) for finding a best harmony (i.e., the global optimum) all together.</p>
+<p>This code implements the so-called improved harmony search algorithm (IHS), in which the probability of picking the variables from the decision vector and the amount of mutation to which they are subject vary (respectively linearly and exponentially) at each call of the <code class="docutils literal"><a class="reference internal" href="#classpagmo_1_1ihs_1a14cd7c1097c8347bee260cf10cfdfaf6"><span class="std std-ref"><span class="pre">evolve()</span></span></a></code> method.</p>
+<p>In this algorithm the number of fitness function evaluations is equal to the number of iterations. All the individuals in the input population participate in the evolution. A new individual is generated at every iteration, substituting the current worst individual of the population if better.</p>
+<p><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The HS algorithm can and has been  criticized, not for its performances,
+but for the use of a metaphor that does not add anything to existing ones. The HS
+algorithm essentially applies mutation and crossover operators to a background population and as such
+should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
+in that context. The use of the musicians metaphor only obscures its internal functioning
+making theoretical results from ES and GA erroneously seem as unapplicable to HS.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
+In pagmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly)
+and stochastic problems. Such extension is original with pagmo.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/Harmony_search">http://en.wikipedia.org/wiki/Harmony_search</a> for an introduction on harmony search.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://dx.doi.org/10.1016/j.amc.2006.11.033">http://dx.doi.org/10.1016/j.amc.2006.11.033</a> for the paper that introduces and explains improved harmony search.</p>
+</div>
+ </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5pagmo3ihs13log_line_typeE">
+<span id="pagmo::ihs::log_line_type"></span><span class="target" id="classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, double, double, double, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo3ihs13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single data line for the algorithm’s log. </p>
+<p>A log data line is a tuple consisting of:<ul class="simple">
+<li>the number of objective function evaluations made so far,</li>
+<li>the pitch adjustment rate,</li>
+<li>the distance bandwidth</li>
+<li>the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual (or -1 in a multiobjective case),</li>
+<li>the population flatness evaluated as the distance between the fitness of the best and of the worst individual (or -1 in a multiobjective case),</li>
+<li>the number of constraints violated by the current decision vector,</li>
+<li>the constraints violation norm for the current decision vector,</li>
+<li>the objective value of the best solution or, in the multiobjective case, the ideal point </li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo3ihs8log_typeE">
+<span id="pagmo::ihs::log_type"></span><span class="target" id="classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo3ihs13log_line_typeE" title="pagmo::ihs::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo3ihs8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Log type. </p>
+<p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1ihs_1a28290771e565656f6e59423c692722b7"><span class="std std-ref">ihs::set_verbosity()</span></a>). </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo3ihs3ihsEjdddddj">
+<span id="pagmo::ihs::ihs__unsigned.double.double.double.double.double.unsigned-i"></span><span class="target" id="classpagmo_1_1ihs_1a98cece1bf96b6d57cd6358725dd7814d"></span><code class="descname">ihs</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>phmcr</em> = 0.85, double <em>ppar_min</em> = 0.35, double <em>ppar_max</em> = 0.99, double <em>bw_min</em> = 1E-5, double <em>bw_max</em> = 1., unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3ihs3ihsEjdddddj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor. </p>
+<p>Constructs ihs</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">gen</span></code>: Number of generations to consider. Each generation will compute the objective function once. </li>
+<li><code class="docutils literal"><span class="pre">phmcr</span></code>: probability of choosing from memory (similar to a crossover probability) </li>
+<li><code class="docutils literal"><span class="pre">ppar_min</span></code>: minimum pitch adjustment rate. (similar to a mutation rate) </li>
+<li><code class="docutils literal"><span class="pre">ppar_max</span></code>: maximum pitch adjustment rate. (similar to a mutation rate) </li>
+<li><code class="docutils literal"><span class="pre">bw_min</span></code>: minimum distance bandwidth. (similar to a mutation width) </li>
+<li><code class="docutils literal"><span class="pre">bw_max</span></code>: maximum distance bandwidth. (similar to a mutation width) </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">value_error</span></code>: if phmcr is not in the ]0,1[ interval, ppar min/max are not in the ]0,1[ interval, min/max quantities are less than/greater than max/min quantities, bw_min is negative. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3ihs6evolveE10population">
+<span id="pagmo::ihs::evolve__populationC"></span><span class="target" id="classpagmo_1_1ihs_1a14cd7c1097c8347bee260cf10cfdfaf6"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3ihs6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>evolved population </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo3ihs13set_verbosityEj">
+<span id="pagmo::ihs::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1ihs_1a28290771e565656f6e59423c692722b7"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3ihs13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set verbosity. </p>
+<p>This method will set the algorithm’s verbosity. If <code class="docutils literal"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"><span class="std std-ref">get_log()</span></a>.</p>
+<p>Example (verbosity 100, a constrained problem): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">ppar</span><span class="p">:</span>            <span class="n">bw</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>
+      <span class="mi">1</span>        <span class="mf">0.35064</span>       <span class="mf">0.988553</span>        <span class="mf">5.17002</span>        <span class="mf">68.4027</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
+    <span class="mi">101</span>        <span class="mf">0.41464</span>       <span class="mf">0.312608</span>        <span class="mf">4.21626</span>         <span class="mf">46.248</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
+    <span class="mi">201</span>        <span class="mf">0.47864</span>      <span class="mf">0.0988553</span>        <span class="mf">2.27851</span>        <span class="mf">8.00679</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
+    <span class="mi">301</span>        <span class="mf">0.54264</span>      <span class="mf">0.0312608</span>        <span class="mf">3.94453</span>        <span class="mf">31.9834</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
+    <span class="mi">401</span>        <span class="mf">0.60664</span>     <span class="mf">0.00988553</span>        <span class="mf">4.74834</span>         <span class="mf">40.188</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
+    <span class="mi">501</span>        <span class="mf">0.67064</span>     <span class="mf">0.00312608</span>        <span class="mf">2.91583</span>        <span class="mf">6.53575</span>              <span class="mi">1</span>     <span class="mf">0.00904482</span>        <span class="mf">90.3601</span>
+    <span class="mi">601</span>        <span class="mf">0.73464</span>    <span class="mf">0.000988553</span>        <span class="mf">2.98691</span>        <span class="mf">10.6425</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
+    <span class="mi">701</span>        <span class="mf">0.79864</span>    <span class="mf">0.000312608</span>        <span class="mf">2.27775</span>        <span class="mf">39.7507</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
+    <span class="mi">801</span>        <span class="mf">0.86264</span>    <span class="mf">9.88553e-05</span>       <span class="mf">0.265908</span>         <span class="mf">4.5488</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
+    <span class="mi">901</span>        <span class="mf">0.92664</span>    <span class="mf">3.12608e-05</span>       <span class="mf">0.566348</span>       <span class="mf">0.354253</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
+</pre></div>
+</div>
+ Feasibility is checked against the problem’s tolerance.</p>
+<p>By default, the verbosity level is zero.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">n</span></code>: the desired verbosity level. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3ihs13get_verbosityEv">
+<span id="pagmo::ihs::get_verbosityC"></span><span class="target" id="classpagmo_1_1ihs_1ad396f317bc9ed21a15116f42aca2cc0d"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3ihs13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the verbosity level. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the verbosity level </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo3ihs8set_seedEj">
+<span id="pagmo::ihs::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1ihs_1a7f7a76d3654273d9c514d0935e339fe5"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3ihs8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3ihs8get_seedEv">
+<span id="pagmo::ihs::get_seedC"></span><span class="target" id="classpagmo_1_1ihs_1a7ba64666d8716e677d9fe3482a04b4ae"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3ihs8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the seed controlling the algorithm stochastic behaviour </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3ihs8get_nameEv">
+<span id="pagmo::ihs::get_nameC"></span><span class="target" id="classpagmo_1_1ihs_1af1b16999df2c5002d7f897510a0a643c"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3ihs8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm name. </p>
+<p>One of the optional methods of any user-defined algorithm (UDA).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing the algorithm name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3ihs14get_extra_infoEv">
+<span id="pagmo::ihs::get_extra_infoC"></span><span class="target" id="classpagmo_1_1ihs_1a0fa01c57728fc1466a1edb9848755db1"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3ihs14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra informations. </p>
+<p>One of the optional methods of any user-defined algorithm (UDA).</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a string containing extra informations on the algorithm </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo3ihs7get_logEv">
+<span id="pagmo::ihs::get_logC"></span><span class="target" id="classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo3ihs8log_typeE" title="pagmo::ihs::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3ihs7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the optimisation log. </p>
+<p>See <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for a description of the optimisation log. Logging is turned on/off via <a class="reference internal" href="#classpagmo_1_1ihs_1a28290771e565656f6e59423c692722b7"><span class="std std-ref">set_verbosity()</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const reference to the log. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
+<dt id="_CPPv2N5pagmo3ihs9serializeER7Archive">
+<span id="pagmo::ihs::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1ihs_1a01b81e78a40db75d034e5c4e994e5a1c"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3ihs9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

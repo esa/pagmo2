@@ -640,16 +640,18 @@ The log frequency depends on the verbosity parameter (by default nothing is logg
 the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
 <a class="reference internal" href="#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">sea</span></code></a>.
 A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
-A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.</p>
+A verbosity equal to 1 will produce a log with one entry at each improvement of the fitness.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Gen</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Improvement</span></code>, <code class="docutils literal"><span class="pre">Mutations</span></code><p><code class="docutils literal"><span class="pre">Gen</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), generation.
-<code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made.
-<code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the best fitness function found so far.
-<code class="docutils literal"><span class="pre">Improvement</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), improvement made by the last mutation.
-<code class="docutils literal"><span class="pre">Mutations</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), number of mutated components for the decision vector.</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Gen</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Improvement</span></code>, <code class="docutils literal"><span class="pre">Mutations</span></code><ul class="simple">
+<li><code class="docutils literal"><span class="pre">Gen</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), generation.</li>
+<li><code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made.</li>
+<li><code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the best fitness function found so far.</li>
+<li><code class="docutils literal"><span class="pre">Improvement</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), improvement made by the last mutation.</li>
+<li><code class="docutils literal"><span class="pre">Mutations</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), number of mutated components for the decision vector.</li>
+</ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
@@ -746,10 +748,6 @@ with standard deviation proportional to the <em>param_m</em> and the bounds widt
 mutation from Deb.</p>
 <p><em>Reinsertion</em>: the only reinsertion strategy provided is what we call pure elitism. After each generation
 all parents and children are put in the same pool and only the best are passed to the next generation.</p>
-<p>This algorithm will work only for box bounded problems.</p>
-<p>Specifying the parameter <em>int_dim</em> a part of the decision vector (at the end) will be treated as integers
-This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
-The various mutation and crossover strategies will do different things on an integer gene or a real valued one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -790,7 +788,7 @@ The log frequency depends on the verbosity parameter (by default nothing is logg
 the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
 <a class="reference internal" href="#pygmo.sga" title="pygmo.sga"><code class="xref py py-class docutils literal"><span class="pre">sga</span></code></a>.
 A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
-A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.</p>
+A verbosity equal to 1 will produce a log with one entry at each improvement of the fitness.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

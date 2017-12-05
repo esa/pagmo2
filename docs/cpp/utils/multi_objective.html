@@ -295,7 +295,7 @@ for multi-objective optimization: NSGA-II.” Parallel problem solving from natu
 </ul>
 </p>
 <p>Complexity is <span class="math">\( O(MN^2)\)</span> where <span class="math">\(M\)</span> is the number of objectives and <span class="math">\(N\)</span> is the number of individuals.</p>
-<p>This function will also work for single objective optimization, i.e. with 1 objective in which case, though, it is more efficient to sort using directly on of the following forms:</p>
+<p>This function will also work for single objective optimization, i.e. with 1 objective in which case, though, it is more efficient to sort using directly one of the following forms:</p>
 <p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">sort</span><span class="p">(</span><span class="n">input_f</span><span class="o">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">input_f</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[]</span> <span class="p">(</span><span class="n">auto</span> <span class="n">a</span><span class="p">,</span> <span class="n">auto</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];});</span>
 </pre></div>
 </div>
