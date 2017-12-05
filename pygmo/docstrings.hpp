@@ -146,6 +146,8 @@ std::string mbh_get_log_docstring();
 std::string mbh_get_perturb_docstring();
 std::string sea_docstring();
 std::string sea_get_log_docstring();
+std::string ihs_docstring();
+std::string ihs_get_log_docstring();
 std::string sga_docstring();
 std::string sga_get_log_docstring();
 std::string nlopt_docstring();
