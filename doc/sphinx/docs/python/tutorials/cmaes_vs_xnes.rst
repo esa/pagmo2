@@ -14,64 +14,48 @@ set to be :math:`n = 4 + log(3 d)` where `d` is the problem dimension.
 
 .. doctest::
 
-    >>> import pygmo as pg
-    >>> from math import floor
-    >>> from matplotlib import pyplot as plt # doctest: +SKIP
-    >>> import matplotlib.lines as mlines # doctest: +SKIP
-    >>> # We instantiate the algorithms
-    >>> xnes = pg.algorithm(pg.xnes(gen = 40000, ftol=1e-8, xtol=1e-14, sigma0 = 0.25))
-    >>> cmaes = pg.algorithm(pg.cmaes(gen = 40000, ftol=1e-8, xtol=1e-14, sigma0 = 0.25))
-    >>> # We define the udp
-    >>> udp = pg.rosenbrock
-    >>> # We will test on the following problem dimensions
-    >>> dims = [2, 4, 8, 10, 20, 30]
-    >>> # And using the following population sizes
-    >>> sizes = [4 + floor(3 * d) for d in dims]
-
-We then define an auxiliary function that will run the experiments recording the number of function
-evaluations upon convergence and the reached objective function value:
-
-    >>> def run_experiments(a, trials):
-    >>>     fevals = []
-    >>>     values = []
-    >>>     for dim in dims:
-    >>>         tmp = []
-    >>>         tmp_val = []
-    >>>         prob = pg.problem(udp(dim = dim))
-    >>>         for i in range(trials):
-    >>>             pop = pg.population(prob,10)
-    >>>             pop = a.evolve(pop)
-    >>>             tmp.append(pop.problem.get_fevals())
-    >>>             tmp_val.append(pop.champion_f[0])
-    >>>         fevals.append(tmp)
-    >>>         values.append(tmp_val)
-    >>>     return fevals, values
-
-Clearly we could use a :class:`~pygmo.archipelago` to parallelize these experiments, but for the purpose of this tutorial
-we will leave things as they are to not 
-
-    >>> colors = ["red","blue"]
-    >>> handles = []
-    >>> trials = 100
+    >>>  import pygmo as pg
+    >>> import numpy as np
+    >>> from matplotlib import pyplot as plt
+    >>> from random import shuffle
     >>> 
-    >>> for a, color in zip([xnes, cmaes], colors): # doctest: +SKIP
-    >>>     res, values = run_experiments(a) 
-    >>>     print(a.get_name())
-    >>>     for v in values:
-    >>>         print("Failed: ", sum(array(v)>1e-7))
-    >>>     bp = plt.boxplot(res)
-    >>>     for element in ['boxes', 'whiskers', 'fliers', 'means', 'medians', 'caps']:
-    >>>             plt.setp(bp[element], color=color)
-    >>>     handles.append(mlines.Line2D([], [], color=color, label=a.get_name().split(":")[0]))
-    >>> plt.legend(handles=handles, loc=2) # doctest: +SKIP
-    >>> ax  =plt.gca() # doctest: +SKIP
-    >>> ax.set_yscale('log') # doctest: +SKIP
-    >>> ax.set_xticklabels(dims) # doctest: +SKIP
-    >>> plt.xlabel("Problem dimension") # doctest: +SKIP
-    >>> plt.ylabel("Function evaluations") # doctest: +SKIP
-    >>> plt.title(pg.problem(udp()).get_name()) # doctest: +SKIP
-    >>> plt.ion() # doctest: +SKIP
-    >>> plt.show() # doctest: +SKIP
+    >>> trials = 100
+    >>> bootstrap = 100
+    >>> target = 1e-6
+    >>> pop_size = 50
+    >>> 
+    >>> udp = pg.rastrigin(10)
+    >>> prob = pg.problem(udp)
+    >>> algo = pg.algorithm(pg.sade(gen=4000))
+    >>> 
+    >>> runs = []
+    >>> for i in range(trials):
+    ...     pop = pg.population(prob, pop_size)
+    ...     pop = algo.evolve(pop)
+    ...     runs.append([pop.problem.get_fevals(), pop.champion_f[0]])
+    ... 
+    >>> target_reached_at = []
+    >>> for i in range(bootstrap):
+    ...     shuffle(runs)
+    ...     tmp = [r[1] for r in runs]
+    ...     t1 = np.array([min(tmp[:(i + 1)]) for i in range(len(tmp))])
+    ...     t2 = np.cumsum([r[0] for r in runs])
+    ...     idx = np.where(t1 < target)
+    ...     target_reached_at.append(t2[idx][0])
+    >>> target_reached_at = np.array(target_reached_at)
+    >>> 
+    >>> n_bins = 100
+    >>> fevallim = 5 * max(target_reached_at)
+    >>> bins = np.linspace(0, fevallim, n_bins)
+    >>> ecdf = []
+    >>> for b in bins:
+    ...     s = sum((target_reached_at) < b) / len(target_reached_at)
+    ...     ecdf.append(s)
+    >>> 
+    >>> plt.plot(bins, ecdf)
+    >>> ax = plt.gca()
+    >>> ax.set_yscale('log')
+
 
 .. image:: ../../images/cmaes_vs_xnes1.png
    :scale: 60 %
