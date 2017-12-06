@@ -324,21 +324,23 @@ public:
 
             // 1bis - Check the exit conditions and logs
             // Exit condition on xtol
-            if ((sigma * B * D * tmp).norm() < m_xtol) {
-                if (m_verbosity > 0u) {
-                    std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
+            {
+                if ((sigma * B * D * tmp).norm() < m_xtol) {
+                    if (m_verbosity > 0u) {
+                        std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
+                    }
+                    return pop;
                 }
-                return pop;
-            }
-            // Exit condition on ftol
-            auto idx_b = pop.best_idx();
-            auto idx_w = pop.worst_idx();
-            double delta_f = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
-            if (delta_f < m_ftol) {
-                if (m_verbosity) {
-                    std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
+                // Exit condition on ftol
+                auto idx_b = pop.best_idx();
+                auto idx_w = pop.worst_idx();
+                double delta_f = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
+                if (delta_f < m_ftol) {
+                    if (m_verbosity) {
+                        std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
+                    }
+                    return pop;
                 }
-                return pop;
             }
 
             // 1bis - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
