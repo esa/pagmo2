@@ -4,7 +4,8 @@ Comparing algorithms: the case of xNES and CMA-ES
 =================================================
 
 In this tutorial we will show how to use pygmo to comapre the performances of two UDAs. We lay down a standard
-procedure which is to be considered the best practice to perfrom comaprisons and should be used when possible.
+procedure which is to be considered the best practice to perfrom comaprisons and should be used when possible, that
+is when algorithms have well defined exit conditions.
 
 We take the case of the two UDAs :class:`~pygmo.cmaes` and :class:`~pygmo.xnes`.
 
@@ -16,8 +17,7 @@ In order to compare the algorithms we use the experimental cumulative distributi
 the probability of finding a solution with an objective function smaller than some ``target``
 within a certain budget of function evaluations. Estimating such a ECDF can be done using the results from
 calling the ``evolve()`` method of the algorithm a number of times (``trials``) and assembling the results in single runs 
-containing multiple restarts. Note that this procedure, while not as widely spread as it should, is the 
-correct and most informative way of performing algoritmic comparisons and should be used whenever possible.
+containing multiple restarts. 
 
 .. image:: ../../images/cmaes_vs_xnes1.png
    :scale: 50 %
@@ -39,7 +39,7 @@ correct and most informative way of performing algoritmic comparisons and should
 
 The results clearly show how CMA-ES is, on these three problems considered, outperforming consistently xNES. 
 
-The code, with comments is:
+The plots can be obtained by running the script below, where the population size and the udp are properly defined.
 
 .. doctest::
 
