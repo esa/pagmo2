@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.7 (unreleased)
+----------------
+
+New
+~~~
+
+- Implement the improved harmony search (IHS) algorithm (`#141 <https://github.com/esa/pagmo2/pull/141>`__).
+
+
 2.6 (2017-11-18)
 ----------------
 
