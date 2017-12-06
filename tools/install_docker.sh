@@ -24,9 +24,6 @@ else
 	exit 1
 fi
 
-# Install wget.
-yum -y install wget
-
 # HACK: for python 3.x, the include directory
 # is called 'python3.xm' rather than just 'python3.x'.
 # This confuses the build system of Boost.Python, thus
