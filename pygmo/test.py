@@ -1586,7 +1586,7 @@ class archipelago_test_case(_ut.TestCase):
         from . import archipelago, sade, ackley
 
         archi = archipelago(n=5, algo=sade(
-            50), prob=_raise_exception_2(), pop_size=20)
+            50, ftol=0, xtol=0), prob=_raise_exception_2(), pop_size=20)
         archi.evolve()
         self.assertRaises(BaseException, lambda: archi.wait_check())
 
