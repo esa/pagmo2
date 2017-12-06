@@ -13,7 +13,7 @@ Changes
 ~~~~~~~
 
 - Update pygmo's dependencies in the manylinux builds to the latest versions
-  (`#141 <https://github.com/esa/pagmo2/pull/141>`__).
+  (`#144 <https://github.com/esa/pagmo2/pull/144>`__).
 
 2.6 (2017-11-18)
 ----------------
