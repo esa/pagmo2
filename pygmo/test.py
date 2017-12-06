@@ -411,6 +411,18 @@ class xnes_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
+class ihs_test_case(_ut.TestCase):
+    """Test case for the UDA ihs
+
+    """
+
+    def runTest(self):
+        from .core import ihs
+        uda = ihs()
+        uda = ihs(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1.)
+        uda = ihs(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1., seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
 
 class sga_test_case(_ut.TestCase):
     """Test case for the UDA sga
@@ -1623,6 +1635,7 @@ def run_test_suite(level=0):
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
     suite.addTest(sga_test_case())
+    suite.addTest(ihs_test_case())
     suite.addTest(population_test_case())
     suite.addTest(archipelago_test_case(level))
     suite.addTest(null_problem_test_case())

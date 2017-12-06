@@ -972,6 +972,14 @@ BOOST_AUTO_TEST_CASE(problem_get_set_c_tol_test)
     BOOST_CHECK((prob.get_c_tol() == vector_double{12., 22.}));
     BOOST_CHECK_THROW(prob.set_c_tol({12., 22., 33.});, std::invalid_argument);
     BOOST_CHECK((prob.get_c_tol() == vector_double{12., 22.}));
+
+    // checking the overload method
+    BOOST_CHECK_THROW(prob.set_c_tol(-12.), std::invalid_argument);
+    if (std::numeric_limits<double>::has_quiet_NaN) {
+        BOOST_CHECK_THROW(prob.set_c_tol(std::numeric_limits<double>::quiet_NaN()), std::invalid_argument);
+    }
+    prob.set_c_tol(22);
+    BOOST_CHECK((prob.get_c_tol() == vector_double{22., 22.}));
 }
 
 BOOST_AUTO_TEST_CASE(problem_feasibility_methods_test)
