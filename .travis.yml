@@ -130,8 +130,6 @@ matrix:
       sudo: required
       services:
       - docker
-  allow_failures:
-      - env: PAGMO_BUILD="CoverageGCC5"
 
 script:
     - mkdir build

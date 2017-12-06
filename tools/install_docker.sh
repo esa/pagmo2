@@ -70,7 +70,7 @@ cd ..
 
 # NLopt
 # NOTE: use our own mirror as the one from the original webpage is faulty.
-wget https://github.com/esa/pagmo2/raw/deps_mirror/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose
+wget https://raw.githubusercontent.com/esa/pagmo2/deps_mirror/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose
 tar xzf nlopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
