@@ -60,17 +60,16 @@ The plots can be obtained by running the script below, where the population size
     >>>
     >>> # 3 - We instantiate here the problem, algorithms to compare and on what population size
     >>> prob = pg.problem(udp(dim))
-    >>> algos = [pg.algorithm(pg.xnes(gen=4000, ftol=1e-8, xtol = 1e-10)),
-    >>>          pg.algorithm(pg.cmaes(gen=4000, ftol=1e-8, xtol = 1e-10))]
+    >>> algos = [pg.algorithm(pg.xnes(gen=4000, ftol=1e-8, xtol = 1e-10)), pg.algorithm(pg.cmaes(gen=4000, ftol=1e-8, xtol = 1e-10))]
     >>> popsizes = [10,20,30]
     >>> 
     >>> # For each of the popsizes and algorithms
-    >>> for algo, popsize in itertools.product(algos, popsizes):
+    >>> for algo, popsize in itertools.product(algos, popsizes): 
     ...     # 4 - We run the algorithms trials times
     ...     run = []
     ...     for i in range(trials):
     ...         pop = pg.population(prob, popsize)
-    ...         pop = algo.evolve(pop)
+    ...         pop = algo.evolve(pop) # doctest: +SKIP
     ...         run.append([pop.problem.get_fevals(), pop.champion_f[0]])
     ... 
     ...     # 5 - We assemble the restarts in a random order (a run) and compute the number 
@@ -92,14 +91,13 @@ The plots can be obtained by running the script below, where the population size
     ...     for b in bins:
     ...         s = sum((target_reached_at) < b) / len(target_reached_at)
     ...         ecdf.append(s)
-    ...     plt.plot(bins, ecdf, label=algo.get_name().split(
-    ...         ":")[0] + " - " + str(popsize))
+    ...     plt.plot(bins, ecdf, label=algo.get_name().split(":")[0] + " - " + str(popsize)) # doctest: +SKIP
     >>> 
-    >>> plt.legend()
-    >>> ax = plt.gca()
-    >>> ax.set_xscale('log')
-    >>> plt.title(prob.get_name() + " - dimension " + str(dim))
-    >>> plt.xlabel("N. fevals")
+    >>> plt.legend()  # doctest: +SKIP
+    >>> ax = plt.gca()  # doctest: +SKIP
+    >>> ax.set_xscale('log')  # doctest: +SKIP
+    >>> plt.title(prob.get_name() + " - dimension " + str(dim))  # doctest: +SKIP
+    >>> plt.xlabel("N. fevals")  # doctest: +SKIP
 
 
 
