@@ -334,7 +334,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Artificial Bee Colony";
+        return "ABC: Artificial Bee Colony";
     }
     /// Extra informations
     /**

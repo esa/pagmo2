@@ -793,7 +793,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Self-adaptive Differential Evolution 1220";
+        return "sa-DE1220: Self-adaptive Differential Evolution 1220";
     }
     /// Extra informations
     /**

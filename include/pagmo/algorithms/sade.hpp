@@ -754,7 +754,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Self-adaptive Differential Evolution";
+        return "saDE: Self-adaptive Differential Evolution";
     }
     /// Extra informations
     /**

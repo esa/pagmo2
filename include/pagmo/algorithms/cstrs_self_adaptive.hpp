@@ -729,7 +729,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Self-adaptive constraints handling";
+        return "sa-CNSTR: Self-adaptive constraints handling";
     }
     /// Extra informations
     /**

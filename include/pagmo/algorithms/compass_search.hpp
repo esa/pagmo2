@@ -352,7 +352,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Compass Search";
+        return "CS: Compass Search";
     }
     /// Extra informations
     /**

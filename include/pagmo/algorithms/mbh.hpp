@@ -430,7 +430,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Monotonic Basin Hopping (MBH) - Generalized";
+        return "MBH: Monotonic Basin Hopping - Generalized";
     }
     /// Extra informations.
     /**

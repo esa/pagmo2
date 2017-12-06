@@ -481,7 +481,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Differential Evolution";
+        return "DE: Differential Evolution";
     }
     /// Extra informations
     /**
