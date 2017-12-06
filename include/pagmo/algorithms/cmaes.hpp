@@ -118,8 +118,8 @@ public:
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the adapted parameters are not reset between successive calls to the evolve method
-     * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the bounds but the
-         covariance matrix adaptation  mechanism will worsen
+     * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the bounds
+     but the covariance matrix adaptation  mechanism will worsen
      * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if cc, cs, c1 and cmu are not in [0, 1]
@@ -322,27 +322,25 @@ public:
                 newpop[i] = mean + (sigma * B * D * tmp);
             }
 
-            // 1bis - Check the exit conditions (every 10 generations) and logs
-            // we need to do it here as termination is defined on tmp
-            if (gen % 10u == 0u) {
-                // Exit condition on xtol
-                if ((sigma * B * D * tmp).norm() < m_xtol) {
-                    if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
-                    }
-                    return pop;
+            // 1bis - Check the exit conditions and logs
+            // Exit condition on xtol
+            if ((sigma * B * D * tmp).norm() < m_xtol) {
+                if (m_verbosity > 0u) {
+                    std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
                 }
-                // Exit condition on ftol
-                auto idx_b = pop.best_idx();
-                auto idx_w = pop.worst_idx();
-                double delta_f = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
-                if (delta_f < m_ftol) {
-                    if (m_verbosity) {
-                        std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
-                    }
-                    return pop;
-                }
+                return pop;
             }
+            // Exit condition on ftol
+            auto idx_b = pop.best_idx();
+            auto idx_w = pop.worst_idx();
+            double delta_f = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
+            if (delta_f < m_ftol) {
+                if (m_verbosity) {
+                    std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
+                }
+                return pop;
+            }
+
             // 1bis - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
