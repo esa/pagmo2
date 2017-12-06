@@ -1,8 +1,0 @@
-Self-adaptive Differential Evolution (DE 1220 aka pDE)
-======================================================
-
-.. doxygenclass:: pagmo::de1220
-   :members:
-
-.. doxygenstruct:: pagmo::de1220_statics
-  :members:
