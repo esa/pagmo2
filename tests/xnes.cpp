@@ -124,6 +124,32 @@ BOOST_AUTO_TEST_CASE(xnes_evolve_test)
 
     {
         // Here we only test that evolution is deterministic if the
+        // seed is controlled and force bounds is active
+        problem prob{rosenbrock{25u}};
+        population pop1{prob, 5u, 23u};
+        population pop2{prob, 5u, 23u};
+        population pop3{prob, 5u, 23u};
+
+        xnes user_algo1{10u, -1, -1, -1, 1.0, 1e-6, 1e-6, false, true, 23u};
+        user_algo1.set_verbosity(1u);
+        pop1 = user_algo1.evolve(pop1);
+
+        BOOST_CHECK(user_algo1.get_log().size() > 0u);
+
+        xnes user_algo2{10u, -1, -1, -1, 1.0, 1e-6, 1e-6, false, true, 23u};
+        user_algo2.set_verbosity(1u);
+        pop2 = user_algo2.evolve(pop2);
+
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+        user_algo2.set_seed(23u);
+        pop3 = user_algo2.evolve(pop3);
+
+        BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+    }
+
+    {
+        // Here we only test that evolution is deterministic if the
         // seed is controlled and the problem is stochastic
         problem prob{inventory{4u, 10u, 23u}};
         population pop1{prob, 5u, 23u};
