@@ -28,6 +28,8 @@ Artificial Bee Colony (ABC)                                :class:`pygmo.bee_col
 Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :class:`pygmo.cmaes`                      S-U             Exposed from C++
 Non-dominated Sorting GA (NSGA2)                           :class:`pygmo.nsga2`                      M-U             Exposed from C++
 Multi-objective EA vith Decomposition (MOEA/D)             :class:`pygmo.moead`                      M-U             Exposed from C++
+Improved Harmony Serach                                    :class:`pygmo.ihs`                        SM-CU-I         Exposed from C++
+Exponential Evolution Strategies (xNES)                    :class:`pygmo.xnes`                       S-U (sto)       Exposed from C++
 ========================================================== ========================================= =============== ===================================================================
 
 Meta-algorithms 
@@ -148,4 +150,14 @@ Algorithms exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.ipopt
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.ihs
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.xnes
    :members:

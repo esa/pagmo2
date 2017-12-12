@@ -7,6 +7,8 @@ Changelog
 New
 ~~~
 
+- Implement the exponential natural evolution strategies (xNES) algorithm (`#142 <https://github.com/esa/pagmo2/pull/142>`__).
+
 - Implement the improved harmony search (IHS) algorithm (`#141 <https://github.com/esa/pagmo2/pull/141>`__).
 
 Changes
