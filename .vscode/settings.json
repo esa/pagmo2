@@ -11,5 +11,6 @@
         "cmath": "cpp",
         "chrono": "cpp"
     },
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "latex-workshop.debug.showUpdateMessage": false
 }

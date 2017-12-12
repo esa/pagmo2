@@ -97,7 +97,6 @@ namespace pagmo
 class xnes
 {
 public:
-    /// Single entry of the log (gen, fevals, best, dx, df, sigma)
     /// Single data line for the algorithm's log.
     /**
      * A log data line is a tuple consisting of:
@@ -109,9 +108,10 @@ public:
      * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
      */
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
+
     /// Log type.
     /**
-     * The algorithm log is a collection of nlopt::log_line_type data lines, stored in chronological order
+     * The algorithm log is a collection of xnes::log_line_type data lines, stored in chronological order
      * during the optimisation if the verbosity of the algorithm is set to a nonzero value
      * (see xnes::set_verbosity()).
      */
@@ -489,25 +489,29 @@ public:
         std::ostringstream ss;
         stream(ss, "\tGenerations: ", m_gen);
         stream(ss, "\n\teta_mu: ");
-        if (m_eta_mu == -1)
+        if (m_eta_mu == -1) {
             stream(ss, "auto");
-        else
+        } else {
             stream(ss, m_eta_mu);
+        }
         stream(ss, "\n\teta_sigma: ");
-        if (m_eta_sigma == -1)
+        if (m_eta_sigma == -1) {
             stream(ss, "auto");
-        else
+        } else {
             stream(ss, m_eta_sigma);
+        }
         stream(ss, "\n\teta_b: ");
-        if (m_eta_b == -1)
+        if (m_eta_b == -1) {
             stream(ss, "auto");
-        else
+        } else {
             stream(ss, m_eta_b);
+        }
         stream(ss, "\n\tsigma0: ");
-        if (m_sigma0 == -1)
+        if (m_sigma0 == -1) {
             stream(ss, "auto");
-        else
+        } else {
             stream(ss, m_eta_b);
+        }
         stream(ss, "\n\tStopping xtol: ", m_xtol);
         stream(ss, "\n\tStopping ftol: ", m_ftol);
         stream(ss, "\n\tMemory: ", m_memory);
