@@ -2451,7 +2451,8 @@ std::string xnes_docstring()
 {
     return R"(__init__(gen = 1, eta_mu = -1, eta_sigma = -1, eta_b = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
 
-Exponential Evolution Strategies
+Exponential Evolution Strategies.
+
 Args:
     gen (``int``): number of generations
     eta_mu (``float``): learning rate for mean update (if -1 will be automatically selected to be 1)

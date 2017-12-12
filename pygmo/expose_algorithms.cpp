@@ -338,7 +338,7 @@ void expose_algorithms()
                  }
                  return retval;
              }),
-             nsga2_get_log_docstring().c_str());
+             ihs_get_log_docstring().c_str());
     ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
