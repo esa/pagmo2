@@ -1,4 +1,4 @@
-.. _py_tutorial_cec2013_copm:
+.. _py_tutorial_cec2013_comp:
 
 Participating to the CEC2013 Competition
 ===============================================
@@ -70,7 +70,7 @@ fitness evaluations, we choose a population of 50 and 400 generations:
 .. doctest::
 
     >>> # The cmaes pygmo algorithm
-    >>> algo = pg.algorithm(pg.cmaes(gen=400, ftol=1e-9, xtol=1e-9))
+    >>> algo = pg.algorithm(pg.cmaes(gen=1000, ftol=1e-9, xtol=1e-9))
     >>> # Defining all 28 problems dimension
     >>> D = 2
     >>> # Running the algo on them multiple times
@@ -81,7 +81,7 @@ fitness evaluations, we choose a population of 50 and 400 generations:
     ... 		prob = pg.problem(pg.cec2013(prob_id = i+1, dim = D))
     ... 		pop = pg.population(prob,50)
     ... 		pop = algo.evolve(pop)
-    ... 		error.append(pop.get_f()[pop.best_idx()] + 1400 - 100*i - 100*(i>13))
+    ... 		error.append(pop.get_f()[pop.best_idx()][0] + 1400 - 100*i - 100*(i>13))
 
 At the end of the script, a matplotlib boxplot can be easily produced reporting the results for each of the 28
 problem instances:

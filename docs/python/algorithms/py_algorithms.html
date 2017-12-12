@@ -1137,7 +1137,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.cmaes">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cmaes</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cc = -1</em>, <em>cs = -1</em>, <em>c1 = -1</em>, <em>cmu = -1</em>, <em>sigma0 = 0.5</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cmaes" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cmaes</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>cc = -1</em>, <em>cs = -1</em>, <em>c1 = -1</em>, <em>cmu = -1</em>, <em>sigma0 = 0.5</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>force_bounds = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cmaes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Covariance Matrix Evolutionary Strategy (CMA-ES).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1153,6 +1153,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the x tolerance</li>
 <li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the f tolerance</li>
 <li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the adapted parameters are not reset between successive calls to the evolve method</li>
+<li><strong>force_bounds</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen</li>
 <li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
 </ul>
 </td>
@@ -3271,7 +3272,7 @@ type conversion errors, mismatched function signatures, etc.)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
-<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
 
 <span class="go">Extra info:</span>
@@ -3307,7 +3308,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_options</span><span class="p">({</span><span class="s2">&quot;filter_reset_trigger&quot;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;print_level&quot;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
-<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
 
 <span class="go">Extra info:</span>
@@ -3347,7 +3348,7 @@ type conversion errors, mismatched function signatures, etc.)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-6</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
-<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
 
 <span class="go">Extra info:</span>
@@ -3383,7 +3384,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_options</span><span class="p">({</span><span class="s2">&quot;tol&quot;</span><span class="p">:</span><span class="mf">1E-4</span><span class="p">,</span> <span class="s2">&quot;constr_viol_tol&quot;</span><span class="p">:</span><span class="mf">1E-3</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
-<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
 
 <span class="go">Extra info:</span>
@@ -3447,15 +3448,15 @@ type conversion errors, mismatched function signatures, etc.)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">,</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
-<span class="go">Algorithm name: Ipopt [deterministic]</span>
-<span class="go">        Thread safety: none</span>
+<span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
+<span class="go">    Thread safety: none</span>
 
 <span class="go">Extra info:</span>
-<span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
-<span class="go">        Verbosity: 0</span>
-<span class="go">        Individual selection policy: best</span>
-<span class="go">        Individual replacement policy: best</span>
-<span class="go">        String options: {hessian_approximation : limited-memory}</span>
+<span class="go">    Last optimisation return code: Solve_Succeeded (value = 0)</span>
+<span class="go">    Verbosity: 0</span>
+<span class="go">    Individual selection policy: best</span>
+<span class="go">    Individual replacement policy: best</span>
+<span class="go">    String options: {hessian_approximation : limited-memory}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3483,7 +3484,7 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_options</span><span class="p">({</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">:</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">,</span> <span class="s2">&quot;limited_memory_initialization&quot;</span><span class="p">:</span><span class="s2">&quot;scalar1&quot;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
-<span class="go">Algorithm name: Ipopt [deterministic]</span>
+<span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
 
 <span class="go">Extra info:</span>

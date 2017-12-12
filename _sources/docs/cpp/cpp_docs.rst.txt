@@ -41,6 +41,8 @@ Implemented algorithms
   algorithms/sea
   algorithms/sga
   algorithms/simulated_annealing
+  algorithms/xnes
+
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^
