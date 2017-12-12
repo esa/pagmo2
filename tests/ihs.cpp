@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/zdt.hpp>
 
 using namespace pagmo;
@@ -64,15 +65,33 @@ BOOST_AUTO_TEST_CASE(ihs_algorithm_construction)
     BOOST_CHECK_THROW((ihs{1u, 0.85, 0.35, 0.99, -0.43, 1., 42u}), std::invalid_argument);
     BOOST_CHECK_THROW((ihs{1u, 0.85, 0.35, 0.99, 0.4, 0.3, 42u}), std::invalid_argument);
 }
+
+struct mo_many {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0., 0., 0., 0., 0., 0.};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 6u;
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 1.}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(ihs_evolve_test)
 {
     // We test for unsuitable populations
     {
         population pop{rosenbrock{25u}};
         BOOST_CHECK_THROW(ihs{15u}.evolve(pop), std::invalid_argument);
-        population pop2{null_problem{2u, 3u, 4u}};
+        population pop2{null_problem{2u, 3u, 4u}, 20u};
         BOOST_CHECK_THROW(ihs{15u}.evolve(pop2), std::invalid_argument);
-        population pop3{inventory{}};
+        population pop3{inventory{}, 20u};
         BOOST_CHECK_THROW(ihs{15u}.evolve(pop3), std::invalid_argument);
     }
     // And a clean exit for 0 generations
@@ -86,6 +105,7 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
     prob_list.push_back(problem(rosenbrock{10u}));
     prob_list.push_back(problem(zdt{1u}));
     prob_list.push_back(problem(hock_schittkowsky_71{}));
+    prob_list.push_back(problem(minlp_rastrigin{}));    
     for (auto &prob : prob_list) {
         prob.set_c_tol(1e-4);
         population pop1{prob, 20u, 42u};
@@ -103,6 +123,13 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
         pop3 = uda2.evolve(pop3);
         BOOST_CHECK(uda1.get_log() == uda2.get_log());
     }
+    // We test a call on many objectives (>5) to trigger the relative lines cropping the screen output
+    ihs uda1{100u, 0.85, 0.35, 0.99, 1e-5, 1., 42u};
+    uda1.set_verbosity(10u);
+    population pop{problem{mo_many{}}, 56u, 23u};
+    uda1.evolve(pop);
+    BOOST_CHECK(std::get<7>(uda1.get_log()[0]).size() == 6u);
+    
 }
 
 BOOST_AUTO_TEST_CASE(ihs_setters_getters_test)

@@ -336,7 +336,7 @@ public:
      */
     std::string get_name() const
     {
-        return "NSGA-II";
+        return "NSGA-II:";
     }
     /// Extra informations
     /**

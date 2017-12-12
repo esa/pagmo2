@@ -72,6 +72,7 @@ ADD_PAGMO_TESTCASE(zdt)
 if(PAGMO_WITH_EIGEN3)
     ADD_PAGMO_TESTCASE(cmaes)
     ADD_PAGMO_TESTCASE(eigen3_serialization)
+    ADD_PAGMO_TESTCASE(xnes)
 endif()
 
 if(PAGMO_WITH_NLOPT)

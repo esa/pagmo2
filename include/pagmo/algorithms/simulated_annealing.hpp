@@ -362,7 +362,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Simulated Annealing (Corana's)";
+        return "SA: Simulated Annealing (Corana's)";
     }
     /// Extra informations
     /**

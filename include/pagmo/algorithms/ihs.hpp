@@ -354,7 +354,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Improved Harmony Search";
+        return "IHS: Improved Harmony Search";
     }
     /// Extra informations
     /**

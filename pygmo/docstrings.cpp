@@ -2380,7 +2380,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log()`
 
 std::string cmaes_docstring()
 {
-    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
 
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
@@ -2394,6 +2394,7 @@ Args:
     ftol (``float``): stopping criteria on the x tolerance
     xtol (``float``): stopping criteria on the f tolerance
     memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    force_bounds (``bool``): when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -2442,6 +2443,73 @@ Examples:
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log()`.
+
+)";
+}
+
+std::string xnes_docstring()
+{
+    return R"(__init__(gen = 1, eta_mu = -1, eta_sigma = -1, eta_b = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
+
+Exponential Evolution Strategies
+Args:
+    gen (``int``): number of generations
+    eta_mu (``float``): learning rate for mean update (if -1 will be automatically selected to be 1)
+    eta_sigma (``float``): learning rate for step-size update (if -1 will be automatically selected)
+    eta_b (``float``): learning rate for the covariance matrix update (if -1 will be automatically selected)
+    sigma0 (``float``):  the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)
+    ftol (``float``): stopping criteria on the x tolerance
+    xtol (``float``): stopping criteria on the f tolerance
+    memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    force_bounds (``bool``): when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* is negative or greater than an implementation-defined value
+    ValueError: if *eta_mu*, *eta_sigma*, *eta_b*, *sigma0* are not in ]0,1] or -1
+
+See also the docs of the C++ class :cpp:class:`pagmo::xnes`.
+
+)";
+}
+
+std::string xnes_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.xnes`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``dx``, ``df``, ``sigma``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``dx`` (``float``), the norm of the distance to the population mean of the mutant vectors
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * ``sigma`` (``float``), the current step-size
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(xnes(gen = 500))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:            dx:            df:         sigma:
+      1              0         173924        33.6872    3.06519e+06            0.5
+    101           2000        92.9612       0.583942        156.921      0.0382078
+    201           4000        8.79819       0.117574          5.101      0.0228353
+    301           6000        4.81377      0.0698366        1.34637      0.0297664
+    401           8000        1.04445      0.0568541       0.514459      0.0649836
+    Exit condition -- generations = 500
+    >>> uda = algo.extract(xnes)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::xnes::get_log()`.
 
 )";
 }
@@ -5100,15 +5168,16 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_string_option("hessian_approximation","limited-memory")
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
-            Thread safety: none
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
+        Thread safety: none
     <BLANKLINE>
     Extra info:
-            Last optimisation return code: Solve_Succeeded (value = 0)
-            Verbosity: 0
-            Individual selection policy: best
-            Individual replacement policy: best
-            String options: {hessian_approximation : limited-memory}
+        Last optimisation return code: Solve_Succeeded (value = 0)
+        Verbosity: 0
+        Individual selection policy: best
+        Individual replacement policy: best
+        String options: {hessian_approximation : limited-memory}
+    <BLANKLINE>
 )";
 }
 
@@ -5134,7 +5203,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_string_options({"hessian_approximation":"limited-memory", "limited_memory_initialization":"scalar1"})
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5207,7 +5276,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_integer_option("print_level",3)
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5242,7 +5311,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_integer_options({"filter_reset_trigger":4, "print_level":3})
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5315,7 +5384,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_numeric_option("tol",1E-6)
     >>> algorithm(ip) # doctest: +SKIP
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5350,7 +5419,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_numeric_options({"tol":1E-4, "constr_viol_tol":1E-3})
     >>> algorithm(ip) # doctest: +SKIP
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:

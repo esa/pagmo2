@@ -473,7 +473,7 @@ public:
     */
     std::string get_name() const
     {
-        return "Genetic Algorithm";
+        return "SGA: Genetic Algorithm";
     }
     /// Extra informations
     /**

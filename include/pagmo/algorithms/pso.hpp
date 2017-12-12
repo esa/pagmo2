@@ -586,7 +586,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Particle Swarm Optimization";
+        return "PSO: Particle Swarm Optimization";
     }
     /// Extra informations
     /**

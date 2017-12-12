@@ -26,7 +26,8 @@ Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::ps
 Simple Genetic Algorithm                                   :cpp:class:`pagmo::sga`                   :class:`pygmo.sga`                        S-U-I (sto)    
 Corana's Simulated Annealing (SA)                          :cpp:class:`pagmo::simulated_annealing`   :class:`pygmo.simulated_annealing`        S-U            
 Artificial Bee Colony (ABC)                                :cpp:class:`pagmo::bee_colony`            :class:`pygmo.bee_colony`                 S-U            
-Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :cpp:class:`pagmo::cmaes`                 :class:`pygmo.cmaes`                      S-U            
+Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :cpp:class:`pagmo::cmaes`                 :class:`pygmo.cmaes`                      S-U (sto)
+Exponential Evolution Strategies (xNES)                    :cpp:class:`pagmo::xnes`                  :class:`pygmo.xnes`                       S-U (sto)
 Non-dominated Sorting GA (NSGA2)                           :cpp:class:`pagmo::nsga2`                 :class:`pygmo.nsga2`                      M-U-I          
 Multi-objective EA vith Decomposition (MOEA/D)             :cpp:class:`pagmo::moead`                 :class:`pygmo.moead`                      M-U            
 ========================================================== ========================================= ========================================= ===============
