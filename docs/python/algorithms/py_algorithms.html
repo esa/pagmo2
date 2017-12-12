@@ -267,6 +267,16 @@ all of them. The user can implement his own UDA, or use any ot the ones we provi
 <td>M-U</td>
 <td>Exposed from C++</td>
 </tr>
+<tr class="row-even"><td>Improved Harmony Serach</td>
+<td><a class="reference internal" href="#pygmo.ihs" title="pygmo.ihs"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ihs</span></code></a></td>
+<td>SM-CU-I</td>
+<td>Exposed from C++</td>
+</tr>
+<tr class="row-odd"><td>Exponential Evolution Strategies (xNES)</td>
+<td><a class="reference internal" href="#pygmo.xnes" title="pygmo.xnes"><code class="xref py py-class docutils literal"><span class="pre">pygmo.xnes</span></code></a></td>
+<td>S-U (sto)</td>
+<td>Exposed from C++</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -3495,6 +3505,230 @@ type conversion errors, mismatched function signatures, etc.)</td>
 <span class="go">        String options: {hessian_approximation : limited-memory,  limited_memory_initialization : scalar1}</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.ihs">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ihs</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>phmcr = 0.85</em>, <em>ppar_min = 0.35</em>, <em>ppar_max=0.99</em>, <em>bw_min=1e-5</em>, <em>bw_max=1.</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ihs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians.
+In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value)
+for finding a best harmony (i.e., the global optimum) all together.</p>
+<p>This pygmo UDA implements the so-called improved harmony search algorithm (IHS), in which the probability
+of picking the variables from the decision vector and the amount of mutation to which they are subject
+vary (respectively linearly and exponentially) at each call of the <code class="docutils literal"><span class="pre">evolve()</span></code> method.</p>
+<p>In this algorithm the number of fitness function evaluations is equal to the number of iterations.
+All the individuals in the input population participate in the evolution. A new individual is generated
+at every iteration, substituting the current worst individual of the population if better.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The HS algorithm can and has been  criticized, not for its performances,
+but for the use of a metaphor that does not add anything to existing ones. The HS
+algorithm essentially applies mutation and crossover operators to a background population and as such
+should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
+in that context. The use of the musicians metaphor only obscures its internal functioning
+making theoretical results from ES and GA erroneously seem as unapplicable to HS.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
+In pygmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly).
+Such extension is original with pygmo.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations to consider (each generation will compute the objective function once)</li>
+<li><strong>phmcr</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – probability of choosing from memory (similar to a crossover probability)</li>
+<li><strong>ppar_min</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – minimum pitch adjustment rate. (similar to a mutation rate)</li>
+<li><strong>ppar_max</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – maximum pitch adjustment rate. (similar to a mutation rate)</li>
+<li><strong>bw_min</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – minimum distance bandwidth. (similar to a mutation width)</li>
+<li><strong>bw_max</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – maximum distance bandwidth. (similar to a mutation width)</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>phmcr</em> is not in the ]0,1[ interval, <em>ppar_min</em> or <em>ppar_max</em> are not in the ]0,1[
+interval, min/max quantities are less than/greater than max/min quantities, <em>bw_min</em> is negative.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python
+(e.g., type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/ihs.html#_CPPv2N5pagmo3ihsE" title="pagmo::ihs"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ihs</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.ihs.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ihs.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen.
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed with a
+<a class="reference internal" href="#pygmo.ihs" title="pygmo.ihs"><code class="xref py py-class docutils literal"><span class="pre">ihs</span></code></a>.
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">ppar</span></code>, <code class="docutils literal"><span class="pre">bw</span></code>, <code class="docutils literal"><span class="pre">dx</span></code>, <code class="docutils literal"><span class="pre">df</span></code>,  <code class="docutils literal"><span class="pre">Violated</span></code>, <code class="docutils literal"><span class="pre">Viol.</span> <span class="pre">Norm</span></code>,``ideal``<ul class="simple">
+<li><code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made.</li>
+<li><code class="docutils literal"><span class="pre">ppar</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the pitch adjustment rate.</li>
+<li><code class="docutils literal"><span class="pre">bw</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the distance bandwidth.</li>
+<li><code class="docutils literal"><span class="pre">dx</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual (or -1 in a multiobjective case).</li>
+<li><code class="docutils literal"><span class="pre">df</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the population flatness evaluated as the distance between the fitness of the best and of the worst individual (or -1 in a multiobjective case).</li>
+<li><code class="docutils literal"><span class="pre">Violated</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), the number of constraints violated by the current decision vector.</li>
+<li><code class="docutils literal"><span class="pre">Viol.</span> <span class="pre">Norm</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the constraints violation norm for the current decision vector.</li>
+<li><code class="docutils literal"><span class="pre">ideal_point</span></code> (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">ihs</span><span class="p">(</span><span class="mi">20000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">hock_schittkowsky_71</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-1</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Fevals:          ppar:            bw:            dx:            df:      Violated:    Viol. Norm:        ideal1:</span>
+<span class="go">      1       0.350032       0.999425        4.88642        14.0397              0              0        43.2982</span>
+<span class="go">   2001       0.414032       0.316046        5.56101        25.7009              0              0        33.4251</span>
+<span class="go">   4001       0.478032      0.0999425          5.036        26.9657              0              0        19.0052</span>
+<span class="go">   6001       0.542032      0.0316046        3.77292        23.9992              0              0        19.0052</span>
+<span class="go">   8001       0.606032     0.00999425        3.97937        16.0803              0              0        18.1803</span>
+<span class="go">  10001       0.670032     0.00316046        1.15023        1.57947              0              0        17.8626</span>
+<span class="go">  12001       0.734032    0.000999425       0.017882      0.0185438              0              0        17.5894</span>
+<span class="go">  14001       0.798032    0.000316046     0.00531358      0.0074745              0              0        17.5795</span>
+<span class="go">  16001       0.862032    9.99425e-05     0.00270865     0.00155563              0              0        17.5766</span>
+<span class="go">  18001       0.926032    3.16046e-05     0.00186637     0.00167523              0              0        17.5748</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">ihs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 0.35003234534534, 0.9994245193792801, 4.886415773459253, 14.0397487316794, ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/ihs.html#_CPPv2NK5pagmo3ihs7get_logEv" title="pagmo::ihs::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::ihs::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ihs.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ihs.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed used internally by this uda.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the random seed of the population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.xnes">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">xnes</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>eta_mu = -1</em>, <em>eta_sigma = -1</em>, <em>eta_b = -1</em>, <em>sigma0 = -1</em>, <em>ftol = 1e-6</em>, <em>xtol = 1e-6</em>, <em>memory = False</em>, <em>force_bounds = False</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.xnes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponential Evolution Strategies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>eta_mu</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – learning rate for mean update (if -1 will be automatically selected to be 1)</li>
+<li><strong>eta_sigma</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – learning rate for step-size update (if -1 will be automatically selected)</li>
+<li><strong>eta_b</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – learning rate for the covariance matrix update (if -1 will be automatically selected)</li>
+<li><strong>sigma0</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)</li>
+<li><strong>ftol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the x tolerance</li>
+<li><strong>xtol</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – stopping criteria on the f tolerance</li>
+<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the adapted parameters are not reset between successive calls to the evolve method</li>
+<li><strong>force_bounds</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>gen</em> is negative or greater than an implementation-defined value</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>eta_mu</em>, <em>eta_sigma</em>, <em>eta_b</em>, <em>sigma0</em> are not in ]0,1] or -1</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/xnes.html#_CPPv2N5pagmo4xnesE" title="pagmo::xnes"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::xnes</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.xnes.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.xnes.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo.xnes"><code class="xref py py-class docutils literal"><span class="pre">xnes</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Gen</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">dx</span></code>, <code class="docutils literal"><span class="pre">df</span></code>, <code class="docutils literal"><span class="pre">sigma</span></code>, where:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">Gen</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), generation number</li>
+<li><code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made</li>
+<li><code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the best fitness function currently in the population</li>
+<li><code class="docutils literal"><span class="pre">dx</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the norm of the distance to the population mean of the mutant vectors</li>
+<li><code class="docutils literal"><span class="pre">df</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the population flatness evaluated as the distance between the fitness of the best and of the worst individual</li>
+<li><code class="docutils literal"><span class="pre">sigma</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), the current step-size</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">xnes</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">500</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Gen:        Fevals:          Best:            dx:            df:         sigma:</span>
+<span class="go">  1              0         173924        33.6872    3.06519e+06            0.5</span>
+<span class="go">101           2000        92.9612       0.583942        156.921      0.0382078</span>
+<span class="go">201           4000        8.79819       0.117574          5.101      0.0228353</span>
+<span class="go">301           6000        4.81377      0.0698366        1.34637      0.0297664</span>
+<span class="go">401           8000        1.04445      0.0568541       0.514459      0.0649836</span>
+<span class="go">Exit condition -- generations = 500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">xnes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/xnes.html#_CPPv2NK5pagmo4xnes7get_logEv" title="pagmo::xnes::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::xnes::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.xnes.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.xnes.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed used internally by this uda.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the random seed of the population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
