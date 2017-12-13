@@ -33,7 +33,7 @@ on some pygmo classes. The above UDI can then be used to construct a :class:`~py
     Island name: It's my island!
         Status: idle
     <BLANKLINE>
-    Algorithm: Differential Evolution
+    Algorithm: DE: Differential Evolution
     <BLANKLINE>
     Problem: Ackley Function
     <BLANKLINE>

@@ -6,9 +6,9 @@ set -x
 # Exit on error.
 set -e
 
-CMAKE_VERSION="3.8.0"
-EIGEN3_VERSION="3.3.3"
-BOOST_VERSION="1.63.0"
+CMAKE_VERSION="3.10.0"
+EIGEN3_VERSION="3.3.4"
+BOOST_VERSION="1.65.0"
 NLOPT_VERSION="2.4.2"
 
 if [[ ${PAGMO_BUILD} == *36 ]]; then
@@ -69,9 +69,9 @@ sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
 cd ..
 
 # NLopt
-# NOTE: use alternative mirror as the one from the original webpage is faulty.
-wget http://pkgs.fedoraproject.org/repo/pkgs/NLopt/NLopt-${NLOPT_VERSION}.tar.gz/d0b8f139a4acf29b76dbae69ade8ac54/NLopt-${NLOPT_VERSION}.tar.gz --no-verbose
-tar xzf NLopt-${NLOPT_VERSION}.tar.gz
+# NOTE: use our own mirror as the one from the original webpage is faulty.
+wget https://raw.githubusercontent.com/esa/pagmo2/deps_mirror/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose --no-check-certificate
+tar xzf nlopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
 make -j2 install > /dev/null

@@ -70,6 +70,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
+#include <pagmo/algorithms/xnes.hpp>
 #endif
 #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
@@ -85,6 +86,7 @@ see https://www.gnu.org/licenses/. */
 #if defined(PAGMO_WITH_NLOPT)
 #include <pagmo/algorithms/nlopt.hpp>
 #endif
+#include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/sade.hpp>
@@ -318,6 +320,26 @@ void expose_algorithms()
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
+    // IHS
+    auto ihs_ = expose_algorithm_pygmo<ihs>("ihs", ihs_docstring().c_str());
+    ihs_.def(bp::init<unsigned, double, double, double, double, double>(
+        (bp::arg("gen") = 1u, bp::arg("phmcr") = 0.85, bp::arg("ppar_min") = 0.35, bp::arg("ppar_max") = 0.99,
+         bp::arg("bw_min") = 1E-5, bp::arg("bw_max") = 1.)));
+    ihs_.def(bp::init<unsigned, double, double, double, double, double, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("phmcr") = 0.85, bp::arg("ppar_min") = 0.35, bp::arg("ppar_max") = 0.99,
+         bp::arg("bw_min") = 1E-5, bp::arg("bw_max") = 1., bp::arg("seed"))));
+    // ihs needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    ihs_.def("get_log", lcast([](const ihs &a) -> bp::list {
+                 bp::list retval;
+                 for (const auto &t : a.get_log()) {
+                     retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t),
+                                                  std::get<4>(t), std::get<5>(t), std::get<6>(t),
+                                                  v_to_a(std::get<7>(t))));
+                 }
+                 return retval;
+             }),
+             ihs_get_log_docstring().c_str());
+    ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
     sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(
@@ -385,18 +407,31 @@ void expose_algorithms()
                                       bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
-// CMA-ES
 #if defined(PAGMO_WITH_EIGEN3)
+    // CMA-ES
     auto cmaes_ = expose_algorithm_pygmo<cmaes>("cmaes", cmaes_docstring().c_str());
-    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool>(
-        (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
-         bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
-    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool, unsigned>(
+    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool, bool>(
         (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
          bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
-         bp::arg("seed"))));
+         bp::arg("force_bounds") = false)));
+    cmaes_.def(bp::init<unsigned, double, double, double, double, double, double, double, bool, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("cc") = -1., bp::arg("cs") = -1., bp::arg("c1") = -1., bp::arg("cmu") = -1.,
+         bp::arg("sigma0") = 0.5, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+         bp::arg("force_bounds") = false, bp::arg("seed"))));
     expose_algo_log(cmaes_, cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
+    // xNES
+    auto xnes_ = expose_algorithm_pygmo<xnes>("xnes", xnes_docstring().c_str());
+    xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool>(
+        (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
+         bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+         bp::arg("force_bounds") = false)));
+    xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("eta_mu") = -1., bp::arg("eta_sigma") = -1., bp::arg("eta_b") = -1.,
+         bp::arg("sigma0") = -1, bp::arg("ftol") = 1e-6, bp::arg("xtol") = 1e-6, bp::arg("memory") = false,
+         bp::arg("force_bounds") = false, bp::arg("seed"))));
+    expose_algo_log(xnes_, xnes_get_log_docstring().c_str());
+    xnes_.def("get_seed", &xnes::get_seed, generic_uda_get_seed_docstring().c_str());
 #endif
     // MOEA/D - DE
     auto moead_ = expose_algorithm_pygmo<moead>("moead", moead_docstring().c_str());
@@ -458,16 +493,17 @@ void expose_algorithms()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
-                                                              bp::return_internal_reference<>()),
-                 lcast([](nlopt &n, const nlopt *ptr) {
-                     if (ptr) {
-                         n.set_local_optimizer(*ptr);
-                     } else {
-                         n.unset_local_optimizer();
-                     }
-                 }),
-                 nlopt_local_optimizer_docstring().c_str());
+    add_property(
+        nlopt_, "local_optimizer",
+        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
+        lcast([](nlopt &n, const nlopt *ptr) {
+            if (ptr) {
+                n.set_local_optimizer(*ptr);
+            } else {
+                n.unset_local_optimizer();
+            }
+        }),
+        nlopt_local_optimizer_docstring().c_str());
 #endif
 
 #if defined(PAGMO_WITH_IPOPT)

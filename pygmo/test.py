@@ -389,12 +389,40 @@ class cmaes_test_case(_ut.TestCase):
         from .core import cmaes
         uda = cmaes()
         uda = cmaes(gen=1, cc=-1, cs=-1, c1=-1, cmu=-1,
-                    sigma0=0.5, ftol=1e-6, xtol=1e-6, memory=False)
+                    sigma0=0.5, ftol=1e-6, xtol=1e-6, memory=False, force_bounds=False)
         uda = cmaes(gen=1, cc=-1, cs=-1, c1=-1, cmu=-1, sigma0=0.5,
-                    ftol=1e-6, xtol=1e-6, memory=False, seed=32)
+                    ftol=1e-6, xtol=1e-6, memory=False, force_bounds=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
+
+class xnes_test_case(_ut.TestCase):
+    """Test case for the UDA xnes
+
+    """
+
+    def runTest(self):
+        from .core import xnes
+        uda = xnes()
+        uda = xnes(gen=1, eta_mu=-1, eta_sigma=-1, eta_b=-1,
+                   sigma0=-1, ftol=1e-6, xtol=1e-6, memory=False, force_bounds=False)
+        uda = xnes(gen=1, eta_mu=-1, eta_sigma=-1, eta_b=-1, sigma0=-1,
+                   ftol=1e-6, xtol=1e-6, memory=False, force_bounds=False, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
+
+class ihs_test_case(_ut.TestCase):
+    """Test case for the UDA ihs
+
+    """
+
+    def runTest(self):
+        from .core import ihs
+        uda = ihs()
+        uda = ihs(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1.)
+        uda = ihs(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1., seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        seed = uda.get_seed()
 
 class sga_test_case(_ut.TestCase):
     """Test case for the UDA sga
@@ -872,26 +900,38 @@ class random_decision_vector_test_case(_ut.TestCase):
     def runTest(self):
         from .core import random_decision_vector, set_global_rng_seed
         set_global_rng_seed(42)
-        x = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
+        x = random_decision_vector(lb=[1.1, 2.1, -3], ub=[2.1, 3.4, 5], nix=1)
         self.assertTrue(int(x[-1]) == x[-1])
         self.assertTrue(int(x[1]) != x[1])
         set_global_rng_seed(42)
-        y = random_decision_vector(lb = [1.1,2.1,-3], ub = [2.1, 3.4,5], nix = 1)
+        y = random_decision_vector(lb=[1.1, 2.1, -3], ub=[2.1, 3.4, 5], nix=1)
         self.assertTrue((x == y).all())
         nan = float("nan")
         inf = float("inf")
-        self.assertRaises(ValueError, lambda : random_decision_vector([1, 2], [0, 3]))
-        self.assertRaises(ValueError, lambda : random_decision_vector([1, -inf], [0, 32]))
-        self.assertRaises(ValueError, lambda : random_decision_vector([1, 2, 3], [0, 3]))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3], [1, 4, nan]))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, nan], [1, 4, 4]))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, nan, 3], [1, nan, 4]))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3], [1, 4, 5], 4))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3.1], [1, 4, 5], 1))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, 2, 3], [1, 4, 5.2], 1))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, -1.1, 3], [1, 2, 5], 2))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, -1.1, -inf], [1, 2, inf], 2))
-        self.assertRaises(ValueError, lambda : random_decision_vector([0, -1.1, inf], [1, 2, inf], 2))
+        self.assertRaises(
+            ValueError, lambda: random_decision_vector([1, 2], [0, 3]))
+        self.assertRaises(
+            ValueError, lambda: random_decision_vector([1, -inf], [0, 32]))
+        self.assertRaises(
+            ValueError, lambda: random_decision_vector([1, 2, 3], [0, 3]))
+        self.assertRaises(
+            ValueError, lambda: random_decision_vector([0, 2, 3], [1, 4, nan]))
+        self.assertRaises(
+            ValueError, lambda: random_decision_vector([0, 2, nan], [1, 4, 4]))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, nan, 3], [1, nan, 4]))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, 2, 3], [1, 4, 5], 4))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, 2, 3.1], [1, 4, 5], 1))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, 2, 3], [1, 4, 5.2], 1))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, -1.1, 3], [1, 2, 5], 2))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, -1.1, -inf], [1, 2, inf], 2))
+        self.assertRaises(ValueError, lambda: random_decision_vector(
+            [0, -1.1, inf], [1, 2, inf], 2))
 
 
 class luksan_vlcek1_test_case(_ut.TestCase):
@@ -1546,7 +1586,7 @@ class archipelago_test_case(_ut.TestCase):
         from . import archipelago, sade, ackley
 
         archi = archipelago(n=5, algo=sade(
-            50), prob=_raise_exception_2(), pop_size=20)
+            50, ftol=0, xtol=0), prob=_raise_exception_2(), pop_size=20)
         archi.evolve()
         self.assertRaises(BaseException, lambda: archi.wait_check())
 
@@ -1595,6 +1635,7 @@ def run_test_suite(level=0):
     suite.addTest(sa_test_case())
     suite.addTest(moead_test_case())
     suite.addTest(sga_test_case())
+    suite.addTest(ihs_test_case())
     suite.addTest(population_test_case())
     suite.addTest(archipelago_test_case(level))
     suite.addTest(null_problem_test_case())
@@ -1608,6 +1649,11 @@ def run_test_suite(level=0):
     try:
         from .core import cmaes
         suite.addTest(cmaes_test_case())
+    except ImportError:
+        pass
+    try:
+        from .core import xnes
+        suite.addTest(xnes_test_case())
     except ImportError:
         pass
     suite.addTest(dtlz_test_case())

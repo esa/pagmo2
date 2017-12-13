@@ -1150,8 +1150,7 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )"
-           + name + R"( problem
+    1D NumPy float array: the best known solution for the )" + name + R"( problem
 
 )";
 }
@@ -2381,7 +2380,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::moead::get_log()`
 
 std::string cmaes_docstring()
 {
-    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, seed = random)
+    return R"(__init__(gen = 1, cc = -1, cs = -1, c1 = -1, cmu = -1, sigma0 = 0.5, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
 
 Covariance Matrix Evolutionary Strategy (CMA-ES).
 
@@ -2395,6 +2394,7 @@ Args:
     ftol (``float``): stopping criteria on the x tolerance
     xtol (``float``): stopping criteria on the f tolerance
     memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    force_bounds (``bool``): when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -2443,6 +2443,74 @@ Examples:
     [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::cmaes::get_log()`.
+
+)";
+}
+
+std::string xnes_docstring()
+{
+    return R"(__init__(gen = 1, eta_mu = -1, eta_sigma = -1, eta_b = -1, sigma0 = -1, ftol = 1e-6, xtol = 1e-6, memory = False, force_bounds = False, seed = random)
+
+Exponential Evolution Strategies.
+
+Args:
+    gen (``int``): number of generations
+    eta_mu (``float``): learning rate for mean update (if -1 will be automatically selected to be 1)
+    eta_sigma (``float``): learning rate for step-size update (if -1 will be automatically selected)
+    eta_b (``float``): learning rate for the covariance matrix update (if -1 will be automatically selected)
+    sigma0 (``float``):  the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)
+    ftol (``float``): stopping criteria on the x tolerance
+    xtol (``float``): stopping criteria on the f tolerance
+    memory (``bool``): when true the adapted parameters are not reset between successive calls to the evolve method
+    force_bounds (``bool``): when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* is negative or greater than an implementation-defined value
+    ValueError: if *eta_mu*, *eta_sigma*, *eta_b*, *sigma0* are not in ]0,1] or -1
+
+See also the docs of the C++ class :cpp:class:`pagmo::xnes`.
+
+)";
+}
+
+std::string xnes_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.xnes`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``dx``, ``df``, ``sigma``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``Best`` (``float``), the best fitness function currently in the population
+    * ``dx`` (``float``), the norm of the distance to the population mean of the mutant vectors
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual
+    * ``sigma`` (``float``), the current step-size
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(xnes(gen = 500))
+    >>> algo.set_verbosity(100)
+    >>> prob = problem(rosenbrock(10))
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:          Best:            dx:            df:         sigma:
+      1              0         173924        33.6872    3.06519e+06            0.5
+    101           2000        92.9612       0.583942        156.921      0.0382078
+    201           4000        8.79819       0.117574          5.101      0.0228353
+    301           6000        4.81377      0.0698366        1.34637      0.0297664
+    401           8000        1.04445      0.0568541       0.514459      0.0649836
+    Exit condition -- generations = 500
+    >>> uda = algo.extract(xnes)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::xnes::get_log()`.
 
 )";
 }
@@ -4518,8 +4586,7 @@ Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
       election/replacement policies (see :attr:`~pygmo.)"
            + algo + R"(.selection` and
-      :attr:`~pygmo.)"
-           + algo + R"(.replacement`)
+      :attr:`~pygmo.)" + algo + R"(.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large
@@ -4644,16 +4711,16 @@ The log frequency depends on the verbosity parameter (by default nothing is logg
 the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
 :class:`~pygmo.sea`. 
 A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
-A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.
+A verbosity equal to 1 will produce a log with one entry at each improvement of the fitness.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Improvement``, ``Mutations``
 
-    ``Gen`` (``int``), generation.
-    ``Fevals`` (``int``), number of functions evaluation made.
-    ``Best`` (``float``), the best fitness function found so far.
-    ``Improvement`` (``float``), improvement made by the last mutation.
-    ``Mutations`` (``float``), number of mutated components for the decision vector.
+    * ``Gen`` (``int``), generation.
+    * ``Fevals`` (``int``), number of functions evaluation made.
+    * ``Best`` (``float``), the best fitness function found so far.
+    * ``Improvement`` (``float``), improvement made by the last mutation.
+    * ``Mutations`` (``float``), number of mutated components for the decision vector.
 
 Examples:
     >>> from pygmo import *
@@ -4678,6 +4745,107 @@ Examples:
     [(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::sea::get_log()`.
+)";
+}
+
+std::string ihs_docstring()
+{
+    return R"(__init__(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1., seed = random)
+
+Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians.
+In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value)
+for finding a best harmony (i.e., the global optimum) all together.
+
+This pygmo UDA implements the so-called improved harmony search algorithm (IHS), in which the probability
+of picking the variables from the decision vector and the amount of mutation to which they are subject
+vary (respectively linearly and exponentially) at each call of the ``evolve()`` method.
+
+In this algorithm the number of fitness function evaluations is equal to the number of iterations.
+All the individuals in the input population participate in the evolution. A new individual is generated
+at every iteration, substituting the current worst individual of the population if better.
+
+.. warning::
+
+   The HS algorithm can and has been  criticized, not for its performances,
+   but for the use of a metaphor that does not add anything to existing ones. The HS
+   algorithm essentially applies mutation and crossover operators to a background population and as such
+   should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
+   in that context. The use of the musicians metaphor only obscures its internal functioning
+   making theoretical results from ES and GA erroneously seem as unapplicable to HS.
+
+.. note::
+
+   The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
+   In pygmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly).
+   Such extension is original with pygmo.
+
+Args:
+    gen (``int``): number of generations to consider (each generation will compute the objective function once)
+    phmcr (``float``): probability of choosing from memory (similar to a crossover probability)
+    ppar_min (``float``): minimum pitch adjustment rate. (similar to a mutation rate)
+    ppar_max (``float``): maximum pitch adjustment rate. (similar to a mutation rate)
+    bw_min (``float``): minimum distance bandwidth. (similar to a mutation width)
+    bw_max (``float``): maximum distance bandwidth. (similar to a mutation width)
+    seed (``int``): seed used by the internal random number generator
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if *phmcr* is not in the ]0,1[ interval, *ppar_min* or *ppar_max* are not in the ]0,1[ 
+        interval, min/max quantities are less than/greater than max/min quantities, *bw_min* is negative.
+    unspecified: any exception thrown by failures at the intersection between C++ and Python
+      (e.g., type conversion errors, mismatched function signatures, etc.)
+
+See also the docs of the C++ class :cpp:class:`pagmo::ihs`.
+
+)";
+}
+
+std::string ihs_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. 
+The log frequency depends on the verbosity parameter (by default nothing is logged) which can be set calling
+the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
+:class:`~pygmo.ihs`. 
+A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Fevals``, ``ppar``, ``bw``, ``dx``, ``df``,  ``Violated``, ``Viol. Norm``,``ideal``
+
+    * ``Fevals`` (``int``), number of functions evaluation made.
+    * ``ppar`` (``float``), the pitch adjustment rate.
+    * ``bw`` (``float``), the distance bandwidth.
+    * ``dx`` (``float``), the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual (or -1 in a multiobjective case).
+    * ``df`` (``float``), the population flatness evaluated as the distance between the fitness of the best and of the worst individual (or -1 in a multiobjective case).
+    * ``Violated`` (``int``), the number of constraints violated by the current decision vector.
+    * ``Viol. Norm`` (``float``), the constraints violation norm for the current decision vector.
+    * ``ideal_point`` (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(ihs(20000))
+    >>> algo.set_verbosity(2000)
+    >>> prob = problem(hock_schittkowsky_71())
+    >>> prob.c_tol = [1e-1]*2
+    >>> pop = population(prob, 20)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Fevals:          ppar:            bw:            dx:            df:      Violated:    Viol. Norm:        ideal1:
+          1       0.350032       0.999425        4.88642        14.0397              0              0        43.2982
+       2001       0.414032       0.316046        5.56101        25.7009              0              0        33.4251
+       4001       0.478032      0.0999425          5.036        26.9657              0              0        19.0052
+       6001       0.542032      0.0316046        3.77292        23.9992              0              0        19.0052
+       8001       0.606032     0.00999425        3.97937        16.0803              0              0        18.1803
+      10001       0.670032     0.00316046        1.15023        1.57947              0              0        17.8626
+      12001       0.734032    0.000999425       0.017882      0.0185438              0              0        17.5894
+      14001       0.798032    0.000316046     0.00531358      0.0074745              0              0        17.5795
+      16001       0.862032    9.99425e-05     0.00270865     0.00155563              0              0        17.5766
+      18001       0.926032    3.16046e-05     0.00186637     0.00167523              0              0        17.5748
+    >>> uda = algo.extract(ihs)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 0.35003234534534, 0.9994245193792801, 4.886415773459253, 14.0397487316794, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::ihs::get_log()`.
 )";
 }
 
@@ -4738,13 +4906,7 @@ all parents and children are put in the same pool and only the best are passed t
  
 .. note:
 
-This algorithm will work only for box bounded problems.
-
-.. note:
-
-Specifying the parameter *int_dim* a part of the decision vector (at the end) will be treated as integers
-This means that all genetic operators are guaranteed to produce integer decision vectors in the specified bounds.
-The various mutation and crossover strategies will do different things on an integer gene or a real valued one.
+   This algorithm will work only for box bounded problems.
 
 Args:
     gen (``int``): number of generations.
@@ -4780,7 +4942,7 @@ The log frequency depends on the verbosity parameter (by default nothing is logg
 the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed with a
 :class:`~pygmo.sga`. 
 A verbosity larger than 1 will produce a log with one entry each verbosity fitness evaluations.
-A verbosity equal to 1 will produce a log woth one entry at each improvement of the fitness.
+A verbosity equal to 1 will produce a log with one entry at each improvement of the fitness.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Improvement``
@@ -5007,15 +5169,16 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_string_option("hessian_approximation","limited-memory")
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
-            Thread safety: none
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
+        Thread safety: none
     <BLANKLINE>
     Extra info:
-            Last optimisation return code: Solve_Succeeded (value = 0)
-            Verbosity: 0
-            Individual selection policy: best
-            Individual replacement policy: best
-            String options: {hessian_approximation : limited-memory}
+        Last optimisation return code: Solve_Succeeded (value = 0)
+        Verbosity: 0
+        Individual selection policy: best
+        Individual replacement policy: best
+        String options: {hessian_approximation : limited-memory}
+    <BLANKLINE>
 )";
 }
 
@@ -5041,7 +5204,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_string_options({"hessian_approximation":"limited-memory", "limited_memory_initialization":"scalar1"})
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5114,7 +5277,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_integer_option("print_level",3)
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5149,7 +5312,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_integer_options({"filter_reset_trigger":4, "print_level":3})
     >>> algorithm(ip) # doctest: +NORMALIZE_WHITESPACE
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5222,7 +5385,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_numeric_option("tol",1E-6)
     >>> algorithm(ip) # doctest: +SKIP
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:
@@ -5257,7 +5420,7 @@ Examples:
     >>> ip = ipopt()
     >>> ip.set_numeric_options({"tol":1E-4, "constr_viol_tol":1E-3})
     >>> algorithm(ip) # doctest: +SKIP
-    Algorithm name: Ipopt [deterministic]
+    Algorithm name: Ipopt: Interior Point Optimization [deterministic]
             Thread safety: none
     <BLANKLINE>
     Extra info:

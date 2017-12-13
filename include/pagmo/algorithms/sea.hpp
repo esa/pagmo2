@@ -272,7 +272,7 @@ public:
      */
     std::string get_name() const
     {
-        return "(N+1)-EA Simple Evolutionary Algorithm";
+        return "SEA: (N+1)-EA Simple Evolutionary Algorithm";
     }
     /// Extra informations
     /**

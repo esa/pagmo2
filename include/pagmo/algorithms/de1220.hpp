@@ -172,9 +172,8 @@ public:
             }
         }
         if (variant_adptv < 1u || variant_adptv > 2u) {
-            pagmo_throw(std::invalid_argument,
-                        "The variant for self-adaptation must be in [1,2], while a value of "
-                            + std::to_string(variant_adptv) + " was detected.");
+            pagmo_throw(std::invalid_argument, "The variant for self-adaptation must be in [1,2], while a value of "
+                                                   + std::to_string(variant_adptv) + " was detected.");
         }
     }
 
@@ -206,14 +205,12 @@ public:
         // We start by checking that the problem is suitable for this
         // particular algorithm.
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -224,9 +221,8 @@ public:
             return pop;
         }
         if (pop.size() < 7u) {
-            pagmo_throw(std::invalid_argument,
-                        get_name() + " needs at least 7 individuals in the population, " + std::to_string(pop.size())
-                            + " detected");
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 7 individuals in the population, "
+                                                   + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -240,8 +236,8 @@ public:
         std::uniform_int_distribution<vector_double::size_type> c_idx(
             0u, dim - 1u); // to generate a random index in the chromosome
         std::uniform_int_distribution<vector_double::size_type> p_idx(0u, NP - 1u); // to generate a random index in pop
-        std::uniform_int_distribution<vector_double::size_type> v_idx(
-            0u, m_allowed_variants.size() - 1u); // to generate a random variant
+        std::uniform_int_distribution<vector_double::size_type> v_idx(0u, m_allowed_variants.size()
+                                                                              - 1u); // to generate a random variant
 
         // We extract from pop the chromosomes and fitness associated
         auto popold = pop.get_x();
@@ -662,28 +658,27 @@ public:
             /* swap population arrays. New generation becomes old one */
             std::swap(popold, popnew);
 
-            // Check the exit conditions (every 40 generations)
+            // Check the exit conditions
             double dx = 0., df = 0.;
-            if (gen % 40u == 0u) {
-                best_idx = pop.best_idx();
-                worst_idx = pop.worst_idx();
-                for (decltype(dim) i = 0u; i < dim; ++i) {
-                    dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
-                }
-                if (dx < m_xtol) {
-                    if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
-                    }
-                    return pop;
-                }
 
-                df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                if (df < m_ftol) {
-                    if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
-                    }
-                    return pop;
+            best_idx = pop.best_idx();
+            worst_idx = pop.worst_idx();
+            for (decltype(dim) i = 0u; i < dim; ++i) {
+                dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+            }
+            if (dx < m_xtol) {
+                if (m_verbosity > 0u) {
+                    std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
                 }
+                return pop;
+            }
+
+            df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+            if (df < m_ftol) {
+                if (m_verbosity > 0u) {
+                    std::cout << "Exit condition -- ftol < " << m_ftol << std::endl;
+                }
+                return pop;
             }
 
             // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -798,7 +793,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Self-adaptive Differential Evolution 1220";
+        return "sa-DE1220: Self-adaptive Differential Evolution 1220";
     }
     /// Extra informations
     /**

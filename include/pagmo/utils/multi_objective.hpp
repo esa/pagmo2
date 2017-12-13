@@ -341,7 +341,7 @@ inline vector_double crowding_distance(const std::vector<vector_double> &non_dom
  * Complexity is \f$ O(MN^2)\f$ where \f$M\f$ is the number of objectives and \f$N\f$ is the number of individuals.
  *
  * This function will also work for single objective optimization, i.e. with 1 objective
- * in which case, though, it is more efficient to sort using directly on of the following forms:
+ * in which case, though, it is more efficient to sort using directly one of the following forms:
  *
  * @code{.unparsed}
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});

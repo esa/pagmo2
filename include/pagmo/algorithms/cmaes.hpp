@@ -82,9 +82,24 @@ namespace pagmo
 class cmaes
 {
 public:
-    /// Single entry of the log (gen, fevals, best, dx, df, sigma)
+    /// Single data line for the algorithm's log.
+    /**
+     * A log data line is a tuple consisting of:
+     * - the generation number,
+     * - the number of function evaluations
+     * - the best fitness vector so far,
+     * - the population flatness evaluated as the distance between the decisions vector of the best and of the worst
+     * individual,
+     * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
+     */
     typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
-    /// The log
+
+    /// Log type.
+    /**
+     * The algorithm log is a collection of cmaes::log_line_type data lines, stored in chronological order
+     * during the optimisation if the verbosity of the algorithm is set to a nonzero value
+     * (see cmaes::set_verbosity()).
+     */
     typedef std::vector<log_line_type> log_type;
 
     /// Constructor.
@@ -103,14 +118,17 @@ public:
      * @param ftol stopping criteria on the x tolerance (default is 1e-6)
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the adapted parameters are not reset between successive calls to the evolve method
+     * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the bounds
+     but the covariance matrix adaptation  mechanism will worsen
      * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if cc, cs, c1 and cmu are not in [0, 1]
      */
     cmaes(unsigned int gen = 1, double cc = -1, double cs = -1, double c1 = -1, double cmu = -1, double sigma0 = 0.5,
-          double ftol = 1e-6, double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next())
+          double ftol = 1e-6, double xtol = 1e-6, bool memory = false, bool force_bounds = false,
+          unsigned int seed = pagmo::random_device::next())
         : m_gen(gen), m_cc(cc), m_cs(cs), m_c1(c1), m_cmu(cmu), m_sigma0(sigma0), m_ftol(ftol), m_xtol(xtol),
-          m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+          m_memory(memory), m_force_bounds(force_bounds), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
     {
         if (((cc < 0.) || (cc > 1.)) && !(cc == -1)) {
             pagmo_throw(std::invalid_argument,
@@ -178,32 +196,27 @@ public:
         // PREAMBLE--------------------------------------------------
         // Checks on the problem type
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (lam < 5u) {
-            pagmo_throw(std::invalid_argument,
-                        get_name() + " needs at least 5 individuals in the population, " + std::to_string(lam)
-                            + " detected");
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
+                                                   + std::to_string(lam) + " detected");
         }
         for (auto num : lb) {
             if (!std::isfinite(num)) {
-                pagmo_throw(std::invalid_argument,
-                            "A " + std::to_string(num) + " is detected in the lower bounds, " + this->get_name()
-                                + " cannot deal with it.");
+                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the lower bounds, "
+                                                       + this->get_name() + " cannot deal with it.");
             }
         }
         for (auto num : ub) {
             if (!std::isfinite(num)) {
-                pagmo_throw(std::invalid_argument,
-                            "A " + std::to_string(num) + " is detected in the upper bounds, " + this->get_name()
-                                + " cannot deal with it.");
+                pagmo_throw(std::invalid_argument, "A " + std::to_string(num) + " is detected in the upper bounds, "
+                                                       + this->get_name() + " cannot deal with it.");
             }
         }
         // Get out if there is nothing to do.
@@ -297,9 +310,6 @@ public:
         // ----------------------------------------------//
         // HERE WE START THE JUICE OF THE ALGORITHM      //
         // ----------------------------------------------//
-        auto best_x = pop.get_x()[pop.best_idx()];
-        auto best_f = pop.get_f()[pop.best_idx()];
-
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(_(dim));
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
             // 1 - We generate and evaluate lam new individuals
@@ -312,10 +322,9 @@ public:
                 newpop[i] = mean + (sigma * B * D * tmp);
             }
 
-            // 1bis - Check the exit conditions (every 10 generations) and logs
-            // we need to do it here as termination is defined on tmp
-            if (gen % 10u == 0u) {
-                // Exit condition on xtol
+            // 1bis - Check the exit conditions and logs
+            // Exit condition on xtol
+            {
                 if ((sigma * B * D * tmp).norm() < m_xtol) {
                     if (m_verbosity > 0u) {
                         std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
@@ -333,6 +342,7 @@ public:
                     return pop;
                 }
             }
+
             // 1bis - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
@@ -348,20 +358,24 @@ public:
                         print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
                               "Best:", std::setw(15), "dx:", std::setw(15), "df:", std::setw(15), "sigma:", '\n');
                     }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15), best_f[0],
-                          std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
+                          pop.get_f()[idx_b][0], std::setw(15), dx, std::setw(15), df, std::setw(15), sigma, '\n');
                     ++count;
                     // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, best_f[0], dx, df, sigma);
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[idx_b][0], dx, df, sigma);
                 }
             }
-            // 2 - we fix the bounds. We cannot use the utils::generic::force_bounds_random as we here represent a
-            // chromosome
-            // via an Eigen matrix. Maybe iterators could be used to generalize that util?
-            for (decltype(lam) i = 0u; i < lam; ++i) {
-                for (decltype(dim) j = 0u; j < dim; ++j) {
-                    if ((newpop[i](_(j)) < lb[j]) || (newpop[i](_(j)) > ub[j])) {
-                        newpop[i](_(j)) = lb[j] + randomly_distributed_number(m_e) * (ub[j] - lb[j]);
+            // 2 - We fix the bounds.
+            // Note that this screws up the whole covariance matrix machinery and worsen
+            // performances considerably.
+            if (m_force_bounds) {
+                for (decltype(lam) i = 0u; i < lam; ++i) {
+                    for (decltype(dim) j = 0u; j < dim; ++j) {
+                        if (newpop[i](_(j)) < lb[j]) {
+                            newpop[i](_(j)) = lb[j];
+                        } else if (newpop[i](_(j)) > ub[j]) {
+                            newpop[i](_(j)) = ub[j];
+                        }
                     }
                 }
             }
@@ -377,10 +391,6 @@ public:
                     dumb[j] = newpop[i](_(j));
                 }
                 pop.set_x(i, dumb);
-                if (pop.get_f()[i][0] <= best_f[0]) {
-                    best_f = pop.get_f()[i];
-                    best_x = pop.get_x()[i];
-                }
             }
             counteval += lam;
             // 4 - We extract the elite from this generation.
@@ -551,6 +561,7 @@ public:
         stream(ss, "\n\tStopping ftol: ", m_ftol);
         stream(ss, "\n\tMemory: ", m_memory);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
+        stream(ss, "\n\tForce bounds: ", m_force_bounds);
         stream(ss, "\n\tSeed: ", m_seed);
         return ss.str();
     }
@@ -577,8 +588,8 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_cc, m_cs, m_c1, m_cmu, m_sigma0, m_ftol, m_xtol, m_memory, sigma, mean, variation, newpop, B, D, C,
-           invsqrtC, pc, ps, counteval, eigeneval, m_e, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_cc, m_cs, m_c1, m_cmu, m_sigma0, m_ftol, m_xtol, m_memory, m_force_bounds, sigma, mean, variation,
+           newpop, B, D, C, invsqrtC, pc, ps, counteval, eigeneval, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -602,6 +613,7 @@ private:
     double m_ftol;
     double m_xtol;
     bool m_memory;
+    bool m_force_bounds;
 
     // "Memory" data members (these are adapted during each evolve call and may be remembered if m_memory is true)
     mutable double sigma;

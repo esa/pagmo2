@@ -150,12 +150,14 @@ public:
         // We start by checking that the problem is suitable for this
         // particular algorithm.
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
+            pagmo_throw(std::invalid_argument,
+                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                            + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -166,8 +168,9 @@ public:
             return pop;
         }
         if (pop.size() < 5u) {
-            pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
-                                                   + std::to_string(pop.size()) + " detected");
+            pagmo_throw(std::invalid_argument,
+                        get_name() + " needs at least 5 individuals in the population, " + std::to_string(pop.size())
+                            + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -359,28 +362,26 @@ public:
             /* swap population arrays. New generation becomes old one */
             std::swap(popold, popnew);
 
-            // Check the exit conditions (every 10 generations)
+            // Check the exit conditions
             double dx = 0., df = 0.;
-            if (gen % 10u == 0u) {
-                best_idx = pop.best_idx();
-                worst_idx = pop.worst_idx();
-                for (decltype(dim) i = 0u; i < dim; ++i) {
-                    dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+            best_idx = pop.best_idx();
+            worst_idx = pop.worst_idx();
+            for (decltype(dim) i = 0u; i < dim; ++i) {
+                dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+            }
+            if (dx < m_xtol) {
+                if (m_verbosity > 0u) {
+                    std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
                 }
-                if (dx < m_xtol) {
-                    if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- xtol < " << m_xtol << std::endl;
-                    }
-                    return pop;
-                }
+                return pop;
+            }
 
-                df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                if (df < m_Ftol) {
-                    if (m_verbosity > 0u) {
-                        std::cout << "Exit condition -- ftol < " << m_Ftol << std::endl;
-                    }
-                    return pop;
+            df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+            if (df < m_Ftol) {
+                if (m_verbosity > 0u) {
+                    std::cout << "Exit condition -- ftol < " << m_Ftol << std::endl;
                 }
+                return pop;
             }
 
             // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -398,8 +399,8 @@ public:
                     df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "dx:", std::setw(15), "df:", '\n');
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "dx:", std::setw(15), "df:", '\n');
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
                           pop.get_f()[best_idx][0], std::setw(15), dx, std::setw(15), df, '\n');
@@ -483,7 +484,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Differential Evolution";
+        return "DE: Differential Evolution";
     }
     /// Extra informations
     /**

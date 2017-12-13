@@ -417,7 +417,7 @@ public:
      */
     std::string get_name() const
     {
-        return "MOEA/D - DE";
+        return "MOEAD: MOEA/D - DE";
     }
     /// Extra informations
     /**

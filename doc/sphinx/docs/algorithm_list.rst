@@ -9,7 +9,7 @@ interface to acces their functionalities.
 
 Each algorithm can be
 associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic
-I = integer programming (without this symbol the algorithm will solve the relaxed problem)
+I = integer programming (without this symbol the algorithm will still work on integer problems solving the relaxed problem)
 
 Heuristic Global Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -18,6 +18,7 @@ Common Name                                                Docs of the C++ class
 ========================================================== ========================================= ========================================= ===============
 The null algorithm                                         :cpp:class:`pagmo::null_algorithm`        :class:`pygmo.null_algorithm`             SM-CU          
 Differential Evolution (DE)                                :cpp:class:`pagmo::de`                    :class:`pygmo.de`                         S-U            
+Improved Harmony Serach                                    :cpp:class:`pagmo::ihs`                   :class:`pygmo.ihs`                        SM-CU-I
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U            
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U            
 Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::pso`                   :class:`pygmo.pso`                        S-U            
@@ -25,7 +26,8 @@ Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::ps
 Simple Genetic Algorithm                                   :cpp:class:`pagmo::sga`                   :class:`pygmo.sga`                        S-U-I (sto)    
 Corana's Simulated Annealing (SA)                          :cpp:class:`pagmo::simulated_annealing`   :class:`pygmo.simulated_annealing`        S-U            
 Artificial Bee Colony (ABC)                                :cpp:class:`pagmo::bee_colony`            :class:`pygmo.bee_colony`                 S-U            
-Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :cpp:class:`pagmo::cmaes`                 :class:`pygmo.cmaes`                      S-U            
+Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :cpp:class:`pagmo::cmaes`                 :class:`pygmo.cmaes`                      S-U (sto)
+Exponential Evolution Strategies (xNES)                    :cpp:class:`pagmo::xnes`                  :class:`pygmo.xnes`                       S-U (sto)
 Non-dominated Sorting GA (NSGA2)                           :cpp:class:`pagmo::nsga2`                 :class:`pygmo.nsga2`                      M-U-I          
 Multi-objective EA vith Decomposition (MOEA/D)             :cpp:class:`pagmo::moead`                 :class:`pygmo.moead`                      M-U            
 ========================================================== ========================================= ========================================= ===============

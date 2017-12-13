@@ -30,6 +30,7 @@ Implemented algorithms
   algorithms/compass_search
   algorithms/de
   algorithms/de1220
+  algorithms/ihs
   algorithms/ipopt
   algorithms/moead
   algorithms/mbh
@@ -41,6 +42,8 @@ Implemented algorithms
   algorithms/sea
   algorithms/sga
   algorithms/simulated_annealing
+  algorithms/xnes
+
 
 Implemented problems
 ^^^^^^^^^^^^^^^^^^^^

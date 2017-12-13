@@ -40,6 +40,7 @@ Let us start:
     	Stopping ftol: 1e-06
     	Memory: false
     	Verbosity: 0
+    	Force bounds: false
     	Seed: ...
 
 In the code above, after the trivial import of the pygmo package, we define a variable algo

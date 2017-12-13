@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -108,7 +109,7 @@ BOOST_AUTO_TEST_CASE(sga_evolve_test)
     BOOST_CHECK(sga{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
     // The we test that evolution is deterministic if the
     // seed is controlled.
-    std::vector<sga> udps = {
+    std::vector<sga> udas = {
         sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "gaussian", "tournament", 32u},
         sga{10u, .90, 1., 0.1, 1., 2u, "sbx", "gaussian", "tournament", 32u},
         sga{10u, .90, 1., 0.1, 1., 2u, "binomial", "gaussian", "tournament", 32u},
@@ -118,40 +119,56 @@ BOOST_AUTO_TEST_CASE(sga_evolve_test)
         sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "gaussian", "truncated", 32u},
     };
     // On a deterministic problem
-    for (sga &udp : udps) {
+    for (sga &uda : udas) {
         problem prob{schwefel{20u}};
         population pop1{prob, 20u, 23u};
-        udp.set_seed(32u);
-        udp.set_verbosity(1u);
-        pop1 = udp.evolve(pop1);
-        auto log1 = udp.get_log();
+        uda.set_seed(32u);
+        uda.set_verbosity(1u);
+        pop1 = uda.evolve(pop1);
+        auto log1 = uda.get_log();
 
         population pop2{prob, 20u, 23u};
-        udp.set_seed(32u);
-        pop2 = udp.evolve(pop2);
-        auto log2 = udp.get_log();
+        uda.set_seed(32u);
+        pop2 = uda.evolve(pop2);
+        auto log2 = uda.get_log();
 
         BOOST_CHECK(log1 == log2);
     }
     // And on a stochastic one
-    for (sga &udp : udps) {
+    for (sga &uda : udas) {
         problem prob{inventory{25u, 5u, 1432u}};
         population pop1{prob, 20u, 23u};
-        udp.set_seed(32u);
-        udp.set_verbosity(1u);
-        pop1 = udp.evolve(pop1);
-        auto log1 = udp.get_log();
+        uda.set_seed(32u);
+        uda.set_verbosity(1u);
+        pop1 = uda.evolve(pop1);
+        auto log1 = uda.get_log();
 
         population pop2{prob, 20u, 23u};
-        udp.set_seed(32u);
-        pop2 = udp.evolve(pop2);
-        auto log2 = udp.get_log();
+        uda.set_seed(32u);
+        pop2 = uda.evolve(pop2);
+        auto log2 = uda.get_log();
+
+        BOOST_CHECK(log1 == log2);
+    }
+    // And on a MINLP
+    for (sga &uda : udas) {
+        problem prob{minlp_rastrigin{5u, 5u}};
+        population pop1{prob, 20u, 23u};
+        uda.set_seed(32u);
+        uda.set_verbosity(1u);
+        pop1 = uda.evolve(pop1);
+        auto log1 = uda.get_log();
+
+        population pop2{prob, 20u, 23u};
+        uda.set_seed(32u);
+        pop2 = uda.evolve(pop2);
+        auto log2 = uda.get_log();
 
         BOOST_CHECK(log1 == log2);
     }
     // We call the extra info and chech they do not throw
-    for (sga &udp : udps) {
-        udp.get_extra_info();
+    for (sga &uda : udas) {
+        BOOST_CHECK_NO_THROW(uda.get_extra_info());
     }
 }
 

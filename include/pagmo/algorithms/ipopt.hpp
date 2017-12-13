@@ -913,7 +913,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Ipopt";
+        return "Ipopt: Interior Point Optimization";
     }
     /// Get extra information about the algorithm.
     /**

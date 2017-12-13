@@ -971,7 +971,7 @@ public:
      */
     std::string get_name() const
     {
-        return "NLopt - " + m_algo;
+        return "NLopt - " + m_algo + ":";
     }
     /// Set verbosity.
     /**
