@@ -105,7 +105,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     # Copy the images into the xml output dir (this is needed by sphinx).
     cp images/* xml/;
     cd ../sphinx/;
-    export SPHINX_OUTPUT=`make html 2>&1 >/dev/null`;
+    export SPHINX_OUTPUT=`make html linkcheck 2>&1 >/dev/null`;
     if [[ "${SPHINX_OUTPUT}" != "" ]]; then
         echo "Sphinx encountered some problem:";
         echo "${SPHINX_OUTPUT}";

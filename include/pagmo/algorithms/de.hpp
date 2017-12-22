@@ -68,9 +68,9 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    The official DE web site: http://www.icsi.berkeley.edu/~storn/code.html
+ *    The official DE web site: http://www1.icsi.berkeley.edu/~storn/code.html
  *
- *    The paper that introduces Differential Evolution http://www.springerlink.com/content/x555692233083677/
+ *    The paper that introduces Differential Evolution https://link.springer.com/article/10.1023%2FA%3A1008202821328
  *
  * \endverbatim
  */
@@ -150,14 +150,12 @@ public:
         // We start by checking that the problem is suitable for this
         // particular algorithm.
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (prob_f_dimension != 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -168,9 +166,8 @@ public:
             return pop;
         }
         if (pop.size() < 5u) {
-            pagmo_throw(std::invalid_argument,
-                        get_name() + " needs at least 5 individuals in the population, " + std::to_string(pop.size())
-                            + " detected");
+            pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
+                                                   + std::to_string(pop.size()) + " detected");
         }
         // ---------------------------------------------------------------------------------------------------------
 

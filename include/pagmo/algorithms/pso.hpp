@@ -107,10 +107,6 @@ namespace pagmo
  *
  *    http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
  *
- * .. seealso::
- *
- *    http://www.engr.iupui.edu/~shi/Coference/psopap4.html for the first paper on this algorithm
- *
  * \endverbatim
  */
 class pso
@@ -162,9 +158,9 @@ public:
                     + std::to_string(m_variant) + " was detected");
         }
         if (m_eta1 < 0. || m_eta2 < 0. || m_eta1 > 4. || m_eta2 > 4.) {
-            pagmo_throw(std::invalid_argument, "The eta parameters must be in the [0,4] range, while eta1 = "
-                                                   + std::to_string(m_eta1) + ", eta2 = " + std::to_string(m_eta2)
-                                                   + " was detected");
+            pagmo_throw(std::invalid_argument,
+                        "The eta parameters must be in the [0,4] range, while eta1 = " + std::to_string(m_eta1)
+                            + ", eta2 = " + std::to_string(m_eta2) + " was detected");
         }
         if (m_max_vel <= 0. || m_max_vel > 1.) {
             pagmo_throw(std::invalid_argument, "The maximum particle velocity (as a fraction of the bounds) should be "
@@ -376,8 +372,9 @@ public:
                     for (decltype(dim) d = 0u; d < dim; ++d) {
                         r1 = drng(m_e);
                         r2 = drng(m_e);
-                        m_V[p][d] = m_omega * (m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
-                                               + m_eta2 * r2 * (best_neighb[d] - X[p][d]));
+                        m_V[p][d] = m_omega
+                                    * (m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
+                                       + m_eta2 * r2 * (best_neighb[d] - X[p][d]));
                     }
                 }
 
@@ -498,9 +495,9 @@ public:
                     // We start printing
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "gbest:",
-                              std::setw(15), "Mean Vel.:", std::setw(15), "Mean lbest:", std::setw(15), "Avg. Dist.:",
-                              '\n');
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "gbest:", std::setw(15), "Mean Vel.:", std::setw(15), "Mean lbest:", std::setw(15),
+                              "Avg. Dist.:", '\n');
                     }
                     print(std::setw(7), gen, std::setw(15), feval_count, std::setw(15), best, std::setw(15),
                           mean_velocity, std::setw(15), lb_avg, std::setw(15), avg_dist, '\n');
@@ -531,15 +528,15 @@ public:
      * @code{.unparsed}
      * Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:
      *    1             40        2.01917       0.298551        1855.03       0.394038
-    *    51           1040     0.00436298      0.0407766         1.0704         0.1288
-    *   101           2040    0.000228898      0.0110884       0.282699      0.0488969
-    *   151           3040    5.53426e-05     0.00231688       0.106807      0.0167147
-    *   201           4040    3.88181e-06    0.000972132      0.0315856     0.00988859
-    *   251           5040    1.25676e-06    0.000330553     0.00146805     0.00397989
-    *   301           6040    3.76784e-08    0.000118192    0.000738972      0.0018789
-    *   351           7040    2.35193e-09    5.39387e-05    0.000532189     0.00253805
-    *   401           8040    3.24364e-10     2.2936e-05    9.02879e-06    0.000178279
-    *   451           9040    2.31237e-10    5.01558e-06    8.12575e-07    9.77163e-05
+     *    51           1040     0.00436298      0.0407766         1.0704         0.1288
+     *   101           2040    0.000228898      0.0110884       0.282699      0.0488969
+     *   151           3040    5.53426e-05     0.00231688       0.106807      0.0167147
+     *   201           4040    3.88181e-06    0.000972132      0.0315856     0.00988859
+     *   251           5040    1.25676e-06    0.000330553     0.00146805     0.00397989
+     *   301           6040    3.76784e-08    0.000118192    0.000738972      0.0018789
+     *   351           7040    2.35193e-09    5.39387e-05    0.000532189     0.00253805
+     *   401           8040    3.24364e-10     2.2936e-05    9.02879e-06    0.000178279
+     *   451           9040    2.31237e-10    5.01558e-06    8.12575e-07    9.77163e-05
      * @endcode
      *
      * Gen is the generation number, Fevals the number of fitness evaluation made, gbest the global best,

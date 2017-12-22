@@ -1481,7 +1481,7 @@ The pseudo code of our generalized version is:
 
 :class:`pygmo.mbh` is a user-defined algorithm (UDA) that can be used to construct :class:`pygmo.algorithm` objects.
 
-See: http://arxiv.org/pdf/cond-mat/9803344 for the paper introducing the basin hopping idea for a Lennard-Jones
+See: https://arxiv.org/pdf/cond-mat/9803344.pdf for the paper introducing the basin hopping idea for a Lennard-Jones
 cluster optimization.
 
 See also the docs of the C++ class :cpp:class:`pagmo::mbh`.
@@ -1909,7 +1909,7 @@ Its formulation in pygmo is written as:
    \end{array}
 
 See: Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
-constrained optimization." (1999). http://folk.uib.no/ssu029/Pdf_file/Luksan99.ps
+constrained optimization." (1999). http://hdl.handle.net/11104/0123965
 
 Args:
     dim (``int``): problem dimension
@@ -2858,7 +2858,7 @@ derivative-free optimization.
 
 See: "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
 
-See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
+See: https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing
 )";
 }
 
@@ -4240,7 +4240,7 @@ std::string nlopt_docstring()
 NLopt algorithms.
 
 This user-defined algorithm wraps a selection of solvers from the
-`NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`__ library, focusing on
+`NLopt <https://nlopt.readthedocs.io/en/latest/>`__ library, focusing on
 local optimisation (both gradient-based and derivative-free). The complete list of supported
 NLopt algorithms is:
 
@@ -4281,7 +4281,7 @@ and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. seealso::
 
-   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`__ contains a detailed description
+   The `NLopt website <http://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed description
    of each supported solver.
 
 This constructor will initialise an :class:`~pygmo.nlopt` object which will use the NLopt algorithm specified by
@@ -4319,7 +4319,7 @@ See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
 
 .. seealso::
 
-   The `NLopt website <http://ab-initio.mit.edu/wiki/index.php/NLopt_Algorithms>`__ contains a detailed
+   The `NLopt website <http://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed
    description of each supported solver.
 
 Args:
