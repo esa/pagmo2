@@ -13,7 +13,7 @@ pagmo is a header-only library which has the following third-party dependencies:
 * `Boost <http://www.boost.org/>`__, **mandatory**, header-only
 * `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__, optional, header-only
   (enabled via the ``PAGMO_WITH_EIGEN3`` CMake option)
-* `NLopt <http://ab-initio.mit.edu/wiki/index.php/NLopt>`__, optional, requires linking
+* `NLopt <https://nlopt.readthedocs.io/en/latest/>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_NLOPT`` CMake option)
 * `Ipopt <https://projects.coin-or.org/Ipopt>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_IPOPT`` CMake option)
