@@ -78,7 +78,7 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://en.wikipedia.org/wiki/Harmony_search for an introduction on harmony search.
+ *    https://en.wikipedia.org/wiki/Harmony_search for an introduction on harmony search.
  *
  * .. seealso::
  *

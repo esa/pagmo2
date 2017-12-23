@@ -85,8 +85,8 @@ Changes
 Fix
 ~~~
 
-- Various documentation fixes and improvements (`#103 <https://github.com/esa/pagmo2/issues/103>`__,
-  `#104 <https://github.com/esa/pagmo2/issues/104>`__, `#107 <https://github.com/esa/pagmo2/issues/107>`__).
+- Various documentation fixes and improvements (`#103 <https://github.com/esa/pagmo2/pull/103>`__,
+  `#104 <https://github.com/esa/pagmo2/pull/104>`__, `#107 <https://github.com/esa/pagmo2/pull/107>`__).
 
 2.2 (2017-05-12)
 ----------------

@@ -64,7 +64,7 @@ namespace pagmo
  * \f]
  *
  * See: Luksan, L., and Jan Vlcek. "Sparse and partially separable test problems for unconstrained and equality
- * constrained optimization." (1999). http://folk.uib.no/ssu029/Pdf_file/Luksan99.ps
+ * constrained optimization." (1999). http://hdl.handle.net/11104/0123965
  *
  */
 struct luksan_vlcek1 {
