@@ -24,7 +24,12 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
+# NOTE: here we are pinning the boost and boost-cpp packages versions to the current
+# pinned conda-forge versions, which can be found out at:
+# https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
+# This ensures that we build with the same boost version we use to build the conda packages.
+# NOTE: these version numbers need to be updated manually.
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost=1.65.1 boost-cpp=1.65.1 eigen nlopt
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
 
@@ -33,7 +38,7 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost=1.65.1 boost-cpp=1.65.1 eigen nlopt numpy cloudpickle ipyparallel
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
@@ -41,7 +46,7 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update conda -y 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost=1.65.1 boost-cpp=1.65.1 eigen nlopt numpy cloudpickle ipyparallel
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pagmo
 
 # Rename sh.exe as sh.exe in PATH interferes with MinGW.
