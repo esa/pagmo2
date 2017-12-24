@@ -24,6 +24,11 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y
+# NOTE: here we are pinning the boost and boost-cpp packages versions to the current
+# pinned conda-forge versions, which can be found out at:
+# https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
+# This ensures that we build with the same boost version we use to build the conda packages.
+# NOTE: these version numbers need to be updated manually.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost=1.65.1 boost-cpp=1.65.1 eigen nlopt
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
