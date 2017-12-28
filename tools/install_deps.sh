@@ -32,9 +32,9 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     fi
 
     if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "OSXPython36" ]]; then
-        conda_pkgs="$conda_pkgs python=3.6 numpy cloudpickle ipyparallel numba"
+        conda_pkgs="$conda_pkgs python=3.6 numpy ipyparallel numba"
     elif [[ "${PAGMO_BUILD}" == "Python27" || "${PAGMO_BUILD}" == "OSXPython27" ]]; then
-        conda_pkgs="$conda_pkgs python=2.7 numpy cloudpickle ipyparallel numba"
+        conda_pkgs="$conda_pkgs python=2.7 numpy ipyparallel numba"
     fi
 
     if [[ "${PAGMO_BUILD}" == Python* ]]; then
