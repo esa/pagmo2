@@ -18,8 +18,8 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     conda config --add channels conda-forge --force
 
     conda_pkgs="cmake>=3.2 eigen nlopt ipopt"
-    if [[ "${PAGMO_BUILD}" == "DebugGCC6" ]]; then
-        # NOTE: for a specific build, DebugGCC6, we are pinning the boost and boost-cpp packages versions to the current
+    if [[ "${PAGMO_BUILD}" == "Python36" ]]; then
+        # NOTE: for a specific build, Python36, we are pinning the boost and boost-cpp packages versions to the current
         # pinned conda-forge versions, which can be found out at:
         # https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
         # This ensures that we build with the same boost version we use to build the conda packages.
@@ -28,7 +28,7 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     else
         # For the other builds, we pick the latest boost available in conda, in order
         # to ensure better coverage of boost versions.
-        conda_pkgs="$conda_pkgs boost"
+        conda_pkgs="$conda_pkgs boost boost-cpp"
     fi
 
     if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "OSXPython36" ]]; then
