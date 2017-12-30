@@ -48,7 +48,6 @@ elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
 elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     export CXX=g++-4.8
     export CC=gcc-4.8
-    pip install cloudpickle
     # Install pagmo first.
     cd ..;
     mkdir build_pagmo;
@@ -153,7 +152,6 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
 elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     export CXX=clang++
     export CC=clang
-    pip install cloudpickle
     # Install pagmo first.
     cd ..;
     mkdir build_pagmo;
