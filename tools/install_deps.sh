@@ -17,12 +17,19 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     bash miniconda.sh -b -p $HOME/miniconda
     conda config --add channels conda-forge --force
 
-    # NOTE: here we are pinning the boost and boost-cpp packages versions to the current
-    # pinned conda-forge versions, which can be found out at:
-    # https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
-    # This ensures that we build with the same boost version we use to build the conda packages.
-    # NOTE: these version numbers need to be updated manually.
-    conda_pkgs="boost=1.65.1 boost-cpp=1.65.1 cmake>=3.2 eigen nlopt ipopt"
+    conda_pkgs="cmake>=3.2 eigen nlopt ipopt"
+    if [[ "${PAGMO_BUILD}" == "Python36" ]]; then
+        # NOTE: for a specific build, Python36, we are pinning the boost and boost-cpp packages versions to the current
+        # pinned conda-forge versions, which can be found out at:
+        # https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
+        # This ensures that we build with the same boost version we use to build the conda packages.
+        # NOTE: these version numbers need to be updated manually.
+        conda_pkgs="$conda_pkgs boost=1.65.1 boost-cpp=1.65.1"
+    else
+        # For the other builds, we pick the latest boost available in conda, in order
+        # to ensure better coverage of boost versions.
+        conda_pkgs="$conda_pkgs boost boost-cpp"
+    fi
 
     if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "OSXPython36" ]]; then
         conda_pkgs="$conda_pkgs python=3.6 numpy cloudpickle ipyparallel numba"
