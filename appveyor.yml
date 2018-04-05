@@ -95,7 +95,7 @@ build_script:
 test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest --output-on-failure
 
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] start /b ipcluster start
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] start /MIN ipcluster start
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd tools
