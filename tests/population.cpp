@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
 
@@ -313,10 +314,13 @@ BOOST_AUTO_TEST_CASE(population_champion_test)
         BOOST_CHECK((pop.champion_f() == vector_double{12., 5., -55.}));
     }
     // We check that requests to the champion cannot be made if the population
-    // contains a problem with more than 1 objective
+    // contains a problem with more than 1 objective or is stochastic
     population pop_mo{problem{zdt{}}, 2u};
     BOOST_CHECK_THROW(pop_mo.champion_f(), std::invalid_argument);
     BOOST_CHECK_THROW(pop_mo.champion_x(), std::invalid_argument);
+    population pop_sto{problem{inventory{12u}}, 2u};
+    BOOST_CHECK_THROW(pop_sto.champion_f(), std::invalid_argument);
+    BOOST_CHECK_THROW(pop_sto.champion_x(), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(population_serialization_test)

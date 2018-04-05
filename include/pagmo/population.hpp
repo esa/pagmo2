@@ -434,6 +434,10 @@ public:
             pagmo_throw(std::invalid_argument,
                         "The Champion of a population can only be extracted in single objective problems");
         }
+        if (m_prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,
+                        "The Champion of a population can only be extracted for non stochastic problems");
+        }
         return m_champion_x;
     }
 
@@ -457,6 +461,10 @@ public:
         if (m_prob.get_nobj() > 1u) {
             pagmo_throw(std::invalid_argument,
                         "The Champion of a population can only be extracted in single objective problems");
+        }
+        if (m_prob.is_stochastic()) {
+            pagmo_throw(std::invalid_argument,
+                        "The Champion of a population can only be extracted for non stochastic problems");
         }
         return m_champion_f;
     }
