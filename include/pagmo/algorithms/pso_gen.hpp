@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_PSO_GENERATIONAL_HPP
-#define PAGMO_ALGORITHMS_PSO_GENERATIONAL_HPP
+#ifndef PAGMO_ALGORITHMS_pso_gen_HPP
+#define PAGMO_ALGORITHMS_pso_gen_HPP
 
 #include <iomanip>
 #include <random>
@@ -71,7 +71,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class pso_generational
+class pso_gen
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
@@ -105,7 +105,7 @@ public:
      * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
-    pso_generational(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05,
+    pso_gen(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05,
                      double max_vel = 0.5, unsigned int variant = 5u, unsigned int neighb_type = 2u,
                      unsigned int neighb_param = 4u, bool memory = false,
                      unsigned int seed = pagmo::random_device::next())
@@ -606,9 +606,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a pso_generational::log_line_type containing: Gen, Fevals, gbest,
-     * Mean Vel., Mean lbest, Avg. Dist. as described in pso_generational::set_verbosity
-     * @return an <tt>std::vector</tt> of pso_generational::log_line_type containing the logged values
+     * <tt>std::vector</tt> is a pso_gen::log_line_type containing: Gen, Fevals, gbest,
+     * Mean Vel., Mean lbest, Avg. Dist. as described in pso_gen::set_verbosity
+     * @return an <tt>std::vector</tt> of pso_gen::log_line_type containing the logged values
      */
     const log_type &get_log() const
     {
@@ -692,7 +692,7 @@ private:
     void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
                                     std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        // The best position already visited by the swarm will be tracked in pso_generational::evolve() as particles are
+        // The best position already visited by the swarm will be tracked in pso_gen::evolve() as particles are
         // evaluated. Here we define the initial values of the variables that will do that tracking.
         gbX = pop.get_x()[pop.best_idx()];
         gbfit = pop.get_f()[pop.best_idx()];
@@ -876,6 +876,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::pso_generational)
+PAGMO_REGISTER_ALGORITHM(pagmo::pso_gen)
 
 #endif

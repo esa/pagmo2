@@ -148,7 +148,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
 
   >>> # hv and ref_point refer to the data above
   >>> hv.contributions(ref_point) 
-  array([ 0.5 ,  0.25,  0.5 ,  0.  ])
+  array([0.5 , 0.25, 0.5 , 0.  ])
 
 Since all of the methods above require a reference point, it is useful to generate
 one automatically using the :func:`~pygmo.nadir()`

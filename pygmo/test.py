@@ -319,6 +319,21 @@ class pso_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
 
+class pso_gen_test_case(_ut.TestCase):
+    """Test case for the UDA pso_gen
+
+    """
+
+    def runTest(self):
+        from .core import pso_gen
+        uda = pso_gen()
+        uda = pso_gen(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
+                  variant=5, neighb_type=2, neighb_param=4, memory=False)
+        uda = pso_gen(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
+                  variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
 
 class bee_colony_test_case(_ut.TestCase):
     """Test case for the UDA bee_colony
@@ -1630,6 +1645,7 @@ def run_test_suite(level=0):
     suite.addTest(_island_test.mp_island_test_case(level))
     suite.addTest(_island_test.ipyparallel_island_test_case(level))
     suite.addTest(pso_test_case())
+    suite.addTest(pso_gen_test_case())
     suite.addTest(bee_colony_test_case())
     suite.addTest(compass_search_test_case())
     suite.addTest(sa_test_case())

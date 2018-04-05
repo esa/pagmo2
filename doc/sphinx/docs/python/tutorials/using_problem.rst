@@ -71,7 +71,7 @@ Lets check how a fitness computation increases the counter:
 .. doctest::
 
     >>> prob.fitness([1,2,3,4,5])
-    array([ 14814.])
+    array([14814.])
     >>> prob.get_fevals() == 1
     True
 

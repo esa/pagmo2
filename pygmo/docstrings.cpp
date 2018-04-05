@@ -2705,7 +2705,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 }
 
 //----------
-std::string pso_generational_docstring()
+std::string pso_gen_docstring()
 {
     return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
 
@@ -2756,7 +2756,7 @@ when computing the social component of the velocity update.
 )";
 }
 
-std::string pso_generational_get_log_docstring()
+std::string pso_gen_get_log_docstring()
 {
     return R"(get_log()
 
@@ -3528,7 +3528,7 @@ Examples:
     >>> def my_fun(x):
     ...     return [x[0]+x[3], x[2], x[1]]
     >>> pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8)
-    array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
+    array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])
 )";
 }
 
@@ -3571,7 +3571,7 @@ Examples:
     >>> def my_fun(x):
     ...     return [x[0]+x[3], x[2], x[1]]
     >>> pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-2)
-    array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
+    array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])
 )";
 }
 
@@ -3594,11 +3594,11 @@ Examples:
     >>> pg.set_global_rng_seed(seed = 32)
     >>> pop = pg.population(prob = pg.ackley(5), size = 20)
     >>> print(pop.champion_f)
-    [ 17.26891503]
+    [17.26891503]
     >>> pg.set_global_rng_seed(seed = 32)
     >>> pop = pg.population(prob = pg.ackley(5), size = 20)
     >>> print(pop.champion_f)
-    [ 17.26891503]
+    [17.26891503]
     )";
 }
 
