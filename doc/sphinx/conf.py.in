@@ -370,3 +370,7 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# In sphinx > 1.6.1 this is needed to have the pagmo css working
+def setup(app):
+    app.add_stylesheet("pagmo.css") # also can be a full URL
