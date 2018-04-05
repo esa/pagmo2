@@ -47,13 +47,14 @@ namespace pagmo
 /// Particle Swarm Optimization
 /**
  *
- * As opposed to the main PSO algorithm implemented in pagmo, this version of Particle Swarm Optimization is 
+ * As opposed to the main PSO algorithm implemented in pagmo, this version of Particle Swarm Optimization is
  * generational. In other words, the velocity is first calculated for all particles, then the position is updated.
- * 
+ *
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    this PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each generation
+ *    this PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
+ * generation
  *
  * .. warning::
  *
@@ -104,9 +105,10 @@ public:
      * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
-    pso_generational(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
-        unsigned int variant = 5u, unsigned int neighb_type = 2u, unsigned int neighb_param = 4u, bool memory = false,
-        unsigned int seed = pagmo::random_device::next())
+    pso_generational(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05,
+                     double max_vel = 0.5, unsigned int variant = 5u, unsigned int neighb_type = 2u,
+                     unsigned int neighb_param = 4u, bool memory = false,
+                     unsigned int seed = pagmo::random_device::next())
         : m_max_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
           m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
           m_verbosity(0u), m_log()
@@ -169,10 +171,6 @@ public:
         if (prob.get_nf() != 1u) {
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
-        }
-        if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument,
-                        "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
         if (!pop.size()) {
             pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
@@ -262,7 +260,7 @@ public:
          */
         // For each generation
         for (decltype(m_max_gen) gen = 1u; gen <= m_max_gen; ++gen) {
-            
+
             // 1st iteration: velocity update
             for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
 
@@ -397,8 +395,6 @@ public:
                 }
             } // End of 2nd iteration
 
-
-
             if (prob.is_stochastic()) {
                 pop.get_problem().set_seed(urng(m_e));
                 // re-evaluate the whole population w.r.t. the new seed
@@ -409,27 +405,27 @@ public:
                     // We re-evaluate the fitness of the particle memory
                     lbfit[p] = prob.fitness(lbX[p]);
                 }
-                
+
                 best_fit = fit[0];
                 best_neighb = X[0];
-                
-                for( decltype(swarm_size) p = 1; p < swarm_size; p++ ) {
-                    if( prob.fitness(fit[p]) < best_fit ) {
+
+                for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
+                    if (fit[p] < best_fit) {
                         best_fit = fit[p];
                         best_neighb = X[p];
                     }
                 }
             } else {
-                for( decltype(swarm_size) p = 0; p < swarm_size; p++ ) {
+                for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
                     // We evaluate here the new individual fitness
                     fit[p] = prob.fitness(X[p]);
                 }
             }
 
-		    // We update the particles memory if a better point has been reached
-		    best_fit_improved = false;
+            // We update the particles memory if a better point has been reached
+            best_fit_improved = false;
 
-            for( decltype(swarm_size) p = 0; p < swarm_size; p++ ) {            
+            for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
                 if (fit[p] <= lbfit[p]) {
                     // update the particle's previous best position
                     lbfit[p] = fit[p];
@@ -443,7 +439,6 @@ public:
                     }
                 }
             }
-
 
             // reset swarm topology if no improvement was observed in the best found fitness value
             if (m_neighb_type == 4u && !best_fit_improved) initialize_topology__adaptive_random(neighb);
@@ -697,8 +692,8 @@ private:
     void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
                                     std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        // The best position already visited by the swarm will be tracked in pso_generational::evolve() as particles are evaluated.
-        // Here we define the initial values of the variables that will do that tracking.
+        // The best position already visited by the swarm will be tracked in pso_generational::evolve() as particles are
+        // evaluated. Here we define the initial values of the variables that will do that tracking.
         gbX = pop.get_x()[pop.best_idx()];
         gbfit = pop.get_f()[pop.best_idx()];
 

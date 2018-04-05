@@ -134,6 +134,8 @@ std::string nsga2_docstring();
 std::string nsga2_get_log_docstring();
 std::string pso_docstring();
 std::string pso_get_log_docstring();
+std::string pso_generational_docstring();
+std::string pso_generational_get_log_docstring();
 std::string sade_docstring();
 std::string sade_get_log_docstring();
 std::string simulated_annealing_docstring();
