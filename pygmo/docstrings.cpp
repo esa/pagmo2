@@ -3528,7 +3528,7 @@ Examples:
     >>> def my_fun(x):
     ...     return [x[0]+x[3], x[2], x[1]]
     >>> pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8)
-    array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
+    array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])
 )";
 }
 
@@ -3571,7 +3571,7 @@ Examples:
     >>> def my_fun(x):
     ...     return [x[0]+x[3], x[2], x[1]]
     >>> pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-2)
-    array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])
+    array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])
 )";
 }
 
@@ -3594,11 +3594,11 @@ Examples:
     >>> pg.set_global_rng_seed(seed = 32)
     >>> pop = pg.population(prob = pg.ackley(5), size = 20)
     >>> print(pop.champion_f)
-    [ 17.26891503]
+    [17.26891503]
     >>> pg.set_global_rng_seed(seed = 32)
     >>> pop = pg.population(prob = pg.ackley(5), size = 20)
     >>> print(pop.champion_f)
-    [ 17.26891503]
+    [17.26891503]
     )";
 }
 
