@@ -240,7 +240,8 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 # We set this to nothing otherwise in recent versions of the sphinx_bootstrap_theme
-# by default a sidebar could appear
+# by default a sidebar could appear. The exact syntax used and the solution 
+# was found by trial and errors.
 html_sidebars = {'**': []}
 
 # Additional templates that should be rendered to pages, maps page names to
@@ -372,5 +373,6 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # In sphinx > 1.6.1 this is needed to have the pagmo css working
+# see the https://github.com/ryan-roemer/sphinx-bootstrap-theme readme file, sphinx>=1.6.1 subsection
 def setup(app):
     app.add_stylesheet("pagmo.css") # also can be a full URL
