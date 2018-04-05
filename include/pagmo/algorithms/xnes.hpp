@@ -510,7 +510,7 @@ public:
         if (m_sigma0 == -1) {
             stream(ss, "auto");
         } else {
-            stream(ss, m_eta_b);
+            stream(ss, m_sigma0);
         }
         stream(ss, "\n\tStopping xtol: ", m_xtol);
         stream(ss, "\n\tStopping ftol: ", m_ftol);
