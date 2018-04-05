@@ -26,7 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE pso_generational_test
+#define BOOST_TEST_MODULE pso_gen_test
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -35,7 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/pso_generational.hpp>
+#include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE(magic)
 {
     // Experimental setup
     auto gen = 100u;
-    pso_generational uda{gen};
+    pso_gen uda{gen};
     algorithm algo{uda};
     algo.set_verbosity(10u);
 
@@ -132,45 +132,45 @@ BOOST_AUTO_TEST_CASE(magic)
 
 // BOOST_AUTO_TEST_CASE(construction)
 //{
-//    BOOST_CHECK_NO_THROW(pso_generational{});
-//    pso_generational user_algo{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+//    BOOST_CHECK_NO_THROW(pso_gen{});
+//    pso_gen user_algo{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
 //    BOOST_CHECK(user_algo.get_verbosity() == 0u);
 //    BOOST_CHECK(user_algo.get_seed() == 23u);
-//    BOOST_CHECK((user_algo.get_log() == pso_generational::log_type{}));
+//    BOOST_CHECK((user_algo.get_log() == pso_gen::log_type{}));
 //
-//    BOOST_CHECK_NO_THROW((pso_generational{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}));
+//    BOOST_CHECK_NO_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}));
 //
-//    BOOST_CHECK_THROW((pso_generational{100, -0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 2.3, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, -0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 2.3, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
 //
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, -1., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., -1., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 5., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 5., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, -1., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., -1., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 5., 2., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 5., 0.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
 //
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., -2.3, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., 1.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., -2.3, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 1.1, 5u, 2u, 4u, false, 23u}), std::invalid_argument);
 //
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., 0.1, 8u, 2u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., 0.1, 0u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 8u, 2u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 0u, 2u, 4u, false, 23u}), std::invalid_argument);
 //
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., 0.1, 5u, 6u, 4u, false, 23u}), std::invalid_argument);
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., 0.1, 5u, 0u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 6u, 4u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 0u, 4u, false, 23u}), std::invalid_argument);
 //
-//    BOOST_CHECK_THROW((pso_generational{100, 0.79, 2., 2., 0.1, 5u, 2u, 0u, false, 23u}), std::invalid_argument);
+//    BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 2u, 0u, false, 23u}), std::invalid_argument);
 //}
 //
 // BOOST_AUTO_TEST_CASE(evolve_test)
 //{
 //    // We then check that the evolve throws if called on unsuitable problems
-//    BOOST_CHECK_THROW(pso_generational{10u}.evolve(population{problem{rosenbrock{}}}), std::invalid_argument);
-//    BOOST_CHECK_THROW(pso_generational{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-//    BOOST_CHECK_THROW(pso_generational{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}),
-//    std::invalid_argument); BOOST_CHECK_THROW(pso_generational{10u}.evolve(population{problem{inventory{}}, 15u}),
+//    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{rosenbrock{}}}), std::invalid_argument);
+//    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
+//    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}),
+//    std::invalid_argument); BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{inventory{}}, 15u}),
 //    std::invalid_argument);
 //    // And a clean exit for 0 generations
 //    population pop{rosenbrock{2u}, 20u};
-//    BOOST_CHECK(pso_generational{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
+//    BOOST_CHECK(pso_gen{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 //
 //    // We check that evolution is deterministic if the
 //    // seed is controlled and for all algoritmic variants:
@@ -178,12 +178,12 @@ BOOST_AUTO_TEST_CASE(magic)
 //        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
 //            problem prob{rosenbrock{10u}};
 //            population pop1{prob, 5u, 23u};
-//            pso_generational user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
+//            pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
 //            user_algo1.set_verbosity(1u);
 //            pop1 = user_algo1.evolve(pop1);
 //
 //            population pop2{prob, 5u, 23u};
-//            pso_generational user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
+//            pso_gen user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
 //            user_algo2.set_verbosity(1u);
 //            pop2 = user_algo2.evolve(pop2);
 //            BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
@@ -199,18 +199,18 @@ BOOST_AUTO_TEST_CASE(magic)
 //        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
 //            problem prob{rosenbrock{10u}};
 //            population pop1{prob, 5u, 23u};
-//            pso_generational user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
+//            pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
 //            user_algo1.set_verbosity(1u);
 //            pop1 = user_algo1.evolve(pop1);
 //
 //            population pop2{prob, 5u, 23u};
-//            pso_generational user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
+//            pso_gen user_algo2{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
 //            user_algo2.set_verbosity(1u);
 //            pop2 = user_algo2.evolve(pop2);
 //            BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 //
 //            population pop3{prob, 5u, 23u};
-//            pso_generational user_algo3{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 0u};
+//            pso_gen user_algo3{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 0u};
 //            user_algo3.set_verbosity(1u);
 //            user_algo3.set_seed(23u);
 //            pop3 = user_algo3.evolve(pop3);
@@ -220,7 +220,7 @@ BOOST_AUTO_TEST_CASE(magic)
 //}
 // BOOST_AUTO_TEST_CASE(setters_getters_test)
 //{
-//    pso_generational user_algo{5000u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+//    pso_gen user_algo{5000u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
 //    user_algo.set_verbosity(200u);
 //    BOOST_CHECK(user_algo.get_verbosity() == 200u);
 //    user_algo.set_seed(23u);
@@ -236,14 +236,14 @@ BOOST_AUTO_TEST_CASE(magic)
 //    // Make one evolution
 //    problem prob{rosenbrock{25u}};
 //    population pop{prob, 5u, 23u};
-//    algorithm algo{pso_generational{500u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}};
+//    algorithm algo{pso_gen{500u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}};
 //    algo.set_verbosity(23u);
 //    pop = algo.evolve(pop);
 //
 //    // Store the string representation of p.
 //    std::stringstream ss;
 //    auto before_text = boost::lexical_cast<std::string>(algo);
-//    auto before_log = algo.extract<pso_generational>()->get_log();
+//    auto before_log = algo.extract<pso_gen>()->get_log();
 //    // Now serialize, deserialize and compare the result.
 //    {
 //        cereal::JSONOutputArchive oarchive(ss);
@@ -256,7 +256,7 @@ BOOST_AUTO_TEST_CASE(magic)
 //        iarchive(algo);
 //    }
 //    auto after_text = boost::lexical_cast<std::string>(algo);
-//    auto after_log = algo.extract<pso_generational>()->get_log();
+//    auto after_log = algo.extract<pso_gen>()->get_log();
 //    BOOST_CHECK_EQUAL(before_text, after_text);
 //    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and
 //    cereal

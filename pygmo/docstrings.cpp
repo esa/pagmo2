@@ -2705,7 +2705,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 }
 
 //----------
-std::string pso_generational_docstring()
+std::string pso_gen_docstring()
 {
     return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
 
@@ -2756,7 +2756,7 @@ when computing the social component of the velocity update.
 )";
 }
 
-std::string pso_generational_get_log_docstring()
+std::string pso_gen_get_log_docstring()
 {
     return R"(get_log()
 
