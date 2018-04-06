@@ -91,6 +91,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
 
     # Documentation.
     cd ../build
+    conda install -c conda-forge pandoc
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
     pip install 'sphinx<1.7' breathe requests[security] sphinx-bootstrap-theme nbsphinx;
     # Run doxygen and check the output.
