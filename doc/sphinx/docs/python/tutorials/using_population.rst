@@ -144,8 +144,8 @@ The best individual that ever lived in a population, i.e. the *champion* can als
 .. doctest::
 
     >>> # The decision vector
-    >>> pop1.champion_x
-    array([ 1.,  2.,  3.,  4.])
+    >>> pop1.champion_x # doctest: +NORMALIZE_WHITESPACE
+    array([1.,  2.,  3.,  4.]) 
     >>> # The fitness vector
     >>> pop1.champion_f
     array([8.43469444])
