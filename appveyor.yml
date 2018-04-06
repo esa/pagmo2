@@ -41,7 +41,7 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost boost-cpp eigen nlopt numpy cloudpickle
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda install -y "ipyparallel<1.6"
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda install -y "ipyparallel<6.1"
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
