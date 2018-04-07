@@ -37,6 +37,8 @@ extensions = [
     'breathe',
     'sphinx.ext.napoleon',
     'sphinx.ext.doctest',
+    #'nbsphinx',
+    #'IPython.sphinxext.ipython_console_highlighting'
 ]
 
 autoclass_content = 'both'
@@ -89,7 +91,7 @@ language = None
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -239,7 +241,10 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+# We set this to nothing otherwise in recent versions of the sphinx_bootstrap_theme
+# by default a sidebar could appear. The exact syntax used and the solution 
+# was found by trial and errors.
+html_sidebars = {'**': []}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -368,3 +373,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# In sphinx > 1.6.1 this is needed to have the pagmo css working
+# see the https://github.com/ryan-roemer/sphinx-bootstrap-theme readme file, sphinx>=1.6.1 subsection
+def setup(app):
+    app.add_stylesheet("pagmo.css") # also can be a full URL

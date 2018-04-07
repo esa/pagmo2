@@ -31,7 +31,7 @@ install:
 # https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
 # This ensures that we build with the same boost version we use to build the conda packages.
 # NOTE: these version numbers need to be updated manually.
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost=1.65.1 boost-cpp=1.65.1 eigen nlopt
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
 
@@ -40,7 +40,8 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost=1.65.1 boost-cpp=1.65.1 eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost boost-cpp eigen nlopt numpy cloudpickle
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda install -y "ipyparallel<6.1"
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
@@ -95,7 +96,7 @@ build_script:
 test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest --output-on-failure
 
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] start /b ipcluster start
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] start /MIN ipcluster start
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd tools
