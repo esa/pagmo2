@@ -6,6 +6,7 @@
     <title>Gradient and Hessians utilities &#8212; pagmo 2.7 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -264,8 +265,8 @@ and contain, in the lexicographic order requested by <a class="reference interna
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">)</span>
-<span class="go">array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">)</span> 
+<span class="go">array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -314,8 +315,8 @@ and contain, in the lexicographic order requested by <a class="reference interna
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span>
-<span class="go">array([ 1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.,  1.,  0.,  0.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span> 
+<span class="go">array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -335,7 +336,7 @@ and contain, in the lexicographic order requested by <a class="reference interna
     </p>
     <p>
         &copy; Copyright 2017, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>
