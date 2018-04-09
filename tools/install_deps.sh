@@ -24,7 +24,7 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
         # https://github.com/conda-forge/conda-forge.github.io/blob/master/scripts/pin_the_slow_way.py
         # This ensures that we build with the same boost version we use to build the conda packages.
         # NOTE: these version numbers need to be updated manually.
-        conda_pkgs="$conda_pkgs boost=1.65.1 boost-cpp=1.65.1"
+        conda_pkgs="$conda_pkgs boost=1.66.0 boost-cpp=1.66.0"
     else
         # For the other builds, we pick the latest boost available in conda, in order
         # to ensure better coverage of boost versions.

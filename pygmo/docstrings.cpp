@@ -2801,8 +2801,6 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 )";
 }
 
-
-
 std::string simulated_annealing_docstring()
 {
     return R"(__init__(Ts = 10., Tf = .1, n_T_adj = 10, n_range_adj = 10, bin_size = 10, start_range = 1., seed = random)
@@ -3527,7 +3525,7 @@ Examples:
     >>> import pygmo as pg
     >>> def my_fun(x):
     ...     return [x[0]+x[3], x[2], x[1]]
-    >>> pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8)
+    >>> pg.estimate_gradient(callable = my_fun, x = [0]*4, dx = 1e-8) # doctest: +NORMALIZE_WHITESPACE
     array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])
 )";
 }
@@ -3570,7 +3568,7 @@ Examples:
     >>> import pygmo as pg
     >>> def my_fun(x):
     ...     return [x[0]+x[3], x[2], x[1]]
-    >>> pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-2)
+    >>> pg.estimate_gradient_h(callable = my_fun, x = [0]*4, dx = 1e-2) # doctest: +NORMALIZE_WHITESPACE
     array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])
 )";
 }
