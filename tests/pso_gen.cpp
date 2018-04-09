@@ -244,7 +244,7 @@ struct my_sto_prob {
     user_algo.set_seed(23u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK(user_algo.get_name().find("Particle Swarm") != std::string::npos);
-    BOOST_CHECK(user_algo.get_name().find("generational") != std::string::npos);
+    BOOST_CHECK(user_algo.get_name().find("GPSO") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Verbosity") != std::string::npos);
     BOOST_CHECK_NO_THROW(user_algo.get_log());
 }

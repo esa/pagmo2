@@ -26,13 +26,17 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_pso_gen_HPP
-#define PAGMO_ALGORITHMS_pso_gen_HPP
+#ifndef PAGMO_ALGORITHMS_PSO_GEN_HPP
+#define PAGMO_ALGORITHMS_PSO_GEN_HPP
 
 #include <iomanip>
 #include <random>
 #include <string>
 #include <tuple>
+#include <cstdlib>
+#include <cmath>
+#include <cinttypes>
+
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
@@ -44,6 +48,27 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+
+// Usual trick with global read-only data.
+template <typename = void>
+struct pso_gen_statics {
+    /*! @brief Von Neumann neighborhood
+     *  (increments on particles' lattice coordinates that produce the coordinates of their neighbors)
+     *
+     *  The von Neumann neighbourhood of a point includes all the points at a Hamming distance of 1.
+     *
+     *  - http://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+     *  - http://mathworld.wolfram.com/vonNeumannNeighborhood.html
+     *  - http://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
+     */    
+    static const int vonNeumann_neighb_diff[4][2];
+};
+
+// Init of the statics data
+template <typename T>
+const int pso_gen_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+
 /// Particle Swarm Optimization
 /**
  *
@@ -53,13 +78,13 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    this PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
- * generation
+ *    This PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
+ * generation.
  *
  * .. warning::
  *
  *    The algorithm is not suitable for multi-objective problems, nor for
- *    constrained optimization
+ *    constrained optimization.
  *
  * .. seealso::
  *
@@ -71,7 +96,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class pso_gen
+class pso_gen : public pso_gen_statics<>
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
@@ -577,7 +602,7 @@ public:
      */
     std::string get_name() const
     {
-        return "PSO (generational): Particle Swarm Optimization";
+        return "GPSO: Generational Particle Swarm Optimization";
     }
     /// Extra informations
     /**
@@ -745,17 +770,6 @@ private:
             }
         }
     }
-
-    /*! @brief Von Neumann neighborhood
-     *  (increments on particles' lattice coordinates that produce the coordinates of their neighbors)
-     *
-     *  The von Neumann neighbourhood of a point includes all the points at a Hamming distance of 1.
-     *
-     *  - http://en.wikipedia.org/wiki/Von_Neumann_neighborhood
-     *  - http://mathworld.wolfram.com/vonNeumannNeighborhood.html
-     *  - http://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
-     */
-    const int vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     /**
      *  @brief Arranges particles in a lattice, where each interacts with its immediate 4 neighbors to the N, S, E and
