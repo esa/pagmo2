@@ -1819,7 +1819,7 @@ when computing the social component of the velocity update.</p>
 <code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.pso.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
 parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-constructed with a <a class="reference internal" href="#pygmo.de1220" title="pygmo.de1220"><code class="xref py py-class docutils literal"><span class="pre">de1220</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.pso"><code class="xref py py-class docutils literal"><span class="pre">pso</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1856,7 +1856,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <span class="go"> 351           7040        6.09414    0.000187343        16.8875     0.00172307</span>
 <span class="go"> 401           8040        5.78415    0.000524536        16.5073     0.00234197</span>
 <span class="go"> 451           9040         5.4662     0.00018305        16.2339    0.000958182</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de1220</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pso</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...</span>
 </pre></div>

@@ -37,7 +37,7 @@ Efficient implementantions of bio-inspired and evolutionary algorithms are sided
 to build a super-algorithm exploiting algoritmic cooperation via the asynchronous, generalized island model.
 
 Pagmo and pygmo can be used to solve constrained, unconstrained, single objective, multiple objective, continuous and integer optimization
-problems, as well as to perform research on novel algorithms and paradigms and easily compare them to state of the
+problems, stochastic and deterministic problems, as well as to perform research on novel algorithms and paradigms and easily compare them to state of the
 art implementations of established ones.
 
 If you are using pagmo/pygmo as part of your research, teaching, or other activities, we would be grateful if you could star
