@@ -22,6 +22,7 @@ Improved Harmony Serach                                    :cpp:class:`pagmo::ih
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U            
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U            
 Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::pso`                   :class:`pygmo.pso`                        S-U            
+Particle Swarm Optimization Generational (GPSO)            :cpp:class:`pagmo::pso_gen`               :class:`pygmo.pso_gen`                    S-U   (sto)    
 (N+1)-ES Simple Evolutionary Algorithm                     :cpp:class:`pagmo::sea`                   :class:`pygmo.sea`                        S-U   (sto)    
 Simple Genetic Algorithm                                   :cpp:class:`pagmo::sga`                   :class:`pygmo.sga`                        S-U-I (sto)    
 Corana's Simulated Annealing (SA)                          :cpp:class:`pagmo::simulated_annealing`   :class:`pygmo.simulated_annealing`        S-U            
@@ -44,21 +45,23 @@ Augmented Lagrangian algorithm     :cpp:class:`pagmo::nlopt`                    
 
 Local optimization 
 ^^^^^^^^^^^^^^^^^^
-====================================================== ========================================= ========================================= =============== 
-Common Name                                            Docs of the C++ class                     Docs of the python class                             Type           
-====================================================== ========================================= ========================================= =============== 
-Compass Search (CS)                                    :cpp:class:`pagmo::compass_search`        :class:`pygmo.compass_search`             S-CU           
-COBYLA (from NLopt)                                    :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-CU           
-BOBYQA (from NLopt)                                    :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-NEWUOA + bound constraints (from NLopt)                :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-PRAXIS (from NLopt)                                    :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-Nelder-Mead simplex (from NLopt)                       :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-sbplx (from NLopt)                                     :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-MMA (Method of Moving Asymptotes) (from NLopt)         :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-CU           
-CCSA (from NLopt)                                      :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-CU           
-SLSQP (from NLopt)                                     :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-CU           
-low-storage BFGS (from NLopt)                          :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-preconditioned truncated Newton (from NLopt)           :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-Shifted limited-memory variable-metric (from NLopt)    :cpp:class:`pagmo::nlopt`                 :class:`pygmo.nlopt`                      S-U            
-Ipopt                                                  :cpp:class:`pagmo::ipopt`                 :class:`pygmo.ipopt`                      S-CU           
-====================================================== ========================================= ========================================= =============== 
+====================================================== ============================================================================================= ========================================================================================= ===============
+Common Name                                            Docs of the C++ class                                                                         Docs of the python class                                                                  Type           
+====================================================== ============================================================================================= ========================================================================================= ===============
+Compass Search (CS)                                    :cpp:class:`pagmo::compass_search`                                                            :class:`pygmo.compass_search`                                                             S-CU           
+COBYLA (from NLopt)                                    :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-CU           
+BOBYQA (from NLopt)                                    :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+NEWUOA + bound constraints (from NLopt)                :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+PRAXIS (from NLopt)                                    :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+Nelder-Mead simplex (from NLopt)                       :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+sbplx (from NLopt)                                     :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+MMA (Method of Moving Asymptotes) (from NLopt)         :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-CU           
+CCSA (from NLopt)                                      :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-CU           
+SLSQP (from NLopt)                                     :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-CU           
+low-storage BFGS (from NLopt)                          :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+preconditioned truncated Newton (from NLopt)           :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+Shifted limited-memory variable-metric (from NLopt)    :cpp:class:`pagmo::nlopt`                                                                     :class:`pygmo.nlopt`                                                                      S-U            
+Ipopt                                                  :cpp:class:`pagmo::ipopt`                                                                     :class:`pygmo.ipopt`                                                                      S-CU           
+SNOPT (in pagmo_plugins_non_free affiliated package)   `pagmo::snopt7 <https://esa.github.io/pagmo_plugins_nonfree/cpp_snopt7.html>`__               `pygmo.snopt7 <https://esa.github.io/pagmo_plugins_nonfree/py_snopt7.html>`__             S-CU          
+WORHP (in pagmo_plugins_non_free affiliated package)   `pagmo::wohrp <https://esa.github.io/pagmo_plugins_nonfree/cpp_worhp.html>`__                 `pygmo.wohrp <https://esa.github.io/pagmo_plugins_nonfree/py_worhp.html>`__               S-CU
+====================================================== ============================================================================================= ========================================================================================= ===============

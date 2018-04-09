@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_PSO_HPP
-#define PAGMO_ALGORITHMS_PSO_HPP
+#ifndef PAGMO_ALGORITHMS_PSO_GEN_HPP
+#define PAGMO_ALGORITHMS_PSO_GEN_HPP
 
 #include <iomanip>
 #include <random>
@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <cmath>
 #include <cinttypes>
 
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -44,10 +45,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/generic.hpp>
 
+namespace pagmo
+{
+
 
 // Usual trick with global read-only data.
 template <typename = void>
-struct pso_statics {
+struct pso_gen_statics {
     /*! @brief Von Neumann neighborhood
      *  (increments on particles' lattice coordinates that produce the coordinates of their neighbors)
      *
@@ -62,65 +66,25 @@ struct pso_statics {
 
 // Init of the statics data
 template <typename T>
-const int pso_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+const int pso_gen_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-namespace pagmo
-{
 
 /// Particle Swarm Optimization
 /**
- * \image html pso.png width=5cm
  *
- * Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms.
- * In PSO each point has memory of the position where it achieved the best performance \f$\mathbf x^l_i\f$ (local
- * memory)
- * and of the best decision vector \f$ \mathbf x^g \f$ in a certain neighbourhood, and uses this information to update
- * its position using the equations (constriction coefficient):
- * \f[
- * \begin{array}{l}
- *	\mathbf v_{i+1} = \omega \left( \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right)
- *	+ \eta_2 \mathbf r_2 \cdot \left(  \mathbf x_i - \mathbf x^g \right) \right)
- * \\
- *	\mathbf x_{i+1} = \mathbf x_i + \mathbf v_i
- *	\end{array}
- * \f]
- * or (inertia weight):
- * \f[
- * \begin{array}{l}
- *	\mathbf v_{i+1} = \omega \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right)
- *	+ \eta_2 \mathbf r_2 \cdot \left(  \mathbf x_i - \mathbf x^g \right)
- * \\
- *	\mathbf x_{i+1} = \mathbf x_i + \mathbf v_i
- *	\end{array}
- * \f]
- *
- * The user can specify the values for \f$\omega, \eta_1, \eta_2\f$ and the magnitude of the maximum velocity
- * allowed (normalized with respect ot the bounds). The user can specify one of five variants where the velocity
- * update rule differs on the definition of the random vectors \f$r_1\f$ and \f$r_2\f$:
- *
- * \li Variant 1: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$
- *... (inertia weight)
- * \li Variant 2: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{11}, r_{11}, ..., r_{1n}]\f$
- *... (inertia weight)
- * \li Variant 3: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_2, r_2, ..., r_2]\f$ ... (inertia
- *weight)
- * \li Variant 4: \f$\mathbf r_1 = [r_1, r_1, ..., r_1]\f$, \f$\mathbf r_2 = [r_1, r_1, ..., r_1]\f$ ... (inertia
- *weight)
- * \li Variant 5: \f$\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\f$, \f$\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\f$
- *... (constriction coefficient)
- * \li Variant 6: Fully Informed Particle Swarm (FIPS)
- *
+ * As opposed to the main PSO algorithm implemented in pagmo, this version of Particle Swarm Optimization is
+ * generational. In other words, the velocity is first calculated for all particles, then the position is updated.
  *
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the constriction
- *    coefficient velocity update formula
+ *    This PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
+ * generation.
  *
  * .. warning::
  *
  *    The algorithm is not suitable for multi-objective problems, nor for
- *    constrained or stochastic optimization
+ *    constrained optimization.
  *
  * .. seealso::
  *
@@ -128,11 +92,11 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
+ *    :cpp:class:`pagmo::pso` for the implementation of non-generational PSO
  *
  * \endverbatim
  */
-class pso : public pso_statics<>
+class pso_gen : public pso_gen_statics<>
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
@@ -166,9 +130,10 @@ public:
      * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
-    pso(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
-        unsigned int variant = 5u, unsigned int neighb_type = 2u, unsigned int neighb_param = 4u, bool memory = false,
-        unsigned int seed = pagmo::random_device::next())
+    pso_gen(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05,
+                     double max_vel = 0.5, unsigned int variant = 5u, unsigned int neighb_type = 2u,
+                     unsigned int neighb_param = 4u, bool memory = false,
+                     unsigned int seed = pagmo::random_device::next())
         : m_max_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
           m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
           m_verbosity(0u), m_log()
@@ -232,10 +197,6 @@ public:
             pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them");
         }
-        if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument,
-                        "The problem appears to be stochastic " + get_name() + " cannot deal with it");
-        }
         if (!pop.size()) {
             pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
         }
@@ -268,6 +229,7 @@ public:
         double new_x;  // Temporary variable
 
         std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
+        std::uniform_int_distribution<unsigned int> urng;
 
         // Initialise the minimum and maximum velocity
         for (decltype(dim) i = 0u; i < dim; ++i) {
@@ -323,8 +285,8 @@ public:
          */
         // For each generation
         for (decltype(m_max_gen) gen = 1u; gen <= m_max_gen; ++gen) {
-            best_fit_improved = false;
-            // For each particle in the swarm
+
+            // 1st iteration: velocity update
             for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
 
                 // identify the current particle's best neighbour
@@ -420,6 +382,10 @@ public:
                         m_V[p][d] = m_omega * (m_V[p][d] + sum_forces / static_cast<double>(neighb[p].size()));
                     }
                 }
+            }
+
+            // 2nd iteration: position update
+            for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
 
                 // We now check that the velocity does not exceed the maximum allowed per component
                 // and we perform the position update and the feasibility correction
@@ -452,10 +418,39 @@ public:
                     }
                     X[p][d] = new_x;
                 }
-                // We evaluate here the new individual fitness
-                // as to be able to update the global best in real time
-                fit[p] = prob.fitness(X[p]);
+            } // End of 2nd iteration
 
+            if (prob.is_stochastic()) {
+                pop.get_problem().set_seed(urng(m_e));
+                // re-evaluate the whole population w.r.t. the new seed
+
+                for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
+                    // We evaluate here the new individual fitness
+                    fit[p] = prob.fitness(X[p]);
+                    // We re-evaluate the fitness of the particle memory
+                    lbfit[p] = prob.fitness(lbX[p]);
+                }
+
+                best_fit = fit[0];
+                best_neighb = X[0];
+
+                for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
+                    if (fit[p] < best_fit) {
+                        best_fit = fit[p];
+                        best_neighb = X[p];
+                    }
+                }
+            } else {
+                for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
+                    // We evaluate here the new individual fitness
+                    fit[p] = prob.fitness(X[p]);
+                }
+            }
+
+            // We update the particles memory if a better point has been reached
+            best_fit_improved = false;
+
+            for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
                 if (fit[p] <= lbfit[p]) {
                     // update the particle's previous best position
                     lbfit[p] = fit[p];
@@ -468,7 +463,8 @@ public:
                         best_fit_improved = true;
                     }
                 }
-            } // End of loop on the population members
+            }
+
             // reset swarm topology if no improvement was observed in the best found fitness value
             if (m_neighb_type == 4u && !best_fit_improved) initialize_topology__adaptive_random(neighb);
             // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
@@ -606,7 +602,7 @@ public:
      */
     std::string get_name() const
     {
-        return "PSO: Particle Swarm Optimization";
+        return "GPSO: Generational Particle Swarm Optimization";
     }
     /// Extra informations
     /**
@@ -635,9 +631,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a pso::log_line_type containing: Gen, Fevals, gbest,
-     * Mean Vel., Mean lbest, Avg. Dist. as described in pso::set_verbosity
-     * @return an <tt>std::vector</tt> of pso::log_line_type containing the logged values
+     * <tt>std::vector</tt> is a pso_gen::log_line_type containing: Gen, Fevals, gbest,
+     * Mean Vel., Mean lbest, Avg. Dist. as described in pso_gen::set_verbosity
+     * @return an <tt>std::vector</tt> of pso_gen::log_line_type containing the logged values
      */
     const log_type &get_log() const
     {
@@ -721,8 +717,8 @@ private:
     void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
                                     std::vector<std::vector<vector_double::size_type>> &neighb) const
     {
-        // The best position already visited by the swarm will be tracked in pso::evolve() as particles are evaluated.
-        // Here we define the initial values of the variables that will do that tracking.
+        // The best position already visited by the swarm will be tracked in pso_gen::evolve() as particles are
+        // evaluated. Here we define the initial values of the variables that will do that tracking.
         gbX = pop.get_x()[pop.best_idx()];
         gbfit = pop.get_f()[pop.best_idx()];
 
@@ -774,17 +770,6 @@ private:
             }
         }
     }
-
-    /*! @brief Von Neumann neighborhood
-     *  (increments on particles' lattice coordinates that produce the coordinates of their neighbors)
-     *
-     *  The von Neumann neighbourhood of a point includes all the points at a Hamming distance of 1.
-     *
-     *  - http://en.wikipedia.org/wiki/Von_Neumann_neighborhood
-     *  - http://mathworld.wolfram.com/vonNeumannNeighborhood.html
-     *  - http://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
-     */
-    //const int vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     /**
      *  @brief Arranges particles in a lattice, where each interacts with its immediate 4 neighbors to the N, S, E and
@@ -905,6 +890,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::pso)
+PAGMO_REGISTER_ALGORITHM(pagmo::pso_gen)
 
 #endif
