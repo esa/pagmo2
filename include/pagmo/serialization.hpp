@@ -39,8 +39,41 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 #if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wexceptions"
+
+#if defined(__apple_build_version__)
+
+// LLVM 3.2 -> Xcode 4.6.
+#if __clang_major__ > 4 || (__clang_major__ == 4 && __clang_minor__ >= 6)
+
 #pragma GCC diagnostic ignored "-Wunused-private-field"
+
+#endif
+
+// LLVM 3.7 -> Xcode 7.0.
+#if __clang_major__ >= 7
+
+#pragma GCC diagnostic ignored "-Wexceptions"
+
+#endif
+
+#else
+
+// LLVM 3.2.
+#if __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 2)
+
+#pragma GCC diagnostic ignored "-Wunused-private-field"
+
+#endif
+
+// LLVM 3.7.
+#if __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7)
+
+#pragma GCC diagnostic ignored "-Wexceptions"
+
+#endif
+
+#endif
+
 #endif
 #endif
 
