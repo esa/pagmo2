@@ -29,13 +29,13 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_PSO_HPP
 #define PAGMO_ALGORITHMS_PSO_HPP
 
+#include <cinttypes>
+#include <cmath>
+#include <cstdlib>
 #include <iomanip>
 #include <random>
 #include <string>
 #include <tuple>
-#include <cstdlib>
-#include <cmath>
-#include <cinttypes>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
@@ -44,6 +44,11 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/generic.hpp>
 
+namespace pagmo
+{
+
+namespace detail
+{
 
 // Usual trick with global read-only data.
 template <typename = void>
@@ -53,10 +58,10 @@ struct pso_statics {
      *
      *  The von Neumann neighbourhood of a point includes all the points at a Hamming distance of 1.
      *
-     *  - http://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+     *  - https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
      *  - http://mathworld.wolfram.com/vonNeumannNeighborhood.html
-     *  - http://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
-     */    
+     *  - https://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
+     */
     static const int vonNeumann_neighb_diff[4][2];
 };
 
@@ -64,8 +69,7 @@ struct pso_statics {
 template <typename T>
 const int pso_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-namespace pagmo
-{
+} // namespace detail
 
 /// Particle Swarm Optimization
 /**
@@ -128,11 +132,11 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://dx.doi.org/10.1007/s11721-007-0002-0 for a survey
+ *    https://link.springer.com/article/10.1007%2Fs11721-007-0002-0 for a survey
  *
  * \endverbatim
  */
-class pso : public pso_statics<>
+class pso
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
@@ -775,17 +779,6 @@ private:
         }
     }
 
-    /*! @brief Von Neumann neighborhood
-     *  (increments on particles' lattice coordinates that produce the coordinates of their neighbors)
-     *
-     *  The von Neumann neighbourhood of a point includes all the points at a Hamming distance of 1.
-     *
-     *  - http://en.wikipedia.org/wiki/Von_Neumann_neighborhood
-     *  - http://mathworld.wolfram.com/vonNeumannNeighborhood.html
-     *  - http://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
-     */
-    //const int vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
     /**
      *  @brief Arranges particles in a lattice, where each interacts with its immediate 4 neighbors to the N, S, E and
      * W.
@@ -821,9 +814,9 @@ private:
             p_y = pidx / cols;
 
             for (unsigned int nidx = 0u; nidx < 4u; nidx++) {
-                n_x = (p_x + vonNeumann_neighb_diff[nidx][0]) % cols;
+                n_x = (p_x + detail::pso_statics<>::vonNeumann_neighb_diff[nidx][0]) % cols;
                 if (n_x < 0) n_x = cols + n_x;
-                n_y = (p_y + vonNeumann_neighb_diff[nidx][1]) % rows;
+                n_y = (p_y + detail::pso_statics<>::vonNeumann_neighb_diff[nidx][1]) % rows;
                 if (n_y < 0) n_y = rows + n_y;
 
                 neighb[static_cast<unsigned int>(pidx)].push_back(static_cast<unsigned int>(n_y * cols + n_x));

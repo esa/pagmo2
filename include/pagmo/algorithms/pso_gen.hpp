@@ -29,14 +29,13 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_PSO_GEN_HPP
 #define PAGMO_ALGORITHMS_PSO_GEN_HPP
 
+#include <cinttypes>
+#include <cmath>
+#include <cstdlib>
 #include <iomanip>
 #include <random>
 #include <string>
 #include <tuple>
-#include <cstdlib>
-#include <cmath>
-#include <cinttypes>
-
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
@@ -48,6 +47,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+namespace detail
+{
 
 // Usual trick with global read-only data.
 template <typename = void>
@@ -57,10 +58,10 @@ struct pso_gen_statics {
      *
      *  The von Neumann neighbourhood of a point includes all the points at a Hamming distance of 1.
      *
-     *  - http://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+     *  - https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
      *  - http://mathworld.wolfram.com/vonNeumannNeighborhood.html
-     *  - http://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
-     */    
+     *  - https://en.wikibooks.org/wiki/Cellular_Automata/Neighborhood
+     */
     static const int vonNeumann_neighb_diff[4][2];
 };
 
@@ -68,6 +69,7 @@ struct pso_gen_statics {
 template <typename T>
 const int pso_gen_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
+} // namespace detail
 
 /// Particle Swarm Optimization
 /**
@@ -79,7 +81,7 @@ const int pso_gen_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {
  * .. note::
  *
  *    This PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
- * generation.
+ *    generation.
  *
  * .. warning::
  *
@@ -96,7 +98,7 @@ const int pso_gen_statics<T>::vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {
  *
  * \endverbatim
  */
-class pso_gen : public pso_gen_statics<>
+class pso_gen
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
@@ -130,10 +132,9 @@ public:
      * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
-    pso_gen(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05,
-                     double max_vel = 0.5, unsigned int variant = 5u, unsigned int neighb_type = 2u,
-                     unsigned int neighb_param = 4u, bool memory = false,
-                     unsigned int seed = pagmo::random_device::next())
+    pso_gen(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
+            unsigned int variant = 5u, unsigned int neighb_type = 2u, unsigned int neighb_param = 4u,
+            bool memory = false, unsigned int seed = pagmo::random_device::next())
         : m_max_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
           m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
           m_verbosity(0u), m_log()
@@ -806,9 +807,9 @@ private:
             p_y = pidx / cols;
 
             for (unsigned int nidx = 0u; nidx < 4u; nidx++) {
-                n_x = (p_x + vonNeumann_neighb_diff[nidx][0]) % cols;
+                n_x = (p_x + detail::pso_gen_statics<>::vonNeumann_neighb_diff[nidx][0]) % cols;
                 if (n_x < 0) n_x = cols + n_x;
-                n_y = (p_y + vonNeumann_neighb_diff[nidx][1]) % rows;
+                n_y = (p_y + detail::pso_gen_statics<>::vonNeumann_neighb_diff[nidx][1]) % rows;
                 if (n_y < 0) n_y = rows + n_y;
 
                 neighb[static_cast<unsigned int>(pidx)].push_back(static_cast<unsigned int>(n_y * cols + n_x));
