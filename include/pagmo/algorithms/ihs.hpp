@@ -82,7 +82,8 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://dx.doi.org/10.1016/j.amc.2006.11.033 for the paper that introduces and explains improved harmony search.
+ *    https://linkinghub.elsevier.com/retrieve/pii/S0096300306015098 for the paper that introduces and explains improved
+ *    harmony search.
  *
  * \endverbatim
  */

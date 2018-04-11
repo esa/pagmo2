@@ -379,7 +379,7 @@ public:
                 retval += std::max(0., fit[j + 1] - c_tol[j]) / m_c_max[j];
             }
         }
-        retval /= (double)nc;
+        retval /= static_cast<double>(nc);
         return retval;
     }
     // According to the population, the first penalty may or may not be applied
@@ -407,7 +407,7 @@ public:
     mutable std::unordered_map<vector_double, vector_double, detail::hash_vf<double>, detail::equal_to_vf<double>>
         m_fitness_map;
 };
-}
+} // namespace detail
 
 /// Self-adaptive constraints handling
 /**
@@ -603,9 +603,9 @@ public:
                     // Prints a log line after each call to the inner algorithm
                     // 1 - Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Iter:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "Infeasibility:", std::setw(15), "Violated:", std::setw(15), "Viol. Norm:",
-                              std::setw(15), "N. Feasible:", '\n');
+                        print("\n", std::setw(7), "Iter:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "Infeasibility:", std::setw(15), "Violated:", std::setw(15),
+                              "Viol. Norm:", std::setw(15), "N. Feasible:", '\n');
                     }
                     // 2 - Print
                     auto cur_best_f = pop.get_f()[pop.best_idx()];

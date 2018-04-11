@@ -785,7 +785,7 @@ private:
         unsigned int i;
         double mu0 = 2.5, d = 1.0, s, mu1, tmp, tmp1, tmp2;
         double *tmpx;
-        tmpx = (double *)malloc(sizeof(double) * nx);
+        tmpx = static_cast<double *>(malloc(sizeof(double) * nx));
         s = 1.0 - 1.0 / (2.0 * std::pow(nx + 20.0, 0.5) - 8.2);
         mu1 = -std::pow((mu0 * mu0 - d) / s, 0.5);
 
@@ -1134,7 +1134,7 @@ private:
         unsigned int i, j;
         double *w;
         double w_max = 0, w_sum = 0;
-        w = (double *)malloc(cf_num * sizeof(double));
+        w = static_cast<double *>(malloc(cf_num * sizeof(double)));
         for (i = 0u; i < cf_num; ++i) {
             fit[i] += bias[i];
             w[i] = 0;
