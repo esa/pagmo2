@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_SERIALIZATION_HPP
 #define PAGMO_SERIALIZATION_HPP
 
+// Let's disable a few compiler warnings emitted by the cereal code.
 #if defined(__clang__) || defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
@@ -36,6 +37,10 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #if __GNUC__ >= 7
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wexceptions"
+#pragma GCC diagnostic ignored "-Wunused-private-field"
 #endif
 #endif
 
@@ -137,6 +142,6 @@ inline void CEREAL_LOAD_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C, O, MR,
     }
 }
 #endif
-}
+} // namespace cereal
 
 #endif

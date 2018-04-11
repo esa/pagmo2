@@ -40,6 +40,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp> // needed for cereal registration macro
 #include <pagmo/types.hpp>
 
+// Let's disable a few compiler warnings emitted by the cec2009 code.
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 namespace pagmo
 {
 // forward declearing the class to allow the following definition of pointers to its methods
@@ -882,5 +888,9 @@ const std::vector<typename cec2009_statics<T>::func_ptr> cec2009_statics<T>::m_c
 } // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::cec2009)
+
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif
