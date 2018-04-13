@@ -21,6 +21,7 @@ Differential Evolution (DE)                                :class:`pygmo.de`    
 Self-adaptive DE (jDE and iDE)                             :class:`pygmo.sade`                       S-U             Exposed from C++
 Self-adaptive DE (de_1220 aka pDE)                         :class:`pygmo.de1220`                     S-U             Exposed from C++
 Particle Swarm Optimization (PSO)                          :class:`pygmo.pso`                        S-U             Exposed from C++
+Particle Swarm Optimization Generational (GPSO)            :class:`pygmo.pso_gen`                    S-U             Exposed from C++
 (N+1)-ES Simple Evolutionary Algorithm                     :class:`pygmo.sea`                        S-U (sto)       Exposed from C++
 Simple Genetic Algorithm                                   :class:`pygmo.sga`                        S-U (sto)       Exposed from C++
 Corana's Simulated Annealing (SA)                          :class:`pygmo.simulated_annealing`        S-U             Exposed from C++
@@ -125,6 +126,11 @@ Algorithms exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.pso
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.pso_gen
    :members:
 
 -------------------------------------------------------------
