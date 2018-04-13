@@ -1150,7 +1150,8 @@ The best known solution for the )"
            + name + R"( problem.
 
 Returns:
-    1D NumPy float array: the best known solution for the )" + name + R"( problem
+    1D NumPy float array: the best known solution for the )"
+           + name + R"( problem
 
 )";
 }
@@ -2709,7 +2710,7 @@ std::string pso_gen_docstring()
 {
     return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
 
-Particle Swarm Optimization (generational) is identical to `pagmo::pso`, but does update the velocities of each particle before new particle positions are computed (taking
+Particle Swarm Optimization (generational) is identical to :class:`~pygmo.pso`, but does update the velocities of each particle before new particle positions are computed (taking
 into consideration all updated particle velocities). Each particle is thus evaluated on the same seed within a generation as opposed to the standard PSO which evaluates single particle 
 at a time. Consequently, the generational PSO algorithm is suited for stochastic optimization problems.
 
@@ -4683,7 +4684,8 @@ Args:
     seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
       election/replacement policies (see :attr:`~pygmo.)"
            + algo + R"(.selection` and
-      :attr:`~pygmo.)" + algo + R"(.replacement`)
+      :attr:`~pygmo.)"
+           + algo + R"(.replacement`)
 
 Raises:
     OverflowError: if the attribute is set to an integer which is negative or too large
@@ -5567,4 +5569,4 @@ Examples:
 )";
 }
 
-} // namespace
+} // namespace pygmo
