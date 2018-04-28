@@ -65,10 +65,12 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
                   linspace(0.1, 0.9, len(fronts)),
                   linspace(0.1, 0.9, len(fronts))))
 
+    fig, ax = plt.subplots()
+
     for ndr, front in enumerate(fronts):
         # We plot the points
         for idx in front:
-            plt.plot(points[idx][comp[0]], points[idx][
+            ax.plot(points[idx][comp[0]], points[idx][
                      comp[1]], marker=marker, color=cl[ndr])
         # We plot the fronts
         # Frist compute the points coordinates
@@ -78,11 +80,11 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
         tmp = [(a, b) for a, b in zip(x, y)]
         tmp = sorted(tmp, key=lambda k: k[0])
         # Now plot using step
-        plt.step([c[0] for c in tmp], [c[1]
+        ax.step([c[0] for c in tmp], [c[1]
                                        for c in tmp], color=cl[ndr], where='post')
 
     plt.show()
-    return plt.gca()
+    return ax
 
 
 def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
