@@ -171,7 +171,7 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
 
     ax.view_init(azim=az)
     plt.show()
-    return plt.gca()
+    return ax
 
 from ..core import dtlz
 dtlz.plot = _dtlz_plot
