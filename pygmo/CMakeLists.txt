@@ -6,11 +6,18 @@ if(UNIX)
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif()
 
-# The name of the BP target to link to depends on the Python version.
-if(${PYTHON_VERSION_MAJOR} EQUAL 2)
-    set(PYGMO_BP_TARGET "Boost::python")
+# The name of the BP target to link to depends on the Boost and Python versions.
+# NOTE: since Boost 1.67, the naming of the Boost.Python library has changed to include the
+# major and minor python version as a suffix. See the release notes:
+# https://www.boost.org/users/history/version_1_67_0.html
+if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 66))
+    set(PYGMO_BP_TARGET "Boost::python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
 else()
-    set(PYGMO_BP_TARGET "Boost::python3")
+    if(${PYTHON_VERSION_MAJOR} EQUAL 2)
+        set(PYGMO_BP_TARGET "Boost::python")
+    else()
+        set(PYGMO_BP_TARGET "Boost::python3")
+    endif()
 endif()
 
 # Boost.Python version 1.64 (and possibly later?) has issues with default hidden visibility.
