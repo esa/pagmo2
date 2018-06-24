@@ -244,7 +244,7 @@ public:
 
     template <typename Archive>
     void serialize(Archive &ar) {
-        ar(func_num, nx, m_rotation_matrix, m_origin_shift, m_shuffle y, z);
+        ar(func_num, nx, m_rotation_matrix, m_origin_shift, m_shuffle, y, z);
     }
 
 private:
