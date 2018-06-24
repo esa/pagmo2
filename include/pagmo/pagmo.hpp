@@ -65,6 +65,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2009.hpp>
 #if !defined(_MSC_VER)
 #include <pagmo/problems/cec2013.hpp>
+#include <pagmo/problems/cec2014.hpp>
 #endif
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
