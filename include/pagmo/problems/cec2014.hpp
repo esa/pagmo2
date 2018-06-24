@@ -20,6 +20,7 @@
 
 #include <pagmo/detail/cec2014_data.hpp>
 #include <pagmo/problem.hpp> // needed for cereal registration macro
+#include <pagmo/exceptions.hpp>
 #include <pagmo/types.hpp>
 
 #define INF 1.0e99
@@ -32,40 +33,46 @@ typedef std::vector<double> vector_double;
 
 namespace pagmo
 {
-class CEC2014 {
+class cec2014 {
 
 public:
 
-    vector_double z;
-    vector_double y;
+    // problem data
     vector_double m_origin_shift;
     vector_double m_rotation_matrix;
     std::vector<int> m_shuffle;
-    int nx;
-    int func_num;
+
+    // auxiliary vectors
+    mutable vector_double z;
+    mutable vector_double y;
+
+    // number of dimensions
+    unsigned int nx;
+    // problem id
+    unsigned int func_num;
 
 
-    CEC2014(int prob_id, int dim) {
+    cec2014(unsigned int prob_id = 1u, unsigned int dim = 2u) : y(dim), z(dim) {
 
         func_num = prob_id;
         nx = dim;
 
         if (!(dim == 2u || dim == 10u || dim == 20u || dim == 30u || dim == 50u || dim == 100u)) {
-            throw std::invalid_argument("CEC2014 test functions are only defined for dimensions: 2,10,20,30,50,100.");
+            pagmo_throw(std::invalid_argument, "Error: CEC2014 Test functions are only defined for dimensions "
+                                               "2,10,20,30,50,100, a dimension of "
+                                                   + std::to_string(dim) + " was detected.");
+        }
+        if (prob_id < 1u || prob_id > 30u) {
+            pagmo_throw(std::invalid_argument,
+                        "Error: CEC2013 Test functions are only defined for prob_id in [1, 28], a prob_id of "
+                            + std::to_string(prob_id) + " was detected.");
         }
 
-        if ((func_num < 1) && (func_num > 30)) {
-            throw std::invalid_argument("CEC2014 test functions have ids between 1 and 30.");
-        }
-
-        if (nx==2&&((func_num>=17&&func_num<=22)||(func_num>=29&&func_num<=30)))
+        if (nx==2&&((func_num>=17u&&func_num<=22u)||(func_num>=29u&&func_num<=30u)))
         {
-            throw std::invalid_argument("hf01,hf02,hf03,hf04,hf05,hf06,cf07&cf08 are NOT defined for D=2.");
+            pagmo_throw(std::invalid_argument,
+                        "hf01,hf02,hf03,hf04,hf05,hf06,cf07&cf08 are NOT defined for D=2.");
         }
-
-        y.reserve(nx);
-        z.reserve(nx);
-
 
         std::ostringstream name_stream;
         std::string data_file_name;
@@ -107,12 +114,12 @@ public:
 
     std::pair<vector_double, vector_double> get_bounds() const {
         // all CEC 2014 problems have the same bounds
-        vector_double lb(z.size(), -100.);
-        vector_double ub(z.size(), 100.);
+        vector_double lb(nx, -100.);
+        vector_double ub(nx, 100.);
         return std::make_pair(std::move(lb), std::move(ub));
     }
 
-    double fitness(vector_double &x) {
+    vector_double fitness(const vector_double &x) const {
         vector_double f(1);
         switch(func_num) {
             case 1:
@@ -235,11 +242,9 @@ public:
                 cf08(x.data(), f.data(), nx, m_origin_shift.data(), m_rotation_matrix.data(), m_shuffle.data(), 1);
                 f[0]+=3000.0;
                 break;
-            default:
-                throw std::runtime_error("Invalid function ID.");
         }
 
-        return f[0];
+        return f;
     }
 
     template <typename Archive>
@@ -250,7 +255,8 @@ public:
 private:
 
     /* Sphere */
-    void sphere_func (double *x, double *f, int nx, double *Os, double *Mr, int s_flag, int r_flag) {
+    void sphere_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                      const double *Mr, int s_flag, int r_flag) const {
 
         int i;
         f[0] = 0.0;
@@ -263,7 +269,8 @@ private:
     }
 
     /* Ellipsoidal */
-    void ellips_func (double *x, double *f, int nx, double *Os,double *Mr, int s_flag, int r_flag) {
+    void ellips_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                      const double *Mr, int s_flag, int r_flag) const {
 
         int i;
         f[0] = 0.0;
@@ -275,7 +282,8 @@ private:
     }
 
     /* Bent_Cigar */
-    void bent_cigar_func (double *x, double *f, int nx, double *Os,double *Mr, int s_flag, int r_flag) {
+    void bent_cigar_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                          const double *Mr, int s_flag, int r_flag) const {
 
         int i;
         sr_func(x, z.data(), nx, Os, Mr,1.0, s_flag, r_flag); /* shift and rotate */
@@ -290,7 +298,8 @@ private:
     }
 
     /* Discus */
-    void discus_func (double *x, double *f, int nx, double *Os,double *Mr, int s_flag, int r_flag) {
+    void discus_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                      const double *Mr, int s_flag, int r_flag) const {
 
         int i;
         sr_func(x, z.data(), nx, Os, Mr,1.0, s_flag, r_flag); /* shift and rotate */
@@ -302,7 +311,8 @@ private:
     }
 
     /* Different Powers */
-    void dif_powers_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void dif_powers_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                          const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         f[0] = 0.0;
@@ -317,7 +327,8 @@ private:
 
 
     /* Rosenbrock's */
-    void rosenbrock_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void rosenbrock_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                          const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double tmp1,tmp2;
@@ -334,7 +345,8 @@ private:
     }
 
     /* Schwefel's 1.2  */
-    void schaffer_F7_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void schaffer_F7_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                           const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double tmp;
@@ -350,7 +362,8 @@ private:
     }
 
     /* Ackley's  */
-    void ackley_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void ackley_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                      const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double sum1, sum2;
@@ -371,7 +384,8 @@ private:
 
 
     /* Weierstrass's  */
-    void weierstrass_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void weierstrass_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                           const double *Mr,int s_flag, int r_flag) const {
 
         int i,j,k_max;
         double sum,sum2, a, b;
@@ -398,7 +412,8 @@ private:
 
 
     /* Griewank's  */
-    void griewank_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void griewank_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                        const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double s, p;
@@ -416,7 +431,8 @@ private:
     }
 
     /* Rastrigin's  */
-    void rastrigin_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void rastrigin_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                         const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         f[0] = 0.0;
@@ -430,7 +446,8 @@ private:
     }
 
     /* Noncontinuous Rastrigin's  */
-    void step_rastrigin_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void step_rastrigin_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                              const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         f[0]=0.0;
@@ -449,7 +466,8 @@ private:
     }
 
     /* Schwefel's  */
-    void schwefel_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void schwefel_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                        const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double tmp;
@@ -480,7 +498,8 @@ private:
     }
 
     /* Katsuura  */
-    void katsuura_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void katsuura_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                        const double *Mr,int s_flag, int r_flag) const {
 
         int i,j;
         double temp,tmp1,tmp2,tmp3;
@@ -506,7 +525,8 @@ private:
     }
 
     /* Lunacek Bi_rastrigin Function */
-    void bi_rastrigin_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void bi_rastrigin_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                            const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double mu0=2.5,d=1.0,s,mu1,tmp,tmp1,tmp2;
@@ -581,7 +601,8 @@ private:
     }
 
     /* Griewank-Rosenbrock  */
-    void grie_rosen_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void grie_rosen_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                          const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double temp,tmp1,tmp2;
@@ -606,7 +627,8 @@ private:
 
 
     /* Expanded Scaffer??s F6  */
-    void escaffer6_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void escaffer6_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                         const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double temp1, temp2;
@@ -629,7 +651,8 @@ private:
 
     /* HappyCat, provdided by Hans-Georg Beyer (HGB) */
     /* original global optimum: [-1,-1,...,-1] */
-    void happycat_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void happycat_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                        const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double alpha,r2,sum_z;
@@ -650,7 +673,8 @@ private:
 
     /* HGBat, provdided by Hans-Georg Beyer (HGB)*/
     /* original global optimum: [-1,-1,...,-1] */
-    void hgbat_func (double *x, double *f, int nx, double *Os,double *Mr,int s_flag, int r_flag) {
+    void hgbat_func (const double *x, double *f, const unsigned int nx, const double *Os,
+                     const double *Mr,int s_flag, int r_flag) const {
 
         int i;
         double alpha,r2,sum_z;
@@ -670,7 +694,8 @@ private:
     }
 
     /* Hybrid Function 1 */
-    void hf01 (double *x, double *f, int nx, double *Os,double *Mr,int *S,int s_flag,int r_flag) {
+    void hf01 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *S,int s_flag,int r_flag) const {
 
         int i,tmp,cf_num=3;
         double fit[3];
@@ -710,7 +735,8 @@ private:
     }
 
     /* Hybrid Function 2 */
-    void hf02 (double *x, double *f, int nx, double *Os,double *Mr,int *S,int s_flag,int r_flag) {
+    void hf02 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *S,int s_flag,int r_flag) const {
 
         int i,tmp,cf_num=3;
         double fit[3];
@@ -752,7 +778,8 @@ private:
     }
 
     /* Hybrid Function 3 */
-    void hf03 (double *x, double *f, int nx, double *Os,double *Mr,int *S,int s_flag,int r_flag) {
+    void hf03 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *S,int s_flag,int r_flag) const {
 
         int i,tmp,cf_num=4;
         double fit[4];
@@ -796,7 +823,8 @@ private:
     }
 
     /* Hybrid Function 4 */
-    void hf04 (double *x, double *f, int nx, double *Os,double *Mr,int *S,int s_flag,int r_flag) {
+    void hf04 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *S,int s_flag,int r_flag) const {
 
         int i,tmp,cf_num=4;
         double fit[4];
@@ -836,7 +864,8 @@ private:
     }
 
     /* Hybrid Function 5 */
-    void hf05 (double *x, double *f, int nx, double *Os,double *Mr,int *S,int s_flag,int r_flag) {
+    void hf05 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *S,int s_flag,int r_flag) const {
 
         int i,tmp,cf_num=5;
         double fit[5];
@@ -880,7 +909,8 @@ private:
     }
 
     /* Hybrid Function 6 */
-    void hf06 (double *x, double *f, int nx, double *Os,double *Mr,int *S,int s_flag,int r_flag) {
+    void hf06 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *S,int s_flag,int r_flag) const {
 
         int i,tmp,cf_num=5;
         double fit[5];
@@ -923,7 +953,8 @@ private:
     }
 
     /* Composition Function 1 */
-    void cf01 (double *x, double *f, int nx, double *Os,double *Mr,int r_flag) {
+    void cf01 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,int r_flag) const {
 
         int i,cf_num=5;
         double fit[5];
@@ -949,7 +980,8 @@ private:
     }
 
     /* Composition Function 2 */
-    void cf02 (double *x, double *f, int nx, double *Os,double *Mr,int r_flag) {
+    void cf02 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,int r_flag) const {
 
         int i,cf_num=3;
         double fit[3];
@@ -966,7 +998,8 @@ private:
     }
 
     /* Composition Function 3 */
-    void cf03 (double *x, double *f, int nx, double *Os,double *Mr,int r_flag) {
+    void cf03 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,int r_flag) const {
 
         int i,cf_num=3;
         double fit[3];
@@ -985,7 +1018,8 @@ private:
     }
 
     /* Composition Function 4 */
-    void cf04 (double *x, double *f, int nx, double *Os,double *Mr,int r_flag) {
+    void cf04 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,int r_flag) const {
 
         int i,cf_num=5;
         double fit[5];
@@ -1010,7 +1044,8 @@ private:
     }
 
     /* Composition Function 4 */
-    void cf05 (double *x, double *f, int nx, double *Os,double *Mr,int r_flag) {
+    void cf05 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,int r_flag) const {
 
         int i,cf_num=5;
         double fit[5];
@@ -1035,7 +1070,8 @@ private:
     }
 
     /* Composition Function 6 */
-    void cf06 (double *x, double *f, int nx, double *Os,double *Mr,int r_flag) {
+    void cf06 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,int r_flag) const {
         int i,cf_num=5;
         double fit[5];
         double delta[5] = {10,20,30,40,50};
@@ -1059,7 +1095,8 @@ private:
     }
 
     /* Composition Function 7 */
-    void cf07 (double *x, double *f, int nx, double *Os,double *Mr,int *SS,int r_flag) {
+    void cf07 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *SS,int r_flag) const {
 
         int i,cf_num=3;
         double fit[3];
@@ -1075,7 +1112,8 @@ private:
     }
 
     /* Composition Function 8 */
-    void cf08 (double *x, double *f, int nx, double *Os,double *Mr,int *SS,int r_flag) {
+    void cf08 (const double *x, double *f, const unsigned int nx, const double *Os,
+               const double *Mr,const int *SS,int r_flag) const {
 
         int i,cf_num=3;
         double fit[3];
@@ -1091,7 +1129,7 @@ private:
     }
 
 
-    void shiftfunc (double *x, double *xshift, int nx,double *Os) {
+    void shiftfunc (const double *x, double *xshift, const unsigned int nx,const double *Os) const {
 
         int i;
         for (i=0; i<nx; i++) {
@@ -1099,7 +1137,7 @@ private:
         }
     }
 
-    void rotatefunc (double *x, double *xrot, int nx,double *Mr) {
+    void rotatefunc (const double *x, double *xrot, const unsigned int nx,const double *Mr) const {
 
         int i,j;
         for (i=0; i<nx; i++) {
@@ -1112,7 +1150,8 @@ private:
     }
 
     /* shift and rotate */
-    void sr_func(double *x, double *sr_x, int nx, double *Os,double *Mr, double sh_rate, int s_flag,int r_flag) {
+    void sr_func(const double *x, double *sr_x, const unsigned int nx, const double *Os,
+                 const double *Mr, double sh_rate, int s_flag,int r_flag) const {
 
         int i;
         if (s_flag==1) {
@@ -1151,7 +1190,7 @@ private:
         }
     }
 
-    void asyfunc (double *x, double *xasy, int nx, double beta) {
+    void asyfunc (const double *x, double *xasy, const unsigned int nx, double beta) const {
 
         int i;
         for (i=0; i<nx; i++) {
@@ -1161,7 +1200,7 @@ private:
         }
     }
 
-    void oszfunc (double *x, double *xosz, int nx) {
+    void oszfunc (const double *x, double *xosz, const unsigned int nx) const {
 
         int i,sx;
         double c1,c2,xx;
@@ -1196,7 +1235,8 @@ private:
     }
 
 
-    void cf_cal(double *x, double *f, int nx, double *Os,double * delta,double * bias,double * fit, int cf_num) {
+    void cf_cal(const double *x, double *f, const unsigned int nx, const double *Os,
+                double * delta,double * bias,double * fit, int cf_num) const {
 
         int i,j;
         double *w;
