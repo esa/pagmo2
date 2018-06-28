@@ -52,7 +52,7 @@ cd ..
 # Install Eigen
 curl -L https://bitbucket.org/eigen/eigen/get/${EIGEN3_VERSION}.tar.gz > ${EIGEN3_VERSION}
 tar xzf ${EIGEN3_VERSION} > /dev/null 2>&1
-cd eigen-${EIGEN3_VERSION}
+cd eigen*
 mkdir build
 cd build
 cmake ../ > /dev/null
