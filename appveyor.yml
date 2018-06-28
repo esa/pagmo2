@@ -116,7 +116,7 @@ test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] python test2.py
 
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] start /b ipcluster start
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] start /MIN ipcluster start
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd tools
