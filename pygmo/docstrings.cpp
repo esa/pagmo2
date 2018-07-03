@@ -2003,8 +2003,8 @@ Args:
     F (``float``): weight coefficient (dafault value is 0.8)
     CR (``float``): crossover probability (dafault value is 0.9)
     variant (``int``): mutation variant (dafault variant is 2: /rand/1/exp)
-    ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
-    xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    ftol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    xtol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
