@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Unconstrain<a class="headerlink" href="#unconstrain" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo11unconstrainE">
-<span id="pagmo::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">unconstrain</code><a class="headerlink" href="#_CPPv2N5pagmo11unconstrainE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain"></span><em class="property">class </em><code class="descname">unconstrain</code><a class="headerlink" href="#_CPPv2N5pagmo11unconstrainE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The unconstrain meta-problem. </p>
 <p>This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:<ul class="simple">
 <li>Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as checked by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ac53d0a801571b55912a60a72fadf73f1"><span class="std std-ref">pagmo::problem::feasibility_f()</span></a>.</li>
@@ -201,10 +202,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double">
-<span id="pagmo::unconstrain::unconstrain__TRR.ssCR.vector_doubleCR"></span><span class="target" id="classpagmo_1_1unconstrain_1a9b6e1ad7270ac8b9bec0b090ef82aab0"></span><code class="descname">unconstrain</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;death penalty&quot;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weights</em> = {}<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::unconstrain::unconstrain__TRR.ssCR.vector_doubleCR"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1unconstrain_1a9b6e1ad7270ac8b9bec0b090ef82aab0"></span><code class="descname">unconstrain</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;death penalty&quot;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weights</em> = {}<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from UDP and unconstrain method. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -401,10 +400,8 @@ non-const methods on the internal <a class="reference internal" href="../problem
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo11unconstrain9serializeER7Archive">
-<span id="pagmo::unconstrain::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1unconstrain_1ab87d62e276dd7cb3a1bd52a0144e3d0f"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11unconstrain9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::unconstrain::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1unconstrain_1ab87d62e276dd7cb3a1bd52a0144e3d0f"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11unconstrain9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into/from the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

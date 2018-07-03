@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>CEC 2006 Problem Suite (single-objective, constrained)<a class="headerlink" href="#cec-2006-problem-suite-single-objective-constrained" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo7cec2006E">
-<span id="pagmo::cec2006"></span><span class="target" id="classpagmo_1_1cec2006"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">cec2006</code><a class="headerlink" href="#_CPPv2N5pagmo7cec2006E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cec2006"></span><span class="target" id="classpagmo_1_1cec2006"></span><em class="property">class </em><code class="descname">cec2006</code> : pagmo::detail::cec2006_statics&lt;&gt;<a class="headerlink" href="#_CPPv2N5pagmo7cec2006E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The CEC 2006 problems: Constrained Real-Parameter Optimization. </p>
 <p>This class allows to instantiate any of the 24 problems of the competition on constrained real-parameter optimization problems that was organized in the framework of the 2006 IEEE Congress on Evolutionary Computation.</p>
 <p><div class="admonition note">
@@ -191,7 +192,6 @@
 <p class="last">All problems are constrained, continuous, single objective problems.</p>
 </div>
  </p>
-<p>Inherits from pagmo::detail::cec2006_statics&lt;&gt;</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
@@ -290,10 +290,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo7cec20069serializeER7Archive">
-<span id="pagmo::cec2006::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1cec2006_1a7a2fbd5ee6cfeee19e5c5d3c04d37718"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7cec20069serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cec2006::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1cec2006_1a7a2fbd5ee6cfeee19e5c5d3c04d37718"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7cec20069serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

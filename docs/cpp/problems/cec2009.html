@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,10 +180,11 @@
 <h1>CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)<a class="headerlink" href="#cec-2009-problem-suite-multi-objective-constrained-and-unconstrained" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo7cec2009E">
-<span id="pagmo::cec2009"></span><span class="target" id="classpagmo_1_1cec2009"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">cec2009</code><a class="headerlink" href="#_CPPv2N5pagmo7cec2009E" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>The CEC 2009 problems: Competition on “Performance Assessment of Constrained / Bound
- Constrained Multi-Objective Optimization Algorithms” 
- This class instantiates any of the problems from CEC2009’s competition on multi-objective optimization algorithms, commonly referred to by the literature as UF1-UF10 (unconstrained) and CF1-CF10 (constrained).</p>
+<span id="pagmo::cec2009"></span><span class="target" id="classpagmo_1_1cec2009"></span><em class="property">class </em><code class="descname">cec2009</code> : pagmo::detail::cec2009_statics&lt;&gt;<a class="headerlink" href="#_CPPv2N5pagmo7cec2009E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><p>The CEC 2009 problems: Competition on “Performance Assessment of Constrained / Bound</p>
+<p> Constrained Multi-Objective Optimization Algorithms” </p>
+<p> This class instantiates any of the problems from CEC2009’s competition on multi-objective optimization algorithms, commonly referred to by the literature as UF1-UF10 (unconstrained) and CF1-CF10 (constrained).</p>
+</p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The three problems constructed by some transformation on DTLZ2, DTLZ3
@@ -194,7 +196,6 @@ this implementation.</p>
 <p class="last">All problems are continuous, multi objective problems.</p>
 </div>
  </p>
-<p>Inherits from pagmo::detail::cec2009_statics&lt;&gt;</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
@@ -281,10 +282,8 @@ this implementation.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo7cec20099serializeER7Archive">
-<span id="pagmo::cec2009::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1cec2009_1a37701d78c5c103196ab4ecbea34730a9"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7cec20099serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cec2009::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1cec2009_1a37701d78c5c103196ab4ecbea34730a9"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7cec20099serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

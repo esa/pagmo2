@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,10 +180,10 @@
 <h1>Self-adaptive Differential Evolution (DE 1220 aka pDE)<a class="headerlink" href="#self-adaptive-differential-evolution-de-1220-aka-pde" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo6de1220E">
-<span id="pagmo::de1220"></span><span class="target" id="classpagmo_1_1de1220"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">de1220</code><a class="headerlink" href="#_CPPv2N5pagmo6de1220E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::de1220"></span><span class="target" id="classpagmo_1_1de1220"></span><em class="property">class </em><code class="descname">de1220</code><a class="headerlink" href="#_CPPv2N5pagmo6de1220E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!) </p>
-<p>
-.<img alt="../../../_images/original.jpg" src="../../../_images/original.jpg" /></p>
+<p><p>.</p>
+<img alt="../../../_images/original.jpg" src="../../../_images/original.jpg" /></p>
 <p>Differential Evolution (<a class="reference internal" href="de.html#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>, <a class="reference internal" href="sade.html#classpagmo_1_1sade"><span class="std std-ref">pagmo::sade</span></a>) is one of the best meta-heuristics in PaGMO, so we dared to propose our own algoritmic variant we call DE 1220 (a.k.a. pDE as in pagmo DE). Our variant makes use of the <a class="reference internal" href="sade.html#classpagmo_1_1sade"><span class="std std-ref">pagmo::sade</span></a> adaptation schemes for CR and F and adds self-adaptation for the mutation variant. The only parameter left to be specified is thus population size.</p>
 <p>Similarly to what done in <a class="reference internal" href="sade.html#classpagmo_1_1sade"><span class="std std-ref">pagmo::sade</span></a> for F and CR, in DE 1220 each individual chromosome (index <span class="math">\(i\)</span>) is augmented also with an integer <span class="math">\(V_i\)</span> that specifies the mutation variant used to produce the next trial individual. Right before mutating the chromosome the value of <span class="math">\(V_i\)</span> is adapted according to the equation:</p>
 <p><div class="math">
@@ -245,8 +246,8 @@ will produce an error.</p>
 </div>
 </p>
 <p>The first ten are the classical variants introduced in the orginal DE algorithm, the remaining ones are, instead, introduced in the work by Elsayed et al.</p>
-<p>
-See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V. (2006). Self-adapting control parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE Transactions on, 10(6), 646-657. Chicago See: (iDE) - Elsayed, S. M., Sarker, R. A., &amp; Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE. <dl class="docutils">
+<p><p>See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V. (2006). Self-adapting control parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE Transactions on, 10(6), 646-657. Chicago See: (iDE) - Elsayed, S. M., Sarker, R. A., &amp; Essam, D. L. (2011, June). Differential evolution with multiple strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011 IEEE Congress on (pp. 1041-1048). IEEE. </p>
+<dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">gen</span></code>: number of generations. </li>
@@ -408,10 +409,8 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo6de12209serializeER7Archive">
-<span id="pagmo::de1220::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1de1220_1a626b5cb60ee60f8a188206c2623f7adb"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6de12209serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::de1220::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1de1220_1a626b5cb60ee60f8a188206c2623f7adb"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6de12209serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">
@@ -433,10 +432,8 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="structpagmo_1_1de1220__statics"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo14de1220_staticsE">
-<span id="pagmo::de1220_statics"></span><em class="property">struct </em><code class="descclassname">pagmo::</code><code class="descname">de1220_statics</code><a class="headerlink" href="#_CPPv2N5pagmo14de1220_staticsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::de1220_statics"></span><span class="target" id="structpagmo_1_1de1220__statics"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">struct </em><code class="descname">de1220_statics</code><a class="headerlink" href="#_CPPv2N5pagmo14de1220_staticsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Static variables used in <a class="reference internal" href="#classpagmo_1_1de1220"><span class="std std-ref">pagmo::de1220</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>

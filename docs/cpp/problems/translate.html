@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Translate<a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo9translateE">
-<span id="pagmo::translate"></span><span class="target" id="classpagmo_1_1translate"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">translate</code><a class="headerlink" href="#_CPPv2N5pagmo9translateE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::translate"></span><span class="target" id="classpagmo_1_1translate"></span><em class="property">class </em><code class="descname">translate</code><a class="headerlink" href="#_CPPv2N5pagmo9translateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The translate meta-problem. </p>
 <p>This meta-problem translates the whole search space of an input problem by a fixed translation vector. <a class="reference internal" href="#classpagmo_1_1translate"><span class="std std-ref">pagmo::translate</span></a> objects are user-defined problems that can be used in the definition of a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
@@ -192,10 +193,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo9translate9translateERR1TRK13vector_double">
-<span id="pagmo::translate::translate__TRR.vector_doubleCR"></span><span class="target" id="classpagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><code class="descname">translate</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>translation</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::translate::translate__TRR.vector_doubleCR"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><code class="descname">translate</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>translation</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from problem and translation vector. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -542,10 +541,8 @@ non-const methods on the internal <a class="reference internal" href="../problem
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo9translate9serializeER7Archive">
-<span id="pagmo::translate::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1translate_1ae98626ddeaa5491d47d4cfd69134080a"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9translate9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::translate::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1translate_1ae98626ddeaa5491d47d4cfd69134080a"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9translate9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into/from the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

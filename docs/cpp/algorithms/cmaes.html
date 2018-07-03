@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)<a class="headerlink" href="#covariance-matrix-adaptation-evolutionary-strategy-cma-es" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo5cmaesE">
-<span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">cmaes</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><em class="property">class </em><code class="descname">cmaes</code><a class="headerlink" href="#_CPPv2N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Covariance Matrix Adaptation Evolutionary Strategy. </p>
 <p><img alt="../../../_images/cmaes.png" src="../../../_images/cmaes.png" /></p>
 <p>CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization. The version implemented in PaGMO is the “classic” version described in the 2006 paper titled “The CMA evolution strategy: a comparing review.”.</p>
@@ -400,10 +401,8 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo5cmaes9serializeER7Archive">
-<span id="pagmo::cmaes::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1cmaes_1a1865c08d1625a91bd8c6d1a1dc17a169"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cmaes::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1cmaes_1a1865c08d1625a91bd8c6d1a1dc17a169"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5cmaes9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

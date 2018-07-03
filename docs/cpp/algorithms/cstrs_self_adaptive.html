@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Self-adaptive constraints handling<a class="headerlink" href="#self-adaptive-constraints-handling" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo19cstrs_self_adaptiveE">
-<span id="pagmo::cstrs_self_adaptive"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">cstrs_self_adaptive</code><a class="headerlink" href="#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cstrs_self_adaptive"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive"></span><em class="property">class </em><code class="descname">cstrs_self_adaptive</code><a class="headerlink" href="#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Self-adaptive constraints handling. </p>
 <p>This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire underlying population. The resulting approach is an alternative to using the meta-problem <a class="reference internal" href="../problems/unconstrain.html#classpagmo_1_1unconstrain"><span class="std std-ref">pagmo::unconstrain</span></a> to transform the constrained fitness into an unconstrained fitness.</p>
 <p>The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it extends their use to any-algorithm, in particular to non generational population based evolutionary approaches where a steady-state reinsertion is used (i.e., as soon as an individual is found fit it is immediately reinserted into the pop and will influence the next offspring genetic material).</p>
@@ -261,10 +262,8 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj">
-<span id="pagmo::cstrs_self_adaptive::cstrs_self_adaptive__unsigned.TRR.unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2fc90595a22902993b856aed01d9901b"></span><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span>unsigned <em>iters</em>, T &amp;&amp;<em>a</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cstrs_self_adaptive::cstrs_self_adaptive__unsigned.TRR.unsigned"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2fc90595a22902993b856aed01d9901b"></span><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span>unsigned <em>iters</em>, T &amp;&amp;<em>a</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -456,10 +455,8 @@ non-const methods on the internal <a class="reference internal" href="../algorit
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo19cstrs_self_adaptive9serializeER7Archive">
-<span id="pagmo::cstrs_self_adaptive::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a8ec78848a8ec666bdde81803c49c8374"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19cstrs_self_adaptive9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::cstrs_self_adaptive::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a8ec78848a8ec666bdde81803c49c8374"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19cstrs_self_adaptive9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

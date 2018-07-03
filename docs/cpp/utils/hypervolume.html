@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -197,7 +198,7 @@ of the algorithms implemented and their performance can be found in the publicat
 <hr class="docutils" />
 <dl class="class">
 <dt id="_CPPv2N5pagmo11hypervolumeE">
-<span id="pagmo::hypervolume"></span><span class="target" id="classpagmo_1_1hypervolume"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">hypervolume</code><a class="headerlink" href="#_CPPv2N5pagmo11hypervolumeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::hypervolume"></span><span class="target" id="classpagmo_1_1hypervolume"></span><em class="property">class </em><code class="descname">hypervolume</code><a class="headerlink" href="#_CPPv2N5pagmo11hypervolumeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hypervolume. </p>
 <p>This class encapsulate various utilities used to compute the hyervolume of a set of points or the various exclusive contributions.</p>
 <p>The main API consists of the five methods:</p>
@@ -224,8 +225,8 @@ of the algorithms implemented and their performance can be found in the publicat
 <span id="pagmo::hypervolume::hypervolume__pagmo::populationCR.b"></span><span class="target" id="classpagmo_1_1hypervolume_1a26157de355a882044dddae3fb6772252"></span><code class="descname">hypervolume</code><span class="sig-paren">(</span><em class="property">const</em> pagmo::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em>, bool <em>verify</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from population. </p>
 <p>Constructs a hypervolume object, where points are elicited from a <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> object.</p>
-<p>
-Example:<dl class="docutils">
+<p><p>Example:</p>
+<dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">pop</span></code>: a <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> </li>
@@ -255,8 +256,8 @@ Example:<dl class="docutils">
 <span id="pagmo::hypervolume::hypervolume__std::vector:vector_double:CR.b"></span><span class="target" id="classpagmo_1_1hypervolume_1ac5f4c950ff9a4808ce37048358367cf9"></span><code class="descname">hypervolume</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em>, bool <em>verify</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from points. </p>
 <p>Constructs a hypervolume object from a provided set of points.</p>
-<p>
-Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">hypervolume</span> <span class="n">hv</span><span class="p">({{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}});</span>
+<p><p>Example: </p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">hypervolume</span> <span class="n">hv</span><span class="p">({{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}});</span>
 <span class="n">hypervolume</span> <span class="n">hv2</span><span class="p">({{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}},</span> <span class="n">false</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -636,10 +637,8 @@ is considered in that method (also its complexity is thus higher)</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo11hypervolume9serializeER7Archive">
-<span id="pagmo::hypervolume::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1hypervolume_1aebfc7c856536a4c35e8cf97f2cb2203b"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::hypervolume::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1hypervolume_1aebfc7c856536a4c35e8cf97f2cb2203b"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11hypervolume9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

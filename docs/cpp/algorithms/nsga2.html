@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Non dominated sorting genetic algorithm (NSGA-II)<a class="headerlink" href="#non-dominated-sorting-genetic-algorithm-nsga-ii" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo5nsga2E">
-<span id="pagmo::nsga2"></span><span class="target" id="classpagmo_1_1nsga2"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">nsga2</code><a class="headerlink" href="#_CPPv2N5pagmo5nsga2E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::nsga2"></span><span class="target" id="classpagmo_1_1nsga2"></span><em class="property">class </em><code class="descname">nsga2</code><a class="headerlink" href="#_CPPv2N5pagmo5nsga2E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Nondominated Sorting genetic algorithm II (NSGA-II) </p>
 <p><img alt="../../../_images/nsga2.jpg" src="../../../_images/nsga2.jpg" /></p>
 <p>NSGA-II is a solid multi-objective algorithm, widely used in many real-world applications. While today it can be considered as an outdated approach, <a class="reference internal" href="#classpagmo_1_1nsga2"><span class="std std-ref">nsga2</span></a> has still a great value, if not as a solid benchmark to test against. NSGA-II genererates offsprings using a specific type of crossover and mutation and then selects the next generation according to nondominated-sorting and crowding distance comparison.</p>
@@ -354,10 +355,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo5nsga29serializeER7Archive">
-<span id="pagmo::nsga2::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1nsga2_1a283b834ef02dde454636210bcd6ae503"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nsga29serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::nsga2::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1nsga2_1a283b834ef02dde454636210bcd6ae503"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nsga29serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

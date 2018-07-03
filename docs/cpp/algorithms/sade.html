@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,10 +180,10 @@
 <h1>Self-adaptive Differential Evolution (jDE and iDE)<a class="headerlink" href="#self-adaptive-differential-evolution-jde-and-ide" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo4sadeE">
-<span id="pagmo::sade"></span><span class="target" id="classpagmo_1_1sade"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">sade</code><a class="headerlink" href="#_CPPv2N5pagmo4sadeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::sade"></span><span class="target" id="classpagmo_1_1sade"></span><em class="property">class </em><code class="descname">sade</code><a class="headerlink" href="#_CPPv2N5pagmo4sadeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Self-adaptive Differential Evolution Algorithm. </p>
-<p>
-.<img alt="../../../_images/adaptation.jpg" src="../../../_images/adaptation.jpg" /></p>
+<p><p>.</p>
+<img alt="../../../_images/adaptation.jpg" src="../../../_images/adaptation.jpg" /></p>
 <p>Two different variants of the Differential Evolution algorithm exploiting the idea of self-adaptation.</p>
 <p>The original Differential Evolution algorithm (<a class="reference internal" href="de.html#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>) can be significantly improved introducing the idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters of the original differential evolution algorithm. In PaGMO we implement two different mechanisms we found effective. The first one, proposed by Brest et al., does not make use of the DE operators to produce new values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control. The resulting DE variant is often referred to as jDE. The second variant here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE operator to produce new CR anf F parameters for each individual. We refer to this variant as to iDE.</p>
 <p><div class="admonition warning">
@@ -412,10 +413,8 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo4sade9serializeER7Archive">
-<span id="pagmo::sade::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1sade_1a0fe1326769dab2b159d6342d81084b64"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4sade9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::sade::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1sade_1a0fe1326769dab2b159d6342d81084b64"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4sade9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Exponential Natural Evolution Strategies (xNES)<a class="headerlink" href="#exponential-natural-evolution-strategies-xnes" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo4xnesE">
-<span id="pagmo::xnes"></span><span class="target" id="classpagmo_1_1xnes"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">xnes</code><a class="headerlink" href="#_CPPv2N5pagmo4xnesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::xnes"></span><span class="target" id="classpagmo_1_1xnes"></span><em class="property">class </em><code class="descname">xnes</code><a class="headerlink" href="#_CPPv2N5pagmo4xnesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Exponential Natural Evolution Strategies. </p>
 <p><img alt="../../../_images/xnes.png" src="../../../_images/xnes.png" /></p>
 <p>Exponential Natural Evolution Strategies is an algorithm closely related to <a class="reference internal" href="cmaes.html#classpagmo_1_1cmaes"><span class="std std-ref">pagmo::cmaes</span></a> and based on the adaptation of a gaussian sampling distribution via the so-called natural gradient. Like <a class="reference internal" href="cmaes.html#classpagmo_1_1cmaes"><span class="std std-ref">pagmo::cmaes</span></a> it is based on the idea of sampling new trial vectors from a multivariate distribution and using the new sampled points to update the distribution parameters. Naively this could be done following the gradient of the expected fitness as approximated by a finite number of sampled points. While this idea offers a powerful lead on algorithmic construction it has some major drawbacks that are solved in the so-called Natural Evolution Strategies class of algorithms by adopting, instead, the natural gradient. xNES is one of the most performing variants in this class.</p>
@@ -406,10 +407,8 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo4xnes9serializeER7Archive">
-<span id="pagmo::xnes::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1xnes_1a051668c3abe082b12d49ced54f9538fc"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4xnes9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::xnes::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1xnes_1a051668c3abe082b12d49ced54f9538fc"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4xnes9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

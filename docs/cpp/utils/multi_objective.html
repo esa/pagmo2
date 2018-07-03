@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -235,8 +236,9 @@ more in general, to multi-objective optimization tasks.</p>
 <span id="pagmo::crowding_distance__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1ad503682786287cfe57f565e335524633"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">crowding_distance</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>non_dom_front</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Crowding distance. </p>
 <p>An implementation of the crowding distance. Complexity is <span class="math">\( O(MNlog(N))\)</span> where <span class="math">\(M\)</span> is the number of objectives and <span class="math">\(N\)</span> is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this condition will result in undefined behaviour.</p>
-<p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm
-for multi-objective optimization: NSGA-II.” Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.</p>
+<p><p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm</p>
+<p>for multi-objective optimization: NSGA-II.” Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.</p>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a vector_double containing the crowding distances. Example: {2, inf, inf}</dd>
@@ -262,8 +264,9 @@ for multi-objective optimization: NSGA-II.” Parallel problem solving from natu
 <span id="pagmo::fast_non_dominated_sorting__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a27aeb5efb01fca4422fc124eec221199"></span>fnds_return_type <code class="descclassname">pagmo::</code><code class="descname">fast_non_dominated_sorting</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fast non dominated sorting. </p>
 <p>An implementation of the fast non dominated sorting algorithm. Complexity is <span class="math">\( O(MN^2)\)</span> where <span class="math">\(M\)</span> is the number of objectives and <span class="math">\(N\)</span> is the number of individuals.</p>
-<p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm
-for multi-objective optimization: NSGA-II.” Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.</p>
+<p><p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm</p>
+<p>for multi-objective optimization: NSGA-II.” Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.</p>
+</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>an std::tuple containing:<ul class="simple">

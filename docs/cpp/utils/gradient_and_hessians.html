@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -180,10 +181,8 @@
 <p>A number of utilities to help with problems with gradient and hessians.</p>
 <hr class="docutils" />
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Func&gt;</dt>
 <dt id="_CPPv2N5pagmo17estimate_sparsityE4FuncRK13vector_doubled">
-<span id="pagmo::estimate_sparsity__Func.vector_doubleCR.double"></span><span class="target" id="namespacepagmo_1a89858d9cbc732abffd0f9cd22bd68c16"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a> <code class="descclassname">pagmo::</code><code class="descname">estimate_sparsity</code><span class="sig-paren">(</span>Func <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17estimate_sparsityE4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::estimate_sparsity__Func.vector_doubleCR.double"></span><em class="property">template </em>&lt;<em class="property">typename</em> Func&gt;<br /><span class="target" id="namespacepagmo_1a89858d9cbc732abffd0f9cd22bd68c16"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a> <code class="descclassname">pagmo::</code><code class="descname">estimate_sparsity</code><span class="sig-paren">(</span>Func <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17estimate_sparsityE4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Heuristic to estimate the sparsity pattern. </p>
 <p>A numerical estimation of the sparsity pattern of same callable object is made by numerically computing it around a given input point and detecting the components that are changed.</p>
 <p>The callable function <code class="docutils literal"><span class="pre">f</span></code> must have the prototype:</p>
@@ -214,10 +213,8 @@
 
 <hr class="docutils" />
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Func&gt;</dt>
 <dt id="_CPPv2N5pagmo17estimate_gradientE4FuncRK13vector_doubled">
-<span id="pagmo::estimate_gradient__Func.vector_doubleCR.double"></span><span class="target" id="namespacepagmo_1a698b7c8e4ddad0637ffe6ed693dd90b8"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">estimate_gradient</code><span class="sig-paren">(</span>Func <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17estimate_gradientE4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::estimate_gradient__Func.vector_doubleCR.double"></span><em class="property">template </em>&lt;<em class="property">typename</em> Func&gt;<br /><span class="target" id="namespacepagmo_1a698b7c8e4ddad0637ffe6ed693dd90b8"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">estimate_gradient</code><span class="sig-paren">(</span>Func <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo17estimate_gradientE4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Numerical computation of the gradient (low-order) </p>
 <p>A numerical estimation of the gradient of same callable function is made numerically.</p>
 <p>The callable function <code class="docutils literal"><span class="pre">f</span></code> must have the prototype:</p>
@@ -256,10 +253,8 @@
 
 <hr class="docutils" />
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Func&gt;</dt>
 <dt id="_CPPv2N5pagmo19estimate_gradient_hE4FuncRK13vector_doubled">
-<span id="pagmo::estimate_gradient_h__Func.vector_doubleCR.double"></span><span class="target" id="namespacepagmo_1a890e456701a084a01bd7810bebc9c18a"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">estimate_gradient_h</code><span class="sig-paren">(</span>Func <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-2<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19estimate_gradient_hE4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::estimate_gradient_h__Func.vector_doubleCR.double"></span><em class="property">template </em>&lt;<em class="property">typename</em> Func&gt;<br /><span class="target" id="namespacepagmo_1a890e456701a084a01bd7810bebc9c18a"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">estimate_gradient_h</code><span class="sig-paren">(</span>Func <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-2<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19estimate_gradient_hE4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Numerical computation of the gradient (high-order) </p>
 <p>A numerical estimation of the gradient of same callable function is made numerically.</p>
 <p>The callable function <code class="docutils literal"><span class="pre">f</span></code> must have the prototype:</p>

@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Decompose<a class="headerlink" href="#decompose" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo9decomposeE">
-<span id="pagmo::decompose"></span><span class="target" id="classpagmo_1_1decompose"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">decompose</code><a class="headerlink" href="#_CPPv2N5pagmo9decomposeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::decompose"></span><span class="target" id="classpagmo_1_1decompose"></span><em class="property">class </em><code class="descname">decompose</code><a class="headerlink" href="#_CPPv2N5pagmo9decomposeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The decompose meta-problem. </p>
 <p><img alt="../../../_images/decompose.png" src="../../../_images/decompose.png" /></p>
 <p>This meta-problem <em>decomposes</em> a multi-objective input user-defined problem, resulting in a single-objective user-defined problem with a fitness function combining the original fitness functions. In particular, three different <em>decomposition methods</em> are here made available:</p>
@@ -234,10 +235,8 @@ derivative-free optimization.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb">
-<span id="pagmo::decompose::decompose__TRR.vector_doubleCR.vector_doubleCR.ssCR.b"></span><span class="target" id="classpagmo_1_1decompose_1adbd72847955fe14a3b24841a6bda8c40"></span><code class="descname">decompose</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weight</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>z</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;weighted&quot;, bool <em>adapt_ideal</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::decompose::decompose__TRR.vector_doubleCR.vector_doubleCR.ssCR.b"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1decompose_1adbd72847955fe14a3b24841a6bda8c40"></span><code class="descname">decompose</code><span class="sig-paren">(</span>T &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weight</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>z</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;weighted&quot;, bool <em>adapt_ideal</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from problem. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -478,10 +477,8 @@ non-const methods on the internal <a class="reference internal" href="../problem
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo9decompose9serializeER7Archive">
-<span id="pagmo::decompose::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1decompose_1ad93fe13aba0c057394a4f8313a8fb9df"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9decompose9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::decompose::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1decompose_1ad93fe13aba0c057394a4f8313a8fb9df"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9decompose9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

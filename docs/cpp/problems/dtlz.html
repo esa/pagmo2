@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>DTLZ test suite<a class="headerlink" href="#dtlz-test-suite" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo4dtlzE">
-<span id="pagmo::dtlz"></span><span class="target" id="classpagmo_1_1dtlz"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">dtlz</code><a class="headerlink" href="#_CPPv2N5pagmo4dtlzE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::dtlz"></span><span class="target" id="classpagmo_1_1dtlz"></span><em class="property">class </em><code class="descname">dtlz</code><a class="headerlink" href="#_CPPv2N5pagmo4dtlzE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>DTLZ problem test suite. </p>
 <p>This widespread test suite was conceived for multiobjective problems with scalable fitness dimensions and takes its name from its authors Deb, Thiele, Laumanns and Zitzler</p>
 <p>All problems in this test suite are box-constrained continuous n-dimensional multi-objective problems, scalable in fitness dimension. The dimension of the decision space is <span class="math">\( k + fdim - 1 \)</span>, whereas fdim is the number of objectives and k a paramter. Properties of the decision space and the Pareto-front of each problems are as follows:</p>
@@ -288,9 +289,9 @@
 <dd><p>Distance from the Pareto front. </p>
 <p>Convergence metric for a given decision_vector (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure “a distance” of any point from the pareto front of any ZDT problem analytically without the need to precompute the front.</p>
-<p>
-See: Märtens, Marcus, and Dario Izzo. “The asynchronous island model
-and NSGA-II: study of a new migration operator and its performance.” Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013. <dl class="docutils">
+<p><p>See: Märtens, Marcus, and Dario Izzo. “The asynchronous island model</p>
+<p>and NSGA-II: study of a new migration operator and its performance.” Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013. </p>
+<dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>the p_distance</dd>
 <dt><strong>Parameters</strong></dt>
@@ -314,10 +315,8 @@ and NSGA-II: study of a new migration operator and its performance.” Proceedin
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo4dtlz9serializeER7Archive">
-<span id="pagmo::dtlz::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1dtlz_1acfe51c622b544a76b3551a35f7f9a05f"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4dtlz9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::dtlz::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1dtlz_1acfe51c622b544a76b3551a35f7f9a05f"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4dtlz9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

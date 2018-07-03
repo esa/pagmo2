@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Particle Swarm Optimization (PSO)<a class="headerlink" href="#particle-swarm-optimization-pso" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo3psoE">
-<span id="pagmo::pso"></span><span class="target" id="classpagmo_1_1pso"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">pso</code><a class="headerlink" href="#_CPPv2N5pagmo3psoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::pso"></span><span class="target" id="classpagmo_1_1pso"></span><em class="property">class </em><code class="descname">pso</code><a class="headerlink" href="#_CPPv2N5pagmo3psoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Particle Swarm Optimization. </p>
 <p><img alt="../../../_images/pso.png" src="../../../_images/pso.png" /></p>
 <p>Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms. In PSO each point has memory of the position where it achieved the best performance <span class="math">\(\mathbf x^l_i\)</span> (local memory) and of the best decision vector <span class="math">\( \mathbf x^g \)</span> in a certain neighbourhood, and uses this information to update its position using the equations (constriction coefficient): <div class="math">
@@ -388,10 +389,8 @@ constrained or stochastic optimization</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo3pso9serializeER7Archive">
-<span id="pagmo::pso::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1pso_1a130c1aa6c1b77d436a1838791ee66b7b"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3pso9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::pso::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1pso_1a130c1aa6c1b77d436a1838791ee66b7b"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3pso9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

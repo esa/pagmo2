@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -199,10 +200,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1is__udp"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo6is_udpE">
-<span id="pagmo::is_udp"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">is_udp</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udpE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::is_udp"></span><span class="target" id="classpagmo_1_1is__udp"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">is_udp</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udpE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect user-defined problems (UDP). </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__fitness"><span class="std std-ref">pagmo::has_fitness</span></a> and <a class="reference internal" href="#classpagmo_1_1has__bounds"><span class="std std-ref">pagmo::has_bounds</span></a> type traits.</p>
 <p>Types satisfying this type trait can be used as user-defined problems (UDP) in <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
@@ -218,10 +217,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1is__uda"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo6is_udaE">
-<span id="pagmo::is_uda"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">is_uda</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udaE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::is_uda"></span><span class="target" id="classpagmo_1_1is__uda"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">is_uda</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect user-defined algorithms (UDA). </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__evolve"><span class="std std-ref">pagmo::has_evolve</span></a> type trait.</p>
 <p>Types satisfying this type trait can be used as user-defined algorithms (UDA) in <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
@@ -237,10 +234,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__fitness"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo11has_fitnessE">
-<span id="pagmo::has_fitness"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_fitness</code><a class="headerlink" href="#_CPPv2N5pagmo11has_fitnessE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_fitness"></span><span class="target" id="classpagmo_1_1has__fitness"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_fitness</code><a class="headerlink" href="#_CPPv2N5pagmo11has_fitnessE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">fitness()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="n">fitness</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -258,10 +253,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__bounds"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo10has_boundsE">
-<span id="pagmo::has_bounds"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_bounds</code><a class="headerlink" href="#_CPPv2N5pagmo10has_boundsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_bounds"></span><span class="target" id="classpagmo_1_1has__bounds"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_bounds</code><a class="headerlink" href="#_CPPv2N5pagmo10has_boundsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_bounds()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span> <span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">get_bounds</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -279,10 +272,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__e__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo17has_e_constraintsE">
-<span id="pagmo::has_e_constraints"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_e_constraints</code><a class="headerlink" href="#_CPPv2N5pagmo17has_e_constraintsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_e_constraints"></span><span class="target" id="classpagmo_1_1has__e__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_e_constraints</code><a class="headerlink" href="#_CPPv2N5pagmo17has_e_constraintsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nec()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nec</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -300,10 +291,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__i__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo17has_i_constraintsE">
-<span id="pagmo::has_i_constraints"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_i_constraints</code><a class="headerlink" href="#_CPPv2N5pagmo17has_i_constraintsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_i_constraints"></span><span class="target" id="classpagmo_1_1has__i__constraints"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_i_constraints</code><a class="headerlink" href="#_CPPv2N5pagmo17has_i_constraintsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nic()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nic</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -321,10 +310,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__integer__part"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo16has_integer_partE">
-<span id="pagmo::has_integer_part"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_integer_part</code><a class="headerlink" href="#_CPPv2N5pagmo16has_integer_partE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_integer_part"></span><span class="target" id="classpagmo_1_1has__integer__part"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_integer_part</code><a class="headerlink" href="#_CPPv2N5pagmo16has_integer_partE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nix()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nix</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -342,10 +329,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__name"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo8has_nameE">
-<span id="pagmo::has_name"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_name</code><a class="headerlink" href="#_CPPv2N5pagmo8has_nameE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_name"></span><span class="target" id="classpagmo_1_1has__name"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_name</code><a class="headerlink" href="#_CPPv2N5pagmo8has_nameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_name()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -363,10 +348,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__extra__info"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo14has_extra_infoE">
-<span id="pagmo::has_extra_info"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_extra_info</code><a class="headerlink" href="#_CPPv2N5pagmo14has_extra_infoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_extra_info"></span><span class="target" id="classpagmo_1_1has__extra__info"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_extra_info</code><a class="headerlink" href="#_CPPv2N5pagmo14has_extra_infoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -384,10 +367,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__get__thread__safety"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21has_get_thread_safetyE">
-<span id="pagmo::has_get_thread_safety"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_get_thread_safety</code><a class="headerlink" href="#_CPPv2N5pagmo21has_get_thread_safetyE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_get_thread_safety"></span><span class="target" id="classpagmo_1_1has__get__thread__safety"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_get_thread_safety</code><a class="headerlink" href="#_CPPv2N5pagmo21has_get_thread_safetyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pagmo</span><span class="p">::</span><span class="n">thread_safety</span> <span class="n">get_thread_safety</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -405,10 +386,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__gradient"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_gradientE">
-<span id="pagmo::has_gradient"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_gradient</code><a class="headerlink" href="#_CPPv2N5pagmo12has_gradientE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_gradient"></span><span class="target" id="classpagmo_1_1has__gradient"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_gradient</code><a class="headerlink" href="#_CPPv2N5pagmo12has_gradientE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">gradient()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="n">gradient</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -426,10 +405,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1override__has__gradient"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo21override_has_gradientE">
-<span id="pagmo::override_has_gradient"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_gradient</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_gradientE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_gradient"></span><span class="target" id="classpagmo_1_1override__has__gradient"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;<br /><em class="property">class </em><code class="descname">override_has_gradient</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_gradientE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_gradient()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_gradient</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -447,10 +424,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__gradient__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21has_gradient_sparsityE">
-<span id="pagmo::has_gradient_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_gradient_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo21has_gradient_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_gradient_sparsity"></span><span class="target" id="classpagmo_1_1has__gradient__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_gradient_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo21has_gradient_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">gradient_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sparsity_pattern</span> <span class="n">gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -468,10 +443,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1override__has__gradient__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo30override_has_gradient_sparsityE">
-<span id="pagmo::override_has_gradient_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_gradient_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo30override_has_gradient_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_gradient_sparsity"></span><span class="target" id="classpagmo_1_1override__has__gradient__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;<br /><em class="property">class </em><code class="descname">override_has_gradient_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo30override_has_gradient_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_gradient_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -489,10 +462,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__hessians"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_hessiansE">
-<span id="pagmo::has_hessians"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_hessians</code><a class="headerlink" href="#_CPPv2N5pagmo12has_hessiansE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_hessians"></span><span class="target" id="classpagmo_1_1has__hessians"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_hessians</code><a class="headerlink" href="#_CPPv2N5pagmo12has_hessiansE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">hessians()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">hessians</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -510,10 +481,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1override__has__hessians"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo21override_has_hessiansE">
-<span id="pagmo::override_has_hessians"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_hessians</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_hessiansE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_hessians"></span><span class="target" id="classpagmo_1_1override__has__hessians"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;<br /><em class="property">class </em><code class="descname">override_has_hessians</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_hessiansE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_hessians()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_hessians</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -531,10 +500,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__hessians__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21has_hessians_sparsityE">
-<span id="pagmo::has_hessians_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_hessians_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo21has_hessians_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_hessians_sparsity"></span><span class="target" id="classpagmo_1_1has__hessians__sparsity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_hessians_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo21has_hessians_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">hessians_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sparsity_pattern</span><span class="o">&gt;</span> <span class="n">hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -552,10 +519,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1override__has__hessians__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;</dt>
 <dt id="_CPPv2N5pagmo30override_has_hessians_sparsityE">
-<span id="pagmo::override_has_hessians_sparsity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_hessians_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo30override_has_hessians_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_hessians_sparsity"></span><span class="target" id="classpagmo_1_1override__has__hessians__sparsity"></span><em class="property">template </em>&lt;typename <em>T</em>&gt;<br /><em class="property">class </em><code class="descname">override_has_hessians_sparsity</code><a class="headerlink" href="#_CPPv2N5pagmo30override_has_hessians_sparsityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_hessians_sparsity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -573,10 +538,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__set__verbosity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo17has_set_verbosityE">
-<span id="pagmo::has_set_verbosity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_set_verbosity</code><a class="headerlink" href="#_CPPv2N5pagmo17has_set_verbosityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_set_verbosity"></span><span class="target" id="classpagmo_1_1has__set__verbosity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_set_verbosity</code><a class="headerlink" href="#_CPPv2N5pagmo17has_set_verbosityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">set_verbosity</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
 </pre></div>
@@ -594,10 +557,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1override__has__set__verbosity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo26override_has_set_verbosityE">
-<span id="pagmo::override_has_set_verbosity"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_set_verbosity</code><a class="headerlink" href="#_CPPv2N5pagmo26override_has_set_verbosityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_set_verbosity"></span><span class="target" id="classpagmo_1_1override__has__set__verbosity"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">override_has_set_verbosity</code><a class="headerlink" href="#_CPPv2N5pagmo26override_has_set_verbosityE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_set_verbosity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -615,10 +576,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo10has_evolveE">
-<span id="pagmo::has_evolve"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_evolve</code><a class="headerlink" href="#_CPPv2N5pagmo10has_evolveE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_evolve"></span><span class="target" id="classpagmo_1_1has__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_evolve</code><a class="headerlink" href="#_CPPv2N5pagmo10has_evolveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">evolve()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">population</span> <span class="n">evolve</span><span class="p">(</span><span class="n">const</span> <span class="n">population</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -636,10 +595,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__get__nobj"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_get_nobjE">
-<span id="pagmo::has_get_nobj"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_get_nobj</code><a class="headerlink" href="#_CPPv2N5pagmo12has_get_nobjE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_get_nobj"></span><span class="target" id="classpagmo_1_1has__get__nobj"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_get_nobj</code><a class="headerlink" href="#_CPPv2N5pagmo12has_get_nobjE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">get_nobj()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nobj</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -657,10 +614,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__set__seed"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo12has_set_seedE">
-<span id="pagmo::has_set_seed"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_set_seed</code><a class="headerlink" href="#_CPPv2N5pagmo12has_set_seedE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_set_seed"></span><span class="target" id="classpagmo_1_1has__set__seed"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_set_seed</code><a class="headerlink" href="#_CPPv2N5pagmo12has_set_seedE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">set_seed()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">set_seed</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
 </pre></div>
@@ -678,10 +633,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1override__has__set__seed"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo21override_has_set_seedE">
-<span id="pagmo::override_has_set_seed"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">override_has_set_seed</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_set_seedE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::override_has_set_seed"></span><span class="target" id="classpagmo_1_1override__has__set__seed"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">override_has_set_seed</code><a class="headerlink" href="#_CPPv2N5pagmo21override_has_set_seedE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">has_set_seed</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -699,10 +652,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1has__run__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo14has_run_evolveE">
-<span id="pagmo::has_run_evolve"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">has_run_evolve</code><a class="headerlink" href="#_CPPv2N5pagmo14has_run_evolveE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::has_run_evolve"></span><span class="target" id="classpagmo_1_1has__run__evolve"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">has_run_evolve</code><a class="headerlink" href="#_CPPv2N5pagmo14has_run_evolveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect <code class="docutils literal"><span class="pre">run_evolve()</span></code> method. </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -720,10 +671,8 @@
 </dd></dl>
 
 <dl class="class">
-<dt>
-<span class="target" id="classpagmo_1_1is__udi"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;</dt>
 <dt id="_CPPv2N5pagmo6is_udiE">
-<span id="pagmo::is_udi"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">is_udi</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udiE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::is_udi"></span><span class="target" id="classpagmo_1_1is__udi"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><em class="property">class </em><code class="descname">is_udi</code><a class="headerlink" href="#_CPPv2N5pagmo6is_udiE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Detect user-defined islands (UDI). </p>
 <p>This type trait will be <code class="docutils literal"><span class="pre">true</span></code> if <code class="docutils literal"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__run__evolve"><span class="std std-ref">pagmo::has_run_evolve</span></a> type trait.</p>
 <p>Types satisfying this type trait can be used as user-defined islands (UDI) in <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>

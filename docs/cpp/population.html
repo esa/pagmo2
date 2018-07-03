@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Population<a class="headerlink" href="#population" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo10populationE">
-<span id="pagmo::population"></span><span class="target" id="classpagmo_1_1population"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">population</code><a class="headerlink" href="#_CPPv2N5pagmo10populationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::population"></span><span class="target" id="classpagmo_1_1population"></span><em class="property">class </em><code class="descname">population</code><a class="headerlink" href="#_CPPv2N5pagmo10populationE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Population class. </p>
 <p><img alt="../../_images/pop_no_text.png" src="../../_images/pop_no_text.png" /></p>
 <p>This class represents a population of individuals, i.e., potential candidate solutions to a given problem. In pagmo an individual is determined by:<ul class="simple">
@@ -222,10 +223,8 @@ in undefined behaviour.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> T, generic_ctor_enabler&lt; T &gt; = 0&gt;</dt>
 <dt id="_CPPv2N5pagmo10population10populationERR1T9size_typej">
-<span id="pagmo::population::population__TRR.size_type.unsigned"></span><span class="target" id="classpagmo_1_1population_1adb1dae0fccddd5bfb6937fb80282879f"></span><code class="descname">population</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em>, <a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>pop_size</em> = 0u, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationERR1T9size_typej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::population::population__TRR.size_type.unsigned"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, generic_ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1population_1adb1dae0fccddd5bfb6937fb80282879f"></span><code class="descname">population</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em>, <a class="reference internal" href="#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>pop_size</em> = 0u, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population10populationERR1T9size_typej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a problem. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -686,10 +685,8 @@ returned by this method is undefined behaviour.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2NK5pagmo10population4saveER7Archive">
-<span id="pagmo::population::save__ArchiveRC"></span><span class="target" id="classpagmo_1_1population_1ae03de7f45c694d61f688719c6da01251"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::population::save__ArchiveRC"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1population_1ae03de7f45c694d61f688719c6da01251"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo10population4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
 <p>This method will save <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">
@@ -708,10 +705,8 @@ returned by this method is undefined behaviour.</p>
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo10population4loadER7Archive">
-<span id="pagmo::population::load__ArchiveR"></span><span class="target" id="classpagmo_1_1population_1a369c4f31121c21a7f0f1fc198c7d962b"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::population::load__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1population_1a369c4f31121c21a7f0f1fc198c7d962b"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
 <p>This method will load a <a class="reference internal" href="#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> from <code class="docutils literal"><span class="pre">ar</span></code> into <code class="docutils literal"><span class="pre">this</span></code>.</p>
 <p><dl class="docutils">

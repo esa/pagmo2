@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)<a class="headerlink" href="#multi-objective-evolutionary-algorithm-by-decomposition-moea-d-de" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo5moeadE">
-<span id="pagmo::moead"></span><span class="target" id="classpagmo_1_1moead"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">moead</code><a class="headerlink" href="#_CPPv2N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::moead"></span><span class="target" id="classpagmo_1_1moead"></span><em class="property">class </em><code class="descname">moead</code><a class="headerlink" href="#_CPPv2N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Multi Objective Evolutionary Algorithms by Decomposition (the DE variant) </p>
 <p><img alt="../../../_images/moead.png" src="../../../_images/moead.png" /></p>
 <p>MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of problem decomposition, it leverages evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particular algorithm implemented in pagmo with the name <a class="reference internal" href="#classpagmo_1_1moead"><span class="std std-ref">pagmo::moead</span></a> uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the Tchebycheff, weighted or boundary intersection decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is also implemented.</p>
@@ -380,10 +381,8 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo5moead9serializeER7Archive">
-<span id="pagmo::moead::serialize__ArchiveR"></span><span class="target" id="classpagmo_1_1moead_1a6c3256cd1e30ac4e5c046c5149d4ce71"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5moead9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::moead::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1moead_1a6c3256cd1e30ac4e5c046c5149d4ce71"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5moead9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
 <p><dl class="docutils">

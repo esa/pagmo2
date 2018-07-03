@@ -124,12 +124,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.8 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.7 (2018-04-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +180,7 @@
 <h1>Ipopt<a class="headerlink" href="#ipopt" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv2N5pagmo5ipoptE">
-<span id="pagmo::ipopt"></span><span class="target" id="classpagmo_1_1ipopt"></span><em class="property">class </em><code class="descclassname">pagmo::</code><code class="descname">ipopt</code><a class="headerlink" href="#_CPPv2N5pagmo5ipoptE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::ipopt"></span><span class="target" id="classpagmo_1_1ipopt"></span><em class="property">class </em><code class="descname">ipopt</code> : <em class="property">public</em> pagmo::<a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv2N5pagmo20not_population_basedE" title="pagmo::not_population_based">not_population_based</a><a class="headerlink" href="#_CPPv2N5pagmo5ipoptE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Ipopt. </p>
 <p><img alt="../../../_images/ipopt.png" src="../../../_images/ipopt.png" /></p>
 <p><div class="versionadded">
@@ -218,7 +219,6 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <p class="last"><a class="reference external" href="https://projects.coin-or.org/Ipopt">https://projects.coin-or.org/Ipopt</a>.</p>
 </div>
  </p>
-<p>Inherits from <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based"><span class="std std-ref">pagmo::not_population_based</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
@@ -367,10 +367,8 @@ file. Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2NK5pagmo5ipopt4saveER7Archive">
-<span id="pagmo::ipopt::save__ArchiveRC"></span><span class="target" id="classpagmo_1_1ipopt_1a6406e9b3834da0f7226927641744caab"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5ipopt4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::ipopt::save__ArchiveRC"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1ipopt_1a6406e9b3834da0f7226927641744caab"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5ipopt4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
@@ -388,10 +386,8 @@ file. Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity
 </dd></dl>
 
 <dl class="function">
-<dt>
-<em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;</dt>
 <dt id="_CPPv2N5pagmo5ipopt4loadER7Archive">
-<span id="pagmo::ipopt::load__ArchiveR"></span><span class="target" id="classpagmo_1_1ipopt_1a83df657fb7626f9edf3ddbb17b1415cb"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5ipopt4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::ipopt::load__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1ipopt_1a83df657fb7626f9edf3ddbb17b1415cb"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5ipopt4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
 <p>In case of exceptions, <code class="docutils literal"><span class="pre">this</span></code> will be reset to a default-constructed state.</p>
 <p><dl class="docutils">
