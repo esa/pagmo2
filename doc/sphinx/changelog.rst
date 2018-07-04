@@ -4,12 +4,18 @@ Changelog
 2.8 (unreleased)
 ----------------
 
+New
+~~~
+
+- The constraints' tolerances for a problem can now be set via a scalar in pygmo (`#185 <https://github.com/esa/pagmo2/pull/185>`__).
+
 Fix
 ~~~
 
 - Fix a bug in the Python exposition of the DE algorithm (`#183 <https://github.com/esa/pagmo2/pull/183>`__).
 
-- Various documentation and CI fixes (`#183 <https://github.com/esa/pagmo2/pull/183>`__).
+- Various documentation and CI fixes and improvements (`#183 <https://github.com/esa/pagmo2/pull/183>`__,
+  `#185 <https://github.com/esa/pagmo2/pull/185>`__).
 
 2.7 (2018-04-13)
 ----------------
