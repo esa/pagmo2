@@ -358,6 +358,14 @@ class problem_test_case(_ut.TestCase):
         self.assertTrue(all(prob.c_tol == array([0., 0.])))
         prob.c_tol = [1e-8, 1e-6]
         self.assertTrue(all(prob.c_tol == array([1e-8, 1e-6])))
+        prob.c_tol = 1e-3
+        self.assertTrue(all(prob.c_tol == array([1e-3, 1e-3])))
+        prob.c_tol = 4
+        self.assertTrue(all(prob.c_tol == array([4., 4.])))
+
+        def raiser():
+            prob.c_tol = float('nan')
+        self.assertRaises(ValueError, raiser)
 
     def run_evals_tests(self):
         from .core import problem

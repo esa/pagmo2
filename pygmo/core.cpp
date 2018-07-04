@@ -139,7 +139,7 @@ std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // Exposed pagmo::island.
 std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
-}
+} // namespace pygmo
 
 // The cleanup function.
 // This function will be registered to be called when the pygmo core module is unloaded
@@ -173,11 +173,10 @@ struct population_pickle_suite : bp::pickle_suite {
     static void setstate(population &pop, bp::tuple state)
     {
         if (len(state) != 2) {
-            pygmo_throw(PyExc_ValueError,
-                        ("the state tuple passed for population deserialization "
-                         "must have 2 elements, but instead it has "
-                         + std::to_string(len(state)) + " elements")
-                            .c_str());
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for population deserialization "
+                                           "must have 2 elements, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
 
         // Make sure we import all the aps specified in the archive.
@@ -214,11 +213,10 @@ struct archipelago_pickle_suite : bp::pickle_suite {
     static void setstate(archipelago &archi, bp::tuple state)
     {
         if (len(state) != 2) {
-            pygmo_throw(PyExc_ValueError,
-                        ("the state tuple passed for archipelago deserialization "
-                         "must have 2 elements, but instead it has "
-                         + std::to_string(len(state)) + " elements")
-                            .c_str());
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for archipelago deserialization "
+                                           "must have 2 elements, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
 
         // Make sure we import all the aps specified in the archive.
@@ -431,13 +429,13 @@ BOOST_PYTHON_MODULE(core)
     // machinery. If we ever make the archive type configurable, we'll probably have to add bits here.
     // See also the merge_s11n_data_for_ap() function in common_utils.hpp.
     bp::scope().attr("_s11n_in_address") = reinterpret_cast<std::uintptr_t>(
-        &cereal::detail::StaticObject<cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::
-             getInstance()
-                 .map);
+        &cereal::detail::StaticObject<
+             cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::getInstance()
+             .map);
     bp::scope().attr("_s11n_out_address") = reinterpret_cast<std::uintptr_t>(
-        &cereal::detail::StaticObject<cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::
-             getInstance()
-                 .map);
+        &cereal::detail::StaticObject<
+             cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::getInstance()
+             .map);
 
     // Store the address to the list of registered APs.
     bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&ap_set);
@@ -584,7 +582,14 @@ BOOST_PYTHON_MODULE(core)
         .def("get_thread_safety", &problem::get_thread_safety, pygmo::problem_get_thread_safety_docstring().c_str());
     pygmo::add_property(problem_class, "c_tol",
                         lcast([](const problem &prob) { return pygmo::v_to_a(prob.get_c_tol()); }),
-                        lcast([](problem &prob, const bp::object &c_tol) { prob.set_c_tol(pygmo::to_vd(c_tol)); }),
+                        lcast([](problem &prob, const bp::object &c_tol) {
+                            bp::extract<double> c_tol_double(c_tol);
+                            if (c_tol_double.check()) {
+                                prob.set_c_tol(static_cast<double>(c_tol_double));
+                                return;
+                            }
+                            prob.set_c_tol(pygmo::to_vd(c_tol));
+                        }),
                         pygmo::problem_c_tol_docstring().c_str());
 
     // Algorithm class.
@@ -621,14 +626,16 @@ BOOST_PYTHON_MODULE(core)
     // Hypervolume class
     bp::class_<hypervolume> hv_class("hypervolume", "Hypervolume Class");
     hv_class
-        .def("__init__", bp::make_constructor(lcast([](const bp::object &points) {
-                                                  auto vvd_points = pygmo::to_vvd(points);
-                                                  return ::new hypervolume(vvd_points, true);
-                                              }),
-                                              bp::default_call_policies(), (bp::arg("points"))),
+        .def("__init__",
+             bp::make_constructor(lcast([](const bp::object &points) {
+                                      auto vvd_points = pygmo::to_vvd(points);
+                                      return ::new hypervolume(vvd_points, true);
+                                  }),
+                                  bp::default_call_policies(), (bp::arg("points"))),
              pygmo::hv_init2_docstring().c_str())
-        .def("__init__", bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
-                                              bp::default_call_policies(), (bp::arg("pop"))),
+        .def("__init__",
+             bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
+                                  bp::default_call_policies(), (bp::arg("pop"))),
              pygmo::hv_init1_docstring().c_str())
         .def("compute",
              lcast([](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); }),
@@ -642,8 +649,9 @@ BOOST_PYTHON_MODULE(core)
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point));
              }),
              (bp::arg("idx"), bp::arg("ref_point")))
-        .def("exclusive", lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
-                                   boost::shared_ptr<hv_algorithm> hv_algo) {
+        .def("exclusive",
+             lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
+                      boost::shared_ptr<hv_algorithm> hv_algo) {
                  return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
              }),
              pygmo::hv_exclusive_docstring().c_str(), (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
@@ -736,17 +744,19 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f), N));
             }),
             pygmo::select_best_N_mo_docstring().c_str(), (bp::arg("points"), bp::arg("N")));
-    bp::def("decomposition_weights", lcast([](vector_double::size_type n_f, vector_double::size_type n_w,
-                                              const std::string &method, unsigned seed) {
-                using reng_t = pagmo::detail::random_engine_type;
-                reng_t tmp_rng(static_cast<reng_t::result_type>(seed));
-                return pygmo::vv_to_a(decomposition_weights(n_f, n_w, method, tmp_rng));
-            }),
-            pygmo::decomposition_weights_docstring().c_str(),
-            (bp::arg("n_f"), bp::arg("n_w"), bp::arg("method"), bp::arg("seed")));
+    bp::def(
+        "decomposition_weights",
+        lcast([](vector_double::size_type n_f, vector_double::size_type n_w, const std::string &method, unsigned seed) {
+            using reng_t = pagmo::detail::random_engine_type;
+            reng_t tmp_rng(static_cast<reng_t::result_type>(seed));
+            return pygmo::vv_to_a(decomposition_weights(n_f, n_w, method, tmp_rng));
+        }),
+        pygmo::decomposition_weights_docstring().c_str(),
+        (bp::arg("n_f"), bp::arg("n_w"), bp::arg("method"), bp::arg("seed")));
 
-    bp::def("decompose_objectives", lcast([](const bp::object &objs, const bp::object &weights,
-                                             const bp::object &ref_point, const std::string &method) {
+    bp::def("decompose_objectives",
+            lcast([](const bp::object &objs, const bp::object &weights, const bp::object &ref_point,
+                     const std::string &method) {
                 return pygmo::v_to_a(
                     decompose_objectives(pygmo::to_vd(objs), pygmo::to_vd(weights), pygmo::to_vd(ref_point), method));
             }),

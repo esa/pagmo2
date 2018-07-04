@@ -646,17 +646,32 @@ std::string problem_c_tol_docstring()
     return R"(Constraints tolerance.
 
 This property contains an array of ``float`` that are used when checking for constraint feasibility.
-The dimension of the array is :math:`n_{ec} + n_{ic}`, and the array is zero-filled on problem
-construction.
+The dimension of the array is :math:`n_{ec} + n_{ic}` (i.e., the total number of constraints), and
+the array is zero-filled on problem construction.
+
+This property can also be set via a scalar, instead of an array. In such case, all the tolerances
+will be set to the provided scalar value.
 
 Returns:
-    1D NumPy float array: the constraints tolerance
+    1D NumPy float array: the constraints' tolerances
 
 Raises:
     ValueError: if, when setting this property, the size of the input array differs from the number
       of constraints of the problem or if any element of the array is negative or NaN
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import problem, hock_schittkowsky_71 as hs71
+    >>> prob = problem(hs71())
+    >>> prob.c_tol
+    array([0., 0.])
+    >>> prob.c_tol = [1, 2]
+    >>> prob.c_tol
+    array([1., 2.])
+    >>> prob.c_tol = .5
+    >>> prob.c_tol
+    array([0.5, 0.5])
 
 )";
 }
@@ -4357,13 +4372,14 @@ NLopt algorithms is:
 * augmented Lagrangian algorithm.
 
 The desired NLopt solver is selected upon construction of an :class:`~pygmo.nlopt` algorithm. Various properties
-of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
+of the solver (e.g., the stopping criteria) can be configured via class attributes. Multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
 All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
-Some solvers support equality and/or inequality constraints.
+Some solvers support equality and/or inequality constraints. The constraints' tolerances will
+be set to those specified in the :class:`~pygmo.problem` being optimised (see :attr:`pygmo.problem.c_tol`).
 
 In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
