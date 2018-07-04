@@ -33,6 +33,29 @@ typedef std::vector<double> vector_double;
 
 namespace pagmo
 {
+/// The CEC 2014 problems: Real-Parameter Single Objective Optimization Competition
+/**
+ *
+ * The 30 problems of the competition on real-parameter single objective optimization problems that
+ * was organized for the 2014 IEEE Congress on Evolutionary Computation.
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    The code for these UDAs is adapted from the original C code distributed during the competition and
+ *    linked below.
+ *
+ * .. note::
+ *
+ *    All problems are box-bounded, continuous, single objective problems.
+ *
+ * .. seealso:
+ *
+ *    http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2014/CEC2014.htm
+ *    http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared%20Documents/CEC-2014/cec14-c-code.zip
+ *
+ * \endverbatim
+ */
 class cec2014 {
 
 public:
@@ -52,6 +75,16 @@ public:
     unsigned int func_num;
 
 
+    /// Constructor
+    /**
+     * Will construct one of the 30 CEC2014 problems
+     *
+     * @param prob_id The problem id. One of [1,2,...,30]
+     * @param dim problem dimension. One of [2,10,20,30,50,100]
+     *
+     * @throws invalid_argument if \p prob_id is not in [1,30] or if \p dim is not one of
+     * [2,10,20,30,50,100]
+     */
     cec2014(unsigned int prob_id = 1u, unsigned int dim = 2u) : y(dim), z(dim) {
 
         func_num = prob_id;
@@ -112,6 +145,13 @@ public:
 
     }
 
+    /// Box-bounds
+    /**
+     *
+     * It returns the box-bounds for this UDP.
+     *
+     * @return the lower and upper bounds for each of the decision vector components
+     */
     std::pair<vector_double, vector_double> get_bounds() const {
         // all CEC 2014 problems have the same bounds
         vector_double lb(nx, -100.);
@@ -119,6 +159,14 @@ public:
         return std::make_pair(std::move(lb), std::move(ub));
     }
 
+    /// Fitness computation
+    /**
+     * Computes the fitness for this UDP
+     *
+     * @param x the decision vector.
+     *
+     * @return the fitness of \p x.
+     */
     vector_double fitness(const vector_double &x) const {
         vector_double f(1);
         switch(func_num) {
@@ -247,13 +295,127 @@ public:
         return f;
     }
 
+    /// Problem name
+    /**
+     *
+     *
+     * @return a string containing the problem name
+     */
+    std::string get_name() const
+    {
+        std::string retval("CEC2014 - f");
+        retval.append(std::to_string(func_num));
+        switch (func_num) {
+            case 1:
+                retval.append("(ellips_func)");
+                break;
+            case 2:
+                retval.append("(bent_cigar_func)");
+                break;
+            case 3:
+                retval.append("(discus_func)");
+                break;
+            case 4:
+                retval.append("(rosenbrock_func)");
+                break;
+            case 5:
+                retval.append("(ackley_func)");
+                break;
+            case 6:
+                retval.append("(weierstrass_func)");
+                break;
+            case 7:
+                retval.append("(griewank_func)");
+                break;
+            case 8:
+                retval.append("(rastrigin_func_non_rotated)");
+                break;
+            case 9:
+                retval.append("(rastrigin_func)");
+                break;
+            case 10:
+                retval.append("(schwefel_func_non_rotated)");
+                break;
+            case 11:
+                retval.append("(schwefel_func)");
+                break;
+            case 12:
+                retval.append("(katsuura_func)");
+                break;
+            case 13:
+                retval.append("(happycat_func)");
+                break;
+            case 14:
+                retval.append("(hgbat_func)");
+                break;
+            case 15:
+                retval.append("(grie_rosen_func)");
+                break;
+            case 16:
+                retval.append("(escaffer6_func)");
+                break;
+            case 17:
+                retval.append("(hf01)");
+                break;
+            case 18:
+                retval.append("(hf02)");
+                break;
+            case 19:
+                retval.append("(hf03)");
+                break;
+            case 20:
+                retval.append("(hf04)");
+                break;
+            case 21:
+                retval.append("(hf05)");
+                break;
+            case 22:
+                retval.append("(hf06)");
+                break;
+            case 23:
+                retval.append("(cf01)");
+                break;
+            case 24:
+                retval.append("(cf02)");
+                break;
+            case 25:
+                retval.append("(cf03)");
+                break;
+            case 26:
+                retval.append("(cf04)");
+                break;
+            case 27:
+                retval.append("(cf05)");
+                break;
+            case 28:
+                retval.append("(cf06)");
+                break;
+            case 29:
+                retval.append("(cf07)");
+                break;
+            case 30:
+                retval.append("(cf08)");
+                break;
+        }
+        return retval;
+    }
+
+    /// Object serialization
+    /**
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar) {
         ar(func_num, nx, m_rotation_matrix, m_origin_shift, m_shuffle, y, z);
     }
 
 private:
-
+    // For the coverage analysis we do not cover the code below as its derived from a third party source
+    // LCOV_EXCL_START
     /* Sphere */
     void sphere_func (const double *x, double *f, const unsigned int nx, const double *Os,
                       const double *Mr, int s_flag, int r_flag) const {
@@ -1275,6 +1437,7 @@ private:
         }
         free(w);
     }
+    // LCOV_EXCL_STOP
 
 };
 
