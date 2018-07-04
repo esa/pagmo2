@@ -4357,13 +4357,14 @@ NLopt algorithms is:
 * augmented Lagrangian algorithm.
 
 The desired NLopt solver is selected upon construction of an :class:`~pygmo.nlopt` algorithm. Various properties
-of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
+of the solver (e.g., the stopping criteria) can be configured via class attributes. Multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
 All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
-Some solvers support equality and/or inequality constraints.
+Some solvers support equality and/or inequality constraints. The constraints' tolerances will
+be set to those specified in the :class:`~pygmo.problem` being optimised (see :attr:`pygmo.problem.c_tol`).
 
 In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.
