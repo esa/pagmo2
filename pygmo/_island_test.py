@@ -275,10 +275,17 @@ class mp_island_test_case(_ut.TestCase):
         from . import mp_island
         from copy import copy, deepcopy
         from pickle import dumps, loads
+        # Try shutting down a few tims.
+        mp_island.shutdown_pool()
+        mp_island.shutdown_pool()
+        mp_island.shutdown_pool()
         isl = island(algo=de(), prob=rosenbrock(), size=25, udi=mp_island())
         self.assertEqual(isl.get_name(), "Multiprocessing island")
         self.assertTrue(isl.get_extra_info() != "")
         self.assertTrue(mp_island.get_pool_size() > 0)
+        # Init a few times.
+        mp_island.init_pool()
+        mp_island.init_pool()
         mp_island.init_pool()
         self.assertRaises(TypeError, lambda: mp_island.init_pool("dasda"))
         self.assertRaises(ValueError, lambda: mp_island.init_pool(0))
@@ -293,6 +300,20 @@ class mp_island_test_case(_ut.TestCase):
         isl.wait()
         self.assertRaises(ValueError, lambda: mp_island.resize_pool(-1))
         self.assertRaises(TypeError, lambda: mp_island.resize_pool("dasda"))
+
+        # Shutdown and verify that evolve() throws.
+        mp_island.shutdown_pool()
+        mp_island.shutdown_pool()
+        isl.evolve(20)
+        with self.assertRaises(RuntimeError) as cm:
+            isl.wait_check()
+        err = cm.exception
+        self.assertTrue(
+            "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool()." in str(err))
+
+        # Verify that asking for the pool size triggers the creation of a new pool.
+        self.assertTrue(mp_island.get_pool_size() > 0)
+        mp_island.resize_pool(4)
 
         # Check the picklability of a problem storing a lambda.
         isl = island(algo=de(), prob=_prob(
