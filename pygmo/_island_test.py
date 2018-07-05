@@ -36,7 +36,8 @@ import unittest as _ut
 class _udi_01(object):
 
     def run_evolve(self, algo, pop):
-        return algo.evolve(pop)
+        newpop = algo.evolve(pop)
+        return algo, newpop
 
     def get_name(self):
         return "udi_01"
@@ -46,7 +47,20 @@ class _udi_01(object):
 
 
 class _udi_02(object):
+    # UDI without the necessary method(s).
     pass
+
+
+class _udi_03(object):
+    # UDI with run_evolve() returning wrong stuff, #1.
+    def run_evolve(self, algo, pop):
+        return algo, pop, 25
+
+
+class _udi_04(object):
+    # UDI with run_evolve() returning wrong stuff, #2.
+    def run_evolve(self, algo, pop):
+        return [algo, pop]
 
 
 class _prob(object):
@@ -59,6 +73,16 @@ class _prob(object):
 
     def get_bounds(self):
         return ([0.], [1.])
+
+
+class _stateful_algo(object):
+
+    def __init__(self):
+        self._n = 0
+
+    def evolve(self, pop):
+        self._n = self._n + 1
+        return pop
 
 
 class island_test_case(_ut.TestCase):
@@ -74,6 +98,7 @@ class island_test_case(_ut.TestCase):
         self.run_thread_safety_tests()
         self.run_io_tests()
         self.run_status_tests()
+        self.run_stateful_algo_tests()
 
     def run_basic_tests(self):
         from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock
@@ -100,6 +125,24 @@ class island_test_case(_ut.TestCase):
         self.assertEqual(len(isl.get_population()), 11)
         self.assertRaises(NotImplementedError, lambda: island(prob=rosenbrock(), udi=_udi_02(),
                                                               size=11, algo=de(), seed=15))
+
+        isl = island(prob=rosenbrock(), udi=_udi_03(),
+                     size=11, algo=de(), seed=15)
+        isl.evolve()
+        with self.assertRaises(RuntimeError) as cm:
+            isl.wait_check()
+        err = cm.exception
+        self.assertTrue(
+            "the tuple returned by the 'run_evolve()' method of a user-defined island must have 2 elements, but instead it has 3 element(s)" in str(err))
+
+        isl = island(prob=rosenbrock(), udi=_udi_04(),
+                     size=11, algo=de(), seed=15)
+        isl.evolve()
+        with self.assertRaises(RuntimeError) as cm:
+            isl.wait_check()
+        err = cm.exception
+        self.assertTrue(
+            "the 'run_evolve()' method of a user-defined island must return a tuple, but it returned an object of type '" in str(err))
 
     def run_concurrent_access_tests(self):
         import threading as thr
@@ -200,6 +243,13 @@ class island_test_case(_ut.TestCase):
         tmp = repr(isl)
         isl = loads(dumps(isl))
         self.assertEqual(tmp, repr(isl))
+
+    def run_stateful_algo_tests(self):
+        from .core import island, rosenbrock
+        isl = island(algo=_stateful_algo(), prob=rosenbrock(), size=25)
+        isl.evolve(20)
+        isl.wait_check()
+        self.assertTrue(isl.get_algorithm().extract(_stateful_algo)._n == 20)
 
 
 class mp_island_test_case(_ut.TestCase):
