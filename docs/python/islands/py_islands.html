@@ -334,7 +334,7 @@ from the main one, or if <em>processes</em> is a non-positive value</li>
 <code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <em>pop</em> using the input
-<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return the evolved population. The evolution
+<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
 is run on one of the processes of the pool backing backing <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -346,10 +346,11 @@ is run on one of the processes of the pool backing backing <a class="reference i
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the evolved population</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><em>algo</em> (i.e., the algorithm object that was used for the evolution)
+<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>: the evolved population</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown during the evolution, or by the public interface of the
@@ -413,7 +414,7 @@ object that will be created internally.</p>
 <code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <em>pop</em> using the input
-<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return the evolved population. The evolution
+<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
 task is submitted to the ipyparallel cluster via an internal <code class="xref py py-class docutils literal"><span class="pre">ipyparallel.LoadBalancedView</span></code>
 instance initialised during the construction of the island.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -426,10 +427,11 @@ instance initialised during the construction of the island.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the evolved population</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><em>algo</em> (i.e., the algorithm object that was used for the evolution)
+<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>: the evolved population</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown during the evolution, or by submitting the evolution task

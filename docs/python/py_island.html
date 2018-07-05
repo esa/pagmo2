@@ -209,11 +209,11 @@ the following method:</p>
 </div>
 <p>The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI will use the input <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>’s
 <a class="reference internal" href="py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> method to evolve the input <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> and, once the evolution
-is finished, it will return the evolved <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>. Note that, since internally the <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
-class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of
-thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy
-the UDI while evolution is undergoing, or call the <code class="docutils literal"><span class="pre">get_name()</span></code>, <code class="docutils literal"><span class="pre">get_extra_info()</span></code> methods, etc.), otherwise the behaviour
-will be undefined.</p>
+is finished, it will return the algorithm used for the evolution and the evolved <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>.
+Note that, since internally the <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> class uses a separate thread of execution to provide asynchronous
+behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact with the UDI
+while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or call the <code class="docutils literal"><span class="pre">get_name()</span></code>,
+<code class="docutils literal"><span class="pre">get_extra_info()</span></code> methods, etc.), otherwise the behaviour will be undefined.</p>
 <p>In addition to the mandatory <code class="docutils literal"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
   <span class="o">...</span>
@@ -284,9 +284,9 @@ signatures, etc.)</li>
 The evolution happens asynchronously: a call to <a class="reference internal" href="#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> will create an evolution task that
 will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
 managed by the <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> object. Each task will invoke the <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI <em>n</em>
-times consecutively to perform the actual evolution. The island’s population will be updated at the end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code>
-invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
-<a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>.</p>
+times consecutively to perform the actual evolution. The island’s algorithm and population will be updated at the
+end of each <code class="docutils literal"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object,
+and can be re-raised by calling <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>.</p>
 <p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
 first-out) fashion. The user may call <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> or <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> to block until all
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks. The <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a>

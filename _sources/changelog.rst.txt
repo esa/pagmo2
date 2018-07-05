@@ -7,6 +7,8 @@ Changelog
 New
 ~~~
 
+- **BREAKING**: user-defined islands in Python must now return the algorithm object used for the evolution in addition
+  to the evolved population (`#186 <https://github.com/esa/pagmo2/pull/186>`__).
 - The constraints' tolerances for a problem can now be set via a scalar in pygmo (`#185 <https://github.com/esa/pagmo2/pull/185>`__).
 
 Fix
