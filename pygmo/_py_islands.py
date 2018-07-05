@@ -37,7 +37,8 @@ from threading import Lock as _Lock
 def _evolve_func(algo, pop):
     # The evolve function that is actually run from the separate processes
     # in both mp_island and ipyparallel_island.
-    return algo.evolve(pop)
+    new_pop = algo.evolve(pop)
+    return algo, new_pop
 
 
 class _temp_disable_sigint(object):
@@ -99,7 +100,7 @@ class mp_island(object):
         """Evolve population.
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
-        :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
+        :class:`~pygmo.algorithm` *algo*, and return *algo* and the evolved population. The evolution
         is run on one of the processes of the pool backing backing :class:`~pygmo.mp_island`.
 
         Args:
@@ -108,9 +109,12 @@ class mp_island(object):
             algo(:class:`~pygmo.algorithm`): the input algorithm
 
         Returns:
+
+            :class:`~pygmo.algorithm`: *algo* (i.e., the algorithm object that was used for the evolution)
             :class:`~pygmo.population`: the evolved population
 
         Raises:
+
             unspecified: any exception thrown during the evolution, or by the public interface of the
               process pool
 
@@ -380,7 +384,7 @@ class ipyparallel_island(object):
         """Evolve population.
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
-        :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
+        :class:`~pygmo.algorithm` *algo*, and return *algo* and the evolved population. The evolution
         task is submitted to the ipyparallel cluster via an internal :class:`ipyparallel.LoadBalancedView`
         instance initialised during the construction of the island.
 
@@ -390,9 +394,12 @@ class ipyparallel_island(object):
             algo(:class:`~pygmo.algorithm`): the input algorithm
 
         Returns:
+
+            :class:`~pygmo.algorithm`: *algo* (i.e., the algorithm object that was used for the evolution)
             :class:`~pygmo.population`: the evolved population
 
         Raises:
+
             unspecified: any exception thrown during the evolution, or by submitting the evolution task
               to the ipyparallel cluster
 

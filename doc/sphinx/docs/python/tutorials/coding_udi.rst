@@ -1,7 +1,7 @@
 .. _py_tutorial_coding_udi_simple:
 
 Coding a User Defined Island
-------------------------------------
+----------------------------
 
 While pagmo provides a number of UDIs (see :ref:`islands`) to provide access to a number of parallelization technologies, the expert user
 can code his own expanding pygmo functionalities. In this tutorial we will show how to code a UDI. Remember that UDIs are classes that can be used 
@@ -19,7 +19,8 @@ the :class:`~pygmo.population` ``pop``.
     >>> import pygmo as pg
     >>> class my_isl:
     ...     def run_evolve(self, algo, pop):
-    ...         return algo.evolve(pop)
+    ...         new_pop = algo.evolve(pop)
+    ...         return algo, new_pop
     ...     def get_name(self):
     ...         return "It's my island!"
 
@@ -42,12 +43,13 @@ on some pygmo classes. The above UDI can then be used to construct a :class:`~py
         Champion fitness: [...
 
 That was easy! Lets now understand what we actually did. The object ``isl`` now contains our UDI and, upon construction will open a thread and delegate the execution of
-``run_evolve(self, algo, pop)`` to it upon call to :func:`~pygmo.island.evolve()`. 
+``run_evolve(self, algo, pop)`` to it upon call to :func:`~pygmo.island.evolve()`. The ``run_evolve()`` method must return the algorithm object used for
+the evolution and the evolved population.
 
-But there is a catch. We are in python! So it is not possible, in general, to have the same interpreter execute instructions in parallel as,
-in most of the popular python language implementations, memory management is not thread-safe. So, while the code above is perfectly fine and will
+But there is a catch. We are in CPython! CPython, generally speaking, serialises the execution of Python code due to the presence
+of the global interpreter lock (GIL). So, while the code above is perfectly fine and will
 work with pygmo, a set of ``my_isl`` running evolutions will not run in parallel as each :class:`~pygmo.island`, when executing its :func:`~pygmo.island.evolve()` 
-method, acquires the GIL (Global Interpreter Lock) and holds it during the :func:`~pygmo.island.evolve()` execution. 
+method, acquires the GIL and holds it during the :func:`~pygmo.island.evolve()` execution. 
 
 As a consequence, the following code:
 
@@ -62,7 +64,8 @@ An example on how this can be achieved using, for example the multiprocessing mo
 .. doctest::
 
    >>> def _evolve_func(algo, pop): # doctest : +SKIP
-   ...     return algo.evolve(pop)
+   ...     new_pop = algo.evolve(pop)
+   ...     return algo, new_pop
    >>> class mp_island(object): # doctest : +SKIP
    ...     def __init__(self):
    ...         # Init the process pool, if necessary.
@@ -76,6 +79,3 @@ An example on how this can be achieved using, for example the multiprocessing mo
 The full details are here not reported and can be read in the :class:`~pygmo.mp_island` code. In a nutshell, what happens is that the ``algo.evolve(pop)`` gets offloaded to
 a process (in a shared pool inited upon construction calling the :func:`~pygmo.mp_island.init_pool()` static method). The instruction ``res.get()``, makes the thread where ``run_evolve``
 remain waiting for the process execution and while doing so it releases the GIL, making parallelization effective. 
-
-.. warning::
-   When coding a UDI the user has to take care, according to the parallelization technology chosen, that the GIL is managed properly.
