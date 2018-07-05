@@ -275,7 +275,7 @@ class mp_island_test_case(_ut.TestCase):
         from . import mp_island
         from copy import copy, deepcopy
         from pickle import dumps, loads
-        # Try shutting down a few tims.
+        # Try shutting down a few times.
         mp_island.shutdown_pool()
         mp_island.shutdown_pool()
         mp_island.shutdown_pool()
