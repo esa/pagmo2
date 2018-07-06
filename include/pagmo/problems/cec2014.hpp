@@ -107,10 +107,6 @@ public:
                         "hf01,hf02,hf03,hf04,hf05,hf06,cf07&cf08 are NOT defined for D=2.");
         }
 
-        std::ostringstream name_stream;
-        std::string data_file_name;
-        std::ifstream data_file;
-
         /* Load Rotation Matrix */
         auto rotation_func_it = detail::cec2014_data::rotation_data.find(func_num);
         auto rotation_data_dim = rotation_func_it->second;
