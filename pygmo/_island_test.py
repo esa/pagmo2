@@ -275,7 +275,8 @@ class mp_island_test_case(_ut.TestCase):
         from . import mp_island
         from copy import copy, deepcopy
         from pickle import dumps, loads
-        # Try shutting down a few times.
+        # Try shutting down a few times, to confirm that the second
+        # and third shutdowns don't do anything.
         mp_island.shutdown_pool()
         mp_island.shutdown_pool()
         mp_island.shutdown_pool()
@@ -283,7 +284,8 @@ class mp_island_test_case(_ut.TestCase):
         self.assertEqual(isl.get_name(), "Multiprocessing island")
         self.assertTrue(isl.get_extra_info() != "")
         self.assertTrue(mp_island.get_pool_size() > 0)
-        # Init a few times.
+        # Init a few times, to confirm that the second
+        # and third inits don't do anything.
         mp_island.init_pool()
         mp_island.init_pool()
         mp_island.init_pool()
@@ -302,7 +304,6 @@ class mp_island_test_case(_ut.TestCase):
         self.assertRaises(TypeError, lambda: mp_island.resize_pool("dasda"))
 
         # Shutdown and verify that evolve() throws.
-        mp_island.shutdown_pool()
         mp_island.shutdown_pool()
         isl.evolve(20)
         with self.assertRaises(RuntimeError) as cm:
