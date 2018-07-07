@@ -7,8 +7,14 @@ Changelog
 New
 ~~~
 
+- It is now possible to explicitly shut down the process pool of :class:`~pygmo.mp_island` (`#187 <https://github.com/esa/pagmo2/pull/187>`__).
+
+- Start using intersphinx in the documentation (used at the moment for hyperlinking to the Python online documentation)
+  (`#187 <https://github.com/esa/pagmo2/pull/187>`__).
+
 - **BREAKING**: user-defined islands in Python must now return the algorithm object used for the evolution in addition
   to the evolved population (`#186 <https://github.com/esa/pagmo2/pull/186>`__).
+
 - The constraints' tolerances for a problem can now be set via a scalar in pygmo (`#185 <https://github.com/esa/pagmo2/pull/185>`__).
 
 Fix
