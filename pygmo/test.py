@@ -995,7 +995,7 @@ class cec2013_test_case(_ut.TestCase):
 
 
 class cec2014_test_case(_ut.TestCase):
-    """Test case for the UDP cec2013
+    """Test case for the UDP cec2014
 
     """
 

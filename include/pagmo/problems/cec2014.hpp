@@ -1,7 +1,6 @@
 /*
   CEC14 Test Function Suite for Single Objective Optimization
   Jane Jing Liang (email: liangjing@zzu.edu.cn; liangjing@pmail.ntu.edu.cn)
-  Dec. 20th 2013
 */
 
 
@@ -97,7 +96,7 @@ public:
         }
         if (prob_id < 1u || prob_id > 30u) {
             pagmo_throw(std::invalid_argument,
-                        "Error: CEC2013 Test functions are only defined for prob_id in [1, 28], a prob_id of "
+                        "Error: CEC2014 Test functions are only defined for prob_id in [1, 28], a prob_id of "
                             + std::to_string(prob_id) + " was detected.");
         }
 
