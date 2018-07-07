@@ -89,6 +89,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
+#include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/sga.hpp>
@@ -284,10 +285,10 @@ void expose_algorithms()
     auto de_ = expose_algorithm_pygmo<de>("de", de_docstring().c_str());
     de_.def(bp::init<unsigned, double, double, unsigned, double, double>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
-         bp::arg("tol") = 1E-6)));
+         bp::arg("xtol") = 1E-6)));
     de_.def(bp::init<unsigned, double, double, unsigned, double, double, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
-         bp::arg("tol") = 1E-6, bp::arg("seed"))));
+         bp::arg("xtol") = 1E-6, bp::arg("seed"))));
     expose_algo_log(de_, de_get_log_docstring().c_str());
     de_.def("get_seed", &de::get_seed, generic_uda_get_seed_docstring().c_str());
     // COMPASS SEARCH
@@ -314,6 +315,18 @@ void expose_algorithms()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(pso_, pso_get_log_docstring().c_str());
     pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
+    // PSO (generational)
+    auto pso_gen_ = expose_algorithm_pygmo<pso_gen>("pso_gen", pso_gen_docstring().c_str());
+    pso_gen_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
+         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
+         bp::arg("memory") = false)));
+    pso_gen_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
+         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
+         bp::arg("memory") = false, bp::arg("seed"))));
+    expose_algo_log(pso_gen_, pso_gen_get_log_docstring().c_str());
+    pso_gen_.def("get_seed", &pso_gen::get_seed, generic_uda_get_seed_docstring().c_str());
     // SEA
     auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
@@ -582,4 +595,4 @@ void expose_algorithms()
     ipopt_.def("reset_numeric_options", &ipopt::reset_numeric_options, ipopt_reset_numeric_options_docstring().c_str());
 #endif
 }
-}
+} // namespace pygmo

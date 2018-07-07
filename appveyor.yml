@@ -21,10 +21,12 @@ environment:
 install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
+# NOTE: we clean and update the conda env due to some apparent caching issues in the
+# conda version installed on appveyor.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
 
@@ -33,7 +35,8 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost boost-cpp eigen nlopt numpy cloudpickle
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda install -y "ipyparallel<6.1"
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
@@ -41,7 +44,9 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update conda -y 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost eigen nlopt numpy cloudpickle ipyparallel
+# For the 3.6 build, let's not pin to the boost conda versions: the idea is to test with the latest boost in order
+# to pre-empt possible future problems when conda updates the pinned versions.
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pagmo
 
 # Rename sh.exe as sh.exe in PATH interferes with MinGW.
@@ -86,10 +91,10 @@ build_script:
 test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest --output-on-failure
 
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] start /b ipcluster start
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd tools
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] Powershell.exe -File start_ip_cluster.ps1
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] python -c "import pygmo; pygmo.test.run_test_suite(1)"
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] python travis_additional_tests.py
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
@@ -111,10 +116,10 @@ test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] python test2.py
 
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] start /b ipcluster start
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd tools
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] Powershell.exe -File start_ip_cluster.ps1
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] timeout 20
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] python -c "import pygmo; pygmo.test.run_test_suite(1)"
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] python travis_additional_tests.py
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cd ..

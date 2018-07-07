@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_SERIALIZATION_HPP
 #define PAGMO_SERIALIZATION_HPP
 
+// Let's disable a few compiler warnings emitted by the cereal code.
 #if defined(__clang__) || defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
@@ -36,6 +37,43 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #if __GNUC__ >= 7
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+#if defined(__clang__)
+
+#if defined(__apple_build_version__)
+
+// LLVM 3.2 -> Xcode 4.6.
+#if __clang_major__ > 4 || (__clang_major__ == 4 && __clang_minor__ >= 6)
+
+#pragma GCC diagnostic ignored "-Wunused-private-field"
+
+#endif
+
+// LLVM 3.7 -> Xcode 7.0.
+#if __clang_major__ >= 7
+
+#pragma GCC diagnostic ignored "-Wexceptions"
+
+#endif
+
+#else
+
+// LLVM 3.2.
+#if __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 2)
+
+#pragma GCC diagnostic ignored "-Wunused-private-field"
+
+#endif
+
+// LLVM 3.7.
+#if __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7)
+
+#pragma GCC diagnostic ignored "-Wexceptions"
+
+#endif
+
+#endif
+
 #endif
 #endif
 
@@ -137,6 +175,6 @@ inline void CEREAL_LOAD_FUNCTION_NAME(Archive &ar, Eigen::Matrix<S, R, C, O, MR,
     }
 }
 #endif
-}
+} // namespace cereal
 
 #endif

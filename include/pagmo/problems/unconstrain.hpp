@@ -75,9 +75,7 @@ public:
     /**
      * The default constructor will initialize a pagmo::null_problem unconstrained via the death penalty method.
      */
-    unconstrain() : unconstrain(null_problem{2, 3, 4}, "death penalty")
-    {
-    }
+    unconstrain() : unconstrain(null_problem{2, 3, 4}, "death penalty") {}
 
     /// Constructor from UDP and unconstrain method
     /**
@@ -117,9 +115,8 @@ public:
         }
         // 2 - We throw if the method weighted is selected but the weight vector has the wrong size
         if (weights.size() != nc && method == "weighted") {
-            pagmo_throw(std::invalid_argument,
-                        "Length of weight vector is: " + std::to_string(weights.size())
-                            + " while the problem constraints are: " + std::to_string(nc));
+            pagmo_throw(std::invalid_argument, "Length of weight vector is: " + std::to_string(weights.size())
+                                                   + " while the problem constraints are: " + std::to_string(nc));
         }
         // 3 - We throw if the method selected is not supported
         if (method != "death penalty" && method != "kuri" && method != "weighted" && method != "ignore_c"
@@ -188,7 +185,8 @@ public:
                                                                 c_tol.data() + nec)
                                       .first;
                     // sets the Kuri penalization
-                    auto penalty = std::numeric_limits<double>::max() * (1. - (double)(sat_ec + sat_ic) / (double)nc);
+                    auto penalty = std::numeric_limits<double>::max()
+                                   * (1. - static_cast<double>(sat_ec + sat_ic) / static_cast<double>(nc));
                     std::fill(retval.begin(), retval.end(), penalty);
                 }
             } break;
@@ -411,7 +409,7 @@ private:
     /// weights vector
     vector_double m_weights;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::unconstrain)
 

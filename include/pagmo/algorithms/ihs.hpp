@@ -78,11 +78,12 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://en.wikipedia.org/wiki/Harmony_search for an introduction on harmony search.
+ *    https://en.wikipedia.org/wiki/Harmony_search for an introduction on harmony search.
  *
  * .. seealso::
  *
- *    http://dx.doi.org/10.1016/j.amc.2006.11.033 for the paper that introduces and explains improved harmony search.
+ *    https://linkinghub.elsevier.com/retrieve/pii/S0096300306015098 for the paper that introduces and explains improved
+ *    harmony search.
  *
  * \endverbatim
  */

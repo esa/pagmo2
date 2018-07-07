@@ -185,7 +185,7 @@ inline bp::object v_to_a(const std::vector<T> &v)
     bp::object retval{bp::handle<>(ret)};
     if (v.size()) {
         // Copy over the data.
-        std::copy(v.begin(), v.end(), static_cast<T *>(PyArray_DATA((PyArrayObject *)(ret))));
+        std::copy(v.begin(), v.end(), static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret))));
     }
     // Hand over to boost python.
     return retval;
@@ -210,7 +210,7 @@ inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
     // Hand over to BP for exception-safe behaviour.
     bp::object retval{bp::handle<>(ret)};
     if (nrows) {
-        auto data = static_cast<T *>(PyArray_DATA((PyArrayObject *)(ret)));
+        auto data = static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
         for (const auto &i : v) {
             if (i.size() != ncols) {
                 pygmo_throw(PyExc_ValueError, "cannot convert a vector of vectors to a NumPy 2D array "
@@ -239,25 +239,22 @@ inline pagmo::vector_double ad_to_vd(PyArrayObject *o)
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError,
-                    ("cannot convert NumPy array to a vector of doubles: "
-                     "the array must be unidimensional, but the dimension is "
-                     + std::to_string(PyArray_NDIM(o)) + " instead")
-                        .c_str());
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a vector of doubles: "
+                                       "the array must be unidimensional, but the dimension is "
+                                       + std::to_string(PyArray_NDIM(o)) + " instead")
+                                          .c_str());
     }
     if (PyArray_STRIDES(o)[0] != sizeof(double)) {
-        pygmo_throw(PyExc_RuntimeError,
-                    ("cannot convert NumPy array to a vector of doubles: "
-                     "the stride value must be "
-                     + std::to_string(sizeof(double)))
-                        .c_str());
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of doubles: "
+                                         "the stride value must be "
+                                         + std::to_string(sizeof(double)))
+                                            .c_str());
     }
     if (PyArray_ITEMSIZE(o) != sizeof(double)) {
-        pygmo_throw(PyExc_RuntimeError,
-                    ("cannot convert NumPy array to a vector of doubles: "
-                     "the size of the scalar type must be "
-                     + std::to_string(sizeof(double)))
-                        .c_str());
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of doubles: "
+                                         "the size of the scalar type must be "
+                                         + std::to_string(sizeof(double)))
+                                            .c_str());
     }
     // NOTE: not sure if this special casing is needed. We make sure
     // the array contains something in order to avoid messing around
@@ -284,7 +281,7 @@ inline pagmo::vector_double to_vd(const bp::object &o)
         if (!n) {
             bp::throw_error_already_set();
         }
-        return ad_to_vd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
+        return ad_to_vd(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
     // If o is not a numpy array, just try to iterate over it and extract doubles.
     bp::stl_input_iterator<double> begin(o), end;
@@ -308,11 +305,10 @@ inline std::vector<pagmo::vector_double> a_to_vvd(PyArrayObject *o)
                                      "the scalar type must be 'double'");
     }
     if (PyArray_ITEMSIZE(o) != sizeof(double)) {
-        pygmo_throw(PyExc_RuntimeError,
-                    ("cannot convert NumPy array to a vector of vector_double: "
-                     "the size of the scalar type must be "
-                     + std::to_string(sizeof(double)))
-                        .c_str());
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of vector_double: "
+                                         "the size of the scalar type must be "
+                                         + std::to_string(sizeof(double)))
+                                            .c_str());
     }
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
     std::vector<pagmo::vector_double> retval;
@@ -343,14 +339,13 @@ inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
         if (!n) {
             bp::throw_error_already_set();
         }
-        return a_to_vvd((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
+        return a_to_vvd(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
-    pygmo_throw(PyExc_TypeError,
-                ("cannot convert the type '" + str(type(o))
-                 + "' to a "
-                   "vector of vector_double: only lists of doubles and NumPy arrays of doubles "
-                   "are supported")
-                    .c_str());
+    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
+                                  + "' to a "
+                                    "vector of vector_double: only lists of doubles and NumPy arrays of doubles "
+                                    "are supported")
+                                     .c_str());
 }
 
 // Convert a numpy array to an std::vector<unsigned>.
@@ -371,18 +366,16 @@ inline std::vector<unsigned> a_to_vu(PyArrayObject *o)
                                      "invalid scalar type");
     }
     if (PyArray_STRIDES(o)[0] != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError,
-                    ("cannot convert NumPy array to a vector of unsigned: "
-                     "the stride value must be "
-                     + std::to_string(sizeof(int_type)))
-                        .c_str());
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned: "
+                                         "the stride value must be "
+                                         + std::to_string(sizeof(int_type)))
+                                            .c_str());
     }
     if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError,
-                    ("cannot convert NumPy array to a vector of unsigned: "
-                     "the size of the scalar type must be "
-                     + std::to_string(sizeof(int_type)))
-                        .c_str());
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned: "
+                                         "the size of the scalar type must be "
+                                         + std::to_string(sizeof(int_type)))
+                                            .c_str());
     }
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
     std::vector<unsigned> retval;
@@ -410,12 +403,11 @@ inline std::vector<unsigned> to_vu(const bp::object &o)
         if (!n) {
             bp::throw_error_already_set();
         }
-        return a_to_vu((PyArrayObject *)(bp::object(bp::handle<>(n)).ptr()));
+        return a_to_vu(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
-    pygmo_throw(PyExc_TypeError,
-                ("cannot convert the type '" + str(type(o))
-                 + "' to a vector of ints: only lists of ints and NumPy arrays of ints are supported")
-                    .c_str());
+    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
+                                  + "' to a vector of ints: only lists of ints and NumPy arrays of ints are supported")
+                                     .c_str());
 }
 
 // Convert a sparsity pattern into a numpy array.
@@ -433,14 +425,13 @@ inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
     // Hand over to BP for exception-safe behaviour.
     bp::object retval{bp::handle<>(ret)};
     auto err_handler = [](const decltype(s[0].first) &n) {
-        pygmo_throw(PyExc_OverflowError,
-                    ("overflow in the conversion of the sparsity index " + std::to_string(n)
-                     + " to the appropriate signed integer type")
-                        .c_str());
+        pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
+                                          + " to the appropriate signed integer type")
+                                             .c_str());
     };
     // NOTE: same as above, avoid asking for the data pointer if size is zero.
     if (s.size()) {
-        auto data = static_cast<int_type *>(PyArray_DATA((PyArrayObject *)(ret)));
+        auto data = static_cast<int_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
         for (decltype(s.size()) i = 0u; i < s.size(); ++i) {
             try {
                 *(data + i + i) = boost::numeric_cast<int_type>(s[i].first);
@@ -467,18 +458,16 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
                                       "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 2) {
-        pygmo_throw(PyExc_ValueError,
-                    ("cannot convert NumPy array to a sparsity pattern: "
-                     "the array must be bidimensional, but its dimension is "
-                     + std::to_string(PyArray_NDIM(o)) + " instead")
-                        .c_str());
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+                                       "the array must be bidimensional, but its dimension is "
+                                       + std::to_string(PyArray_NDIM(o)) + " instead")
+                                          .c_str());
     }
     if (PyArray_SHAPE(o)[1] != 2) {
-        pygmo_throw(PyExc_ValueError,
-                    ("cannot convert NumPy array to a sparsity pattern: "
-                     "the second dimension must be 2, but it is instead "
-                     + std::to_string(PyArray_SHAPE(o)[1]))
-                        .c_str());
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+                                       "the second dimension must be 2, but it is instead "
+                                       + std::to_string(PyArray_SHAPE(o)[1]))
+                                          .c_str());
     }
     if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
         pygmo_throw(PyExc_TypeError,
@@ -490,19 +479,17 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
                                       "invalid strides detected");
     }
     if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_ValueError,
-                    ("cannot convert NumPy array to a sparsity pattern: "
-                     "the size of the scalar type must be "
-                     + std::to_string(sizeof(int_type)))
-                        .c_str());
+        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+                                       "the size of the scalar type must be "
+                                       + std::to_string(sizeof(int_type)))
+                                          .c_str());
     }
     const auto size = boost::numeric_cast<pagmo::sparsity_pattern::size_type>(PyArray_SHAPE(o)[0]);
     // Error handler for nice Python error messages.
     auto err_handler = [](int_type n) {
-        pygmo_throw(PyExc_OverflowError,
-                    ("overflow in the conversion of the sparsity index " + std::to_string(n)
-                     + " to the appropriate unsigned integer type")
-                        .c_str());
+        pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
+                                          + " to the appropriate unsigned integer type")
+                                             .c_str());
     };
     if (size) {
         auto data = static_cast<int_type *>(PyArray_DATA(o));
@@ -546,7 +533,7 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         }
         // Hand over to BP for nice RAII and exception safety.
         auto bp_n = bp::object(bp::handle<>(n));
-        return a_to_sp((PyArrayObject *)bp_n.ptr());
+        return a_to_sp(reinterpret_cast<PyArrayObject *>(bp_n.ptr()));
     }
     pagmo::sparsity_pattern retval;
     // We will try to interpret o as a collection of generic python objects, and each element
@@ -650,7 +637,7 @@ inline auto ct2pt_invoke(Func &&func, Tup &&tup)
     return ct2pt_invoke_helper(std::forward<Func>(func), std::forward<Tup>(tup),
                                pagmo::detail::make_index_sequence<std::tuple_size<pagmo::decay_t<Tup>>::value>{});
 }
-}
+} // namespace detail
 
 // Utility function to convert a C++ tuple into a Python tuple.
 template <typename... Args>
@@ -787,17 +774,15 @@ inline void add_property(bp::class_<T> &c, const char *name, G getter, const bp:
 // the algos/probs/etc. implemented in the APs. See also the explanation in core.cpp.
 inline void merge_s11n_data_for_ap()
 {
-    auto cur_in_ptr
-        = &cereal::detail::StaticObject<cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::
-               getInstance()
-                   .map;
+    auto cur_in_ptr = &cereal::detail::StaticObject<
+                           cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::getInstance()
+                           .map;
     auto pygmo_in_ptr = reinterpret_cast<decltype(cur_in_ptr)>(
         bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_s11n_in_address"))());
 
-    auto cur_out_ptr
-        = &cereal::detail::StaticObject<cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::
-               getInstance()
-                   .map;
+    auto cur_out_ptr = &cereal::detail::StaticObject<
+                            cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::getInstance()
+                            .map;
     auto pygmo_out_ptr = reinterpret_cast<decltype(cur_out_ptr)>(
         bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_s11n_out_address"))());
 
@@ -836,6 +821,6 @@ inline void import_aps(const bp::list &l)
         }
     }
 }
-}
+} // namespace pygmo
 
 #endif

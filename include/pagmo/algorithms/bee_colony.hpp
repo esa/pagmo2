@@ -55,11 +55,11 @@ namespace pagmo
  * The implementation provided for PaGMO is based on the pseudo-code provided in Mernik et al. (2015) - Algorithm 2.
  * pagmo::bee_colony is suitable for box-constrained single-objective continuous optimization.
  *
- * See: http://mf.erciyes.edu.tr/abc/ for the official ABC web site
+ * See: https://abc.erciyes.edu.tr/ for the official ABC web site
  *
  * See: https://link.springer.com/article/10.1007/s10898-007-9149-x for the paper that introduces Artificial Bee Colony
  *
- * See: http://www.sciencedirect.com/science/article/pii/S0020025514008378 for the pseudo-code
+ * See: https://www.sciencedirect.com/science/article/pii/S0020025514008378 for the pseudo-code
  */
 class bee_colony
 {
@@ -256,8 +256,8 @@ public:
                     auto best_idx = pop.best_idx();
                     // Every 50 lines print the column names
                     if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:",
-                              std::setw(15), "Current Best:\n");
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "Current Best:\n");
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
                           pop.champion_f()[0], std::setw(15), pop.get_f()[best_idx][0], '\n');

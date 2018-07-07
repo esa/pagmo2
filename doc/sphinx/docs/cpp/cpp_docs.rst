@@ -38,6 +38,7 @@ Implemented algorithms
   algorithms/nlopt
   algorithms/nsga2
   algorithms/pso
+  algorithms/pso_gen
   algorithms/sade
   algorithms/sea
   algorithms/sga

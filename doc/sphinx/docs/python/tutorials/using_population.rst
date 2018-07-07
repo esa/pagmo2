@@ -110,18 +110,18 @@ some individual decision vector:
 
     >>> pop1.problem.get_fevals() == 1
     True
-    >>> print(pop1.get_x()[0])
-    [ 0.1  0.2  0.3  0.4]
+    >>> print(pop1.get_x()[0]) # doctest: +NORMALIZE_WHITESPACE
+    [0.1  0.2  0.3  0.4]
     >>> pop1.set_x(0, [1.,2.,3.,4.])
     >>> pop1.problem.get_fevals() == 2
     True
     >>> print(pop1.get_f()[0])
-    [ 2705.]
+    [2705.]
     >>> pop1.set_xf(0, [1.,2.,3.,4.], [8.43469444])
     >>> pop1.problem.get_fevals() == 2
     True
     >>> print(pop1.get_f()[0])
-    [ 8.43469444]
+    [8.43469444]
 
 .. note:: Using the method :func:`~pygmo.population.set_xf()` or:func:`~pygmo.population.push_back()` it is possible to avoid
           triggering fitness function evaluations, but it is also possible to inject
@@ -133,22 +133,22 @@ The best individual in a population can be extracted as:
 .. doctest::
 
     >>> # The decision vector
-    >>> pop1.get_x()[pop1.best_idx()]
-    array([ 1.,  2.,  3.,  4.])
+    >>> pop1.get_x()[pop1.best_idx()] # doctest: +NORMALIZE_WHITESPACE
+    array([1.,  2.,  3.,  4.])
     >>> # The fitness vector
     >>> pop1.get_f()[pop1.best_idx()]
-    array([ 8.43469444])
+    array([8.43469444])
 
 The best individual that ever lived in a population, i.e. the *champion* can also be extracted as:
 
 .. doctest::
 
     >>> # The decision vector
-    >>> pop1.champion_x
-    array([ 1.,  2.,  3.,  4.])
+    >>> pop1.champion_x # doctest: +NORMALIZE_WHITESPACE
+    array([1.,  2.,  3.,  4.]) 
     >>> # The fitness vector
     >>> pop1.champion_f
-    array([ 8.43469444])
+    array([8.43469444])
 
 .. note:: The *champion* is not necessarily identical to the best individual in the current population
           as it actually keeps the memory of all past individuals that were at some point in the population

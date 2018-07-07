@@ -40,19 +40,19 @@ cd
 mkdir install
 cd install
 
-# CMake
-wget https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz --no-verbose
-tar xzf v${CMAKE_VERSION}
+# Install CMake
+curl -L https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz > v${CMAKE_VERSION}
+tar xzf v${CMAKE_VERSION} > /dev/null 2>&1
 cd CMake-${CMAKE_VERSION}/
 ./configure > /dev/null
 gmake -j2 > /dev/null
 gmake install > /dev/null
 cd ..
 
-# Eigen
-wget https://github.com/RLovelett/eigen/archive/${EIGEN3_VERSION}.tar.gz --no-verbose
-tar xzf ${EIGEN3_VERSION}
-cd eigen-${EIGEN3_VERSION}
+# Install Eigen
+curl -L https://bitbucket.org/eigen/eigen/get/${EIGEN3_VERSION}.tar.gz > ${EIGEN3_VERSION}
+tar xzf ${EIGEN3_VERSION} > /dev/null 2>&1
+cd eigen*
 mkdir build
 cd build
 cmake ../ > /dev/null
@@ -60,8 +60,8 @@ make install > /dev/null
 cd ..
 cd ..
 
-# Boost
-wget https://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2 --no-verbose
+# Boost (python, system, filesystem libs needed)
+curl -L http://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2 > boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 tar xjf boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 cd boost_`echo ${BOOST_VERSION}|tr "." "_"`
 sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
@@ -69,9 +69,9 @@ sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
 cd ..
 
 # NLopt
-# NOTE: use our own mirror as the one from the original webpage is faulty.
-wget https://raw.githubusercontent.com/esa/pagmo2/deps_mirror/nlopt-${NLOPT_VERSION}.tar.gz --no-verbose --no-check-certificate
-tar xzf nlopt-${NLOPT_VERSION}.tar.gz
+# NOTE: use alternative mirror as the one from the original webpage is faulty.
+curl -L  http://pkgs.fedoraproject.org/repo/pkgs/NLopt/NLopt-${NLOPT_VERSION}.tar.gz/d0b8f139a4acf29b76dbae69ade8ac54/NLopt-${NLOPT_VERSION}.tar.gz > NLopt-${NLOPT_VERSION}.tar.gz
+tar xzf NLopt-${NLOPT_VERSION}.tar.gz
 cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
 make -j2 install > /dev/null

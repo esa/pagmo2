@@ -17,7 +17,7 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     bash miniconda.sh -b -p $HOME/miniconda
     conda config --add channels conda-forge --force
 
-    conda_pkgs="boost>=1.55 cmake>=3.2 eigen nlopt ipopt"
+    conda_pkgs="cmake>=3.2 eigen nlopt ipopt boost boost-cpp"
 
     if [[ "${PAGMO_BUILD}" == "Python36" || "${PAGMO_BUILD}" == "OSXPython36" ]]; then
         conda_pkgs="$conda_pkgs python=3.6 numpy cloudpickle ipyparallel numba"

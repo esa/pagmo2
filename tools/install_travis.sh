@@ -92,7 +92,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     # Documentation.
     cd ../build
     # At the moment conda has these packages only for Python 3.4. Install via pip instead.
-    pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
+    pip install 'sphinx<1.7' breathe requests[security] sphinx-bootstrap-theme;
     # Run doxygen and check the output.
     cd ../doc/doxygen;
     export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;
@@ -105,7 +105,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     # Copy the images into the xml output dir (this is needed by sphinx).
     cp images/* xml/;
     cd ../sphinx/;
-    export SPHINX_OUTPUT=`make html 2>&1 >/dev/null`;
+    export SPHINX_OUTPUT=`make html linkcheck 2>&1 >/dev/null`;
     if [[ "${SPHINX_OUTPUT}" != "" ]]; then
         echo "Sphinx encountered some problem:";
         echo "${SPHINX_OUTPUT}";

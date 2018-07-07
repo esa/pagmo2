@@ -95,7 +95,7 @@ namespace pagmo
  * .. seealso::
  *
  *    "Q. Zhang -- MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition"
- *    https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing_multi-objective_optimization_problems
+ *    https://en.wikipedia.org/wiki/Multi-objective_optimization#Scalarizing
  *
  * \endverbatim
  */
@@ -113,9 +113,7 @@ public:
      *
      * @throws unspecified any exception thrown by the other constructor.
      */
-    decompose() : decompose(null_problem{2u}, {0.5, 0.5}, {0., 0.})
-    {
-    }
+    decompose() : decompose(null_problem{2u}, {0.5, 0.5}, {0., 0.}) {}
     /// Constructor from problem.
     /**
      * \verbatim embed:rst:leading-asterisk
@@ -154,10 +152,9 @@ public:
             pagmo_throw(std::invalid_argument, "Decomposition can only be applied to multi-objective problems");
         }
         if (m_problem.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "Decomposition can only be applied to unconstrained problems, it seems "
-                        "you are trying to decompose a problem with "
-                            + std::to_string(m_problem.get_nc()) + " constraints");
+            pagmo_throw(std::invalid_argument, "Decomposition can only be applied to unconstrained problems, it seems "
+                                               "you are trying to decompose a problem with "
+                                                   + std::to_string(m_problem.get_nc()) + " constraints");
         }
         // 1 - we check that the decomposition method is one of "weighted", "tchebycheff" or "bi"
         if (method != "weighted" && method != "tchebycheff" && method != "bi") {
@@ -194,17 +191,16 @@ public:
         // 3 - we check that the weight vector is normalized.
         auto sum = std::accumulate(weight.begin(), weight.end(), 0.);
         if (std::abs(sum - 1.0) > 1E-8) {
-            pagmo_throw(std::invalid_argument,
-                        "The weight vector must sum to 1 with a tolerance of 1E-8. The sum of "
-                        "the weight vector components was detected to be: "
-                            + std::to_string(sum));
+            pagmo_throw(std::invalid_argument, "The weight vector must sum to 1 with a tolerance of 1E-8. The sum of "
+                                               "the weight vector components was detected to be: "
+                                                   + std::to_string(sum));
         }
         // 4 - we check the weight vector only contains positive numbers
         for (decltype(m_weight.size()) i = 0u; i < m_weight.size(); ++i) {
             if (m_weight[i] < 0.) {
-                pagmo_throw(std::invalid_argument,
-                            "The weight vector may contain only non negative values. A value of "
-                                + std::to_string(m_weight[i]) + " was detected at index " + std::to_string(i));
+                pagmo_throw(std::invalid_argument, "The weight vector may contain only non negative values. A value of "
+                                                       + std::to_string(m_weight[i]) + " was detected at index "
+                                                       + std::to_string(i));
             }
         }
     }
@@ -318,7 +314,7 @@ public:
     {
         return m_problem.get_name() + " [decomposed]";
     }
-    
+
     /// Extra information.
     /**
      * This method will add info about the decomposition method to the extra info provided
