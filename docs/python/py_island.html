@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Island class &#8212; pagmo 2.7 documentation</title>
+    <title>Island class &#8212; pagmo 2.8 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.7',
+        VERSION:     '2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -243,7 +243,7 @@ will be constructed from <em>prob</em>, <em>size</em> and <em>seed</em>, and the
 above (i.e., <em>algo</em> and the newly-created population are used to initialise the island’s algorithm and population,
 and the UDI, if not specified, will be chosen according to the heuristic detailed above).</li>
 </ul>
-<p>If the keyword arguments list is invalid, a <code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code> exception will be raised.</p>
+<p>If the keyword arguments list is invalid, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a> exception will be raised.</p>
 <p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::island</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -262,7 +262,7 @@ and stored inside the <a class="reference internal" href="#pygmo.island" title="
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code> – if the set of keyword arguments is invalid</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a> – if the set of keyword arguments is invalid</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
 <li>the invoked C++ constructors,</li>
 <li>the deep copy of the UDI,</li>
@@ -299,7 +299,7 @@ attribute can be used to query the status of the asynchronous operations in the 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>n</em> is negative or larger than an implementation-defined value</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – if <em>n</em> is negative or larger than an implementation-defined value</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>

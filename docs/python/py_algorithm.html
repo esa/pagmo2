@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Algorithm class &#8212; pagmo 2.7 documentation</title>
+    <title>Algorithm class &#8212; pagmo 2.8 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.7',
+        VERSION:     '2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -231,7 +231,7 @@ and stored inside the <a class="reference internal" href="#pygmo.algorithm" titl
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if <em>uda</em> does not implement the mandatory method detailed above</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> – if <em>uda</em> does not implement the mandatory method detailed above</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
 <li>methods of the UDA invoked during construction,</li>
 <li>the deep copy of the UDA,</li>
@@ -281,7 +281,7 @@ the internal user-defined algorithm will be returned. Otherwise, <code class="do
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined algorithm if it is of type <em>t</em>, or <code class="docutils literal"><span class="pre">None</span></code> otherwise</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>t</em> is not a type</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>t</em> is not a type</td>
 </tr>
 </tbody>
 </table>
@@ -417,7 +417,7 @@ returned. Otherwise, <code class="docutils literal"><span class="pre">False</spa
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>t</em> is not a type</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>t</em> is not a type</td>
 </tr>
 </tbody>
 </table>
@@ -445,7 +445,7 @@ raised. The <em>seed</em> parameter must be non-negative.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA or failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
@@ -471,7 +471,7 @@ then its <code class="docutils literal"><span class="pre">set_verbosity()</span>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA or failures at the intersection
 between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>

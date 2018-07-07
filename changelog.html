@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Changelog &#8212; pagmo 2.7 documentation</title>
+    <title>Changelog &#8212; pagmo 2.8 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.7',
+        VERSION:     '2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -219,6 +219,9 @@
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li>It is now possible to explicitly shut down the process pool of <a class="reference internal" href="docs/python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> (<a class="reference external" href="https://github.com/esa/pagmo2/pull/187">#187</a>).</li>
+<li>Start using intersphinx in the documentation (used at the moment for hyperlinking to the Python online documentation)
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/187">#187</a>).</li>
 <li><strong>BREAKING</strong>: user-defined islands in Python must now return the algorithm object used for the evolution in addition
 to the evolved population (<a class="reference external" href="https://github.com/esa/pagmo2/pull/186">#186</a>).</li>
 <li>The constraints’ tolerances for a problem can now be set via a scalar in pygmo (<a class="reference external" href="https://github.com/esa/pagmo2/pull/185">#185</a>).</li>

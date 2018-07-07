@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Population class &#8212; pagmo 2.7 documentation</title>
+    <title>Population class &#8212; pagmo 2.8 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.7',
+        VERSION:     '2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -209,8 +209,8 @@ an individual currently in the population. The <em>champion</em> is only defined
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>size</em> is not an <code class="docutils literal"><span class="pre">int</span></code> or <em>seed</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – is <em>size</em> or <em>seed</em> are negative</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>size</em> is not an <code class="docutils literal"><span class="pre">int</span></code> or <em>seed</em> is not <code class="docutils literal"><span class="pre">None</span></code> and not an <code class="docutils literal"><span class="pre">int</span></code></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – is <em>size</em> or <em>seed</em> are negative</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the invoked C++ constructors or by the constructor of
 <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, or by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
@@ -244,7 +244,7 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="../cpp/utils/constrained.html#_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::sort_population_con()</span></code></a></li>
 </ul>
 </td>
@@ -275,7 +275,7 @@ fitness.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the current problem is not single objective</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the current problem is not single objective</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
@@ -307,7 +307,7 @@ fitness.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the current problem is not single objective</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the current problem is not single objective</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
@@ -429,7 +429,7 @@ It is the user’s responsibility to ensure that <em>f</em> actually corresponds
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the dimensions of <em>x</em> or <em>f</em> (if provided) are incompatible with the population’s problem</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the dimensions of <em>x</em> or <em>f</em> (if provided) are incompatible with the population’s problem</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.fitness()</span></code></a> or by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </ul>
@@ -479,7 +479,7 @@ individual’s ID remains the same.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>i</em> is invalid, or if <em>x</em> has the wrong dimensions (i.e., the dimension is
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if <em>i</em> is invalid, or if <em>x</em> has the wrong dimensions (i.e., the dimension is
 inconsistent with the problem’s properties)</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
@@ -511,7 +511,7 @@ Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>i</em> is invalid, or if <em>x</em> or <em>f</em> have the wrong dimensions (i.e., their dimensions are
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if <em>i</em> is invalid, or if <em>x</em> or <em>f</em> have the wrong dimensions (i.e., their dimensions are
 inconsistent with the problem’s properties)</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and
 Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
@@ -544,7 +544,7 @@ individuals by calling the <code class="xref py py-func docutils literal"><span 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty</li>
 <li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="utils/py_con_utils.html#pygmo.sort_population_con" title="pygmo.sort_population_con"><code class="xref py py-func docutils literal"><span class="pre">pygmo.sort_population_con()</span></code></a></li>
 </ul>
 </td>

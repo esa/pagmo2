@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Constrained optimization utilities &#8212; pagmo 2.7 documentation</title>
+    <title>Constrained optimization utilities &#8212; pagmo 2.8 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '2.7',
+        VERSION:     '2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -209,10 +209,10 @@ in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>nec</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if <em>f1</em> and <em>f2</em> do not have equal size <span class="math">\(n\)</span>, if <em>f1</em> does not have at least size 1,</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – if <em>nec</em> is negative or greater than an implementation-defined value</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if <em>f1</em> and <em>f2</em> do not have equal size <span class="math">\(n\)</span>, if <em>f1</em> does not have at least size 1,</li>
 <li>if <em>neq</em> is larger than <span class="math">\(n-1\)</span> (too many constraints) or if the size of <em>tol</em> is not <span class="math">\(n - 1\)</span></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>f1</em>, <em>f2</em> or <em>tol</em> cannot be converted to a vector of floats</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>f1</em>, <em>f2</em> or <em>tol</em> cannot be converted to a vector of floats</li>
 </ul>
 </td>
 </tr>
@@ -264,10 +264,10 @@ in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> – if <em>nec</em> is negative or greater than an implementation-defined value</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – if the input fitness vectors do not have all the same size <span class="math">\(n &gt;=1\)</span>, or if <em>neq</em> is larger than <span class="math">\(n-1\)</span> (too many constraints)</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – if <em>nec</em> is negative or greater than an implementation-defined value</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the input fitness vectors do not have all the same size <span class="math">\(n &gt;=1\)</span>, or if <em>neq</em> is larger than <span class="math">\(n-1\)</span> (too many constraints)</li>
 <li>or if the size of <em>tol</em> is not equal to <span class="math">\(n-1\)</span></li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> – if <em>input_f</em> cannot be converted to a vector of vector of floats or <em>tol</em> cannot be converted to a vector of floats.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>input_f</em> cannot be converted to a vector of vector of floats or <em>tol</em> cannot be converted to a vector of floats.</li>
 </ul>
 </td>
 </tr>
