@@ -1848,6 +1848,25 @@ See also the docs of the C++ class :cpp:class:`pagmo::dtlz`.
 )";
 }
 
+std::string cec2014_docstring()
+{
+    return R"(__init__(prob_id = 1, dim = 2)
+
+The CEC 2014 problem suite (continuous, box-bounded, single-objective problems)
+
+Args:
+    prob_id (``int``): problem id (one of [1..30])
+    dim (``int``): number of dimensions (one of [2, 10, 20, 30, 50, 100])
+
+Raises:
+    OverflowError: if *dim* or *prob_id* are negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1..28] or if *dim* is not in [2, 10, 20, 30, 50, 100]
+
+See also the docs of the C++ class :cpp:class:`pagmo::cec2014`.
+
+)";
+}
+
 std::string cec2013_docstring()
 {
     return R"(__init__(prob_id = 1, dim = 2)

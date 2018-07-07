@@ -91,4 +91,5 @@ if(NOT YACMA_COMPILER_IS_MSVC AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # To be tried again when they update the compiler?
     # NOTE: it also slows down a lot the CI on OSX.
     ADD_PAGMO_TESTCASE(cec2013)
+    ADD_PAGMO_TESTCASE(cec2014)
 endif()

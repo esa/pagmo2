@@ -1014,6 +1014,20 @@ class cec2013_test_case(_ut.TestCase):
         udp = cec2013(prob_id=3, dim=10)
 
 
+class cec2014_test_case(_ut.TestCase):
+    """Test case for the UDP cec2014
+
+    """
+
+    def runTest(self):
+        try:
+            # NOTE: cec2014 is not always present (see MSVC issue).
+            from .core import cec2014, population
+        except ImportError:
+            return
+        udp = cec2014(prob_id=3, dim=10)
+
+
 class translate_test_case(_ut.TestCase):
     """Test case for the translate meta-problem
 
@@ -1697,6 +1711,7 @@ def run_test_suite(level=0):
     suite.addTest(cec2006_test_case())
     suite.addTest(cec2009_test_case())
     suite.addTest(cec2013_test_case())
+    suite.addTest(cec2014_test_case())
     suite.addTest(luksan_vlcek1_test_case())
     suite.addTest(minlp_rastrigin_test_case())
     suite.addTest(translate_test_case())
