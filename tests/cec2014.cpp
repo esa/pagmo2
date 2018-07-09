@@ -49,12 +49,15 @@ BOOST_AUTO_TEST_CASE(cec2014_test)
     std::vector<unsigned int> allowed_dims = {2u, 10u, 20u, 30u, 50u, 100u};
     for (unsigned int i = 1u; i <= 30u; ++i) {
         for (auto dim : allowed_dims) {
+            if (dim==2&&((i>=17u&&i<=22u)||(i>=29u&&i<=30u))) { // Not all functions are defined for dim = 2
+                continue;
+            }
             cec2014 udp{i, dim};
             auto x = random_decision_vector({vector_double(dim, -100.), vector_double(dim, 100.)},
                                             r_engine); // a random vector
             BOOST_CHECK_NO_THROW(udp.fitness(x));
         }
-        BOOST_CHECK((cec2014{i, 2u}.get_name().find("CEC2014 - f")) != std::string::npos);
+        BOOST_CHECK((cec2014{i, 10u}.get_name().find("CEC2014 - f")) != std::string::npos);
     }
     // We check that wrong problem ids and dimensions cannot be constructed
     BOOST_CHECK_THROW((cec2014{0u, 2u}), std::invalid_argument);
@@ -64,9 +67,9 @@ BOOST_AUTO_TEST_CASE(cec2014_test)
 
 BOOST_AUTO_TEST_CASE(cec2014_serialization_test)
 {
-    problem p{cec2014{1u, 2u}};
+    problem p{cec2014{1u, 10u}};
     // Call objfun to increase the internal counters.
-    p.fitness(vector_double(2u, 0.));
+    p.fitness(vector_double(10u, 0.));
     // Store the string representation of p.
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(p);
