@@ -64,8 +64,6 @@ public:
     mutable vector_double z;
     mutable vector_double y;
 
-    // number of dimensions
-    unsigned int nx;
     // problem id
     unsigned int func_num;
 
@@ -79,12 +77,8 @@ public:
      * @throws invalid_argument if \p prob_id is not in [1,30] or if \p dim is not one of
      * [2,10,20,30,50,100]
      */
-    cec2014(unsigned int prob_id = 1u, unsigned int dim = 2u) : z(dim), y(dim)
+    cec2014(unsigned int prob_id = 1u, unsigned int dim = 2u) : z(dim), y(dim), func_num(prob_id)
     {
-
-        func_num = prob_id;
-        nx = dim;
-
         if (!(dim == 2u || dim == 10u || dim == 20u || dim == 30u || dim == 50u || dim == 100u)) {
             pagmo_throw(std::invalid_argument, "Error: CEC2014 Test functions are only defined for dimensions "
                                                "2,10,20,30,50,100, a dimension of "
@@ -96,26 +90,26 @@ public:
                             + std::to_string(prob_id) + " was detected.");
         }
 
-        if (nx == 2 && ((func_num >= 17u && func_num <= 22u) || (func_num >= 29u && func_num <= 30u))) {
+        if (dim == 2 && ((func_num >= 17u && func_num <= 22u) || (func_num >= 29u && func_num <= 30u))) {
             pagmo_throw(std::invalid_argument, "hf01,hf02,hf03,hf04,hf05,hf06,cf07&cf08 are NOT defined for D=2.");
         }
 
         /* Load Rotation Matrix */
         auto rotation_func_it = detail::cec2014_data::rotation_data.find(func_num);
         auto rotation_data_dim = rotation_func_it->second;
-        auto rotation_dim_it = rotation_data_dim.find(nx);
+        auto rotation_dim_it = rotation_data_dim.find(dim);
         m_rotation_matrix = rotation_dim_it->second;
 
         /* Load shift_data */
         auto loader_it = detail::cec2014_data::shift_data.find(func_num);
         m_origin_shift = loader_it->second;
 
-        // Uses first nx elements of each line for multidimensional functions (id > 23)
+        // Uses first dim elements of each line for multidimensional functions (id > 23)
         auto it = m_origin_shift.begin();
         int i = -1;
         while (it != m_origin_shift.end()) {
             i++;
-            if ((i % 100) >= nx) {
+            if ((i % 100) >= dim) {
                 it = m_origin_shift.erase(it);
             } else {
                 ++it;
@@ -126,7 +120,7 @@ public:
         if (((func_num >= 17) && (func_num <= 22)) || (func_num == 29) || (func_num == 30)) {
             auto shuffle_func_it = detail::cec2014_data::shuffle_data.find(func_num);
             auto shuffle_data_dim = shuffle_func_it->second;
-            auto shuffle_dim_it = shuffle_data_dim.find(nx);
+            auto shuffle_dim_it = shuffle_data_dim.find(dim);
             m_shuffle = shuffle_dim_it->second;
         }
     }
@@ -141,8 +135,8 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const
     {
         // all CEC 2014 problems have the same bounds
-        vector_double lb(nx, -100.);
-        vector_double ub(nx, 100.);
+        vector_double lb(z.size(), -100.);
+        vector_double ub(z.size(), 100.);
         return std::make_pair(std::move(lb), std::move(ub));
     }
 
@@ -157,6 +151,7 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         vector_double f(1);
+        auto nx = static_cast<unsigned>(z.size());
         switch (func_num) {
             case 1:
                 ellips_func(x.data(), f.data(), nx, m_origin_shift.data(), m_rotation_matrix.data(), 1, 1);
@@ -399,7 +394,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(func_num, nx, m_rotation_matrix, m_origin_shift, m_shuffle, y, z);
+        ar(func_num, m_rotation_matrix, m_origin_shift, m_shuffle, y, z);
     }
 
 private:
