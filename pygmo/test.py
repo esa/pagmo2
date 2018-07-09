@@ -319,6 +319,22 @@ class pso_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
 
+
+class de_test_case(_ut.TestCase):
+    """Test case for the UDA de
+
+    """
+
+    def runTest(self):
+        from .core import de
+        uda = de()
+        uda = de(gen=10000, F=0.5, CR=0.3, variant=9, ftol=1e-3, xtol=1e-2)
+        uda = de(gen=10000, F=0.5, CR=0.3, variant=9,
+                 ftol=1e-3, xtol=1e-2, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
+
 class pso_gen_test_case(_ut.TestCase):
     """Test case for the UDA pso_gen
 
@@ -328,9 +344,9 @@ class pso_gen_test_case(_ut.TestCase):
         from .core import pso_gen
         uda = pso_gen()
         uda = pso_gen(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
-                  variant=5, neighb_type=2, neighb_param=4, memory=False)
+                      variant=5, neighb_type=2, neighb_param=4, memory=False)
         uda = pso_gen(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
-                  variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
+                      variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
 
@@ -426,6 +442,7 @@ class xnes_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
+
 class ihs_test_case(_ut.TestCase):
     """Test case for the UDA ihs
 
@@ -434,10 +451,13 @@ class ihs_test_case(_ut.TestCase):
     def runTest(self):
         from .core import ihs
         uda = ihs()
-        uda = ihs(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1.)
-        uda = ihs(gen = 1, phmcr = 0.85, ppar_min = 0.35, ppar_max=0.99, bw_min=1e-5, bw_max=1., seed=32)
+        uda = ihs(gen=1, phmcr=0.85, ppar_min=0.35,
+                  ppar_max=0.99, bw_min=1e-5, bw_max=1.)
+        uda = ihs(gen=1, phmcr=0.85, ppar_min=0.35,
+                  ppar_max=0.99, bw_min=1e-5, bw_max=1., seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
+
 
 class sga_test_case(_ut.TestCase):
     """Test case for the UDA sga
@@ -1658,6 +1678,7 @@ def run_test_suite(level=0):
     suite.addTest(_island_test.island_test_case())
     suite.addTest(_island_test.mp_island_test_case(level))
     suite.addTest(_island_test.ipyparallel_island_test_case(level))
+    suite.addTest(de_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(pso_gen_test_case())
     suite.addTest(bee_colony_test_case())

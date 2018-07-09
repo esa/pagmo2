@@ -285,10 +285,10 @@ void expose_algorithms()
     auto de_ = expose_algorithm_pygmo<de>("de", de_docstring().c_str());
     de_.def(bp::init<unsigned, double, double, unsigned, double, double>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
-         bp::arg("tol") = 1E-6)));
+         bp::arg("xtol") = 1E-6)));
     de_.def(bp::init<unsigned, double, double, unsigned, double, double, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("F") = .8, bp::arg("CR") = .9, bp::arg("variant") = 2u, bp::arg("ftol") = 1e-6,
-         bp::arg("tol") = 1E-6, bp::arg("seed"))));
+         bp::arg("xtol") = 1E-6, bp::arg("seed"))));
     expose_algo_log(de_, de_get_log_docstring().c_str());
     de_.def("get_seed", &de::get_seed, generic_uda_get_seed_docstring().c_str());
     // COMPASS SEARCH
@@ -595,4 +595,4 @@ void expose_algorithms()
     ipopt_.def("reset_numeric_options", &ipopt::reset_numeric_options, ipopt_reset_numeric_options_docstring().c_str());
 #endif
 }
-}
+} // namespace pygmo

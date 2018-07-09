@@ -669,7 +669,7 @@ inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const d
         ::nlopt_force_stop(nlo.m_value.get());
     }
 }
-}
+} // namespace detail
 
 /// NLopt algorithms.
 /**
@@ -695,13 +695,14 @@ inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const d
  *
  * The desired NLopt solver is selected upon construction of a pagmo::nlopt algorithm. Various properties
  * of the solver (e.g., the stopping criteria) can be configured after construction via methods provided
- * by this class. Note that multiple stopping criteria can be active at the same time: the optimisation will
+ * by this class. Multiple stopping criteria can be active at the same time: the optimisation will
  * stop as soon as at least one stopping criterion is satisfied. By default, only the ``xtol_rel`` stopping
  * criterion is active (see get_xtol_rel()).
  *
  * All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation
  * is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
- * Some solvers support equality and/or inequality constraints.
+ * Some solvers support equality and/or inequality constraints. The constraints' tolerances will
+ * be set to those specified in the pagmo::problem being optimised (see pagmo::problem::set_c_tol()).
  *
  * In order to support pagmo's population-based optimisation model, nlopt::evolve() will select
  * a single individual from the input pagmo::population to be optimised by the NLopt solver.
@@ -1346,7 +1347,7 @@ private:
     // Local/subsidiary optimizer.
     std::unique_ptr<nlopt> m_loc_opt;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_ALGORITHM(pagmo::nlopt)
 

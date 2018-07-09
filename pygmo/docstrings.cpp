@@ -646,17 +646,32 @@ std::string problem_c_tol_docstring()
     return R"(Constraints tolerance.
 
 This property contains an array of ``float`` that are used when checking for constraint feasibility.
-The dimension of the array is :math:`n_{ec} + n_{ic}`, and the array is zero-filled on problem
-construction.
+The dimension of the array is :math:`n_{ec} + n_{ic}` (i.e., the total number of constraints), and
+the array is zero-filled on problem construction.
+
+This property can also be set via a scalar, instead of an array. In such case, all the tolerances
+will be set to the provided scalar value.
 
 Returns:
-    1D NumPy float array: the constraints tolerance
+    1D NumPy float array: the constraints' tolerances
 
 Raises:
     ValueError: if, when setting this property, the size of the input array differs from the number
       of constraints of the problem or if any element of the array is negative or NaN
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
+
+Examples:
+    >>> from pygmo import problem, hock_schittkowsky_71 as hs71
+    >>> prob = problem(hs71())
+    >>> prob.c_tol
+    array([0., 0.])
+    >>> prob.c_tol = [1, 2]
+    >>> prob.c_tol
+    array([1., 2.])
+    >>> prob.c_tol = .5
+    >>> prob.c_tol
+    array([0.5, 0.5])
 
 )";
 }
@@ -2022,8 +2037,8 @@ Args:
     F (``float``): weight coefficient (dafault value is 0.8)
     CR (``float``): crossover probability (dafault value is 0.9)
     variant (``int``): mutation variant (dafault variant is 2: /rand/1/exp)
-    ftol (``float``): stopping criteria on the x tolerance (default is 1e-6)
-    xtol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    ftol (``float``): stopping criteria on the f tolerance (default is 1e-6)
+    xtol (``float``): stopping criteria on the x tolerance (default is 1e-6)
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -3929,11 +3944,11 @@ the following method:
 
 The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.algorithm`'s
 :func:`~pygmo.algorithm.evolve()` method to evolve the input :class:`~pygmo.population` and, once the evolution
-is finished, it will return the evolved :class:`~pygmo.population`. Note that, since internally the :class:`~pygmo.island`
-class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of
-thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy
-the UDI while evolution is undergoing, or call the ``get_name()``, ``get_extra_info()`` methods, etc.), otherwise the behaviour
-will be undefined.
+is finished, it will return the algorithm used for the evolution and the evolved :class:`~pygmo.population`.
+Note that, since internally the :class:`~pygmo.island` class uses a separate thread of execution to provide asynchronous
+behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact with the UDI
+while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or call the ``get_name()``,
+``get_extra_info()`` methods, etc.), otherwise the behaviour will be undefined.
 
 In addition to the mandatory ``run_evolve()`` method, a UDI may implement the following optional methods:
 
@@ -3983,9 +3998,9 @@ This method will evolve the island’s :class:`~pygmo.population` using the isla
 The evolution happens asynchronously: a call to :func:`~pygmo.island.evolve()` will create an evolution task that
 will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
 managed by the :class:`~pygmo.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
-times consecutively to perform the actual evolution. The island's population will be updated at the end of each ``run_evolve()``
-invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling
-:func:`~pygmo.island.wait_check()`.
+times consecutively to perform the actual evolution. The island's algorithm and population will be updated at the
+end of each ``run_evolve()`` invocation. Exceptions raised inside the tasks are stored within the island object,
+and can be re-raised by calling :func:`~pygmo.island.wait_check()`.
 
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
 first-out) fashion. The user may call :func:`~pygmo.island.wait()` or :func:`~pygmo.island.wait_check()` to block until all
@@ -4376,13 +4391,14 @@ NLopt algorithms is:
 * augmented Lagrangian algorithm.
 
 The desired NLopt solver is selected upon construction of an :class:`~pygmo.nlopt` algorithm. Various properties
-of the solver (e.g., the stopping criteria) can be configured via class attributes. Note that multiple
+of the solver (e.g., the stopping criteria) can be configured via class attributes. Multiple
 stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion
 is satisfied. By default, only the ``xtol_rel`` stopping criterion is active (see :attr:`~pygmo.nlopt.xtol_rel`).
 
 All NLopt solvers support only single-objective optimisation, and, as usual in pygmo, minimisation
 is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient.
-Some solvers support equality and/or inequality constraints.
+Some solvers support equality and/or inequality constraints. The constraints' tolerances will
+be set to those specified in the :class:`~pygmo.problem` being optimised (see :attr:`pygmo.problem.c_tol`).
 
 In order to support pygmo's population-based optimisation model, the ``evolve()`` method will select
 a single individual from the input :class:`~pygmo.population` to be optimised by the NLopt solver.

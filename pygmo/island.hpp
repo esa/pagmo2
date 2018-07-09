@@ -89,10 +89,9 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         return make_unique<isl_inner>(m_value);
     }
     // If Python raises any exception in a separate thread (as signalled by a bp::error_already_set exception),
-    // the following will
-    // happen: the Python error indicator has been set for the *current* thread, but the bp::error_already_set
-    // exception will actually *escape* this thread due to the internal exception transport mechanism of
-    // std::future. In other words, bp::error_already_set will be re-thrown in a thread which, from the
+    // the following will happen: the Python error indicator has been set for the *current* thread, but the
+    // bp::error_already_set exception will actually *escape* this thread due to the internal exception transport
+    // mechanism of std::future. In other words, bp::error_already_set will be re-thrown in a thread which, from the
     // Python side, has no knowledge/information about the Python exception that originated all this, resulting
     // in an unhelpful error message by Boost Python.
     //
@@ -118,12 +117,7 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         // Small helper to build a bp::object from a raw PyObject ptr.
         // It assumes that ptr is a new reference, or null. If null, we
         // return None.
-        auto new_ptr_to_obj = [](::PyObject *ptr) -> bp::object {
-            if (ptr) {
-                return bp::object(bp::handle<>(ptr));
-            }
-            return bp::object();
-        };
+        auto new_ptr_to_obj = [](::PyObject *ptr) { return ptr ? bp::object(bp::handle<>(ptr)) : bp::object(); };
 
         // Fetch the error data that was set by Python: exception type, value and the traceback.
         ::PyObject *type, *value, *traceback;
@@ -174,8 +168,40 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
         }
 
         try {
-            isl.set_population(
-                bp::extract<population>(m_value.attr("run_evolve")(isl.get_algorithm(), isl.get_population()))());
+            auto ret = m_value.attr("run_evolve")(isl.get_algorithm(), isl.get_population());
+            bp::extract<bp::tuple> ext_ret(ret);
+            if (!ext_ret.check()) {
+                pygmo_throw(PyExc_TypeError, ("the 'run_evolve()' method of a user-defined island "
+                                              "must return a tuple, but it returned an object of type '"
+                                              + pygmo::str(pygmo::type(ret)) + "' instead")
+                                                 .c_str());
+            }
+            bp::tuple ret_tup = ext_ret;
+            if (len(ret_tup) != 2) {
+                pygmo_throw(PyExc_ValueError,
+                            ("the tuple returned by the 'run_evolve()' method of a user-defined island "
+                             "must have 2 elements, but instead it has "
+                             + std::to_string(len(ret_tup)) + " element(s)")
+                                .c_str());
+            }
+            bp::extract<algorithm> ret_algo(ret_tup[0]);
+            if (!ret_algo.check()) {
+                pygmo_throw(PyExc_TypeError,
+                            ("the first value returned by the 'run_evolve()' method of a user-defined island "
+                             "must be an algorithm, but an object of type '"
+                             + pygmo::str(pygmo::type(ret_tup[0])) + "' was returned instead")
+                                .c_str());
+            }
+            bp::extract<population> ret_pop(ret_tup[1]);
+            if (!ret_pop.check()) {
+                pygmo_throw(PyExc_TypeError,
+                            ("the second value returned by the 'run_evolve()' method of a user-defined island "
+                             "must be a population, but an object of type '"
+                             + pygmo::str(pygmo::type(ret_tup[1])) + "' was returned instead")
+                                .c_str());
+            }
+            isl.set_algorithm(ret_algo);
+            isl.set_population(ret_pop);
         } catch (const bp::error_already_set &) {
             handle_thread_py_exception("The asynchronous evolution of a Pythonic island of type '" + isl_name
                                        + "' raised an error:\n");
@@ -197,8 +223,8 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     }
     bp::object m_value;
 };
-}
-}
+} // namespace detail
+} // namespace pagmo
 
 // Register the isl_inner specialisation for bp::object.
 PAGMO_REGISTER_ISLAND(boost::python::object)
@@ -229,11 +255,10 @@ struct island_pickle_suite : bp::pickle_suite {
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 2) {
-            pygmo_throw(PyExc_ValueError,
-                        ("the state tuple passed for island deserialization "
-                         "must have 2 elements, but instead it has "
-                         + std::to_string(len(state)) + " elements")
-                            .c_str());
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for island deserialization "
+                                           "must have 2 elements, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
 
         // Make sure we import all the aps specified in the archive.
@@ -254,6 +279,6 @@ struct island_pickle_suite : bp::pickle_suite {
         }
     }
 };
-}
+} // namespace pygmo
 
 #endif

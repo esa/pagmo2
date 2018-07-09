@@ -611,7 +611,7 @@ from .core import _cleanup as _cpp_cleanup
 
 
 def _cleanup():
-    mp_island._shutdown_pool()
+    mp_island.shutdown_pool()
     _cpp_cleanup()
 
 

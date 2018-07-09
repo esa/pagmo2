@@ -37,7 +37,8 @@ from threading import Lock as _Lock
 def _evolve_func(algo, pop):
     # The evolve function that is actually run from the separate processes
     # in both mp_island and ipyparallel_island.
-    return algo.evolve(pop)
+    new_pop = algo.evolve(pop)
+    return algo, new_pop
 
 
 class _temp_disable_sigint(object):
@@ -59,17 +60,18 @@ class mp_island(object):
     """Multiprocessing island.
 
     This user-defined island (UDI) will dispatch evolution tasks to a pool of processes
-    created via the standard Python multiprocessing module. The pool is shared between
+    created via the standard Python :mod:`multiprocessing module <multiprocessing>`. The pool is shared between
     different instances of :class:`~pygmo.mp_island`, and it is created
     either implicitly by the construction of the first :class:`~pygmo.mp_island`
     object or explicitly via the :func:`~pygmo.mp_island.init_pool()` static method.
     The default number of processes in the pool is equal to the number of logical CPUs on the
     current machine. The pool's size can be queried via :func:`~pygmo.mp_island.get_pool_size()`,
-    and changed via :func:`~pygmo.mp_island.resize_pool()`.
+    and changed via :func:`~pygmo.mp_island.resize_pool()`. The pool can be stopped via
+    :func:`~pygmo.mp_island.shutdown_pool()`.
 
     .. note::
 
-       Due to certain implementation details of CPython, it is not possible to initialise or resize the pool
+       Due to certain implementation details of CPython, it is not possible to initialise, resize or shutdown the pool
        from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
        :class:`~pygmo.mp_island` instance is created in a thread different from the main one, an error
        will be raised. In such a situation, the user should ensure to call :func:`~pygmo.mp_island.init_pool()`
@@ -99,20 +101,25 @@ class mp_island(object):
         """Evolve population.
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
-        :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
-        is run on one of the processes of the pool backing backing :class:`~pygmo.mp_island`.
+        :class:`~pygmo.algorithm` *algo*, and return *algo* and the evolved population. The evolution
+        is run on one of the processes of the pool backing :class:`~pygmo.mp_island`.
+        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking
+        this function will raise an exception.
 
         Args:
 
-            pop(:class:`~pygmo.population`): the input population
-            algo(:class:`~pygmo.algorithm`): the input algorithm
+           algo(:class:`~pygmo.algorithm`): the input algorithm
+           pop(:class:`~pygmo.population`): the input population
 
         Returns:
-            :class:`~pygmo.population`: the evolved population
+
+           tuple: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
 
         Raises:
-            unspecified: any exception thrown during the evolution, or by the public interface of the
-              process pool
+
+           RuntimeError: if the pool was manually shut down via :func:`~pygmo.mp_island.shutdown_pool()`
+           unspecified: any exception thrown during the evolution, or by the public interface of the
+             process pool
 
 
         """
@@ -121,6 +128,9 @@ class mp_island(object):
             # functions to modify the pool (e.g., resize()) and
             # we need to make sure we are not trying to touch
             # the pool while we are sending tasks to it.
+            if mp_island._pool is None:
+                raise RuntimeError(
+                    "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool().")
             res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
         # NOTE: there might be a bug in need of a workaround lurking in here:
         # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
@@ -131,7 +141,8 @@ class mp_island(object):
         """Island's name.
 
         Returns:
-            ``str``: ``"Multiprocessing island"``
+
+           str: ``"Multiprocessing island"``
 
         """
         return "Multiprocessing island"
@@ -139,8 +150,16 @@ class mp_island(object):
     def get_extra_info(self):
         """Island's extra info.
 
+        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
+        function will trigger the creation of a new process pool.
+
         Returns:
-            ``str``: a string specifying the current number of processes in the pool
+
+           str: a string specifying the current number of processes in the pool
+
+        Raises:
+
+           unspecified: any exception thrown by :func:`~pygmo.mp_island.get_pool_size()`
 
         """
         return "\tNumber of processes in the pool: {}".format(mp_island.get_pool_size())
@@ -183,18 +202,20 @@ class mp_island(object):
         """Initialise the process pool.
 
         This method will initialise the process pool backing :class:`~pygmo.mp_island`, if the pool
-        has not been initialised yet. Otherwise, this method will have no effects.
+        has not been initialised yet or if the pool was previously shut down via :func:`~pygmo.mp_island.shutdown_pool()`.
+        Otherwise, this method will have no effects.
 
         Args:
-            processes(``None`` or an ``int``): the size of the pool (if ``None``, the size of the pool will be
-              equal to the number of logical CPUs on the system)
+
+           processes(:data:`None` or an :class:`int`): the size of the pool (if :data:`None`, the size of the pool will be
+             equal to the number of logical CPUs on the system)
 
         Raises:
 
-            ValueError: if the pool does not exist yet and the function is being called from a thread different
-              from the main one, or if *processes* is a non-positive value
-            RuntimeError: if the current platform or Python version is not supported
-            TypeError: if *processes* is not ``None`` and not an ``int``
+           ValueError: if the pool does not exist yet and the function is being called from a thread different
+             from the main one, or if *processes* is a non-positive value
+           RuntimeError: if the current platform or Python version is not supported
+           TypeError: if *processes* is not :data:`None` and not an :class:`int`
 
         """
         # Helper to create a new pool. It will do something
@@ -219,9 +240,16 @@ class mp_island(object):
     def get_pool_size():
         """Get the size of the process pool.
 
+        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
+        function will trigger the creation of a new process pool.
+
         Returns:
 
-            ``int``: the current size of the pool
+           int: the current size of the pool
+
+        Raises:
+
+           unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
         mp_island.init_pool()
@@ -234,15 +262,18 @@ class mp_island(object):
 
         This method will resize the process pool backing :class:`~pygmo.mp_island`.
 
+        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
+        function will trigger the creation of a new process pool.
+
         Args:
 
-            processes(``int``): the desired number of processes in the pool
+           processes(int): the desired number of processes in the pool
 
         Raises:
 
-            TypeError: if the *processes* argument is not an ``int``
-            ValueError: if the *processes* argument is not strictly positive
-            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
+           TypeError: if the *processes* argument is not an :class:`int`
+           ValueError: if the *processes* argument is not strictly positive
+           unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
         import multiprocessing as mp
@@ -267,12 +298,24 @@ class mp_island(object):
             mp_island._pool_size = new_size
 
     @staticmethod
-    def _shutdown_pool():
-        # This is used only during the shutdown phase of the pygmo module.
+    def shutdown_pool():
+        """Shutdown pool.
+
+        This method will shut down the process pool backing :class:`~pygmo.mp_island`, after
+        all pending tasks in the pool have completed.
+
+        After the process pool has been shut down, attempting to run an evolution on the island
+        will raise an error. A new process pool can be created via an explicit call to
+        :func:`~pygmo.mp_island.init_pool()` or one of the methods of the public API of
+        :class:`~pygmo.mp_island` which trigger the creation of a new process pool.
+
+        """
         with mp_island._pool_lock:
             if mp_island._pool is not None:
                 mp_island._pool.close()
                 mp_island._pool.join()
+                mp_island._pool = None
+                mp_island._pool_size = None
 
 
 # Make sure we use cloudpickle for serialization, if ipyparallel is available.
@@ -380,7 +423,7 @@ class ipyparallel_island(object):
         """Evolve population.
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
-        :class:`~pygmo.algorithm` *algo*, and return the evolved population. The evolution
+        :class:`~pygmo.algorithm` *algo*, and return *algo* and the evolved population. The evolution
         task is submitted to the ipyparallel cluster via an internal :class:`ipyparallel.LoadBalancedView`
         instance initialised during the construction of the island.
 
@@ -390,9 +433,12 @@ class ipyparallel_island(object):
             algo(:class:`~pygmo.algorithm`): the input algorithm
 
         Returns:
+
+            :class:`~pygmo.algorithm`: *algo* (i.e., the algorithm object that was used for the evolution)
             :class:`~pygmo.population`: the evolved population
 
         Raises:
+
             unspecified: any exception thrown during the evolution, or by submitting the evolution task
               to the ipyparallel cluster
 
