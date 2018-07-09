@@ -38,6 +38,10 @@ see https://www.gnu.org/licenses/. */
 #if __GNUC__ >= 7
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
+#if __GNUC__ >= 8
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#pragma GCC diagnostic ignored "-Wnoexcept"
+#endif
 #if defined(__clang__)
 
 #if defined(__apple_build_version__)

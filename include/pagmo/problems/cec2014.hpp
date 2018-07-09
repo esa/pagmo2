@@ -61,8 +61,8 @@ public:
     std::vector<int> m_shuffle;
 
     // auxiliary vectors
-    mutable vector_double z;
-    mutable vector_double y;
+    mutable vector_double m_z;
+    mutable vector_double m_y;
 
     // problem id
     unsigned func_num;
@@ -77,7 +77,7 @@ public:
      * @throws invalid_argument if \p prob_id is not in [1,30] or if \p dim is not one of
      * [2,10,20,30,50,100]
      */
-    cec2014(unsigned prob_id = 1u, unsigned dim = 2u) : z(dim), y(dim), func_num(prob_id)
+    cec2014(unsigned prob_id = 1u, unsigned dim = 2u) : m_z(dim), m_y(dim), func_num(prob_id)
     {
         if (!(dim == 2u || dim == 10u || dim == 20u || dim == 30u || dim == 50u || dim == 100u)) {
             pagmo_throw(std::invalid_argument, "Error: CEC2014 Test functions are only defined for dimensions "
@@ -135,8 +135,8 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const
     {
         // all CEC 2014 problems have the same bounds
-        vector_double lb(z.size(), -100.);
-        vector_double ub(z.size(), 100.);
+        vector_double lb(m_z.size(), -100.);
+        vector_double ub(m_z.size(), 100.);
         return std::make_pair(std::move(lb), std::move(ub));
     }
 
@@ -151,7 +151,7 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         vector_double f(1);
-        auto nx = static_cast<unsigned>(z.size());
+        auto nx = static_cast<unsigned>(m_z.size());
         switch (func_num) {
             case 1:
                 ellips_func(x.data(), f.data(), nx, m_origin_shift.data(), m_rotation_matrix.data(), 1, 1);
@@ -394,7 +394,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(func_num, m_rotation_matrix, m_origin_shift, m_shuffle, y, z);
+        ar(func_num, m_rotation_matrix, m_origin_shift, m_shuffle, m_y, m_z);
     }
 
 private:
@@ -407,9 +407,9 @@ private:
 
         unsigned i;
         f[0] = 0.0;
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
         for (i = 0; i < nx; i++) {
-            f[0] += z[i] * z[i];
+            f[0] += m_z[i] * m_z[i];
         }
     }
 
@@ -420,9 +420,9 @@ private:
 
         unsigned i;
         f[0] = 0.0;
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
         for (i = 0; i < nx; i++) {
-            f[0] += pow(10.0, 6.0 * i / (nx - 1)) * z[i] * z[i];
+            f[0] += pow(10.0, 6.0 * i / (nx - 1)) * m_z[i] * m_z[i];
         }
     }
 
@@ -432,11 +432,11 @@ private:
     {
 
         unsigned i;
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        f[0] = z[0] * z[0];
+        f[0] = m_z[0] * m_z[0];
         for (i = 1; i < nx; i++) {
-            f[0] += pow(10.0, 6.0) * z[i] * z[i];
+            f[0] += pow(10.0, 6.0) * m_z[i] * m_z[i];
         }
     }
 
@@ -446,10 +446,10 @@ private:
     {
 
         unsigned i;
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
-        f[0] = pow(10.0, 6.0) * z[0] * z[0];
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        f[0] = pow(10.0, 6.0) * m_z[0] * m_z[0];
         for (i = 1; i < nx; i++) {
-            f[0] += z[i] * z[i];
+            f[0] += m_z[i] * m_z[i];
         }
     }
 
@@ -460,10 +460,10 @@ private:
 
         unsigned i;
         f[0] = 0.0;
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
-            f[0] += pow(fabs(z[i]), 2 + 4 * i / (nx - 1));
+            f[0] += pow(fabs(m_z[i]), 2 + 4 * i / (nx - 1));
         }
         f[0] = pow(f[0], 0.5);
     }
@@ -476,12 +476,12 @@ private:
         unsigned i;
         double tmp1, tmp2;
         f[0] = 0.0;
-        sr_func(x, z.data(), nx, Os, Mr, 2.048 / 100.0, s_flag, r_flag); /* shift and rotate */
-        z[0] += 1.0;                                                     // shift to orgin
+        sr_func(x, m_z.data(), nx, Os, Mr, 2.048 / 100.0, s_flag, r_flag); /* shift and rotate */
+        m_z[0] += 1.0;                                                     // shift to orgin
         for (i = 0; i < nx - 1; i++) {
-            z[i + 1] += 1.0; // shift to orgin
-            tmp1 = z[i] * z[i] - z[i + 1];
-            tmp2 = z[i] - 1.0;
+            m_z[i + 1] += 1.0; // shift to orgin
+            tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
+            tmp2 = m_z[i] - 1.0;
             f[0] += 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
         }
     }
@@ -494,11 +494,11 @@ private:
         unsigned i;
         double tmp;
         f[0] = 0.0;
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
         for (i = 0; i < nx - 1; i++) {
-            z[i] = pow(y[i] * y[i] + y[i + 1] * y[i + 1], 0.5);
-            tmp = sin(50.0 * pow(z[i], 0.2));
-            f[0] += pow(z[i], 0.5) + pow(z[i], 0.5) * tmp * tmp;
+            m_z[i] = pow(m_y[i] * m_y[i] + m_y[i + 1] * m_y[i + 1], 0.5);
+            tmp = sin(50.0 * pow(m_z[i], 0.2));
+            f[0] += pow(m_z[i], 0.5) + pow(m_z[i], 0.5) * tmp * tmp;
         }
         f[0] = f[0] * f[0] / (nx - 1) / (nx - 1);
     }
@@ -513,11 +513,11 @@ private:
         sum1 = 0.0;
         sum2 = 0.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
-            sum1 += z[i] * z[i];
-            sum2 += cos(2.0 * PI * z[i]);
+            sum1 += m_z[i] * m_z[i];
+            sum2 += cos(2.0 * PI * m_z[i]);
         }
         sum1 = -0.2 * sqrt(sum1 / nx);
         sum2 /= nx;
@@ -536,13 +536,13 @@ private:
         k_max = 20;
         f[0] = 0.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 0.5 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 0.5 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
             sum = 0.0;
             sum2 = 0.0;
             for (j = 0; j <= k_max; j++) {
-                sum += pow(a, j) * cos(2.0 * PI * pow(b, j) * (z[i] + 0.5));
+                sum += pow(a, j) * cos(2.0 * PI * pow(b, j) * (m_z[i] + 0.5));
                 sum2 += pow(a, j) * cos(2.0 * PI * pow(b, j) * 0.5);
             }
             f[0] += sum;
@@ -560,11 +560,11 @@ private:
         s = 0.0;
         p = 1.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 600.0 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 600.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
-            s += z[i] * z[i];
-            p *= cos(z[i] / sqrt(1.0 + i));
+            s += m_z[i] * m_z[i];
+            p *= cos(m_z[i] / sqrt(1.0 + i));
         }
         f[0] = 1.0 + s / 4000.0 - p;
     }
@@ -577,10 +577,10 @@ private:
         unsigned i;
         f[0] = 0.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
-            f[0] += (z[i] * z[i] - 10.0 * cos(2.0 * PI * z[i]) + 10.0);
+            f[0] += (m_z[i] * m_z[i] - 10.0 * cos(2.0 * PI * m_z[i]) + 10.0);
         }
     }
 
@@ -592,13 +592,13 @@ private:
         unsigned i;
         f[0] = 0.0;
         for (i = 0; i < nx; i++) {
-            if (fabs(y[i] - Os[i]) > 0.5) y[i] = Os[i] + floor(2 * (y[i] - Os[i]) + 0.5) / 2;
+            if (fabs(m_y[i] - Os[i]) > 0.5) m_y[i] = Os[i] + floor(2 * (m_y[i] - Os[i]) + 0.5) / 2;
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
-            f[0] += (z[i] * z[i] - 10.0 * cos(2.0 * PI * z[i]) + 10.0);
+            f[0] += (m_z[i] * m_z[i] - 10.0 * cos(2.0 * PI * m_z[i]) + 10.0);
         }
     }
 
@@ -611,20 +611,20 @@ private:
         double tmp;
         f[0] = 0.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 1000.0 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1000.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
-            z[i] += 4.209687462275036e+002;
-            if (z[i] > 500) {
-                f[0] -= (500.0 - fmod(z[i], 500)) * sin(pow(500.0 - fmod(z[i], 500), 0.5));
-                tmp = (z[i] - 500.0) / 100;
+            m_z[i] += 4.209687462275036e+002;
+            if (m_z[i] > 500) {
+                f[0] -= (500.0 - fmod(m_z[i], 500)) * sin(pow(500.0 - fmod(m_z[i], 500), 0.5));
+                tmp = (m_z[i] - 500.0) / 100;
                 f[0] += tmp * tmp / nx;
-            } else if (z[i] < -500) {
-                f[0] -= (-500.0 + fmod(fabs(z[i]), 500)) * sin(pow(500.0 - fmod(fabs(z[i]), 500), 0.5));
-                tmp = (z[i] + 500.0) / 100;
+            } else if (m_z[i] < -500) {
+                f[0] -= (-500.0 + fmod(fabs(m_z[i]), 500)) * sin(pow(500.0 - fmod(fabs(m_z[i]), 500), 0.5));
+                tmp = (m_z[i] + 500.0) / 100;
                 f[0] += tmp * tmp / nx;
             } else
-                f[0] -= z[i] * sin(pow(fabs(z[i]), 0.5));
+                f[0] -= m_z[i] * sin(pow(fabs(m_z[i]), 0.5));
         }
         f[0] += 4.189828872724338e+002 * nx;
     }
@@ -639,13 +639,13 @@ private:
         f[0] = 1.0;
         tmp3 = pow(1.0 * nx, 1.2);
 
-        sr_func(x, z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         for (i = 0; i < nx; i++) {
             temp = 0.0;
             for (j = 1; j <= 32; j++) {
                 tmp1 = pow(2.0, j);
-                tmp2 = tmp1 * z[i];
+                tmp2 = tmp1 * m_z[i];
                 temp += fabs(tmp2 - floor(tmp2 + 0.5)) / tmp1;
             }
             f[0] *= pow(1.0 + (i + 1) * temp, 10.0 / tmp3);
@@ -667,26 +667,26 @@ private:
         mu1 = -pow((mu0 * mu0 - d) / s, 0.5);
 
         if (s_flag == 1) {
-            shiftfunc(x, y.data(), nx, Os);
+            shiftfunc(x, m_y.data(), nx, Os);
         } else {
             // shrink to the orginal search range
             for (i = 0; i < nx; i++) {
-                y[i] = x[i];
+                m_y[i] = x[i];
             }
         }
         // shrink to the orginal search range
         for (i = 0; i < nx; i++) {
-            y[i] *= 10.0 / 100.0;
+            m_y[i] *= 10.0 / 100.0;
         }
 
         for (i = 0; i < nx; i++) {
-            tmpx[i] = 2 * y[i];
+            tmpx[i] = 2 * m_y[i];
             if (Os[i] < 0.0) {
                 tmpx[i] *= -1.;
             }
         }
         for (i = 0; i < nx; i++) {
-            z[i] = tmpx[i];
+            m_z[i] = tmpx[i];
             tmpx[i] += mu0;
         }
         tmp1 = 0.0;
@@ -703,9 +703,9 @@ private:
         tmp = 0.0;
 
         if (r_flag == 1) {
-            rotatefunc(z.data(), y.data(), nx, Mr);
+            rotatefunc(m_z.data(), m_y.data(), nx, Mr);
             for (i = 0; i < nx; i++) {
-                tmp += cos(2.0 * PI * y[i]);
+                tmp += cos(2.0 * PI * m_y[i]);
             }
             if (tmp1 < tmp2) {
                 f[0] = tmp1;
@@ -715,7 +715,7 @@ private:
             f[0] += 10.0 * (nx - tmp);
         } else {
             for (i = 0; i < nx; i++) {
-                tmp += cos(2.0 * PI * z[i]);
+                tmp += cos(2.0 * PI * m_z[i]);
             }
             if (tmp1 < tmp2) {
                 f[0] = tmp1;
@@ -737,18 +737,18 @@ private:
         double temp, tmp1, tmp2;
         f[0] = 0.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
-        z[0] += 1.0; // shift to orgin
+        m_z[0] += 1.0; // shift to orgin
         for (i = 0; i < nx - 1; i++) {
-            z[i + 1] += 1.0; // shift to orgin
-            tmp1 = z[i] * z[i] - z[i + 1];
-            tmp2 = z[i] - 1.0;
+            m_z[i + 1] += 1.0; // shift to orgin
+            tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
+            tmp2 = m_z[i] - 1.0;
             temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
             f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
         }
-        tmp1 = z[nx - 1] * z[nx - 1] - z[0];
-        tmp2 = z[nx - 1] - 1.0;
+        tmp1 = m_z[nx - 1] * m_z[nx - 1] - m_z[0];
+        tmp2 = m_z[nx - 1] - 1.0;
         temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
         f[0] += (temp * temp) / 4000.0 - cos(temp) + 1.0;
     }
@@ -761,18 +761,18 @@ private:
         unsigned i;
         double temp1, temp2;
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         f[0] = 0.0;
         for (i = 0; i < nx - 1; i++) {
-            temp1 = sin(sqrt(z[i] * z[i] + z[i + 1] * z[i + 1]));
+            temp1 = sin(sqrt(m_z[i] * m_z[i] + m_z[i + 1] * m_z[i + 1]));
             temp1 = temp1 * temp1;
-            temp2 = 1.0 + 0.001 * (z[i] * z[i] + z[i + 1] * z[i + 1]);
+            temp2 = 1.0 + 0.001 * (m_z[i] * m_z[i] + m_z[i + 1] * m_z[i + 1]);
             f[0] += 0.5 + (temp1 - 0.5) / (temp2 * temp2);
         }
-        temp1 = sin(sqrt(z[nx - 1] * z[nx - 1] + z[0] * z[0]));
+        temp1 = sin(sqrt(m_z[nx - 1] * m_z[nx - 1] + m_z[0] * m_z[0]));
         temp1 = temp1 * temp1;
-        temp2 = 1.0 + 0.001 * (z[nx - 1] * z[nx - 1] + z[0] * z[0]);
+        temp2 = 1.0 + 0.001 * (m_z[nx - 1] * m_z[nx - 1] + m_z[0] * m_z[0]);
         f[0] += 0.5 + (temp1 - 0.5) / (temp2 * temp2);
     }
 
@@ -786,14 +786,14 @@ private:
         double alpha, r2, sum_z;
         alpha = 1.0 / 8.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         r2 = 0.0;
         sum_z = 0.0;
         for (i = 0; i < nx; i++) {
-            z[i] = z[i] - 1.0; // shift to orgin
-            r2 += z[i] * z[i];
-            sum_z += z[i];
+            m_z[i] = m_z[i] - 1.0; // shift to orgin
+            r2 += m_z[i] * m_z[i];
+            sum_z += m_z[i];
         }
 
         f[0] = pow(fabs(r2 - nx), 2 * alpha) + (0.5 * r2 + sum_z) / nx + 0.5;
@@ -809,14 +809,14 @@ private:
         double alpha, r2, sum_z;
         alpha = 1.0 / 4.0;
 
-        sr_func(x, z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
         r2 = 0.0;
         sum_z = 0.0;
         for (i = 0; i < nx; i++) {
-            z[i] = z[i] - 1.0; // shift to orgin
-            r2 += z[i] * z[i];
-            sum_z += z[i];
+            m_z[i] = m_z[i] - 1.0; // shift to orgin
+            r2 += m_z[i] * m_z[i];
+            sum_z += m_z[i];
         }
 
         f[0] = pow(fabs(pow(r2, 2.0) - pow(sum_z, 2.0)), 2 * alpha) + (0.5 * r2 + sum_z) / nx + 0.5;
@@ -842,17 +842,17 @@ private:
             G[i] = G[i - 1] + G_nx[i - 1];
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            y[j] = z[S[j] - 1];
+            m_y[j] = m_z[S[j] - 1];
         }
         i = 0;
-        schwefel_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        schwefel_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 1;
-        rastrigin_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        rastrigin_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 2;
-        ellips_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        ellips_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         f[0] = 0.0;
         for (i = 0; i < cf_num; i++) {
             f[0] += fit[i];
@@ -880,17 +880,17 @@ private:
             G[i] = G[i - 1] + G_nx[i - 1];
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            y[j] = z[S[j] - 1];
+            m_y[j] = m_z[S[j] - 1];
         }
         i = 0;
-        bent_cigar_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        bent_cigar_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 1;
-        hgbat_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        hgbat_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 2;
-        rastrigin_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        rastrigin_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
 
         f[0] = 0.0;
         for (i = 0; i < cf_num; i++) {
@@ -920,19 +920,19 @@ private:
             G[i] = G[i - 1] + G_nx[i - 1];
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            y[j] = z[S[j] - 1];
+            m_y[j] = m_z[S[j] - 1];
         }
         i = 0;
-        griewank_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        griewank_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 1;
-        weierstrass_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        weierstrass_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 2;
-        rosenbrock_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        rosenbrock_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 3;
-        escaffer6_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        escaffer6_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
 
         f[0] = 0.0;
         for (i = 0; i < cf_num; i++) {
@@ -962,19 +962,19 @@ private:
             G[i] = G[i - 1] + G_nx[i - 1];
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            y[j] = z[S[j] - 1];
+            m_y[j] = m_z[S[j] - 1];
         }
         i = 0;
-        hgbat_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        hgbat_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 1;
-        discus_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        discus_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 2;
-        grie_rosen_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        grie_rosen_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 3;
-        rastrigin_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        rastrigin_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
 
         f[0] = 0.0;
         for (i = 0; i < cf_num; i++) {
@@ -1005,22 +1005,22 @@ private:
             G[i] = G[i - 1] + G_nx[i - 1];
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            y[j] = z[S[j] - 1];
+            m_y[j] = m_z[S[j] - 1];
         }
 
         i = 0;
-        escaffer6_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        escaffer6_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 1;
-        hgbat_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        hgbat_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 2;
-        rosenbrock_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        rosenbrock_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 3;
-        schwefel_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        schwefel_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 4;
-        ellips_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        ellips_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
 
         f[0] = 0.0;
         for (i = 0; i < cf_num; i++) {
@@ -1051,22 +1051,22 @@ private:
             G[i] = G[i - 1] + G_nx[i - 1];
         }
 
-        sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
+        sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            y[j] = z[S[j] - 1];
+            m_y[j] = m_z[S[j] - 1];
         }
 
         i = 0;
-        katsuura_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        katsuura_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 1;
-        happycat_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        happycat_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 2;
-        grie_rosen_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        grie_rosen_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 3;
-        schwefel_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        schwefel_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         i = 4;
-        ackley_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
+        ackley_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
         f[0] = 0.0;
         for (i = 0; i < cf_num; i++) {
             f[0] += fit[i];
@@ -1281,13 +1281,13 @@ private:
         unsigned i;
         if (s_flag == 1) {
             if (r_flag == 1) {
-                shiftfunc(x, y.data(), nx, Os);
+                shiftfunc(x, m_y.data(), nx, Os);
 
                 // shrink to the original search range
                 for (i = 0; i < nx; i++) {
-                    y[i] = y[i] * sh_rate;
+                    m_y[i] = m_y[i] * sh_rate;
                 }
-                rotatefunc(y.data(), sr_x, nx, Mr);
+                rotatefunc(m_y.data(), sr_x, nx, Mr);
             } else {
                 shiftfunc(x, sr_x, nx, Os);
 
@@ -1300,9 +1300,9 @@ private:
             if (r_flag == 1) {
                 // shrink to the original search range
                 for (i = 0; i < nx; i++) {
-                    y[i] = x[i] * sh_rate;
+                    m_y[i] = x[i] * sh_rate;
                 }
-                rotatefunc(y.data(), sr_x, nx, Mr);
+                rotatefunc(m_y.data(), sr_x, nx, Mr);
             } else {
                 // shrink to the original search range
                 for (i = 0; i < nx; i++) {
