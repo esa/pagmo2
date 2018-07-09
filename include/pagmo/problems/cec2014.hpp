@@ -65,7 +65,7 @@ public:
     mutable vector_double y;
 
     // problem id
-    unsigned int func_num;
+    unsigned func_num;
 
     /// Constructor
     /**
@@ -77,7 +77,7 @@ public:
      * @throws invalid_argument if \p prob_id is not in [1,30] or if \p dim is not one of
      * [2,10,20,30,50,100]
      */
-    cec2014(unsigned int prob_id = 1u, unsigned int dim = 2u) : z(dim), y(dim), func_num(prob_id)
+    cec2014(unsigned prob_id = 1u, unsigned dim = 2u) : z(dim), y(dim), func_num(prob_id)
     {
         if (!(dim == 2u || dim == 10u || dim == 20u || dim == 30u || dim == 50u || dim == 100u)) {
             pagmo_throw(std::invalid_argument, "Error: CEC2014 Test functions are only defined for dimensions "
@@ -109,7 +109,7 @@ public:
         int i = -1;
         while (it != m_origin_shift.end()) {
             i++;
-            if ((i % 100) >= dim) {
+            if ((i % 100) >= static_cast<int>(dim)) {
                 it = m_origin_shift.erase(it);
             } else {
                 ++it;
@@ -401,11 +401,11 @@ private:
     // For the coverage analysis we do not cover the code below as its derived from a third party source
     // LCOV_EXCL_START
     /* Sphere */
-    void sphere_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int s_flag,
+    void sphere_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
                      int r_flag) const
     {
 
-        int i;
+        unsigned i;
         f[0] = 0.0;
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
         for (i = 0; i < nx; i++) {
@@ -414,11 +414,11 @@ private:
     }
 
     /* Ellipsoidal */
-    void ellips_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int s_flag,
+    void ellips_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
                      int r_flag) const
     {
 
-        int i;
+        unsigned i;
         f[0] = 0.0;
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
         for (i = 0; i < nx; i++) {
@@ -427,11 +427,11 @@ private:
     }
 
     /* Bent_Cigar */
-    void bent_cigar_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void bent_cigar_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                          int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         f[0] = z[0] * z[0];
@@ -441,11 +441,11 @@ private:
     }
 
     /* Discus */
-    void discus_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int s_flag,
+    void discus_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
                      int r_flag) const
     {
 
-        int i;
+        unsigned i;
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
         f[0] = pow(10.0, 6.0) * z[0] * z[0];
         for (i = 1; i < nx; i++) {
@@ -454,11 +454,11 @@ private:
     }
 
     /* Different Powers */
-    void dif_powers_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void dif_powers_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                          int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         f[0] = 0.0;
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
@@ -469,11 +469,11 @@ private:
     }
 
     /* Rosenbrock's */
-    void rosenbrock_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void rosenbrock_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                          int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double tmp1, tmp2;
         f[0] = 0.0;
         sr_func(x, z.data(), nx, Os, Mr, 2.048 / 100.0, s_flag, r_flag); /* shift and rotate */
@@ -487,11 +487,11 @@ private:
     }
 
     /* Schwefel's 1.2  */
-    void schaffer_F7_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void schaffer_F7_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                           int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double tmp;
         f[0] = 0.0;
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
@@ -504,11 +504,11 @@ private:
     }
 
     /* Ackley's  */
-    void ackley_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int s_flag,
+    void ackley_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
                      int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double sum1, sum2;
         sum1 = 0.0;
         sum2 = 0.0;
@@ -525,11 +525,11 @@ private:
     }
 
     /* Weierstrass's  */
-    void weierstrass_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void weierstrass_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                           int s_flag, int r_flag) const
     {
 
-        int i, j, k_max;
+        unsigned i, j, k_max;
         double sum, sum2, a, b;
         a = 0.5;
         b = 3.0;
@@ -551,11 +551,11 @@ private:
     }
 
     /* Griewank's  */
-    void griewank_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void griewank_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                        int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double s, p;
         s = 0.0;
         p = 1.0;
@@ -570,11 +570,11 @@ private:
     }
 
     /* Rastrigin's  */
-    void rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                         int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         f[0] = 0.0;
 
         sr_func(x, z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
@@ -585,11 +585,11 @@ private:
     }
 
     /* Noncontinuous Rastrigin's  */
-    void step_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void step_rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                              int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         f[0] = 0.0;
         for (i = 0; i < nx; i++) {
             if (fabs(y[i] - Os[i]) > 0.5) y[i] = Os[i] + floor(2 * (y[i] - Os[i]) + 0.5) / 2;
@@ -603,11 +603,11 @@ private:
     }
 
     /* Schwefel's  */
-    void schwefel_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void schwefel_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                        int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double tmp;
         f[0] = 0.0;
 
@@ -630,11 +630,11 @@ private:
     }
 
     /* Katsuura  */
-    void katsuura_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void katsuura_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                        int s_flag, int r_flag) const
     {
 
-        int i, j;
+        unsigned i, j;
         double temp, tmp1, tmp2, tmp3;
         f[0] = 1.0;
         tmp3 = pow(1.0 * nx, 1.2);
@@ -655,14 +655,14 @@ private:
     }
 
     /* Lunacek Bi_rastrigin Function */
-    void bi_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void bi_rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                            int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double mu0 = 2.5, d = 1.0, s, mu1, tmp, tmp1, tmp2;
         double *tmpx;
-        tmpx = (double *)std::malloc(sizeof(double) * nx);
+        tmpx = static_cast<double *>(std::malloc(sizeof(double) * nx));
         s = 1.0 - 1.0 / (2.0 * pow(nx + 20.0, 0.5) - 8.2);
         mu1 = -pow((mu0 * mu0 - d) / s, 0.5);
 
@@ -729,11 +729,11 @@ private:
     }
 
     /* Griewank-Rosenbrock  */
-    void grie_rosen_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void grie_rosen_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                          int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double temp, tmp1, tmp2;
         f[0] = 0.0;
 
@@ -754,11 +754,11 @@ private:
     }
 
     /* Expanded Scaffer??s F6  */
-    void escaffer6_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void escaffer6_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                         int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double temp1, temp2;
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
@@ -778,11 +778,11 @@ private:
 
     /* HappyCat, provdided by Hans-Georg Beyer (HGB) */
     /* original global optimum: [-1,-1,...,-1] */
-    void happycat_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    void happycat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                        int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double alpha, r2, sum_z;
         alpha = 1.0 / 8.0;
 
@@ -801,11 +801,11 @@ private:
 
     /* HGBat, provdided by Hans-Georg Beyer (HGB)*/
     /* original global optimum: [-1,-1,...,-1] */
-    void hgbat_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int s_flag,
+    void hgbat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
                     int r_flag) const
     {
 
-        int i;
+        unsigned i;
         double alpha, r2, sum_z;
         alpha = 1.0 / 4.0;
 
@@ -823,10 +823,9 @@ private:
     }
 
     /* Hybrid Function 1 */
-    void hf01(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *S,
+    void hf01(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
-
         int i, tmp, cf_num = 3;
         double fit[3];
         int G[3], G_nx[3];
@@ -834,7 +833,7 @@ private:
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = ceil(Gp[i] * nx);
+            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -845,8 +844,8 @@ private:
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        for (i = 0; i < nx; i++) {
-            y[i] = z[S[i] - 1];
+        for (auto j = 0u; j < nx; j++) {
+            y[j] = z[S[j] - 1];
         }
         i = 0;
         schwefel_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -861,10 +860,9 @@ private:
     }
 
     /* Hybrid Function 2 */
-    void hf02(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *S,
+    void hf02(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
-
         int i, tmp, cf_num = 3;
         double fit[3];
         int G[3], G_nx[3];
@@ -872,7 +870,7 @@ private:
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = ceil(Gp[i] * nx);
+            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -884,8 +882,8 @@ private:
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        for (i = 0; i < nx; i++) {
-            y[i] = z[S[i] - 1];
+        for (auto j = 0u; j < nx; j++) {
+            y[j] = z[S[j] - 1];
         }
         i = 0;
         bent_cigar_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -901,7 +899,7 @@ private:
     }
 
     /* Hybrid Function 3 */
-    void hf03(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *S,
+    void hf03(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
 
@@ -912,7 +910,7 @@ private:
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = ceil(Gp[i] * nx);
+            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -924,8 +922,8 @@ private:
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        for (i = 0; i < nx; i++) {
-            y[i] = z[S[i] - 1];
+        for (auto j = 0u; j < nx; j++) {
+            y[j] = z[S[j] - 1];
         }
         i = 0;
         griewank_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -943,7 +941,7 @@ private:
     }
 
     /* Hybrid Function 4 */
-    void hf04(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *S,
+    void hf04(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
 
@@ -954,7 +952,7 @@ private:
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = ceil(Gp[i] * nx);
+            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -966,8 +964,8 @@ private:
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        for (i = 0; i < nx; i++) {
-            y[i] = z[S[i] - 1];
+        for (auto j = 0u; j < nx; j++) {
+            y[j] = z[S[j] - 1];
         }
         i = 0;
         hgbat_func(&y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -985,7 +983,7 @@ private:
     }
 
     /* Hybrid Function 5 */
-    void hf05(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *S,
+    void hf05(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
 
@@ -996,7 +994,7 @@ private:
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = ceil(Gp[i] * nx);
+            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
 
@@ -1009,8 +1007,8 @@ private:
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        for (i = 0; i < nx; i++) {
-            y[i] = z[S[i] - 1];
+        for (auto j = 0u; j < nx; j++) {
+            y[j] = z[S[j] - 1];
         }
 
         i = 0;
@@ -1031,7 +1029,7 @@ private:
     }
 
     /* Hybrid Function 6 */
-    void hf06(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *S,
+    void hf06(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
 
@@ -1042,7 +1040,7 @@ private:
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = ceil(Gp[i] * nx);
+            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
 
@@ -1055,8 +1053,8 @@ private:
 
         sr_func(x, z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
-        for (i = 0; i < nx; i++) {
-            y[i] = z[S[i] - 1];
+        for (auto j = 0u; j < nx; j++) {
+            y[j] = z[S[j] - 1];
         }
 
         i = 0;
@@ -1076,7 +1074,7 @@ private:
     }
 
     /* Composition Function 1 */
-    void cf01(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int r_flag) const
+    void cf01(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
 
         int i, cf_num = 5;
@@ -1103,7 +1101,7 @@ private:
     }
 
     /* Composition Function 2 */
-    void cf02(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int r_flag) const
+    void cf02(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
 
         int i, cf_num = 3;
@@ -1121,7 +1119,7 @@ private:
     }
 
     /* Composition Function 3 */
-    void cf03(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int r_flag) const
+    void cf03(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
 
         int i, cf_num = 3;
@@ -1141,7 +1139,7 @@ private:
     }
 
     /* Composition Function 4 */
-    void cf04(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int r_flag) const
+    void cf04(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
 
         int i, cf_num = 5;
@@ -1167,7 +1165,7 @@ private:
     }
 
     /* Composition Function 4 */
-    void cf05(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int r_flag) const
+    void cf05(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
 
         int i, cf_num = 5;
@@ -1193,7 +1191,7 @@ private:
     }
 
     /* Composition Function 6 */
-    void cf06(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, int r_flag) const
+    void cf06(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
         int i, cf_num = 5;
         double fit[5];
@@ -1218,7 +1216,7 @@ private:
     }
 
     /* Composition Function 7 */
-    void cf07(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *SS,
+    void cf07(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *SS,
               int r_flag) const
     {
 
@@ -1236,7 +1234,7 @@ private:
     }
 
     /* Composition Function 8 */
-    void cf08(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr, const int *SS,
+    void cf08(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *SS,
               int r_flag) const
     {
 
@@ -1253,19 +1251,19 @@ private:
         cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
     }
 
-    void shiftfunc(const double *x, double *xshift, const unsigned int nx, const double *Os) const
+    void shiftfunc(const double *x, double *xshift, const unsigned nx, const double *Os) const
     {
 
-        int i;
+        unsigned i;
         for (i = 0; i < nx; i++) {
             xshift[i] = x[i] - Os[i];
         }
     }
 
-    void rotatefunc(const double *x, double *xrot, const unsigned int nx, const double *Mr) const
+    void rotatefunc(const double *x, double *xrot, const unsigned nx, const double *Mr) const
     {
-
-        int i, j;
+        unsigned j;
+        unsigned i;
         for (i = 0; i < nx; i++) {
             xrot[i] = 0;
 
@@ -1276,11 +1274,11 @@ private:
     }
 
     /* shift and rotate */
-    void sr_func(const double *x, double *sr_x, const unsigned int nx, const double *Os, const double *Mr,
+    void sr_func(const double *x, double *sr_x, const unsigned nx, const double *Os, const double *Mr,
                  double sh_rate, int s_flag, int r_flag) const
     {
 
-        int i;
+        unsigned i;
         if (s_flag == 1) {
             if (r_flag == 1) {
                 shiftfunc(x, y.data(), nx, Os);
@@ -1314,10 +1312,10 @@ private:
         }
     }
 
-    void asyfunc(const double *x, double *xasy, const unsigned int nx, double beta) const
+    void asyfunc(const double *x, double *xasy, const unsigned nx, double beta) const
     {
 
-        int i;
+        unsigned i;
         for (i = 0; i < nx; i++) {
             if (x[i] > 0) {
                 xasy[i] = pow(x[i], 1.0 + beta * i / (nx - 1) * pow(x[i], 0.5));
@@ -1325,10 +1323,10 @@ private:
         }
     }
 
-    void oszfunc(const double *x, double *xosz, const unsigned int nx) const
+    void oszfunc(const double *x, double *xosz, const unsigned nx) const
     {
-
-        int i, sx;
+        unsigned i;
+        int sx;
         double c1, c2, xx;
         for (i = 0; i < nx; i++) {
             if (i == 0 || i == nx - 1) {
@@ -1356,14 +1354,14 @@ private:
         }
     }
 
-    void cf_cal(const double *x, double *f, const unsigned int nx, const double *Os, double *delta, double *bias,
+    void cf_cal(const double *x, double *f, const unsigned nx, const double *Os, double *delta, double *bias,
                 double *fit, int cf_num) const
     {
-
-        int i, j;
+        unsigned j;
+        int i;
         double *w;
         double w_max = 0, w_sum = 0;
-        w = (double *)std::malloc(cf_num * sizeof(double));
+        w = static_cast<double *>(std::malloc(cf_num * sizeof(double)));
         for (i = 0; i < cf_num; i++) {
             fit[i] += bias[i];
             w[i] = 0;
