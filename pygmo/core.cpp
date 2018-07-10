@@ -620,7 +620,8 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose problems and algorithms.
     pygmo::expose_problems();
-    pygmo::expose_algorithms();
+    pygmo::expose_algorithms_0();
+    pygmo::expose_algorithms_1();
 
     // Exposition of various structured utilities
     // Hypervolume class

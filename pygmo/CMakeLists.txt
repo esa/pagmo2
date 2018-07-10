@@ -53,7 +53,7 @@ install(EXPORT pygmo_export NAMESPACE Pygmo:: DESTINATION lib/cmake/pygmo)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION include/pygmo)
 
 # Setup of the pygmo core module.
-YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp expose_algorithms.cpp expose_islands.cpp expose_problems.cpp)
+YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp expose_algorithms_0.cpp expose_algorithms_1.cpp expose_islands.cpp expose_problems.cpp)
 target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
 set_property(TARGET core PROPERTY CXX_STANDARD 11)
