@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(cec2014_correctness_test)
     for (auto i = 1u; i <= 30u; ++i) {
 
         pagmo::cec2014 prob = pagmo::cec2014(i, 10u);
-        auto x_min = prob.m_origin_shift;
+        auto x_min = prob.get_origin_shift();
         x_min.resize(10u); // uses only the first _dimensions_ elements since it will be longer for func_num > 23
 
         auto f_origin = prob.fitness(vector_double(10u, 0.))[0];

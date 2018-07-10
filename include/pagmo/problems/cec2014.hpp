@@ -55,18 +55,6 @@ class cec2014
 {
 
 public:
-    // problem data
-    vector_double m_origin_shift;
-    vector_double m_rotation_matrix;
-    std::vector<int> m_shuffle;
-
-    // auxiliary vectors
-    mutable vector_double m_z;
-    mutable vector_double m_y;
-
-    // problem id
-    unsigned func_num;
-
     /// Constructor
     /**
      * Will construct one of the 30 CEC2014 problems
@@ -381,6 +369,11 @@ public:
                 break;
         }
         return retval;
+    }
+
+    const vector_double& get_origin_shift() const
+    {
+        return m_origin_shift;
     }
 
     /// Object serialization
@@ -1391,6 +1384,19 @@ private:
         free(w);
     }
     // LCOV_EXCL_STOP
+
+    // problem data
+    vector_double m_origin_shift;
+    vector_double m_rotation_matrix;
+    std::vector<int> m_shuffle;
+
+    // auxiliary vectors
+    mutable vector_double m_z;
+    mutable vector_double m_y;
+
+    // problem id
+    unsigned func_num;
+
 };
 
 } // namespace pagmo
