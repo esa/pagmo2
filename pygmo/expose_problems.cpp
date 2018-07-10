@@ -61,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2009.hpp>
 #if !defined(_MSC_VER)
 #include <pagmo/problems/cec2013.hpp>
+#include <pagmo/problems/cec2014.hpp>
 #endif
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
@@ -229,9 +230,12 @@ void expose_problems()
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
+#if !defined(_MSC_VER)
 // excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data. To be
 // reassesed in future versions of the compiler
-#if !defined(_MSC_VER)
+    // CEC 2014.
+    auto cec2014_ = expose_problem_pygmo<cec2014>("cec2014", cec2014_docstring().c_str());
+    cec2014_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
     // CEC 2013.
     auto cec2013_ = expose_problem_pygmo<cec2013>("cec2013", cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));

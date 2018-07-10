@@ -103,6 +103,7 @@ std::string zdt_p_distance_docstring();
 std::string cec2006_docstring();
 std::string cec2009_docstring();
 std::string cec2013_docstring();
+std::string cec2014_docstring();
 std::string luksan_vlcek1_docstring();
 std::string translate_docstring();
 std::string translate_translation_docstring();
