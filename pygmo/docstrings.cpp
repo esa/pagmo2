@@ -1860,7 +1860,7 @@ Args:
 
 Raises:
     OverflowError: if *dim* or *prob_id* are negative or greater than an implementation-defined value
-    ValueError: if *prob_id* is not in [1..28] or if *dim* is not in [2, 10, 20, 30, 50, 100] or if *dim* is 2 and **prob_id* is in [17,18,19,20,21,22,29,30]
+    ValueError: if *prob_id* is not in [1..28] or if *dim* is not in [2, 10, 20, 30, 50, 100] or if *dim* is 2 and *prob_id* is in [17,18,19,20,21,22,29,30]
 
 See also the docs of the C++ class :cpp:class:`pagmo::cec2014`.
 
