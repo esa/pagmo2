@@ -110,7 +110,7 @@ matrix:
     #  osx_image: xcode6.4
     - env: PAGMO_BUILD="OSXPython36"
       os: osx
-      osx_image: xcode6.4
+      osx_image: xcode9.4
     #- env: PAGMO_BUILD="OSXPython27"
     #  os: osx
     #  osx_image: xcode6.4
@@ -139,7 +139,7 @@ script:
     # command, so that if install_deps.sh fails the whole build fails immediately
     # rather than executing install_travis.sh as well. See
     # https://github.com/travis-ci/travis-ci/issues/1066
-    - travis_wait 20 ../tools/install_deps.sh && ../tools/install_travis.sh
+    - ../tools/install_deps.sh && ../tools/install_travis.sh
 
 notifications:
   email: false
