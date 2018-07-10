@@ -371,6 +371,12 @@ public:
         return retval;
     }
 
+    /// Returns the origin shift
+    /**
+     * This method will return the origin shift.
+     *
+     * @return The origin shift.
+     */
     const vector_double& get_origin_shift() const
     {
         return m_origin_shift;
