@@ -826,14 +826,14 @@ private:
     void hf01(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
-        int i, tmp, cf_num = 3;
+        unsigned i, tmp, cf_num = 3;
         double fit[3];
-        int G[3], G_nx[3];
+        unsigned G[3], G_nx[3];
         double Gp[3] = {0.3, 0.3, 0.4};
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
+            G_nx[i] = static_cast<unsigned>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -845,7 +845,7 @@ private:
         sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            m_y[j] = m_z[S[j] - 1];
+            m_y[j] = m_z[static_cast<unsigned>(S[j] - 1)];
         }
         i = 0;
         schwefel_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -863,14 +863,14 @@ private:
     void hf02(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *S,
               int s_flag, int r_flag) const
     {
-        int i, tmp, cf_num = 3;
+        unsigned i, tmp, cf_num = 3;
         double fit[3];
-        int G[3], G_nx[3];
+        unsigned G[3], G_nx[3];
         double Gp[3] = {0.3, 0.3, 0.4};
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
+            G_nx[i] = static_cast<unsigned>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -883,7 +883,7 @@ private:
         sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            m_y[j] = m_z[S[j] - 1];
+            m_y[j] = m_z[static_cast<unsigned>(S[j] - 1)];
         }
         i = 0;
         bent_cigar_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -903,14 +903,14 @@ private:
               int s_flag, int r_flag) const
     {
 
-        int i, tmp, cf_num = 4;
+        unsigned i, tmp, cf_num = 4;
         double fit[4];
-        int G[4], G_nx[4];
+        unsigned G[4], G_nx[4];
         double Gp[4] = {0.2, 0.2, 0.3, 0.3};
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
+            G_nx[i] = static_cast<unsigned>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -923,7 +923,7 @@ private:
         sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            m_y[j] = m_z[S[j] - 1];
+            m_y[j] = m_z[static_cast<unsigned>(S[j] - 1)];
         }
         i = 0;
         griewank_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -945,14 +945,14 @@ private:
               int s_flag, int r_flag) const
     {
 
-        int i, tmp, cf_num = 4;
+        unsigned i, tmp, cf_num = 4;
         double fit[4];
-        int G[4], G_nx[4];
+        unsigned G[4], G_nx[4];
         double Gp[4] = {0.2, 0.2, 0.3, 0.3};
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
+            G_nx[i] = static_cast<unsigned>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
         G_nx[cf_num - 1] = nx - tmp;
@@ -965,7 +965,7 @@ private:
         sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            m_y[j] = m_z[S[j] - 1];
+            m_y[j] = m_z[static_cast<unsigned>(S[j] - 1)];
         }
         i = 0;
         hgbat_func(&m_y[G[i]], &fit[i], G_nx[i], Os, Mr, 0, 0);
@@ -987,14 +987,14 @@ private:
               int s_flag, int r_flag) const
     {
 
-        int i, tmp, cf_num = 5;
+        unsigned i, tmp, cf_num = 5;
         double fit[5];
-        int G[5], G_nx[5];
+        unsigned G[5], G_nx[5];
         double Gp[5] = {0.1, 0.2, 0.2, 0.2, 0.3};
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
+            G_nx[i] = static_cast<unsigned>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
 
@@ -1008,7 +1008,7 @@ private:
         sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            m_y[j] = m_z[S[j] - 1];
+            m_y[j] = m_z[static_cast<unsigned>(S[j] - 1)];
         }
 
         i = 0;
@@ -1033,14 +1033,14 @@ private:
               int s_flag, int r_flag) const
     {
 
-        int i, tmp, cf_num = 5;
+        unsigned i, tmp, cf_num = 5;
         double fit[5];
-        int G[5], G_nx[5];
+        unsigned G[5], G_nx[5];
         double Gp[5] = {0.1, 0.2, 0.2, 0.2, 0.3};
 
         tmp = 0;
         for (i = 0; i < cf_num - 1; i++) {
-            G_nx[i] = static_cast<int>(ceil(Gp[i] * nx));
+            G_nx[i] = static_cast<unsigned>(ceil(Gp[i] * nx));
             tmp += G_nx[i];
         }
 
@@ -1054,7 +1054,7 @@ private:
         sr_func(x, m_z.data(), nx, Os, Mr, 1.0, s_flag, r_flag); /* shift and rotate */
 
         for (auto j = 0u; j < nx; j++) {
-            m_y[j] = m_z[S[j] - 1];
+            m_y[j] = m_z[static_cast<unsigned>(S[j] - 1)];
         }
 
         i = 0;
@@ -1076,8 +1076,8 @@ private:
     /* Composition Function 1 */
     void cf01(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
-
-        int i, cf_num = 5;
+        unsigned i;
+        int cf_num = 5;
         double fit[5];
         double delta[5] = {10, 20, 30, 40, 50};
         double bias[5] = {0, 100, 200, 300, 400};
@@ -1103,8 +1103,8 @@ private:
     /* Composition Function 2 */
     void cf02(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
-
-        int i, cf_num = 3;
+        unsigned i;
+        int cf_num = 3;
         double fit[3];
         double delta[3] = {20, 20, 20};
         double bias[3] = {0, 100, 200};
@@ -1121,8 +1121,8 @@ private:
     /* Composition Function 3 */
     void cf03(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
-
-        int i, cf_num = 3;
+        unsigned i;
+        int cf_num = 3;
         double fit[3];
         double delta[3] = {10, 30, 50};
         double bias[3] = {0, 100, 200};
@@ -1141,8 +1141,8 @@ private:
     /* Composition Function 4 */
     void cf04(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
-
-        int i, cf_num = 5;
+        unsigned i;
+        int cf_num = 5;
         double fit[5];
         double delta[5] = {10, 10, 10, 10, 10};
         double bias[5] = {0, 100, 200, 300, 400};
@@ -1167,8 +1167,8 @@ private:
     /* Composition Function 4 */
     void cf05(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
-
-        int i, cf_num = 5;
+        unsigned i;
+        int cf_num = 5;
         double fit[5];
         double delta[5] = {10, 10, 10, 20, 20};
         double bias[5] = {0, 100, 200, 300, 400};
@@ -1193,7 +1193,8 @@ private:
     /* Composition Function 6 */
     void cf06(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int r_flag) const
     {
-        int i, cf_num = 5;
+        unsigned i;
+        int cf_num = 5;
         double fit[5];
         double delta[5] = {10, 20, 30, 40, 50};
         double bias[5] = {0, 100, 200, 300, 400};
@@ -1219,8 +1220,8 @@ private:
     void cf07(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *SS,
               int r_flag) const
     {
-
-        int i, cf_num = 3;
+        unsigned i;
+        int cf_num = 3;
         double fit[3];
         double delta[3] = {10, 30, 50};
         double bias[3] = {0, 100, 200};
@@ -1237,8 +1238,8 @@ private:
     void cf08(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, const int *SS,
               int r_flag) const
     {
-
-        int i, cf_num = 3;
+        unsigned i;
+        int cf_num = 3;
         double fit[3];
         double delta[3] = {10, 30, 50};
         double bias[3] = {0, 100, 200};
@@ -1358,11 +1359,11 @@ private:
                 double *fit, int cf_num) const
     {
         unsigned j;
-        int i;
+        unsigned i;
         double *w;
         double w_max = 0, w_sum = 0;
-        w = static_cast<double *>(std::malloc(cf_num * sizeof(double)));
-        for (i = 0; i < cf_num; i++) {
+        w = static_cast<double *>(std::malloc(static_cast<unsigned>(cf_num) * sizeof(double)));
+        for (i = 0; i < static_cast<unsigned>(cf_num); i++) {
             fit[i] += bias[i];
             w[i] = 0;
             for (j = 0; j < nx; j++) {
@@ -1375,16 +1376,16 @@ private:
             if (w[i] > w_max) w_max = w[i];
         }
 
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0; i < static_cast<unsigned>(cf_num); i++) {
             w_sum = w_sum + w[i];
         }
         if (w_max == 0) {
-            for (i = 0; i < cf_num; i++)
+            for (i = 0; i < static_cast<unsigned>(cf_num); i++)
                 w[i] = 1;
             w_sum = cf_num;
         }
         f[0] = 0.0;
-        for (i = 0; i < cf_num; i++) {
+        for (i = 0; i < static_cast<unsigned>(cf_num); i++) {
             f[0] = f[0] + w[i] / w_sum * fit[i];
         }
         free(w);
