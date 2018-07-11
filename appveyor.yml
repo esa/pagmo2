@@ -22,7 +22,8 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
 # NOTE: we clean and update the conda env due to some apparent caching issues in the
-# conda version installed on appveyor.
+# conda version installed on appveyor. This is necessary sometimes, depending on the
+# current state of conda.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda clean --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y

@@ -7,6 +7,8 @@ Changelog
 New
 ~~~
 
+- Implement the CEC2014 problem suite (`#189 <https://github.com/esa/pagmo2/pull/189>`__, `#188 <https://github.com/esa/pagmo2/pull/188>`__).
+
 - It is now possible to explicitly shut down the process pool of :class:`~pygmo.mp_island` (`#187 <https://github.com/esa/pagmo2/pull/187>`__).
 
 - Start using intersphinx in the documentation (used at the moment for hyperlinking to the Python online documentation)
@@ -23,7 +25,7 @@ Fix
 - Fix a bug in the Python exposition of the DE algorithm (`#183 <https://github.com/esa/pagmo2/pull/183>`__).
 
 - Various documentation and CI fixes and improvements (`#183 <https://github.com/esa/pagmo2/pull/183>`__,
-  `#185 <https://github.com/esa/pagmo2/pull/185>`__).
+  `#185 <https://github.com/esa/pagmo2/pull/185>`__, `#190 <https://github.com/esa/pagmo2/pull/190>`__).
 
 2.7 (2018-04-13)
 ----------------
