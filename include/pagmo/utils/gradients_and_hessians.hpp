@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -248,7 +248,7 @@ vector_double estimate_gradient_h(Func f, const vector_double &x, double dx = 1e
     }
     return gradient;
 }
-}
+} // namespace pagmo
 // namespace pagmo
 
 #endif

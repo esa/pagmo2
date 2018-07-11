@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -53,9 +53,9 @@ see https://www.gnu.org/licenses/. */
 using namespace pagmo;
 
 /**
-* Assertion method that tests correct computation of contributions for the whole contribution method
-* and the single exclusive method.
-*/
+ * Assertion method that tests correct computation of contributions for the whole contribution method
+ * and the single exclusive method.
+ */
 void assertContribs(const std::vector<vector_double> &points, std::vector<double> &ref, std::vector<double> &answers)
 {
     hypervolume hv = hypervolume(points, true);
@@ -315,7 +315,8 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test)
         {1, 6.5}, {1, 6}, {1, 5}, {2, 5}, {3, 5}, {3, 3}, {4, 6.5}, {4.5, 4}, {5, 3}, {5, 1.5}, {7, 1.5}, {7, 3.5},
     };
     ref = {
-        7.0, 6.5,
+        7.0,
+        6.5,
     };
     answers = {
         0.0, 0.0, 1.0, 0.0, 0.0, 3.5, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0,
@@ -327,7 +328,8 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test)
               {5, 3},     {5, 1.5}, {7, 1.5},   {7, 3.5}, {7, 0.5}, {7, 1.0}, {7, 4.5}, {0.0, 6.5},
               {5.5, 6.5}, {7, 0.5}, {5.5, 6.5}, {5, 5},   {5, 5},   {5, 5}};
     ref = {
-        7.0, 6.5,
+        7.0,
+        6.5,
     };
     answers = {0.0, 0.0, 1.0, 0.0, 0.0, 3.5, 0.0, 0.0, 0.0, 3.0, 0.0,
                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -391,7 +393,8 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributions_test)
     // Decrease the contribution of first point.Second point is dominated.
     points.push_back({4, 4, 4});
     answers = {
-        7, 0,
+        7,
+        0,
     };
     assertContribs(points, ref, answers);
 

@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -43,8 +43,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>         // uniform_real_from_range
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
-#include <pagmo/utils/generic.hpp> // uniform_real_from_range
 
 namespace pagmo
 {
@@ -74,17 +74,17 @@ public:
 
     /// Constructor
     /**
-    * Constructs the NSGA II user defined algorithm.
-    *
-    * @param[in] gen Number of generations to evolve.
-    * @param[in] cr Crossover probability.
-    * @param[in] eta_c Distribution index for crossover.
-    * @param[in] m Mutation probability.
-    * @param[in] eta_m Distribution index for mutation.
-    * @param seed seed used by the internal random number generator (default is random)
-    * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
-    * [1,100[ or \p eta_m is not in [1,100[.
-    */
+     * Constructs the NSGA II user defined algorithm.
+     *
+     * @param[in] gen Number of generations to evolve.
+     * @param[in] cr Crossover probability.
+     * @param[in] eta_c Distribution index for crossover.
+     * @param[in] m Mutation probability.
+     * @param[in] eta_m Distribution index for mutation.
+     * @param seed seed used by the internal random number generator (default is random)
+     * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
+     * [1,100[ or \p eta_m is not in [1,100[.
+     */
     nsga2(unsigned gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
           unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed), m_verbosity(0u),

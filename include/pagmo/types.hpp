@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -41,6 +41,6 @@ typedef std::vector<double> vector_double;
 /// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
 typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
 
-} // namespaces
+} // namespace pagmo
 
 #endif

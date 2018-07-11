@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -96,18 +96,18 @@ class dtlz
 {
 public:
     /** Constructor
-    *
-    * Will construct a problem of the DTLZ test-suite.
-    *
-    * @param prob_id problem id
-    * @param dim the problem dimension (size of the decision vector)
-    * @param fdim number of objectives
-    * @param alpha controls density of solutions (used only by DTLZ4)
-    *
-    * @throw std::invalid_argument if the prob_id is not in [1 .. 7], if fdim is less than 2 or if fdim or dim_param are
-    * larger than an implementation defiend value
-    *
-    */
+     *
+     * Will construct a problem of the DTLZ test-suite.
+     *
+     * @param prob_id problem id
+     * @param dim the problem dimension (size of the decision vector)
+     * @param fdim number of objectives
+     * @param alpha controls density of solutions (used only by DTLZ4)
+     *
+     * @throw std::invalid_argument if the prob_id is not in [1 .. 7], if fdim is less than 2 or if fdim or dim_param
+     * are larger than an implementation defiend value
+     *
+     */
     dtlz(unsigned int prob_id = 1u, vector_double::size_type dim = 5u, vector_double::size_type fdim = 3u,
          unsigned int alpha = 100u)
         : m_prob_id(prob_id), m_alpha(alpha), m_dim(dim), m_fdim(fdim)
@@ -502,7 +502,7 @@ private:
     // number of objectives
     vector_double::size_type m_fdim;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::dtlz)
 

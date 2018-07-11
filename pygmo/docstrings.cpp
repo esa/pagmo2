@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -1855,8 +1855,8 @@ std::string cec2014_docstring()
 The CEC 2014 problem suite (continuous, box-bounded, single-objective problems)
 
 Args:
-    prob_id (``int``): problem id (one of [1..30])
-    dim (``int``): number of dimensions (one of [2, 10, 20, 30, 50, 100])
+    prob_id (int): problem id (one of [1..30])
+    dim (int): number of dimensions (one of [2, 10, 20, 30, 50, 100])
 
 Raises:
     OverflowError: if *dim* or *prob_id* are negative or greater than an implementation-defined value

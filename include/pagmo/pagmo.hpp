@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -63,8 +63,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/ackley.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
-#if !defined(_MSC_VER)
+// Enable conditionally the inclusion of these
+// two problems in the global header. See
+// the explanation in config.hpp.
+#if defined(PAGMO_ENABLE_CEC2013)
 #include <pagmo/problems/cec2013.hpp>
+#endif
+#if defined(PAGMO_ENABLE_CEC2014)
 #include <pagmo/problems/cec2014.hpp>
 #endif
 #include <pagmo/problems/decompose.hpp>

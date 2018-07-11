@@ -6,6 +6,14 @@
 #ifndef PAGMO_PROBLEM_CEC2014_HPP
 #define PAGMO_PROBLEM_CEC2014_HPP
 
+#include <pagmo/config.hpp>
+
+#if !defined(PAGMO_ENABLE_CEC2014)
+
+#error The cec2014.hpp header was included but the CEC 2014 problem is not supported on the current platform.
+
+#endif
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -377,7 +385,7 @@ public:
      *
      * @return The origin shift.
      */
-    const vector_double& get_origin_shift() const
+    const vector_double &get_origin_shift() const
     {
         return m_origin_shift;
     }
@@ -426,8 +434,8 @@ private:
     }
 
     /* Bent_Cigar */
-    void bent_cigar_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                         int s_flag, int r_flag) const
+    void bent_cigar_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                         int r_flag) const
     {
 
         unsigned i;
@@ -453,8 +461,8 @@ private:
     }
 
     /* Different Powers */
-    void dif_powers_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                         int s_flag, int r_flag) const
+    void dif_powers_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                         int r_flag) const
     {
 
         unsigned i;
@@ -468,8 +476,8 @@ private:
     }
 
     /* Rosenbrock's */
-    void rosenbrock_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                         int s_flag, int r_flag) const
+    void rosenbrock_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                         int r_flag) const
     {
 
         unsigned i;
@@ -486,8 +494,8 @@ private:
     }
 
     /* Schwefel's 1.2  */
-    void schaffer_F7_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                          int s_flag, int r_flag) const
+    void schaffer_F7_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                          int r_flag) const
     {
 
         unsigned i;
@@ -524,8 +532,8 @@ private:
     }
 
     /* Weierstrass's  */
-    void weierstrass_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                          int s_flag, int r_flag) const
+    void weierstrass_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                          int r_flag) const
     {
 
         unsigned i, j, k_max;
@@ -550,8 +558,8 @@ private:
     }
 
     /* Griewank's  */
-    void griewank_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                       int s_flag, int r_flag) const
+    void griewank_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                       int r_flag) const
     {
 
         unsigned i;
@@ -569,8 +577,8 @@ private:
     }
 
     /* Rastrigin's  */
-    void rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                        int s_flag, int r_flag) const
+    void rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                        int r_flag) const
     {
 
         unsigned i;
@@ -602,8 +610,8 @@ private:
     }
 
     /* Schwefel's  */
-    void schwefel_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                       int s_flag, int r_flag) const
+    void schwefel_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                       int r_flag) const
     {
 
         unsigned i;
@@ -629,8 +637,8 @@ private:
     }
 
     /* Katsuura  */
-    void katsuura_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                       int s_flag, int r_flag) const
+    void katsuura_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                       int r_flag) const
     {
 
         unsigned i, j;
@@ -728,8 +736,8 @@ private:
     }
 
     /* Griewank-Rosenbrock  */
-    void grie_rosen_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                         int s_flag, int r_flag) const
+    void grie_rosen_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                         int r_flag) const
     {
 
         unsigned i;
@@ -753,8 +761,8 @@ private:
     }
 
     /* Expanded Scaffer??s F6  */
-    void escaffer6_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                        int s_flag, int r_flag) const
+    void escaffer6_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                        int r_flag) const
     {
 
         unsigned i;
@@ -777,8 +785,8 @@ private:
 
     /* HappyCat, provdided by Hans-Georg Beyer (HGB) */
     /* original global optimum: [-1,-1,...,-1] */
-    void happycat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
-                       int s_flag, int r_flag) const
+    void happycat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
+                       int r_flag) const
     {
 
         unsigned i;
@@ -1274,8 +1282,8 @@ private:
     }
 
     /* shift and rotate */
-    void sr_func(const double *x, double *sr_x, const unsigned nx, const double *Os, const double *Mr,
-                 double sh_rate, int s_flag, int r_flag) const
+    void sr_func(const double *x, double *sr_x, const unsigned nx, const double *Os, const double *Mr, double sh_rate,
+                 int s_flag, int r_flag) const
     {
 
         unsigned i;
@@ -1402,7 +1410,6 @@ private:
 
     // problem id
     unsigned func_num;
-
 };
 
 } // namespace pagmo

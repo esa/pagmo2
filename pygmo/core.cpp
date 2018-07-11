@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -619,8 +619,10 @@ BOOST_PYTHON_MODULE(core)
              pygmo::algorithm_get_thread_safety_docstring().c_str());
 
     // Expose problems and algorithms.
-    pygmo::expose_problems();
-    pygmo::expose_algorithms();
+    pygmo::expose_problems_0();
+    pygmo::expose_problems_1();
+    pygmo::expose_algorithms_0();
+    pygmo::expose_algorithms_1();
 
     // Exposition of various structured utilities
     // Hypervolume class

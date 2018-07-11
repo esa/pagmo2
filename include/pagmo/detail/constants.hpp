@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -42,7 +42,7 @@ constexpr double pi_half()
 {
     return 3.1415926535897932384626433832795028841971693993 / 2.;
 }
-}
-}
+} // namespace detail
+} // namespace pagmo
 
 #endif

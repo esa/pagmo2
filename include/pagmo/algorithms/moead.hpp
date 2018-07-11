@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -89,24 +89,24 @@ public:
 
     /// Constructor
     /**
-    * Constructs MOEA/D-DE
-    *
-    * @param gen number of generations
-    * @param weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
-    * @param decomposition decomposition method: one of "weighted", "tchebycheff" or "bi"
-    * @param neighbours size of the weight's neighborhood
-    * @param CR crossover parameter in the Differential Evolution operator
-    * @param F parameter for the Differential Evolution operator
-    * @param eta_m distribution index used by the polynomial mutation
-    * @param realb chance that the neighbourhood is considered at each generation, rather than the whole population
-    * (only if preserve_diversity is true)
-    * @param limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
-    * @param preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
-    * and Qingfu Zhang paper
-    * @param seed seed used by the internal random number generator (default is random)
-    * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
-    * in [1.0] or m_eta is < 0
-    */
+     * Constructs MOEA/D-DE
+     *
+     * @param gen number of generations
+     * @param weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
+     * @param decomposition decomposition method: one of "weighted", "tchebycheff" or "bi"
+     * @param neighbours size of the weight's neighborhood
+     * @param CR crossover parameter in the Differential Evolution operator
+     * @param F parameter for the Differential Evolution operator
+     * @param eta_m distribution index used by the polynomial mutation
+     * @param realb chance that the neighbourhood is considered at each generation, rather than the whole population
+     * (only if preserve_diversity is true)
+     * @param limit maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)
+     * @param preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
+     * and Qingfu Zhang paper
+     * @param seed seed used by the internal random number generator (default is random)
+     * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
+     * in [1.0] or m_eta is < 0
+     */
     moead(unsigned int gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
           double realb = 0.9, unsigned int limit = 2u, bool preserve_diversity = true,

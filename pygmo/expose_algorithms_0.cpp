@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -45,9 +45,11 @@ see https://www.gnu.org/licenses/. */
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include <pygmo/numpy.hpp>
 
-#include <boost/any.hpp>
+#include <map>
+#include <string>
+#include <tuple>
+
 #include <boost/python/args.hpp>
-#include <boost/python/class.hpp>
 #include <boost/python/default_call_policies.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/extract.hpp>
@@ -57,13 +59,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/make_function.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/return_internal_reference.hpp>
-#include <boost/python/scope.hpp>
 #include <boost/python/stl_iterator.hpp>
-#include <boost/python/str.hpp>
 #include <boost/python/tuple.hpp>
-#include <map>
-#include <string>
-#include <tuple>
 
 #include <pagmo/config.hpp>
 
@@ -83,17 +80,6 @@ see https://www.gnu.org/licenses/. */
 #endif
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
-#if defined(PAGMO_WITH_NLOPT)
-#include <pagmo/algorithms/nlopt.hpp>
-#endif
-#include <pagmo/algorithms/ihs.hpp>
-#include <pagmo/algorithms/nsga2.hpp>
-#include <pagmo/algorithms/pso.hpp>
-#include <pagmo/algorithms/pso_gen.hpp>
-#include <pagmo/algorithms/sade.hpp>
-#include <pagmo/algorithms/sea.hpp>
-#include <pagmo/algorithms/sga.hpp>
-#include <pagmo/algorithms/simulated_annealing.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/threading.hpp>
@@ -101,7 +87,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/algorithm_exposition_suite.hpp>
 #include <pygmo/common_utils.hpp>
 #include <pygmo/docstrings.hpp>
-#include <pygmo/pygmo_classes.hpp>
+#include <pygmo/expose_algorithms.hpp>
 
 using namespace pagmo;
 namespace bp = boost::python;
@@ -139,91 +125,7 @@ struct tu_test_algorithm {
     }
 };
 
-template <typename T>
-static inline void expose_not_population_based(bp::class_<T> &c, const std::string &algo_name)
-{
-    // Selection/replacement.
-    add_property(
-        c, "selection", lcast([](const T &n) -> bp::object {
-            auto s = n.get_selection();
-            if (boost::any_cast<std::string>(&s)) {
-                return bp::str(boost::any_cast<std::string>(s));
-            }
-            return bp::object(boost::any_cast<population::size_type>(s));
-        }),
-        lcast([](T &n, const bp::object &o) {
-            bp::extract<std::string> e_str(o);
-            if (e_str.check()) {
-                n.set_selection(e_str());
-                return;
-            }
-            bp::extract<population::size_type> e_idx(o);
-            if (e_idx.check()) {
-                n.set_selection(e_idx());
-                return;
-            }
-            pygmo_throw(::PyExc_TypeError,
-                        ("cannot convert the input object '" + str(o) + "' of type '" + str(type(o))
-                         + "' to either a selection policy (one of ['best', 'worst', 'random']) or an individual index")
-                            .c_str());
-        }),
-        bls_selection_docstring(algo_name).c_str());
-    add_property(
-        c, "replacement", lcast([](const T &n) -> bp::object {
-            auto s = n.get_replacement();
-            if (boost::any_cast<std::string>(&s)) {
-                return bp::str(boost::any_cast<std::string>(s));
-            }
-            return bp::object(boost::any_cast<population::size_type>(s));
-        }),
-        lcast([](T &n, const bp::object &o) {
-            bp::extract<std::string> e_str(o);
-            if (e_str.check()) {
-                n.set_replacement(e_str());
-                return;
-            }
-            bp::extract<population::size_type> e_idx(o);
-            if (e_idx.check()) {
-                n.set_replacement(e_idx());
-                return;
-            }
-            pygmo_throw(
-                ::PyExc_TypeError,
-                ("cannot convert the input object '" + str(o) + "' of type '" + str(type(o))
-                 + "' to either a replacement policy (one of ['best', 'worst', 'random']) or an individual index")
-                    .c_str());
-        }),
-        bls_replacement_docstring(algo_name).c_str());
-    c.def("set_random_sr_seed", &T::set_random_sr_seed, bls_set_random_sr_seed_docstring(algo_name).c_str());
-}
-
-// Main algorithm exposition function - for *internal* use by pygmo. The exposition function
-// for APs needs to be different.
-template <typename Algo>
-static inline bp::class_<Algo> expose_algorithm_pygmo(const char *name, const char *descr)
-{
-    // We require all algorithms to be def-ctible at the bare minimum.
-    bp::class_<Algo> c(name, descr, bp::init<>());
-
-    // Mark it as a C++ algorithm.
-    c.attr("_pygmo_cpp_algorithm") = true;
-
-    // Get reference to the algorithm class.
-    auto &algo = get_algorithm_class();
-
-    // Expose the algorithm constructor from Algo.
-    algo.def(bp::init<const Algo &>((bp::arg("uda"))));
-
-    // Expose extract.
-    algo.def("_cpp_extract", &generic_cpp_extract<pagmo::algorithm, Algo>, bp::return_internal_reference<>());
-
-    // Add the algorithm to the algorithms submodule.
-    bp::scope().attr("algorithms").attr(name) = c;
-
-    return c;
-}
-
-void expose_algorithms()
+void expose_algorithms_0()
 {
     // MBH meta-algo.
     auto mbh_ = expose_algorithm_pygmo<mbh>("mbh", mbh_docstring().c_str());
@@ -272,8 +174,6 @@ void expose_algorithms()
     test_a.def("set_n", &test_algorithm::set_n);
     // Thread unsafe test algo.
     expose_algorithm_pygmo<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
-    // Null algo.
-    auto na = expose_algorithm_pygmo<null_algorithm>("null_algorithm", null_algorithm_docstring().c_str());
     // ARTIFICIAL BEE COLONY
     auto bee_colony_ = expose_algorithm_pygmo<bee_colony>("bee_colony", bee_colony_docstring().c_str());
     bee_colony_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
@@ -303,91 +203,6 @@ void expose_algorithms()
     compass_search_.def("get_reduction_coeff", &compass_search::get_reduction_coeff);
     compass_search_.def("get_verbosity", &compass_search::get_verbosity);
     expose_not_population_based(compass_search_, "compass_search");
-    // PSO
-    auto pso_ = expose_algorithm_pygmo<pso>("pso", pso_docstring().c_str());
-    pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
-        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
-         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
-         bp::arg("memory") = false)));
-    pso_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
-         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
-         bp::arg("memory") = false, bp::arg("seed"))));
-    expose_algo_log(pso_, pso_get_log_docstring().c_str());
-    pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
-    // PSO (generational)
-    auto pso_gen_ = expose_algorithm_pygmo<pso_gen>("pso_gen", pso_gen_docstring().c_str());
-    pso_gen_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
-        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
-         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
-         bp::arg("memory") = false)));
-    pso_gen_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("omega") = 0.7298, bp::arg("eta1") = 2.05, bp::arg("eta2") = 2.05,
-         bp::arg("max_vel") = 0.5, bp::arg("variant") = 5u, bp::arg("neighb_type") = 2u, bp::arg("neighb_param") = 4u,
-         bp::arg("memory") = false, bp::arg("seed"))));
-    expose_algo_log(pso_gen_, pso_gen_get_log_docstring().c_str());
-    pso_gen_.def("get_seed", &pso_gen::get_seed, generic_uda_get_seed_docstring().c_str());
-    // SEA
-    auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
-    sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
-    sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
-    expose_algo_log(sea_, sea_get_log_docstring().c_str());
-    sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
-    // IHS
-    auto ihs_ = expose_algorithm_pygmo<ihs>("ihs", ihs_docstring().c_str());
-    ihs_.def(bp::init<unsigned, double, double, double, double, double>(
-        (bp::arg("gen") = 1u, bp::arg("phmcr") = 0.85, bp::arg("ppar_min") = 0.35, bp::arg("ppar_max") = 0.99,
-         bp::arg("bw_min") = 1E-5, bp::arg("bw_max") = 1.)));
-    ihs_.def(bp::init<unsigned, double, double, double, double, double, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("phmcr") = 0.85, bp::arg("ppar_min") = 0.35, bp::arg("ppar_max") = 0.99,
-         bp::arg("bw_min") = 1E-5, bp::arg("bw_max") = 1., bp::arg("seed"))));
-    // ihs needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
-    ihs_.def("get_log", lcast([](const ihs &a) -> bp::list {
-                 bp::list retval;
-                 for (const auto &t : a.get_log()) {
-                     retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t),
-                                                  std::get<4>(t), std::get<5>(t), std::get<6>(t),
-                                                  v_to_a(std::get<7>(t))));
-                 }
-                 return retval;
-             }),
-             ihs_get_log_docstring().c_str());
-    ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
-    // SGA
-    auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
-    sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(
-        (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02, bp::arg("param_m") = 1.,
-         bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential", bp::arg("mutation") = "polynomial",
-         bp::arg("selection") = "tournament")));
-    sga_.def(
-        bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string, unsigned>(
-            (bp::arg("gen") = 1u, bp::arg("cr") = 0.9, bp::arg("eta_c") = 1., bp::arg("m") = 0.02,
-             bp::arg("param_m") = 1., bp::arg("param_s") = 2u, bp::arg("crossover") = "exponential",
-             bp::arg("mutation") = "polynomial", bp::arg("selection") = "tournament", bp::arg("seed"))));
-    expose_algo_log(sga_, sga_get_log_docstring().c_str());
-    sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
-    // SIMULATED ANNEALING
-    auto simulated_annealing_
-        = expose_algorithm_pygmo<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());
-    simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double>(
-        (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 1u,
-         bp::arg("bin_size") = 20u, bp::arg("start_range") = 1.)));
-    simulated_annealing_.def(bp::init<double, double, unsigned, unsigned, unsigned, double, unsigned>(
-        (bp::arg("Ts") = 10., bp::arg("Tf") = 0.1, bp::arg("n_T_adj") = 10u, bp::arg("n_range_adj") = 10u,
-         bp::arg("bin_size") = 10u, bp::arg("start_range") = 1., bp::arg("seed"))));
-    expose_algo_log(simulated_annealing_, simulated_annealing_get_log_docstring().c_str());
-    simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
-    expose_not_population_based(simulated_annealing_, "simulated_annealing");
-    // SADE
-    auto sade_ = expose_algorithm_pygmo<sade>("sade", sade_docstring().c_str());
-    sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
-        (bp::arg("gen") = 1u, bp::arg("variant") = 2u, bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6,
-         bp::arg("xtol") = 1e-6, bp::arg("memory") = false)));
-    sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("variant") = 2u, bp::arg("variant_adptv") = 1u, bp::arg("ftol") = 1e-6,
-         bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
-    expose_algo_log(sade_, sade_get_log_docstring().c_str());
-    sade_.def("get_seed", &sade::get_seed, generic_uda_get_seed_docstring().c_str());
     // DE-1220
     auto de1220_ = expose_algorithm_pygmo<de1220>("de1220", de1220_docstring().c_str());
     // Helper to get the list of default allowed variants for de1220.
@@ -467,57 +282,7 @@ void expose_algorithms()
                    return retval;
                }),
                moead_get_log_docstring().c_str());
-
     moead_.def("get_seed", &moead::get_seed, generic_uda_get_seed_docstring().c_str());
-    // NSGA2
-    auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
-    nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
-                                                                   bp::arg("eta_c") = 10., bp::arg("m") = 0.01,
-                                                                   bp::arg("eta_m") = 10.)));
-    nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
-         bp::arg("seed"))));
-    // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
-    nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
-                   bp::list retval;
-                   for (const auto &t : a.get_log()) {
-                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
-                   }
-                   return retval;
-               }),
-               nsga2_get_log_docstring().c_str());
-
-    nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());
-
-#if defined(PAGMO_WITH_NLOPT)
-    // NLopt.
-    auto nlopt_ = expose_algorithm_pygmo<nlopt>("nlopt", nlopt_docstring().c_str());
-    nlopt_.def(bp::init<const std::string &>((bp::arg("solver"))));
-    // Properties for the stopping criteria.
-    add_property(nlopt_, "stopval", &nlopt::get_stopval, &nlopt::set_stopval, nlopt_stopval_docstring().c_str());
-    add_property(nlopt_, "ftol_rel", &nlopt::get_ftol_rel, &nlopt::set_ftol_rel, nlopt_ftol_rel_docstring().c_str());
-    add_property(nlopt_, "ftol_abs", &nlopt::get_ftol_abs, &nlopt::set_ftol_abs, nlopt_ftol_abs_docstring().c_str());
-    add_property(nlopt_, "xtol_rel", &nlopt::get_xtol_rel, &nlopt::set_xtol_rel, nlopt_xtol_rel_docstring().c_str());
-    add_property(nlopt_, "xtol_abs", &nlopt::get_xtol_abs, &nlopt::set_xtol_abs, nlopt_xtol_abs_docstring().c_str());
-    add_property(nlopt_, "maxeval", &nlopt::get_maxeval, &nlopt::set_maxeval, nlopt_maxeval_docstring().c_str());
-    add_property(nlopt_, "maxtime", &nlopt::get_maxtime, &nlopt::set_maxtime, nlopt_maxtime_docstring().c_str());
-    expose_not_population_based(nlopt_, "nlopt");
-    expose_algo_log(nlopt_, nlopt_get_log_docstring().c_str());
-    nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
-               nlopt_get_last_opt_result_docstring().c_str());
-    nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(
-        nlopt_, "local_optimizer",
-        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
-        lcast([](nlopt &n, const nlopt *ptr) {
-            if (ptr) {
-                n.set_local_optimizer(*ptr);
-            } else {
-                n.unset_local_optimizer();
-            }
-        }),
-        nlopt_local_optimizer_docstring().c_str());
-#endif
 
 #if defined(PAGMO_WITH_IPOPT)
     // Ipopt.

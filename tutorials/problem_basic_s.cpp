@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -60,9 +60,7 @@ class problem_basic_s
 public:
     // Since the problem is stochastic we introduce as data members a random engine
     // and a seed
-    problem_basic_s(unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed)
-    {
-    }
+    problem_basic_s(unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed) {}
 
     // Mandatory, computes ... well ... the fitness.
     // In a stochastic problem the fitness depends on the

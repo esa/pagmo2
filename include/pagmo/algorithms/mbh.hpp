@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -473,7 +473,7 @@ private:
     unsigned m_verbosity;
     mutable log_type m_log;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_ALGORITHM(pagmo::mbh)
 

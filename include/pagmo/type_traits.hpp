@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -156,7 +156,7 @@ void tuple_for_each(Tuple &&t, const F &f)
                        make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
 }
 
-} // end of detail namespace
+} // namespace detail
 
 /// Implementation of \p std::is_detected.
 /**
@@ -212,7 +212,7 @@ using enable_if_is_floating_point = enable_if_t<std::is_floating_point<T>::value
  */
 template <typename T>
 using enable_if_is_not_floating_point = enable_if_t<!std::is_floating_point<T>::value, int>;
-}
+} // namespace detail
 
 /// Remove reference and cv qualifiers from type \p T.
 template <typename T>

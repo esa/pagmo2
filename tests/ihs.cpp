@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -27,9 +27,8 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE ihs_problem_test
-#include <boost/test/included/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
-
+#include <boost/test/included/unit_test.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ihs.hpp>
@@ -37,8 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
-#include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 
 using namespace pagmo;
@@ -105,7 +104,7 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
     prob_list.push_back(problem(rosenbrock{10u}));
     prob_list.push_back(problem(zdt{1u}));
     prob_list.push_back(problem(hock_schittkowsky_71{}));
-    prob_list.push_back(problem(minlp_rastrigin{}));    
+    prob_list.push_back(problem(minlp_rastrigin{}));
     for (auto &prob : prob_list) {
         prob.set_c_tol(1e-4);
         population pop1{prob, 20u, 42u};
@@ -129,7 +128,6 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
     population pop{problem{mo_many{}}, 56u, 23u};
     uda1.evolve(pop);
     BOOST_CHECK(std::get<7>(uda1.get_log()[0]).size() == 6u);
-    
 }
 
 BOOST_AUTO_TEST_CASE(ihs_setters_getters_test)

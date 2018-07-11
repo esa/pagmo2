@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,9 +34,9 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/io.hpp>
 
 namespace pagmo
 {
@@ -217,7 +217,7 @@ struct hock_schittkowsky_71 {
     {
     }
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::hock_schittkowsky_71)
 

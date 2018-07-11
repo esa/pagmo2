@@ -104,16 +104,16 @@ matrix:
           - g++-4.8
     - env: PAGMO_BUILD="OSXDebug"
       os: osx
-      osx_image: xcode9.4
+      osx_image: xcode6.4
     - env: PAGMO_BUILD="OSXRelease"
       os: osx
-      osx_image: xcode9.4
+      osx_image: xcode6.4
     - env: PAGMO_BUILD="OSXPython36"
       os: osx
-      osx_image: xcode9.4
+      osx_image: xcode6.4
     - env: PAGMO_BUILD="OSXPython27"
       os: osx
-      osx_image: xcode9.4
+      osx_image: xcode6.4
     - env: PAGMO_BUILD="manylinux64Py27" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
       sudo: required
       services:
