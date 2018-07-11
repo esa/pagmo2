@@ -24,7 +24,7 @@ The implementation as UDP can be realized as follows:
 
     >>> import pygmo as pg
 
-    >>> class FonsecaFleming():
+    >>> class Schaffer():
     ...     # Define objectives
     ...     def fitness(self, x):
     ...         f1 = x[0]**2
@@ -50,7 +50,7 @@ Let's now create an object from our new UDP class and pass it to a pygmo :class:
 .. doctest::
 
     >>> # create UDP
-    >>> prob = pg.problem(FonsecaFleming(10))
+    >>> prob = pg.problem(Schaffer())
 
 In the next step, the problem can be solved straightforward using the NSGA2 algorithm from the :class:`~pygmo.algorithm` class:
 
