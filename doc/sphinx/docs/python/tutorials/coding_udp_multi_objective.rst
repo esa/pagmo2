@@ -24,8 +24,6 @@ The implementation as UDP can be realized as follows:
 .. doctest::
 
     >>> import pygmo as pg
-    >>> import numpy as np
-
 
     >>> class FonsecaFleming():
     ...     # Define objectives
