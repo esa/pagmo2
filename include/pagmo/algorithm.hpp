@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -101,7 +101,7 @@ struct null_algorithm {
     }
 };
 
-} // namespaces
+} // namespace pagmo
 
 namespace pagmo
 {
@@ -191,7 +191,7 @@ namespace detail
 template <typename>
 struct disable_uda_checks : std::false_type {
 };
-}
+} // namespace detail
 
 /// Detect user-defined algorithms (UDA).
 /**
@@ -221,9 +221,7 @@ namespace detail
 {
 
 struct algo_inner_base {
-    virtual ~algo_inner_base()
-    {
-    }
+    virtual ~algo_inner_base() {}
     virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
     virtual void set_seed(unsigned) = 0;
@@ -248,12 +246,8 @@ struct algo_inner final : algo_inner_base {
     algo_inner &operator=(const algo_inner &) = delete;
     algo_inner &operator=(algo_inner &&) = delete;
     // Constructors from T (copy and move variants).
-    explicit algo_inner(const T &x) : m_value(x)
-    {
-    }
-    explicit algo_inner(T &&x) : m_value(std::move(x))
-    {
-    }
+    explicit algo_inner(const T &x) : m_value(x) {}
+    explicit algo_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of algorithm.
     virtual std::unique_ptr<algo_inner_base> clone() const override final
     {
@@ -452,9 +446,7 @@ public:
      *
      * @throws unspecified any exception thrown by the constructor from UDA.
      */
-    algorithm() : algorithm(null_algorithm{})
-    {
-    }
+    algorithm() : algorithm(null_algorithm{}) {}
     /// Constructor from a user-defined algorithm of type \p T
     /**
      * \verbatim embed:rst:leading-asterisk
@@ -832,7 +824,7 @@ private:
     std::string m_name;
     thread_safety m_thread_safety;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_ALGORITHM(pagmo::null_algorithm)
 

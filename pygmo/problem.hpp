@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -113,11 +113,10 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         bp::tuple tup = bp::extract<bp::tuple>(m_value.attr("get_bounds")());
         // Check the tuple size.
         if (len(tup) != 2) {
-            pygmo_throw(PyExc_ValueError,
-                        ("the bounds of the problem must be returned as a tuple of 2 elements, but "
-                         "the detected tuple size is "
-                         + std::to_string(len(tup)))
-                            .c_str());
+            pygmo_throw(PyExc_ValueError, ("the bounds of the problem must be returned as a tuple of 2 elements, but "
+                                           "the detected tuple size is "
+                                           + std::to_string(len(tup)))
+                                              .c_str());
         }
         // Finally, we build the pair from the tuple elements.
         return std::make_pair(pygmo::to_vd(tup[0]), pygmo::to_vd(tup[1]));
@@ -323,8 +322,8 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     }
     bp::object m_value;
 };
-}
-}
+} // namespace detail
+} // namespace pagmo
 
 // Register the prob_inner specialisation for bp::object.
 PAGMO_REGISTER_PROBLEM(boost::python::object)
@@ -355,11 +354,10 @@ struct problem_pickle_suite : bp::pickle_suite {
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 2) {
-            pygmo_throw(PyExc_ValueError,
-                        ("the state tuple passed for problem deserialization "
-                         "must have 2 elements, but instead it has "
-                         + std::to_string(len(state)) + " elements")
-                            .c_str());
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for problem deserialization "
+                                           "must have 2 elements, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
 
         // Make sure we import all the aps specified in the archive.
@@ -379,6 +377,6 @@ struct problem_pickle_suite : bp::pickle_suite {
         }
     }
 };
-}
+} // namespace pygmo
 
 #endif

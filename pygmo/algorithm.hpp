@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -158,8 +158,8 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     }
     bp::object m_value;
 };
-}
-}
+} // namespace detail
+} // namespace pagmo
 
 // Register the algo_inner specialisation for bp::object.
 PAGMO_REGISTER_ALGORITHM(boost::python::object)
@@ -191,11 +191,10 @@ struct algorithm_pickle_suite : bp::pickle_suite {
         // and then we build a C++ string from it. The string is then used
         // to decerealise the object.
         if (len(state) != 2) {
-            pygmo_throw(PyExc_ValueError,
-                        ("the state tuple passed for algorithm deserialization "
-                         "must have 2 elements, but instead it has "
-                         + std::to_string(len(state)) + " elements")
-                            .c_str());
+            pygmo_throw(PyExc_ValueError, ("the state tuple passed for algorithm deserialization "
+                                           "must have 2 elements, but instead it has "
+                                           + std::to_string(len(state)) + " elements")
+                                              .c_str());
         }
 
         // Make sure we import all the aps specified in the archive.
@@ -215,6 +214,6 @@ struct algorithm_pickle_suite : bp::pickle_suite {
         }
     }
 };
-}
+} // namespace pygmo
 
 #endif

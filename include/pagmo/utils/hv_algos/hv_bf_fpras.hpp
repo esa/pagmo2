@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -59,12 +59,12 @@ class bf_fpras : public hv_algorithm
 public:
     /// Constructor
     /**
-    * Constructs an instance of the algorithm
-    *
-    * @param eps accuracy of the approximation
-    * @param delta confidence of the approximation
-    * @param seed seeding for the pseudo-random number generator
-    */
+     * Constructs an instance of the algorithm
+     *
+     * @param eps accuracy of the approximation
+     * @param delta confidence of the approximation
+     * @param seed seeding for the pseudo-random number generator
+     */
     bf_fpras(double eps = 1e-2, double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
     {
@@ -78,13 +78,13 @@ public:
 
     /// Verify before compute
     /**
-    * Verifies whether given algorithm suits the requested data.
-    *
-    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the vector of points
-    *
-    * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
-    */
+     * Verifies whether given algorithm suits the requested data.
+     *
+     * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the vector of points
+     *
+     * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
+     */
     void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
     {
         hv_algorithm::assert_minimisation(points, r_point);
@@ -92,16 +92,16 @@ public:
 
     /// Compute method
     /**
-    * Compute the hypervolume using FPRAS.
-    *
-    * @see "Approximating the volume of unions and intersections of high-dimensional geometric objects", Karl Bringmann,
-    * Tobias Friedrich.
-    *
-    * @param points vector of fitness_vectors for which the hypervolume is computed
-    * @param r_point distinguished "reference point".
-    *
-    * @return approximated hypervolume
-    */
+     * Compute the hypervolume using FPRAS.
+     *
+     * @see "Approximating the volume of unions and intersections of high-dimensional geometric objects", Karl
+     * Bringmann, Tobias Friedrich.
+     *
+     * @param points vector of fitness_vectors for which the hypervolume is computed
+     * @param r_point distinguished "reference point".
+     *
+     * @return approximated hypervolume
+     */
     double compute(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         auto n = points.size();
@@ -161,9 +161,9 @@ public:
 
     /// Exclusive method
     /**
-    * This algorithm does not support this method.
-    * @return Nothing as it throws before
-    */
+     * This algorithm does not support this method.
+     * @return Nothing as it throws before
+     */
     double exclusive(unsigned int, std::vector<vector_double> &, const vector_double &) const
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
@@ -171,10 +171,10 @@ public:
 
     /// Least contributor method
     /**
-    * This algorithm does not support this method.
-    *
-    * @return Nothing as it throws before
-    */
+     * This algorithm does not support this method.
+     *
+     * @return Nothing as it throws before
+     */
     unsigned long long least_contributor(std::vector<vector_double> &, const vector_double &) const
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
@@ -182,9 +182,9 @@ public:
 
     /// Greatest contributor method
     /**
-    * This algorithm does not support this method.
-    * @return Nothing as it throws before
-    */
+     * This algorithm does not support this method.
+     * @return Nothing as it throws before
+     */
     unsigned long long greatest_contributor(std::vector<vector_double> &, const vector_double &) const
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
@@ -192,10 +192,10 @@ public:
 
     /// Contributions method
     /**
-    * As of yet, this algorithm does not support this method, even in its naive form, due to a poor handling of the
-    * dominated points.
-    * @return Nothing as it throws before
-    */
+     * As of yet, this algorithm does not support this method, even in its naive form, due to a poor handling of the
+     * dominated points.
+     * @return Nothing as it throws before
+     */
     vector_double contributions(std::vector<vector_double> &, const vector_double &) const
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
@@ -227,6 +227,6 @@ private:
 
     mutable detail::random_engine_type m_e;
 };
-}
+} // namespace pagmo
 
 #endif

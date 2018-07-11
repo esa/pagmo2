@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -178,9 +178,9 @@ BOOST_AUTO_TEST_CASE(translate_inheritance_test)
     check_inheritance(cec2009{1}, vector_double(30, 0.5));
     // We check the forwarding of the integer dimension. The translation needs to be integer too as to
     // not create a non integer bound.
-    check_inheritance(null_problem{2,2,3,1}, vector_double(1, 1));
-    check_inheritance(null_problem{2,2,3,0}, vector_double(1, 1));
-    
+    check_inheritance(null_problem{2, 2, 3, 1}, vector_double(1, 1));
+    check_inheritance(null_problem{2, 2, 3, 0}, vector_double(1, 1));
+
     // We check if set_seed is working
     problem p{translate{inventory{10u, 10u, 1234567u}, vector_double(10, 1.)}};
     std::ostringstream ss1, ss2;

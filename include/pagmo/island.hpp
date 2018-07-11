@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -124,7 +124,7 @@ namespace detail
 template <typename>
 struct disable_udi_checks : std::false_type {
 };
-}
+} // namespace detail
 
 /// Detect user-defined islands (UDI).
 /**
@@ -154,9 +154,7 @@ namespace detail
 {
 
 struct isl_inner_base {
-    virtual ~isl_inner_base()
-    {
-    }
+    virtual ~isl_inner_base() {}
     virtual std::unique_ptr<isl_inner_base> clone() const = 0;
     virtual void run_evolve(island &) const = 0;
     virtual std::string get_name() const = 0;
@@ -176,12 +174,8 @@ struct isl_inner final : isl_inner_base {
     isl_inner &operator=(const isl_inner &) = delete;
     isl_inner &operator=(isl_inner &&) = delete;
     // Constructors from T.
-    explicit isl_inner(const T &x) : m_value(x)
-    {
-    }
-    explicit isl_inner(T &&x) : m_value(std::move(x))
-    {
-    }
+    explicit isl_inner(const T &x) : m_value(x) {}
+    explicit isl_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of island.
     virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
@@ -271,7 +265,7 @@ inline bool future_running(const std::future<void> &f)
 {
     return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
 }
-}
+} // namespace detail
 
 /// Thread island.
 /**
@@ -399,7 +393,7 @@ struct island_data {
     archipelago *archi_ptr = nullptr;
     task_queue queue;
 };
-}
+} // namespace detail
 
 /// Evolution status.
 /**
@@ -447,7 +441,7 @@ const typename island_static_data<T>::status_map_t island_static_data<T>::status
        {evolve_status::busy, "busy"},
        {evolve_status::idle_error, "idle - **error occurred**"},
        {evolve_status::busy_error, "busy - **error occurred**"}};
-}
+} // namespace detail
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
@@ -537,9 +531,7 @@ public:
      *
      * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
      */
-    island() : m_ptr(detail::make_unique<idata_t>())
-    {
-    }
+    island() : m_ptr(detail::make_unique<idata_t>()) {}
     /// Copy constructor.
     /**
      * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population
@@ -574,9 +566,8 @@ public:
 
 private:
     template <typename Algo, typename Pop>
-    using algo_pop_enabler = enable_if_t<std::is_constructible<algorithm, Algo &&>::value
-                                             && std::is_same<population, uncvref_t<Pop>>::value,
-                                         int>;
+    using algo_pop_enabler = enable_if_t<
+        std::is_constructible<algorithm, Algo &&>::value && std::is_same<population, uncvref_t<Pop>>::value, int>;
 
 public:
     /// Constructor from algorithm and population.
@@ -1221,9 +1212,7 @@ public:
     /**
      * The default constructor will initialise an empty archipelago.
      */
-    archipelago()
-    {
-    }
+    archipelago() {}
     /// Copy constructor.
     /**
      * The islands of \p other will be copied into \p this via archipelago::push_back().
@@ -1418,9 +1407,8 @@ public:
     island &operator[](size_type i)
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the island at index " + std::to_string(i)
-                            + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1440,9 +1428,8 @@ public:
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the island at index " + std::to_string(i)
-                            + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1762,7 +1749,7 @@ public:
 private:
     container_t m_islands;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_ISLAND(pagmo::thread_island)
 

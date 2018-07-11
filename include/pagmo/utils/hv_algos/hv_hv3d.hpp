@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -63,35 +63,33 @@ class hv3d : public hv_algorithm
 {
 public:
     /**
-    * Constructor of the algorithm object.
-    * In the very first step, algorithm requires the inital set of points to be sorted ASCENDING in the third dimension.
-    * If the input is already sorted, user can skip this step using "initial_sorting = false" option, saving some extra
-    * time.
-    *
-    * @param initial_sorting when set to true (default), algorithm will sort the points ascending by third dimension
-    */
-    hv3d(const bool initial_sorting = true) : m_initial_sorting(initial_sorting)
-    {
-    }
+     * Constructor of the algorithm object.
+     * In the very first step, algorithm requires the inital set of points to be sorted ASCENDING in the third
+     * dimension. If the input is already sorted, user can skip this step using "initial_sorting = false" option, saving
+     * some extra time.
+     *
+     * @param initial_sorting when set to true (default), algorithm will sort the points ascending by third dimension
+     */
+    hv3d(const bool initial_sorting = true) : m_initial_sorting(initial_sorting) {}
 
     /// Compute hypervolume
     /**
-    * This method should be used both as a solution to 3D cases, and as a general termination method for algorithms that
-    * reduce D-dimensional problem to 3-dimensional one.
-    *
-    * This is the implementation of the algorithm for computing hypervolume as it was presented by Nicola Beume et al.
-    * The implementation uses std::multiset (which is based on red-black tree data structure) as a container for the
-    * sweeping front.
-    * Original implementation by Beume et. al uses AVL-tree.
-    * The difference is insiginificant as the important characteristics (maintaining order when traversing,
-    * self-balancing) of both structures and the asymptotic times (O(log n) updates) are guaranteed.
-    * Computational complexity: O(n*log(n))
-    *
-    * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    *
-    * @return hypervolume.
-    */
+     * This method should be used both as a solution to 3D cases, and as a general termination method for algorithms
+     * that reduce D-dimensional problem to 3-dimensional one.
+     *
+     * This is the implementation of the algorithm for computing hypervolume as it was presented by Nicola Beume et al.
+     * The implementation uses std::multiset (which is based on red-black tree data structure) as a container for the
+     * sweeping front.
+     * Original implementation by Beume et. al uses AVL-tree.
+     * The difference is insiginificant as the important characteristics (maintaining order when traversing,
+     * self-balancing) of both structures and the asymptotic times (O(log n) updates) are guaranteed.
+     * Computational complexity: O(n*log(n))
+     *
+     * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the points
+     *
+     * @return hypervolume.
+     */
     double compute(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (m_initial_sorting) {
@@ -151,17 +149,17 @@ public:
 
     /// Contributions method
     /**
-    * This method is the implementation of the HyCon3D algorithm.
-    * This algorithm computes the exclusive contribution to the hypervolume by every point, using an efficient HyCon3D
-    * algorithm by Emmerich and Fonseca.
-    *
-    * @see "Computing hypervolume contribution in low dimensions: asymptotically optimal algorithm and complexity
-    * results", Michael T. M. Emmerich, Carlos M. Fonseca
-    *
-    * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    * @return vector of exclusive contributions by every point
-    */
+     * This method is the implementation of the HyCon3D algorithm.
+     * This algorithm computes the exclusive contribution to the hypervolume by every point, using an efficient HyCon3D
+     * algorithm by Emmerich and Fonseca.
+     *
+     * @see "Computing hypervolume contribution in low dimensions: asymptotically optimal algorithm and complexity
+     * results", Michael T. M. Emmerich, Carlos M. Fonseca
+     *
+     * @param points vector of points containing the 3-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the points
+     * @return vector of exclusive contributions by every point
+     */
     std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         // Make a copy of the original set of points
@@ -304,14 +302,14 @@ public:
 
     /// Verify before compute
     /**
-    * Verifies whether given algorithm suits the requested data.
-    *
-    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the vector of points
-    *
-    * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal reference
-    * point
-    */
+     * Verifies whether given algorithm suits the requested data.
+     *
+     * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the vector of points
+     *
+     * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal
+     * reference point
+     */
     void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (r_point.size() != 3u) {
@@ -367,8 +365,8 @@ private:
 
     /// Box volume method
     /**
-    * Returns the volume of the box3d object
-    */
+     * Returns the volume of the box3d object
+     */
     static double box_volume(const box3d &b)
     {
         return std::abs((b.ux - b.lx) * (b.uy - b.ly) * (b.uz - b.lz));
@@ -392,13 +390,13 @@ inline std::vector<double> hv2d::contributions(std::vector<vector_double> &point
 
 /// Chooses the best algorithm to compute the hypervolume
 /**
-* Returns the best method for given hypervolume computation problem.
-* As of yet, only the dimension size is taken into account.
-*
-* @param r_point reference point for the vector of points
-*
-* @return an std::shared_ptr to the selected algorithm
-*/
+ * Returns the best method for given hypervolume computation problem.
+ * As of yet, only the dimension size is taken into account.
+ *
+ * @param r_point reference point for the vector of points
+ *
+ * @return an std::shared_ptr to the selected algorithm
+ */
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_double &r_point) const
 {
     auto fdim = r_point.size();
@@ -414,14 +412,14 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_
 
 /// Chooses the best algorithm to compute the hypervolume
 /**
-* Returns the best method for given hypervolume computation problem.
-* As of yet, only the dimension size is taken into account.
-*
-* @param p_idx index of the point for which the exclusive contribution is to be computed
-* @param r_point reference point for the vector of points
-*
-* @return an std::shared_ptr to the selected algorithm
-*/
+ * Returns the best method for given hypervolume computation problem.
+ * As of yet, only the dimension size is taken into account.
+ *
+ * @param p_idx index of the point for which the exclusive contribution is to be computed
+ * @param r_point reference point for the vector of points
+ *
+ * @return an std::shared_ptr to the selected algorithm
+ */
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsigned int p_idx,
                                                                      const vector_double &r_point) const
 {
@@ -432,13 +430,13 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsig
 
 /// Chooses the best algorithm to compute the hypervolume
 /**
-* Returns the best method for given hypervolume computation problem.
-* As of yet, only the dimension size is taken into account.
-*
-* @param r_point reference point for the vector of points
-*
-* @return an std::shared_ptr to the selected algorithm
-*/
+ * Returns the best method for given hypervolume computation problem.
+ * As of yet, only the dimension size is taken into account.
+ *
+ * @param r_point reference point for the vector of points
+ *
+ * @return an std::shared_ptr to the selected algorithm
+ */
 inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const vector_double &r_point) const
 {
     auto fdim = r_point.size();
@@ -451,6 +449,6 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const v
         return hvwfg().clone();
     }
 }
-}
+} // namespace pagmo
 
 #endif

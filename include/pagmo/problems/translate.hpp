@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -59,9 +59,7 @@ public:
     /**
      * The default constructor will initialize a non-translated pagmo::null_problem.
      */
-    translate() : m_problem(null_problem{}), m_translation({0.})
-    {
-    }
+    translate() : m_problem(null_problem{}), m_translation({0.}) {}
 
     /// Constructor from problem and translation vector.
     /**
@@ -410,7 +408,7 @@ private:
     /// translation vector
     vector_double m_translation;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::translate)
 

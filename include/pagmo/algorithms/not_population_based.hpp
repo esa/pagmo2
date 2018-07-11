@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -363,6 +363,6 @@ protected:
     /// Random engine for the <tt>"random"</tt> selection/replacement policies.
     mutable detail::random_engine_type m_e;
 };
-}
+} // namespace pagmo
 
 #endif

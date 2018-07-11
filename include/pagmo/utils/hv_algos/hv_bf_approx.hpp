@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -61,19 +61,19 @@ class bf_approx : public hv_algorithm
 public:
     /// Constructor
     /**
-    * Constructs an instance of the algorithm
-    *
-    * @param use_exact boolean flag stating whether algorithm is allowed to use exact algorithms for the computation
-    * @param trivial_subcase_size size of the sub-front (points overlapping the bounding box) for which algorithm
-    * skips to the exact computation right away
-    * @param eps accuracy of the approximation
-    * @param delta confidence of the approximation
-    * @param gamma constant used for computation of delta for each of the points during the sampling
-    * @param delta_multiplier factor with which delta diminishes each round
-    * @param initial_delta_coeff initial coefficient multiplied by the delta at round 0
-    * @param alpha coefficicient stating how accurately current lowest contributor should be sampled
-    * @param seed seeding for the pseudo-random number generator
-    */
+     * Constructs an instance of the algorithm
+     *
+     * @param use_exact boolean flag stating whether algorithm is allowed to use exact algorithms for the computation
+     * @param trivial_subcase_size size of the sub-front (points overlapping the bounding box) for which algorithm
+     * skips to the exact computation right away
+     * @param eps accuracy of the approximation
+     * @param delta confidence of the approximation
+     * @param gamma constant used for computation of delta for each of the points during the sampling
+     * @param delta_multiplier factor with which delta diminishes each round
+     * @param initial_delta_coeff initial coefficient multiplied by the delta at round 0
+     * @param alpha coefficicient stating how accurately current lowest contributor should be sampled
+     * @param seed seeding for the pseudo-random number generator
+     */
     bf_approx(bool use_exact = true, unsigned int trivial_subcase_size = 1, double eps = 1e-2, double delta = 1e-6,
               double delta_multiplier = 0.775, double alpha = 0.2, double initial_delta_coeff = 0.1,
               double gamma = 0.25, unsigned int seed = pagmo::random_device::next())
@@ -91,11 +91,11 @@ public:
 
     /// Compute hypervolume
     /**
-    * This method is overloaded to throw an exception in case a hypervolume indicator computation is requested.
-    *
-    * @return Nothing as it throws before.
-    * @throws std::invalid_argument whenever called
-    */
+     * This method is overloaded to throw an exception in case a hypervolume indicator computation is requested.
+     *
+     * @return Nothing as it throws before.
+     * @throws std::invalid_argument whenever called
+     */
     double compute(std::vector<vector_double> &, const vector_double &) const
     {
         pagmo_throw(std::invalid_argument,
@@ -104,14 +104,14 @@ public:
 
     /// Least contributor method
     /**
-    * This method establishes the individual that contributes the least to the hypervolume (approximately withing given
-    * epsilon and delta).
-    *
-    * @param points vector of fitness_vectors for which the hypervolume is computed
-    * @param r_point distinguished "reference point".
-    *
-    * @return index of the least contributing point
-    */
+     * This method establishes the individual that contributes the least to the hypervolume (approximately withing given
+     * epsilon and delta).
+     *
+     * @param points vector of fitness_vectors for which the hypervolume is computed
+     * @param r_point distinguished "reference point".
+     *
+     * @return index of the least contributing point
+     */
     unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return approx_extreme_contributor(points, r_point, LEAST, [](double a, double b) { return a < b; },
@@ -120,14 +120,14 @@ public:
 
     /// Greatest contributor method
     /**
-    * This method establishes the individual that contributes the most to the hypervolume (approximately withing given
-    * epsilon and delta).
-    *
-    * @param points vector of fitness_vectors for which the hypervolume is computed
-    * @param r_point distinguished "reference point".
-    *
-    * @return index of the greatest contributing point
-    */
+     * This method establishes the individual that contributes the most to the hypervolume (approximately withing given
+     * epsilon and delta).
+     *
+     * @param points vector of fitness_vectors for which the hypervolume is computed
+     * @param r_point distinguished "reference point".
+     *
+     * @return index of the greatest contributing point
+     */
     unsigned long long greatest_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return approx_extreme_contributor(points, r_point, GREATEST, [](double a, double b) { return a > b; },
@@ -136,13 +136,13 @@ public:
 
     /// Verify before compute method
     /**
-    * Verifies whether given algorithm suits the requested data.
-    *
-    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the vector of points
-    *
-    * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
-    */
+     * Verifies whether given algorithm suits the requested data.
+     *
+     * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the vector of points
+     *
+     * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
+     */
     void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
     {
         hv_algorithm::assert_minimisation(points, r_point);
@@ -169,9 +169,9 @@ public:
 private:
     /// Compute delta for given point
     /**
-    * Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
-    * The parameters of the method are taked from the Shark implementation of the algorithm.
-    */
+     * Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
+     * The parameters of the method are taked from the Shark implementation of the algorithm.
+     */
     double compute_point_delta(unsigned int round_no, vector_double::size_type idx, double log_factor) const
     {
         return std::sqrt(0.5 * ((1. + m_gamma) * std::log(static_cast<double>(round_no)) + log_factor)
@@ -180,16 +180,16 @@ private:
 
     /// Compute bounding box method
     /* Find the MINIMAL (in terms of volume) bounding box that contains all the exclusive hypervolume contributed by
-    * point at index 'p_idx'
-    * Thus obtained point 'z' and the original point 'points[p_idx]' form a box in which we perform the monte carlo
-    * sampling
-    *
-    * @param points pareto front points
-    * @param r_point reference point
-    * @param p_idx index of point for which we compute the bounding box
-    *
-    * @return fitness_vector describing the opposite corner of the bounding box
-    */
+     * point at index 'p_idx'
+     * Thus obtained point 'z' and the original point 'points[p_idx]' form a box in which we perform the monte carlo
+     * sampling
+     *
+     * @param points pareto front points
+     * @param r_point reference point
+     * @param p_idx index of point for which we compute the bounding box
+     *
+     * @return fitness_vector describing the opposite corner of the bounding box
+     */
     vector_double compute_bounding_box(const std::vector<vector_double> &points, const vector_double &r_point,
                                        vector_double::size_type p_idx) const
     {
@@ -228,11 +228,11 @@ private:
 
     /// Determine whether point 'p' influences the volume of box (a, b)
     /**
-    * return 0 - box (p, R) has no overlapping volume with box (a, b)
-    * return 1 - box (p, R) overlaps some volume with the box (a, b)
-    * return 2 - point p dominates the point a (in which case, contribution by box (a, b) is guaranteed to be 0)
-    * return 3 - point p is equal to point a (box (a, b) also contributes 0 hypervolume)
-    */
+     * return 0 - box (p, R) has no overlapping volume with box (a, b)
+     * return 1 - box (p, R) overlaps some volume with the box (a, b)
+     * return 2 - point p dominates the point a (in which case, contribution by box (a, b) is guaranteed to be 0)
+     * return 3 - point p is equal to point a (box (a, b) also contributes 0 hypervolume)
+     */
     int point_in_box(const vector_double &p, const vector_double &a, const vector_double &b) const
     {
         int cmp_a_p = hv_algorithm::dom_cmp(a, p, 0);
@@ -350,28 +350,28 @@ private:
 
     /// Approximated extreme contributor method
     /**
-    * Compute the extreme contributor using the approximated algorithm.
-    * In order to make the original algorithm work for both the least and the greatest contributor, some portions
-    * of the code had to be removed to external methods.
-    * The following argument and functions are passed as arguments in the corresponding least/greatest contributor
-    * methods:
-    *
-    * - ec_type (argument):
-    *   enum stating whether given execution aims to find the least or the greatest contributor.
-    *   In either scenario, certain preprocessing steps are altered to determine it faster if possible.
-    *
-    * - cmp_func (function):
-    *   Comparison function of two contributions, stating which of the contribution values fits our purpose (lesser or
-    * greater).
-    *
-    * - erase_condition (function):
-    *   Determines whether current extreme contributor guarantees to exceed given candidate.
-    *   In such case, the other point is removed from the racing.
-    *
-    * - end_condition (function):
-    *   Determines whether given extreme contributor guarantees be accurate withing provided epsilon error.
-    *   The return value of the function is the ratio, stating the estimated error.
-    */
+     * Compute the extreme contributor using the approximated algorithm.
+     * In order to make the original algorithm work for both the least and the greatest contributor, some portions
+     * of the code had to be removed to external methods.
+     * The following argument and functions are passed as arguments in the corresponding least/greatest contributor
+     * methods:
+     *
+     * - ec_type (argument):
+     *   enum stating whether given execution aims to find the least or the greatest contributor.
+     *   In either scenario, certain preprocessing steps are altered to determine it faster if possible.
+     *
+     * - cmp_func (function):
+     *   Comparison function of two contributions, stating which of the contribution values fits our purpose (lesser or
+     * greater).
+     *
+     * - erase_condition (function):
+     *   Determines whether current extreme contributor guarantees to exceed given candidate.
+     *   In such case, the other point is removed from the racing.
+     *
+     * - end_condition (function):
+     *   Determines whether given extreme contributor guarantees be accurate withing provided epsilon error.
+     *   The return value of the function is the ratio, stating the estimated error.
+     */
     vector_double::size_type approx_extreme_contributor(
         std::vector<vector_double> &points, const vector_double &r_point, extreme_contrib_type ec_type,
         bool (*cmp_func)(double, double),
@@ -592,6 +592,6 @@ private:
      * End of 'least_contributor' method variables section
      */
 };
-}
+} // namespace pagmo
 
 #endif

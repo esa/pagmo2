@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -48,7 +48,7 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(cmaes_algorithm_construction)
 {
-    cmaes user_algo{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, false,23u};
+    cmaes user_algo{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, false, 23u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK((user_algo.get_log() == cmaes::log_type{}));

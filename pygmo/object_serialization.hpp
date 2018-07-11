@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -78,6 +78,6 @@ inline void load(Archive &archive, boost::python::object &o)
     auto b = pygmo::make_bytes(v.data(), boost::numeric_cast<Py_ssize_t>(v.size()));
     o = import("cloudpickle").attr("loads")(b);
 }
-}
+} // namespace cereal
 
 #endif

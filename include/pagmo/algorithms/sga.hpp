@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -223,9 +223,8 @@ public:
           m_verbosity(0u), m_log()
     {
         if (cr > 1. || cr < 0.) {
-            pagmo_throw(std::invalid_argument,
-                        "The crossover probability must be in the [0,1] range, while a value of " + std::to_string(cr)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1] range, while a value of "
+                                                   + std::to_string(cr) + " was detected");
         }
         if (eta_c < 1. || eta_c > 100.) {
             pagmo_throw(std::invalid_argument,
@@ -233,14 +232,12 @@ public:
                             + std::to_string(eta_c) + " was detected");
         }
         if (m < 0. || m > 1.) {
-            pagmo_throw(std::invalid_argument,
-                        "The mutation probability must be in the [0,1] range, while a value of " + std::to_string(cr)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
+                                                   + std::to_string(cr) + " was detected");
         }
         if (param_s == 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "The selection parameter must be at least 1, while a value of " + std::to_string(param_s)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "The selection parameter must be at least 1, while a value of "
+                                                   + std::to_string(param_s) + " was detected");
         }
         if (mutation != "gaussian" && mutation != "uniform" && mutation != "polynomial") {
             pagmo_throw(
@@ -262,17 +259,15 @@ public:
         }
         // param_m represents the distribution index if polynomial mutation is selected
         if (mutation == "polynomial" && (param_m < 1. || param_m > 100.)) {
-            pagmo_throw(std::invalid_argument,
-                        "Polynomial mutation was selected, the mutation parameter (distribution "
-                        "index) must be in [1, 100], while a value of "
-                            + std::to_string(param_m) + " was detected");
+            pagmo_throw(std::invalid_argument, "Polynomial mutation was selected, the mutation parameter (distribution "
+                                               "index) must be in [1, 100], while a value of "
+                                                   + std::to_string(param_m) + " was detected");
         }
 
         // otherwise param_m represents the width of the mutation relative to the box bounds
         if (mutation != "polynomial" && (param_m < 0 || param_m > 1.)) {
-            pagmo_throw(std::invalid_argument,
-                        "The mutation parameter must be in [0,1], while a value of " + std::to_string(param_m)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "The mutation parameter must be in [0,1], while a value of "
+                                                   + std::to_string(param_m) + " was detected");
         }
         // We can now init the data members representing the various choices made using std::string
         m_crossover = m_crossover_map.left.at(crossover);
@@ -301,19 +296,16 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // Check whether the problem/population are suitable for bee_colony
         if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument,
-                        "Constraints detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Constraints detected in " + prob.get_name() + " instance. " + get_name()
+                                                   + " cannot deal with them");
         }
         if (prob.get_nf() != 1u) {
-            pagmo_throw(std::invalid_argument,
-                        "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
-                            + " cannot deal with them");
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         if (NP < 2u) {
-            pagmo_throw(std::invalid_argument,
-                        prob.get_name() + " needs at least 2 individuals in the population, " + std::to_string(NP)
-                            + " detected");
+            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
+                                                   + std::to_string(NP) + " detected");
         }
         if (m_param_s > pop.size()) {
             pagmo_throw(std::invalid_argument,
@@ -415,70 +407,70 @@ public:
     }
     /// Gets the seed
     /**
-    * @return the seed controlling the algorithm stochastic behaviour
-    */
+     * @return the seed controlling the algorithm stochastic behaviour
+     */
     unsigned get_seed() const
     {
         return m_seed;
     }
     /// Sets the algorithm verbosity
     /**
-    * Sets the verbosity level of the screen output and of the
-    * log returned by get_log(). \p level can be:
-    * - 0: no verbosity
-    * - 1: will only print and log when the population is improved
-    * - >1: will print and log one line each \p level generations.
-    *
-    * Example (verbosity 1):
-    * @code{.unparsed}
-    * Gen:        Fevals:          Best:   Improvement:
-    *    1             20        6605.75         415.95
-    *    3             60        6189.79        500.359
-    *    4             80        5689.44        477.663
-    *    5            100        5211.77        218.231
-    *    6            120        4993.54        421.684
-    *    8            160        4571.86        246.532
-    *   10            200        4325.33        166.685
-    *   11            220        4158.64        340.382
-    *   14            280        3818.26        294.232
-    *   15            300        3524.03        55.0358
-    *   16            320        3468.99        452.544
-    *   17            340        3016.45        16.7273
-    *   19            380        2999.72         150.68
-    *   21            420        2849.04        301.156
-    *   22            440        2547.88        1.25038
-    *   23            460        2546.63        192.561
-    *   25            500        2354.07        22.6248
-    * @endcode
-    * Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found,
-    * Improvement is the improvement of the new population of offspring with respect to the parents.
-    *
-    * @param level verbosity level
-    */
+     * Sets the verbosity level of the screen output and of the
+     * log returned by get_log(). \p level can be:
+     * - 0: no verbosity
+     * - 1: will only print and log when the population is improved
+     * - >1: will print and log one line each \p level generations.
+     *
+     * Example (verbosity 1):
+     * @code{.unparsed}
+     * Gen:        Fevals:          Best:   Improvement:
+     *    1             20        6605.75         415.95
+     *    3             60        6189.79        500.359
+     *    4             80        5689.44        477.663
+     *    5            100        5211.77        218.231
+     *    6            120        4993.54        421.684
+     *    8            160        4571.86        246.532
+     *   10            200        4325.33        166.685
+     *   11            220        4158.64        340.382
+     *   14            280        3818.26        294.232
+     *   15            300        3524.03        55.0358
+     *   16            320        3468.99        452.544
+     *   17            340        3016.45        16.7273
+     *   19            380        2999.72         150.68
+     *   21            420        2849.04        301.156
+     *   22            440        2547.88        1.25038
+     *   23            460        2546.63        192.561
+     *   25            500        2354.07        22.6248
+     * @endcode
+     * Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found,
+     * Improvement is the improvement of the new population of offspring with respect to the parents.
+     *
+     * @param level verbosity level
+     */
     void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
     /// Gets the verbosity level
     /**
-    * @return the verbosity level
-    */
+     * @return the verbosity level
+     */
     unsigned get_verbosity() const
     {
         return m_verbosity;
     }
     /// Algorithm name
     /**
-    * @return a string containing the algorithm name
-    */
+     * @return a string containing the algorithm name
+     */
     std::string get_name() const
     {
         return "SGA: Genetic Algorithm";
     }
     /// Extra informations
     /**
-    * @return a string containing extra informations on the algorithm
-    */
+     * @return a string containing extra informations on the algorithm
+     */
     std::string get_extra_info() const
     {
         std::ostringstream ss;
@@ -506,25 +498,25 @@ public:
 
     /// Get log
     /**
-    * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-    * <tt>std::vector</tt> is a sga::log_line_type containing: Gen, Fevals, Current best, Best as
-    * described in sga::set_verbosity().
-    *
-    * @return an <tt> std::vector</tt> of sga::log_line_type containing the logged values Gen, Fevals, Best
-    * improvement
-    */
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt>std::vector</tt> is a sga::log_line_type containing: Gen, Fevals, Current best, Best as
+     * described in sga::set_verbosity().
+     *
+     * @return an <tt> std::vector</tt> of sga::log_line_type containing the logged values Gen, Fevals, Best
+     * improvement
+     */
     const log_type &get_log() const
     {
         return m_log;
     }
     /// Object serialization
     /**
-    * This method will save/load \p this into the archive \p ar.
-    *
-    * @param ar target archive.
-    *
-    * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-    */
+     * This method will save/load \p this into the archive \p ar.
+     *
+     * @param ar target archive.
+     *
+     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     */
     template <typename Archive>
     void serialize(Archive &ar)
     {

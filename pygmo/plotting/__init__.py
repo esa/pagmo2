@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2017 PaGMO development team
+# Copyright 2017-2018 PaGMO development team
 #
 # This file is part of the PaGMO library.
 #
@@ -71,7 +71,7 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
         # We plot the points
         for idx in front:
             ax.plot(points[idx][comp[0]], points[idx][
-                     comp[1]], marker=marker, color=cl[ndr])
+                comp[1]], marker=marker, color=cl[ndr])
         # We plot the fronts
         # Frist compute the points coordinates
         x = [points[idx][0] for idx in front]
@@ -81,7 +81,7 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
         tmp = sorted(tmp, key=lambda k: k[0])
         # Now plot using step
         ax.step([c[0] for c in tmp], [c[1]
-                                       for c in tmp], color=cl[ndr], where='post')
+                                      for c in tmp], color=cl[ndr], where='post')
 
     plt.show()
     return ax
@@ -172,6 +172,7 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
     ax.view_init(azim=az)
     plt.show()
     return ax
+
 
 from ..core import dtlz
 dtlz.plot = _dtlz_plot

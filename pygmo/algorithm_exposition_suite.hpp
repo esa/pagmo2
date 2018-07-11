@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -89,5 +89,5 @@ inline void expose_algo_log(bp::class_<Algo> &algo_class, const char *doc)
 {
     algo_class.def("get_log", &generic_log_getter<Algo>, doc);
 }
-}
+} // namespace pygmo
 #endif

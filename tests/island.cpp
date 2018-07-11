@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -52,9 +52,7 @@ see https://www.gnu.org/licenses/. */
 using namespace pagmo;
 
 struct udi_01 {
-    void run_evolve(island &) const
-    {
-    }
+    void run_evolve(island &) const {}
     std::string get_name() const
     {
         return "udi_01";

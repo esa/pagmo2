@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -83,8 +83,9 @@ BOOST_AUTO_TEST_CASE(ipopt_nlp_test)
     BOOST_CHECK((lb == vector_double{1., 1., 1., 1.}));
     BOOST_CHECK((ub == vector_double{5., 5., 5., 5.}));
     BOOST_CHECK(
-        (c_lb == vector_double{0., std::numeric_limits<double>::has_infinity ? -std::numeric_limits<double>::infinity()
-                                                                             : std::numeric_limits<double>::lowest()}));
+        (c_lb
+         == vector_double{0., std::numeric_limits<double>::has_infinity ? -std::numeric_limits<double>::infinity()
+                                                                        : std::numeric_limits<double>::lowest()}));
     BOOST_CHECK((c_ub == vector_double{0., 0.}));
 
     // Initial guess.
@@ -411,8 +412,9 @@ BOOST_AUTO_TEST_CASE(ipopt_options)
     // String.
     ip.set_string_option("bart", "simpson");
     ip.set_string_options({{"homer", "simpson"}, {"marge", "simpson"}});
-    BOOST_CHECK((ip.get_string_options() == std::map<std::string, std::string>{
-                                                {"bart", "simpson"}, {"homer", "simpson"}, {"marge", "simpson"}}));
+    BOOST_CHECK(
+        (ip.get_string_options()
+         == std::map<std::string, std::string>{{"bart", "simpson"}, {"homer", "simpson"}, {"marge", "simpson"}}));
     ip.reset_string_options();
     BOOST_CHECK(ip.get_string_options().empty());
     // Integer.

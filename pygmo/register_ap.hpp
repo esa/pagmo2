@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -58,6 +58,6 @@ inline void register_ap()
         bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_ap_set_address"))());
     ap_set.insert(bp::extract<std::string>(bp::scope().attr("__name__"))());
 }
-}
+} // namespace pygmo
 
 #endif

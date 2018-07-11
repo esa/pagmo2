@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -234,8 +234,8 @@ public:
 
                 // 1 - Every 50 lines print the column names
                 if (count % 50u == 1u) {
-                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15), "Violated:",
-                          std::setw(15), "Viol. Norm:", std::setw(15), "Range:", '\n');
+                    print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15),
+                          "Violated:", std::setw(15), "Viol. Norm:", std::setw(15), "Range:", '\n');
                 }
                 // 2 - Print
                 auto c1eq = detail::test_eq_constraints(cur_best_f.data() + 1, cur_best_f.data() + 1 + neq,
@@ -413,7 +413,7 @@ private:
     void save(Archive &ar) const = delete;
 };
 
-} // namespaces
+} // namespace pagmo
 
 PAGMO_REGISTER_ALGORITHM(pagmo::compass_search)
 

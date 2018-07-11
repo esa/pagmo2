@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -87,4 +87,4 @@ void expose_islands()
     // Thread island.
     expose_island_pygmo<thread_island>("thread_island", thread_island_docstring().c_str());
 }
-}
+} // namespace pygmo

@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -68,7 +68,6 @@ struct my_sto_prob {
         auto drng = std::normal_distribution<double>(0., 1.0);
         auto x_copy = x;
 
-
         std::transform(x.begin(), x.end(), x_copy.begin(), [](const double &el) { return std::pow(el, 2.); });
         double retval = 0;
 
@@ -76,7 +75,7 @@ struct my_sto_prob {
             auto noise = drng(m_e);
             retval += noise;
         }
-        double spam = std::pow(std::accumulate(x_copy.begin(), x_copy.end(), 0.0), 1./5.);
+        double spam = std::pow(std::accumulate(x_copy.begin(), x_copy.end(), 0.0), 1. / 5.);
         retval = (retval / m_sample_size) + spam;
         return {retval};
     }
@@ -105,7 +104,7 @@ struct my_sto_prob {
     unsigned m_seed;
 };
 
- BOOST_AUTO_TEST_CASE(construction)
+BOOST_AUTO_TEST_CASE(construction)
 {
     BOOST_CHECK_NO_THROW(pso_gen{});
     pso_gen user_algo{100, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
@@ -135,12 +134,12 @@ struct my_sto_prob {
     BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 2u, 0u, false, 23u}), std::invalid_argument);
 }
 
- BOOST_AUTO_TEST_CASE(evolve_test)
+BOOST_AUTO_TEST_CASE(evolve_test)
 {
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{rosenbrock{}}}), std::invalid_argument);
     BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument); 
+    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{2u}, 20u};
     BOOST_CHECK(pso_gen{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
@@ -236,7 +235,7 @@ struct my_sto_prob {
         }
     }
 }
- BOOST_AUTO_TEST_CASE(setters_getters_test)
+BOOST_AUTO_TEST_CASE(setters_getters_test)
 {
     pso_gen user_algo{5000u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
     user_algo.set_verbosity(200u);
@@ -249,7 +248,7 @@ struct my_sto_prob {
     BOOST_CHECK_NO_THROW(user_algo.get_log());
 }
 
- BOOST_AUTO_TEST_CASE(serialization_test)
+BOOST_AUTO_TEST_CASE(serialization_test)
 {
     // Make one evolution
     problem prob{my_sto_prob{25u}};
@@ -276,7 +275,7 @@ struct my_sto_prob {
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<pso_gen>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log); 
+    // BOOST_CHECK(before_log == after_log);
     // This fails because of floating point problems when using JSON and cereal
     // so we implement a close check
     for (auto i = 0u; i < before_log.size(); ++i) {

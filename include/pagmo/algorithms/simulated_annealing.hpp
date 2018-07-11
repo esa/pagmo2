@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -253,8 +253,8 @@ public:
                                 // 1 - Every 50 lines print the column names
                                 if (count % 50u == 1u) {
                                     print("\n", std::setw(7), "Fevals:", std::setw(15), "Best:", std::setw(15),
-                                          "Current:", std::setw(15), "Mean range:", std::setw(15), "Temperature:",
-                                          '\n');
+                                          "Current:", std::setw(15), "Mean range:", std::setw(15),
+                                          "Temperature:", '\n');
                                 }
                                 auto avg_range
                                     = std::accumulate(step.begin(), step.end(), 0.) / static_cast<double>(step.size());
