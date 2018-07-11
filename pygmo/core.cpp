@@ -619,7 +619,8 @@ BOOST_PYTHON_MODULE(core)
              pygmo::algorithm_get_thread_safety_docstring().c_str());
 
     // Expose problems and algorithms.
-    pygmo::expose_problems();
+    pygmo::expose_problems_0();
+    pygmo::expose_problems_1();
     pygmo::expose_algorithms_0();
     pygmo::expose_algorithms_1();
 
