@@ -34,7 +34,7 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda config --add channels conda-forge --force
 # - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --all -y
 # - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda -y
-# - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
