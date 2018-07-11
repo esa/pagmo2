@@ -139,7 +139,7 @@ script:
     # command, so that if install_deps.sh fails the whole build fails immediately
     # rather than executing install_travis.sh as well. See
     # https://github.com/travis-ci/travis-ci/issues/1066
-    - travis_wait 30 ../tools/install_deps.sh && ../tools/install_travis.sh
+    - ../tools/install_deps.sh && ../tools/install_travis.sh
 
 notifications:
   email: false
