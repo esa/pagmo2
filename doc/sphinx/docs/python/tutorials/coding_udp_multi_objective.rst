@@ -7,17 +7,16 @@ In this chapter we show how to code an unconstrained user defined problem (UDP) 
 We assume that the mathematical formulation of problem is the following:
 
 \begin{array}{rl}
-\mbox{minimize:} & f_{1}\left(\boldsymbol{x}\right) = 1 - \exp \left[-\sum_{i=1}^{n} \left(x_{i} - \frac{1}{\sqrt{n}} \right)^{2} \right]\\
-& f_{2}\left(\boldsymbol{x}\right) = 1 - \exp \left[-\sum_{i=1}^{n} \left(x_{i} + \frac{1}{\sqrt{n}} \right)^{2} \right]
-\mbox{subject to:} & -4 <= x_i <= 4\\
-& 1 <= i <= n\\
+\mbox{minimize:} & f_{1}\left(x\right) = x^{2} \\
+& f_{2}\left(x\right) = \left(x-2\right)^{2} \\
+\mbox{subject to:} & 0 <= x <= 2\\
 \end{array}
 
 which is a test function for multi-objective optimization being introduced in
 *Schaffer, J. David (1984). Some experiments in machine learning using vector
 evaluated genetic algorithms (artificial intelligence, optimization, adaptation,
 pattern recognition) (PhD). Vanderbilt University.* and illustrated
-`here <https://en.wikipedia.org/wiki/Test_functions_for_optimization#Test_functions_for_multi-objective_optimization>`_
+`here <https://en.wikipedia.org/wiki/Test_functions_for_optimization#Test_functions_for_multi-objective_optimization>`_.
 
 The implementation as UDP can be realized as follows:
 
