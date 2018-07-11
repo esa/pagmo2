@@ -14,9 +14,10 @@ We assume that the mathematical formulation of problem is the following:
 \end{array}
 
 which is a test function for multi-objective optimization being introduced in
-*C. M. Fonseca and P. J. Fleming,
-An Overview of Evolutionary Algorithms in Multiobjective Optimization
-in Evolutionary Computation, vol. 3, no. 1, pp. 1-16, March 1995*.
+*Schaffer, J. David (1984). Some experiments in machine learning using vector
+evaluated genetic algorithms (artificial intelligence, optimization, adaptation,
+pattern recognition) (PhD). Vanderbilt University.* and illustrated
+`here <https://en.wikipedia.org/wiki/Test_functions_for_optimization#Test_functions_for_multi-objective_optimization>`_
 
 The implementation as UDP can be realized as follows:
 
@@ -27,16 +28,10 @@ The implementation as UDP can be realized as follows:
 
 
     >>> class FonsecaFleming():
-    ...     # Pass dimensions to constructor
-    ...     def __init__(self, n):
-    ...         self.n = n
-    ...
     ...     # Define objectives
     ...     def fitness(self, x):
-    ...     f1 = 1-np.exp(-sum([(x[i]-1/np.sqrt(self.n))**2
-    ...                         for i in range(1, self.n)]))
-    ...     f2 = 1-np.exp(-sum([(x[i]+1/np.sqrt(self.n))**2
-    ...                         for i in range(1, self.n)]))
+    ...         f1 = x[0]**2
+    ...         f2 = (x[0]-2)**2
     ...         return [f1, f2]
     ...
     ...     # Return number of objectives
@@ -45,17 +40,15 @@ The implementation as UDP can be realized as follows:
     ...
     ...     # Return bounds of decision variables
     ...     def get_bounds(self):
-    ...         return ([-4]*self.n, [4]*self.n)
+    ...         return ([0]*1, [2]*1)
     ...
     ...     # Return function name
     ...     def get_name(self):
-    ...         return "Fonseca and Fleming function"
+    ...         return "Schaffer function N.1"
 
 Note that the only difference between a mono- and multi-objective problem lies in the number of objectives.
-Moreover, parameters such as the number of summands in the exponent `n` can be passed flexibly to the constructor
-and used within the class.
 
-Let's now create an object with `n=10` from our new UDP class and pass it to a pygmo :class:`~pygmo.problem`.
+Let's now create an object from our new UDP class and pass it to a pygmo :class:`~pygmo.problem`.
 
 .. doctest::
 
@@ -75,6 +68,6 @@ In the next step, the problem can be solved straightforward using the NSGA2 algo
     >>> # print results
     >>> fits, vectors = pop.get_f(), pop.get_x()
     >>> print(fits[:1]) #doctest: +SKIP
-    [[0.93880491 0.08521805]]
+    [[1.44097647e-08 3.99951985e+00]]
 
 And we are already done!
