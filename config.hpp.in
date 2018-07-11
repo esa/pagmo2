@@ -40,4 +40,26 @@ see https://www.gnu.org/licenses/. */
 // clang-format on
 // End of defines instantiated by CMake.
 
+// NOTE: some compilers are not able to deal with the large data
+// arrays embedded in the CEC 2013/2014 problems. We thus implement
+// here some heuristic to signal the capability of compiling
+// these problems on the current platform.
+
+#if !defined(_MSC_VER)
+
+// NOTE: thus far, only MSVC 2015 has issues with cec2013. In the future
+// we might want to check if later versions fix this issue, in such a case
+// we can make this switch dependent on the specific compiler version.
+#define PAGMO_ENABLE_CEC2013
+
+#endif
+
+#if !defined(_MSC_VER) && (!defined(__apple_build_version__) || (defined(__clang_major__) && __clang_major__ >= 9))
+
+// NOTE: MSVC and early versions of Xcode clang have issues with cec2014.
+// We've seen this working properly on Xcode 9.4, so let's tentatively enable it for Xcode >= 9.
+#define PAGMO_ENABLE_CEC2014
+
+#endif
+
 #endif

@@ -55,12 +55,13 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/object.hpp>
 #include <boost/python/return_internal_reference.hpp>
 
+#include <pagmo/config.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
-#if !defined(_MSC_VER)
+#if defined(PAGMO_ENABLE_CEC2014)
 #include <pagmo/problems/cec2014.hpp>
 #endif
 #include <pagmo/problems/decompose.hpp>
@@ -170,9 +171,8 @@ void expose_problems_0()
     inv.def(bp::init<unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u)));
     inv.def(
         bp::init<unsigned, unsigned, unsigned>((bp::arg("weeks") = 4u, bp::arg("sample_size") = 10u, bp::arg("seed"))));
-#if !defined(_MSC_VER)
-    // excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data.
-    // To be reassesed in future versions of the compiler CEC 2014.
+#if defined(PAGMO_ENABLE_CEC2014)
+    // See the explanation in pagmo/config.hpp.
     auto cec2014_ = expose_problem_pygmo<cec2014>("cec2014", cec2014_docstring().c_str());
     cec2014_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif

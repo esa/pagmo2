@@ -54,9 +54,10 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/object.hpp>
 #include <boost/python/return_internal_reference.hpp>
 
+#include <pagmo/config.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#if !defined(_MSC_VER)
+#if defined(PAGMO_ENABLE_CEC2013)
 #include <pagmo/problems/cec2013.hpp>
 #endif
 #include <pagmo/problems/luksan_vlcek1.hpp>
@@ -108,10 +109,8 @@ void expose_problems_1()
     zdt_p.def("p_distance", lcast([](const zdt &z, const population &pop) { return z.p_distance(pop); }),
               zdt_p_distance_docstring().c_str());
 
-#if !defined(_MSC_VER)
-    // excluded in MSVC (Dec. - 2016) because of troubles to deal with the big static array defining the problem data.
-    // To be reassesed in future versions of the compiler CEC 2014.
-    // CEC 2013.
+#if defined(PAGMO_ENABLE_CEC2013)
+    // See the explanation in pagmo/config.hpp.
     auto cec2013_ = expose_problem_pygmo<cec2013>("cec2013", cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
