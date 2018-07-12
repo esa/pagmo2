@@ -22,8 +22,6 @@ The implementation as UDP can be realized as follows:
 
 .. doctest::
 
-    >>> import pygmo as pg
-
     >>> class Schaffer():
     ...     # Define objectives
     ...     def fitness(self, x):
@@ -49,6 +47,7 @@ Let's now create an object from our new UDP class and pass it to a pygmo :class:
 
 .. doctest::
 
+    >>> import pygmo as pg
     >>> # create UDP
     >>> prob = pg.problem(Schaffer())
 
@@ -57,14 +56,16 @@ In the next step, the problem can be solved straightforward using the NSGA2 algo
 .. doctest::
 
     >>> # create population
-    >>> pop = pg.population(prob, size=200)
+    >>> pop = pg.population(prob, size=20)
     >>> # select algorithm
     >>> algo = pg.algorithm(pg.nsga2(gen=40))
     >>> # run optimization
     >>> pop = algo.evolve(pop)
-    >>> # print results
+    >>> # extract results
     >>> fits, vectors = pop.get_f(), pop.get_x()
-    >>> print(fits[:1]) #doctest: +SKIP
-    [[1.44097647e-08 3.99951985e+00]]
+    >>> # extract and print non-dominated fronts
+    >>> ndf, dl, dc, ndr = pg.fast_non_dominated_sorting(fits)
+    >>> print(ndf) #doctest: +SKIP
+    [array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19], dtype=uint64)]
 
 And we are already done!
