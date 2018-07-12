@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <cmath>  // log, etc..
 #include <random> // uniform_int, etc..
+#include <iomanip> // setw
 
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
