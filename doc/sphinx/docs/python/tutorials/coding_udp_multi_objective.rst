@@ -1,7 +1,7 @@
 .. _py_tutorial_coding_udp_multi_objective:
 
-Coding a User Defined Problem with constraints multiple objectives
-------------------------------------------------------------------
+Coding a User Defined Problem with multiple objectives
+------------------------------------------------------
 
 In this chapter we show how to code an unconstrained user defined problem (UDP) with multiple objectives.
 We assume that the mathematical formulation of problem is the following:
