@@ -7,25 +7,35 @@ Changelog
 New
 ~~~
 
-- Implement the CEC2014 problem suite (`#189 <https://github.com/esa/pagmo2/pull/189>`__, `#188 <https://github.com/esa/pagmo2/pull/188>`__).
+- Implement the CEC2014 problem suite (`#188 <https://github.com/esa/pagmo2/pull/188>`__, `#189 <https://github.com/esa/pagmo2/pull/189>`__).
 
 - It is now possible to explicitly shut down the process pool of :class:`~pygmo.mp_island` (`#187 <https://github.com/esa/pagmo2/pull/187>`__).
 
 - Start using intersphinx in the documentation (used at the moment for hyperlinking to the Python online documentation)
   (`#187 <https://github.com/esa/pagmo2/pull/187>`__).
 
-- **BREAKING**: user-defined islands in Python must now return the algorithm object used for the evolution in addition
-  to the evolved population (`#186 <https://github.com/esa/pagmo2/pull/186>`__).
-
 - The constraints' tolerances for a problem can now be set via a scalar in pygmo (`#185 <https://github.com/esa/pagmo2/pull/185>`__).
+
+Changes
+~~~~~~~
+
+- Update the copyright date to 2018 (`#190 <https://github.com/esa/pagmo2/pull/190>`__).
+
+- **BREAKING**: user-defined islands in Python must now return the algorithm object used for the evolution in addition
+  to the evolved population (`#186 <https://github.com/esa/pagmo2/pull/186>`__). This change ensures that the state of
+  an algorithm executed on a pythonic island is now correctly propagated back to the original algorithm object at the end of
+  an evolution.
 
 Fix
 ~~~
 
+- Fix a compilation failure involving the IHS algorithm (`#192 <https://github.com/esa/pagmo2/pull/192>`__).
+
 - Fix a bug in the Python exposition of the DE algorithm (`#183 <https://github.com/esa/pagmo2/pull/183>`__).
 
 - Various documentation and CI fixes and improvements (`#183 <https://github.com/esa/pagmo2/pull/183>`__,
-  `#185 <https://github.com/esa/pagmo2/pull/185>`__, `#190 <https://github.com/esa/pagmo2/pull/190>`__).
+  `#185 <https://github.com/esa/pagmo2/pull/185>`__, `#190 <https://github.com/esa/pagmo2/pull/190>`__,
+  `#191 <https://github.com/esa/pagmo2/pull/191>`__).
 
 2.7 (2018-04-13)
 ----------------
