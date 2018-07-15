@@ -6,10 +6,10 @@ Coding a User Defined Problem with multiple objectives
 In this chapter we show how to code an unconstrained user defined problem (UDP) with multiple objectives.
 We assume that the mathematical formulation of problem is the following:
 
-\begin{array}{rl}
-\mbox{minimize:} & f_{1}\left(x\right) = x^{2} \\
-& f_{2}\left(x\right) = \left(x-2\right)^{2} \\
-\mbox{subject to:} & 0 <= x <= 2\\
+\begin{array}{ll}
+  \mbox{minimize: } & f_{1}(x) = x^{2} \\
+  & f_{2}(x) = (x-2)^{2} \\
+  \mbox{subject to:} & 0 \le x \le 2
 \end{array}
 
 which is a test function for multi-objective optimization being introduced in
