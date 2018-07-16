@@ -38,13 +38,21 @@ from ._version import __version__
 from .core import *
 from .plotting import *
 from ._py_islands import *
+from ._py_problems import *
 
 # We move into the problems, algorithms and islands namespaces
-# all the pure python UDAs, UDPs and UDIs
+# all the pure python UDAs, UDPs and UDIs.
 for item in dir(_py_islands):
-    if item[0] != "_":
+    if not item.startswith("_"):
         setattr(islands, item, getattr(_py_islands, item))
 del _py_islands
+
+for item in dir(_py_problems):
+    if not item.startswith("_"):
+        setattr(problems, item, getattr(_py_problems, item))
+del _py_problems
+
+del item
 
 # And we explicitly import the test submodule
 from . import test
