@@ -118,15 +118,15 @@ matrix:
       sudo: required
       services:
       - docker
+    - env: PAGMO_BUILD="manylinux64Py37" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+      sudo: required
+      services:
+      - docker
     - env: PAGMO_BUILD="manylinux64Py36" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
       sudo: required
       services:
       - docker
     - env: PAGMO_BUILD="manylinux64Py35" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-      sudo: required
-      services:
-      - docker
-    - env: PAGMO_BUILD="manylinux64Py34" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
       sudo: required
       services:
       - docker
