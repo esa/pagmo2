@@ -7,11 +7,11 @@ In this chapter we show how to code an unconstrained user defined problem (UDP) 
 We assume that the mathematical formulation of problem is the following:
 
 .. math::
-\begin{array}{ll}
-  \mbox{minimize: } & f_{1}(x) = x^{2} \\
-  & f_{2}(x) = (x-2)^{2} \\
-  \mbox{subject to:} & 0 \le x \le 2
-\end{array}
+    \begin{array}{ll}
+      \mbox{minimize: } & f_{1}(x) = x^{2} \\
+      & f_{2}(x) = (x-2)^{2} \\
+      \mbox{subject to:} & 0 \le x \le 2
+    \end{array}
 
 which is a test function for multi-objective optimization being introduced in
 *Schaffer, J. David (1984). Some experiments in machine learning using vector
