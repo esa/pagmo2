@@ -180,11 +180,12 @@
 <span id="py-tutorial-coding-udp-multi-objective"></span><h1>Coding a User Defined Problem with multiple objectives<a class="headerlink" href="#coding-a-user-defined-problem-with-multiple-objectives" title="Permalink to this headline">¶</a></h1>
 <p>In this chapter we show how to code an unconstrained user defined problem (UDP) with multiple objectives.
 We assume that the mathematical formulation of problem is the following:</p>
-<p>begin{array}{rl}
-mbox{minimize:} &amp; f_{1}left(xright) = x^{2} \
-&amp; f_{2}left(xright) = left(x-2right)^{2} \
-mbox{subject to:} &amp; 0 &lt;= x &lt;= 2\
-end{array}</p>
+<div class="math">
+\[\begin{split}\begin{array}{ll}
+  \mbox{minimize: } &amp; f_{1}(x) = x^{2} \\
+  &amp; f_{2}(x) = (x-2)^{2} \\
+  \mbox{subject to:} &amp; 0 \le x \le 2
+\end{array}\end{split}\]</div>
 <p>which is a test function for multi-objective optimization being introduced in
 <em>Schaffer, J. David (1984). Some experiments in machine learning using vector
 evaluated genetic algorithms (artificial intelligence, optimization, adaptation,
