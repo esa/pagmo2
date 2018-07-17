@@ -1852,6 +1852,8 @@ std::string cec2014_docstring()
 {
     return R"(__init__(prob_id = 1, dim = 2)
 
+.. versionadded:: 2.8
+
 The CEC 2014 problem suite (continuous, box-bounded, single-objective problems)
 
 Args:

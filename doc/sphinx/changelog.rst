@@ -1,6 +1,26 @@
 Changelog
 =========
 
+2.9 (unreleased)
+----------------
+
+New
+~~~
+
+- pip pygmo package for Python 3.7 (Linux) (`#196 <https://github.com/esa/pagmo2/pull/196>`__).
+
+- Various documentation additions (`#194 <https://github.com/esa/pagmo2/pull/194>`__).
+
+Changes
+~~~~~~~
+
+- The pip pygmo package for Python 3.4 (Linux) has been dropped (`#196 <https://github.com/esa/pagmo2/pull/196>`__).
+
+Fix
+~~~
+
+- Various documentation fixes (`#196 <https://github.com/esa/pagmo2/pull/196>`__).
+
 2.8 (2018-07-12)
 ----------------
 
