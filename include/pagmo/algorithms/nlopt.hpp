@@ -89,7 +89,7 @@ struct nlopt_data {
     // A map to link a human-readable description to NLopt return codes.
     // NOTE: in C++11 hashing of enums might not be available. Provide our own.
     struct res_hasher {
-        std::size_t operator()(::nlopt_result res) const
+        std::size_t operator()(::nlopt_result res) const noexcept
         {
             return std::hash<int>{}(static_cast<int>(res));
         }

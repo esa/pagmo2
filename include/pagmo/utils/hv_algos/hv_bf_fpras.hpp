@@ -85,7 +85,7 @@ public:
      *
      * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
      */
-    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
+    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         hv_algorithm::assert_minimisation(points, r_point);
     }
@@ -102,7 +102,7 @@ public:
      *
      * @return approximated hypervolume
      */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         auto n = points.size();
         auto dim = r_point.size();
@@ -164,7 +164,7 @@ public:
      * This algorithm does not support this method.
      * @return Nothing as it throws before
      */
-    double exclusive(unsigned int, std::vector<vector_double> &, const vector_double &) const
+    double exclusive(unsigned int, std::vector<vector_double> &, const vector_double &) const override
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
@@ -175,7 +175,7 @@ public:
      *
      * @return Nothing as it throws before
      */
-    unsigned long long least_contributor(std::vector<vector_double> &, const vector_double &) const
+    unsigned long long least_contributor(std::vector<vector_double> &, const vector_double &) const override
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
@@ -185,7 +185,7 @@ public:
      * This algorithm does not support this method.
      * @return Nothing as it throws before
      */
-    unsigned long long greatest_contributor(std::vector<vector_double> &, const vector_double &) const
+    unsigned long long greatest_contributor(std::vector<vector_double> &, const vector_double &) const override
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
@@ -196,7 +196,7 @@ public:
      * dominated points.
      * @return Nothing as it throws before
      */
-    vector_double contributions(std::vector<vector_double> &, const vector_double &) const
+    vector_double contributions(std::vector<vector_double> &, const vector_double &) const override
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }
@@ -205,7 +205,7 @@ public:
     /**
      * @return a pointer to a new object cloning this
      */
-    std::shared_ptr<hv_algorithm> clone() const
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new bf_fpras(*this));
     }
@@ -214,7 +214,7 @@ public:
     /**
      * @return The name of this particular algorithm
      */
-    std::string get_name() const
+    std::string get_name() const override
     {
         return "bf_fpras algorithm";
     }

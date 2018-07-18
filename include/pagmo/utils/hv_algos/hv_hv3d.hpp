@@ -90,7 +90,7 @@ public:
      *
      * @return hypervolume.
      */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         if (m_initial_sorting) {
             sort(points.begin(), points.end(),
@@ -160,7 +160,7 @@ public:
      * @param r_point reference point for the points
      * @return vector of exclusive contributions by every point
      */
-    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
+    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         // Make a copy of the original set of points
         std::vector<vector_double> p(points.begin(), points.end());
@@ -310,7 +310,7 @@ public:
      * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal
      * reference point
      */
-    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
+    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         if (r_point.size() != 3u) {
             pagmo_throw(std::invalid_argument, "Algorithm hv3d works only for 3-dimensional cases");
@@ -323,7 +323,7 @@ public:
     /**
      * @return a pointer to a new object cloning this
      */
-    std::shared_ptr<hv_algorithm> clone() const
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new hv3d(*this));
     }
@@ -332,7 +332,7 @@ public:
     /**
      * @return The name of this particular algorithm
      */
-    std::string get_name() const
+    std::string get_name() const override
     {
         return "hv3d algorithm";
     }

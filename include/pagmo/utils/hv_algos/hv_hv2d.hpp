@@ -73,7 +73,7 @@ public:
      *
      * @return hypervolume
      */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         if (points.size() == 0u) {
             return 0.0;
@@ -147,13 +147,13 @@ public:
      * @param r_point reference point for the points
      * @return vector of exclusive contributions by every point
      */
-    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const;
+    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const override;
 
     /// Clone method.
     /**
      * @return a pointer to a new object cloning this
      */
-    std::shared_ptr<hv_algorithm> clone() const
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new hv2d(*this));
     }
@@ -168,7 +168,7 @@ public:
      * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal
      * reference point
      */
-    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
+    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         if (r_point.size() != 2u) {
             pagmo_throw(std::invalid_argument, "Algorithm hv2d works only for 2-dimensional cases.");
@@ -181,7 +181,7 @@ public:
     /**
      * @return The name of this particular algorithm
      */
-    std::string get_name() const
+    std::string get_name() const override
     {
         return "hv2d algorithm";
     }

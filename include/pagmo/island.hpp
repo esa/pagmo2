@@ -426,7 +426,7 @@ struct island_static_data {
     // A map to link a human-readable description to evolve_status.
     // NOTE: in C++11 hashing of enums might not be available. Provide our own.
     struct status_hasher {
-        std::size_t operator()(evolve_status es) const
+        std::size_t operator()(evolve_status es) const noexcept
         {
             return std::hash<int>{}(static_cast<int>(es));
         }
