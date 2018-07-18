@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #if __GNUC__ >= 8
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
 #pragma GCC diagnostic ignored "-Wnoexcept"
+#pragma GCC diagnostic ignored "-Wcast-align"
 #endif
 #if defined(__clang__)
 

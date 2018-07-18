@@ -77,7 +77,7 @@ public:
      *
      * @return hypervolume.
      */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         allocate_wfg_members(points, r_point);
         double hv = compute_hv(1);
@@ -105,7 +105,7 @@ public:
      *
      * @return the single contributions
      */
-    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
+    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         std::vector<double> c;
         c.reserve(points.size());
@@ -142,7 +142,7 @@ public:
      *
      * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
      */
-    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
+    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         hv_algorithm::assert_minimisation(points, r_point);
     }
@@ -151,7 +151,7 @@ public:
     /**
      * @return a pointer to a new object cloning this
      */
-    std::shared_ptr<hv_algorithm> clone() const
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new hvwfg(*this));
     }
@@ -160,7 +160,7 @@ public:
     /**
      * @return The name of this particular algorithm
      */
-    std::string get_name() const
+    std::string get_name() const override
     {
         return "WFG algorithm";
     }

@@ -181,12 +181,12 @@ public:
     {
         return hv_algorithm::dom_cmp(a, b, dim_bound);
     }
-    double compute(std::vector<vector_double> &points, const vector_double &ref) const
+    double compute(std::vector<vector_double> &points, const vector_double &ref) const override
     {
         return hv2d().compute(points, ref);
     };
-    void verify_before_compute(const std::vector<vector_double> &, const vector_double &) const {};
-    std::shared_ptr<hv_algorithm> clone() const
+    void verify_before_compute(const std::vector<vector_double> &, const vector_double &) const override{};
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new hv_fake_algo(*this));
     }
