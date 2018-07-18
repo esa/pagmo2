@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Changelog &#8212; pagmo 2.8 documentation</title>
+    <title>Changelog &#8212; pagmo 2.9 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.8',
+        VERSION:     '2.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.8</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -123,13 +123,14 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">2.9 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id1">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id13">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id16">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id19">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -146,40 +147,46 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#id1">2.8 (2018-07-12)</a><ul>
+<li><a class="reference internal" href="#unreleased">2.9 (unreleased)</a><ul>
 <li><a class="reference internal" href="#new">New</a></li>
 <li><a class="reference internal" href="#changes">Changes</a></li>
 <li><a class="reference internal" href="#fix">Fix</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">2.7 (2018-04-13)</a><ul>
-<li><a class="reference internal" href="#id3">New</a></li>
-<li><a class="reference internal" href="#id4">Changes</a></li>
+<li><a class="reference internal" href="#id1">2.8 (2018-07-12)</a><ul>
+<li><a class="reference internal" href="#id2">New</a></li>
+<li><a class="reference internal" href="#id3">Changes</a></li>
+<li><a class="reference internal" href="#id4">Fix</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id5">2.6 (2017-11-18)</a><ul>
-<li><a class="reference internal" href="#id6">Fix</a></li>
+<li><a class="reference internal" href="#id5">2.7 (2018-04-13)</a><ul>
+<li><a class="reference internal" href="#id6">New</a></li>
+<li><a class="reference internal" href="#id7">Changes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id7">2.5 (2017-11-12)</a><ul>
-<li><a class="reference internal" href="#id8">Fix</a></li>
+<li><a class="reference internal" href="#id8">2.6 (2017-11-18)</a><ul>
+<li><a class="reference internal" href="#id9">Fix</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id9">2.4 (2017-06-09)</a><ul>
-<li><a class="reference internal" href="#id10">New</a></li>
-<li><a class="reference internal" href="#id11">Changes</a></li>
-<li><a class="reference internal" href="#id12">Fix</a></li>
+<li><a class="reference internal" href="#id10">2.5 (2017-11-12)</a><ul>
+<li><a class="reference internal" href="#id11">Fix</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id13">2.3 (2017-05-19)</a><ul>
+<li><a class="reference internal" href="#id12">2.4 (2017-06-09)</a><ul>
+<li><a class="reference internal" href="#id13">New</a></li>
 <li><a class="reference internal" href="#id14">Changes</a></li>
 <li><a class="reference internal" href="#id15">Fix</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id16">2.2 (2017-05-12)</a><ul>
-<li><a class="reference internal" href="#id17">New</a></li>
-<li><a class="reference internal" href="#id18">Changes</a></li>
-<li><a class="reference internal" href="#id19">Fix</a></li>
+<li><a class="reference internal" href="#id16">2.3 (2017-05-19)</a><ul>
+<li><a class="reference internal" href="#id17">Changes</a></li>
+<li><a class="reference internal" href="#id18">Fix</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id19">2.2 (2017-05-12)</a><ul>
+<li><a class="reference internal" href="#id20">New</a></li>
+<li><a class="reference internal" href="#id21">Changes</a></li>
+<li><a class="reference internal" href="#id22">Fix</a></li>
 </ul>
 </li>
 </ul>
@@ -215,10 +222,32 @@
       
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="id1">
-<h2>2.8 (2018-07-12)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="unreleased">
+<h2>2.9 (unreleased)<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>pip pygmo package for Python 3.7 (Linux) (<a class="reference external" href="https://github.com/esa/pagmo2/pull/196">#196</a>).</li>
+<li>Various documentation additions (<a class="reference external" href="https://github.com/esa/pagmo2/pull/194">#194</a>).</li>
+</ul>
+</div>
+<div class="section" id="changes">
+<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The pip pygmo package for Python 3.4 (Linux) has been dropped (<a class="reference external" href="https://github.com/esa/pagmo2/pull/196">#196</a>).</li>
+</ul>
+</div>
+<div class="section" id="fix">
+<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Various documentation fixes (<a class="reference external" href="https://github.com/esa/pagmo2/pull/196">#196</a>).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>2.8 (2018-07-12)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>New<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Implement the CEC2014 problem suite (<a class="reference external" href="https://github.com/esa/pagmo2/pull/188">#188</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/189">#189</a>).</li>
 <li>It is now possible to explicitly shut down the process pool of <a class="reference internal" href="docs/python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> (<a class="reference external" href="https://github.com/esa/pagmo2/pull/187">#187</a>).</li>
@@ -227,8 +256,8 @@
 <li>The constraints’ tolerances for a problem can now be set via a scalar in pygmo (<a class="reference external" href="https://github.com/esa/pagmo2/pull/185">#185</a>).</li>
 </ul>
 </div>
-<div class="section" id="changes">
-<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Changes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Update the copyright date to 2018 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/190">#190</a>).</li>
 <li><strong>BREAKING</strong>: user-defined islands in Python must now return the algorithm object used for the evolution in addition
@@ -237,8 +266,8 @@ an algorithm executed on a pythonic island is now correctly propagated back to t
 an evolution.</li>
 </ul>
 </div>
-<div class="section" id="fix">
-<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Fix<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix a compilation failure involving the IHS algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/192">#192</a>).</li>
 <li>Fix a bug in the Python exposition of the DE algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/183">#183</a>).</li>
@@ -248,38 +277,38 @@ an evolution.</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id2">
-<h2>2.7 (2018-04-13)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
-<h3>New<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h2>2.7 (2018-04-13)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>New<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Implement the particle swarm optimization generational (GPSO) algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/161">#161</a>).</li>
 <li>Implement the exponential natural evolution strategies (xNES) algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/142">#142</a>).</li>
 <li>Implement the improved harmony search (IHS) algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/141">#141</a>).</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h3>Changes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Changes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Update pygmo’s dependencies in the manylinux builds to the latest versions
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/144">#144</a>).</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id5">
-<h2>2.6 (2017-11-18)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id6">
-<h3>Fix<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h2>2.6 (2017-11-18)<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h3>Fix<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix a bug in NSGA2 when the bounds of the problem contain negative values (<a class="reference external" href="https://github.com/esa/pagmo2/pull/139">#139</a>).</li>
 <li>Various documentation fixes and improvements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/139">#139</a>).</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id7">
-<h2>2.5 (2017-11-12)<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id8">
-<h3>Fix<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h2>2.5 (2017-11-12)<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id11">
+<h3>Fix<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix meta-problems not forwarding the integer dimension (<a class="reference external" href="https://github.com/esa/pagmo2/pull/134">#134</a>).</li>
 <li>Various continuous integration fixes (<a class="reference external" href="https://github.com/esa/pagmo2/pull/134">#134</a>,
@@ -289,10 +318,10 @@ an evolution.</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id9">
-<h2>2.4 (2017-06-09)<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id10">
-<h3>New<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h2>2.4 (2017-06-09)<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id13">
+<h3>New<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Initial release of the pagmo/pygmo C++ software-development kit (SDK). The purpose of the SDK is to make the process
 of writing C++ extensions for pagmo/pygmo as easy as possible. The SDK is a beta-quality feature at this time,
@@ -301,8 +330,8 @@ and ask there if you are interested in it (<a class="reference external" href="h
 <li>Improve support for integer and mixed integer optimization (<a class="reference external" href="https://github.com/esa/pagmo2/pull/115">#115</a>).</li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h3>Changes<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h3>Changes<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
 source, you will need first to install the pagmo C++ headers. Users of pip/conda are <strong>not</strong> affected by this change (as
@@ -312,51 +341,51 @@ longer available as an argument when constructing algorithms such as <a class="r
 must instead be specified in the definition of the UDP via the optional <code class="docutils literal"><span class="pre">get_nix()</span></code> method.</li>
 </ul>
 </div>
-<div class="section" id="id12">
-<h3>Fix<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h3>Fix<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix a bug in the plotting submodule (<a class="reference external" href="https://github.com/esa/pagmo2/pull/118">#118</a>).</li>
 <li>Various documentation fixes and improvements.</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id13">
-<h2>2.3 (2017-05-19)<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id14">
-<h3>Changes<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h2>2.3 (2017-05-19)<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id17">
+<h3>Changes<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Move from dill to cloudpickle as a serialization backend. This fixes various serialization issues reported in
 <a class="reference external" href="https://github.com/esa/pagmo2/issues/106">#106</a>.</li>
 </ul>
 </div>
-<div class="section" id="id15">
-<h3>Fix<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h3>Fix<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Various documentation fixes and improvements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/103">#103</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/104">#104</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/107">#107</a>).</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id16">
-<h2>2.2 (2017-05-12)<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id17">
-<h3>New<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id19">
+<h2>2.2 (2017-05-12)<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id20">
+<h3>New<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>New tutorials (Schwefel and constrained problems) <a class="reference external" href="https://github.com/esa/pagmo2/pull/91">(#91)</a>.</li>
 <li>Add support for <a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a> <a class="reference external" href="https://github.com/esa/pagmo2/pull/92">(#92)</a>.</li>
 <li>Implement the simple genetic algorithm (SGA) <a class="reference external" href="https://github.com/esa/pagmo2/pull/93">(#93)</a>.</li>
 </ul>
 </div>
-<div class="section" id="id18">
-<h3>Changes<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id21">
+<h3>Changes<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Rename, fix and improve the implementation of various archipelago-related methods
 <a class="reference external" href="https://github.com/esa/pagmo2/issues/94">(#94)</a>.</li>
 <li>Remove the use of atomic counters in the problem <a class="reference external" href="https://github.com/esa/pagmo2/issues/79">(#79)</a>.</li>
 </ul>
 </div>
-<div class="section" id="id19">
-<h3>Fix<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id22">
+<h3>Fix<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Various documentation fixes/improvements, headers sanitization, etc.</li>
 </ul>
