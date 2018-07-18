@@ -38,11 +38,13 @@ namespace pagmo
 {
 /// The CEC 2014 problems: Real-Parameter Single Objective Optimization Competition
 /**
+ * \verbatim embed:rst:leading-asterisk
+ *
+ * .. versionadded:: 2.8
  *
  * The 30 problems of the competition on real-parameter single objective optimization problems that
  * was organized for the 2014 IEEE Congress on Evolutionary Computation.
  *
- * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
  *    The code for these UDAs is adapted from the original C code distributed during the competition and

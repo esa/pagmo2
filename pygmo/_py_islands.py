@@ -301,6 +301,8 @@ class mp_island(object):
     def shutdown_pool():
         """Shutdown pool.
 
+        .. versionadded:: 2.8
+
         This method will shut down the process pool backing :class:`~pygmo.mp_island`, after
         all pending tasks in the pool have completed.
 
