@@ -8,7 +8,7 @@ set -e
 
 CMAKE_VERSION="3.12.0"
 EIGEN3_VERSION="3.3.4"
-BOOST_VERSION="1.65.0"
+BOOST_VERSION="1.67.0"
 NLOPT_VERSION="2.4.2"
 
 if [[ ${PAGMO_BUILD} == *37 ]]; then
@@ -65,7 +65,7 @@ curl -L http://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_`ec
 tar xjf boost_`echo ${BOOST_VERSION}|tr "." "_"`.tar.bz2
 cd boost_`echo ${BOOST_VERSION}|tr "." "_"`
 sh bootstrap.sh --with-python=/opt/python/${PYTHON_DIR}/bin/python > /dev/null
-./bjam --toolset=gcc link=shared threading=multi cxxflags="-std=c++11" variant=release --with-python -j2 install > /dev/null
+./bjam --toolset=gcc link=shared threading=multi cxxflags="-std=c++11" variant=release --with-python -j2 install
 cd ..
 
 # NLopt
