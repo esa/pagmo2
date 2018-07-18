@@ -48,9 +48,14 @@ class problem_callback(object):
     def __init__(self, prob, **kwargs):
         from warnings import warn
         from pygmo import problem
+        from copy import deepcopy
         if type(prob) == problem:
-            # If prob is a pygmo problem, we will store it as-is.
-            self._prob = prob
+            # If prob is a pygmo problem, we will make a copy
+            # and store it. The copy is to ensure consistent behaviour
+            # with the other meta problems and with the constructor
+            # from a UDP (which will end up making a deep copy of
+            # the input object).
+            self._prob = deepcopy(prob)
         else:
             # Otherwise, we attempt to create a problem from it. This will
             # work if prob is an exposed C++ problem or a Python UDP.
