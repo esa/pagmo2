@@ -43,7 +43,7 @@ Let's now build a :class:`~pygmo.problem` from our new UDP.
     >>> import pygmo as pg
     >>> prob = pg.problem(sphere_function())
 
-That easy! To inspect what type of problem pygmo has detected from our UDP we may print on screen:
+That's easy! To inspect what type of problem pygmo has detected from our UDP we may print on screen:
 
 .. doctest::
 
@@ -148,7 +148,7 @@ that it is somehow malformed are high. Let's see some common mistakes.
     '<sphere_function object at 0x1108cad68>' of type '<class 'sphere_function'>': the method is either not present or not callable
 
 
-oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a :class:`~pygmo.problem`
+Oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a :class:`~pygmo.problem`
 and, when we try, we then get a rather helpful error message. 
 
 In other cases while the UDP is still malformed, the construction of :class:`~pygmo.problem` will succeed and the issue will
