@@ -7,7 +7,7 @@ Use of the class :class:`~pygmo.island`
 
 The :class:`~pygmo.island` class is the unit parallelization block of pagmo. The idea is that, in pygmo, an :class:`~pygmo.island` is a computational
 unit that can be physically located anywhere and that can thus be used to outsource calls to :func:`~pygmo.algorithm.evolve()`
-unloading the main computational unit from the task. As such it is able to run evolutions ona separate thread, process or remote machine,
+unloading the main computational unit from the task. As such it is able to run evolutions on a separate thread, process or remote machine,
 according to the implementation details of the UDI (User Defined Island) whose type it erases. Similarly to how an :class:`~pygmo.algorithm`
 evolves a :class:`~pygmo.population` according to the UDA, and a problem computes its fitness according to the UDP.
 
@@ -57,10 +57,10 @@ its crossover and *F* parameter. Thanks to the *seed* being specified in the isl
 
 .. note::
    Since no *udi* argument is specified, the :class:`~pygmo.island` constructor will choose the island type for us using its own internal heuristics (see the documentation). In this
-   case since bith the problem and the algorithm are thread safe, a :class:`~pygmo.thread_island` will be chosen (as can be verified calling the ``__repr__()`` method).
+   case since both the problem and the algorithm are thread safe, a :class:`~pygmo.thread_island` will be chosen (as can be verified calling the ``__repr__()`` method).
 
 .. warning::
-   This use of the :class:`~pygmo.island` is, essentially, replicating some of the functionalities of the :class:`~pygmo.archipelago`. While interesting to get acquinted with pygmo
+   This use of the :class:`~pygmo.island` is, essentially, replicating some of the functionalities of the :class:`~pygmo.archipelago`. While interesting to get acquainted with pygmo
    machinery, and thus great in the context of this tutorial, we discourage this type of scripting and encourage the use of an :class:`~pygmo.archipelago` (with no migration) instead.
 
 Repeating the same computation a hundreds times we can obtain the boxplot on the right, where the best parameters for the algorithm and this task are found. id0: *F* = 0.3, *CR* = 0.3, id11: 

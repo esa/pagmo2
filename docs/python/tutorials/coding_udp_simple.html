@@ -217,7 +217,7 @@ no gradients etc…</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">sphere_function</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>That easy! To inspect what type of problem pygmo has detected from our UDP we may print on screen:</p>
+<p>That’s easy! To inspect what type of problem pygmo has detected from our UDP we may print on screen:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
 <span class="go">Problem name: &lt;class &#39;sphere_function&#39;&gt;</span>
 <span class="go">    Global dimension:                       2</span>
@@ -310,7 +310,7 @@ that it is somehow malformed are high. Let’s see some common mistakes.</p>
 <span class="go">&#39;&lt;sphere_function object at 0x1108cad68&gt;&#39; of type &#39;&lt;class &#39;sphere_function&#39;&gt;&#39;: the method is either not present or not callable</span>
 </pre></div>
 </div>
-<p>oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+<p>Oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
 and, when we try, we then get a rather helpful error message.</p>
 <p>In other cases while the UDP is still malformed, the construction of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> will succeed and the issue will
 be revealed only when calling the malformed method:</p>

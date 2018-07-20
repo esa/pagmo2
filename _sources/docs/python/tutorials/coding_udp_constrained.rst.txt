@@ -229,4 +229,4 @@ To compare, as an example, with what an heuristic method could deliver we check 
 Huang, Vicky Ling, A. Kai Qin, and Ponnuthurai N. Suganthan. "Self-adaptive differential evolution algorithm
 for constrained real-parameter optimization." Evolutionary Computation, 2006. CEC 2006. IEEE Congress on. IEEE, 2006.
 
-to find that after 5000 fitness evaluations this particular problem is still not solved by the heuristic approach there introduced.
+to find that after 5000 fitness evaluations this particular problem is still not solved by the heuristic approach introduced in the paper.
