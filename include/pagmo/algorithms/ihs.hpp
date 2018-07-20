@@ -74,7 +74,7 @@ namespace pagmo
  * .. note::
  *
  *    The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
- *    In pagmo, the algorithm was modified to tackle also multi-objective, constrained (box and non linearly)
+ *    In pagmo, the algorithm was modified to tackle also multi-objective (unconstrained), constrained (single-objective)
  *    and stochastic problems. Such extension is original with pagmo.
  *
  * .. seealso::

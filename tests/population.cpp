@@ -376,3 +376,13 @@ BOOST_AUTO_TEST_CASE(population_minlp_test)
         BOOST_CHECK(pop.get_x()[i][1] == std::floor(pop.get_x()[i][1]));
     }
 }
+
+BOOST_AUTO_TEST_CASE(population_cout_test)
+{
+    population pop{problem{rosenbrock{2u}}};
+    population pop_sto{problem{inventory{12u}}, 3u};
+    population pop_mo{problem{zdt{}}, 3u};
+    BOOST_CHECK_NO_THROW(std::cout << pop);
+    BOOST_CHECK_NO_THROW(std::cout << pop_sto);
+    BOOST_CHECK_NO_THROW(std::cout << pop_mo);
+}
