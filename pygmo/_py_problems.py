@@ -48,10 +48,59 @@ def _with_decorator(f):
 class decorator_problem(object):
     """Decorator meta-problem.
 
+    This meta-problem allows to apply arbitrary transformations to the functions
+    of a PyGMO :class:`~pygmo.problem` via Python decorators.
+
+    The decorators are passed as keyword arguments during initialisation, and they
+    must be named after the function they are meant to decorate plus the
+    ``_decorator`` suffix. For instance, we can define a minimal decorator
+    for the fitness function as follows:
+
+    .. code::
+
+       def f_decor(orig_fitness_function):
+           def new_fitness_function(self, dv):
+               print("Evaluating dv: {}".format(dv))
+               return orig_fitness_function(self, dv)
+           return new_fitness_function
+
+    This decorator will print the input decision vector *dv* before invoking the
+    original fitness function. We can then construct a decorated Rosenbrock problem
+    as follows:
+
+    .. code::
+
+       from pygmo import problem, rosenbrock
+       dprob = problem(decorator_problem(rosenbrock(), fitness_decorator=f_decor))
+
+    We can then verify that calling the fitness function of *dprob* will print
+    the decision vector before returning the fitness value:
+
+    >>> fv = dprob.fitness([1, 2])
+    Evaluating dv: [1. 2.]
+    >>> print(fv)
+    [100.]
+
+    All the functions in the public API of a UDP can be decorated (see the documentation
+    of :class:`pygmo.problem` for the full list).
 
     """
 
     def __init__(self, prob, **kwargs):
+        """
+        Args:
+
+           prob: a :class:`~pygmo.problem` or a user-defined problem (either C++ or Python - note that
+              *prob* will be deep-copied and stored inside the :class:`~pygmo.decorator_problem` instance)
+           kwargs: the dictionary of decorators to be applied to the functions of the input problem
+
+        Raises:
+
+           ValueError: if at least on of the values in *kwargs* is not callable
+           unspecified: any exception thrown by the constructor of :class:`~pygmo.problem` or the deep copy
+              of *prob* or *kwargs*
+
+        """
         from . import problem
         from warnings import warn
         from copy import deepcopy
@@ -160,4 +209,12 @@ class decorator_problem(object):
 
     @property
     def inner_problem(self):
+        """Inner problem of the meta-problem
+
+        This read-only property gives direct access to the :class:`~pygmo.problem` stored within the meta-problem.
+
+        Returns:
+           :class:`~pygmo.problem`: a reference to the inner problem
+        """
+
         return self._prob
