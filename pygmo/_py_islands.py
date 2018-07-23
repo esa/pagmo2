@@ -382,11 +382,10 @@ class ipyparallel_island(object):
         args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
         if _hashable(args_key):
             with _client_cache_lock:
-                if args_key in _client_cache:
-                    rc = _client_cache[args_key]
-                else:
-                    _client_cache[args_key] = Client(*args, **kwargs)
-                    rc = _client_cache[args_key]
+                rc = _client_cache.get(args_key)
+                if rc is None:
+                    rc = Client(*args, **kwargs)
+                    _client_cache[args_key] = rc
         else:
             # If the arguments are not hashable, just create a brand new
             # client.
