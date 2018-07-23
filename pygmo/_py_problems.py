@@ -48,6 +48,8 @@ def _with_decorator(f):
 class decorator_problem(object):
     """Decorator meta-problem.
 
+    .. versionadded:: 2.9
+
     This meta-problem allows to apply arbitrary transformations to the functions
     of a PyGMO :class:`~pygmo.problem` via Python decorators.
 
@@ -56,22 +58,18 @@ class decorator_problem(object):
     ``_decorator`` suffix. For instance, we can define a minimal decorator
     for the fitness function as follows:
 
-    .. code::
-
-       def f_decor(orig_fitness_function):
-           def new_fitness_function(self, dv):
-               print("Evaluating dv: {}".format(dv))
-               return orig_fitness_function(self, dv)
-           return new_fitness_function
+    >>> def f_decor(orig_fitness_function):
+    ...     def new_fitness_function(self, dv):
+    ...         print("Evaluating dv: {}".format(dv))
+    ...         return orig_fitness_function(self, dv)
+    ...     return new_fitness_function
 
     This decorator will print the input decision vector *dv* before invoking the
     original fitness function. We can then construct a decorated Rosenbrock problem
     as follows:
 
-    .. code::
-
-       from pygmo import problem, rosenbrock
-       dprob = problem(decorator_problem(rosenbrock(), fitness_decorator=f_decor))
+    >>> from pygmo import decorator_problem, problem, rosenbrock
+    >>> dprob = problem(decorator_problem(rosenbrock(), fitness_decorator=f_decor))
 
     We can then verify that calling the fitness function of *dprob* will print
     the decision vector before returning the fitness value:
