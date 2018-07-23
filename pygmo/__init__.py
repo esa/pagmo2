@@ -206,7 +206,7 @@ __original_unconstrain_init = unconstrain.__init__
 def _unconstrain_init(self, prob=None, method="death penalty", weights=[]):
     """
     Args:
-        prob: a :class:`~pygmo.problem` or a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
+        prob: a :class:`~pygmo.problem` or a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
               and stored inside the :class:`~pygmo.unconstrained` instance)
         method (``str``): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
         weights (array-like object): the vector of weights to be used if the method chosen is "weighted"
