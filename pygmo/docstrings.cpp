@@ -1441,9 +1441,9 @@ Returns:
 std::string generic_uda_inner_algorithm_docstring()
 {
 
-    return R"(Inner algorithm of the meta-algorithm
+    return R"(Inner algorithm of the meta-algorithm.
 
-This read-only property gives direct access to the :class:`~pygmo.algorithm` stored within the meta-algorithm.
+This read-only property gives direct access to the :class:`~pygmo.algorithm` stored within this meta-algorithm.
 
 Returns:
     :class:`~pygmo.algorithm`: a reference to the inner algorithm
@@ -1454,9 +1454,9 @@ Returns:
 std::string generic_udp_inner_problem_docstring()
 {
 
-    return R"(Inner problem of the meta-problem
+    return R"(Inner problem of the meta-problem.
 
-This read-only property gives direct access to the :class:`~pygmo.problem` stored within the meta-problem.
+This read-only property gives direct access to the :class:`~pygmo.problem` stored within this meta-problem.
 
 Returns:
     :class:`~pygmo.problem`: a reference to the inner problem

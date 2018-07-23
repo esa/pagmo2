@@ -209,12 +209,16 @@ class decorator_problem(object):
 
     @property
     def inner_problem(self):
-        """Inner problem of the meta-problem
-
-        This read-only property gives direct access to the :class:`~pygmo.problem` stored within the meta-problem.
-
-        Returns:
-           :class:`~pygmo.problem`: a reference to the inner problem
-        """
-
         return self._prob
+
+
+# Little helper to add a docstring to the inner_problem property
+# of the decorator problem. Instead of writing it manually, we
+# copy it from one of the exposed C++ meta-problems (all exposed
+# C++ meta-problems share the same docstring for this property).
+def _patch_decorator_problem():
+    from . import unconstrain
+    decorator_problem.inner_problem.__doc__ = unconstrain.inner_problem.__doc__
+
+
+_patch_decorator_problem()
