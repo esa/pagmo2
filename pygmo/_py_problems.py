@@ -33,6 +33,9 @@ from __future__ import absolute_import as _ai
 
 
 def _with_decorator(f):
+    # A decorator that will decorate the input method f of a decorator_problem
+    # with one of the decorator stored inside the problem itself, in the _decors
+    # dictionary.
     from functools import wraps
 
     @wraps(f)
@@ -43,6 +46,22 @@ def _with_decorator(f):
         else:
             return dec(f)(self, *args, **kwds)
     return wrapper
+
+
+def _add_doc(value):
+    # Small decorator with parameter to change the docstring
+    # of a function to 'value'. See:
+    # https://stackoverflow.com/questions/4056983/how-do-i-programmatically-set-the-docstring
+    def _doc(func):
+        func.__doc__ = value
+        return func
+    return _doc
+
+
+# Import the unconstrain meta-problem so that we can re-use
+# the docstring of its inner_problem property in the documentation
+# of the inner_problem property of decorator_problem.
+from .core import unconstrain as _unconstrain
 
 
 class decorator_problem(object):
@@ -206,17 +225,6 @@ class decorator_problem(object):
         return retval
 
     @property
+    @_add_doc(_unconstrain.inner_problem.__doc__)
     def inner_problem(self):
         return self._prob
-
-
-# Little helper to add a docstring to the inner_problem property
-# of the decorator problem. Instead of writing it manually, we
-# copy it from one of the exposed C++ meta-problems (all exposed
-# C++ meta-problems share the same docstring for this property).
-def _patch_decorator_problem():
-    from . import unconstrain
-    decorator_problem.inner_problem.__doc__ = unconstrain.inner_problem.__doc__
-
-
-_patch_decorator_problem()
