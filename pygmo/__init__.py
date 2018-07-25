@@ -251,7 +251,7 @@ __original_mbh_init = mbh.__init__
 def _mbh_init(self, algo=None, stop=5, perturb=1e-2, seed=None):
     """
     Args:
-        algo: a :class:`~pygmo.algorithm` or a user-defined algorithm, either C++ or Python (if
+        algo: an :class:`~pygmo.algorithm` or a user-defined algorithm, either C++ or Python (if
               *algo* is :data:`None`, a :class:`~pygmo.compass_search` algorithm will be used in its stead)
         stop (int): consecutive runs of the inner algorithm that need to result in no improvement for
              :class:`~pygmo.mbh` to stop

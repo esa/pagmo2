@@ -144,8 +144,8 @@ Let's now verify that the fitness function has been decorated as expected:
 
 .. doctest::
 
-   >>> fv = drb.fitness([1, 2]) # doctest: +SKIP
-   Elapsed time: 2.300000000010627e-05 seconds
+   >>> fv = drb.fitness([1, 2]) # doctest: +ELLIPSIS
+   Elapsed time: ... seconds
    >>> print(fv)
    [100.]
 
