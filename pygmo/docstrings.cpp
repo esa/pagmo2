@@ -324,7 +324,7 @@ Returns:
 
 std::string problem_docstring()
 {
-    return R"(__init__(udp = null_problem)
+    return R"(__init__(udp = null_problem())
 
 Problem class.
 
