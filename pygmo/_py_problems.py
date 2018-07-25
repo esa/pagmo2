@@ -34,7 +34,7 @@ from __future__ import absolute_import as _ai
 
 def _with_decorator(f):
     # A decorator that will decorate the input method f of a decorator_problem
-    # with one of the decorator stored inside the problem itself, in the _decors
+    # with one of the decorators stored inside the problem itself, in the _decors
     # dictionary.
     from functools import wraps
 
@@ -49,7 +49,7 @@ def _with_decorator(f):
 
 
 def _add_doc(value):
-    # Small decorator with parameter to change the docstring
+    # Small decorator for changing the docstring
     # of a function to 'value'. See:
     # https://stackoverflow.com/questions/4056983/how-do-i-programmatically-set-the-docstring
     def _doc(func):
@@ -103,24 +103,26 @@ class decorator_problem(object):
 
     """
 
-    def __init__(self, prob, **kwargs):
+    def __init__(self, prob=None, **kwargs):
         """
         Args:
 
-           prob: a :class:`~pygmo.problem` or a user-defined problem (either C++ or Python - note that
-              *prob* will be deep-copied and stored inside the :class:`~pygmo.decorator_problem` instance)
+           prob: a :class:`~pygmo.problem` or a user-defined problem, either C++ or Python (if
+              *prob* is :data:`None`, a :class:`~pygmo.null_problem` will be used in its stead)
            kwargs: the dictionary of decorators to be applied to the functions of the input problem
 
         Raises:
 
-           ValueError: if at least on of the values in *kwargs* is not callable
+           ValueError: if at least one of the values in *kwargs* is not callable
            unspecified: any exception thrown by the constructor of :class:`~pygmo.problem` or the deep copy
               of *prob* or *kwargs*
 
         """
-        from . import problem
+        from . import problem, null_problem
         from warnings import warn
         from copy import deepcopy
+        if prob is None:
+            prob = null_problem()
         if type(prob) == problem:
             # If prob is a pygmo problem, we will make a copy
             # and store it. The copy is to ensure consistent behaviour

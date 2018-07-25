@@ -423,8 +423,7 @@ full list of UDPs already coded in pygmo).
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::problem`.
 
 Args:
-    udp: a user-defined problem (either C++ or Python - note that *udp* will be deep-copied
-      and stored inside the :class:`~pygmo.problem` instance)
+    udp: a user-defined problem, either C++ or Python
 
 Raises:
     NotImplementedError: if *udp* does not implement the mandatory methods detailed above
@@ -1173,9 +1172,7 @@ Returns:
 
 std::string translate_docstring()
 {
-    return R"(__init__(udp = null_problem(), translation = [0.])
-
-The translate meta-problem.
+    return R"(The translate meta-problem.
 
 This meta-problem translates the whole search space of an input :class:`pygmo.problem` or 
 user-defined problem (UDP) by a fixed translation vector. :class:`~pygmo.translate` objects 
@@ -1198,7 +1195,7 @@ Returns:
 
 std::string algorithm_docstring()
 {
-    return R"(__init__(uda = null_algorithm)
+    return R"(__init__(uda = null_algorithm())
 
 Algorithm class.
 
@@ -1251,8 +1248,7 @@ full list of UDAs already coded in pygmo).
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::algorithm`.
 
 Args:
-    uda: a user-defined algorithm (either C++ or Python - note that *uda* will be deep-copied
-      and stored inside the :class:`~pygmo.algorithm` instance)
+    uda: a user-defined algorithm, either C++ or Python
 
 Raises:
     NotImplementedError: if *uda* does not implement the mandatory method detailed above
@@ -1466,9 +1462,7 @@ Returns:
 
 std::string mbh_docstring()
 {
-    return R"(__init__(algo = compass_search(), stop = 5, perturb = 1e-2, seed = random)
-
-Monotonic Basin Hopping (generalized).
+    return R"(Monotonic Basin Hopping (generalized).
 
 Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping
 the objective function :math:`f(\mathbf x_0)` into the local minima found starting from :math:`\mathbf x_0`.
@@ -1550,7 +1544,7 @@ std::string mbh_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling :func:`~pygmo.algorithm.set_verbosity()` on a :class:`~pygmo.algorithm` constructed
+(by default nothing is logged) which can be set calling :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed
 with an :class:`~pygmo.mbh`. A verbosity level ``N > 0`` will log one line at the end of each call to the inner algorithm.
 
 Returns:
@@ -1597,9 +1591,7 @@ Returns:
 
 std::string cstrs_self_adaptive_docstring()
 {
-    return R"(__init__(iters = 1, algo = de(), seed = random)
-
-This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
+    return R"(This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
 underlying population. The resulting approach is an alternative to using the meta-problem :class:`~pygmo.unconstrain`
@@ -1673,7 +1665,7 @@ std::string cstrs_self_adaptive_get_log_docstring()
     return R"(get_log()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()``. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling :func:`~pygmo.algorithm.set_verbosity()` on a :class:`~pygmo.algorithm` constructed
+(by default nothing is logged) which can be set calling :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm` constructed
 with an :class:`~pygmo.cstrs_self_adaptive`. A verbosity level of ``N > 0`` will log one line each ``N`` ``iters``.
 
 Returns:
@@ -2946,9 +2938,7 @@ Returns:
 
 std::string decompose_docstring()
 {
-    return R"(__init__(udp = null_problem(nobj = 2), weight = [0.5, 0.5], z = [0.,0.], method = 'weighted', adapt_ideal = False)
-
-The decompose meta-problem.
+    return R"(The decompose meta-problem.
 
 This meta-problem *decomposes* a multi-objective input user-defined problem,
 resulting in a single-objective user-defined problem with a fitness function combining the
@@ -3063,9 +3053,7 @@ Raises:
 
 std::string unconstrain_docstring()
 {
-    return R"(__init__(prob = null_problem(nobj=2, nec=3, nic=4), method = "death penalty", weights = [])
-
-The unconstrain meta-problem.
+    return R"(The unconstrain meta-problem.
 
 This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:
 

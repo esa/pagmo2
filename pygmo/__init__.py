@@ -115,7 +115,7 @@ def _translate_init(self, prob=None, translation=[0.]):
     """
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-            (if ``None``, the population problem will be :class:`~pygmo.null_problem`)
+            (if *prob* is :data:`None`, a :class:`~pygmo.null_problem` will be used in its stead)
         translation (array-like object): an array containing the translation to be applied
 
     Raises:
@@ -155,11 +155,11 @@ def _decompose_init(self, prob=None, weight=[0.5, 0.5], z=[0., 0.], method='weig
     """
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-            (if ``None``, the population problem will be :class:`~pygmo.null_problem`)
-        weight (array-like object): the vector of weights :math:`\boldsymbol \lambda`
+            (if *prob* is :data:`None`, a :class:`~pygmo.null_problem` will be used in its stead)
+        weight (array-like object): the vector of weights :math:`\\boldsymbol \lambda`
         z (array-like object): the reference point :math:`\mathbf z^*`
-        method (``str``): a string containing the decomposition method chosen
-        adapt_ideal (``bool``): when ``True``, the reference point is adapted at each fitness evaluation
+        method (str): a string containing the decomposition method chosen
+        adapt_ideal (bool): when :data:`True`, the reference point is adapted at each fitness evaluation
             to be the ideal point
 
     Raises:
@@ -206,17 +206,17 @@ __original_unconstrain_init = unconstrain.__init__
 def _unconstrain_init(self, prob=None, method="death penalty", weights=[]):
     """
     Args:
-        prob: a :class:`~pygmo.problem` or a user-defined problem (either C++ or Python - note that *prob* will be deep-copied
-              and stored inside the :class:`~pygmo.unconstrained` instance)
-        method (``str``): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
-        weights (array-like object): the vector of weights to be used if the method chosen is "weighted"
+        prob: a :class:`~pygmo.problem` or a user-defined problem, either C++ or Python (if
+              *prob* is :data:`None`, a :class:`~pygmo.null_problem` will be used in its stead)
+        method (str): a string containing the unconstrain method chosen, one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``]
+        weights (array-like object): the vector of weights to be used if the method chosen is ``'weighted'``
 
     Raises:
         ValueError: if either:
 
            * *prob* is unconstrained,
            * *method* is not one of [``'death penalty'``, ``'kuri'``, ``'weighted'``, ``'ignore_c'``, ``'ignore_o'``],
-           * *weight* is not of the same size as the problem constraints (if the method ``'weighted'`` is selcted), or not empty otherwise.
+           * *weight* is not of the same size as the problem constraints (if the method ``'weighted'`` is selected), or not empty otherwise.
 
         unspecified: any exception thrown by:
 
@@ -251,12 +251,13 @@ __original_mbh_init = mbh.__init__
 def _mbh_init(self, algo=None, stop=5, perturb=1e-2, seed=None):
     """
     Args:
-        algo: an :class:`~pygmo.algorithm` or a user-defined algorithm (either C++ or Python - note that
-             *algo* will be deep-copied and stored inside the :class:`~pygmo.mbh` instance)
-        stop (``int``): consecutive runs of the inner algorithm that need to result in no improvement for
+        algo: a :class:`~pygmo.algorithm` or a user-defined algorithm, either C++ or Python (if
+              *algo* is :data:`None`, a :class:`~pygmo.compass_search` algorithm will be used in its stead)
+        stop (int): consecutive runs of the inner algorithm that need to result in no improvement for
              :class:`~pygmo.mbh` to stop
-        perturb (``float`` or array-like object): perturb the perturbation to be applied to each component
-        seed (``int``): seed used by the internal random number generator
+        perturb (float or array-like object): the perturbation to be applied to each component
+        seed (int): seed used by the internal random number generator (if *seed* is :data:`None`, a
+             randomly-generated value will be used in its stead)
 
     Raises:
         ValueError: if *perturb* (or one of its components, if *perturb* is an array) is not in the
@@ -268,7 +269,7 @@ def _mbh_init(self, algo=None, stop=5, perturb=1e-2, seed=None):
     """
     import numbers
     if algo is None:
-        # Use the null problem for default init.
+        # Use the compass search algo for default init.
         algo = compass_search()
     if type(algo) == algorithm:
         # If algo is a pygmo algorithm, we will pass it as-is to the
@@ -297,10 +298,11 @@ __original_cstrs_self_adaptive_init = cstrs_self_adaptive.__init__
 def _cstrs_self_adaptive_init(self, iters=1, algo=None, seed=None):
     """
     Args:
-        iter (``int``): number of iterations (i.e. calls to the innel algorithm evolve)
-        algo: an :class:`~pygmo.algorithm` or a user-defined algorithm (either C++ or Python - note that *algo*
-             will be deep-copied and stored inside the :class:`~pygmo.cstrs_self_adaptive` instance)
-        seed (``int``): seed used by the internal random number generator
+        iter (int): number of iterations (i.e., calls to the inner algorithm evolve)
+        algo: an :class:`~pygmo.algorithm` or a user-defined algorithm, either C++ or Python (if
+             *algo* is :data:`None`, a :class:`~pygmo.de` algorithm will be used in its stead)
+        seed (int): seed used by the internal random number generator (if *seed* is :data:`None`, a
+             randomly-generated value will be used in its stead)
 
     Raises:
         ValueError: if *iters* is negative or greater than an implementation-defined value
@@ -341,9 +343,10 @@ def _population_init(self, prob=None, size=0, seed=None):
     """
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-            (if ``None``, the population problem will be :class:`~pygmo.null_problem`)
+             (if *prob* ``None``, a :class:`~pygmo.null_problem` will be used in its stead)
         size (``int``): the number of individuals
-        seed (``int``): the random seed (if ``None``, it will be randomly-generated)
+        seed (``int``): the random seed (if *seed* is ``None``, a randomly-generated value will be used
+             in its stead)
 
     Raises:
         TypeError: if *size* is not an ``int`` or *seed* is not ``None`` and not an ``int``
@@ -386,8 +389,7 @@ __original_island_init = island.__init__
 def _island_init(self, **kwargs):
     """
     Keyword Args:
-        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
-          and stored inside the :class:`~pygmo.island` instance)
+        udi: a user-defined island, either Python or C++
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
@@ -477,8 +479,7 @@ def _archi_init(self, n=0, **kwargs):
         n (``int``): the number of islands in the archipelago
 
     Keyword Args:
-        udi: a user-defined island (either Python or C++ - note that *udi* will be deep-copied
-          and stored inside the :class:`~pygmo.island` instances)
+        udi: a user-defined island, either Python or C++
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
