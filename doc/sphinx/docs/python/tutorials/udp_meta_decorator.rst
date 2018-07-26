@@ -202,8 +202,11 @@ Next, we call the fitness function a few times:
 .. doctest::
 
    >>> drb.fitness([1, 2])
+   array([100.])
    >>> drb.fitness([3, 4])
+   array([2504.])
    >>> drb.fitness([5, 6])
+   array([36116.])
 
 We can now verify that all the decision vectors passed so far to the fitness function
 have been logged in the internal :class:`~pygmo.decorator_problem` object:

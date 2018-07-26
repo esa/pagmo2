@@ -99,7 +99,14 @@ class decorator_problem(object):
     [100.]
 
     All the functions in the public API of a UDP can be decorated (see the documentation
-    of :class:`pygmo.problem` for the full list).
+    of :class:`pygmo.problem` for the full list). An extended :ref:`tutorial <py_tutorial_udp_meta_decorator>`
+    on the usage of this class is available in PyGMO's documentation.
+
+    Both *prob* and the decorators will be deep-copied inside the instance upon construction. As
+    usually done in meta-problems, this class will store as an internal data member a :class:`~pygmo.problem`
+    containing a copy of *prob* (this is commonly referred to as the *inner problem* of the
+    meta-problem). The inner problem is accessible via the :attr:`~pygmo.decorator_problem.inner_problem`
+    read-only property.
 
     """
 
@@ -113,7 +120,7 @@ class decorator_problem(object):
 
         Raises:
 
-           ValueError: if at least one of the values in *kwargs* is not callable
+           TypeError: if at least one of the values in *kwargs* is not callable
            unspecified: any exception thrown by the constructor of :class:`~pygmo.problem` or the deep copy
               of *prob* or *kwargs*
 
@@ -138,12 +145,13 @@ class decorator_problem(object):
         for k in kwargs:
             if k.endswith("_decorator"):
                 if not callable(kwargs[k]):
-                    raise ValueError(
+                    raise TypeError(
                         "Cannot register the decorator for the '{}' method: the supplied object "
                         "'{}' is not callable".format(k[:-10], kwargs[k]))
                 self._decors[k[:-10]] = deepcopy(kwargs[k])
             else:
-                warn("Unrecognized keyword argument: '{}'".format(k))
+                warn("A keyword argument without the '_decorator' suffix, '{}', was used in the "
+                     "construction of a decorator problem. This keyword argument will be ignored.".format(k))
 
     @_with_decorator
     def fitness(self, dv):
@@ -230,3 +238,42 @@ class decorator_problem(object):
     @_add_doc(_unconstrain.inner_problem.__doc__)
     def inner_problem(self):
         return self._prob
+
+    def get_decorator(self, fname):
+        """Get the decorator for the function called *fname*.
+
+        This method will return a copy of the decorator that has been registered upon construction
+        for the function called *fname*. If no decorator for *fname* has been specified during
+        construction, :data:`None` will be returned.
+
+        >>> from pygmo import decorator_problem, problem, rosenbrock
+        >>> def f_decor(orig_fitness_function):
+        ...     def new_fitness_function(self, dv):
+        ...         print("Evaluating dv: {}".format(dv))
+        ...         return orig_fitness_function(self, dv)
+        ...     return new_fitness_function
+        >>> dprob = decorator_problem(rosenbrock(), fitness_decorator=f_decor)
+        >>> dprob.get_decorator("fitness") # doctest: +ELLIPSIS
+        <function ...>
+        >>> dprob.get_decorator("gradient") is None
+        True
+
+        Args:
+
+           fname(str): the name of the function whose decorator will be returned
+
+        Returns:
+
+            a copy of the decorator registered for *fname*, or :data:`None` if no decorator for *fname* has been registered
+
+        Raises:
+
+           TypeError: if *fname* is not a string
+           unspecified: any exception thrown by the deep copying of the decorator for *fname*
+
+        """
+        if not isinstance(fname, str):
+            raise TypeError(
+                "The input parameter 'fname' must be a string, but it is of type '{}' instead.".format(type(fname)))
+        from copy import deepcopy
+        return deepcopy(self._decors.get(fname))
