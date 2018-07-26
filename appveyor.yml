@@ -2,13 +2,13 @@ environment:
   TWINE_PASSWORD:
     secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
   matrix:
+    - BUILD_TYPE: "MSVC_64_Debug"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
     - BUILD_TYPE: "MSVC_64_Python35"
       COMPILER: MSVC15
       PLATFORM: "x64"
     - BUILD_TYPE: "MSVC_64_Python36"
-      COMPILER: MSVC15
-      PLATFORM: "x64"
-    - BUILD_TYPE: "MSVC_64_Debug"
       COMPILER: MSVC15
       PLATFORM: "x64"
     - BUILD_TYPE: "MinGW_64_Debug"
@@ -57,7 +57,7 @@ install:
 build_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] mkdir build
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cd build
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_PREFIX_PATH=%CONDA_PREFIX% -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake --build . --config Debug --target install
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] mkdir build_pagmo
