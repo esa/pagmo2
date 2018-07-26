@@ -98,9 +98,15 @@ class decorator_problem(object):
     >>> print(fv)
     [100.]
 
+    An extended :ref:`tutorial <py_tutorial_udp_meta_decorator>` on the usage of this class is available
+    in PyGMO's documentation.
+
     All the functions in the public API of a UDP can be decorated (see the documentation
-    of :class:`pygmo.problem` for the full list). An extended :ref:`tutorial <py_tutorial_udp_meta_decorator>`
-    on the usage of this class is available in PyGMO's documentation.
+    of :class:`pygmo.problem` for the full list). Note that the public API of :class:`~pygmo.decorator_problem`
+    includes the UDP public API: there is a ``fitness()`` method, methods to query the problem's properties,
+    sparsity-related methods, etc. In order to avoid duplication, we do not repeat here the documentation of
+    the UDP API and we document instead only the few methods which are specific to :class:`~pygmo.decorator_problem`.
+    Users can refer to the documentation of :class:`pygmo.problem` for detailed information on the UDP API.
 
     Both *prob* and the decorators will be deep-copied inside the instance upon construction. As
     usually done in meta-problems, this class will store as an internal data member a :class:`~pygmo.problem`
@@ -147,7 +153,7 @@ class decorator_problem(object):
                 if not callable(kwargs[k]):
                     raise TypeError(
                         "Cannot register the decorator for the '{}' method: the supplied object "
-                        "'{}' is not callable".format(k[:-10], kwargs[k]))
+                        "'{}' is not callable.".format(k[:-10], kwargs[k]))
                 self._decors[k[:-10]] = deepcopy(kwargs[k])
             else:
                 warn("A keyword argument without the '_decorator' suffix, '{}', was used in the "
