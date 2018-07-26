@@ -23,7 +23,7 @@ Fix
 
 - Fixes for compiler warnings in GCC 8 (`#197 <https://github.com/esa/pagmo2/pull/197>`__).
 
-- Various documentation fixes and enhancements (`#195 <https://github.com/esa/pagmo2/pull/195>`__,
+- Various documentation and CI fixes and enhancements (`#195 <https://github.com/esa/pagmo2/pull/195>`__,
   `#196 <https://github.com/esa/pagmo2/pull/196>`__).
 
 2.8 (2018-07-12)
