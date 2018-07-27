@@ -38,7 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/python_includes.hpp>
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
-// In every cpp file We need to make sure this is included before everything else,
+// In every cpp file we need to make sure this is included before everything else,
 // with the correct #defines.
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include <pygmo/numpy.hpp>

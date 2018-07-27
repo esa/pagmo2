@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -403,9 +404,9 @@ private:
         std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<double>());
         return x_sh;
     }
-    /// Inner problem
+    // Inner problem
     problem m_problem;
-    /// translation vector
+    // translation vector
     vector_double m_translation;
 };
 } // namespace pagmo

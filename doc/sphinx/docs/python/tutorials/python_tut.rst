@@ -4,7 +4,7 @@ Python tutorials
 ================
 
 Basics
-^^^^^^^^^^^^^^^
+^^^^^^
 
 .. toctree::
   :maxdepth: 2
@@ -27,6 +27,14 @@ Coding your own problem (UDP)
   coding_udp_minlp
   coding_udp_multi_objective
 
+Meta-problems
+^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  udp_meta_decorator
+
 Coding your own island (UDI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -36,7 +44,7 @@ Coding your own island (UDI)
   coding_udi
 
 Local optimization
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 .. toctree::
   :maxdepth: 2
@@ -53,7 +61,7 @@ Multi-objective optimization
   moo_moead
 
 Hypervolumes
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^
 
 .. toctree::
   :maxdepth: 1

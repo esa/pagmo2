@@ -46,5 +46,5 @@ Common Name                                                Docs of the C++ class
 Decompose                                                  :cpp:class:`pagmo::decompose`             :class:`pygmo.decompose`                 
 Translate                                                  :cpp:class:`pagmo::translate`             :class:`pygmo.translate`                 
 Unconstrain                                                :cpp:class:`pagmo::unconstrain`           :class:`pygmo.unconstrain`               
+Decorator                                                  N/A                                       :class:`pygmo.decorator_problem`
 ========================================================== ========================================= =========================================
-

@@ -7,5 +7,4 @@
         "doc/doxygen/xml/": true,
         "doc/sphinx/_build/": true
     },
-    "python.linting.pylintEnabled": false
 }

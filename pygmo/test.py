@@ -88,7 +88,7 @@ class core_test_case(_ut.TestCase):
     def runTest(self):
         import sys
         from numpy import random, all, array
-        from .core import _builtin, _test_to_vd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
+        from .core import _builtin, _test_to_vd, _test_to_vvd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
         from . import __version__
         self.assertTrue(__version__ != "")
         if sys.version_info[0] < 3:
@@ -111,6 +111,10 @@ class core_test_case(_ut.TestCase):
         self.assert_(_test_to_vd((0., 1), 2))
         self.assert_(_test_to_vd(array([0., 1.]), 2))
         self.assert_(_test_to_vd(array([0, 1]), 2))
+        self.assert_(_test_to_vvd([[1., 2, 3], [4, 5, 6]], 2, 3))
+        self.assert_(_test_to_vvd(array([[1., 2, 3], [4, 5, 6]]), 2, 3))
+        self.assertRaises(TypeError, lambda: _test_to_vvd(
+            ([1., 2, 3], [4, 5, 6]), 2, 3))
         self.assertEqual(type(int), _type(int))
         self.assertEqual(str(123), _str(123))
         self.assertEqual(callable(1), _callable(1))
@@ -1356,6 +1360,123 @@ class cstrs_self_adaptive_test_case(_ut.TestCase):
         cstrs_self_adaptive(algo=algorithm(null_algorithm()), seed=5, iters=4)
 
 
+class decorator_problem_test_case(_ut.TestCase):
+    """Test case for the decorator meta-problem
+
+    """
+
+    def runTest(self):
+        from . import decorator_problem as dp, problem
+        from .core import null_problem, rosenbrock
+
+        # Default construction.
+        d = dp()
+        self.assertTrue(isinstance(d.inner_problem, problem))
+        self.assertFalse(d.inner_problem.extract(null_problem) is None)
+        self.assertTrue(d.get_decorator("fitness") is None)
+
+        # C++ problem, test we forward properly the problem properties.
+        rb = rosenbrock()
+        pr = problem(rb)
+        d = dp(prob=rb)
+        self.assertEqual(type(d.inner_problem.extract(rosenbrock)), rosenbrock)
+        self.assertTrue((pr.get_bounds()[0] == d.get_bounds()[0]).all())
+        self.assertTrue((pr.get_bounds()[1] == d.get_bounds()[1]).all())
+        self.assertEqual(pr.get_nec(), d.get_nec())
+        self.assertEqual(pr.get_nic(), d.get_nic())
+        self.assertEqual(pr.get_nix(), d.get_nix())
+        self.assertEqual(pr.get_nobj(), d.get_nobj())
+        # Check that we made a copy of rb on construction.
+        self.assertTrue(id(d.inner_problem.extract(rosenbrock)) != id(rb))
+        # Try construction from a problem object.
+        d = dp(prob=pr)
+        self.assertEqual(type(d.inner_problem.extract(rosenbrock)), rosenbrock)
+        self.assertTrue((pr.get_bounds()[0] == d.get_bounds()[0]).all())
+        self.assertTrue((pr.get_bounds()[1] == d.get_bounds()[1]).all())
+        self.assertEqual(pr.get_nec(), d.get_nec())
+        self.assertEqual(pr.get_nic(), d.get_nic())
+        self.assertEqual(pr.get_nix(), d.get_nix())
+        self.assertEqual(pr.get_nobj(), d.get_nobj())
+        # Check that we made a copy of pr on construction.
+        self.assertTrue(id(d.inner_problem) != id(pr))
+
+        # Check that a non callable decorator throws.
+        self.assertRaises(TypeError, lambda: dp(
+            prob=rb, fitness_decorator=None))
+        with self.assertRaises(TypeError) as cm:
+            dp(prob=rb, fitness_decorator=None)
+        err = cm.exception
+        self.assertEqual(str(err), "Cannot register the decorator for the 'fitness' method: the supplied object "
+                         "'{}' is not callable.".format(None))
+
+        # Test the extra info bits.
+        d = problem(dp(prob=rb))
+        self.assertTrue("No registered decorators." in str(d))
+        self.assertTrue("[decorated]" in str(d))
+        d = problem(dp(prob=rb, fitness_decorator=lambda f: f))
+        self.assertTrue("Registered decorators:" in str(d))
+        self.assertTrue("fitness" in str(d))
+        self.assertTrue("[decorated]" in str(d))
+
+        # Test the get_decorator() method.
+        d = dp(prob=pr)
+        self.assertTrue(d.get_decorator("fitness") is None)
+        d = dp(prob=pr, fitness_decorator=lambda f: f)
+        self.assertFalse(d.get_decorator("fitness") is None)
+        self.assertEqual(d.get_decorator("fitness")("hello"), "hello")
+        with self.assertRaises(TypeError) as cm:
+            d.get_decorator(3)
+        err = cm.exception
+        self.assertEqual(str(err), "The input parameter 'fname' must be a string, "
+                         "but it is of type '{}' instead.".format(int))
+
+        # Decorate a few extra methods.
+        class any_decor(object):
+            def __init__(self, s):
+                self._s = s
+
+            def __call__(self, f):
+                def wrapper(prob, *args, **kwargs):
+                    setattr(prob, self._s + "_decorated", True)
+                    return f(prob, *args, **kwargs)
+                return wrapper
+        dmeths = ["get_nobj", "get_nec", "get_nic", "get_nix",
+                  "has_gradient", "has_gradient_sparsity", "has_hessians",
+                  "has_hessians_sparsity", "has_set_seed", "get_name",
+                  "get_extra_info"]
+        decors = dict((_+"_decorator", any_decor(_)) for _ in dmeths)
+        d = dp(prob=rb, **decors)
+        for _ in dmeths:
+            getattr(d, _)()
+            self.assertTrue(getattr(d, _ + "_decorated"))
+
+        # Run an evolution in an mp_island of a decorated problem, if possible.
+        import sys
+        import os
+        # The mp island requires either Windows or at least Python 3.4.
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            return
+        from . import archipelago, de, mp_island
+
+        # fitness logging decorator.
+        def f_log_decor(orig_fitness_function):
+            def new_fitness_function(self, dv):
+                if hasattr(self, "dv_log"):
+                    self.dv_log.append(dv)
+                else:
+                    self.dv_log = [dv]
+                return orig_fitness_function(self, dv)
+            return new_fitness_function
+
+        a = archipelago(5, algo=de(), prob=dp(rosenbrock(), fitness_decorator=f_log_decor),
+                        pop_size=10, udi=mp_island(), seed=5)
+        a.evolve()
+        a.wait_check()
+        for isl in a:
+            self.assertTrue(
+                len(isl.get_population().problem.extract(dp).dv_log) > 5)
+
+
 class archipelago_test_case(_ut.TestCase):
     """Test case for the archipelago class.
 
@@ -1719,6 +1840,7 @@ def run_test_suite(level=0):
     suite.addTest(unconstrain_test_case())
     suite.addTest(mbh_test_case())
     suite.addTest(cstrs_self_adaptive_test_case())
+    suite.addTest(decorator_problem_test_case())
     try:
         from .core import nlopt
         suite.addTest(nlopt_test_case())
