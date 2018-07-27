@@ -88,7 +88,7 @@ class core_test_case(_ut.TestCase):
     def runTest(self):
         import sys
         from numpy import random, all, array
-        from .core import _builtin, _test_to_vd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
+        from .core import _builtin, _test_to_vd, _test_to_vvd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
         from . import __version__
         self.assertTrue(__version__ != "")
         if sys.version_info[0] < 3:
@@ -111,6 +111,10 @@ class core_test_case(_ut.TestCase):
         self.assert_(_test_to_vd((0., 1), 2))
         self.assert_(_test_to_vd(array([0., 1.]), 2))
         self.assert_(_test_to_vd(array([0, 1]), 2))
+        self.assert_(_test_to_vvd([[1., 2, 3], [4, 5, 6]], 2, 3))
+        self.assert_(_test_to_vvd(array([[1., 2, 3], [4, 5, 6]]), 2, 3))
+        self.assertRaises(TypeError, lambda: _test_to_vvd(
+            ([1., 2, 3], [4, 5, 6]), 2, 3))
         self.assertEqual(type(int), _type(int))
         self.assertEqual(str(123), _str(123))
         self.assertEqual(callable(1), _callable(1))

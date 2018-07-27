@@ -342,8 +342,7 @@ inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
         return a_to_vvd(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
     pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a "
-                                    "vector of vector_double: only lists of doubles and NumPy arrays of doubles "
+                                  + "' to a vector of vector_double: only lists of doubles and NumPy arrays of doubles "
                                     "are supported")
                                      .c_str());
 }
