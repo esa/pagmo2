@@ -98,3 +98,8 @@ Problems exposed from C++
 
 .. autoclass:: pygmo.unconstrain
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.decorator_problem
+   :members:

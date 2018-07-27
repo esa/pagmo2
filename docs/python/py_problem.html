@@ -110,6 +110,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
@@ -182,7 +183,7 @@
 <img alt="../../_images/prob_no_text1.png" src="../../_images/prob_no_text1.png" />
 <dl class="class">
 <dt id="pygmo.problem">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">problem</code><span class="sig-paren">(</span><em>udp = null_problem</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">problem</code><span class="sig-paren">(</span><em>udp = null_problem()</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Problem class.</p>
 <p>This class represents a generic <em>mathematical programming</em> or <em>evolutionary optimization</em> problem in the form:</p>
 <div class="math">
@@ -271,8 +272,7 @@ full list of UDPs already coded in pygmo).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>udp</strong> – a user-defined problem (either C++ or Python - note that <em>udp</em> will be deep-copied
-and stored inside the <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> instance)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>udp</strong> – a user-defined problem, either C++ or Python</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">

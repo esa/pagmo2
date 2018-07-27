@@ -110,6 +110,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
@@ -2122,7 +2123,7 @@ constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygm
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.mbh">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mbh</code><span class="sig-paren">(</span><em>algo = compass_search()</em>, <em>stop = 5</em>, <em>perturb = 1e-2</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mbh</code><span class="sig-paren">(</span><em>algo=None</em>, <em>stop=5</em>, <em>perturb=0.01</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Monotonic Basin Hopping (generalized).</p>
 <p>Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping
 the objective function <span class="math">\(f(\mathbf x_0)\)</span> into the local minima found starting from <span class="math">\(\mathbf x_0\)</span>.
@@ -2155,12 +2156,13 @@ cluster optimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that
-<em>algo</em> will be deep-copied and stored inside the <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> instance)</li>
-<li><strong>stop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – consecutive runs of the inner algorithm that need to result in no improvement for
+<li><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm, either C++ or Python (if
+<em>algo</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.compass_search" title="pygmo.compass_search"><code class="xref py py-class docutils literal"><span class="pre">compass_search</span></code></a> algorithm will be used in its stead)</li>
+<li><strong>stop</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – consecutive runs of the inner algorithm that need to result in no improvement for
 <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a> to stop</li>
-<li><strong>perturb</strong> (<code class="docutils literal"><span class="pre">float</span></code> or array-like object) – perturb the perturbation to be applied to each component</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
+<li><strong>perturb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> or </em><em>array-like object</em>) – the perturbation to be applied to each component</li>
+<li><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – seed used by the internal random number generator (if <em>seed</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, a
+randomly-generated value will be used in its stead)</li>
 </ul>
 </td>
 </tr>
@@ -2179,7 +2181,7 @@ signatures, etc.)</li>
 <dt id="pygmo.mbh.get_log">
 <code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
+(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
 with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">mbh</span></code></a>. A verbosity level <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line at the end of each call to the inner algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2269,8 +2271,8 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <dl class="attribute">
 <dt id="pygmo.mbh.inner_algorithm">
 <code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.mbh.inner_algorithm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inner algorithm of the meta-algorithm</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<dd><p>Inner algorithm of the meta-algorithm.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within this meta-algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2305,7 +2307,7 @@ mismatched function signatures, etc.)</td>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.cstrs_self_adaptive">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span><em>iters = 1</em>, <em>algo = de()</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cstrs_self_adaptive" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cstrs_self_adaptive</code><span class="sig-paren">(</span><em>iters=1</em>, <em>algo=None</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cstrs_self_adaptive" title="Permalink to this definition">¶</a></dt>
 <dd><p>This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm
 (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The
 technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire
@@ -2368,10 +2370,11 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>iter</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of iterations (i.e. calls to the innel algorithm evolve)</li>
-<li><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm (either C++ or Python - note that <em>algo</em>
-will be deep-copied and stored inside the <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> instance)</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator</li>
+<li><strong>iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of iterations (i.e., calls to the inner algorithm evolve)</li>
+<li><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> or a user-defined algorithm, either C++ or Python (if
+<em>algo</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">de</span></code></a> algorithm will be used in its stead)</li>
+<li><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – seed used by the internal random number generator (if <em>seed</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, a
+randomly-generated value will be used in its stead)</li>
 </ul>
 </td>
 </tr>
@@ -2389,7 +2392,7 @@ signatures, etc.)</li>
 <dt id="pygmo.cstrs_self_adaptive.get_log">
 <code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cstrs_self_adaptive.get_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code>. The log frequency depends on the verbosity parameter
-(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
+(by default nothing is logged) which can be set calling <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> constructed
 with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a>. A verbosity level of <code class="docutils literal"><span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> will log one line each <code class="docutils literal"><span class="pre">N</span></code> <code class="docutils literal"><span class="pre">iters</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2437,8 +2440,8 @@ with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="p
 <dl class="attribute">
 <dt id="pygmo.cstrs_self_adaptive.inner_algorithm">
 <code class="descname">inner_algorithm</code><a class="headerlink" href="#pygmo.cstrs_self_adaptive.inner_algorithm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inner algorithm of the meta-algorithm</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within the meta-algorithm.</p>
+<dd><p>Inner algorithm of the meta-algorithm.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> stored within this meta-algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

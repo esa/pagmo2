@@ -110,6 +110,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="python_tut.html">Python tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_tut.html#meta-problems">Meta-problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
@@ -191,7 +192,7 @@ be used to build a pygmo object of type <a class="reference internal" href="../p
 </div>
 <p>Some UDAs (optimization algorithms) are already provided with pygmo and we refer to them as pygmo UDAs.</p>
 <p>For the purpose of this tutorial we are going to use a pygmo UDA called <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>
-to show the basic construction of a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>, but the same logic would also
+to show the basic construction of an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>, but the same logic would also
 apply to a custom UDAs, that is a UDA that is actually coded by the user.</p>
 <p>Let us start:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
@@ -216,7 +217,7 @@ apply to a custom UDAs, that is a UDA that is actually coded by the user.</p>
 </pre></div>
 </div>
 <p>In the code above, after the trivial import of the pygmo package, we define a variable algo
-by constructing a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> from <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>, our implementation
+by constructing an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> from <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>, our implementation
 of the Covariance Matrix Adaptation Evolutionary Strategy. To construct the pygmo UDA we also pass
 some parameters (<code class="docutils literal"><span class="pre">gen</span></code> and <code class="docutils literal"><span class="pre">sigma0</span></code>) whose meaning is documented in <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a>.
 In the following line we inspect the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>. We can see, at a glance, the

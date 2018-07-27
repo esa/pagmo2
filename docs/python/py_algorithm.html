@@ -110,6 +110,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
@@ -182,7 +183,7 @@
 <img alt="../../_images/algo_no_text1.png" src="../../_images/algo_no_text1.png" />
 <dl class="class">
 <dt id="pygmo.algorithm">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">algorithm</code><span class="sig-paren">(</span><em>uda = null_algorithm</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">algorithm</code><span class="sig-paren">(</span><em>uda = null_algorithm()</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Algorithm class.</p>
 <p>This class represents an optimization algorithm. An algorithm can be
 stochastic, deterministic, population based, derivative-free, using hessians,
@@ -227,8 +228,7 @@ full list of UDAs already coded in pygmo).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uda</strong> – a user-defined algorithm (either C++ or Python - note that <em>uda</em> will be deep-copied
-and stored inside the <a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> instance)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uda</strong> – a user-defined algorithm, either C++ or Python</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">

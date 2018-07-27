@@ -110,6 +110,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#local-optimization">Local optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
@@ -203,9 +204,10 @@ an individual currently in the population. The <em>champion</em> is only defined
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-(if <code class="docutils literal"><span class="pre">None</span></code>, the population problem will be <a class="reference internal" href="problems/py_problems.html#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a>)</li>
+(if <em>prob</em> <code class="docutils literal"><span class="pre">None</span></code>, a <a class="reference internal" href="problems/py_problems.html#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a> will be used in its stead)</li>
 <li><strong>size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of individuals</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed (if <code class="docutils literal"><span class="pre">None</span></code>, it will be randomly-generated)</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed (if <em>seed</em> is <code class="docutils literal"><span class="pre">None</span></code>, a randomly-generated value will be used
+in its stead)</li>
 </ul>
 </td>
 </tr>
