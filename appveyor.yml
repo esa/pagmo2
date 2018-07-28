@@ -28,7 +28,7 @@ install:
 # - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y
 # NOTE: we are installing some extra packages here (the same as in the python builds, even though we don't
-# use Python here), because otherwise there's some error arising when trying to detect the nlop installation.
+# use Python here), because otherwise there's some error arising when trying to detect the nlopt installation.
 # Not clear why that's the case, hopefully it's temporary.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel
 # NOTE: need to use "call" because otherwise it won't work within an if block.
