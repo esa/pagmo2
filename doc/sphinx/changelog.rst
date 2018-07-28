@@ -21,6 +21,8 @@ Changes
 Fix
 ~~~
 
+- Fix a bunch of missing includes in ``pagmo.hpp`` (`#202 <https://github.com/esa/pagmo2/pull/202>`__).
+
 - Fixes for compiler warnings in GCC 8 (`#197 <https://github.com/esa/pagmo2/pull/197>`__).
 
 - Various documentation and CI fixes and enhancements (`#195 <https://github.com/esa/pagmo2/pull/195>`__,
