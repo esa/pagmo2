@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
+#include <pagmo/algorithms/ihs.hpp>
 #if defined(PAGMO_WITH_IPOPT)
 #include <pagmo/algorithms/ipopt.hpp>
 #endif
@@ -48,12 +49,15 @@ see https://www.gnu.org/licenses/. */
 #if defined(PAGMO_WITH_NLOPT)
 #include <pagmo/algorithms/nlopt.hpp>
 #endif
+#include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
+#include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/sga.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
+#include <pagmo/algorithms/xnes.hpp>
 #include <pagmo/archipelago.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -77,6 +81,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/luksan_vlcek1.hpp>
+#include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -91,6 +97,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/constrained.hpp>
 #include <pagmo/utils/discrepancy.hpp>
 #include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_fpras.hpp>
