@@ -4,8 +4,6 @@ cmake_minimum_required(VERSION 3.2)
 # Module path setup.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
 
-message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
-
 # Set default build type to "Release".
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING
@@ -32,7 +30,8 @@ set(PAGMO_PROJECT_VERSION 2.9)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
-    project(pagmo VERSION ${PAGMO_PROJECT_VERSION})
+    project(pagmo VERSION ${PAGMO_PROJECT_VERSION} LANGUAGES CXX C)
+    message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
     enable_testing()
 
     # Build option: enable test set.
@@ -51,7 +50,8 @@ if(PAGMO_BUILD_PAGMO)
     option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
 else()
     # Initial setup of a pygmo build.
-    project(pygmo VERSION ${PAGMO_PROJECT_VERSION})
+    project(pygmo VERSION ${PAGMO_PROJECT_VERSION} LANGUAGES CXX C)
+    message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
 endif()
 
 # Common general bits.
