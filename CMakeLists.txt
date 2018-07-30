@@ -48,6 +48,18 @@ if(PAGMO_BUILD_PAGMO)
 
     # Build option: enable Ipopt.
     option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
+
+    # Detect if we can enable the fork_island UDI.
+    include(CheckIncludeFileCXX)
+    CHECK_INCLUDE_FILE_CXX("sys/types.h" PAGMO_HAVE_SYS_TYPES_H)
+    CHECK_INCLUDE_FILE_CXX("sys/wait.h" PAGMO_HAVE_SYS_WAIT_H)
+    CHECK_INCLUDE_FILE_CXX("unistd.h" PAGMO_HAVE_UNISTD_H)
+    if(PAGMO_HAVE_SYS_TYPES_H AND PAGMO_HAVE_SYS_WAIT_H AND PAGMO_HAVE_UNISTD_H)
+        message(STATUS "Enabling the fork_island UDI.")
+        set(PAGMO_ENABLE_FORK_ISLAND YES)
+    else()
+        set(PAGMO_ENABLE_FORK_ISLAND NO)
+    endif()
 else()
     # Initial setup of a pygmo build.
     project(pygmo VERSION ${PAGMO_PROJECT_VERSION} LANGUAGES CXX C)
