@@ -34,11 +34,15 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/islands/fork_island.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 
+#include <chrono>
+
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(fork_island_test)
 {
-    island fi_0(fork_island{}, de{}, rosenbrock{}, 2);
+    island fi_0(fork_island{}, de{10000000}, rosenbrock{100}, 20);
     fi_0.evolve();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << fi_0 << '\n';
     fi_0.wait_check();
 }
