@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <exception>
 #include <ios>
 #include <iostream>
 #include <iterator>
@@ -66,14 +67,10 @@ class fork_island
                                             + "() in the fork island failed with error code " + std::to_string(errno)
                                             + " and the following error message: '" + std::strerror(errno) + "'");
     }
-    static void exit_unrecoverable()
-    {
-        std::cerr << "An unrecoverable error occurred in fork_island, giving up now :(" << std::endl;
-        std::exit(1);
-    }
     // Small RAII wrapper around a pipe.
     struct pipe_t {
-        pipe_t()
+        // Def ctor: will create the pipe.
+        pipe_t() : r_status(true), w_status(true)
         {
             int fd[2];
             if (pipe(fd) == -1) {
@@ -84,15 +81,53 @@ class fork_island
             read = fd[0];
             write = fd[1];
         }
+        // Try to close the reading end if it has not been closed already.
+        // This will throw on error.
+        void close_r()
+        {
+            if (r_status) {
+                if (close(read) == -1) {
+                    raise_errno("close");
+                }
+                r_status = false;
+            }
+        }
+        // Try to close the writing end if it has not been closed already.
+        // This will throw on error.
+        void close_w()
+        {
+            if (w_status) {
+                if (close(write) == -1) {
+                    raise_errno("close");
+                }
+                w_status = false;
+            }
+        }
         ~pipe_t()
         {
             // Attempt to close the pipe on destruction.
-            // These calls could fail in theory.
-            close(read);
-            close(write);
+            try {
+                close_r();
+                close_w();
+            } catch (...) {
+                // We are in a dtor, the error is not recoverable.
+                std::cerr
+                    << "An unrecoverable error was raised in the destructor of a pipe in fork_island(). Exiting now."
+                    << std::endl;
+                std::exit(1);
+            }
         }
+        // The file descriptors of the two ends of the pipe.
         int read, write;
+        // Flag to signal the status of the two ends
+        // of the pipe: true for open, false for closed.
+        bool r_status, w_status;
     };
+    // The structure we use to pass messages from the child to the parent:
+    // - int, status flag,
+    // - string, error message,
+    // - the algorithm used for evolution,
+    // - the evolved population.
     using message_t = std::tuple<int, std::string, algorithm, population>;
 
 public:
@@ -102,7 +137,11 @@ public:
     }
     void run_evolve(island &isl) const
     {
+        // A message that will be used both by parent and child.
+        message_t m;
+        // The pipe.
         pipe_t p;
+        // Try to fork now.
         auto child_pid = fork();
         if (child_pid == -1) {
             // Forking failed.
@@ -110,13 +149,9 @@ public:
         }
         if (child_pid) {
             // We are in the parent.
-            // Init the message from the child.
-            message_t m;
             try {
                 // Close the write descriptor, we don't need to send anything to the child.
-                if (close(p.write) == -1) {
-                    raise_errno("close");
-                }
+                p.close_w();
                 // Prepare a local buffer and a stringstream, then read the data from the child.
                 char buffer[1024];
                 std::stringstream ss;
@@ -136,9 +171,7 @@ public:
                     iarchive(m);
                 }
                 // Close the read descriptor.
-                if (close(p.read) == -1) {
-                    raise_errno("close");
-                }
+                p.close_r();
             } catch (...) {
                 // Something failed above. Try to kill the child
                 // before re-raising the error.
@@ -146,7 +179,10 @@ public:
                     // The signal delivery to the child failed, and not because
                     // the child does not exist any more (if the child did not exist,
                     // errno would be ESRCH).
-                    exit_unrecoverable();
+                    std::cerr << "An unrecoverable error was raised while handling another error in the parent process "
+                                 "of fork_island(). Giving up now."
+                              << std::endl;
+                    std::exit(1);
                 }
                 // Re-raise.
                 throw;
@@ -158,27 +194,19 @@ public:
                                                 "child process. The full error message reported by the child is:\n"
                                                     + std::get<1>(m));
             }
-            isl.set_algorithm(std::get<2>(m));
-            isl.set_population(std::get<3>(m));
-            std::cout << "parent, everything ok!\n";
+            isl.set_algorithm(std::move(std::get<2>(m)));
+            isl.set_population(std::move(std::get<3>(m)));
         } else {
-            try {
-                // We are in the child.
-                // Close the read descriptor, we don't need to read anything from the parent.
-                if (close(p.read) == -1) {
-                    raise_errno("close");
-                }
-                // Run the evolution.
-                auto algo = isl.get_algorithm();
-                auto new_pop = algo.evolve(isl.get_population());
-                // Pack in a tuple and serialize the result of the evolution.
-                message_t m(0, "", std::move(algo), std::move(new_pop));
+            // We are in the child.
+            //
+            // A small helper to send the serialized representation of
+            // a message_t to the parent.
+            auto send_message = [&p](const message_t &ms) {
                 std::stringstream ss;
                 {
                     cereal::BinaryOutputArchive oarchive(ss);
-                    oarchive(m);
+                    oarchive(ms);
                 }
-                // Now start the process of sending back the data to the parent.
                 char buffer[1024];
                 while (!ss.eof()) {
                     // Copy a chunk of data from the stream to the local buffer.
@@ -191,16 +219,57 @@ public:
                         raise_errno("write");
                     }
                 }
+            };
+            // Fatal error message.
+            constexpr char fatal_msg[]
+                = "An unrecoverable error was raised while handling another error in the child process "
+                  "of fork_island(). Giving up now.";
+            try {
+                // Close the read descriptor, we don't need to read anything from the parent.
+                p.close_r();
+                // Run the evolution.
+                auto algo = isl.get_algorithm();
+                auto new_pop = algo.evolve(isl.get_population());
+                // Pack in m and serialize the result of the evolution.
+                // NOTE: m was def cted, which, for tuples, value-inits all members.
+                // So the status flag is already zero and the error message empty.
+                std::get<2>(m) = std::move(algo);
+                std::get<3>(m) = std::move(new_pop);
+                // Send the message.
+                send_message(m);
                 // Close the write descriptor.
-                if (close(p.write) == -1) {
-                    raise_errno("close");
-                }
-                std::cout << "child, everything ok!\n";
+                p.close_w();
                 // All done, we can kill the child.
-                // std::exit(0);
-            } catch (...) {
-                // TODO
                 std::exit(0);
+            } catch (const std::exception &e) {
+                // If we caught an std::exception, set the error message in
+                // m before continuing.
+                try {
+                    std::get<1>(m) = e.what();
+                } catch (...) {
+                    std::cerr << fatal_msg << std::endl;
+                    std::exit(1);
+                }
+            } catch (...) {
+                // Not an std::exception, we won't have an error message.
+            }
+            // If we get here, it means that something went wrong above. We will try
+            // to send an error message back to the parent, failing that we will bail out.
+            // Set the error flag.
+            std::get<0>(m) = 1;
+            try {
+                // Make sure the algo/pop in m are set to serializable entities.
+                std::get<2>(m) = algorithm{};
+                std::get<3>(m) = population{};
+                // Send the message.
+                send_message(m);
+                // Close the write descriptor.
+                p.close_w();
+                // All done, we can kill the child.
+                std::exit(0);
+            } catch (...) {
+                std::cerr << fatal_msg << std::endl;
+                std::exit(1);
             }
         }
     }

@@ -38,7 +38,7 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(fork_island_test)
 {
-    island fi_0(fork_island{}, de{}, rosenbrock{}, 20);
+    island fi_0(fork_island{}, de{}, rosenbrock{}, 2);
     fi_0.evolve();
     fi_0.wait_check();
 }
