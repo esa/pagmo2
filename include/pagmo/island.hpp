@@ -1130,14 +1130,17 @@ private:
  * This method will use copies of <tt>isl</tt>'s
  * algorithm and population, obtained via island::get_algorithm() and island::get_population(),
  * to evolve the input island's population. The evolved population will be assigned to \p isl
- * using island::set_population().
+ * using island::set_population(), and the algorithm used for the evolution will be assigned
+ * to \p isl using island::set_algorithm().
  *
  * @param isl the pagmo::island that will undergo evolution.
  *
  * @throws std::invalid_argument if <tt>isl</tt>'s algorithm or problem do not provide
  * at least the pagmo::thread_safety::basic thread safety guarantee.
- * @throws unspecified any exception thrown by island::get_algorithm(), island::get_population(),
- * island::set_population().
+ * @throws unspecified any exception thrown by:
+ * - island::get_algorithm(), island::get_population(),
+ * - island::set_algorithm(), island::set_population(),
+ * - algorithm::evolve().
  */
 inline void thread_island::run_evolve(island &isl) const
 {
@@ -1151,7 +1154,14 @@ inline void thread_island::run_evolve(island &isl) const
         pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
                                            "thread safety guarantee");
     }
-    isl.set_population(isl.get_algorithm().evolve(isl.get_population()));
+    // Get out a copy of the algorithm for evolution.
+    const auto algo = isl.get_algorithm();
+    // Replace the island's population with the evolved population.
+    isl.set_population(algo.evolve(isl.get_population()));
+    // Replace the island's algorithm with the algorithm used for the evolution.
+    // NOTE: if set_algorithm() fails, we will have the new population with the
+    // original algorithm, which is still a valid state for the island.
+    isl.set_algorithm(algo);
 }
 
 /// Archipelago.
