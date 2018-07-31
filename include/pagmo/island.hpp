@@ -1155,13 +1155,13 @@ inline void thread_island::run_evolve(island &isl) const
                                            "thread safety guarantee");
     }
     // Get out a copy of the algorithm for evolution.
-    const auto algo = isl.get_algorithm();
+    auto algo = isl.get_algorithm();
     // Replace the island's population with the evolved population.
     isl.set_population(algo.evolve(isl.get_population()));
     // Replace the island's algorithm with the algorithm used for the evolution.
     // NOTE: if set_algorithm() fails, we will have the new population with the
     // original algorithm, which is still a valid state for the island.
-    isl.set_algorithm(algo);
+    isl.set_algorithm(std::move(algo));
 }
 
 /// Archipelago.
