@@ -16,6 +16,9 @@ New
 Changes
 ~~~~~~~
 
+- Ensure that, in :cpp:class:`~pagmo::thread_island`, the algorithm used for the evolution replaces the original algorithm
+  at the end of the evolution (`#203 <https://github.com/esa/pagmo2/pull/203>`__).
+
 - The pip pygmo package for Python 3.4 (Linux) has been dropped (`#196 <https://github.com/esa/pagmo2/pull/196>`__).
 
 Fix
@@ -26,7 +29,7 @@ Fix
 - Fixes for compiler warnings in GCC 8 (`#197 <https://github.com/esa/pagmo2/pull/197>`__).
 
 - Various documentation and CI fixes and enhancements (`#195 <https://github.com/esa/pagmo2/pull/195>`__,
-  `#196 <https://github.com/esa/pagmo2/pull/196>`__).
+  `#196 <https://github.com/esa/pagmo2/pull/196>`__, `#204 <https://github.com/esa/pagmo2/pull/204>`__).
 
 2.8 (2018-07-12)
 ----------------
