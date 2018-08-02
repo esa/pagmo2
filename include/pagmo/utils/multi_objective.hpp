@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -85,7 +85,7 @@ inline void reksum(std::vector<std::vector<double>> &retval, const std::vector<p
         }
     }
 }
-}
+} // namespace detail
 
 /// Pareto-dominance
 /**
@@ -106,9 +106,9 @@ inline void reksum(std::vector<std::vector<double>> &retval, const std::vector<p
 inline bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
 {
     if (obj1.size() != obj2.size()) {
-        pagmo_throw(std::invalid_argument, "Different number of objectives found in input fitnesses: "
-                                               + std::to_string(obj1.size()) + " and " + std::to_string(obj2.size())
-                                               + ". I cannot define dominance");
+        pagmo_throw(std::invalid_argument,
+                    "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) + " and "
+                        + std::to_string(obj2.size()) + ". I cannot define dominance");
     }
     vector_double::size_type count1 = 0u;
     vector_double::size_type count2 = 0u;

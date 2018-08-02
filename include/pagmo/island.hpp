@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -138,7 +138,7 @@ namespace detail
 template <typename>
 struct disable_udi_checks : std::false_type {
 };
-}
+} // namespace detail
 
 /// Detect user-defined islands (UDI).
 /**
@@ -168,9 +168,7 @@ namespace detail
 {
 
 struct isl_inner_base {
-    virtual ~isl_inner_base()
-    {
-    }
+    virtual ~isl_inner_base() {}
     virtual std::unique_ptr<isl_inner_base> clone() const = 0;
     virtual void run_evolve(island &) const = 0;
     virtual std::string get_name() const = 0;
@@ -190,12 +188,8 @@ struct isl_inner final : isl_inner_base {
     isl_inner &operator=(const isl_inner &) = delete;
     isl_inner &operator=(isl_inner &&) = delete;
     // Constructors from T.
-    explicit isl_inner(const T &x) : m_value(x)
-    {
-    }
-    explicit isl_inner(T &&x) : m_value(std::move(x))
-    {
-    }
+    explicit isl_inner(const T &x) : m_value(x) {}
+    explicit isl_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of island.
     virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
@@ -285,7 +279,7 @@ inline bool future_running(const std::future<void> &f)
 {
     return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
 }
-}
+} // namespace detail
 
 /// Thread island.
 /**
@@ -413,7 +407,7 @@ struct island_data {
     archipelago *archi_ptr = nullptr;
     task_queue queue;
 };
-}
+} // namespace detail
 
 /// Evolution status.
 /**
@@ -446,7 +440,7 @@ struct island_static_data {
     // A map to link a human-readable description to evolve_status.
     // NOTE: in C++11 hashing of enums might not be available. Provide our own.
     struct status_hasher {
-        std::size_t operator()(evolve_status es) const
+        std::size_t operator()(evolve_status es) const noexcept
         {
             return std::hash<int>{}(static_cast<int>(es));
         }
@@ -461,7 +455,7 @@ const typename island_static_data<T>::status_map_t island_static_data<T>::status
        {evolve_status::busy, "busy"},
        {evolve_status::idle_error, "idle - **error occurred**"},
        {evolve_status::busy_error, "busy - **error occurred**"}};
-}
+} // namespace detail
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
@@ -551,9 +545,7 @@ public:
      *
      * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
      */
-    island() : m_ptr(detail::make_unique<idata_t>())
-    {
-    }
+    island() : m_ptr(detail::make_unique<idata_t>()) {}
     /// Copy constructor.
     /**
      * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population
@@ -588,9 +580,8 @@ public:
 
 private:
     template <typename Algo, typename Pop>
-    using algo_pop_enabler = enable_if_t<std::is_constructible<algorithm, Algo &&>::value
-                                             && std::is_same<population, uncvref_t<Pop>>::value,
-                                         int>;
+    using algo_pop_enabler = enable_if_t<
+        std::is_constructible<algorithm, Algo &&>::value && std::is_same<population, uncvref_t<Pop>>::value, int>;
 
 public:
     /// Constructor from algorithm and population.
@@ -1109,14 +1100,17 @@ private:
  * This method will use copies of <tt>isl</tt>'s
  * algorithm and population, obtained via island::get_algorithm() and island::get_population(),
  * to evolve the input island's population. The evolved population will be assigned to \p isl
- * using island::set_population().
+ * using island::set_population(), and the algorithm used for the evolution will be assigned
+ * to \p isl using island::set_algorithm().
  *
  * @param isl the pagmo::island that will undergo evolution.
  *
  * @throws std::invalid_argument if <tt>isl</tt>'s algorithm or problem do not provide
  * at least the pagmo::thread_safety::basic thread safety guarantee.
- * @throws unspecified any exception thrown by island::get_algorithm(), island::get_population(),
- * island::set_population().
+ * @throws unspecified any exception thrown by:
+ * - island::get_algorithm(), island::get_population(),
+ * - island::set_algorithm(), island::set_population(),
+ * - algorithm::evolve().
  */
 inline void thread_island::run_evolve(island &isl) const
 {
@@ -1130,7 +1124,14 @@ inline void thread_island::run_evolve(island &isl) const
         pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
                                            "thread safety guarantee");
     }
-    isl.set_population(isl.get_algorithm().evolve(isl.get_population()));
+    // Get out a copy of the algorithm for evolution.
+    auto algo = isl.get_algorithm();
+    // Replace the island's population with the evolved population.
+    isl.set_population(algo.evolve(isl.get_population()));
+    // Replace the island's algorithm with the algorithm used for the evolution.
+    // NOTE: if set_algorithm() fails, we will have the new population with the
+    // original algorithm, which is still a valid state for the island.
+    isl.set_algorithm(std::move(algo));
 }
 
 /// Archipelago.
@@ -1457,9 +1458,8 @@ public:
     island &operator[](size_type i)
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the island at index " + std::to_string(i)
-                            + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1479,9 +1479,8 @@ public:
     const island &operator[](size_type i) const
     {
         if (i >= size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the island at index " + std::to_string(i)
-                            + ": the archipelago has a size of only " + std::to_string(size()));
+            pagmo_throw(std::out_of_range, "cannot access the island at index " + std::to_string(i)
+                                               + ": the archipelago has a size of only " + std::to_string(size()));
         }
         return *m_islands[i];
     }
@@ -1875,9 +1874,9 @@ public:
     {
         std::lock_guard<std::mutex> lock(m_migrants_mutex);
         if (i >= m_migrants.size()) {
-            pagmo_throw(std::out_of_range,
-                        "cannot access the migrants of the island at index " + std::to_string(i)
-                            + ": the migrants database has a size of only " + std::to_string(m_migrants.size()));
+            pagmo_throw(std::out_of_range, "cannot access the migrants of the island at index " + std::to_string(i)
+                                               + ": the migrants database has a size of only "
+                                               + std::to_string(m_migrants.size()));
         }
         return m_migrants[i];
     }
@@ -2092,7 +2091,7 @@ inline void island::evolve(unsigned n)
         // LCOV_EXCL_STOP
     }
 }
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_ISLAND(pagmo::thread_island)
 

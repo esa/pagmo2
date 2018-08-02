@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -61,6 +61,6 @@ inline std::ostream &operator<<(std::ostream &os, thread_safety ts)
 }
 
 #endif
-}
+} // namespace pagmo
 
 #endif

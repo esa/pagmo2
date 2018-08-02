@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -422,7 +422,7 @@ private:
     // adapts the decomposition reference point whenever a better point is computed
     bool m_adapt_ideal;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::decompose)
 

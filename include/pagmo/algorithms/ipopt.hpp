@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -83,7 +83,7 @@ struct ipopt_data {
     // A map to link a human-readable description to Ipopt return codes.
     // NOTE: in C++11 hashing of enums might not be available. Provide our own.
     struct res_hasher {
-        std::size_t operator()(Ipopt::ApplicationReturnStatus res) const
+        std::size_t operator()(Ipopt::ApplicationReturnStatus res) const noexcept
         {
             return std::hash<int>{}(static_cast<int>(res));
         }
@@ -152,9 +152,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
 
         // We need the gradient.
         if (!m_prob.has_gradient()) {
-            pagmo_throw(std::invalid_argument,
-                        "the ipopt algorithm needs the gradient, but the problem named '" + m_prob.get_name()
-                            + "' does not provide it");
+            pagmo_throw(std::invalid_argument, "the ipopt algorithm needs the gradient, but the problem named '"
+                                                   + m_prob.get_name() + "' does not provide it");
         }
 
         // Prepare the dv used for fitness computation.
@@ -651,7 +650,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     // will be re-thrown in the ipopt::evolve() method.
     std::exception_ptr m_eptr;
 };
-}
+} // namespace detail
 
 /// Ipopt.
 /**
@@ -732,9 +731,8 @@ class ipopt : public not_population_based
     static void opt_checker(bool status, const Pair &p, const std::string &op_type)
     {
         if (!status) {
-            pagmo_throw(std::invalid_argument,
-                        "failed to set the ipopt " + op_type + " option '" + p.first
-                            + "' to the value: " + detail::to_string(p.second));
+            pagmo_throw(std::invalid_argument, "failed to set the ipopt " + op_type + " option '" + p.first
+                                                   + "' to the value: " + detail::to_string(p.second));
         }
     }
 
@@ -808,9 +806,8 @@ public:
                             "the value of the initial guess at index " + std::to_string(i) + " is NaN");
             }
             if (initial_guess[i] < bounds.first[i] || initial_guess[i] > bounds.second[i]) {
-                pagmo_throw(std::invalid_argument,
-                            "the value of the initial guess at index " + std::to_string(i)
-                                + " is outside the problem's bounds");
+                pagmo_throw(std::invalid_argument, "the value of the initial guess at index " + std::to_string(i)
+                                                       + " is outside the problem's bounds");
             }
         }
 
@@ -1175,7 +1172,7 @@ private:
     unsigned m_verbosity = 0;
     mutable log_type m_log;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_ALGORITHM(pagmo::ipopt)
 

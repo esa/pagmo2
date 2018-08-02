@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -70,14 +70,14 @@ public:
 
     /// Compute hypervolume
     /**
-    * Computes the hypervolume using the WFG algorithm.
-    *
-    * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    *
-    * @return hypervolume.
-    */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+     * Computes the hypervolume using the WFG algorithm.
+     *
+     * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the points
+     *
+     * @return hypervolume.
+     */
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         allocate_wfg_members(points, r_point);
         double hv = compute_hv(1);
@@ -87,25 +87,25 @@ public:
 
     /// Contributions method
     /**
-    * This method employs a slightly modified version of the original WFG algorithm to suit the computation of the
-    * exclusive contributions.
-    * It differs from the IWFG algorithm (referenced below), as we do not use the priority-queueing mechanism, but
-    * compute every exclusive contribution instead.
-    * This may suggest that the algorithm for the extreme contributor itself reduces to the 'naive' approach. It is not
-    * the case however,
-    * as we utilize the benefits of the 'limitset', before we begin the recursion.
-    * This simplifies the sub problems for each exclusive computation right away, which makes the whole algorithm much
-    * faster, and in many cases only slower than regular WFG algorithm by a constant factor.
-    *
-    * @see "Lyndon While and Lucas Bradstreet. Applying the WFG Algorithm To Calculate Incremental Hypervolumes. 2012
-    * IEEE Congress on Evolutionary Computation. CEC 2012, pages 489-496. IEEE, June 2012."
-    *
-    * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    *
-    * @return the single contributions
-    */
-    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
+     * This method employs a slightly modified version of the original WFG algorithm to suit the computation of the
+     * exclusive contributions.
+     * It differs from the IWFG algorithm (referenced below), as we do not use the priority-queueing mechanism, but
+     * compute every exclusive contribution instead.
+     * This may suggest that the algorithm for the extreme contributor itself reduces to the 'naive' approach. It is not
+     * the case however,
+     * as we utilize the benefits of the 'limitset', before we begin the recursion.
+     * This simplifies the sub problems for each exclusive computation right away, which makes the whole algorithm much
+     * faster, and in many cases only slower than regular WFG algorithm by a constant factor.
+     *
+     * @see "Lyndon While and Lucas Bradstreet. Applying the WFG Algorithm To Calculate Incremental Hypervolumes. 2012
+     * IEEE Congress on Evolutionary Computation. CEC 2012, pages 489-496. IEEE, June 2012."
+     *
+     * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the points
+     *
+     * @return the single contributions
+     */
+    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         std::vector<double> c;
         c.reserve(points.size());
@@ -135,14 +135,14 @@ public:
 
     /// Verify before compute method
     /**
-    * Verifies whether given algorithm suits the requested data.
-    *
-    * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the vector of points
-    *
-    * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
-    */
-    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
+     * Verifies whether given algorithm suits the requested data.
+     *
+     * @param points vector of points containing the D-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the vector of points
+     *
+     * @throws value_error when trying to compute the hypervolume for the non-maximal reference point
+     */
+    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         hv_algorithm::assert_minimisation(points, r_point);
     }
@@ -151,7 +151,7 @@ public:
     /**
      * @return a pointer to a new object cloning this
      */
-    std::shared_ptr<hv_algorithm> clone() const
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new hvwfg(*this));
     }
@@ -160,7 +160,7 @@ public:
     /**
      * @return The name of this particular algorithm
      */
-    std::string get_name() const
+    std::string get_name() const override
     {
         return "WFG algorithm";
     }
@@ -316,8 +316,8 @@ private:
 
     /// Comparator function for sorting
     /**
-    * Comparison function for WFG. Can't be static in order to have access to member variable m_current_slice.
-    */
+     * Comparison function for WFG. Can't be static in order to have access to member variable m_current_slice.
+     */
     bool cmp_points(double *a, double *b) const
     {
         for (auto i = m_current_slice; i > 0u; --i) {
@@ -413,5 +413,5 @@ private:
     // Dimension at which WFG stops the slicing
     const unsigned int m_stop_dimension;
 };
-}
+} // namespace pagmo
 #endif

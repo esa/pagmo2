@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -38,7 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/python_includes.hpp>
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
-// In every cpp file We need to make sure this is included before everything else,
+// In every cpp file we need to make sure this is included before everything else,
 // with the correct #defines.
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include <pygmo/numpy.hpp>
@@ -619,8 +619,10 @@ BOOST_PYTHON_MODULE(core)
              pygmo::algorithm_get_thread_safety_docstring().c_str());
 
     // Expose problems and algorithms.
-    pygmo::expose_problems();
-    pygmo::expose_algorithms();
+    pygmo::expose_problems_0();
+    pygmo::expose_problems_1();
+    pygmo::expose_algorithms_0();
+    pygmo::expose_algorithms_1();
 
     // Exposition of various structured utilities
     // Hypervolume class

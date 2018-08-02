@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -50,63 +50,60 @@ namespace pagmo
 
 /// Base hypervolume algorithm class.
 /**
-* This class represents the abstract hypervolume algorithm used for computing
-* the hypervolume indicator (also known as Lebesgue measure, or S-metric), and other
-* measures that can derive from it, e.g. exclusive contribution by given point
-*
-* There are the following public methods available:
-*
-* - 'compute' - returns the total hypervolume of the set of points
-* - 'exclusive' - returns the exclusive volume contributed by a given point
-* - 'least_contributor' - returns the index of the point contributing the least volume
-* - 'greatest_contributor' - returns the index of the point contributing the most volume
-* - 'contributions' - returns the vector of exclusive contributions for each of the points.
-*
-* Additionally, the private method extreme_contributor can be overloaded:
-* - 'extreme_contributor' - returns an index of a single individual that contributes either the least or the greatest
-*  amount of the volume. The distinction between the extreme contributors is made using a comparator function.
-*  Purpose of this method is to avoid repeating a similar code for the least and the greatest contributor methods.
-*  In many cases it's just a matter of a single alteration in a comparison sign '<' to '>'.
-*
-* This class provides a base for an interface for any hv_algorithm that may be added.
-* The most important method to implement is the 'compute' method, as the remaining methods can be derived from it.
-* If no other method than 'compute' is implemented, the base class will use a naive approach to provide the other
-* functionalities:
-*
-* 'hv_algorithm::exclusive' method relies on 'compute' method, by computing the hypervolume twice (e.g. ExclusiveHV =
-* HV(P) -
-* HV(P/{p}))
-* 'hv_algorithm::contributions' method relies on 'compute' method as well, by computing the exclusive volume for each
-* point
-* using the approach above.
-* 'hv_algorithm::extreme_contributor' (private method) relies on the 'hv_algorithm::contributions' method in order to
-* elicit the correct
-* extreme individual.
-* 'hv_algorithm::least_contributor' and 'hv_algorithm::greatest_contributor' methods rely on
-* 'hv_algorithm::extreme_contributor' method by
-* providing the correct comparator.
-*
-* Thanks to that, any newly implemented hypervolume algorithm that overloads the 'compute' method, gets the
-* functionalities above as well.
-* It is often the case that the algorithm may provide a better solution for each of the features above, e.g. overloading
-* the 'hv_algorithm::extreme_contributor'
-* method with an efficient implementation will automatically speed up the 'least_contributor' and the
-* 'greatest_contributor' methods as well.
-*
-* Additionally, any newly implemented hypervolume algorithm should overload the 'hv_algorithm::verify_before_compute'
-* method in
-* order to prevent
-* the computation in case of incompatible data.
-*
-*/
+ * This class represents the abstract hypervolume algorithm used for computing
+ * the hypervolume indicator (also known as Lebesgue measure, or S-metric), and other
+ * measures that can derive from it, e.g. exclusive contribution by given point
+ *
+ * There are the following public methods available:
+ *
+ * - 'compute' - returns the total hypervolume of the set of points
+ * - 'exclusive' - returns the exclusive volume contributed by a given point
+ * - 'least_contributor' - returns the index of the point contributing the least volume
+ * - 'greatest_contributor' - returns the index of the point contributing the most volume
+ * - 'contributions' - returns the vector of exclusive contributions for each of the points.
+ *
+ * Additionally, the private method extreme_contributor can be overloaded:
+ * - 'extreme_contributor' - returns an index of a single individual that contributes either the least or the greatest
+ *  amount of the volume. The distinction between the extreme contributors is made using a comparator function.
+ *  Purpose of this method is to avoid repeating a similar code for the least and the greatest contributor methods.
+ *  In many cases it's just a matter of a single alteration in a comparison sign '<' to '>'.
+ *
+ * This class provides a base for an interface for any hv_algorithm that may be added.
+ * The most important method to implement is the 'compute' method, as the remaining methods can be derived from it.
+ * If no other method than 'compute' is implemented, the base class will use a naive approach to provide the other
+ * functionalities:
+ *
+ * 'hv_algorithm::exclusive' method relies on 'compute' method, by computing the hypervolume twice (e.g. ExclusiveHV =
+ * HV(P) -
+ * HV(P/{p}))
+ * 'hv_algorithm::contributions' method relies on 'compute' method as well, by computing the exclusive volume for each
+ * point
+ * using the approach above.
+ * 'hv_algorithm::extreme_contributor' (private method) relies on the 'hv_algorithm::contributions' method in order to
+ * elicit the correct
+ * extreme individual.
+ * 'hv_algorithm::least_contributor' and 'hv_algorithm::greatest_contributor' methods rely on
+ * 'hv_algorithm::extreme_contributor' method by
+ * providing the correct comparator.
+ *
+ * Thanks to that, any newly implemented hypervolume algorithm that overloads the 'compute' method, gets the
+ * functionalities above as well.
+ * It is often the case that the algorithm may provide a better solution for each of the features above, e.g.
+ * overloading the 'hv_algorithm::extreme_contributor' method with an efficient implementation will automatically speed
+ * up the 'least_contributor' and the 'greatest_contributor' methods as well.
+ *
+ * Additionally, any newly implemented hypervolume algorithm should overload the 'hv_algorithm::verify_before_compute'
+ * method in
+ * order to prevent
+ * the computation in case of incompatible data.
+ *
+ */
 class hv_algorithm
 {
 public:
     /// Destructor required for pure virtual methods
     hv_algorithm() = default;
-    virtual ~hv_algorithm()
-    {
-    }
+    virtual ~hv_algorithm() {}
     /// Default copy constructor
     hv_algorithm(const hv_algorithm &) = default;
     /// Default move constructor
@@ -114,15 +111,15 @@ public:
 
     /// Compute volume between two points
     /**
-    * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
-    *
-    * @param a first point defining the hypercube
-    * @param b second point defining the hypercube
-    * @param dim_bound dimension boundary for the volume. If equal to 0 (default value), then compute the volume of
-    * whole vector. Any positive number limits the computation from dimension 1 to dim_bound INCLUSIVE.
-    *
-    * @return volume of hypercube defined by points a and b
-    */
+     * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
+     *
+     * @param a first point defining the hypercube
+     * @param b second point defining the hypercube
+     * @param dim_bound dimension boundary for the volume. If equal to 0 (default value), then compute the volume of
+     * whole vector. Any positive number limits the computation from dimension 1 to dim_bound INCLUSIVE.
+     *
+     * @return volume of hypercube defined by points a and b
+     */
     static double volume_between(const vector_double &a, const vector_double &b,
                                  vector_double::size_type dim_bound = 0u)
     {
@@ -138,14 +135,14 @@ public:
 
     /// Compute volume between two points
     /**
-    * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
-    *
-    * @param a first point defining the hypercube
-    * @param b second point defining the hypercube
-    * @param size dimension of the vectors.
-    *
-    * @return volume of hypercube defined by points a and b
-    */
+     * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
+     *
+     * @param a first point defining the hypercube
+     * @param b second point defining the hypercube
+     * @param size dimension of the vectors.
+     *
+     * @return volume of hypercube defined by points a and b
+     */
     static double volume_between(double *a, double *b, vector_double::size_type size)
     {
         double volume = 1.0;
@@ -157,31 +154,31 @@ public:
 
     /// Compute method
     /**
-    * This method computes the hypervolume.
-    * It accepts a list of points as an input, and the distinguished "reference point".
-    * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point and
-    * each point from the set.
-    *
-    * @param points - vector of points for which the hypervolume is computed
-    * @param r_point - reference point.
-    *
-    * @return The value of the hypervolume
-    */
+     * This method computes the hypervolume.
+     * It accepts a list of points as an input, and the distinguished "reference point".
+     * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point
+     * and each point from the set.
+     *
+     * @param points - vector of points for which the hypervolume is computed
+     * @param r_point - reference point.
+     *
+     * @return The value of the hypervolume
+     */
     virtual double compute(std::vector<vector_double> &points, const vector_double &r_point) const = 0;
 
     /// Exclusive hypervolume method
     /**
-    * This method computes the exclusive hypervolume for given individual.
-    * It accepts a list of points as an input, and the distinguished "reference point".
-    * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point and
-    * each point from the set.
-    *
-    * @param p_idx index of the individual
-    * @param points vector of vector_doubles for which the hypervolume is computed
-    * @param r_point distinguished "reference point".
-    *
-    * @return exlusive hypervolume contributed by the individual at index p_idx
-    */
+     * This method computes the exclusive hypervolume for given individual.
+     * It accepts a list of points as an input, and the distinguished "reference point".
+     * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point
+     * and each point from the set.
+     *
+     * @param p_idx index of the individual
+     * @param points vector of vector_doubles for which the hypervolume is computed
+     * @param r_point distinguished "reference point".
+     *
+     * @return exlusive hypervolume contributed by the individual at index p_idx
+     */
     virtual double exclusive(unsigned int p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (points.size() == 1) {
@@ -197,15 +194,15 @@ public:
 
     /// Least contributor method
     /**
-    * This method establishes the individual that contributes the least to the hypervolume.
-    * By default it computes each individual contribution, and chooses the one with the lowest contribution.
-    * Other algorithms may overload this method for a more efficient solution.
-    *
-    * @param points vector of vector_doubles for which the hypervolume is computed
-    * @param r_point distinguished "reference point".
-    *
-    * @return index of the least contributor
-    */
+     * This method establishes the individual that contributes the least to the hypervolume.
+     * By default it computes each individual contribution, and chooses the one with the lowest contribution.
+     * Other algorithms may overload this method for a more efficient solution.
+     *
+     * @param points vector of vector_doubles for which the hypervolume is computed
+     * @param r_point distinguished "reference point".
+     *
+     * @return index of the least contributor
+     */
     virtual unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         return extreme_contributor(points, r_point, [](double a, double b) { return a < b; });
@@ -213,15 +210,15 @@ public:
 
     /// Greatest contributor method
     /**
-    * This method establishes the individual that contributes the most to the hypervolume.
-    * By default it computes each individual contribution, and chooses the one with the highest contribution.
-    * Other algorithms may overload this method for a more efficient solution.
-    *
-    * @param points vector of vector_doubles for which the hypervolume is computed
-    * @param r_point distinguished "reference point".
-    *
-    * @return index of the greatest contributor
-    */
+     * This method establishes the individual that contributes the most to the hypervolume.
+     * By default it computes each individual contribution, and chooses the one with the highest contribution.
+     * Other algorithms may overload this method for a more efficient solution.
+     *
+     * @param points vector of vector_doubles for which the hypervolume is computed
+     * @param r_point distinguished "reference point".
+     *
+     * @return index of the greatest contributor
+     */
     virtual unsigned long long greatest_contributor(std::vector<vector_double> &points,
                                                     const vector_double &r_point) const
     {
@@ -230,18 +227,18 @@ public:
 
     /// Contributions method
     /**
-    * This methods return the exclusive contribution to the hypervolume for each point.
-    * Main reason for this method is the fact that in most cases the explicit request for all contributions
-    * can be done more efficiently (may vary depending on the provided hv_algorithm) than executing "exclusive" method
-    * in a loop.
-    *
-    * This base method uses a very naive approach, which in fact is only slightly more efficient than calling
-    * "exclusive" method successively.
-    *
-    * @param points vector of vector_doubles for which the contributions are computed
-    * @param r_point distinguished "reference point".
-    * @return vector of exclusive contributions by every point
-    */
+     * This methods return the exclusive contribution to the hypervolume for each point.
+     * Main reason for this method is the fact that in most cases the explicit request for all contributions
+     * can be done more efficiently (may vary depending on the provided hv_algorithm) than executing "exclusive" method
+     * in a loop.
+     *
+     * This base method uses a very naive approach, which in fact is only slightly more efficient than calling
+     * "exclusive" method successively.
+     *
+     * @param points vector of vector_doubles for which the contributions are computed
+     * @param r_point distinguished "reference point".
+     * @return vector of exclusive contributions by every point
+     */
     virtual std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
     {
         std::vector<double> c;
@@ -276,27 +273,27 @@ public:
 
     /// Verification of input
     /**
-    * This method serves as a verification method.
-    * Not every algorithm is suited of every type of problem.
-    *
-    * @param points - vector of vector_doubles for which the hypervolume is computed
-    * @param r_point - distinguished "reference point".
-    */
+     * This method serves as a verification method.
+     * Not every algorithm is suited of every type of problem.
+     *
+     * @param points - vector of vector_doubles for which the hypervolume is computed
+     * @param r_point - distinguished "reference point".
+     */
     virtual void verify_before_compute(const std::vector<vector_double> &points,
                                        const vector_double &r_point) const = 0;
 
     /// Clone method.
     /**
-    * @return ptr to a copy of this.
-    */
+     * @return ptr to a copy of this.
+     */
     virtual std::shared_ptr<hv_algorithm> clone() const = 0;
 
     /// Get algorithm's name.
     /**
-    * Default implementation will return the algorithm's mangled C++ name.
-    *
-    * @return name of the algorithm.
-    */
+     * Default implementation will return the algorithm's mangled C++ name.
+     *
+     * @return name of the algorithm.
+     */
     virtual std::string get_name() const
     {
         return typeid(*this).name();
@@ -305,13 +302,14 @@ public:
 protected:
     /// Assert that reference point dominates every other point from the set.
     /**
-    * This is a method that can be referenced from verify_before_compute method.
-    * The method checks whether the provided reference point fits the minimisation assumption, e.g.,
-    * reference point must be "no worse" and in at least one objective and "better" for each of the points from the set.
-    *
-    * @param points - vector of vector_doubles for which the hypervolume is computed
-    * @param r_point - distinguished "reference point".
-    */
+     * This is a method that can be referenced from verify_before_compute method.
+     * The method checks whether the provided reference point fits the minimisation assumption, e.g.,
+     * reference point must be "no worse" and in at least one objective and "better" for each of the points from the
+     * set.
+     *
+     * @param points - vector of vector_doubles for which the hypervolume is computed
+     * @param r_point - distinguished "reference point".
+     */
     void assert_minimisation(const std::vector<vector_double> &points, const vector_double &r_point) const
     {
         for (std::vector<vector_double>::size_type idx = 0; idx < points.size(); ++idx) {
@@ -357,19 +355,19 @@ protected:
 
     /// Dominance comparison method
     /**
-    * Establishes the domination relationship between two points (overloaded for double*);
-    *
-    * returns DOM_CMP_B_DOMINATES_A if point 'b' DOMINATES point 'a'
-    * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
-    * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
-    * returns DOM_CMP_INCOMPARABLE otherwise
-    *
-    * @param a first point
-    * @param b second point
-    * @param size size of the points
-    *
-    * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
-    */
+     * Establishes the domination relationship between two points (overloaded for double*);
+     *
+     * returns DOM_CMP_B_DOMINATES_A if point 'b' DOMINATES point 'a'
+     * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
+     * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
+     * returns DOM_CMP_INCOMPARABLE otherwise
+     *
+     * @param a first point
+     * @param b second point
+     * @param size size of the points
+     *
+     * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
+     */
     static int dom_cmp(double *a, double *b, vector_double::size_type size)
     {
         for (vector_double::size_type i = 0; i < size; ++i) {
@@ -394,19 +392,19 @@ protected:
 
     /// Dominance comparison method
     /**
-    * Establishes the domination relationship between two points.
-    *
-    * returns DOM_CMP_B_DOMINATES_A if point 'b' DOMINATES point 'a'
-    * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
-    * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
-    * returns DOM_CMP_INCOMPARABLE otherwise
-    *
-    * @param a first point
-    * @param b second point
-    * @param dim_bound maximum dimension to be considered
-    *
-    * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
-    */
+     * Establishes the domination relationship between two points.
+     *
+     * returns DOM_CMP_B_DOMINATES_A if point 'b' DOMINATES point 'a'
+     * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
+     * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
+     * returns DOM_CMP_INCOMPARABLE otherwise
+     *
+     * @param a first point
+     * @param b second point
+     * @param dim_bound maximum dimension to be considered
+     *
+     * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
+     */
     static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0u)
     {
         if (dim_bound == 0u) {
@@ -435,9 +433,9 @@ protected:
 private:
     /// Compute the extreme contributor
     /**
-    * Computes the index of the individual that contributes the most or the least to the
-    * hypervolume (depending on the  prodivded comparison function)
-    */
+     * Computes the index of the individual that contributes the most or the least to the
+     * hypervolume (depending on the  prodivded comparison function)
+     */
     unsigned int extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
                                      bool (*cmp_func)(double, double)) const
     {

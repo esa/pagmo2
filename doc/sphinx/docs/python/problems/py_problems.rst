@@ -11,6 +11,11 @@ Problems exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.cec2014
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.cec2013
    :members:
 
@@ -92,4 +97,9 @@ Problems exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.unconstrain
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.decorator_problem
    :members:

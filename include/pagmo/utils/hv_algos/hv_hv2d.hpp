@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -59,23 +59,21 @@ public:
     /**
      * @param initial_sorting Turn initial sorting on-off
      */
-    hv2d(const bool initial_sorting = true) : m_initial_sorting(initial_sorting)
-    {
-    }
+    hv2d(const bool initial_sorting = true) : m_initial_sorting(initial_sorting) {}
 
     /// Compute hypervolume method.
     /**
-    * This method should be used both as a solution to 2-dimensional cases, and as a general termination method for
-    * algorithms that reduce n-dimensional problem to 2D.
-    *
-    * Computational complexity: n*log(n)
-    *
-    * @param points vector of points containing the 2-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    *
-    * @return hypervolume
-    */
-    double compute(std::vector<vector_double> &points, const vector_double &r_point) const
+     * This method should be used both as a solution to 2-dimensional cases, and as a general termination method for
+     * algorithms that reduce n-dimensional problem to 2D.
+     *
+     * Computational complexity: n*log(n)
+     *
+     * @param points vector of points containing the 2-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the points
+     *
+     * @return hypervolume
+     */
+    double compute(std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         if (points.size() == 0u) {
             return 0.0;
@@ -103,19 +101,19 @@ public:
 
     /// Compute hypervolume method.
     /**
-    * This method should be used both as a solution to 2-dimensional cases, and as a general termination method for
-    * algorithms that reduce n-dimensional problem to 2d.
-    * This method is overloaded to work with arrays of double, in order to provide other algorithms that internally work
-    * with arrays (such as hv_algorithm::wfg) with an efficient computation.
-    *
-    * Computational complexity: n*log(n)
-    *
-    * @param points array of 2-dimensional points
-    * @param n_points number of points
-    * @param r_point 2-dimensional reference point for the points
-    *
-    * @return hypervolume
-    */
+     * This method should be used both as a solution to 2-dimensional cases, and as a general termination method for
+     * algorithms that reduce n-dimensional problem to 2d.
+     * This method is overloaded to work with arrays of double, in order to provide other algorithms that internally
+     * work with arrays (such as hv_algorithm::wfg) with an efficient computation.
+     *
+     * Computational complexity: n*log(n)
+     *
+     * @param points array of 2-dimensional points
+     * @param n_points number of points
+     * @param r_point 2-dimensional reference point for the points
+     *
+     * @return hypervolume
+     */
     double compute(double **points, vector_double::size_type n_points, double *r_point) const
     {
         if (n_points == 0u) {
@@ -143,34 +141,34 @@ public:
 
     /// Contributions method
     /**
-    * Computes the contributions of each point by invoking the HV3D algorithm with mock third dimension.
-    *
-    * @param points vector of points containing the 2-dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the points
-    * @return vector of exclusive contributions by every point
-    */
-    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const;
+     * Computes the contributions of each point by invoking the HV3D algorithm with mock third dimension.
+     *
+     * @param points vector of points containing the 2-dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the points
+     * @return vector of exclusive contributions by every point
+     */
+    std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const override;
 
     /// Clone method.
     /**
      * @return a pointer to a new object cloning this
      */
-    std::shared_ptr<hv_algorithm> clone() const
+    std::shared_ptr<hv_algorithm> clone() const override
     {
         return std::shared_ptr<hv_algorithm>(new hv2d(*this));
     }
 
     /// Verify input method.
     /**
-    * Verifies whether the requested data suits the hv2d algorithm.
-    *
-    * @param points vector of points containing the d dimensional points for which we compute the hypervolume
-    * @param r_point reference point for the vector of points
-    *
-    * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal reference
-    * point
-    */
-    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const
+     * Verifies whether the requested data suits the hv2d algorithm.
+     *
+     * @param points vector of points containing the d dimensional points for which we compute the hypervolume
+     * @param r_point reference point for the vector of points
+     *
+     * @throws value_error when trying to compute the hypervolume for the dimension other than 3 or non-maximal
+     * reference point
+     */
+    void verify_before_compute(const std::vector<vector_double> &points, const vector_double &r_point) const override
     {
         if (r_point.size() != 2u) {
             pagmo_throw(std::invalid_argument, "Algorithm hv2d works only for 2-dimensional cases.");
@@ -183,7 +181,7 @@ public:
     /**
      * @return The name of this particular algorithm
      */
-    std::string get_name() const
+    std::string get_name() const override
     {
         return "hv2d algorithm";
     }
@@ -192,6 +190,6 @@ private:
     // Flag stating whether the points should be sorted in the first step of the algorithm.
     const bool m_initial_sorting;
 };
-}
+} // namespace pagmo
 
 #endif

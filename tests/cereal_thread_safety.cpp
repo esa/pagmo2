@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -48,7 +48,7 @@ struct base1 {
 };
 
 struct derived1 : base1 {
-    virtual int do_something() const
+    virtual int do_something() const override
     {
         return 42;
     }
@@ -60,7 +60,7 @@ struct derived1 : base1 {
 };
 
 struct derived2 : base1 {
-    virtual int do_something() const
+    virtual int do_something() const override
     {
         return 24;
     }

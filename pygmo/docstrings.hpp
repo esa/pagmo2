@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -103,6 +103,7 @@ std::string zdt_p_distance_docstring();
 std::string cec2006_docstring();
 std::string cec2009_docstring();
 std::string cec2013_docstring();
+std::string cec2014_docstring();
 std::string luksan_vlcek1_docstring();
 std::string translate_docstring();
 std::string translate_translation_docstring();
@@ -256,6 +257,6 @@ std::string archipelago_wait_check_docstring();
 std::string archipelago_getitem_docstring();
 std::string archipelago_get_champions_f_docstring();
 std::string archipelago_get_champions_x_docstring();
-}
+} // namespace pygmo
 
 #endif

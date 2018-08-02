@@ -10,7 +10,7 @@ We assume that the mathematical formulation of problem is the following:
 
    \begin{array}{rl}
    \mbox{minimize:} & \sum_{i=1}^3 \left[(x_{2i-1}-3)^2 / 1000 - (x_{2i-1}-x_{2i}) + \exp(20(x_{2i-1}-x_{2i}))\right]\\
-   \mbox{subject to:} & -5, <= x_i, <= 5\\
+   \mbox{subject to:} & -5 <= x_i <= 5\\
    & 4(x_1-x_2)^2+x_2-x_3^2+x_3-x_4^2  = 0 \\
    & 8x_2(x_2^2-x_1)-2(1-x_2)+4(x_2-x_3)^2+x_1^2+x_3-x_4^2+x_4-x_5^2 = 0 \\
    & 8x_3(x_3^2-x_2)-2(1-x_3)+4(x_3-x_4)^2+x_2^2-x_1+x_4-x_5^2+x_1^2+x_5-x_6^2 = 0 \\
@@ -36,13 +36,13 @@ Neglecting for the time being the fitness, the basic structure for the UDP to ha
     ...         return ([-5]*6,[5]*6)
     ...     # Inequality Constraints
     ...     def get_nic(self):
-    ...         return 2 
+    ...         return 2
     ...     # Equality Constraints
     ...     def get_nec(self):
     ...         return 4
 
 Note how we need to specify both the number of equality constraints and the number of inequality constraints (as pygmo by default assumes
-0 for both). There is no need to specify the number of objectives as by default pygmo assumes single objective optimization. 
+0 for both). There is no need to specify the number of objectives as by default pygmo assumes single objective optimization.
 The full documenation on the UDP specification can be found in the :class:`pygmo.problem` docs.
 
 We still have to write the fitness function as that is a mandatory method (together with ``get_bounds()``) for all UDPs. Constructing a :class:`~pygmo.problem` with
@@ -67,7 +67,7 @@ are in the form :math:`g(x) = 0`, while inequalities :math:`g(x) <= 0` as docume
     ...     def get_bounds(self):
     ...         return ([-5]*6,[5]*6)
     ...     def get_nic(self):
-    ...         return 2 
+    ...         return 2
     ...     def get_nec(self):
     ...         return 4
     ...     def gradient(self, x):
@@ -176,13 +176,13 @@ to estimate the gradient numerically.
     >>> pop.problem.get_gevals() # doctest: +SKIP
     1320
 
-Both strategies in these runs converge to a local feasible minima of value 2.25966. Repeating the above solution 
+Both strategies in these runs converge to a local feasible minima of value 2.25966. Repeating the above solution
 strategies from different initial populations, the value of 1.60799 is sometimes also be obtained.
 
 Do not use a black-box solver if you do not have to
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We conclude this tutorial arguing how, contrary to common (bad) practices of part of the scientific community, 
+We conclude this tutorial arguing how, contrary to common (bad) practices of part of the scientific community,
 the use of appropriate local optimization algorithms is always to be preferred and heuristic approaches should only
 be used in situations where they are needed as they otherwise are just a bad idea. Let's consider here the problem
 suite in constrained optimization that was used during the CEC2006 competition. In pygmo, we have implemented such an UDP
@@ -223,10 +223,10 @@ Consider here only one case: the problem ``g07``. You can complete this tutorial
     >>> pop.problem.get_gevals() # doctest: +SKIP
     1022
 
-The total number of evaluations made to solve the problem (at a precision of 1e-8) is thus 1155 + 1022 * 2 = 3599. 
+The total number of evaluations made to solve the problem (at a precision of 1e-8) is thus 1155 + 1022 * 2 = 3599.
 To compare, as an example, with what an heuristic method could deliver we check the table that appears in:
 
 Huang, Vicky Ling, A. Kai Qin, and Ponnuthurai N. Suganthan. "Self-adaptive differential evolution algorithm
 for constrained real-parameter optimization." Evolutionary Computation, 2006. CEC 2006. IEEE Congress on. IEEE, 2006.
 
-to find that after 5000 fitness evaluations this particular problem is still not solved by the heuristic approach there introduced.
+to find that after 5000 fitness evaluations this particular problem is still not solved by the heuristic approach introduced in the paper.

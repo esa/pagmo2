@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -79,6 +79,6 @@ inline bp::object best_known_wrapper(const Prob &p)
 {
     return v_to_a(p.best_known());
 }
-}
+} // namespace pygmo
 
 #endif

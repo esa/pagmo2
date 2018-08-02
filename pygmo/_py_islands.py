@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2017 PaGMO development team
+# Copyright 2017-2018 PaGMO development team
 #
 # This file is part of the PaGMO library.
 #
@@ -301,6 +301,8 @@ class mp_island(object):
     def shutdown_pool():
         """Shutdown pool.
 
+        .. versionadded:: 2.8
+
         This method will shut down the process pool backing :class:`~pygmo.mp_island`, after
         all pending tasks in the pool have completed.
 
@@ -377,14 +379,20 @@ class ipyparallel_island(object):
         # * return the view.
         from ipyparallel import Client
         # Turn the arguments into something that might be hashable.
+        # Make sure the kwargs are sorted so that two sets of identical
+        # kwargs will be recognized as equal also if the keys are stored
+        # in different order.
         args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
         if _hashable(args_key):
             with _client_cache_lock:
-                if args_key in _client_cache:
-                    rc = _client_cache[args_key]
-                else:
-                    _client_cache[args_key] = Client(*args, **kwargs)
-                    rc = _client_cache[args_key]
+                # Try to see if a client constructed with the same
+                # arguments already exists in the cache.
+                rc = _client_cache.get(args_key)
+                if rc is None:
+                    # No cached client exists. Create a new client
+                    # and store it in the cache.
+                    rc = Client(*args, **kwargs)
+                    _client_cache[args_key] = rc
         else:
             # If the arguments are not hashable, just create a brand new
             # client.

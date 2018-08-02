@@ -87,11 +87,8 @@ if(PAGMO_WITH_IPOPT)
     ADD_PAGMO_TESTCASE(ipopt)
 endif()
 
-# Here are problematic tests.
+# Here are problematic tests. See config.hpp for an explanation.
 if(NOT YACMA_COMPILER_IS_MSVC AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    # This test compiles but MSVC seems to have troubles in
-    # dealing with the cec2013_data.hpp .... resulting in a segfault of the test on the CI (Feb. 2017)
-    # To be tried again when they update the compiler?
-    # NOTE: it also slows down a lot the CI on OSX.
     ADD_PAGMO_TESTCASE(cec2013)
+    ADD_PAGMO_TESTCASE(cec2014)
 endif()

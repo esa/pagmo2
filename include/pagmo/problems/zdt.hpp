@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -153,15 +153,13 @@ public:
     zdt(unsigned int prob_id = 1u, unsigned int param = 30u) : m_prob_id(prob_id), m_param(param)
     {
         if (param < 2u) {
-            pagmo_throw(std::invalid_argument,
-                        "ZDT test problems must have a minimum value of 2 for the constructing "
-                        "parameter (representing the dimension except for ZDT5), "
-                            + std::to_string(param) + " requested");
+            pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing "
+                                               "parameter (representing the dimension except for ZDT5), "
+                                                   + std::to_string(param) + " requested");
         }
         if (prob_id == 0u || prob_id > 6u) {
-            pagmo_throw(std::invalid_argument,
-                        "ZDT test suite contains six (prob_id=[1 ... 6]) problems, prob_id=" + std::to_string(prob_id)
-                            + " was detected");
+            pagmo_throw(std::invalid_argument, "ZDT test suite contains six (prob_id=[1 ... 6]) problems, prob_id="
+                                                   + std::to_string(prob_id) + " was detected");
         }
     };
     /// Fitness computation
@@ -554,7 +552,7 @@ private:
     unsigned int m_prob_id;
     unsigned int m_param;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::zdt)
 

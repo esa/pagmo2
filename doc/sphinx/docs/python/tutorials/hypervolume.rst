@@ -13,10 +13,10 @@ quality of such fronts, i.e. the quality of a solution, can be measured by sever
 
 One of such measures is the hypervolume indicator, which is the hypervolume between a non-dominated front (P) and
 a reference point (R). However, to rigorously calcuate the indicator can be time-consuming, hence efficiency
-and approximate methods can be very important. 
+and approximate methods can be very important.
 
-In pygmo the main functionalities allowing to compute the hypervolume indicator (also known as Lebesgue Measure or S-Metric) 
-and related quantities are provided by the class :class:`~pygmo.hypervolume`. Instantiating this class from a 
+In pygmo the main functionalities allowing to compute the hypervolume indicator (also known as Lebesgue Measure or S-Metric)
+and related quantities are provided by the class :class:`~pygmo.hypervolume`. Instantiating this class from a
 :class:`~pygmo.population` or simply from a NumPy array will allow to compute the hypervolume indicator or
 the exclusive contributions of single points using exact or approximated algorithms.
 
@@ -24,6 +24,12 @@ This tutorial will cover the features introduced by the hypervolume functionalit
 First, we will describe how the user interface was designed and point out important notions that ought to be taken into account.
 Later, we will give several examples in order to get you started with the basic hypervolume computations.
 
+More information on the details
+of the algorithms implemented and their performance can be found in the publication:
+
+:Title: "Empirical performance of the approximation of the least hypervolume contributor."
+:Authors: Krzysztof Nowak, Marcus Märtens, and Dario Izzo.
+:Published in: International Conference on Parallel Problem Solving from Nature. Springer International Publishing, 2014.
 
 Hypervolume interface and construction
 ======================================
@@ -35,7 +41,7 @@ hypervolume contributions is :class:`pygmo.hypervolume`. You can import the hype
     >>> from pygmo import hypervolume
     >>> 'hypervolume' in dir()
     True
-    
+
 Since the computation of the hypervolume indicator and the hypervolume contributions are bound tightly
 to multi-objective optimization, we provide two ways of constructing :class:`~pygmo.hypervolume`.
 The first one uses the fitness values of the individuals of a :class:`~pygmo.population` for the input point set:
@@ -44,13 +50,13 @@ The first one uses the fitness values of the individuals of a :class:`~pygmo.pop
 
     >>> import pygmo as pg
     >>> # Construct a DTLZ-2 problem with 3-dimensional fitness space and 10 dimensions
-    >>> udp = pg.problem(pg.dtlz(prob_id = 2, dim = 10, fdim = 3))  
-    >>> pop = pg.population(udp, 50) 
+    >>> udp = pg.problem(pg.dtlz(prob_id = 2, dim = 10, fdim = 3))
+    >>> pop = pg.population(udp, 50)
     >>> hv = hypervolume(pop)
-  
+
 .. note::
 
-   You need to reconstruct the :class:`~pygmo.hypervolume` if the fitness values of the population are changing. 
+   You need to reconstruct the :class:`~pygmo.hypervolume` if the fitness values of the population are changing.
    The point set is saved in the :class:`~pygmo.hypervolume` and copied there once upon contruction.
 
 The second way of construction uses an explicit representation of coordinates for the input point set:
@@ -79,7 +85,7 @@ larger or equal in each objective, and strictly larger in at least one of them.
 a matching dimension of at least 2, including the reference point.
 
 pygmo helps you with these assumptions as it performs checks upon construction and also before each computation
-and will give you an error if your input set or your reference point does not fulfill these criteria. 
+and will give you an error if your input set or your reference point does not fulfill these criteria.
 
 For simplicity, we will use a simple 2-dimensional front as an example to show the basic features of a hypervolume object:
 
@@ -87,7 +93,7 @@ For simplicity, we will use a simple 2-dimensional front as an example to show t
 
   >>> hv = hypervolume([[1, 0], [0.5, 0.5], [0, 1], [1.5, 0.75]] )
   >>> ref_point = [2,2]
-  >>> hv.compute(ref_point)  
+  >>> hv.compute(ref_point)
   3.25
 
 We will refer to each point by it's position on the x-axis, e.g. first point is the point (0,1), fourth
@@ -108,7 +114,7 @@ Once the hypervolume object is created, it allows for the computation of the fol
     3.25
 
 2. :func:`~pygmo.hypervolume.exclusive()` - Returns the exclusive hypervolume by the point at given index.
-   The exclusive hypervolume 
+   The exclusive hypervolume
    is defined as the part of the space dominated exclusively by one point and is also called its (hypervolume) contribution.
 
 .. doctest::
@@ -139,9 +145,9 @@ Once the hypervolume object is created, it allows for the computation of the fol
   In case of several least/greatest contributors, pygmo returns only one contributor out of all candidates arbitrarily.
 
 5. :func:`~pygmo.hypervolume.contributions()` - Returns a list of contributions for all points in the set.
-   This returns the same results as the successive call to the :func:`~pygmo.hypervolume.exclusive()` method 
+   This returns the same results as the successive call to the :func:`~pygmo.hypervolume.exclusive()` method
    for each of the points. Due to the implementation, calling :func:`~pygmo.hypervolume.contributions()` once can
-   be much faster (up to a linear factor) than computing all contributions separately 
+   be much faster (up to a linear factor) than computing all contributions separately
    by using :func:`~pygmo.hypervolume.exclusive()`.
 
 .. doctest::
@@ -172,7 +178,7 @@ increase after the evolution of a :class:`~pygmo.population`.
     >>> # Evolve the population some generations
     >>> algo = pg.algorithm(pg.moead(gen=2000))
     >>> pop = algo.evolve(pop)
-    >>> # Compute the hypervolume indicator again. 
+    >>> # Compute the hypervolume indicator again.
     >>> # This time we expect a higher value as SMS-EMOA evolves the population
     >>> # by trying to maximize the hypervolume indicator.
     >>> hv = pg.hypervolume(pop)

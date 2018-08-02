@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -39,8 +39,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
-#include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
 
@@ -375,4 +375,14 @@ BOOST_AUTO_TEST_CASE(population_minlp_test)
         BOOST_CHECK(pop.get_x()[i][2] == std::floor(pop.get_x()[i][2]));
         BOOST_CHECK(pop.get_x()[i][1] == std::floor(pop.get_x()[i][1]));
     }
+}
+
+BOOST_AUTO_TEST_CASE(population_cout_test)
+{
+    population pop{problem{rosenbrock{2u}}};
+    population pop_sto{problem{inventory{12u}}, 3u};
+    population pop_mo{problem{zdt{}}, 3u};
+    BOOST_CHECK_NO_THROW(std::cout << pop);
+    BOOST_CHECK_NO_THROW(std::cout << pop_sto);
+    BOOST_CHECK_NO_THROW(std::cout << pop_mo);
 }

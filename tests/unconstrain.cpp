@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -202,9 +202,7 @@ void check_inheritance(T udp)
 }
 
 struct sconp {
-    sconp(unsigned seed = 0u) : m_seed(seed)
-    {
-    }
+    sconp(unsigned seed = 0u) : m_seed(seed) {}
     vector_double fitness(const vector_double &) const
     {
         return {1u, 1u, 1u};

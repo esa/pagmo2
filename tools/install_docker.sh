@@ -6,17 +6,17 @@ set -x
 # Exit on error.
 set -e
 
-CMAKE_VERSION="3.10.0"
+CMAKE_VERSION="3.12.0"
 EIGEN3_VERSION="3.3.4"
-BOOST_VERSION="1.65.0"
+BOOST_VERSION="1.67.0"
 NLOPT_VERSION="2.4.2"
 
-if [[ ${PAGMO_BUILD} == *36 ]]; then
+if [[ ${PAGMO_BUILD} == *37 ]]; then
+	PYTHON_DIR="cp37-cp37m"
+elif [[ ${PAGMO_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 elif [[ ${PAGMO_BUILD} == *35 ]]; then
 	PYTHON_DIR="cp35-cp35m"
-elif [[ ${PAGMO_BUILD} == *34 ]]; then
-	PYTHON_DIR="cp34-cp34m"
 elif [[ ${PAGMO_BUILD} == *27 ]]; then
 	PYTHON_DIR="cp27-cp27mu"
 else

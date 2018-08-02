@@ -33,6 +33,7 @@ Common Name                        Docs of the C++ class                        
 CEC2006                            :cpp:class:`pagmo::cec2006`                  :class:`pygmo.cec2006`                       S-C           
 CEC2009                            :cpp:class:`pagmo::cec2009`                  :class:`pygmo.cec2009`                       S-C           
 CEC2013                            :cpp:class:`pagmo::cec2013`                  :class:`pygmo.cec2013`                       S-U           
+CEC2014                            :cpp:class:`pagmo::cec2014`                  :class:`pygmo.cec2014`                       S-U           
 ZDT                                :cpp:class:`pagmo::zdt`                      :class:`pygmo.zdt`                           M-U
 DTLZ                               :cpp:class:`pagmo::dtlz`                     :class:`pygmo.dtlz`                          M-U
 ================================== ============================================ ============================================ =============== 
@@ -45,5 +46,5 @@ Common Name                                                Docs of the C++ class
 Decompose                                                  :cpp:class:`pagmo::decompose`             :class:`pygmo.decompose`                 
 Translate                                                  :cpp:class:`pagmo::translate`             :class:`pygmo.translate`                 
 Unconstrain                                                :cpp:class:`pagmo::unconstrain`           :class:`pygmo.unconstrain`               
+Decorator                                                  N/A                                       :class:`pygmo.decorator_problem`
 ========================================================== ========================================= =========================================
-

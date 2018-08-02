@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -52,9 +53,7 @@ see https://www.gnu.org/licenses/. */
 using namespace pagmo;
 
 struct udi_01 {
-    void run_evolve(island &) const
-    {
-    }
+    void run_evolve(island &) const {}
     std::string get_name() const
     {
         return "udi_01";
@@ -400,4 +399,24 @@ BOOST_AUTO_TEST_CASE(island_evolve_status)
     ss.str("");
     stream(ss, evolve_status::idle_error);
     BOOST_CHECK_EQUAL(ss.str(), "idle - **error occurred**");
+}
+
+// An algorithm that changes its state at every evolve() call.
+struct stateful_algo {
+    population evolve(const population &pop) const
+    {
+        ++n_evolve;
+        return pop;
+    }
+    mutable int n_evolve = 0;
+};
+
+// Check that the thread island correctly replaces the original
+// algorithm with the one used for evolving the population.
+BOOST_AUTO_TEST_CASE(thread_island_algo_state)
+{
+    island isl(thread_island{}, stateful_algo{}, null_problem{}, 20);
+    isl.evolve(5);
+    isl.wait_check();
+    BOOST_CHECK(isl.get_algorithm().extract<stateful_algo>()->n_evolve == 5);
 }

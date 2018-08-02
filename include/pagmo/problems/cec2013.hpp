@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -28,6 +28,14 @@ see https://www.gnu.org/licenses/. */
 
 #ifndef PAGMO_PROBLEM_CEC2013_HPP
 #define PAGMO_PROBLEM_CEC2013_HPP
+
+#include <pagmo/config.hpp>
+
+#if !defined(PAGMO_ENABLE_CEC2013)
+
+#error The cec2013.hpp header was included but the CEC 2013 problem is not supported on the current platform.
+
+#endif
 
 #include <cassert>
 #include <stdexcept>

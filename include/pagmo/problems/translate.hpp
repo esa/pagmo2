@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -59,9 +60,7 @@ public:
     /**
      * The default constructor will initialize a non-translated pagmo::null_problem.
      */
-    translate() : m_problem(null_problem{}), m_translation({0.})
-    {
-    }
+    translate() : m_problem(null_problem{}), m_translation({0.}) {}
 
     /// Constructor from problem and translation vector.
     /**
@@ -405,12 +404,12 @@ private:
         std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<double>());
         return x_sh;
     }
-    /// Inner problem
+    // Inner problem
     problem m_problem;
-    /// translation vector
+    // translation vector
     vector_double m_translation;
 };
-}
+} // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::translate)
 

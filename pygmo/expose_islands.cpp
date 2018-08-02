@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -39,7 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/python_includes.hpp>
 
 // See: https://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
-// In every cpp file We need to make sure this is included before everything else,
+// In every cpp file we need to make sure this is included before everything else,
 // with the correct #defines.
 #define NO_IMPORT_ARRAY
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
@@ -87,4 +87,4 @@ void expose_islands()
     // Thread island.
     expose_island_pygmo<thread_island>("thread_island", thread_island_docstring().c_str());
 }
-}
+} // namespace pygmo
