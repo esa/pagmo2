@@ -23,7 +23,7 @@ The implementation as UDP can be realized as follows:
 
 .. doctest::
 
-    >>> class Schaffer():
+    >>> class Schaffer:
     ...     # Define objectives
     ...     def fitness(self, x):
     ...         f1 = x[0]**2

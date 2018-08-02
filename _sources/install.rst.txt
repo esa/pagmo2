@@ -89,7 +89,7 @@ Thus, the pygmo packages for conda on Windows might lack some Fortran-based feat
 (e.g., the wrapper for the Ipopt solver).
 
 Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`__
-packages for pygmo built with `MinGW <https://mingw-w64.org/doku.php>`__. These packages allow us both to support Python 2.7
+packages for pygmo built with `MinGW <http://mingw-w64.org/doku.php>`__. These packages allow us both to support Python 2.7
 and to provide a full-featured pygmo on Windows, thanks to the ``gfortran`` compiler. The pip packages are also available on
 Linux for those users who might prefer pip to conda, but they are **not** available on OSX.
 
