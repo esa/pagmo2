@@ -61,12 +61,6 @@ namespace pagmo
 
 class fork_island
 {
-    static void raise_errno(const std::string &fname)
-    {
-        pagmo_throw(std::runtime_error, "The call to the function " + fname
-                                            + "() in the fork island failed with error code " + std::to_string(errno)
-                                            + " and the following error message: '" + std::strerror(errno) + "'");
-    }
     // Small RAII wrapper around a pipe.
     struct pipe_t {
         // Def ctor: will create the pipe.
@@ -74,31 +68,37 @@ class fork_island
         {
             int fd[2];
             if (pipe(fd) == -1) {
-                raise_errno("pipe");
+                pagmo_throw(std::runtime_error, "Unable to create a pipe with the pipe() function. The error code is "
+                                                    + std::to_string(errno) + " and the error message is: '"
+                                                    + std::strerror(errno) + "'");
             }
             // The pipe was successfully opened, copy over
             // the r/w descriptors.
-            read = fd[0];
-            write = fd[1];
+            rd = fd[0];
+            wd = fd[1];
         }
         // Try to close the reading end if it has not been closed already.
-        // This will throw on error.
         void close_r()
         {
             if (r_status) {
-                if (close(read) == -1) {
-                    raise_errno("close");
+                if (close(rd) == -1) {
+                    pagmo_throw(
+                        std::runtime_error,
+                        "Unable to close the reading end of a pipe with the close() function. The error code is "
+                            + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
                 }
                 r_status = false;
             }
         }
         // Try to close the writing end if it has not been closed already.
-        // This will throw on error.
         void close_w()
         {
             if (w_status) {
-                if (close(write) == -1) {
-                    raise_errno("close");
+                if (close(wd) == -1) {
+                    pagmo_throw(
+                        std::runtime_error,
+                        "Unable to close the writing end of a pipe with the close() function. The error code is "
+                            + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
                 }
                 w_status = false;
             }
@@ -111,14 +111,36 @@ class fork_island
                 close_w();
             } catch (...) {
                 // We are in a dtor, the error is not recoverable.
-                std::cerr
-                    << "An unrecoverable error was raised in the destructor of a pipe in fork_island(). Exiting now."
-                    << std::endl;
+                std::cerr << "An unrecoverable error was raised in the destructor of a pipe in fork_island(), while "
+                             "trying to close the pipe. Exiting now."
+                          << std::endl;
                 std::exit(1);
             }
         }
+        // Wrapper around the read() function.
+        ssize_t read(void *buf, std::size_t count) const
+        {
+            auto retval = ::read(rd, buf, count);
+            if (retval == -1) {
+                pagmo_throw(std::runtime_error,
+                            "Unable to read from a pipe with the read() function. The error code is "
+                                + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+            }
+            return retval;
+        }
+        // Wrapper around the write() function.
+        ssize_t write(const void *buf, std::size_t count) const
+        {
+            auto retval = ::write(wd, buf, count);
+            if (retval == -1) {
+                pagmo_throw(std::runtime_error,
+                            "Unable to write to a pipe with the write() function. The error code is "
+                                + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+            }
+            return retval;
+        }
         // The file descriptors of the two ends of the pipe.
-        int read, write;
+        int rd, wd;
         // Flag to signal the status of the two ends
         // of the pipe: true for open, false for closed.
         bool r_status, w_status;
@@ -129,8 +151,24 @@ class fork_island
     // - the algorithm used for evolution,
     // - the evolved population.
     using message_t = std::tuple<int, std::string, algorithm, population>;
+    // Small raii helper to ensure that the pid of the child is atomically
+    // set on construction, and reset to zero by the dtor.
+    struct pid_setter {
+        explicit pid_setter(std::atomic<pid_t> &ap, pid_t pid) : m_ap(ap)
+        {
+            m_ap.store(pid);
+        }
+        ~pid_setter()
+        {
+            m_ap.store(0);
+        }
+        std::atomic<pid_t> &m_ap;
+    };
 
 public:
+    fork_island() : m_pid(0) {}
+    fork_island(const fork_island &) : fork_island() {}
+    fork_island(fork_island &&) : fork_island() {}
     std::string get_name() const
     {
         return "Fork island";
@@ -145,10 +183,13 @@ public:
         auto child_pid = fork();
         if (child_pid == -1) {
             // Forking failed.
-            raise_errno("fork");
+            pagmo_throw(std::runtime_error,
+                        "Cannot fork the process in a fork_island with the fork() function. The error code is "
+                            + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
         }
         if (child_pid) {
             // We are in the parent.
+            pid_setter ps(m_pid, child_pid);
             try {
                 // Close the write descriptor, we don't need to send anything to the child.
                 p.close_w();
@@ -158,13 +199,10 @@ public:
                 {
                     cereal::BinaryInputArchive iarchive(ss);
                     while (true) {
-                        const auto read_bytes = read(p.read, static_cast<void *>(buffer), sizeof(buffer));
+                        const auto read_bytes = p.read(static_cast<void *>(buffer), sizeof(buffer));
                         if (read_bytes == 0) {
                             // EOF, break out.
                             break;
-                        }
-                        if (read_bytes == -1) {
-                            raise_errno("read");
                         }
                         ss.write(buffer, boost::numeric_cast<std::streamsize>(read_bytes));
                     }
@@ -173,7 +211,7 @@ public:
                 // Close the read descriptor.
                 p.close_r();
             } catch (...) {
-                // Something failed above. Try to kill the child
+                // Something failed above. As a cleanup action, try to kill the child
                 // before re-raising the error.
                 if (kill(child_pid, SIGTERM) == -1 && errno != ESRCH) {
                     // The signal delivery to the child failed, and not because
@@ -200,7 +238,8 @@ public:
             // We are in the child.
             //
             // A small helper to send the serialized representation of
-            // a message_t to the parent.
+            // a message_t to the parent. Factored out because it's used
+            // in 2 places.
             auto send_message = [&p](const message_t &ms) {
                 std::stringstream ss;
                 {
@@ -215,9 +254,7 @@ public:
                     const auto read_bytes = boost::numeric_cast<std::size_t>(ss.gcount());
                     assert(read_bytes <= sizeof(buffer));
                     // Now let's send the current content of the buffer to the parent.
-                    if (write(p.write, static_cast<const void *>(buffer), read_bytes) == -1) {
-                        raise_errno("write");
-                    }
+                    p.write(static_cast<const void *>(buffer), read_bytes);
                 }
             };
             // Fatal error message.
@@ -277,6 +314,17 @@ public:
     void serialize(Archive &)
     {
     }
+    std::string get_extra_info() const
+    {
+        const auto pid = m_pid.load();
+        if (pid) {
+            return "\tChild PID: " + std::to_string(pid);
+        }
+        return "\tNo active child.";
+    }
+
+private:
+    mutable std::atomic<pid_t> m_pid;
 };
 
 } // namespace pagmo

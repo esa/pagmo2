@@ -91,3 +91,4 @@ if(NOT YACMA_COMPILER_IS_MSVC AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 ADD_PAGMO_TESTCASE(fork_island)
+target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=1)
