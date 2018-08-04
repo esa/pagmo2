@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 @PAGMO_ENABLE_EIGEN3@
 @PAGMO_ENABLE_NLOPT@
 @PAGMO_ENABLE_IPOPT@
+@PAGMO_ENABLE_FORK_ISLAND@
 // clang-format on
 // End of defines instantiated by CMake.
 
