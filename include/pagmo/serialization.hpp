@@ -113,8 +113,9 @@ see https://www.gnu.org/licenses/. */
 #include <random>
 #include <sstream>
 #include <string>
+
 #if defined(PAGMO_WITH_EIGEN3)
-#include <Eigen/Dense>
+#include <pagmo/detail/eigen.hpp>
 #endif
 
 namespace cereal
