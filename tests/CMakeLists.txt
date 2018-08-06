@@ -92,5 +92,5 @@ endif()
 
 if (PAGMO_WITH_FORK_ISLAND)
     ADD_PAGMO_TESTCASE(fork_island)
-    target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=200112L)
+    target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=1)
 endif()
