@@ -29,8 +29,15 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_EIGEN_HPP
 #define PAGMO_DETAIL_EIGEN_HPP
 
+// NOTE: we have experimental evidence that on some platform/compiler combinations
+// Eigen is failing to include necessary header files. As a workaround, we use this header
+// to wrap any Eigen functionality that might be needed in pagmo, and we pre-emptively
+// include the missing headers as necessary.
 #if defined(__apple_build_version__)
 
+// NOTE: on OSX and if the _POSIX_C_SOURCE definition is active (or at least for some specific
+// values of this definition), Eigen uses the alloca() function without including the header
+// that declares it.
 #include <alloca.h>
 
 #endif
