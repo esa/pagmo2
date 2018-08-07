@@ -274,7 +274,7 @@ struct algo_01 {
     }
 };
 
-BOOST_AUTO_TEST_CASE(island_tread_safety)
+BOOST_AUTO_TEST_CASE(island_thread_safety)
 {
     island isl{de{}, population{rosenbrock{}, 25}};
     auto ts = isl.get_thread_safety();
