@@ -33,12 +33,6 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
 
-#if !defined(_POSIX_C_SOURCE)
-
-#error The fork_island.hpp header was included, but the _POSIX_C_SOURCE definition is not active - please make sure to add the _POSIX_C_SOURCE definition when including this file
-
-#endif
-
 #include <cassert>
 #include <cerrno>
 #include <csignal>
@@ -343,7 +337,7 @@ PAGMO_REGISTER_ISLAND(pagmo::fork_island)
 
 #else // PAGMO_WITH_FORK_ISLAND
 
-#error The fork_island.hpp header was included, but the fork island is not supported on the current platform
+#error The fork_island.hpp header was included, but the fork island is not available on the current platform (this might mean that either the platform is not POSIX-compliant, or that the definition _POSIX_C_SOURCE is not active)
 
 #endif // PAGMO_WITH_FORK_ISLAND
 
