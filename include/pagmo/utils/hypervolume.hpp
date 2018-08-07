@@ -552,7 +552,7 @@ namespace detail
 *
 * @return expected number of operations
 */
-double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
+inline double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
 {
     if (d <= 3u) {
         return static_cast<double>(d) * static_cast<double>(n) * std::log(n); // hv3d
