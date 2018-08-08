@@ -543,7 +543,7 @@ struct island_data {
     island_data &operator=(island_data &&) = delete;
     // The data members.
     // NOTE: isl_ptr has no associated mutex, as it's supposed to be fully
-    // threads-safe on its own.
+    // thread-safe on its own.
     std::unique_ptr<isl_inner_base> isl_ptr;
     // Algo and pop need a mutex to regulate concurrent access
     // while the island is evolving.
@@ -647,11 +647,8 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  *
  * The <tt>run_evolve()</tt> method of
  * the UDI will use the input island algorithm's algorithm::evolve() method to evolve the input island's
- * pagmo::population and, once the evolution is finished, will replace the population of the input island with the
- * evolved population. Since internally the pagmo::island class uses a separate thread of execution to provide
- * asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact
- * with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or
- * call the <tt>%get_name()</tt>, <tt>%get_extra_info()</tt> methods, etc.), otherwise the behaviour will be undefined.
+ * pagmo::population. Once the evolution is finished, <tt>run_evolve()</tt> will then replace the population and the
+ * algorithm of the input island with, respectively, the evolved population and the algorithm used for the evolution.
  *
  * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI may implement the following optional methods:
  * @code{.unparsed}
@@ -661,6 +658,15 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  *
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDI are used by pagmo::island.
+ *
+ * Note that, due to the asynchronous nature of pagmo::island, a UDI has certain requirements regarding thread safety.
+ * Specifically, ``run_evolve()`` is always called in a separate thread of execution, and consequently:
+ * - multiple UDI objects may be calling their own ``run_evolve()`` method concurrently,
+ * - in a specific UDI object, any method from the public API of the UDI may be called while ``run_evolve()`` is
+ *   running concurrently in another thread (the only exception being the destructor, which will wait for the end
+ *   of any ongoing evolution before taking any action). Thus, UDI writers must ensure that actions such as copying
+ *   the UDI, calling the optional methods (such as ``%get_name()``), etc. can be safely performed while the island
+ *   is evolving.
  *
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
@@ -742,7 +748,7 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    :cpp:class`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
      *
      * \endverbatim
      *
@@ -776,9 +782,10 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if:
-     *     - ``Isl`` satisfies :cpp:class::`pagmo::is_udi`,
-     *     - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
-     *     - ``p`` is an instance of pagmo::population.
+     *
+     *    - ``Isl`` satisfies :cpp:class:`pagmo::is_udi`,
+     *    - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
+     *    - ``p`` is an instance of :cpp:class:`pagmo::population`.
      *
      * \endverbatim
      *
@@ -813,7 +820,8 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    pagmo::algorithm, and ``p``, ``size`` and ``seed`` can be used to construct a :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
+     *    :cpp:class:`pagmo::population`.
      *
      * \endverbatim
      *

@@ -3935,10 +3935,6 @@ the following method:
 The ``run_evolve()`` method of the UDI will use the input :class:`~pygmo.algorithm`'s
 :func:`~pygmo.algorithm.evolve()` method to evolve the input :class:`~pygmo.population` and, once the evolution
 is finished, it will return the algorithm used for the evolution and the evolved :class:`~pygmo.population`.
-Note that, since internally the :class:`~pygmo.island` class uses a separate thread of execution to provide asynchronous
-behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact with the UDI
-while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or call the ``get_name()``,
-``get_extra_info()`` methods, etc.), otherwise the behaviour will be undefined.
 
 In addition to the mandatory ``run_evolve()`` method, a UDI may implement the following optional methods:
 
@@ -3951,6 +3947,15 @@ In addition to the mandatory ``run_evolve()`` method, a UDI may implement the fo
 
 See the documentation of the corresponding methods in this class for details on how the optional
 methods in the UDI are used by :class:`~pygmo.island`.
+
+Note that, due to the asynchronous nature of :class:`~pygmo.island`, a UDI has certain requirements regarding
+thread safety. Specifically, ``run_evolve()`` is always called in a separate thread of execution, and consequently:
+
+* multiple UDI objects may be calling their own ``run_evolve()`` method concurrently,
+* in a specific UDI object, any method from the public API of the UDI may be called while ``run_evolve()`` is
+  running concurrently in another thread. Thus, UDI writers must ensure that actions such as copying
+  the UDI, calling the optional methods (such as ``get_name()``), etc. can be safely performed while the island
+  is evolving.
 
 An island can be initialised in a variety of ways using keyword arguments:
 
