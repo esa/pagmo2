@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/config.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
@@ -248,6 +249,8 @@ BOOST_AUTO_TEST_CASE(island_get_wait_busy)
     isl.wait();
 }
 
+#if !defined(PAGMO_WITH_FORK_ISLAND)
+
 struct prob_02 {
     vector_double fitness(const vector_double &) const
     {
@@ -303,6 +306,8 @@ BOOST_AUTO_TEST_CASE(island_thread_safety)
     isl.evolve();
     BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
 }
+
+#endif
 
 BOOST_AUTO_TEST_CASE(island_name_info_stream)
 {
