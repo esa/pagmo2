@@ -321,6 +321,7 @@ public:
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
 
+// Fork island: will offload the evolution to a child process created with the fork() system call.
 class fork_island
 {
     // Small RAII wrapper around a pipe.

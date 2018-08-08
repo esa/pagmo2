@@ -38,8 +38,8 @@ see https://www.gnu.org/licenses/. */
 @PAGMO_ENABLE_NLOPT@
 @PAGMO_ENABLE_IPOPT@
 // NOTE: in order to enable the fork island, we have to:
-// - verify in the build system that the required headers are present
-//   (which will set the PAGMO_ENABLE_FORK_ISLAND variable), and
+// - verify in the build system that the required headers and the fork() function
+//   are present (which will set the PAGMO_ENABLE_FORK_ISLAND variable), and
 // - verify that the _POSIX_C_SOURCE definition is active.
 #if defined(_POSIX_C_SOURCE)
 @PAGMO_ENABLE_FORK_ISLAND@
