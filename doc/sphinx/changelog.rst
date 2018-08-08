@@ -24,12 +24,15 @@ Changes
 Fix
 ~~~
 
+- Fix a missing ``inline`` specifier (`#206 <https://github.com/esa/pagmo2/pull/206>`__).
+
 - Fix a bunch of missing includes in ``pagmo.hpp`` (`#202 <https://github.com/esa/pagmo2/pull/202>`__).
 
 - Fixes for compiler warnings in GCC 8 (`#197 <https://github.com/esa/pagmo2/pull/197>`__).
 
 - Various documentation and CI fixes and enhancements (`#195 <https://github.com/esa/pagmo2/pull/195>`__,
-  `#196 <https://github.com/esa/pagmo2/pull/196>`__, `#204 <https://github.com/esa/pagmo2/pull/204>`__).
+  `#196 <https://github.com/esa/pagmo2/pull/196>`__, `#204 <https://github.com/esa/pagmo2/pull/204>`__,
+  `#205 <https://github.com/esa/pagmo2/pull/205>`__).
 
 2.8 (2018-07-12)
 ----------------
