@@ -931,6 +931,68 @@ public:
         }
         return *this;
     }
+    /// Extract a const pointer to the UDI used for construction.
+    /**
+     * This method will extract a const pointer to the internal instance of the UDI. If \p T is not the same type
+     * as the UDI used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * \endverbatim
+     *
+     * @return a const pointer to the internal UDI, or \p nullptr
+     * if \p T does not correspond exactly to the original UDI type used
+     * in the constructor.
+     */
+    template <typename T>
+    const T *extract() const
+    {
+        auto isl = dynamic_cast<const detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
+        return isl == nullptr ? nullptr : &(isl->m_value);
+    }
+    /// Extract a pointer to the UDI used for construction.
+    /**
+     * This method will extract a pointer to the internal instance of the UDI. If \p T is not the same type
+     * as the UDI used during construction (after removal of cv and reference qualifiers), this method will
+     * return \p nullptr.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * .. note::
+     *
+     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     *    methods on the internal UDI instance. Assigning a new UDI via this pointer is undefined behaviour.
+     *
+     * \endverbatim
+     *
+     * @return a pointer to the internal UDI, or \p nullptr
+     * if \p T does not correspond exactly to the original UDI type used
+     * in the constructor.
+     */
+    template <typename T>
+    T *extract()
+    {
+        auto isl = dynamic_cast<detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
+        return isl == nullptr ? nullptr : &(isl->m_value);
+    }
+    /// Check if the UDI used for construction is of type \p T.
+    /**
+     * @return \p true if the UDI used in construction is of type \p T, \p false otherwise.
+     */
+    template <typename T>
+    bool is() const
+    {
+        return extract<T>() != nullptr;
+    }
     /// Launch evolution.
     /**
      * This method will evolve the island's pagmo::population using the
