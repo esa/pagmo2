@@ -29,20 +29,80 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE fork_island_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <chrono>
+#include <csignal>
+#include <exception>
+#include <thread>
+#include <utility>
+
+#include <sys/types.h>
+
+#include <boost/algorithm/string/predicate.hpp>
+
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/fork_island.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
-
-#include <chrono>
+#include <pagmo/serialization.hpp>
+#include <pagmo/types.hpp>
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(fork_island_test)
+// A silly problem that, after max fitness evals, just waits.
+struct godot1 {
+    explicit godot1(unsigned max) : m_max(max), m_counter(0) {}
+    godot1() : godot1(0) {}
+    vector_double fitness(const vector_double &) const
+    {
+        if (m_max == m_counter++) {
+            std::this_thread::sleep_for(std::chrono::seconds(3600));
+        }
+        return {.5};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(m_max, m_counter);
+    }
+    unsigned m_max;
+    mutable unsigned m_counter;
+};
+
+PAGMO_REGISTER_PROBLEM(godot1)
+
+BOOST_AUTO_TEST_CASE(fork_island_basic)
 {
-    island fi_0(fork_island{}, de{10000000}, rosenbrock{100}, 20);
-    fi_0.evolve();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::cout << fi_0 << '\n';
-    fi_0.wait_check();
+    {
+        fork_island fi_0;
+        BOOST_CHECK(fi_0.get_child_pid() == pid_t(0));
+        fork_island fi_1(fi_0), fi_2(std::move(fi_0));
+        BOOST_CHECK(fi_1.get_child_pid() == pid_t(0));
+        BOOST_CHECK(fi_2.get_child_pid() == pid_t(0));
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+        BOOST_CHECK(boost::contains(fi_1.get_extra_info(), "No active child."));
+        BOOST_CHECK(boost::contains(fi_2.get_extra_info(), "No active child."));
+        BOOST_CHECK_EQUAL(fi_0.get_name(), "Fork island");
+    }
+    {
+        island fi_0(fork_island{}, de{200}, godot1{20}, 20);
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+        fi_0.evolve();
+        BOOST_CHECK(fi_0.extract<fork_island>() != nullptr);
+        // Busy wait until the child is running.
+        pid_t child_pid;
+        while ((child_pid = fi_0.extract<fork_island>()->get_child_pid()) == pid_t(0)) {
+        }
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "Child PID:"));
+        // Now let's kill the child.
+        // """
+        // Kill the boy and let the man be born.
+        // """
+        kill(child_pid, SIGTERM);
+        BOOST_CHECK_THROW(fi_0.wait_check(), std::exception);
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+    }
 }
