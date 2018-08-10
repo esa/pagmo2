@@ -330,11 +330,13 @@ class fork_island
         pipe_t() : r_status(true), w_status(true)
         {
             int fd[2];
+            // LCOV_EXCL_START
             if (pipe(fd) == -1) {
                 pagmo_throw(std::runtime_error, "Unable to create a pipe with the pipe() function. The error code is "
                                                     + std::to_string(errno) + " and the error message is: '"
                                                     + std::strerror(errno) + "'");
             }
+            // LCOV_EXCL_STOP
             // The pipe was successfully opened, copy over
             // the r/w descriptors.
             rd = fd[0];
@@ -344,12 +346,14 @@ class fork_island
         void close_r()
         {
             if (r_status) {
+                // LCOV_EXCL_START
                 if (close(rd) == -1) {
                     pagmo_throw(
                         std::runtime_error,
                         "Unable to close the reading end of a pipe with the close() function. The error code is "
                             + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
                 }
+                // LCOV_EXCL_STOP
                 r_status = false;
             }
         }
@@ -357,12 +361,14 @@ class fork_island
         void close_w()
         {
             if (w_status) {
+                // LCOV_EXCL_START
                 if (close(wd) == -1) {
                     pagmo_throw(
                         std::runtime_error,
                         "Unable to close the writing end of a pipe with the close() function. The error code is "
                             + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
                 }
+                // LCOV_EXCL_STOP
                 w_status = false;
             }
         }
@@ -372,6 +378,7 @@ class fork_island
             try {
                 close_r();
                 close_w();
+                // LCOV_EXCL_START
             } catch (...) {
                 // We are in a dtor, the error is not recoverable.
                 std::cerr << "An unrecoverable error was raised in the destructor of a pipe in fork_island(), while "
@@ -379,27 +386,32 @@ class fork_island
                           << std::endl;
                 std::exit(1);
             }
+            // LCOV_EXCL_STOP
         }
         // Wrapper around the read() function.
         ssize_t read(void *buf, std::size_t count) const
         {
             auto retval = ::read(rd, buf, count);
+            // LCOV_EXCL_START
             if (retval == -1) {
                 pagmo_throw(std::runtime_error,
                             "Unable to read from a pipe with the read() function. The error code is "
                                 + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
             }
+            // LCOV_EXCL_STOP
             return retval;
         }
         // Wrapper around the write() function.
         ssize_t write(const void *buf, std::size_t count) const
         {
             auto retval = ::write(wd, buf, count);
+            // LCOV_EXCL_START
             if (retval == -1) {
                 pagmo_throw(std::runtime_error,
                             "Unable to write to a pipe with the write() function. The error code is "
                                 + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
             }
+            // LCOV_EXCL_STOP
             return retval;
         }
         // The file descriptors of the two ends of the pipe.
@@ -437,6 +449,11 @@ public:
             return "\tChild PID: " + std::to_string(pid);
         }
         return "\tNo active child.";
+    }
+    // Get the PID of the child.
+    pid_t get_child_pid() const
+    {
+        return m_pid.load();
     }
     template <typename Archive>
     void serialize(Archive &)
@@ -1411,12 +1428,14 @@ inline void fork_island::run_evolve(island &isl) const
     pipe_t p;
     // Try to fork now.
     auto child_pid = fork();
+    // LCOV_EXCL_START
     if (child_pid == -1) {
         // Forking failed.
         pagmo_throw(std::runtime_error,
                     "Cannot fork the process in a fork_island with the fork() function. The error code is "
                         + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
     }
+    // LCOV_EXCL_STOP
     if (child_pid) {
         // We are in the parent.
         // Small raii helper to ensure that the pid of the child is atomically
@@ -1457,6 +1476,7 @@ inline void fork_island::run_evolve(island &isl) const
             // Something failed above. As a cleanup action, try to kill the child
             // before re-raising the error.
             if (kill(child_pid, SIGTERM) == -1 && errno != ESRCH) {
+                // LCOV_EXCL_START
                 // The signal delivery to the child failed, and not because
                 // the child does not exist any more (if the child did not exist,
                 // errno would be ESRCH).
@@ -1464,6 +1484,7 @@ inline void fork_island::run_evolve(island &isl) const
                              "of fork_island(). Giving up now."
                           << std::endl;
                 std::exit(1);
+                // LCOV_EXCL_STOP
             }
             // Re-raise.
             throw;
@@ -1478,6 +1499,11 @@ inline void fork_island::run_evolve(island &isl) const
         isl.set_algorithm(std::move(std::get<2>(m)));
         isl.set_population(std::move(std::get<3>(m)));
     } else {
+        // NOTE: we won't get any coverage data from the child process, so just disable
+        // lcov for this whole block.
+        //
+        // LCOV_EXCL_START
+        //
         // We are in the child.
         //
         // A small helper to send the serialized representation of
@@ -1551,6 +1577,7 @@ inline void fork_island::run_evolve(island &isl) const
             std::cerr << fatal_msg << std::endl;
             std::exit(1);
         }
+        // LCOV_EXCL_STOP
     }
 }
 
