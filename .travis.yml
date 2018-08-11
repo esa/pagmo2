@@ -39,7 +39,7 @@ matrix:
           - gcc-4.8
           - g++-4.8
           - binutils-gold
-    - env: PAGMO_BUILD="CoverageGCC5"
+    - env: PAGMO_BUILD="CoverageGCC6"
       compiler: gcc
       os: linux
       addons:
@@ -47,10 +47,10 @@ matrix:
           sources:
           - ubuntu-toolchain-r-test
           packages:
-          - gcc-5
-          - g++-5
+          - gcc-6
+          - g++-6
           - binutils-gold
-    - env: PAGMO_BUILD="DebugGCC6"
+    - env: PAGMO_BUILD="DebugGCC7"
       compiler: gcc
       os: linux
       dist: precise
@@ -59,8 +59,8 @@ matrix:
           sources:
           - ubuntu-toolchain-r-test
           packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
           - binutils-gold
     - env: PAGMO_BUILD="DebugClang38"
       compiler: clang
