@@ -38,13 +38,13 @@ def _island_extract(self, t):
     """Extract user-defined island instance.
 
     If *t* is the same type of the user-defined island used to construct this island, then a reference to
-    the internal user-defined island will be returned. Otherwise, ``None`` will be returned.
+    the internal user-defined island will be returned. Otherwise, :data:`None` will be returned.
 
     Args:
-        t (``type``): the type of the user-defined island to extract
+        t (type): the type of the user-defined island to extract
 
     Returns:
-        a reference to the internal user-defined island if it is of type *t*, or ``None`` otherwise
+        a reference to the internal user-defined island if it is of type *t*, or :data:`None` otherwise
 
     Raises:
         TypeError: if *t* is not a type
@@ -60,14 +60,14 @@ def _island_extract(self, t):
 def _island_is(self, t):
     """Check the type of the user-defined island instance.
 
-    If *t* is the same type of the user-defined island used to construct this island, then ``True`` will be
-    returned. Otherwise, ``False`` will be returned.
+    If *t* is the same type of the user-defined island used to construct this island, then :data:`True` will be
+    returned. Otherwise, :data:`False` will be returned.
 
     Args:
-        t (``type``): the type of the user-defined island to extract
+        t (type): the type of the user-defined island to extract
 
     Returns:
-        ``bool``: whether the user-defined island is of type *t* or not
+        bool: whether the user-defined island is of type *t* or not
 
     Raises:
         TypeError: if *t* is not a type

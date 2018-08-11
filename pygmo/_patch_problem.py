@@ -38,13 +38,13 @@ def _problem_extract(self, t):
     """Extract user-defined problem instance.
 
     If *t* is the same type of the user-defined problem used to construct this problem, then a reference to
-    the internal user-defined problem will be returned. Otherwise, ``None`` will be returned.
+    the internal user-defined problem will be returned. Otherwise, :data:`None` will be returned.
 
     Args:
-        t (``type``): the type of the user-defined problem to extract
+        t (type): the type of the user-defined problem to extract
 
     Returns:
-        a reference to the internal user-defined problem if it is of type *t*, or ``None`` otherwise
+        a reference to the internal user-defined problem if it is of type *t*, or :data:`None` otherwise
 
     Raises:
         TypeError: if *t* is not a type
@@ -60,14 +60,14 @@ def _problem_extract(self, t):
 def _problem_is(self, t):
     """Check the type of the user-defined problem instance.
 
-    If *t* is the same type of the user-defined problem used to construct this problem, then ``True`` will be
-    returned. Otherwise, ``False`` will be returned.
+    If *t* is the same type of the user-defined problem used to construct this problem, then :data:`True` will be
+    returned. Otherwise, :data:`False` will be returned.
 
     Args:
-        t (``type``): the type of the user-defined problem to extract
+        t (type): the type of the user-defined problem to extract
 
     Returns:
-        ``bool``: whether the user-defined problem is of type *t* or not
+        bool: whether the user-defined problem is of type *t* or not
 
     Raises:
         TypeError: if *t* is not a type

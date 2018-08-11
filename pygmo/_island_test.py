@@ -292,6 +292,7 @@ class island_test_case(_ut.TestCase):
         rc = sys.getrefcount(isl)
         tisl = isl.extract(_test_island)
         self.assertFalse(tisl is None)
+        self.assertTrue(isl.is_(_test_island))
         self.assertEqual(sys.getrefcount(isl), rc + 1)
         del tisl
         self.assertEqual(sys.getrefcount(isl), rc)
@@ -300,6 +301,7 @@ class island_test_case(_ut.TestCase):
         self.assertEqual(isl.extract(_test_island).get_n(), 5)
         # Try to extract the wrong C++ island type.
         self.assertTrue(isl.extract(thread_island) is None)
+        self.assertFalse(isl.is_(thread_island))
 
         class tisland(object):
 
@@ -321,6 +323,7 @@ class island_test_case(_ut.TestCase):
         rc = sys.getrefcount(isl)
         tisl = isl.extract(tisland)
         self.assertFalse(tisl is None)
+        self.assertTrue(isl.is_(tisland))
         # Reference count does not increase because
         # tisland is stored as a proper Python object
         # with its own refcount.
@@ -330,6 +333,7 @@ class island_test_case(_ut.TestCase):
         self.assertEqual(isl.extract(tisland).get_n(), 12)
         # Try to extract the wrong Python island type.
         self.assertTrue(isl.extract(_udi_01) is None)
+        self.assertFalse(isl.is_(_udi_01))
 
 
 class mp_island_test_case(_ut.TestCase):
