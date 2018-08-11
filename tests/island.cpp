@@ -434,13 +434,9 @@ BOOST_AUTO_TEST_CASE(island_extract)
     BOOST_CHECK(isl.extract<const thread_island>() == nullptr);
     BOOST_CHECK(isl.extract<udi_01>() == nullptr);
     BOOST_CHECK(!isl.is<udi_01>());
-    BOOST_CHECK(isl.extract<int>() == nullptr);
-    BOOST_CHECK(!isl.is<int>());
     isl = island(udi_01{}, stateful_algo{}, null_problem{}, 20);
     BOOST_CHECK(isl.extract<thread_island>() == nullptr);
     BOOST_CHECK(!isl.is<thread_island>());
-    BOOST_CHECK(isl.extract<int>() == nullptr);
-    BOOST_CHECK(!isl.is<int>());
     BOOST_CHECK(isl.extract<udi_01>() != nullptr);
     BOOST_CHECK(static_cast<const island &>(isl).extract<udi_01>() != nullptr);
     BOOST_CHECK((std::is_same<udi_01 *, decltype(isl.extract<udi_01>())>::value));
