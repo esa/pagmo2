@@ -159,8 +159,9 @@ class problem_test_case(_ut.TestCase):
         # Run fitness a few more times.
         prob.fitness([0, 0])
         prob.fitness([0, 0])
-        # Assert that the global variable was copied into p, not simply
-        # referenced.
+        # Assert that p_inst was deep-copied into prob:
+        # the instance in prob will have its own copy of glob
+        # and it will not be a reference the outside object.
         self.assertEqual(len(glob), 0)
         self.assertEqual(len(prob.extract(p).g), 3)
         # Non-finite bounds.

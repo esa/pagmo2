@@ -92,6 +92,7 @@ class island_test_case(_ut.TestCase):
 
     def runTest(self):
         self.run_basic_tests()
+        self.run_extract_tests()
         self.run_concurrent_access_tests()
         self.run_evolve_tests()
         self.run_get_busy_wait_tests()
@@ -105,6 +106,9 @@ class island_test_case(_ut.TestCase):
         isl = island()
         self.assertTrue(isl.get_algorithm().is_(null_algorithm))
         self.assertTrue(isl.get_population().problem.is_(null_problem))
+        self.assertTrue(isl.extract(thread_island) is not None)
+        self.assertTrue(isl.extract(_udi_01) is None)
+        self.assertTrue(isl.extract(int) is None)
         self.assertEqual(len(isl.get_population()), 0)
         isl = island(algo=de(), prob=rosenbrock(), size=10)
         self.assertTrue(isl.get_algorithm().is_(de))
@@ -125,6 +129,32 @@ class island_test_case(_ut.TestCase):
         self.assertEqual(len(isl.get_population()), 11)
         self.assertRaises(NotImplementedError, lambda: island(prob=rosenbrock(), udi=_udi_02(),
                                                               size=11, algo=de(), seed=15))
+
+        # Verify that the constructor copies the UDI instance.
+        udi_01_inst = _udi_01()
+        isl = island(udi=udi_01_inst, algo=de(), prob=rosenbrock(), size=10)
+        self.assertTrue(id(isl.extract(thread_island)) != id(udi_01_inst))
+
+        # Local island using local variable.
+        glob = []
+
+        class loc_01(object):
+            def __init__(self, g):
+                self.g = g
+
+            def run_evolve(self, algo, pop):
+                self.g.append(1)
+                return algo, pop
+
+        loc_inst = loc_01(glob)
+        isl = island(udi=loc_inst, algo=de(), prob=rosenbrock(), size=20)
+        isl.evolve(10)
+        isl.wait_check()
+        # Assert that loc_inst was deep-copied into isl:
+        # the instance in isl will have its own copy of glob
+        # and it will not be a reference the outside object.
+        self.assertEqual(len(glob), 0)
+        self.assertEqual(len(isl.extract(loc_01).g), 10)
 
         isl = island(prob=rosenbrock(), udi=_udi_03(),
                      size=11, algo=de(), seed=15)
@@ -250,6 +280,56 @@ class island_test_case(_ut.TestCase):
         isl.evolve(20)
         isl.wait_check()
         self.assertTrue(isl.get_algorithm().extract(_stateful_algo)._n == 20)
+
+    def run_extract_tests(self):
+        from .core import island, _test_island, null_problem, null_algorithm, thread_island
+        import sys
+
+        # First we try with a C++ test island.
+        isl = island(udi=_test_island(), algo=null_algorithm(),
+                     prob=null_problem(), size=1)
+        # Verify the refcount of p is increased after extract().
+        rc = sys.getrefcount(isl)
+        tisl = isl.extract(_test_island)
+        self.assertFalse(tisl is None)
+        self.assertEqual(sys.getrefcount(isl), rc + 1)
+        del tisl
+        self.assertEqual(sys.getrefcount(isl), rc)
+        # Verify we are modifying the inner object.
+        isl.extract(_test_island).set_n(5)
+        self.assertEqual(isl.extract(_test_island).get_n(), 5)
+        # Try to extract the wrong C++ island type.
+        self.assertTrue(isl.extract(thread_island) is None)
+
+        class tisland(object):
+
+            def __init__(self):
+                self._n = 1
+
+            def get_n(self):
+                return self._n
+
+            def set_n(self, n):
+                self._n = n
+
+            def run_evolve(self, algo, pop):
+                return algo, pop
+
+        # Test with Python problem.
+        isl = island(udi=tisland(), algo=null_algorithm(),
+                     prob=null_problem(), size=1)
+        rc = sys.getrefcount(isl)
+        tisl = isl.extract(tisland)
+        self.assertFalse(tisl is None)
+        # Reference count does not increase because
+        # tisland is stored as a proper Python object
+        # with its own refcount.
+        self.assertEqual(sys.getrefcount(isl), rc)
+        self.assertEqual(tisl.get_n(), 1)
+        tisl.set_n(12)
+        self.assertEqual(isl.extract(tisland).get_n(), 12)
+        # Try to extract the wrong Python island type.
+        self.assertTrue(isl.extract(_udi_01) is None)
 
 
 class mp_island_test_case(_ut.TestCase):
