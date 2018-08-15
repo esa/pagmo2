@@ -17,6 +17,7 @@ env:
 matrix:
   include:
     - env: PAGMO_BUILD="DebugGCC48"
+      dist: trusty
       compiler: gcc
       os: linux
       addons:
@@ -28,6 +29,7 @@ matrix:
           - g++-4.8
           - binutils-gold
     - env: PAGMO_BUILD="ReleaseGCC48"
+      dist: trusty
       compiler: gcc
       os: linux
       addons:
@@ -39,6 +41,7 @@ matrix:
           - g++-4.8
           - binutils-gold
     - env: PAGMO_BUILD="CoverageGCC6"
+      dist: trusty
       compiler: gcc
       os: linux
       addons:
@@ -50,6 +53,7 @@ matrix:
           - g++-6
           - binutils-gold
     - env: PAGMO_BUILD="DebugGCC7"
+      dist: trusty
       compiler: gcc
       os: linux
       addons:
@@ -61,26 +65,29 @@ matrix:
           - g++-7
           - binutils-gold
     - env: PAGMO_BUILD="DebugClang38"
+      dist: trusty
       compiler: clang
       os: linux
       addons:
         apt:
           sources:
-          - llvm-toolchain-precise-3.8
+          - llvm-toolchain-trusty-6.0
           - ubuntu-toolchain-r-test
           packages:
-          - clang-3.8
+          - clang-6.0
     - env: PAGMO_BUILD="ReleaseClang38"
+      dist: trusty
       compiler: clang
       os: linux
       addons:
         apt:
           sources:
-          - llvm-toolchain-precise-3.8
+          - llvm-toolchain-trusty-5.0
           - ubuntu-toolchain-r-test
           packages:
-          - clang-3.8
+          - clang-5.0
     - env: PAGMO_BUILD="Python36"
+      dist: trusty
       compiler: gcc
       os: linux
       addons:
@@ -91,6 +98,7 @@ matrix:
           - gcc-4.8
           - g++-4.8
     - env: PAGMO_BUILD="Python27"
+      dist: trusty
       compiler: gcc
       os: linux
       addons:
