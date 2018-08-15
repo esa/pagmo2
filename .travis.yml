@@ -64,7 +64,7 @@ matrix:
           - gcc-7
           - g++-7
           - binutils-gold
-    - env: PAGMO_BUILD="DebugClang38"
+    - env: PAGMO_BUILD="DebugClang60"
       dist: trusty
       compiler: clang
       os: linux
@@ -75,7 +75,7 @@ matrix:
           - ubuntu-toolchain-r-test
           packages:
           - clang-6.0
-    - env: PAGMO_BUILD="ReleaseClang38"
+    - env: PAGMO_BUILD="ReleaseClang50"
       dist: trusty
       compiler: clang
       os: linux
