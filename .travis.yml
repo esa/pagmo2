@@ -30,7 +30,6 @@ matrix:
     - env: PAGMO_BUILD="ReleaseGCC48"
       compiler: gcc
       os: linux
-      dist: precise
       addons:
         apt:
           sources:
@@ -53,7 +52,6 @@ matrix:
     - env: PAGMO_BUILD="DebugGCC7"
       compiler: gcc
       os: linux
-      dist: precise
       addons:
         apt:
           sources:
