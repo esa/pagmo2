@@ -38,13 +38,13 @@ def _algorithm_extract(self, t):
     """Extract user-defined algorithm instance.
 
     If *t* is the same type of the user-defined algorithm used to construct this algorithm, then a reference to
-    the internal user-defined algorithm will be returned. Otherwise, ``None`` will be returned.
+    the internal user-defined algorithm will be returned. Otherwise, :data:`None` will be returned.
 
     Args:
-        t (``type``): the type of the user-defined algorithm to extract
+        t (type): the type of the user-defined algorithm to extract
 
     Returns:
-        a reference to the internal user-defined algorithm if it is of type *t*, or ``None`` otherwise
+        a reference to the internal user-defined algorithm if it is of type *t*, or :data:`None` otherwise
 
     Raises:
         TypeError: if *t* is not a type
@@ -60,14 +60,14 @@ def _algorithm_extract(self, t):
 def _algorithm_is(self, t):
     """Check the type of the user-defined algorithm instance.
 
-    If *t* is the same type of the user-defined algorithm used to construct this algorithm, then ``True`` will be
-    returned. Otherwise, ``False`` will be returned.
+    If *t* is the same type of the user-defined algorithm used to construct this algorithm, then :data:`True` will be
+    returned. Otherwise, :data:`False` will be returned.
 
     Args:
-        t (``type``): the type of the user-defined algorithm to extract
+        t (type): the type of the user-defined algorithm to extract
 
     Returns:
-        ``bool``: whether the user-defined algorithm is of type *t* or not
+        bool: whether the user-defined algorithm is of type *t* or not
 
     Raises:
         TypeError: if *t* is not a type

@@ -514,7 +514,7 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<problem>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<problem>)
-        // Problem extraction.
+        // UDP extraction.
         .def("_py_extract", &pygmo::generic_py_extract<problem>)
         // Problem methods.
         .def("fitness", lcast([](const pagmo::problem &p, const bp::object &dv) {
@@ -586,9 +586,9 @@ BOOST_PYTHON_MODULE(core)
                             bp::extract<double> c_tol_double(c_tol);
                             if (c_tol_double.check()) {
                                 prob.set_c_tol(static_cast<double>(c_tol_double));
-                                return;
+                            } else {
+                                prob.set_c_tol(pygmo::to_vd(c_tol));
                             }
-                            prob.set_c_tol(pygmo::to_vd(c_tol));
                         }),
                         pygmo::problem_c_tol_docstring().c_str());
 
@@ -602,7 +602,7 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<algorithm>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<algorithm>)
-        // Algorithm extraction.
+        // UDA extraction.
         .def("_py_extract", &pygmo::generic_py_extract<algorithm>)
         // Algorithm methods.
         .def("evolve", &algorithm::evolve, pygmo::algorithm_evolve_docstring().c_str(), (bp::arg("pop")))
@@ -812,6 +812,7 @@ BOOST_PYTHON_MODULE(core)
     // Global random number generator
     bp::def("set_global_rng_seed", lcast([](unsigned seed) { random_device::set_seed(seed); }),
             pygmo::set_global_rng_seed_docstring().c_str(), bp::arg("seed"));
+
     // Island.
     pygmo::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
@@ -823,6 +824,8 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<island>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<island>)
+        // UDI extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<island>)
         .def("evolve", lcast([](island &isl, unsigned n) { isl.evolve(n); }), pygmo::island_evolve_docstring().c_str(),
              boost::python::arg("n") = 1u)
         .def("wait", &island::wait, pygmo::island_wait_docstring().c_str())

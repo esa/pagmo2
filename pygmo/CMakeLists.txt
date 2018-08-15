@@ -56,7 +56,10 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION
 YACMA_PYTHON_MODULE(core core.cpp docstrings.cpp expose_algorithms_0.cpp expose_algorithms_1.cpp expose_problems_0.cpp expose_problems_1.cpp expose_islands.cpp)
 target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
-set_property(TARGET core PROPERTY CXX_STANDARD 11)
+# Let's setup the target C++ standard, but only if the user did not provide it manually.
+if(NOT CMAKE_CXX_STANDARD)
+    set_property(TARGET core PROPERTY CXX_STANDARD 11)
+endif()
 set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)
 set_property(TARGET core PROPERTY CXX_EXTENSIONS NO)
 
@@ -74,7 +77,7 @@ install(TARGETS core
 add_subdirectory(plotting)
 
 # Add the Python files.
-install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _problem_test.py
+install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _patch_island.py _problem_test.py
      _algorithm_test.py _island_test.py _py_islands.py _py_problems.py "${CMAKE_CURRENT_BINARY_DIR}/_version.py"
      DESTINATION ${PYGMO_INSTALL_PATH})
 
