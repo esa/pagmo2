@@ -223,7 +223,19 @@
 24
 25
 26
-27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/pagmo.hpp&gt;</span><span class="cp"></span>
+27
+28
+29
+30
+31
+32
+33</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithms/sade.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/archipelago.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problems/schwefel.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">pagmo</span><span class="p">;</span>
 
@@ -243,11 +255,11 @@
     <span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
 
     <span class="c1">// 5 - Wait for the evolutions to be finished</span>
-    <span class="n">archi</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+    <span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span>
 
     <span class="c1">// 6 - Print the fitness of the best solution in each island</span>
     <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">isl</span> <span class="p">:</span> <span class="n">archi</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">print</span><span class="p">(</span><span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">(),</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

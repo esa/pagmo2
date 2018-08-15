@@ -448,6 +448,58 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv2NK5pagmo6island7extractEv">
+<span id="pagmo::island::extractC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1aa3f9b3e7c5e2795122f0d039ed3d7dab"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extract a const pointer to the UDI used for construction. </p>
+<p>This method will extract a const pointer to the internal instance of the UDI. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDI used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a const pointer to the internal UDI, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDI type used in the constructor. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo6island7extractEv">
+<span id="pagmo::island::extract"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1a31fbb60b6a24d56f575e94bd6aac1cd8"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extract a pointer to the UDI used for construction. </p>
+<p>This method will extract a pointer to the internal instance of the UDI. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDI used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the internal UDI instance. Assigning a new UDI via this pointer is undefined behaviour.</p>
+</div>
+</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a pointer to the internal UDI, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDI type used in the constructor. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo6island2isEv">
+<span id="pagmo::island::isC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1a67bee065ca4df29c6eaf3348ffa4e0dc"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island2isEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the UDI used for construction is of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><code class="docutils literal"><span class="pre">true</span></code> if the UDI used in construction is of type <code class="docutils literal"><span class="pre">T</span></code>, <code class="docutils literal"><span class="pre">false</span></code> otherwise. </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv2N5pagmo6island6evolveEj">
 <span id="pagmo::island::evolve__unsigned"></span><span class="target" id="classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"></span>void <code class="descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Launch evolution. </p>
