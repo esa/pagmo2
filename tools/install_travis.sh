@@ -34,7 +34,7 @@ elif [[ "${PAGMO_BUILD}" == "DebugClang50" ]]; then
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == "ReleaseClang50" ]]; then
-    CXX=clang++-5.0 CC=clang-5.0 cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
+    CXX=clang++-5.0 CC=clang-5.0 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == "OSXDebug" ]]; then
