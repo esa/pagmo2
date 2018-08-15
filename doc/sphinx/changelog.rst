@@ -18,6 +18,8 @@ New
 Changes
 ~~~~~~~
 
+- The build system now respects the ``CMAKE_CXX_STANDARD`` CMake setting (`#207 <https://github.com/esa/pagmo2/pull/207>`__).
+
 - Ensure that, in :cpp:class:`~pagmo::thread_island`, the algorithm used for the evolution replaces the original algorithm
   at the end of the evolution (`#203 <https://github.com/esa/pagmo2/pull/203>`__).
 
