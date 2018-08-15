@@ -60,9 +60,11 @@ from . import test
 # Patch the problem class.
 from . import _patch_problem
 
-
 # Patch the algorithm class.
 from . import _patch_algorithm
+
+# Patch the island class.
+from . import _patch_island
 
 
 class thread_safety(object):

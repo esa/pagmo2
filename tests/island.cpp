@@ -425,3 +425,27 @@ BOOST_AUTO_TEST_CASE(thread_island_algo_state)
     isl.wait_check();
     BOOST_CHECK(isl.get_algorithm().extract<stateful_algo>()->n_evolve == 5);
 }
+
+// Extract functionality.
+BOOST_AUTO_TEST_CASE(island_extract)
+{
+    island isl(thread_island{}, stateful_algo{}, null_problem{}, 20);
+    BOOST_CHECK(isl.extract<thread_island>() != nullptr);
+    BOOST_CHECK(static_cast<const island &>(isl).extract<thread_island>() != nullptr);
+    BOOST_CHECK((std::is_same<thread_island *, decltype(isl.extract<thread_island>())>::value));
+    BOOST_CHECK((std::is_same<thread_island const *,
+                              decltype(static_cast<const island &>(isl).extract<thread_island>())>::value));
+    BOOST_CHECK(isl.is<thread_island>());
+    BOOST_CHECK(isl.extract<const thread_island>() == nullptr);
+    BOOST_CHECK(isl.extract<udi_01>() == nullptr);
+    BOOST_CHECK(!isl.is<udi_01>());
+    isl = island(udi_01{}, stateful_algo{}, null_problem{}, 20);
+    BOOST_CHECK(isl.extract<thread_island>() == nullptr);
+    BOOST_CHECK(!isl.is<thread_island>());
+    BOOST_CHECK(isl.extract<udi_01>() != nullptr);
+    BOOST_CHECK(static_cast<const island &>(isl).extract<udi_01>() != nullptr);
+    BOOST_CHECK((std::is_same<udi_01 *, decltype(isl.extract<udi_01>())>::value));
+    BOOST_CHECK((std::is_same<udi_01 const *, decltype(static_cast<const island &>(isl).extract<udi_01>())>::value));
+    BOOST_CHECK(isl.is<udi_01>());
+    BOOST_CHECK(isl.extract<const udi_01>() == nullptr);
+}

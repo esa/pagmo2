@@ -1,4 +1,10 @@
-#include <pagmo/pagmo.hpp>
+#include <iostream>
+
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/sade.hpp>
+#include <pagmo/archipelago.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/schwefel.hpp>
 
 using namespace pagmo;
 
@@ -18,10 +24,10 @@ int main()
     archi.evolve(10);
 
     // 5 - Wait for the evolutions to be finished
-    archi.wait();
+    archi.wait_check();
 
     // 6 - Print the fitness of the best solution in each island
     for (const auto &isl : archi) {
-        print(isl.get_population().champion_f(), "\n");
+        std::cout << isl.get_population().champion_f()[0] << '\n';
     }
 }

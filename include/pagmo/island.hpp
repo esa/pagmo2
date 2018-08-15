@@ -565,9 +565,9 @@ struct island_data {
     std::unique_ptr<isl_inner_base> isl_ptr;
     // Algo and pop need a mutex to regulate concurrent access
     // while the island is evolving.
-    std::mutex algo_mutex;
     // NOTE: see the explanation in island::get_algorithm() about why
     // we store algo/pop as shared_ptrs.
+    std::mutex algo_mutex;
     std::shared_ptr<algorithm> algo;
     std::mutex pop_mutex;
     std::shared_ptr<population> pop;
