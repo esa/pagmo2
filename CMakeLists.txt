@@ -67,7 +67,6 @@ if(PAGMO_BUILD_PAGMO)
         message(STATUS "The fork_island UDI will NOT be available.")
         set(PAGMO_WITH_FORK_ISLAND NO)
     endif()
-    unset(PAGMO_HAVE_FORK_SYSCALL)
 else()
     # Initial setup of a pygmo build.
     project(pygmo VERSION ${PAGMO_PROJECT_VERSION} LANGUAGES CXX C)

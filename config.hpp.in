@@ -40,7 +40,7 @@ see https://www.gnu.org/licenses/. */
 // NOTE: in order to enable the fork island, we have to:
 // - verify in the build system that the required headers and the fork() function
 //   are present (which will set the PAGMO_ENABLE_FORK_ISLAND variable), and
-// - verify that the _POSIX_C_SOURCE definition is active.
+// - verify that the _POSIX_C_SOURCE definition is active during compilation.
 #if defined(_POSIX_C_SOURCE)
 @PAGMO_ENABLE_FORK_ISLAND@
 #endif
