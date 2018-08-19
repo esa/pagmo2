@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/algorithm/string/predicate.hpp>
 
+#include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/island.hpp>
@@ -133,13 +134,81 @@ BOOST_AUTO_TEST_CASE(fork_island_evolve)
     BOOST_CHECK(new_cf[0] < old_cf[0]);
 }
 
+// An algorithm that changes its state at every evolve() call.
+struct stateful_algo {
+    population evolve(const population &pop) const
+    {
+        ++n_evolve;
+        return pop;
+    }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar(n_evolve);
+    }
+    mutable int n_evolve = 0;
+};
+
+PAGMO_REGISTER_ALGORITHM(stateful_algo)
+
 // Check that the state of the algorithm is preserved.
 BOOST_AUTO_TEST_CASE(fork_island_stateful_algo)
 {
-    island fi_0(fork_island{}, compass_search{100}, rosenbrock{}, 1, 0);
-    const auto old_cf = fi_0.get_population().champion_f();
+    island fi_0(fork_island{}, stateful_algo{}, rosenbrock{}, 1, 0);
+    BOOST_CHECK(fi_0.get_algorithm().extract<stateful_algo>()->n_evolve == 0);
     fi_0.evolve();
     fi_0.wait_check();
-    const auto new_cf = fi_0.get_population().champion_f();
-    BOOST_CHECK(new_cf[0] < old_cf[0]);
+    BOOST_CHECK(fi_0.get_algorithm().extract<stateful_algo>()->n_evolve == 1);
+}
+
+struct recursive_algo1 {
+    population evolve(const population &pop) const
+    {
+        island fi_0(fork_island{}, compass_search{100}, pop);
+        fi_0.evolve();
+        fi_0.wait_check();
+        return fi_0.get_population();
+    }
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+
+struct recursive_algo2 {
+    population evolve(const population &pop) const
+    {
+        island fi_0(fork_island{}, de{1}, pop);
+        fi_0.evolve();
+        fi_0.wait_check();
+        return fi_0.get_population();
+    }
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+
+PAGMO_REGISTER_ALGORITHM(recursive_algo1)
+PAGMO_REGISTER_ALGORITHM(recursive_algo2)
+
+// Try to call fork() inside fork().
+BOOST_AUTO_TEST_CASE(fork_island_recurse)
+{
+    {
+        island fi_0(fork_island{}, recursive_algo1{}, rosenbrock{}, 1, 0);
+        const auto old_cf = fi_0.get_population().champion_f();
+        fi_0.evolve();
+        fi_0.wait_check();
+        const auto new_cf = fi_0.get_population().champion_f();
+        BOOST_CHECK(new_cf[0] < old_cf[0]);
+    }
+    {
+        // Try also error transport.
+        island fi_0(fork_island{}, recursive_algo2{}, rosenbrock{}, 1, 0);
+        fi_0.evolve();
+        BOOST_CHECK_EXCEPTION(fi_0.wait_check(), std::runtime_error, [](const std::runtime_error &re) {
+            return boost::contains(re.what(), "needs at least 5 individuals in the population");
+        });
+    }
 }
