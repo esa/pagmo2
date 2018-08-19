@@ -54,7 +54,7 @@ namespace pagmo
  *
  */
 
-class bf_fpras : public hv_algorithm
+class bf_fpras final : public hv_algorithm
 {
 public:
     /// Constructor
