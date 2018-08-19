@@ -79,8 +79,6 @@ see https://www.gnu.org/licenses/. */
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <boost/numeric/conversion/cast.hpp>
-
 #endif
 
 /// Macro for the registration of the serialization functionality for user-defined islands.
@@ -379,11 +377,11 @@ class fork_island
                 close_r();
                 close_w();
                 // LCOV_EXCL_START
-            } catch (...) {
+            } catch (const std::runtime_error &re) {
                 // We are in a dtor, the error is not recoverable.
-                std::cerr << "An unrecoverable error was raised in the destructor of a pipe in fork_island(), while "
-                             "trying to close the pipe. Exiting now."
-                          << std::endl;
+                std::cerr << "An unrecoverable error was raised while trying to close a pipe in the pipe's destructor. "
+                             "The full error message is:\n"
+                          << re.what() << "\n\nExiting now." << std::endl;
                 std::exit(1);
             }
             // LCOV_EXCL_STOP
@@ -1456,17 +1454,19 @@ inline void fork_island::run_evolve(island &isl) const
             // Close the write descriptor, we don't need to send anything to the child.
             p.close_w();
             // Prepare a local buffer and a stringstream, then read the data from the child.
-            char buffer[1024];
+            // NOTE: make the buffer small enough that its size can be represented by any
+            // integral type.
+            char buffer[100];
             std::stringstream ss;
             {
                 cereal::BinaryInputArchive iarchive(ss);
                 while (true) {
                     const auto read_bytes = p.read(static_cast<void *>(buffer), sizeof(buffer));
-                    if (read_bytes == 0) {
+                    if (!read_bytes) {
                         // EOF, break out.
                         break;
                     }
-                    ss.write(buffer, boost::numeric_cast<std::streamsize>(read_bytes));
+                    ss.write(buffer, static_cast<std::streamsize>(read_bytes));
                 }
                 iarchive(m);
             }
@@ -1515,12 +1515,14 @@ inline void fork_island::run_evolve(island &isl) const
                 cereal::BinaryOutputArchive oarchive(ss);
                 oarchive(ms);
             }
-            char buffer[1024];
+            // NOTE: make the buffer small enough that its size can be represented by any
+            // integral type.
+            char buffer[100];
             while (!ss.eof()) {
                 // Copy a chunk of data from the stream to the local buffer.
-                ss.read(buffer, boost::numeric_cast<std::streamsize>(sizeof(buffer)));
+                ss.read(buffer, static_cast<std::streamsize>(sizeof(buffer)));
                 // Figure out how much we actually read.
-                const auto read_bytes = boost::numeric_cast<std::size_t>(ss.gcount());
+                const auto read_bytes = static_cast<std::size_t>(ss.gcount());
                 assert(read_bytes <= sizeof(buffer));
                 // Now let's send the current content of the buffer to the parent.
                 p.write(static_cast<const void *>(buffer), read_bytes);
@@ -1541,7 +1543,7 @@ inline void fork_island::run_evolve(island &isl) const
             // So the status flag is already zero and the error message empty.
             std::get<2>(m) = std::move(algo);
             std::get<3>(m) = std::move(new_pop);
-            // Send the message.
+            // Send the evolved pop/algo back to the parent.
             send_message(m);
             // Close the write descriptor.
             p.close_w();
