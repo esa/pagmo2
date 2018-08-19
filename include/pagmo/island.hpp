@@ -72,7 +72,7 @@ see https://www.gnu.org/licenses/. */
 #include <cstdlib>
 #include <cstring>
 #include <ios>
-#include <iterator>
+#include <ostream>
 #include <sstream>
 #include <tuple>
 

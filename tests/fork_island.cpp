@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <chrono>
 #include <csignal>
 #include <exception>
+#include <stdexcept>
 #include <thread>
 #include <utility>
 
@@ -39,9 +40,11 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/algorithm/string/predicate.hpp>
 
+#include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/fork_island.hpp>
+#include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/types.hpp>
@@ -88,21 +91,55 @@ BOOST_AUTO_TEST_CASE(fork_island_basic)
         BOOST_CHECK_EQUAL(fi_0.get_name(), "Fork island");
     }
     {
+        // Test: try to kill a running island.
         island fi_0(fork_island{}, de{200}, godot1{20}, 20);
+        BOOST_CHECK(fi_0.extract<fork_island>() != nullptr);
         BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
         fi_0.evolve();
-        BOOST_CHECK(fi_0.extract<fork_island>() != nullptr);
         // Busy wait until the child is running.
         pid_t child_pid;
-        while ((child_pid = fi_0.extract<fork_island>()->get_child_pid()) == pid_t(0)) {
+        while (!(child_pid = fi_0.extract<fork_island>()->get_child_pid())) {
         }
         BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "Child PID:"));
-        // Now let's kill the child.
         // """
         // Kill the boy and let the man be born.
         // """
         kill(child_pid, SIGTERM);
+        // Check that killing the child raised an error in the parent process.
         BOOST_CHECK_THROW(fi_0.wait_check(), std::exception);
         BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
     }
+    {
+        // Test: try to generate an error in the evolution.
+        // NOTE: de wants more than 1 individual in the pop.
+        island fi_0(fork_island{}, de{1}, rosenbrock{}, 1);
+        BOOST_CHECK(fi_0.extract<fork_island>() != nullptr);
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+        fi_0.evolve();
+        BOOST_CHECK_EXCEPTION(fi_0.wait_check(), std::runtime_error, [](const std::runtime_error &re) {
+            return boost::contains(re.what(), "needs at least 5 individuals in the population");
+        });
+    }
+}
+
+// Check that the population actually evolves.
+BOOST_AUTO_TEST_CASE(fork_island_evolve)
+{
+    island fi_0(fork_island{}, compass_search{100}, rosenbrock{}, 1, 0);
+    const auto old_cf = fi_0.get_population().champion_f();
+    fi_0.evolve();
+    fi_0.wait_check();
+    const auto new_cf = fi_0.get_population().champion_f();
+    BOOST_CHECK(new_cf[0] < old_cf[0]);
+}
+
+// Check that the state of the algorithm is preserved.
+BOOST_AUTO_TEST_CASE(fork_island_stateful_algo)
+{
+    island fi_0(fork_island{}, compass_search{100}, rosenbrock{}, 1, 0);
+    const auto old_cf = fi_0.get_population().champion_f();
+    fi_0.evolve();
+    fi_0.wait_check();
+    const auto new_cf = fi_0.get_population().champion_f();
+    BOOST_CHECK(new_cf[0] < old_cf[0]);
 }
