@@ -4409,7 +4409,7 @@ and :attr:`~pygmo.nlopt.replacement` attributes.
 
 .. seealso::
 
-   The `NLopt website <http://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed description
+   The `NLopt website <https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed description
    of each supported solver.
 
 This constructor will initialise an :class:`~pygmo.nlopt` object which will use the NLopt algorithm specified by
@@ -4447,7 +4447,7 @@ See also the docs of the C++ class :cpp:class:`pagmo::nlopt`.
 
 .. seealso::
 
-   The `NLopt website <http://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed
+   The `NLopt website <https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed
    description of each supported solver.
 
 Args:
