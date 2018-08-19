@@ -32,9 +32,15 @@ see https://www.gnu.org/licenses/. */
 // Let's disable a few compiler warnings emitted by the cereal code.
 #if defined(__clang__) || defined(__GNUC__)
 #pragma GCC diagnostic push
+// NOTE: these warnings are available on all the supported versions
+// of GCC/clang, no need to put version checks.
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #pragma GCC diagnostic ignored "-Wdeprecated"
+// MINGW-specific warnings.
+#if defined(__MINGW32__)
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#endif
 #if __GNUC__ >= 7
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
@@ -82,13 +88,6 @@ see https://www.gnu.org/licenses/. */
 #endif
 #endif
 
-// MINGW-specific warnings.
-#if defined(__MINGW32__)
-
-#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
-
-#endif
-
 // Enable thread-safety in cereal. See:
 // http://uscilab.github.io/cereal/thread_safety.html
 #define CEREAL_THREAD_SAFE 1
@@ -110,7 +109,7 @@ see https://www.gnu.org/licenses/. */
 
 #undef CEREAL_THREAD_SAFE
 
-#if defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__)
+#if defined(__clang__) || defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
