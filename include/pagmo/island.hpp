@@ -1481,7 +1481,7 @@ inline void fork_island::run_evolve(island &isl) const
                 // the child does not exist any more (if the child did not exist,
                 // errno would be ESRCH).
                 std::cerr << "An unrecoverable error was raised while handling another error in the parent process "
-                             "of fork_island(). Giving up now."
+                             "of a fork_island. Giving up now."
                           << std::endl;
                 std::exit(1);
                 // LCOV_EXCL_STOP
@@ -1506,23 +1506,23 @@ inline void fork_island::run_evolve(island &isl) const
         //
         // We are in the child.
         //
-        // A small helper to send the serialized representation of
-        // a message_t to the parent. Factored out because it's used
-        // in 2 places.
-        auto send_message = [&p](const message_t &ms) {
-            std::stringstream ss;
-            {
-                cereal::BinaryOutputArchive oarchive(ss);
-                oarchive(ms);
-            }
+        // Small helpers to serialize a message and send the contents of a string
+        // stream back to the parent. This is split in 2 separate functions
+        // because we can handle errors in serialize_message(), but not in send_ss().
+        auto serialize_message = [](std::stringstream &ss, const message_t &ms) {
+            cereal::BinaryOutputArchive oarchive(ss);
+            oarchive(ms);
+        };
+        auto send_ss = [&p](std::stringstream &ss) {
             // NOTE: make the buffer small enough that its size can be represented by any
             // integral type.
             char buffer[100];
+            std::size_t read_bytes;
             while (!ss.eof()) {
                 // Copy a chunk of data from the stream to the local buffer.
                 ss.read(buffer, static_cast<std::streamsize>(sizeof(buffer)));
                 // Figure out how much we actually read.
-                const auto read_bytes = static_cast<std::size_t>(ss.gcount());
+                read_bytes = static_cast<std::size_t>(ss.gcount());
                 assert(read_bytes <= sizeof(buffer));
                 // Now let's send the current content of the buffer to the parent.
                 p.write(static_cast<const void *>(buffer), read_bytes);
@@ -1531,7 +1531,7 @@ inline void fork_island::run_evolve(island &isl) const
         // Fatal error message.
         constexpr char fatal_msg[]
             = "An unrecoverable error was raised while handling another error in the child process "
-              "of fork_island(). Giving up now.";
+              "of a fork_island. Giving up now.";
         try {
             // Close the read descriptor, we don't need to read anything from the parent.
             p.close_r();
@@ -1543,15 +1543,28 @@ inline void fork_island::run_evolve(island &isl) const
             // So the status flag is already zero and the error message empty.
             std::get<2>(m) = std::move(algo);
             std::get<3>(m) = std::move(new_pop);
-            // Send the evolved pop/algo back to the parent.
-            send_message(m);
-            // Close the write descriptor.
-            p.close_w();
-            // All done, we can kill the child.
-            std::exit(0);
+            // Serialize the message into a stringstream.
+            std::stringstream ss;
+            serialize_message(ss, m);
+            // NOTE: any error raised past this point may now result in incomplete/corrupted
+            // data being sent back to the parent. We have no way of recovering from that,
+            // so we will just bail out.
+            try {
+                // Send the evolved population/algorithm back to the parent.
+                send_ss(ss);
+                // Close the write descriptor.
+                p.close_w();
+                // All done, we can kill the child.
+                std::exit(0);
+            } catch (...) {
+                std::cerr << "An unrecoverable error was raised while trying to send data back to the parent process "
+                             "from the child process of a fork_island. Giving up now."
+                          << std::endl;
+                std::exit(1);
+            }
         } catch (const std::exception &e) {
-            // If we caught an std::exception, set the error message in
-            // m before continuing.
+            // If we caught an std::exception try to set the error message in m before continuing.
+            // We will try to send the error message back to the parent.
             try {
                 std::get<1>(m) = e.what();
             } catch (...) {
@@ -1562,15 +1575,17 @@ inline void fork_island::run_evolve(island &isl) const
             // Not an std::exception, we won't have an error message.
         }
         // If we get here, it means that something went wrong above. We will try
-        // to send an error message back to the parent, failing that we will bail out.
-        // Set the error flag.
-        std::get<0>(m) = 1;
+        // to send an error message back to the parent. Failing that, we will bail.
         try {
+            // Set the error flag.
+            std::get<0>(m) = 1;
             // Make sure the algo/pop in m are set to serializable entities.
             std::get<2>(m) = algorithm{};
             std::get<3>(m) = population{};
             // Send the message.
-            send_message(m);
+            std::stringstream ss;
+            serialize_message(ss, m);
+            send_ss(ss);
             // Close the write descriptor.
             p.close_w();
             // All done, we can kill the child.
