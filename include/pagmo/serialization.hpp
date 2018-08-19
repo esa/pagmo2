@@ -82,6 +82,13 @@ see https://www.gnu.org/licenses/. */
 #endif
 #endif
 
+// MINGW-specific warnings.
+#if defined(__MINGW32__)
+
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+
+#endif
+
 // Enable thread-safety in cereal. See:
 // http://uscilab.github.io/cereal/thread_safety.html
 #define CEREAL_THREAD_SAFE 1
@@ -103,7 +110,7 @@ see https://www.gnu.org/licenses/. */
 
 #undef CEREAL_THREAD_SAFE
 
-#if defined(__clang__) || defined(__GNUC__)
+#if defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__)
 #pragma GCC diagnostic pop
 #endif
 
