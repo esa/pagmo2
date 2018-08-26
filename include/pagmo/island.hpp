@@ -288,10 +288,6 @@ inline bool future_running(const std::future<void> &f)
 
 /// Thread island.
 /**
- * \verbatim embed:rst:leading-asterisk
- * *#include <pagmo/islands/thread_island.hpp>*
- * \endverbatim
- *
  * This class is a user-defined island (UDI) that will run evolutions directly inside
  * the separate thread of execution within pagmo::island.
  */
