@@ -45,6 +45,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#endif
+
 namespace pagmo
 {
 /// DTLZ problem test suite.
@@ -505,5 +511,9 @@ private:
 } // namespace pagmo
 
 PAGMO_REGISTER_PROBLEM(pagmo::dtlz)
+
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif
