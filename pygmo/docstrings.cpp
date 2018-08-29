@@ -2660,7 +2660,7 @@ Args:
 
 Raises:
     OverflowError: if *gen* or *seed* is negative or greater than an implementation-defined value
-    ValueError: if *omega* is not in the [0,1] interval, if *eta1*, *eta2* are not in the [0,1] interval, if *max_vel* is not in ]0,1]
+    ValueError: if *omega* is not in the [0,1] interval, if *eta1*, *eta2* are not in the [0,4] interval, if *max_vel* is not in ]0,1]
     ValueError: *variant* is not one of 1 .. 6, if *neighb_type* is not one of 1 .. 4 or if *neighb_param* is zero
 
 The following variants can be selected via the *variant* parameter:

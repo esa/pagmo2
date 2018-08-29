@@ -167,7 +167,7 @@ public:
      * @param memory when true the particle velocities are not reset between successive calls to evolve
      * @param seed seed used by the internal random number generator (default is random)
      *
-     * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval,
+     * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,4] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
     pso(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
