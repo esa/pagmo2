@@ -9,6 +9,8 @@ New
 
 - Implement the UDI extraction functionality for :cpp:class:`~pagmo::island` (`#207 <https://github.com/esa/pagmo2/pull/207>`__).
 
+- Implement the :cpp:class:`~pagmo::fork_island` UDI (`#205 <https://github.com/esa/pagmo2/pull/205>`__).
+
 - pip pygmo package for Python 3.7 (Linux) (`#196 <https://github.com/esa/pagmo2/pull/196>`__).
 
 - Implement the :class:`~pygmo.decorator_problem` Python meta-problem (`#195 <https://github.com/esa/pagmo2/pull/195>`__).

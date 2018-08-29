@@ -290,6 +290,10 @@ inline bool future_running(const std::future<void> &f)
 /**
  * This class is a user-defined island (UDI) that will run evolutions directly inside
  * the separate thread of execution within pagmo::island.
+ *
+ * thread_island is the UDI type automatically selected by the constructors of pagmo::island
+ * on non-POSIX platforms or when both the island's problem and algorithm provide at least the
+ * pagmo::thread_safety::basic thread safety guarantee.
  */
 class thread_island
 {
@@ -635,20 +639,26 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
 /**
  * \image html island_no_text.png
  *
+ * \verbatim embed:rst:leading-asterisk
+ *
  * In the pagmo jargon, an island is a class that encapsulates three entities:
+ *
  * - a user-defined island (UDI),
- * - a pagmo::algorithm,
- * - a pagmo::population.
+ * - an :cpp:class:`~pagmo::algorithm`,
+ * - a :cpp:class:`~pagmo::population`.
  *
  * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
- * of its pagmo::population via the algorithm's algorithm::evolve() method. Depending
- * on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
- * pagmo::thread_island), in a separate process or even in a separate machine. The evolution
+ * of its :cpp:class:`~pagmo::population` via the algorithm's :cpp:func:`~pagmo::algorithm::evolve()`
+ * method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
+ * :cpp:class:`~pagmo::thread_island`), in a separate process (see :cpp:class:`~pagmo::fork_island`) or even
+ * in a separate machine. The evolution
  * is always asynchronous (i.e., running in the "background") and it is initiated by a call
- * to the evolve() method. At any time the user can query the state of the island
+ * to the :cpp:func:`~pagmo::island::evolve()` method. At any time the user can query the state of the island
  * and fetch its internal data members. The user can explicitly wait for pending evolutions
- * to conclude by calling the wait() and wait_check() methods. The status of
- * ongoing evolutions in the island can be queried via status().
+ * to conclude by calling the :cpp:func:`~pagmo::island::wait()` and :cpp:func:`~pagmo::island::wait_check()`
+ * methods. The status of ongoing evolutions in the island can be queried via :cpp:func:`~pagmo::island::status()`.
+ *
+ * \endverbatim
  *
  * Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
  * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
@@ -762,10 +772,20 @@ public:
      *    This constructor is enabled only if ``a`` can be used to construct a
      *    :cpp:class:`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
      *
-     * \endverbatim
+     * This constructor will use *a* to construct the internal algorithm, and *p* to construct
+     * the internal population. The UDI type will be inferred from the :cpp:type:`~pagmo::thread_safety` properties
+     * of the algorithm and the population's problem. Specifically:
      *
-     * This constructor will use \p a to construct the internal algorithm, and \p p to construct
-     * the internal population. A default-constructed pagmo::thread_island will be the internal UDI.
+     * - if both the algorithm and the problem provide at least the basic :cpp:type:`~pagmo::thread_safety`
+     *   guarantee, or if the current platform is *not* POSIX, then the UDI type will be
+     *   :cpp:class:`~pagmo::thread_island`;
+     * - otherwise, the UDI type will be :cpp:class:`~pagmo::fork_island`.
+     *
+     * Note that on non-POSIX platforms, :cpp:class:`~pagmo::thread_island` will always be selected as the UDI type,
+     * but island evolutions will fail if the algorithm and/or problem do not provide at least the
+     * basic :cpp:type:`~pagmo::thread_safety` guarantee.
+     *
+     * \endverbatim
      *
      * @param a the input algorithm.
      * @param p the input population.
