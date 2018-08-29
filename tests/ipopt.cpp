@@ -42,6 +42,8 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ipopt.hpp>
+#include <pagmo/config.hpp>
+#include <pagmo/island.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/luksan_vlcek1.hpp>
@@ -51,6 +53,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
+
+#if defined(PAGMO_WITH_FORK_ISLAND)
+#include <pagmo/islands/fork_island.hpp>
+#else
+#include <pagmo/islands/thread_island.hpp>
+#endif
 
 using namespace pagmo;
 
@@ -435,4 +443,10 @@ BOOST_AUTO_TEST_CASE(ipopt_options)
 BOOST_AUTO_TEST_CASE(ipopt_thread_safety)
 {
     BOOST_CHECK(algorithm(ipopt{}).get_thread_safety() == thread_safety::none);
+    // Check the island selection type.
+#if defined(PAGMO_WITH_FORK_ISLAND)
+    BOOST_CHECK((island{ipopt{}, luksan_vlcek1{4}, 10}.is<fork_island>()));
+#else
+    BOOST_CHECK((island{ipopt{}, luksan_vlcek1{4}, 10}.is<thread_island>()));
+#endif
 }
