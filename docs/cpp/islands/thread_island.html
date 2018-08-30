@@ -28,7 +28,7 @@
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Multi-objective optimization utilities" href="../utils/multi_objective.html" />
+    <link rel="next" title="Fork island" href="fork_island.html" />
     <link rel="prev" title="Unconstrain" href="../problems/unconstrain.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
@@ -180,11 +180,13 @@
       
   <div class="section" id="thread-island">
 <h1>Thread island<a class="headerlink" href="#thread-island" title="Permalink to this headline">¶</a></h1>
+<p><em>#include &lt;pagmo/islands/thread_island.hpp&gt;</em></p>
 <dl class="class">
 <dt id="_CPPv2N5pagmo13thread_islandE">
 <span id="pagmo::thread_island"></span><span class="target" id="classpagmo_1_1thread__island"></span><em class="property">class </em><code class="descname">thread_island</code><a class="headerlink" href="#_CPPv2N5pagmo13thread_islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread island. </p>
-<p>This class is a user-defined island (UDI) that will run evolutions directly inside the separate thread of execution within <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
+<p>This class is a user-defined island (UDI) that will run evolutions directly inside the separate thread of execution within <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>.</p>
+<p><a class="reference internal" href="#classpagmo_1_1thread__island"><span class="std std-ref">thread_island</span></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> on non-POSIX platforms or when both the island’s problem and algorithm provide at least the <a class="reference internal" href="../miscellanea/type_traits.html#namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"><span class="std std-ref">pagmo::thread_safety::basic</span></a> thread safety guarantee. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">

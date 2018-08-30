@@ -185,24 +185,39 @@
 <span id="pagmo::island"></span><span class="target" id="classpagmo_1_1island"></span><em class="property">class </em><code class="descname">island</code><a class="headerlink" href="#_CPPv2N5pagmo6islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Island class. </p>
 <p><img alt="../../_images/island_no_text.png" src="../../_images/island_no_text.png" /></p>
-<p>In the pagmo jargon, an island is a class that encapsulates three entities:<ul class="simple">
+<p><p>In the pagmo jargon, an island is a class that encapsulates three entities:</p>
+<ul class="simple">
 <li>a user-defined island (UDI),</li>
-<li>a <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>,</li>
-<li>a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</li>
+<li>an <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">algorithm</span></code></a>,</li>
+<li>a <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">population</span></code></a>.</li>
 </ul>
+<p>Through the UDI, the island class manages the asynchronous evolution (or optimisation)
+of its <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">population</span></code></a> via the algorithm’s <a class="reference internal" href="algorithm.html#_CPPv2NK5pagmo9algorithm6evolveERK10population" title="pagmo::algorithm::evolve"><code class="xref cpp cpp-func docutils literal"><span class="pre">evolve()</span></code></a>
+method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
+<a class="reference internal" href="islands/thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">thread_island</span></code></a>), in a separate process (see <a class="reference internal" href="islands/fork_island.html#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a>) or even
+in a separate machine. The evolution
+is always asynchronous (i.e., running in the “background”) and it is initiated by a call
+to the <a class="reference internal" href="#_CPPv2N5pagmo6island6evolveEj" title="pagmo::island::evolve"><code class="xref cpp cpp-func docutils literal"><span class="pre">evolve()</span></code></a> method. At any time the user can query the state of the island
+and fetch its internal data members. The user can explicitly wait for pending evolutions
+to conclude by calling the <a class="reference internal" href="#_CPPv2N5pagmo6island4waitEv" title="pagmo::island::wait"><code class="xref cpp cpp-func docutils literal"><span class="pre">wait()</span></code></a> and <a class="reference internal" href="#_CPPv2N5pagmo6island10wait_checkEv" title="pagmo::island::wait_check"><code class="xref cpp cpp-func docutils literal"><span class="pre">wait_check()</span></code></a>
+methods. The status of ongoing evolutions in the island can be queried via <a class="reference internal" href="#_CPPv2NK5pagmo6island6statusEv" title="pagmo::island::status"><code class="xref cpp cpp-func docutils literal"><span class="pre">status()</span></code></a>.</p>
 </p>
-<p>Through the UDI, the island class manages the asynchronous evolution (or optimisation) of its <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> via the algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>), in a separate process or even in a separate machine. The evolution is always asynchronous (i.e., running in the “background”) and it is initiated by a call to the <a class="reference internal" href="#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">evolve()</span></a> method. At any time the user can query the state of the island and fetch its internal data members. The user can explicitly wait for pending evolutions to conclude by calling the <a class="reference internal" href="#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">wait()</span></a> and <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a> methods. The status of ongoing evolutions in the island can be queried via <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">status()</span></a>.</p>
 <p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>) in conjunction with this class, but advanced users can implement their own UDI types. A user-defined island must implement the following method: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
 </p>
-<p>The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and, once the evolution is finished, will replace the population of the input island with the evolved population. Since internally the <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> class uses a separate thread of execution to provide asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or call the <code class="docutils literal"><span class="pre">get_name()</span></code>, <code class="docutils literal"><span class="pre">get_extra_info()</span></code> methods, etc.), otherwise the behaviour will be undefined.</p>
+<p>The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. Once the evolution is finished, <code class="docutils literal"><span class="pre">run_evolve()</span></code> will then replace the population and the algorithm of the input island with, respectively, the evolved population and the algorithm used for the evolution.</p>
 <p>In addition to the mandatory <code class="docutils literal"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
 </p>
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDI are used by <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>.</p>
+<p>Note that, due to the asynchronous nature of <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>, a UDI has certain requirements regarding thread safety. Specifically, <code class="docutils literal"><span class="pre">run_evolve()</span></code> is always called in a separate thread of execution, and consequently:<ul class="simple">
+<li>multiple UDI objects may be calling their own <code class="docutils literal"><span class="pre">run_evolve()</span></code> method concurrently,</li>
+<li>in a specific UDI object, any method from the public API of the UDI may be called while <code class="docutils literal"><span class="pre">run_evolve()</span></code> is running concurrently in another thread (the only exception being the destructor, which will wait for the end of any ongoing evolution before taking any action). Thus, UDI writers must ensure that actions such as copying the UDI, calling the optional methods (such as <code class="docutils literal"><span class="pre">get_name()</span></code>), etc. can be safely performed while the island is evolving.</li>
+</ul>
+</p>
 <p><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">A moved-from <a class="reference internal" href="#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::island</span></code></a> is destructible and assignable. Any other operation will result
@@ -273,10 +288,21 @@ in undefined behaviour.</p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This constructor is enabled only if <code class="docutils literal"><span class="pre">a</span></code> can be used to construct a
-:cpp:class`pagmo::algorithm` and <code class="xref cpp cpp-class docutils literal"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
+<a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a> and <code class="xref cpp cpp-class docutils literal"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
 </div>
+<p>This constructor will use <em>a</em> to construct the internal algorithm, and <em>p</em> to construct
+the internal population. The UDI type will be inferred from the <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal"><span class="pre">thread_safety</span></code></a> properties
+of the algorithm and the population’s problem. Specifically:</p>
+<ul class="simple">
+<li>if both the algorithm and the problem provide at least the basic <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal"><span class="pre">thread_safety</span></code></a>
+guarantee, or if the current platform is <em>not</em> POSIX, then the UDI type will be
+<a class="reference internal" href="islands/thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">thread_island</span></code></a>;</li>
+<li>otherwise, the UDI type will be <a class="reference internal" href="islands/fork_island.html#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a>.</li>
+</ul>
+<p>Note that on non-POSIX platforms, <a class="reference internal" href="islands/thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">thread_island</span></code></a> will always be selected as the UDI type,
+but island evolutions will fail if the algorithm and/or problem do not provide at least the
+basic <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal"><span class="pre">thread_safety</span></code></a> guarantee.</p>
 </p>
-<p>This constructor will use <code class="docutils literal"><span class="pre">a</span></code> to construct the internal algorithm, and <code class="docutils literal"><span class="pre">p</span></code> to construct the internal population. A default-constructed <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a> will be the internal UDI.</p>
 <p><dl class="docutils">
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
@@ -303,15 +329,12 @@ in undefined behaviour.</p>
 <dd><p>Constructor from UDI, algorithm and population. </p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
-<dl class="last docutils">
-<dt>This constructor is enabled only if:</dt>
-<dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">Isl</span></code> satisfies :cpp:class::<cite>pagmo::is_udi</cite>,</li>
+<p>This constructor is enabled only if:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">Isl</span></code> satisfies <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo6is_udiE" title="pagmo::is_udi"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::is_udi</span></code></a>,</li>
 <li><code class="docutils literal"><span class="pre">a</span></code> can be used to construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>,</li>
-<li><code class="docutils literal"><span class="pre">p</span></code> is an instance of pagmo::population.</li>
+<li><code class="docutils literal"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</li>
 </ul>
-</dd>
-</dl>
 </div>
 </p>
 <p>This constructor will use <code class="docutils literal"><span class="pre">isl</span></code> to construct the internal UDI, <code class="docutils literal"><span class="pre">a</span></code> to construct the internal algorithm, and <code class="docutils literal"><span class="pre">p</span></code> to construct the internal population.</p>
@@ -343,7 +366,8 @@ in undefined behaviour.</p>
 <p><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This constructor is enabled only if <code class="docutils literal"><span class="pre">a</span></code> can be used to construct a
-pagmo::algorithm, and <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code> can be used to construct a <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
+<a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>, and <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code> can be used to construct a
+<a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::population</span></code></a>.</p>
 </div>
 </p>
 <p>This constructor will construct a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> <code class="docutils literal"><span class="pre">pop</span></code> from <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">size</span></code> and <code class="docutils literal"><span class="pre">seed</span></code>, and it will then invoke <a class="reference internal" href="#classpagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a> with <code class="docutils literal"><span class="pre">a</span></code> and <code class="docutils literal"><span class="pre">pop</span></code> as arguments.</p>
