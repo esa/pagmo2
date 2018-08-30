@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <array>
 #include <boost/any.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
+#include <cassert>
 #include <chrono>
 #include <cstddef>
 #include <exception>
@@ -52,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/config.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/exceptions.hpp>
@@ -61,6 +63,23 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
+
+#if defined(PAGMO_WITH_FORK_ISLAND)
+
+#include <atomic>
+#include <cerrno>
+#include <csignal>
+#include <cstdlib>
+#include <cstring>
+#include <ios>
+#include <ostream>
+#include <sstream>
+#include <tuple>
+
+#include <sys/types.h>
+#include <unistd.h>
+
+#endif
 
 /// Macro for the registration of the serialization functionality for user-defined islands.
 /**
@@ -271,6 +290,10 @@ inline bool future_running(const std::future<void> &f)
 /**
  * This class is a user-defined island (UDI) that will run evolutions directly inside
  * the separate thread of execution within pagmo::island.
+ *
+ * thread_island is the UDI type automatically selected by the constructors of pagmo::island
+ * on non-POSIX platforms or when both the island's problem and algorithm provide at least the
+ * pagmo::thread_safety::basic thread safety guarantee.
  */
 class thread_island
 {
@@ -293,6 +316,153 @@ public:
     {
     }
 };
+
+#if defined(PAGMO_WITH_FORK_ISLAND)
+
+// Fork island: will offload the evolution to a child process created with the fork() system call.
+class fork_island
+{
+    // Small RAII wrapper around a pipe.
+    struct pipe_t {
+        // Def ctor: will create the pipe.
+        pipe_t() : r_status(true), w_status(true)
+        {
+            int fd[2];
+            // LCOV_EXCL_START
+            if (pipe(fd) == -1) {
+                pagmo_throw(std::runtime_error, "Unable to create a pipe with the pipe() function. The error code is "
+                                                    + std::to_string(errno) + " and the error message is: '"
+                                                    + std::strerror(errno) + "'");
+            }
+            // LCOV_EXCL_STOP
+            // The pipe was successfully opened, copy over
+            // the r/w descriptors.
+            rd = fd[0];
+            wd = fd[1];
+        }
+        // Try to close the reading end if it has not been closed already.
+        void close_r()
+        {
+            if (r_status) {
+                // LCOV_EXCL_START
+                if (close(rd) == -1) {
+                    pagmo_throw(
+                        std::runtime_error,
+                        "Unable to close the reading end of a pipe with the close() function. The error code is "
+                            + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+                }
+                // LCOV_EXCL_STOP
+                r_status = false;
+            }
+        }
+        // Try to close the writing end if it has not been closed already.
+        void close_w()
+        {
+            if (w_status) {
+                // LCOV_EXCL_START
+                if (close(wd) == -1) {
+                    pagmo_throw(
+                        std::runtime_error,
+                        "Unable to close the writing end of a pipe with the close() function. The error code is "
+                            + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+                }
+                // LCOV_EXCL_STOP
+                w_status = false;
+            }
+        }
+        ~pipe_t()
+        {
+            // Attempt to close the pipe on destruction.
+            try {
+                close_r();
+                close_w();
+                // LCOV_EXCL_START
+            } catch (const std::runtime_error &re) {
+                // We are in a dtor, the error is not recoverable.
+                std::cerr << "An unrecoverable error was raised while trying to close a pipe in the pipe's destructor. "
+                             "The full error message is:\n"
+                          << re.what() << "\n\nExiting now." << std::endl;
+                std::exit(1);
+            }
+            // LCOV_EXCL_STOP
+        }
+        // Wrapper around the read() function.
+        ssize_t read(void *buf, std::size_t count) const
+        {
+            auto retval = ::read(rd, buf, count);
+            // LCOV_EXCL_START
+            if (retval == -1) {
+                pagmo_throw(std::runtime_error,
+                            "Unable to read from a pipe with the read() function. The error code is "
+                                + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+            }
+            // LCOV_EXCL_STOP
+            return retval;
+        }
+        // Wrapper around the write() function.
+        ssize_t write(const void *buf, std::size_t count) const
+        {
+            auto retval = ::write(wd, buf, count);
+            // LCOV_EXCL_START
+            if (retval == -1) {
+                pagmo_throw(std::runtime_error,
+                            "Unable to write to a pipe with the write() function. The error code is "
+                                + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+            }
+            // LCOV_EXCL_STOP
+            return retval;
+        }
+        // The file descriptors of the two ends of the pipe.
+        int rd, wd;
+        // Flag to signal the status of the two ends
+        // of the pipe: true for open, false for closed.
+        bool r_status, w_status;
+    };
+    // The structure we use to pass messages from the child to the parent:
+    // - int, status flag,
+    // - string, error message,
+    // - the algorithm used for evolution,
+    // - the evolved population.
+    using message_t = std::tuple<int, std::string, algorithm, population>;
+
+public:
+    // NOTE: we need to implement these because of the m_pid member,
+    // which has a trivial def ctor and which is missing the copy/move ctors.
+    // m_pid is only informational and it is relevant only while the evolution
+    // is undergoing, we will not copy it or serialize it.
+    fork_island() : m_pid(0) {}
+    fork_island(const fork_island &) : fork_island() {}
+    fork_island(fork_island &&) : fork_island() {}
+    void run_evolve(island &) const;
+    std::string get_name() const
+    {
+        return "Fork island";
+    }
+    // Extra info: report the child process' ID, if evolution
+    // is active.
+    std::string get_extra_info() const
+    {
+        const auto pid = m_pid.load();
+        if (pid) {
+            return "\tChild PID: " + std::to_string(pid);
+        }
+        return "\tNo active child.";
+    }
+    // Get the PID of the child.
+    pid_t get_child_pid() const
+    {
+        return m_pid.load();
+    }
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+
+private:
+    mutable std::atomic<pid_t> m_pid;
+};
+
+#endif
 
 class archipelago;
 
@@ -324,9 +494,21 @@ struct island_factory {
     static func_t s_func;
 };
 
-// This is the default UDI type selector. It will always select thread_island as UDI.
-inline void default_island_factory(const algorithm &, const population &, std::unique_ptr<detail::isl_inner_base> &ptr)
+// This is the default UDI type selector. It will select the thread_island if both algorithm
+// and population provide at least the basic thread safety guarantee. Otherwise, it will select
+// the fork_island, if available.
+inline void default_island_factory(const algorithm &algo, const population &pop,
+                                   std::unique_ptr<detail::isl_inner_base> &ptr)
 {
+    (void)algo;
+    (void)pop;
+#if defined(PAGMO_WITH_FORK_ISLAND)
+    if (static_cast<int>(algo.get_thread_safety()) < static_cast<int>(thread_safety::basic)
+        || static_cast<int>(pop.get_problem().get_thread_safety()) < static_cast<int>(thread_safety::basic)) {
+        ptr = make_unique<isl_inner<fork_island>>();
+        return;
+    }
+#endif
     ptr = make_unique<isl_inner<thread_island>>();
 }
 
@@ -377,7 +559,7 @@ struct island_data {
     island_data &operator=(island_data &&) = delete;
     // The data members.
     // NOTE: isl_ptr has no associated mutex, as it's supposed to be fully
-    // threads-safe on its own.
+    // thread-safe on its own.
     std::unique_ptr<isl_inner_base> isl_ptr;
     // Algo and pop need a mutex to regulate concurrent access
     // while the island is evolving.
@@ -457,20 +639,26 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
 /**
  * \image html island_no_text.png
  *
+ * \verbatim embed:rst:leading-asterisk
+ *
  * In the pagmo jargon, an island is a class that encapsulates three entities:
+ *
  * - a user-defined island (UDI),
- * - a pagmo::algorithm,
- * - a pagmo::population.
+ * - an :cpp:class:`~pagmo::algorithm`,
+ * - a :cpp:class:`~pagmo::population`.
  *
  * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
- * of its pagmo::population via the algorithm's algorithm::evolve() method. Depending
- * on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
- * pagmo::thread_island), in a separate process or even in a separate machine. The evolution
+ * of its :cpp:class:`~pagmo::population` via the algorithm's :cpp:func:`~pagmo::algorithm::evolve()`
+ * method. Depending on the UDI, the evolution might take place in a separate thread (e.g., if the UDI is a
+ * :cpp:class:`~pagmo::thread_island`), in a separate process (see :cpp:class:`~pagmo::fork_island`) or even
+ * in a separate machine. The evolution
  * is always asynchronous (i.e., running in the "background") and it is initiated by a call
- * to the evolve() method. At any time the user can query the state of the island
+ * to the :cpp:func:`~pagmo::island::evolve()` method. At any time the user can query the state of the island
  * and fetch its internal data members. The user can explicitly wait for pending evolutions
- * to conclude by calling the wait() and wait_check() methods. The status of
- * ongoing evolutions in the island can be queried via status().
+ * to conclude by calling the :cpp:func:`~pagmo::island::wait()` and :cpp:func:`~pagmo::island::wait_check()`
+ * methods. The status of ongoing evolutions in the island can be queried via :cpp:func:`~pagmo::island::status()`.
+ *
+ * \endverbatim
  *
  * Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
  * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
@@ -481,11 +669,8 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  *
  * The <tt>run_evolve()</tt> method of
  * the UDI will use the input island algorithm's algorithm::evolve() method to evolve the input island's
- * pagmo::population and, once the evolution is finished, will replace the population of the input island with the
- * evolved population. Since internally the pagmo::island class uses a separate thread of execution to provide
- * asynchronous behaviour, a UDI needs to guarantee a certain degree of thread-safety: it must be possible to interact
- * with the UDI while evolution is ongoing (e.g., it must be possible to copy the UDI while evolution is undergoing, or
- * call the <tt>%get_name()</tt>, <tt>%get_extra_info()</tt> methods, etc.), otherwise the behaviour will be undefined.
+ * pagmo::population. Once the evolution is finished, <tt>run_evolve()</tt> will then replace the population and the
+ * algorithm of the input island with, respectively, the evolved population and the algorithm used for the evolution.
  *
  * In addition to the mandatory <tt>run_evolve()</tt> method, a UDI may implement the following optional methods:
  * @code{.unparsed}
@@ -495,6 +680,15 @@ inline std::ostream &operator<<(std::ostream &os, evolve_status es)
  *
  * See the documentation of the corresponding methods in this class for details on how the optional
  * methods in the UDI are used by pagmo::island.
+ *
+ * Note that, due to the asynchronous nature of pagmo::island, a UDI has certain requirements regarding thread safety.
+ * Specifically, ``run_evolve()`` is always called in a separate thread of execution, and consequently:
+ * - multiple UDI objects may be calling their own ``run_evolve()`` method concurrently,
+ * - in a specific UDI object, any method from the public API of the UDI may be called while ``run_evolve()`` is
+ *   running concurrently in another thread (the only exception being the destructor, which will wait for the end
+ *   of any ongoing evolution before taking any action). Thus, UDI writers must ensure that actions such as copying
+ *   the UDI, calling the optional methods (such as ``%get_name()``), etc. can be safely performed while the island
+ *   is evolving.
  *
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
@@ -576,12 +770,22 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    :cpp:class`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
+     *
+     * This constructor will use *a* to construct the internal algorithm, and *p* to construct
+     * the internal population. The UDI type will be inferred from the :cpp:type:`~pagmo::thread_safety` properties
+     * of the algorithm and the population's problem. Specifically:
+     *
+     * - if both the algorithm and the problem provide at least the basic :cpp:type:`~pagmo::thread_safety`
+     *   guarantee, or if the current platform is *not* POSIX, then the UDI type will be
+     *   :cpp:class:`~pagmo::thread_island`;
+     * - otherwise, the UDI type will be :cpp:class:`~pagmo::fork_island`.
+     *
+     * Note that on non-POSIX platforms, :cpp:class:`~pagmo::thread_island` will always be selected as the UDI type,
+     * but island evolutions will fail if the algorithm and/or problem do not provide at least the
+     * basic :cpp:type:`~pagmo::thread_safety` guarantee.
      *
      * \endverbatim
-     *
-     * This constructor will use \p a to construct the internal algorithm, and \p p to construct
-     * the internal population. A default-constructed pagmo::thread_island will be the internal UDI.
      *
      * @param a the input algorithm.
      * @param p the input population.
@@ -610,9 +814,10 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if:
-     *     - ``Isl`` satisfies :cpp:class::`pagmo::is_udi`,
-     *     - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
-     *     - ``p`` is an instance of pagmo::population.
+     *
+     *    - ``Isl`` satisfies :cpp:class:`pagmo::is_udi`,
+     *    - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
+     *    - ``p`` is an instance of :cpp:class:`pagmo::population`.
      *
      * \endverbatim
      *
@@ -647,7 +852,8 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    pagmo::algorithm, and ``p``, ``size`` and ``seed`` can be used to construct a :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
+     *    :cpp:class:`pagmo::population`.
      *
      * \endverbatim
      *
@@ -1225,6 +1431,190 @@ inline void thread_island::run_evolve(island &isl) const
     // original algorithm, which is still a valid state for the island.
     isl.set_algorithm(std::move(algo));
 }
+
+#if defined(PAGMO_WITH_FORK_ISLAND)
+
+inline void fork_island::run_evolve(island &isl) const
+{
+    // A message that will be used both by parent and child.
+    message_t m;
+    // The pipe.
+    pipe_t p;
+    // Try to fork now.
+    auto child_pid = fork();
+    // LCOV_EXCL_START
+    if (child_pid == -1) {
+        // Forking failed.
+        pagmo_throw(std::runtime_error,
+                    "Cannot fork the process in a fork_island with the fork() function. The error code is "
+                        + std::to_string(errno) + " and the error message is: '" + std::strerror(errno) + "'");
+    }
+    // LCOV_EXCL_STOP
+    if (child_pid) {
+        // We are in the parent.
+        // Small raii helper to ensure that the pid of the child is atomically
+        // set on construction, and reset to zero by the dtor.
+        struct pid_setter {
+            explicit pid_setter(std::atomic<pid_t> &ap, pid_t pid) : m_ap(ap)
+            {
+                m_ap.store(pid);
+            }
+            ~pid_setter()
+            {
+                m_ap.store(0);
+            }
+            std::atomic<pid_t> &m_ap;
+        };
+        pid_setter ps(m_pid, child_pid);
+        try {
+            // Close the write descriptor, we don't need to send anything to the child.
+            p.close_w();
+            // Prepare a local buffer and a stringstream, then read the data from the child.
+            // NOTE: make the buffer small enough that its size can be represented by any
+            // integral type.
+            char buffer[100];
+            std::stringstream ss;
+            {
+                cereal::BinaryInputArchive iarchive(ss);
+                while (true) {
+                    const auto read_bytes = p.read(static_cast<void *>(buffer), sizeof(buffer));
+                    if (!read_bytes) {
+                        // EOF, break out.
+                        break;
+                    }
+                    ss.write(buffer, static_cast<std::streamsize>(read_bytes));
+                }
+                iarchive(m);
+            }
+            // Close the read descriptor.
+            p.close_r();
+        } catch (...) {
+            // Something failed above. As a cleanup action, try to kill the child
+            // before re-raising the error.
+            if (kill(child_pid, SIGTERM) == -1 && errno != ESRCH) {
+                // LCOV_EXCL_START
+                // The signal delivery to the child failed, and not because
+                // the child does not exist any more (if the child did not exist,
+                // errno would be ESRCH).
+                std::cerr << "An unrecoverable error was raised while handling another error in the parent process "
+                             "of a fork_island. Giving up now."
+                          << std::endl;
+                std::exit(1);
+                // LCOV_EXCL_STOP
+            }
+            // Re-raise.
+            throw;
+        }
+        // At this point, we have received the data from the child, and we can insert
+        // it into isl, or raise an error.
+        if (std::get<0>(m)) {
+            pagmo_throw(std::runtime_error, "The run_evolve() method of fork_island raised an error in the "
+                                            "child process. The full error message reported by the child is:\n"
+                                                + std::get<1>(m));
+        }
+        isl.set_algorithm(std::move(std::get<2>(m)));
+        isl.set_population(std::move(std::get<3>(m)));
+    } else {
+        // NOTE: we won't get any coverage data from the child process, so just disable
+        // lcov for this whole block.
+        //
+        // LCOV_EXCL_START
+        //
+        // We are in the child.
+        //
+        // Small helpers to serialize a message and send the contents of a string
+        // stream back to the parent. This is split in 2 separate functions
+        // because we can handle errors in serialize_message(), but not in send_ss().
+        auto serialize_message = [](std::stringstream &ss, const message_t &ms) {
+            cereal::BinaryOutputArchive oarchive(ss);
+            oarchive(ms);
+        };
+        auto send_ss = [&p](std::stringstream &ss) {
+            // NOTE: make the buffer small enough that its size can be represented by any
+            // integral type.
+            char buffer[100];
+            std::size_t read_bytes;
+            while (!ss.eof()) {
+                // Copy a chunk of data from the stream to the local buffer.
+                ss.read(buffer, static_cast<std::streamsize>(sizeof(buffer)));
+                // Figure out how much we actually read.
+                read_bytes = static_cast<std::size_t>(ss.gcount());
+                assert(read_bytes <= sizeof(buffer));
+                // Now let's send the current content of the buffer to the parent.
+                p.write(static_cast<const void *>(buffer), read_bytes);
+            }
+        };
+        // Fatal error message.
+        constexpr char fatal_msg[]
+            = "An unrecoverable error was raised while handling another error in the child process "
+              "of a fork_island. Giving up now.";
+        try {
+            // Close the read descriptor, we don't need to read anything from the parent.
+            p.close_r();
+            // Run the evolution.
+            auto algo = isl.get_algorithm();
+            auto new_pop = algo.evolve(isl.get_population());
+            // Pack in m and serialize the result of the evolution.
+            // NOTE: m was def cted, which, for tuples, value-inits all members.
+            // So the status flag is already zero and the error message empty.
+            std::get<2>(m) = std::move(algo);
+            std::get<3>(m) = std::move(new_pop);
+            // Serialize the message into a stringstream.
+            std::stringstream ss;
+            serialize_message(ss, m);
+            // NOTE: any error raised past this point may now result in incomplete/corrupted
+            // data being sent back to the parent. We have no way of recovering from that,
+            // so we will just bail out.
+            try {
+                // Send the evolved population/algorithm back to the parent.
+                send_ss(ss);
+                // Close the write descriptor.
+                p.close_w();
+                // All done, we can kill the child.
+                std::exit(0);
+            } catch (...) {
+                std::cerr << "An unrecoverable error was raised while trying to send data back to the parent process "
+                             "from the child process of a fork_island. Giving up now."
+                          << std::endl;
+                std::exit(1);
+            }
+        } catch (const std::exception &e) {
+            // If we caught an std::exception try to set the error message in m before continuing.
+            // We will try to send the error message back to the parent.
+            try {
+                std::get<1>(m) = e.what();
+            } catch (...) {
+                std::cerr << fatal_msg << std::endl;
+                std::exit(1);
+            }
+        } catch (...) {
+            // Not an std::exception, we won't have an error message.
+        }
+        // If we get here, it means that something went wrong above. We will try
+        // to send an error message back to the parent. Failing that, we will bail.
+        try {
+            // Set the error flag.
+            std::get<0>(m) = 1;
+            // Make sure the algo/pop in m are set to serializable entities.
+            std::get<2>(m) = algorithm{};
+            std::get<3>(m) = population{};
+            // Send the message.
+            std::stringstream ss;
+            serialize_message(ss, m);
+            send_ss(ss);
+            // Close the write descriptor.
+            p.close_w();
+            // All done, we can kill the child.
+            std::exit(0);
+        } catch (...) {
+            std::cerr << fatal_msg << std::endl;
+            std::exit(1);
+        }
+        // LCOV_EXCL_STOP
+    }
+}
+
+#endif
 
 /// Archipelago.
 /**
@@ -1824,5 +2214,11 @@ private:
 } // namespace pagmo
 
 PAGMO_REGISTER_ISLAND(pagmo::thread_island)
+
+#if defined(PAGMO_WITH_FORK_ISLAND)
+
+PAGMO_REGISTER_ISLAND(pagmo::fork_island)
+
+#endif
 
 #endif

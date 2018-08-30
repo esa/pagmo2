@@ -16,7 +16,7 @@ coded in UDIs provided with pygmo, a list of which can be found at :ref:`islands
 
 .. note::
    A collection of :class:`pygmo.island` form an :class:`~pygmo.archipelago`, you can skip this tutorial and follow directly the tutorial ":ref:`py_tutorial_using_archipelago`"
-   in case you are happy with the defualt choices pygmo will do for you to parallelize your tasks via the :class:`~pygmo.archipelago`.
+   in case you are happy with the default choices pygmo will do for you to parallelize your tasks via the :class:`~pygmo.archipelago`.
 
 We start by instantiating an island.
 

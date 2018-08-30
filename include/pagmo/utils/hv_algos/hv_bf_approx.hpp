@@ -56,7 +56,7 @@ namespace pagmo
  * Tobias Friedrich.
  *
  */
-class bf_approx : public hv_algorithm
+class bf_approx final : public hv_algorithm
 {
 public:
     /// Constructor
