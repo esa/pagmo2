@@ -45,45 +45,37 @@ see https://www.gnu.org/licenses/. */
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include <pygmo/numpy.hpp>
 
-#include <boost/python/class.hpp>
-#include <boost/python/init.hpp>
-#include <boost/python/scope.hpp>
-
-#include <pagmo/algorithm.hpp>
 #include <pagmo/island.hpp>
-#include <pagmo/population.hpp>
 
 #include <pygmo/docstrings.hpp>
-#include <pygmo/pygmo_classes.hpp>
+#include <pygmo/expose_islands.hpp>
 
 using namespace pagmo;
-namespace bp = boost::python;
 
 namespace pygmo
 {
 
-// Main island exposition function - for *internal* use by pygmo. The exposition function
-// for APs needs to be different.
-template <typename Isl>
-static inline bp::class_<Isl> expose_island_pygmo(const char *name, const char *descr)
-{
-    // We require all islands to be def-ctible at the bare minimum.
-    bp::class_<Isl> c(name, descr, bp::init<>());
-
-    // Mark it as a C++ island.
-    c.attr("_pygmo_cpp_island") = true;
-
-    // Expose the island constructor from Isl.
-    get_island_class().def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
-
-    // Add the island to the islands submodule.
-    bp::scope().attr("islands").attr(name) = c;
-
-    return c;
-}
+// A test island.
+struct test_island {
+    void run_evolve(island &) const {}
+    // Set/get an internal value to test extraction semantics.
+    void set_n(int n)
+    {
+        m_n = n;
+    }
+    int get_n() const
+    {
+        return m_n;
+    }
+    int m_n = 1;
+};
 
 void expose_islands()
 {
+    // Test island.
+    auto test_isl = expose_island_pygmo<test_island>("_test_island", "A test island.");
+    test_isl.def("get_n", &test_island::get_n);
+    test_isl.def("set_n", &test_island::set_n);
     // Thread island.
     expose_island_pygmo<thread_island>("thread_island", thread_island_docstring().c_str());
 }

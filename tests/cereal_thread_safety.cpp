@@ -47,7 +47,7 @@ struct base1 {
     }
 };
 
-struct derived1 : base1 {
+struct derived1 final : base1 {
     virtual int do_something() const override
     {
         return 42;
@@ -59,7 +59,7 @@ struct derived1 : base1 {
     }
 };
 
-struct derived2 : base1 {
+struct derived2 final : base1 {
     virtual int do_something() const override
     {
         return 24;

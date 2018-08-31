@@ -725,7 +725,7 @@ inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const d
  *
  * .. seealso::
  *
- *    The `NLopt website <http://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed description
+ *    The `NLopt website <https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed description
  *    of each supported solver.
  *
  * \endverbatim
@@ -805,7 +805,7 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. seealso::
      *
-     *    The `NLopt website <http://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed
+     *    The `NLopt website <https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed
      *    description of each supported solver.
      *
      * \endverbatim

@@ -79,6 +79,7 @@ Implemented islands
   :maxdepth: 1
 
   islands/thread_island
+  islands/fork_island
 
 Implemented topologies
 ^^^^^^^^^^^^^^^^^^^^^^

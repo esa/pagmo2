@@ -62,6 +62,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
+#if defined(PAGMO_WITH_FORK_ISLAND)
+#include <pagmo/islands/fork_island.hpp>
+#endif
+#include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/ackley.hpp>

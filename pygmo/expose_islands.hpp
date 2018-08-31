@@ -29,10 +29,51 @@ see https://www.gnu.org/licenses/. */
 #ifndef PYGMO_EXPOSE_ISLANDS_HPP
 #define PYGMO_EXPOSE_ISLANDS_HPP
 
+#include <boost/python/class.hpp>
+#include <boost/python/init.hpp>
+#include <boost/python/return_internal_reference.hpp>
+#include <boost/python/scope.hpp>
+
+#include <pagmo/algorithm.hpp>
+#include <pagmo/island.hpp>
+#include <pagmo/population.hpp>
+
+#include <pygmo/common_utils.hpp>
+#include <pygmo/pygmo_classes.hpp>
+
 namespace pygmo
 {
 
+namespace bp = boost::python;
+
 void expose_islands();
+
+// Main island exposition function - for *internal* use by pygmo. The exposition function
+// for APs needs to be different.
+template <typename Isl>
+inline bp::class_<Isl> expose_island_pygmo(const char *name, const char *descr)
+{
+    // We require all islands to be def-ctible at the bare minimum.
+    bp::class_<Isl> c(name, descr, bp::init<>());
+
+    // Mark it as a C++ island.
+    c.attr("_pygmo_cpp_island") = true;
+
+    // Get reference to the island class.
+    auto &isl = get_island_class();
+
+    // Expose the island constructor from Isl.
+    isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
+
+    // Expose extract.
+    isl.def("_cpp_extract", &generic_cpp_extract<pagmo::island, Isl>, bp::return_internal_reference<>());
+
+    // Add the island to the islands submodule.
+    bp::scope().attr("islands").attr(name) = c;
+
+    return c;
 }
+
+} // namespace pygmo
 
 #endif

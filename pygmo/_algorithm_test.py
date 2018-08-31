@@ -111,8 +111,9 @@ class algorithm_test_case(_ut.TestCase):
         self.assertFalse(algo.extract(a) is None)
         self.assertTrue(algo.is_(a))
         self.assertTrue(isinstance(algo.evolve(population()), population))
-        # Assert that the global variable was copied into p, not simply
-        # referenced.
+        # Assert that a_inst was deep-copied into algo:
+        # the instance in algo will have its own copy of glob
+        # and it will not be a reference the outside object.
         self.assertEqual(len(glob), 0)
         self.assertEqual(len(algo.extract(a).g), 1)
         algo = algorithm(de())

@@ -52,7 +52,7 @@ namespace pagmo
  * partial areas linearly.
  *
  */
-class hv2d : public hv_algorithm
+class hv2d final : public hv_algorithm
 {
 public:
     /// Constructor

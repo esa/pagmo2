@@ -31,20 +31,20 @@
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
-from .core import problem
+from .core import island
 
 
-def _problem_extract(self, t):
-    """Extract user-defined problem instance.
+def _island_extract(self, t):
+    """Extract user-defined island instance.
 
-    If *t* is the same type of the user-defined problem used to construct this problem, then a reference to
-    the internal user-defined problem will be returned. Otherwise, :data:`None` will be returned.
+    If *t* is the same type of the user-defined island used to construct this island, then a reference to
+    the internal user-defined island will be returned. Otherwise, :data:`None` will be returned.
 
     Args:
-        t (type): the type of the user-defined problem to extract
+        t (type): the type of the user-defined island to extract
 
     Returns:
-        a reference to the internal user-defined problem if it is of type *t*, or :data:`None` otherwise
+        a reference to the internal user-defined island if it is of type *t*, or :data:`None` otherwise
 
     Raises:
         TypeError: if *t* is not a type
@@ -52,22 +52,22 @@ def _problem_extract(self, t):
     """
     if not isinstance(t, type):
         raise TypeError("the 't' parameter must be a type")
-    if hasattr(t, "_pygmo_cpp_problem"):
+    if hasattr(t, "_pygmo_cpp_island"):
         return self._cpp_extract(t())
     return self._py_extract(t)
 
 
-def _problem_is(self, t):
-    """Check the type of the user-defined problem instance.
+def _island_is(self, t):
+    """Check the type of the user-defined island instance.
 
-    If *t* is the same type of the user-defined problem used to construct this problem, then :data:`True` will be
+    If *t* is the same type of the user-defined island used to construct this island, then :data:`True` will be
     returned. Otherwise, :data:`False` will be returned.
 
     Args:
-        t (type): the type of the user-defined problem to extract
+        t (type): the type of the user-defined island to extract
 
     Returns:
-        bool: whether the user-defined problem is of type *t* or not
+        bool: whether the user-defined island is of type *t* or not
 
     Raises:
         TypeError: if *t* is not a type
@@ -77,5 +77,5 @@ def _problem_is(self, t):
 
 
 # Do the actual patching.
-setattr(problem, "extract", _problem_extract)
-setattr(problem, "is_", _problem_is)
+setattr(island, "extract", _island_extract)
+setattr(island, "is_", _island_is)

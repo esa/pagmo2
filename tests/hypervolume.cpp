@@ -173,7 +173,7 @@ private:
 };
 
 // only here to access and test protected members of hv_algorithm
-class hv_fake_algo : public hv_algorithm
+class hv_fake_algo final : public hv_algorithm
 {
 public:
     hv_fake_algo() = default;
