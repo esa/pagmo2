@@ -176,23 +176,20 @@ struct nlopt_obj {
     using log_line_type = std::tuple<unsigned long, double, vector_double::size_type, double, bool>;
     // The log.
     using log_type = std::vector<log_line_type>;
-#if defined(_MSC_VER)
     // NOTE: this is a wrapper around std::copy() for use in MSVC in conjunction with raw pointers.
     // In debug mode, MSVC will complain about unchecked iterators unless instructed otherwise.
     template <typename Int, typename T>
     static void unchecked_copy(Int size, const T *begin, T *dest)
     {
-        std::copy(stdext::make_checked_array_iterator(begin, size),
-                  stdext::make_checked_array_iterator(begin, size, size),
-                  stdext::make_checked_array_iterator(dest, size));
-    }
+        std::copy(
+#if defined(_MSC_VER)
+            stdext::make_checked_array_iterator(begin, size), stdext::make_checked_array_iterator(begin, size, size),
+            stdext::make_checked_array_iterator(dest, size)
 #else
-    template <typename Int, typename T>
-    static void unchecked_copy(Int size, const T *begin, T *dest)
-    {
-        std::copy(begin, begin + size, dest);
-    }
+            begin, begin + size, dest
 #endif
+        );
+    }
     // Shortcut to the static data.
     using data = nlopt_data<>;
     explicit nlopt_obj(::nlopt_algorithm algo, problem &prob, double stopval, double ftol_rel, double ftol_abs,
@@ -547,8 +544,7 @@ inline void nlopt_ineq_c_wrapper(unsigned m, double *result, unsigned dim, const
 
                 // Now we need to go into the sparsity pattern and find where
                 // the sparsity data for the constraints start.
-                using pair_t = sparsity_pattern::value_type;
-                auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(p.get_nec() + 1u, 0u));
+                auto it_sp = std::lower_bound(sp.begin(), sp.end(), sparsity_pattern::value_type(p.get_nec() + 1u, 0u));
 
                 // Need to do a bit of horrid overflow checking :/.
                 using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
@@ -634,12 +630,11 @@ inline void nlopt_eq_c_wrapper(unsigned m, double *result, unsigned dim, const d
 
                 // Now we need to go into the sparsity pattern and find where
                 // the sparsity data for the constraints start.
-                using pair_t = sparsity_pattern::value_type;
                 // NOTE: it_sp could be end() or point to ineq constraints. This should
                 // be fine: it_sp is a valid iterator in sp, sp has the same
                 // size as gradient and we do the proper checks below before accessing
                 // the values pointed to by it_sp/g_it.
-                auto it_sp = std::lower_bound(sp.begin(), sp.end(), pair_t(1u, 0u));
+                auto it_sp = std::lower_bound(sp.begin(), sp.end(), sparsity_pattern::value_type(1u, 0u));
 
                 // Need to do a bit of horrid overflow checking :/.
                 using diff_type = std::iterator_traits<decltype(it_sp)>::difference_type;
