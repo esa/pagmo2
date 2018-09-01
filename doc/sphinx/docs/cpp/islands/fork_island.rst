@@ -51,7 +51,7 @@ Fork island
    .. cpp:function:: fork_island(const fork_island &)
    .. cpp:function:: fork_island(fork_island &&) noexcept
 
-      :cpp:class:`~pagmo::fork_island` is default, copy and move-constructible.
+   :cpp:class:`~pagmo::fork_island` is default, copy and move-constructible.
 
    .. cpp:function:: void run_evolve(island &isl) const
 
