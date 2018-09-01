@@ -1229,7 +1229,7 @@ public:
      *    At the present time, only the ``"auglag"`` and ``"auglag_eq"`` solvers make use
      *    of a local optimizer. Setting a local optimizer on any other solver will have no effect.
      *
-     * .. warning::
+     * .. note::
      *
      *    The objective function, bounds, and nonlinear-constraint parameters of the local
      *    optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
@@ -1251,7 +1251,7 @@ public:
      *
      * \verbatim embed:rst:leading-asterisk
      *
-     * .. warning::
+     * .. note::
      *
      *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      *    of ``this``, and ``delete`` must never be called on the pointer.
@@ -1271,10 +1271,15 @@ public:
      *
      * \verbatim embed:rst:leading-asterisk
      *
-     * .. warning::
+     * .. note::
      *
      *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * .. note::
+     *
+     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     *    methods on the local optimizer. Assigning a new local optimizer via this pointer is undefined behaviour.
      *
      * \endverbatim
      *
