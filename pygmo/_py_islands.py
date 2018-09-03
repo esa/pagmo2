@@ -34,13 +34,6 @@ from __future__ import absolute_import as _ai
 from threading import Lock as _Lock
 
 
-def _evolve_func(algo, pop):
-    # The evolve function that is actually run from the separate processes
-    # in both mp_island and ipyparallel_island.
-    new_pop = algo.evolve(pop)
-    return algo, new_pop
-
-
 class _temp_disable_sigint(object):
     # A small helper context class to disable CTRL+C temporarily.
 
@@ -54,6 +47,28 @@ class _temp_disable_sigint(object):
         import signal
         # Restore the previous sighandler.
         signal.signal(signal.SIGINT, self._prev_signal)
+
+
+def _evolve_func(algo, pop):
+    # The evolve function that is actually run from the separate processes
+    # in both mp_island (when using the pool) and ipyparallel_island.
+    new_pop = algo.evolve(pop)
+    return algo, new_pop
+
+
+def _evolve_func_pipe(conn, algo, pop):
+    # The evolve function that is actually run from the separate processes
+    # in mp_island (when *not* using the pool). Communication with the
+    # parent process happens through the conn pipe.
+    with _temp_disable_sigint():
+        try:
+            new_pop = algo.evolve(pop)
+            conn.send((algo, new_pop))
+        except Exception as e:
+            conn.send(RuntimeError(
+                "An exception was raised in the evolution of a multiprocessing island. The full error message is:\n{}".format(e)))
+        finally:
+            conn.close()
 
 
 class mp_island(object):
@@ -87,15 +102,41 @@ class mp_island(object):
     _pool = None
     _pool_size = None
 
-    def __init__(self):
+    def __init__(self, use_pool=True):
         """
         Raises:
 
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
-        # Init the process pool, if necessary.
-        mp_island.init_pool()
+        if not isinstance(use_pool, bool):
+            raise TypeError(
+                "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead".format(type(use_pool)))
+        self._use_pool = use_pool
+        if self._use_pool:
+            # Init the process pool, if necessary.
+            mp_island.init_pool()
+        else:
+            # Init the pid member and associated lock.
+            self._pid_lock = _Lock()
+            self._pid = None
+
+    def __copy__(self):
+        # For copy/deepcopy, construct a new instance
+        # with the same arguments used to construct self.
+        return mp_island(self._use_pool)
+
+    def __deepcopy__(self, d):
+        return self.__copy__()
+
+    def __getstate__(self):
+        # For pickle/unpickle, we employ the construction
+        # argument, which will be used to re-init the class
+        # during unpickle.
+        return self._use_pool
+
+    def __setstate__(self, state):
+        self._use_pool = state
 
     def run_evolve(self, algo, pop):
         """Evolve population.
@@ -123,19 +164,36 @@ class mp_island(object):
 
 
         """
-        with mp_island._pool_lock:
-            # NOTE: run this while the pool is locked. We have
-            # functions to modify the pool (e.g., resize()) and
-            # we need to make sure we are not trying to touch
-            # the pool while we are sending tasks to it.
-            if mp_island._pool is None:
-                raise RuntimeError(
-                    "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool().")
-            res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
-        # NOTE: there might be a bug in need of a workaround lurking in here:
-        # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
-        # Just keep it in mind.
-        return res.get()
+        if self._use_pool:
+            with mp_island._pool_lock:
+                # NOTE: run this while the pool is locked. We have
+                # functions to modify the pool (e.g., resize()) and
+                # we need to make sure we are not trying to touch
+                # the pool while we are sending tasks to it.
+                if mp_island._pool is None:
+                    raise RuntimeError(
+                        "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool().")
+                res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
+            # NOTE: there might be a bug in need of a workaround lurking in here:
+            # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
+            # Just keep it in mind.
+            return res.get()
+        else:
+            import multiprocessing as mp
+            ctx = mp.get_context('spawn')
+            parent_conn, child_conn = ctx.Pipe(duplex=False)
+            p = ctx.Process(target=_evolve_func_pipe,
+                            args=(child_conn, algo, pop))
+            p.start()
+            with self._pid_lock:
+                self._pid = p.pid
+            res = parent_conn.recv()
+            p.join()
+            with self._pid_lock:
+                self._pid = None
+            if isinstance(res, RuntimeError):
+                raise res
+            return res
 
     def get_name(self):
         """Island's name.
@@ -162,7 +220,15 @@ class mp_island(object):
            unspecified: any exception thrown by :func:`~pygmo.mp_island.get_pool_size()`
 
         """
-        return "\tNumber of processes in the pool: {}".format(mp_island.get_pool_size())
+        if self._use_pool:
+            return "\tNumber of processes in the pool: {}".format(mp_island.get_pool_size())
+        else:
+            with self._pid_lock:
+                pid = self._pid
+            if pid is None:
+                return "\tNo active process"
+            else:
+                return "\tProcess ID: {}".format(pid)
 
     @staticmethod
     def _make_pool(processes):

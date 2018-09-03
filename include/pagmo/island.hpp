@@ -446,7 +446,7 @@ public:
         if (pid) {
             return "\tChild PID: " + std::to_string(pid);
         }
-        return "\tNo active child.";
+        return "\tNo active child";
     }
     // Get the PID of the child.
     pid_t get_child_pid() const
