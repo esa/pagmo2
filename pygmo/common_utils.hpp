@@ -611,10 +611,18 @@ template <typename C>
 inline bp::object generic_py_extract(C &c, const bp::object &t)
 {
     auto ptr = c.template extract<bp::object>();
-    if (!ptr || type(*ptr) != t) {
-        return bp::object{};
+    // NOTE: this function must be used only if we are
+    // sure the user-defined entity is a Python object.
+    assert(ptr);
+    if (t == builtin().attr("object") || t == type(*ptr)) {
+        // Either the user supplied as t the builtin 'object' type
+        // (which we use as a wildcard for any Python type), or the type
+        // passed in by the user is the exact type of the user-defined
+        // entity. Let's return the extracted object.
+        return *ptr;
     }
-    return *ptr;
+    // The user specified the wrong type, return None.
+    return bp::object{};
 }
 
 // Detail implementation of the tuple conversion below.
