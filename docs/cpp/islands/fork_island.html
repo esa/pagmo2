@@ -148,7 +148,10 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Fork island</a></li>
+<li><a class="reference internal" href="#">Fork island</a><ul>
+<li><a class="reference internal" href="#types">Types</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -234,9 +237,10 @@ of objects with automatic storage duration). Thus, such warnings can be safely i
 <dl class="function">
 <dt id="_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island">
 <span id="pagmo::fork_island::fork_island__fork_islandRR"></span><code class="descclassname"></code><code class="descname">fork_island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11fork_island11fork_islandEv" title="pagmo::fork_island::fork_island">fork_island</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is default, copy and move-constructible.</p>
-</dd></dl>
+<dd></dd></dl>
 
+<p><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is default, copy and move-constructible. The copy and move constructor are equivalent
+to the default constructor.</p>
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11fork_island10run_evolveER6island">
 <span id="pagmo::fork_island::run_evolve__islandRC"></span>void <code class="descclassname"></code><code class="descname">run_evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
@@ -298,7 +302,7 @@ representation of the ID of the child process. Otherwise, the <code class="docut
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo11fork_island13get_child_pidEv">
-<span id="pagmo::fork_island::get_child_pidC"></span>pid_t <code class="descclassname"></code><code class="descname">get_child_pid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island13get_child_pidEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::fork_island::get_child_pidC"></span><a class="reference internal" href="#_CPPv25pid_t" title="pid_t">pid_t</a> <code class="descclassname"></code><code class="descname">get_child_pid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island13get_child_pidEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -319,6 +323,15 @@ template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code c
 
 </dd></dl>
 
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv25pid_t">
+<span id="pid_t"></span><em class="property">type </em><code class="descclassname"></code><code class="descname">pid_t</code><a class="headerlink" href="#_CPPv25pid_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The POSIX type used to represent a process ID. It is an alias for a fundamental signed integral type.</p>
+</dd></dl>
+
+</div>
 </div>
 
 

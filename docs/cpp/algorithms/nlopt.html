@@ -722,8 +722,8 @@ description of each supported solver.</p>
 <p class="last">At the present time, only the <code class="docutils literal"><span class="pre">&quot;auglag&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;auglag_eq&quot;</span></code> solvers make use
 of a local optimizer. Setting a local optimizer on any other solver will have no effect.</p>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
 <p class="last">The objective function, bounds, and nonlinear-constraint parameters of the local
 optimizer are ignored (as they are provided by the parent optimizer). Conversely, the stopping
 criteria should be specified in the local optimizer. The verbosity of
@@ -745,8 +745,8 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 <span id="pagmo::nlopt::get_local_optimizerC"></span><span class="target" id="classpagmo_1_1nlopt_1ad590dda8dee32d984479635c7874442d"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a> *<code class="descname">get_local_optimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nlopt19get_local_optimizerEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the local optimizer. </p>
 <p>This method returns a raw const pointer to the local optimizer, if it has been set via <a class="reference internal" href="#classpagmo_1_1nlopt_1ab86c27d160a902c25e5f95757d2c76c6"><span class="std std-ref">set_local_optimizer()</span></a>. Otherwise, <code class="docutils literal"><span class="pre">nullptr</span></code> will be returned.</p>
-<p><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
 <p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
 of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
 </div>
@@ -763,10 +763,15 @@ of <code class="docutils literal"><span class="pre">this</span></code>, and <cod
 <span id="pagmo::nlopt::get_local_optimizer"></span><span class="target" id="classpagmo_1_1nlopt_1a705357b0c3e1b1f22ba061069ec84253"></span><a class="reference internal" href="#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt">nlopt</a> *<code class="descname">get_local_optimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nlopt19get_local_optimizerEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the local optimizer. </p>
 <p>This method returns a raw pointer to the local optimizer, if it has been set via <a class="reference internal" href="#classpagmo_1_1nlopt_1ab86c27d160a902c25e5f95757d2c76c6"><span class="std std-ref">set_local_optimizer()</span></a>. Otherwise, <code class="docutils literal"><span class="pre">nullptr</span></code> will be returned.</p>
-<p><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
 <p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
 of <code class="docutils literal"><span class="pre">this</span></code>, and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the local optimizer. Assigning a new local optimizer via this pointer is undefined behaviour.</p>
 </div>
 </p>
 <p><dl class="docutils">
