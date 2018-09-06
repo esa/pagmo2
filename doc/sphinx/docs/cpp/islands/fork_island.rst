@@ -51,7 +51,8 @@ Fork island
    .. cpp:function:: fork_island(const fork_island &)
    .. cpp:function:: fork_island(fork_island &&) noexcept
 
-      :cpp:class:`~pagmo::fork_island` is default, copy and move-constructible.
+   :cpp:class:`~pagmo::fork_island` is default, copy and move-constructible. The copy and move constructor are equivalent
+   to the default constructor.
 
    .. cpp:function:: void run_evolve(island &isl) const
 
@@ -93,3 +94,10 @@ Fork island
       Note that :cpp:class:`~pagmo::fork_island` is stateless, and thus this (de)serialisation function is empty and performs no work.
 
 .. cpp:namespace-pop::
+
+Types
+-----
+
+.. cpp:type:: pid_t
+
+   The POSIX type used to represent a process ID. It is an alias for a fundamental signed integral type.
