@@ -4,10 +4,15 @@ Changelog
 2.10 (unreleased)
 -----------------
 
-Fix
+New
 ~~~
 
-- Tentative fix for a pygmo build failure in Cygwin (`#219 <https://github.com/esa/pagmo2/pull/219>`__).
+- Python user-defined classes can now be extracted from their type-erased containers using the
+  Python :class:`object` type (`#219 <https://github.com/esa/pagmo2/pull/219>`__). This allows extraction
+  without knowing the exact type of the object being extracted.
+
+Fix
+~~~
 
 - Various documentation fixes and enhancements (`#217 <https://github.com/esa/pagmo2/pull/217>`__, `#218 <https://github.com/esa/pagmo2/pull/218>`__).
 
