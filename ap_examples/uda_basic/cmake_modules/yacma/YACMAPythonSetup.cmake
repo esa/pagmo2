@@ -10,7 +10,12 @@ endif()
 # on various CI setups.
 # NOTE: apparently homebrew requires NOT to link to the Python library. We might want
 # to add a config option to accommodate that eventually.
-if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# NOTE: according to this report:
+# https://github.com/esa/pagmo2/issues/216
+# it is necessary to link to the Python library on Cygwin. Note that, in recent
+# CMake versions, the WIN32 variable is *not* defined on Cygwin. So, we check
+# for the CYGWIN variable explicitly.
+if(WIN32 OR CYGWIN OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
 else()
