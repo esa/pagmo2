@@ -335,6 +335,18 @@ class island_test_case(_ut.TestCase):
         self.assertTrue(isl.extract(_udi_01) is None)
         self.assertFalse(isl.is_(_udi_01))
 
+        # Check that we can extract Python UDIs also via Python's object type.
+        isl = island(udi=tisland(), algo=null_algorithm(),
+                     prob=null_problem(), size=1)
+        self.assertTrue(not isl.extract(object) is None)
+        # Check we are referring to the same object.
+        self.assertEqual(id(isl.extract(object)), id(isl.extract(tisland)))
+        # Check that it will not work with exposed C++ islands.
+        isl = island(udi=thread_island(), algo=null_algorithm(),
+                     prob=null_problem(), size=1)
+        self.assertTrue(isl.extract(object) is None)
+        self.assertTrue(not isl.extract(thread_island) is None)
+
 
 class mp_island_test_case(_ut.TestCase):
     """Test case for the :class:`~pygmo.mp_island` class.
