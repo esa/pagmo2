@@ -29,9 +29,9 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_IHS_HPP
 #define PAGMO_ALGORITHMS_IHS_HPP
 
-#include <cmath>  // log, etc..
-#include <random> // uniform_int, etc..
+#include <cmath>   // log, etc..
 #include <iomanip> // setw
+#include <random>  // uniform_int, etc..
 
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -74,8 +74,8 @@ namespace pagmo
  * .. note::
  *
  *    The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
- *    In pagmo, the algorithm was modified to tackle also multi-objective (unconstrained), constrained (single-objective)
- *    and stochastic problems. Such extension is original with pagmo.
+ *    In pagmo, the algorithm was modified to tackle also multi-objective (unconstrained), constrained
+ *    (single-objective), mixed-integer and stochastic problems. Such extension is original with pagmo.
  *
  * .. seealso::
  *
