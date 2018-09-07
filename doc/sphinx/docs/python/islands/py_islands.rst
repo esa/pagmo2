@@ -12,6 +12,8 @@ Islands implemented in Python
 .. autoclass:: pygmo.ipyparallel_island
    :members:
 
+.. _py_islands_cpp:
+
 Islands exposed from C++
 -------------------------
 
