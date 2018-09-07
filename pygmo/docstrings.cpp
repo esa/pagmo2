@@ -366,8 +366,8 @@ Every UDP must implement at least the following two methods:
    def get_bounds(self):
      ...
 
-The ``fitness()`` method is expected to return the fitness of the input decision vector (
-* concatenating the objectives, the equality and the inequality constraints), while
+The ``fitness()`` method is expected to return the fitness of the input decision vector (concatenating
+the objectives, the equality and the inequality constraints), while
 ``get_bounds()`` is expected to return the box bounds of the problem,
 :math:`(\mathbf{lb}, \mathbf{ub})`, which also implicitly define the dimension of the problem.
 The ``fitness()`` and ``get_bounds()`` methods of the UDP are accessible from the corresponding
@@ -4210,6 +4210,9 @@ the separate thread of execution within :class:`pygmo.island`. Evolution tasks r
 UDI must involve :class:`~pygmo.algorithm` and :class:`~pygmo.problem` instances
 that provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee, otherwise
 errors will be raised during the evolution.
+
+Note that algorithms and problems implemented in Python are never considered thread safe, and thus
+this UDI can be used only with algorithms and problems implemented in C++.
 
 See also the documentation of the corresponding C++ class :cpp:class:`pagmo::thread_island`.
 

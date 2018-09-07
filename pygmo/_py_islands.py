@@ -442,8 +442,7 @@ class ipyparallel_island(object):
 
         Returns:
 
-            :class:`~pygmo.algorithm`: *algo* (i.e., the algorithm object that was used for the evolution)
-            :class:`~pygmo.population`: the evolved population
+            tuple: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
 
         Raises:
 
