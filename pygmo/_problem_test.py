@@ -551,7 +551,7 @@ class problem_test_case(_ut.TestCase):
         self.assertRaises(ValueError, lambda: prob.fitness([1, 2]))
 
     def run_extract_tests(self):
-        from .core import problem, translate, _test_problem, decompose
+        from .core import problem, translate, _test_problem, decompose, rosenbrock
         import sys
 
         # First we try with a C++ test problem.
@@ -680,6 +680,16 @@ class problem_test_case(_ut.TestCase):
         del test_prob
         # Verify the refcount of p drops back.
         self.assert_(sys.getrefcount(p) == rc)
+
+        # Check that we can extract Python UDPs also via Python's object type.
+        p = problem(tproblem())
+        self.assertTrue(not p.extract(object) is None)
+        # Check we are referring to the same object.
+        self.assertEqual(id(p.extract(object)), id(p.extract(tproblem)))
+        # Check that it will not work with exposed C++ problems.
+        p = problem(rosenbrock())
+        self.assertTrue(p.extract(object) is None)
+        self.assertTrue(not p.extract(rosenbrock) is None)
 
     def run_nec_nic_tests(self):
         from .core import problem

@@ -611,17 +611,17 @@ template <typename C>
 inline bp::object generic_py_extract(C &c, const bp::object &t)
 {
     auto ptr = c.template extract<bp::object>();
-    // NOTE: this function must be used only if we are
-    // sure the user-defined entity is a Python object.
-    assert(ptr);
-    if (t == builtin().attr("object") || t == type(*ptr)) {
-        // Either the user supplied as t the builtin 'object' type
-        // (which we use as a wildcard for any Python type), or the type
-        // passed in by the user is the exact type of the user-defined
-        // entity. Let's return the extracted object.
+    if (ptr && (t == type(*ptr) || t == builtin().attr("object"))) {
+        // c contains a user-defined pythonic entity and either:
+        // - the type passed in by the user is the exact type of the user-defined
+        //   entity, or
+        // - the user supplied as t the builtin 'object' type (which we use as a
+        //   wildcard for any Python type).
+        // Let's return the extracted object.
         return *ptr;
     }
-    // The user specified the wrong type, return None.
+    // Either the user-defined entity is not pythonic, or the user specified the
+    // wrong type. Return None.
     return bp::object{};
 }
 
