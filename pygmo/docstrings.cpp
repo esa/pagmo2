@@ -3289,6 +3289,8 @@ where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}` ,
 :math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` , and 
 :math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`
 
+Note that while `ref_point` is required, it does not impact the calculation for the `weighted` method as shown above.
+
 Args:
     objs (array-like object): the objective vectors
     weights (array-like object): the weights :math:`\boldsymbol \lambda`
@@ -3306,6 +3308,10 @@ Examples:
     >>> import pygmo as pg
     >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[5,5,5], method = "weighted") # doctest: +SKIP
     array([ 2.7])
+    >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[0,0,0], method = "weighted") # doctest: +SKIP
+    array([ 2.7])
+    >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[5,5,5], method = "tchebycheff") # doctest: +SKIP
+    array([ 1.6])
 )";
 }
 
