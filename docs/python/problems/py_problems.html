@@ -79,8 +79,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
@@ -149,6 +149,7 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">List of problems available in pygmo</a><ul>
+<li><a class="reference internal" href="#problems-implemented-in-python">Problems implemented in Python</a></li>
 <li><a class="reference internal" href="#problems-exposed-from-c">Problems exposed from C++</a></li>
 </ul>
 </li>
@@ -183,8 +184,138 @@
       
   <div class="section" id="list-of-problems-available-in-pygmo">
 <span id="py-problems"></span><h1>List of problems available in pygmo<a class="headerlink" href="#list-of-problems-available-in-pygmo" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="problems-implemented-in-python">
+<span id="py-problems-py"></span><h2>Problems implemented in Python<a class="headerlink" href="#problems-implemented-in-python" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pygmo.decorator_problem">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">decorator_problem</code><span class="sig-paren">(</span><em>prob=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator meta-problem.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.9.</span></p>
+</div>
+<p>This meta-problem allows to apply arbitrary transformations to the functions
+of a PyGMO <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> via Python decorators.</p>
+<p>The decorators are passed as keyword arguments during initialisation, and they
+must be named after the function they are meant to decorate plus the
+<code class="docutils literal"><span class="pre">_decorator</span></code> suffix. For instance, we can define a minimal decorator
+for the fitness function as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating dv: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dv</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">orig_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">new_fitness_function</span>
+</pre></div>
+</div>
+<p>This decorator will print the input decision vector <em>dv</em> before invoking the
+original fitness function. We can then construct a decorated Rosenbrock problem
+as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(),</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We can then verify that calling the fitness function of <em>dprob</em> will print
+the decision vector before returning the fitness value:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fv</span> <span class="o">=</span> <span class="n">dprob</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="go">Evaluating dv: [1. 2.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
+<span class="go">[100.]</span>
+</pre></div>
+</div>
+<p>An extended <a class="reference internal" href="../tutorials/udp_meta_decorator.html#py-tutorial-udp-meta-decorator"><span class="std std-ref">tutorial</span></a> on the usage of this class is available
+in PyGMO’s documentation.</p>
+<p>All the functions in the public API of a UDP can be decorated (see the documentation
+of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> for the full list). Note that the public API of <a class="reference internal" href="#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>
+includes the UDP public API: there is a <code class="docutils literal"><span class="pre">fitness()</span></code> method, methods to query the problem’s properties,
+sparsity-related methods, etc. In order to avoid duplication, we do not repeat here the documentation of
+the UDP API and we document instead only the few methods which are specific to <a class="reference internal" href="#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>.
+Users can refer to the documentation of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> for detailed information on the UDP API.</p>
+<p>Both <em>prob</em> and the decorators will be deep-copied inside the instance upon construction. As
+usually done in meta-problems, this class will store as an internal data member a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+containing a copy of <em>prob</em> (this is commonly referred to as the <em>inner problem</em> of the
+meta-problem). The inner problem is accessible via the <a class="reference internal" href="#pygmo.decorator_problem.inner_problem" title="pygmo.decorator_problem.inner_problem"><code class="xref py py-attr docutils literal"><span class="pre">inner_problem</span></code></a>
+read-only property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prob</strong> – a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> or a user-defined problem, either C++ or Python (if
+<em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a> will be used in its stead)</li>
+<li><strong>kwargs</strong> – the dictionary of decorators to be applied to the functions of the input problem</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if at least one of the values in <em>kwargs</em> is not callable</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> or the deep copy
+of <em>prob</em> or <em>kwargs</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pygmo.decorator_problem.get_decorator">
+<code class="descname">get_decorator</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem.get_decorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the decorator for the function called <em>fname</em>.</p>
+<p>This method will return a copy of the decorator that has been registered upon construction
+for the function called <em>fname</em>. If no decorator for <em>fname</em> has been specified during
+construction, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> will be returned.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating dv: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dv</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">orig_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">new_fitness_function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span> <span class="o">=</span> <span class="n">decorator_problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(),</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span><span class="o">.</span><span class="n">get_decorator</span><span class="p">(</span><span class="s2">&quot;fitness&quot;</span><span class="p">)</span> 
+<span class="go">&lt;function ...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span><span class="o">.</span><span class="n">get_decorator</span><span class="p">(</span><span class="s2">&quot;gradient&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the function whose decorator will be returned</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a copy of the decorator registered for <em>fname</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> if no decorator for <em>fname</em> has been registered</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>fname</em> is not a string</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the deep copying of the decorator for <em>fname</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pygmo.decorator_problem.inner_problem">
+<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.decorator_problem.inner_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inner problem of the meta-problem.</p>
+<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="problems-exposed-from-c">
-<h2>Problems exposed from C++<a class="headerlink" href="#problems-exposed-from-c" title="Permalink to this headline">¶</a></h2>
+<span id="py-problems-cpp"></span><h2>Problems exposed from C++<a class="headerlink" href="#problems-exposed-from-c" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pygmo.null_problem">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">null_problem</code><span class="sig-paren">(</span><em>nobj = 1</em>, <em>nec = 0</em>, <em>nic = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.null_problem" title="Permalink to this definition">¶</a></dt>
@@ -947,134 +1078,6 @@ signatures, etc.)</li>
 <dl class="attribute">
 <dt id="pygmo.unconstrain.inner_problem">
 <code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.unconstrain.inner_problem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inner problem of the meta-problem.</p>
-<p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a reference to the inner problem</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<hr class="docutils" />
-<dl class="class">
-<dt id="pygmo.decorator_problem">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">decorator_problem</code><span class="sig-paren">(</span><em>prob=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator meta-problem.</p>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 2.9.</span></p>
-</div>
-<p>This meta-problem allows to apply arbitrary transformations to the functions
-of a PyGMO <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> via Python decorators.</p>
-<p>The decorators are passed as keyword arguments during initialisation, and they
-must be named after the function they are meant to decorate plus the
-<code class="docutils literal"><span class="pre">_decorator</span></code> suffix. For instance, we can define a minimal decorator
-for the fitness function as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating dv: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dv</span><span class="p">))</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">orig_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">new_fitness_function</span>
-</pre></div>
-</div>
-<p>This decorator will print the input decision vector <em>dv</em> before invoking the
-original fitness function. We can then construct a decorated Rosenbrock problem
-as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(),</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>We can then verify that calling the fitness function of <em>dprob</em> will print
-the decision vector before returning the fitness value:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fv</span> <span class="o">=</span> <span class="n">dprob</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-<span class="go">Evaluating dv: [1. 2.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
-<span class="go">[100.]</span>
-</pre></div>
-</div>
-<p>An extended <a class="reference internal" href="../tutorials/udp_meta_decorator.html#py-tutorial-udp-meta-decorator"><span class="std std-ref">tutorial</span></a> on the usage of this class is available
-in PyGMO’s documentation.</p>
-<p>All the functions in the public API of a UDP can be decorated (see the documentation
-of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> for the full list). Note that the public API of <a class="reference internal" href="#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>
-includes the UDP public API: there is a <code class="docutils literal"><span class="pre">fitness()</span></code> method, methods to query the problem’s properties,
-sparsity-related methods, etc. In order to avoid duplication, we do not repeat here the documentation of
-the UDP API and we document instead only the few methods which are specific to <a class="reference internal" href="#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>.
-Users can refer to the documentation of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> for detailed information on the UDP API.</p>
-<p>Both <em>prob</em> and the decorators will be deep-copied inside the instance upon construction. As
-usually done in meta-problems, this class will store as an internal data member a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-containing a copy of <em>prob</em> (this is commonly referred to as the <em>inner problem</em> of the
-meta-problem). The inner problem is accessible via the <a class="reference internal" href="#pygmo.decorator_problem.inner_problem" title="pygmo.decorator_problem.inner_problem"><code class="xref py py-attr docutils literal"><span class="pre">inner_problem</span></code></a>
-read-only property.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prob</strong> – a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> or a user-defined problem, either C++ or Python (if
-<em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal"><span class="pre">null_problem</span></code></a> will be used in its stead)</li>
-<li><strong>kwargs</strong> – the dictionary of decorators to be applied to the functions of the input problem</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if at least one of the values in <em>kwargs</em> is not callable</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> or the deep copy
-of <em>prob</em> or <em>kwargs</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pygmo.decorator_problem.get_decorator">
-<code class="descname">get_decorator</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem.get_decorator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the decorator for the function called <em>fname</em>.</p>
-<p>This method will return a copy of the decorator that has been registered upon construction
-for the function called <em>fname</em>. If no decorator for <em>fname</em> has been specified during
-construction, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> will be returned.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating dv: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dv</span><span class="p">))</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">orig_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">new_fitness_function</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span> <span class="o">=</span> <span class="n">decorator_problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(),</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span><span class="o">.</span><span class="n">get_decorator</span><span class="p">(</span><span class="s2">&quot;fitness&quot;</span><span class="p">)</span> 
-<span class="go">&lt;function ...&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span><span class="o">.</span><span class="n">get_decorator</span><span class="p">(</span><span class="s2">&quot;gradient&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the function whose decorator will be returned</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a copy of the decorator registered for <em>fname</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> if no decorator for <em>fname</em> has been registered</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>fname</em> is not a string</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the deep copying of the decorator for <em>fname</em></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pygmo.decorator_problem.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.decorator_problem.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem.</p>
 <p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
 <table class="docutils field-list" frame="void" rules="none">

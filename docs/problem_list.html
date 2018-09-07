@@ -79,8 +79,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">List of problems (UDPs) available in pagmo/pygmo</a><ul>
@@ -186,9 +186,17 @@
   <div class="section" id="list-of-problems-udps-available-in-pagmo-pygmo">
 <span id="problems"></span><h1>List of problems (UDPs) available in pagmo/pygmo<a class="headerlink" href="#list-of-problems-udps-available-in-pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
 <p>This is the list of user defined problems (UDPs) currently provided with pagmo/pygmo. These are classes that
-can be used to construct a <a class="reference internal" href="cpp/problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a>, or <a class="reference internal" href="python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> which will then provide a unified
-interface to acces their functionalities.</p>
-<p>Each problem can be can be of type S = Single, M = Multi-objective, I = has an integer part, C = Constrained, U = Unconstrained, sto = stochastic</p>
+can be used to construct a <a class="reference internal" href="cpp/problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> (C++), or a <a class="reference internal" href="python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> (Python), which will
+then provide a unified interface to access the problem’s functionalities.</p>
+<p>In the tables below, we classify optimisation problems according to the following flags:</p>
+<ul class="simple">
+<li>S = Single-objective</li>
+<li>M = Multi-objective</li>
+<li>C = Constrained</li>
+<li>U = Unconstrained</li>
+<li>I = Integer programming</li>
+<li>sto = Stochastic</li>
+</ul>
 <div class="section" id="scalable-problems">
 <h2>Scalable problems<a class="headerlink" href="#scalable-problems" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
@@ -224,7 +232,7 @@ interface to acces their functionalities.</p>
 <tr class="row-odd"><td>Inventory</td>
 <td><a class="reference internal" href="cpp/problems/inventory.html#_CPPv2N5pagmo9inventoryE" title="pagmo::inventory"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::inventory</span></code></a></td>
 <td><a class="reference internal" href="python/problems/py_problems.html#pygmo.inventory" title="pygmo.inventory"><code class="xref py py-class docutils literal"><span class="pre">pygmo.inventory</span></code></a></td>
-<td>S-U (sto)</td>
+<td>S-U-sto</td>
 </tr>
 <tr class="row-even"><td>Luksan Vlcek 1</td>
 <td><a class="reference internal" href="cpp/problems/luksan_vlcek1.html#_CPPv2N5pagmo13luksan_vlcek1E" title="pagmo::luksan_vlcek1"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::luksan_vlcek1</span></code></a></td>
@@ -305,7 +313,9 @@ interface to acces their functionalities.</p>
 </table>
 </div>
 <div class="section" id="meta-problems">
-<h2>Meta-problems<a class="headerlink" href="#meta-problems" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Meta-problems<a class="headerlink" href="#meta-problems" title="Permalink to this headline">¶</a></h2>
+<p>Meta-problems are UDPs that take another UDP as input, yielding a new UDP which modifies the behaviour and/or the properties of the original
+problem in a variety of ways.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="41%" />

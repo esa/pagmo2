@@ -79,8 +79,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
@@ -208,7 +208,7 @@ to a separate process (rather than a separate thread), <a class="reference inter
 that thread-unsafe problems and algorithms are always run in only one thread at a time.
 This capability is particularly useful when wrapping in pagmo third-party code which does not support execution
 in multithreaded contexts (a notable example is the <a class="reference internal" href="../algorithms/ipopt.html#_CPPv2N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">ipopt</span></code></a> algorithm,
-which uses the thread-unsafe IPOPT optimiser).</p>
+which uses the thread-unsafe Ipopt optimiser).</p>
 <p><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">island</span></code></a>
 on POSIX platforms when the island’s problem and/or algorithm do not provide the basic <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal"><span class="pre">thread_safety</span></code></a>
 guarantee.</p>

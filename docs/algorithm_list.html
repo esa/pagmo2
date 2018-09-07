@@ -79,8 +79,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
@@ -150,8 +150,8 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li><a class="reference internal" href="#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
 <li><a class="reference internal" href="#local-optimization">Local optimization</a></li>
+<li><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 </ul>
@@ -186,52 +186,62 @@
   <div class="section" id="list-of-algorithms-udas-available-in-pagmo-pygmo">
 <span id="algorithms"></span><h1>List of algorithms (UDAs) available in pagmo/pygmo<a class="headerlink" href="#list-of-algorithms-udas-available-in-pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
 <p>This is the list of user defined algorithms (UDAs) currently provided with pagmo/pygmo. These are classes that
-can be used to construct a <a class="reference internal" href="cpp/algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>, or <a class="reference internal" href="python/py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> which will then provide a unified
-interface to acces their functionalities.</p>
-<p>Each algorithm can be
-associated only to problems of certain types S = Single, M = Multi-objective, C = Constrained, U = Unconstrained, sto = stochastic
-I = integer programming (without this symbol the algorithm will still work on integer problems solving the relaxed problem)</p>
+can be used to construct a <a class="reference internal" href="cpp/algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a> (C++), or a <a class="reference internal" href="python/py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> (Python), which will
+then provide a unified interface to access the algorithm’s functionalities.</p>
+<p>Generally speaking, algorithms can solve only specific problem classes. In the tables below, we use the following
+flags to signal which problem types an algorithm can solve:</p>
+<ul class="simple">
+<li>S = Single-objective</li>
+<li>M = Multi-objective</li>
+<li>C = Constrained</li>
+<li>U = Unconstrained</li>
+<li>I = Integer programming</li>
+<li>sto = Stochastic</li>
+</ul>
+<p>Note that algorithms that do not directly support integer programming will still work on integer problems
+(i.e., they will optimise the relaxed problem). Note also that it is possible to use <a class="reference internal" href="problem_list.html#meta-problems"><span class="std std-ref">meta-problems</span></a>
+to turn constrained problems into unconstrained ones, and multi-objective problems into single-objective ones.</p>
 <div class="section" id="heuristic-global-optimization">
 <h2>Heuristic Global Optimization<a class="headerlink" href="#heuristic-global-optimization" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="37%" />
-<col width="26%" />
-<col width="26%" />
-<col width="10%" />
+<col width="35%" />
+<col width="25%" />
+<col width="25%" />
+<col width="15%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Common Name</th>
 <th class="head">Docs of the C++ class</th>
 <th class="head">Docs of the python class</th>
-<th class="head">Type</th>
+<th class="head">Capabilities</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>The null algorithm</td>
+<tr class="row-even"><td>The null algorithm <a class="footnote-reference" href="#null-algo" id="id1">[1]</a></td>
 <td><a class="reference internal" href="cpp/algorithms/null.html#_CPPv2N5pagmo14null_algorithmE" title="pagmo::null_algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::null_algorithm</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.null_algorithm" title="pygmo.null_algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.null_algorithm</span></code></a></td>
-<td>SM-CU</td>
+<td>SM-CU-I-sto</td>
 </tr>
 <tr class="row-odd"><td>Differential Evolution (DE)</td>
 <td><a class="reference internal" href="cpp/algorithms/de.html#_CPPv2N5pagmo2deE" title="pagmo::de"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::de</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">pygmo.de</span></code></a></td>
 <td>S-U</td>
 </tr>
-<tr class="row-even"><td>Improved Harmony Serach</td>
-<td><a class="reference internal" href="cpp/algorithms/ihs.html#_CPPv2N5pagmo3ihsE" title="pagmo::ihs"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ihs</span></code></a></td>
-<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.ihs" title="pygmo.ihs"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ihs</span></code></a></td>
-<td>SM-CU-I</td>
-</tr>
-<tr class="row-odd"><td>Self-adaptive DE (jDE and iDE)</td>
+<tr class="row-even"><td>Self-adaptive DE (jDE and iDE)</td>
 <td><a class="reference internal" href="cpp/algorithms/sade.html#_CPPv2N5pagmo4sadeE" title="pagmo::sade"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sade</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sade</span></code></a></td>
 <td>S-U</td>
 </tr>
-<tr class="row-even"><td>Self-adaptive DE (de_1220 aka pDE)</td>
+<tr class="row-odd"><td>Self-adaptive DE (de_1220 aka pDE)</td>
 <td><a class="reference internal" href="cpp/algorithms/de1220.html#_CPPv2N5pagmo6de1220E" title="pagmo::de1220"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::de1220</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.de1220" title="pygmo.de1220"><code class="xref py py-class docutils literal"><span class="pre">pygmo.de1220</span></code></a></td>
 <td>S-U</td>
+</tr>
+<tr class="row-even"><td>Improved Harmony Search</td>
+<td><a class="reference internal" href="cpp/algorithms/ihs.html#_CPPv2N5pagmo3ihsE" title="pagmo::ihs"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ihs</span></code></a></td>
+<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.ihs" title="pygmo.ihs"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ihs</span></code></a></td>
+<td>SM-CU-I</td>
 </tr>
 <tr class="row-odd"><td>Particle Swarm Optimization (PSO)</td>
 <td><a class="reference internal" href="cpp/algorithms/pso.html#_CPPv2N5pagmo3psoE" title="pagmo::pso"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::pso</span></code></a></td>
@@ -241,17 +251,17 @@ I = integer programming (without this symbol the algorithm will still work on in
 <tr class="row-even"><td>Particle Swarm Optimization Generational (GPSO)</td>
 <td><a class="reference internal" href="cpp/algorithms/pso_gen.html#_CPPv2N5pagmo7pso_genE" title="pagmo::pso_gen"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::pso_gen</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.pso_gen" title="pygmo.pso_gen"><code class="xref py py-class docutils literal"><span class="pre">pygmo.pso_gen</span></code></a></td>
-<td>S-U   (sto)</td>
+<td>S-U-sto</td>
 </tr>
 <tr class="row-odd"><td>(N+1)-ES Simple Evolutionary Algorithm</td>
 <td><a class="reference internal" href="cpp/algorithms/sea.html#_CPPv2N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sea</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sea</span></code></a></td>
-<td>S-U   (sto)</td>
+<td>S-U-sto</td>
 </tr>
 <tr class="row-even"><td>Simple Genetic Algorithm</td>
 <td><a class="reference internal" href="cpp/algorithms/sga.html#_CPPv2N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::sga</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sga" title="pygmo.sga"><code class="xref py py-class docutils literal"><span class="pre">pygmo.sga</span></code></a></td>
-<td>S-U-I (sto)</td>
+<td>S-U-I-sto</td>
 </tr>
 <tr class="row-odd"><td>Corana’s Simulated Annealing (SA)</td>
 <td><a class="reference internal" href="cpp/algorithms/simulated_annealing.html#_CPPv2N5pagmo19simulated_annealingE" title="pagmo::simulated_annealing"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::simulated_annealing</span></code></a></td>
@@ -266,12 +276,12 @@ I = integer programming (without this symbol the algorithm will still work on in
 <tr class="row-odd"><td>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</td>
 <td><a class="reference internal" href="cpp/algorithms/cmaes.html#_CPPv2N5pagmo5cmaesE" title="pagmo::cmaes"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cmaes</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cmaes</span></code></a></td>
-<td>S-U (sto)</td>
+<td>S-U-sto</td>
 </tr>
 <tr class="row-even"><td>Exponential Evolution Strategies (xNES)</td>
 <td><a class="reference internal" href="cpp/algorithms/xnes.html#_CPPv2N5pagmo4xnesE" title="pagmo::xnes"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::xnes</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.xnes" title="pygmo.xnes"><code class="xref py py-class docutils literal"><span class="pre">pygmo.xnes</span></code></a></td>
-<td>S-U (sto)</td>
+<td>S-U-sto</td>
 </tr>
 <tr class="row-odd"><td>Non-dominated Sorting GA (NSGA2)</td>
 <td><a class="reference internal" href="cpp/algorithms/nsga2.html#_CPPv2N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nsga2</span></code></a></td>
@@ -282,41 +292,6 @@ I = integer programming (without this symbol the algorithm will still work on in
 <td><a class="reference internal" href="cpp/algorithms/moead.html#_CPPv2N5pagmo5moeadE" title="pagmo::moead"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::moead</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">pygmo.moead</span></code></a></td>
 <td>M-U</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="meta-algorithms">
-<h2>Meta-algorithms<a class="headerlink" href="#meta-algorithms" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils">
-<colgroup>
-<col width="25%" />
-<col width="32%" />
-<col width="32%" />
-<col width="11%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Common Name</th>
-<th class="head">Docs of the C++ class</th>
-<th class="head">Docs of the python class</th>
-<th class="head">Type</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Monotonic Basin Hopping (MBH)</td>
-<td><a class="reference internal" href="cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbhE" title="pagmo::mbh"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::mbh</span></code></a></td>
-<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">pygmo.mbh</span></code></a></td>
-<td>S-CU</td>
-</tr>
-<tr class="row-odd"><td>Cstrs Self-Adaptive</td>
-<td><a class="reference internal" href="cpp/algorithms/cstrs_self_adaptive.html#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a></td>
-<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a></td>
-<td>S-C</td>
-</tr>
-<tr class="row-even"><td>Augmented Lagrangian algorithm</td>
-<td><a class="reference internal" href="cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nlopt</span></code></a></td>
-<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
-<td>S-CU</td>
 </tr>
 </tbody>
 </table>
@@ -334,7 +309,7 @@ I = integer programming (without this symbol the algorithm will still work on in
 <tr class="row-odd"><th class="head">Common Name</th>
 <th class="head">Docs of the C++ class</th>
 <th class="head">Docs of the python class</th>
-<th class="head">Type</th>
+<th class="head">Capabilities</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -368,7 +343,7 @@ I = integer programming (without this symbol the algorithm will still work on in
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
 </tr>
-<tr class="row-even"><td>sbplx (from NLopt)</td>
+<tr class="row-even"><td>Subplex (from NLopt)</td>
 <td><a class="reference internal" href="cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nlopt</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
@@ -388,12 +363,12 @@ I = integer programming (without this symbol the algorithm will still work on in
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-CU</td>
 </tr>
-<tr class="row-even"><td>low-storage BFGS (from NLopt)</td>
+<tr class="row-even"><td>Low-storage BFGS (from NLopt)</td>
 <td><a class="reference internal" href="cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nlopt</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
 </tr>
-<tr class="row-odd"><td>preconditioned truncated Newton (from NLopt)</td>
+<tr class="row-odd"><td>Preconditioned truncated Newton (from NLopt)</td>
 <td><a class="reference internal" href="cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nlopt</span></code></a></td>
 <td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
 <td>S-U</td>
@@ -418,6 +393,62 @@ I = integer programming (without this symbol the algorithm will still work on in
 <td><a class="reference external" href="https://esa.github.io/pagmo_plugins_nonfree/py_worhp.html">pygmo.wohrp</a></td>
 <td>S-CU</td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="meta-algorithms">
+<h2>Meta-algorithms<a class="headerlink" href="#meta-algorithms" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="26%" />
+<col width="26%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Common Name</th>
+<th class="head">Docs of the C++ class</th>
+<th class="head">Docs of the python class</th>
+<th class="head">Capabilities <a class="footnote-reference" href="#meta-capa" id="id2">[2]</a></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Monotonic Basin Hopping (MBH)</td>
+<td><a class="reference internal" href="cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbhE" title="pagmo::mbh"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::mbh</span></code></a></td>
+<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal"><span class="pre">pygmo.mbh</span></code></a></td>
+<td>S-CU</td>
+</tr>
+<tr class="row-odd"><td>Cstrs Self-Adaptive</td>
+<td><a class="reference internal" href="cpp/algorithms/cstrs_self_adaptive.html#_CPPv2N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a></td>
+<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a></td>
+<td>S-C</td>
+</tr>
+<tr class="row-even"><td>Augmented Lagrangian algorithm (from NLopt) <a class="footnote-reference" href="#auglag" id="id3">[3]</a></td>
+<td><a class="reference internal" href="cpp/algorithms/nlopt.html#_CPPv2N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::nlopt</span></code></a></td>
+<td><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a></td>
+<td>S-CU</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="null-algo" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>The null algorithm is used only for initialisation purposes. It will not actually run any optimisation if invoked.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="meta-capa" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>The capabilities of the meta-algorithms depend also on the capabilities of the algorithms they wrap. If, for instance,
+a meta-algorithm supporting constrained problems is constructed from an algorithm which does <em>not</em> support constrained problems, the
+resulting meta-algorithms will <em>not</em> be able to solve constrained problems.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="auglag" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>The Augmented Lagrangian algorithm can be used only in conjunction with other NLopt algorithms.</td></tr>
 </tbody>
 </table>
 </div>

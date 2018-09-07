@@ -79,8 +79,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
@@ -149,8 +149,8 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">List of islands available in pygmo</a><ul>
-<li><a class="reference internal" href="#islands-exposed-from-c">Islands exposed from C++</a></li>
 <li><a class="reference internal" href="#islands-implemented-in-python">Islands implemented in Python</a></li>
+<li><a class="reference internal" href="#islands-exposed-from-c">Islands exposed from C++</a></li>
 </ul>
 </li>
 </ul>
@@ -184,21 +184,6 @@
       
   <div class="section" id="list-of-islands-available-in-pygmo">
 <span id="py-islands"></span><h1>List of islands available in pygmo<a class="headerlink" href="#list-of-islands-available-in-pygmo" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="islands-exposed-from-c">
-<h2>Islands exposed from C++<a class="headerlink" href="#islands-exposed-from-c" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pygmo.thread_island">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">thread_island</code><a class="headerlink" href="#pygmo.thread_island" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thread island.</p>
-<p>This class is a user-defined island (UDI) that will run evolutions directly inside
-the separate thread of execution within <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.island</span></code></a>. Evolution tasks running on this
-UDI must involve <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> and <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> instances
-that provide at least the <a class="reference internal" href="../py_misc.html#pygmo.thread_safety.basic" title="pygmo.thread_safety.basic"><code class="xref py py-attr docutils literal"><span class="pre">basic</span></code></a> thread safety guarantee, otherwise
-errors will be raised during the evolution.</p>
-<p>See also the documentation of the corresponding C++ class <a class="reference internal" href="../../cpp/islands/thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::thread_island</span></code></a>.</p>
-</dd></dl>
-
-</div>
 <div class="section" id="islands-implemented-in-python">
 <h2>Islands implemented in Python<a class="headerlink" href="#islands-implemented-in-python" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -460,11 +445,10 @@ instance initialised during the construction of the island.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><em>algo</em> (i.e., the algorithm object that was used for the evolution)
-<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>: the evolved population</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a tuple of 2 elements containing <em>algo</em> (i.e., the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> object that was used for the evolution) and the evolved <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown during the evolution, or by submitting the evolution task
@@ -475,6 +459,23 @@ to the ipyparallel cluster</p>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="islands-exposed-from-c">
+<h2>Islands exposed from C++<a class="headerlink" href="#islands-exposed-from-c" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pygmo.thread_island">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">thread_island</code><a class="headerlink" href="#pygmo.thread_island" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thread island.</p>
+<p>This class is a user-defined island (UDI) that will run evolutions directly inside
+the separate thread of execution within <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.island</span></code></a>. Evolution tasks running on this
+UDI must involve <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> and <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> instances
+that provide at least the <a class="reference internal" href="../py_misc.html#pygmo.thread_safety.basic" title="pygmo.thread_safety.basic"><code class="xref py py-attr docutils literal"><span class="pre">basic</span></code></a> thread safety guarantee, otherwise
+errors will be raised during the evolution.</p>
+<p>Note that algorithms and problems implemented in Python are never considered thread safe, and thus
+this UDI can be used only with algorithms and problems implemented in C++.</p>
+<p>See also the documentation of the corresponding C++ class <a class="reference internal" href="../../cpp/islands/thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::thread_island</span></code></a>.</p>
 </dd></dl>
 
 </div>

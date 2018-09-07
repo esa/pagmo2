@@ -29,7 +29,7 @@ Fork island
    that thread-unsafe problems and algorithms are always run in only one thread at a time.
    This capability is particularly useful when wrapping in pagmo third-party code which does not support execution
    in multithreaded contexts (a notable example is the :cpp:class:`~pagmo::ipopt` algorithm,
-   which uses the thread-unsafe IPOPT optimiser).
+   which uses the thread-unsafe Ipopt optimiser).
 
    :cpp:class:`~pagmo::fork_island` is the UDI type automatically selected by the constructors of :cpp:class:`~pagmo::island`
    on POSIX platforms when the island's problem and/or algorithm do not provide the basic :cpp:type:`~pagmo::thread_safety`

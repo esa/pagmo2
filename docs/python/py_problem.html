@@ -79,8 +79,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
@@ -217,8 +217,8 @@ provides a generic interface to optimization problems.</p>
   <span class="o">...</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">fitness()</span></code> method is expected to return the fitness of the input decision vector (
-* concatenating the objectives, the equality and the inequality constraints), while
+<p>The <code class="docutils literal"><span class="pre">fitness()</span></code> method is expected to return the fitness of the input decision vector (concatenating
+the objectives, the equality and the inequality constraints), while
 <code class="docutils literal"><span class="pre">get_bounds()</span></code> is expected to return the box bounds of the problem,
 <span class="math">\((\mathbf{lb}, \mathbf{ub})\)</span>, which also implicitly define the dimension of the problem.
 The <code class="docutils literal"><span class="pre">fitness()</span></code> and <code class="docutils literal"><span class="pre">get_bounds()</span></code> methods of the UDP are accessible from the corresponding
