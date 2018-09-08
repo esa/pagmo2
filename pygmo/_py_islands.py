@@ -246,10 +246,24 @@ class mp_island(object):
             return res.get()
         else:
             import multiprocessing as mp
-            ctx = mp.get_context('spawn')
-            parent_conn, child_conn = ctx.Pipe(duplex=False)
-            p = ctx.Process(target=_evolve_func_pipe,
-                            args=(child_conn, algo, pop))
+            import sys
+            import os
+            # The context functionality in the mp module is available since
+            # Python 3.4. It is used to force the process creation with the
+            # "spawn" method.
+            has_context = sys.version_info[0] > 3 or (
+                sys.version_info[0] == 3 and sys.version_info[1] >= 4)
+            if has_context:
+                mp_ctx = mp.get_context('spawn')
+            else:
+                # NOTE: for Python < 3.4, only Windows is supported and we
+                # should never end up here (the island will throw on construction
+                # when we do platform checks).
+                assert(os.name == 'nt')
+                mp_ctx = mp
+            parent_conn, child_conn = mp_ctx.Pipe(duplex=False)
+            p = mp_ctx.Process(target=_evolve_func_pipe,
+                               args=(child_conn, algo, pop))
             p.start()
             with self._pid_lock:
                 self._pid = p.pid
