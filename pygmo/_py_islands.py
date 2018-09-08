@@ -525,7 +525,7 @@ class ipyparallel_island(object):
         """Island's name.
 
         Returns:
-            ``str``: ``"Ipyparallel island"``
+            str: ``"Ipyparallel island"``
 
         """
         return "Ipyparallel island"
@@ -534,7 +534,7 @@ class ipyparallel_island(object):
         """Island's extra info.
 
         Returns:
-            ``str``: a string with extra information about the status of the island
+            str: a string with extra information about the status of the island
 
         """
         with self._view_lock:
