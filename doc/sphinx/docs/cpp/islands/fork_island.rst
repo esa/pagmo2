@@ -80,7 +80,7 @@ Fork island
    .. cpp:function:: std::string get_extra_info() const
 
       :return: if an evolution is ongoing, this method will return a string
-         representation of the ID of the child process. Otherwise, the ``"No active child."`` string will be returned.
+         representation of the ID of the child process. Otherwise, the ``"No active child"`` string will be returned.
 
    .. cpp:function:: pid_t get_child_pid() const
 
