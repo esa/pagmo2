@@ -437,6 +437,7 @@ class mp_island_test_case(_ut.TestCase):
         # Pickle.
         self.assertEqual(str(loads(dumps(isl))), str(isl))
         self.assertTrue(loads(dumps(isl)).extract(object).use_pool)
+        self.assertTrue("Using a process pool: yes" in str(loads(dumps(isl))))
 
         # Tests when not using the pool.
         with self.assertRaises(TypeError) as cm:
@@ -457,6 +458,7 @@ class mp_island_test_case(_ut.TestCase):
         self.assertFalse(isl2.extract(object).use_pool)
         self.assertFalse(isl3.extract(object).use_pool)
         self.assertFalse(loads(dumps(isl)).extract(object).use_pool)
+        self.assertTrue("Using a process pool: no" in str(loads(dumps(isl))))
 
         # Run some evolutions in a separate process.
         isl.evolve(20)

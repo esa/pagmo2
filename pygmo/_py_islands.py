@@ -162,6 +162,12 @@ class mp_island(object):
         if not isinstance(use_pool, bool):
             raise TypeError(
                 "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead.".format(type(use_pool)))
+        self._init(use_pool)
+
+    def _init(self, use_pool):
+        # Implementation of the ctor. Factored out
+        # because it's re-used in the pickling support.
+        assert(isinstance(use_pool, bool))
         self._use_pool = use_pool
         if self._use_pool:
             # Init the process pool, if necessary.
@@ -202,7 +208,10 @@ class mp_island(object):
         return self._use_pool
 
     def __setstate__(self, state):
-        self._use_pool = state
+        # NOTE: we need to do a full init of the object,
+        # in order to set the use_pool flag and, if necessary,
+        # construct the _pid and _pid_lock objects.
+        self._init(state)
 
     def run_evolve(self, algo, pop):
         """Evolve population.
