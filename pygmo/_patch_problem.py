@@ -67,7 +67,7 @@ def _problem_extract(self, t):
         True
         >>> class prob:
         ...:     def fitness(self, x):
-        ...:         return x[0]
+        ...:         return [x[0]]
         ...:     def get_bounds(self):
         ...:         return ([0],[1])
         >>> p2 = pg.problem(prob())
