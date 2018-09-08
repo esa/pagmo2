@@ -465,10 +465,12 @@ class mp_island_test_case(_ut.TestCase):
         isl.evolve(20)
         self.assertTrue("Using a process pool: no" in str(isl))
         isl.wait()
+        self.assertTrue(isl.extract(object).pid is None)
         isl.evolve(20)
         isl.evolve(20)
         self.assertTrue("Using a process pool: no" in str(isl))
         isl.wait_check()
+        self.assertTrue(isl.extract(object).pid is None)
 
         # Error transport when not using a pool.
         isl = island(algo=de(), prob=_prob(
@@ -481,6 +483,7 @@ class mp_island_test_case(_ut.TestCase):
         err = cm.exception
         self.assertTrue(
             "An exception was raised in the evolution of a multiprocessing island. The full error message is:" in str(err))
+        self.assertTrue(isl.extract(object).pid is None)
 
         if self._level == 0:
             return
