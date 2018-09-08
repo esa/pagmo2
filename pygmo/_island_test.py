@@ -377,9 +377,17 @@ class mp_island_test_case(_ut.TestCase):
         mp_island.shutdown_pool()
         mp_island.shutdown_pool()
         isl = island(algo=de(), prob=rosenbrock(), size=25, udi=mp_island())
+        self.assertTrue("Using a process pool: yes" in str(isl))
         self.assertEqual(isl.get_name(), "Multiprocessing island")
         self.assertTrue(isl.get_extra_info() != "")
         self.assertTrue(mp_island.get_pool_size() > 0)
+        self.assertTrue(isl.extract(object).use_pool)
+        with self.assertRaises(ValueError) as cm:
+            isl.extract(object).pid
+        err = cm.exception
+        self.assertTrue(
+            "The 'pid' property is available only when the island is configured to spawn" in str(err))
+
         # Init a few times, to confirm that the second
         # and third inits don't do anything.
         mp_island.init_pool()
@@ -423,9 +431,54 @@ class mp_island_test_case(_ut.TestCase):
         isl3 = deepcopy(isl)
         self.assertEqual(str(isl2), str(isl))
         self.assertEqual(str(isl3), str(isl))
+        self.assertTrue(isl2.extract(object).use_pool)
+        self.assertTrue(isl3.extract(object).use_pool)
 
         # Pickle.
         self.assertEqual(str(loads(dumps(isl))), str(isl))
+        self.assertTrue(loads(dumps(isl)).extract(object).use_pool)
+
+        # Tests when not using the pool.
+        with self.assertRaises(TypeError) as cm:
+            island(algo=de(), prob=rosenbrock(),
+                   size=25, udi=mp_island(use_pool=None))
+        err = cm.exception
+        self.assertTrue(
+            "The 'use_pool' parameter in the mp_island constructor must be a boolean" in str(err))
+
+        # Island properties, copy/deecopy, pickle.
+        isl = island(algo=de(), prob=rosenbrock(), size=25,
+                     udi=mp_island(use_pool=False))
+        self.assertTrue("Using a process pool: no" in str(isl))
+        self.assertFalse(isl.extract(object).use_pool)
+        self.assertTrue(isl.extract(object).pid is None)
+        isl2 = copy(isl)
+        isl3 = deepcopy(isl)
+        self.assertFalse(isl2.extract(object).use_pool)
+        self.assertFalse(isl3.extract(object).use_pool)
+        self.assertFalse(loads(dumps(isl)).extract(object).use_pool)
+
+        # Run some evolutions in a separate process.
+        isl.evolve(20)
+        isl.evolve(20)
+        self.assertTrue("Using a process pool: no" in str(isl))
+        isl.wait()
+        isl.evolve(20)
+        isl.evolve(20)
+        self.assertTrue("Using a process pool: no" in str(isl))
+        isl.wait_check()
+
+        # Error transport when not using a pool.
+        isl = island(algo=de(), prob=_prob(
+            lambda x, y: x + y), size=2, udi=mp_island(use_pool=False))
+        isl.evolve()
+        isl.wait()
+        self.assertTrue("**error occurred**" in repr(isl))
+        with self.assertRaises(RuntimeError) as cm:
+            isl.wait_check()
+        err = cm.exception
+        self.assertTrue(
+            "An exception was raised in the evolution of a multiprocessing island. The full error message is:" in str(err))
 
         if self._level == 0:
             return
@@ -433,7 +486,7 @@ class mp_island_test_case(_ut.TestCase):
         # Check exception transport.
         for _ in range(1000):
             isl = island(algo=de(), prob=_prob(
-                lambda x, y: x + y), size=2, udi=mp_island())
+                lambda x, y: x + y), size=2, udi=mp_island(use_pool=True))
             isl.evolve()
             isl.wait()
             self.assertTrue("**error occurred**" in repr(isl))

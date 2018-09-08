@@ -60,6 +60,15 @@ def _evolve_func_pipe(conn, algo, pop):
     # The evolve function that is actually run from the separate processes
     # in mp_island (when *not* using the pool). Communication with the
     # parent process happens through the conn pipe.
+    # NOTE: disable SIGINT with the goal of preventing the user from accidentally
+    # interrupting the evolution via hitting Ctrl+C in an interactive session
+    # in the parent process. Note that this disables the signal only during
+    # evolution, but the signal is still enabled when the process is bootstrapping
+    # (so the user can still cause troubles in the child process with a well-timed
+    # Ctrl+C). There's nothing we can do about it: the only way would be to disable
+    # SIGINT before creating the child process, but unfortunately the creation
+    # of a child process happens in a separate thread and Python disallows messing
+    # with signal handlers from a thread different from the main one :(
     with _temp_disable_sigint():
         try:
             new_pop = algo.evolve(pop)
@@ -306,15 +315,19 @@ class mp_island(object):
            unspecified: any exception thrown by :func:`~pygmo.mp_island.get_pool_size()`
 
         """
+        retval = "\tUsing a process pool: {}\n".format(
+            "yes" if self._use_pool else "no")
         if self._use_pool:
-            return "\tNumber of processes in the pool: {}".format(mp_island.get_pool_size())
+            retval += "\tNumber of processes in the pool: {}".format(
+                mp_island.get_pool_size())
         else:
             with self._pid_lock:
                 pid = self._pid
             if pid is None:
-                return "\tNo active process"
+                retval += "\tNo active evolution process"
             else:
-                return "\tProcess ID: {}".format(pid)
+                retval += "\tEvolution process ID: {}".format(pid)
+        return retval
 
     @staticmethod
     def _make_pool(processes):
