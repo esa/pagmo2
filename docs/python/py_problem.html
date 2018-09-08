@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Problem class &#8212; pagmo 2.9 documentation</title>
+    <title>Problem class &#8212; pagmo 2.10 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.9',
+        VERSION:     '2.10',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.9</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -125,14 +125,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.10 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id9">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id11">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id13">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id17">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id20">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id11">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id13">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id15">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id19">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id22">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -346,21 +347,52 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <dl class="method">
 <dt id="pygmo.problem.extract">
 <code class="descname">extract</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.extract" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract user-defined problem instance.</p>
-<p>If <em>t</em> is the same type of the user-defined problem used to construct this problem, then a reference to
-the internal user-defined problem will be returned. Otherwise, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> will be returned.</p>
+<dd><p>Extract the user-defined problem.</p>
+<p>This method allows to extract a reference to the user-defined problem (UDP) stored within this
+<a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> instance. The behaviour of this function depends on the value
+of <em>t</em> (which must be a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>) and on the type of the internal UDP:</p>
+<ul class="simple">
+<li>if the type of the UDP is <em>t</em>, then a reference to the UDP will be returned
+(this mirrors the behaviour of the corresponding C++ method
+<a class="reference internal" href="../cpp/problem.html#_CPPv2NK5pagmo7problem7extractEv" title="pagmo::problem::extract"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::problem::extract()</span></code></a>),</li>
+<li>if <em>t</em> is <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> and the UDP is a Python object (as opposed to an
+<a class="reference internal" href="problems/py_problems.html#py-problems-cpp"><span class="std std-ref">exposed C++ problem</span></a>), then a reference to the
+UDP will be returned (this allows to extract a Python UDP without knowing its type),</li>
+<li>otherwise, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> will be returned.</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><em>type</em></a>) – the type of the user-defined problem to extract</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>) – the type of the user-defined problem to extract</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined problem if it is of type <em>t</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined problem, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> if the extraction fails</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>t</em> is not a type</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a></td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">)</span> 
+<span class="go">&lt;pygmo.core.rosenbrock at 0x7f56b870fd50&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">prob</span><span class="p">:</span>
+<span class="go">...:     def fitness(self, x):</span>
+<span class="go">...:         return [x[0]]</span>
+<span class="go">...:     def get_bounds(self):</span>
+<span class="go">...:         return ([0],[1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">prob</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> 
+<span class="go">&lt;__main__.prob at 0x7f56a66b6588&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
+<span class="go">&lt;__main__.prob at 0x7f56a66b6588&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1094,20 +1126,20 @@ signatures, etc.)</li>
 <dl class="method">
 <dt id="pygmo.problem.is_">
 <code class="descname">is_</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.is_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check the type of the user-defined problem instance.</p>
-<p>If <em>t</em> is the same type of the user-defined problem used to construct this problem, then <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a> will be
-returned. Otherwise, <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">False</span></code></a> will be returned.</p>
+<dd><p>Check the type of the user-defined problem.</p>
+<p>This method returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">False</span></code></a> if <a class="reference internal" href="#pygmo.problem.extract" title="pygmo.problem.extract"><code class="xref py py-func docutils literal"><span class="pre">extract(t)</span></code></a> returns
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a> otherwise.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><em>type</em></a>) – the type of the user-defined problem to extract</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDP</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">whether the user-defined problem is of type <em>t</em> or not</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">whether the UDP is of type <em>t</em> or not</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>t</em> is not a type</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.problem.extract" title="pygmo.problem.extract"><code class="xref py py-func docutils literal"><span class="pre">extract()</span></code></a></td>
 </tr>
 </tbody>
 </table>
