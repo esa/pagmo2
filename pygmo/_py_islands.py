@@ -159,15 +159,14 @@ class mp_island(object):
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()` if *use_pool* is :data:`True`
 
         """
-        if not isinstance(use_pool, bool):
-            raise TypeError(
-                "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead.".format(type(use_pool)))
         self._init(use_pool)
 
     def _init(self, use_pool):
         # Implementation of the ctor. Factored out
         # because it's re-used in the pickling support.
-        assert(isinstance(use_pool, bool))
+        if not isinstance(use_pool, bool):
+            raise TypeError(
+                "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead.".format(type(use_pool)))
         self._use_pool = use_pool
         if self._use_pool:
             # Init the process pool, if necessary.
