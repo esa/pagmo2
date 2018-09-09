@@ -433,11 +433,22 @@ class mp_island_test_case(_ut.TestCase):
         self.assertEqual(str(isl3), str(isl))
         self.assertTrue(isl2.extract(object).use_pool)
         self.assertTrue(isl3.extract(object).use_pool)
+        # Do some copying while the island evolves.
+        isl.evolve(20)
+        isl2 = copy(isl)
+        isl3 = deepcopy(isl)
+        self.assertTrue(isl2.extract(object).use_pool)
+        self.assertTrue(isl3.extract(object).use_pool)
+        isl.wait_check()
 
         # Pickle.
         self.assertEqual(str(loads(dumps(isl))), str(isl))
         self.assertTrue(loads(dumps(isl)).extract(object).use_pool)
         self.assertTrue("Using a process pool: yes" in str(loads(dumps(isl))))
+        # Pickle during evolution.
+        isl.evolve(20)
+        self.assertTrue("Using a process pool: yes" in str(loads(dumps(isl))))
+        isl.wait_check()
 
         # Tests when not using the pool.
         with self.assertRaises(TypeError) as cm:
@@ -447,7 +458,7 @@ class mp_island_test_case(_ut.TestCase):
         self.assertTrue(
             "The 'use_pool' parameter in the mp_island constructor must be a boolean" in str(err))
 
-        # Island properties, copy/deecopy, pickle.
+        # Island properties, copy/deepcopy, pickle.
         isl = island(algo=de(), prob=rosenbrock(), size=25,
                      udi=mp_island(use_pool=False))
         self.assertTrue("Using a process pool: no" in str(isl))
@@ -459,6 +470,14 @@ class mp_island_test_case(_ut.TestCase):
         self.assertFalse(isl3.extract(object).use_pool)
         self.assertFalse(loads(dumps(isl)).extract(object).use_pool)
         self.assertTrue("Using a process pool: no" in str(loads(dumps(isl))))
+        # Do some copying/pickling while the island evolves.
+        isl.evolve(20)
+        self.assertTrue("Using a process pool: no" in str(loads(dumps(isl))))
+        isl2 = copy(isl)
+        isl3 = deepcopy(isl)
+        self.assertFalse(isl2.extract(object).use_pool)
+        self.assertFalse(isl3.extract(object).use_pool)
+        isl.wait_check()
 
         # Run some evolutions in a separate process.
         isl.evolve(20)
@@ -553,12 +572,24 @@ class ipyparallel_island_test_case(_ut.TestCase):
         self.assertEqual(str(isl3.get_population()), str(isl.get_population()))
         self.assertEqual(str(isl3.get_algorithm()), str(isl.get_algorithm()))
         self.assertEqual(str(isl3.get_name()), str(isl.get_name()))
+        # Do some copying while the island evolves.
+        isl.evolve(20)
+        isl2 = copy(isl)
+        isl3 = deepcopy(isl)
+        self.assertEqual(str(isl2.get_name()), str(isl.get_name()))
+        self.assertEqual(str(isl3.get_name()), str(isl.get_name()))
+        isl.wait_check()
 
         # Pickle.
         pisl = loads(dumps(isl))
         self.assertEqual(str(pisl.get_population()), str(isl.get_population()))
         self.assertEqual(str(pisl.get_algorithm()), str(isl.get_algorithm()))
         self.assertEqual(str(pisl.get_name()), str(isl.get_name()))
+        # Pickle during evolution.
+        isl.evolve(20)
+        pisl = loads(dumps(isl))
+        self.assertEqual(str(pisl.get_name()), str(isl.get_name()))
+        isl.wait_check()
 
         if self._level == 0:
             return
