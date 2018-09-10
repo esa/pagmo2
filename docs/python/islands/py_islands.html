@@ -189,17 +189,32 @@
 <h2>Islands implemented in Python<a class="headerlink" href="#islands-implemented-in-python" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pygmo.mp_island">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mp_island</code><a class="headerlink" href="#pygmo.mp_island" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mp_island</code><span class="sig-paren">(</span><em>use_pool=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multiprocessing island.</p>
-<p>This user-defined island (UDI) will dispatch evolution tasks to a pool of processes
-created via the standard Python <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span> <span class="pre">module</span></code></a>. The pool is shared between
-different instances of <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>, and it is created
-either implicitly by the construction of the first <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>
-object or explicitly via the <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a> static method.
-The default number of processes in the pool is equal to the number of logical CPUs on the
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.10: </span>The <em>use_pool</em> parameter (in previous versions, <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> always used a process pool).</p>
+</div>
+<p>This user-defined island (UDI) will dispatch evolution tasks to an external Python process
+using the facilities provided by the standard Python <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></code></a> module.</p>
+<p>If the construction argument <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a>, then a process from a global
+<a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">pool</span></code></a> shared between different instances of
+<a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> will be used. The pool is created either implicitly by the construction
+of the first <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> object or explicitly via the <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a>
+static method. The default number of processes in the pool is equal to the number of logical CPUs on the
 current machine. The pool’s size can be queried via <a class="reference internal" href="#pygmo.mp_island.get_pool_size" title="pygmo.mp_island.get_pool_size"><code class="xref py py-func docutils literal"><span class="pre">get_pool_size()</span></code></a>,
 and changed via <a class="reference internal" href="#pygmo.mp_island.resize_pool" title="pygmo.mp_island.resize_pool"><code class="xref py py-func docutils literal"><span class="pre">resize_pool()</span></code></a>. The pool can be stopped via
 <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>.</p>
+<p>If <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">False</span></code></a>, each evolution launched by an <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> will be offloaded
+to a new <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.Process" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">process</span></code></a> which will then be terminated at the end of the evolution.</p>
+<p>Generally speaking, a process pool will be faster (and will use fewer resources) than spawning a new process
+for every evolution. A process pool, however, by its very nature limits the number of evolutions that can
+be run simultaneously on the system, and it introduces a serializing behaviour that might not be desirable
+in certain situations (e.g., when studying parallel evolution with migration in an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a>).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
+this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.</p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Due to certain implementation details of CPython, it is not possible to initialise, resize or shutdown the pool
@@ -208,16 +223,29 @@ from a thread different from the main one. Normally this is not a problem, but, 
 will be raised. In such a situation, the user should ensure to call <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a>
 from the main thread before spawning the secondary thread.</p>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
-this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Due to internal limitations of CPython, sending an interrupt signal (e.g., by pressing <code class="docutils literal"><span class="pre">Ctrl+C</span></code> in an interactive
+Python session) while an <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> is evolving might end up sending an interrupt signal also to the
+external evolution process(es). This can lead to unpredictable runtime behaviour (e.g., the session may hang). Although
+pygmo tries hard to limit as much as possible the chances of this occurrence, it cannot eliminate them completely. Users
+are thus advised to tread carefully with interrupt signals (especially in interactive sessions) when using
+<a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>use_pool</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a>, a process from a global pool will be used to run the evolution, otherwise a new
+process will be spawned for each evolution</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – is <em>use_pool</em> is not of type <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> – if the multiprocessing island is not supported on the current platform and <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">False</span></code></a></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a> if <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -225,13 +253,13 @@ this class on non-Windows platforms with a Python version earlier than 3.4 will 
 <dt id="pygmo.mp_island.get_extra_info">
 <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island’s extra info.</p>
-<p>If the process pool was explicitly shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, invoking this
-function will trigger the creation of a new process pool.</p>
+<p>If the island uses a process pool and the pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>,
+invoking this function will trigger the creation of a new pool.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string specifying the current number of processes in the pool</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
 </tr>
@@ -261,8 +289,8 @@ function will trigger the creation of a new process pool.</p>
 <dt id="pygmo.mp_island.get_pool_size">
 <em class="property">static </em><code class="descname">get_pool_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_pool_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the size of the process pool.</p>
-<p>If the process pool was explicitly shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, invoking this
-function will trigger the creation of a new process pool.</p>
+<p>If the process pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, invoking this
+function will trigger the creation of a new pool.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -304,13 +332,32 @@ from the main one, or if <em>processes</em> is a non-positive value</li>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pygmo.mp_island.pid">
+<code class="descname">pid</code><a class="headerlink" href="#pygmo.mp_island.pid" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of the evolution process (read-only).</p>
+<p>This property is available only if the island is <em>not</em> using a process pool.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the ID of the process running the current evolution, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> if no evolution is ongoing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the island is using a process pool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="pygmo.mp_island.resize_pool">
 <em class="property">static </em><code class="descname">resize_pool</code><span class="sig-paren">(</span><em>processes</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.resize_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resize pool.</p>
 <p>This method will resize the process pool backing <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>.</p>
-<p>If the process pool was explicitly shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, invoking this
-function will trigger the creation of a new process pool.</p>
+<p>If the process pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, invoking this
+function will trigger the creation of a new pool.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -335,9 +382,9 @@ function will trigger the creation of a new process pool.</p>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
-is run on one of the processes of the pool backing <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>.
-If the process pool was explicitly shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, invoking
-this function will raise an exception.</p>
+is run either on one of the processes of the pool backing <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a>, or in
+a new separate process. If this island is using a pool, and the pool was previously
+shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal"><span class="pre">shutdown_pool()</span></code></a>, an exception will be raised.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -380,6 +427,22 @@ will raise an error. A new process pool can be created via an explicit call to
 <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> which trigger the creation of a new process pool.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pygmo.mp_island.use_pool">
+<code class="descname">use_pool</code><a class="headerlink" href="#pygmo.mp_island.use_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pool usage flag (read-only).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a> if this island uses a process pool, <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">False</span></code></a> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -387,10 +450,10 @@ will raise an error. A new process pool can be created via an explicit call to
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ipyparallel_island</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ipyparallel island.</p>
 <p>This user-defined island (UDI) will dispatch evolution tasks to an ipyparallel cluster.
-Upon construction, an instance of this UDI will first initialise an <code class="xref py py-class docutils literal"><span class="pre">ipyparallel.Client</span></code>
-object, and then extract an <code class="xref py py-class docutils literal"><span class="pre">ipyparallel.LoadBalancedView</span></code> object from it that will
+Upon construction, an instance of this UDI will first initialise an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel.Client</span></code></a>
+object, and then extract an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel.LoadBalancedView</span></code></a> object from it that will
 be used to submit evolution tasks to the cluster. The arguments to the constructor of this
-class will be passed without modifications to the constructor of the <code class="xref py py-class docutils literal"><span class="pre">ipyparallel.Client</span></code>
+class will be passed without modifications to the constructor of the <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel.Client</span></code></a>
 object that will be created internally.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -406,7 +469,7 @@ object that will be created internally.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string with extra information about the status of the island</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -422,7 +485,7 @@ object that will be created internally.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">&quot;Ipyparallel</span> <span class="pre">island&quot;</span></code></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -434,7 +497,7 @@ object that will be created internally.</p>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
-task is submitted to the ipyparallel cluster via an internal <code class="xref py py-class docutils literal"><span class="pre">ipyparallel.LoadBalancedView</span></code>
+task is submitted to the ipyparallel cluster via an internal <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>
 instance initialised during the construction of the island.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

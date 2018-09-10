@@ -234,6 +234,8 @@
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li>The Python multiprocessing island <a class="reference internal" href="docs/python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> can now optionally spawn a new process for each
+evolution, rather than using a process pool (<a class="reference external" href="https://github.com/esa/pagmo2/pull/221">#221</a>).</li>
 <li>Python user-defined classes can now be extracted from their type-erased containers using the
 Python <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> type (<a class="reference external" href="https://github.com/esa/pagmo2/pull/219">#219</a>). This allows extraction
 without knowing the exact type of the object being extracted.</li>
@@ -242,7 +244,9 @@ without knowing the exact type of the object being extracted.</li>
 <div class="section" id="fix">
 <h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Various documentation fixes and enhancements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/217">#217</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/218">#218</a>).</li>
+<li>Tentative fix for a pygmo build failure in Cygwin (<a class="reference external" href="https://github.com/esa/pagmo2/pull/221">#221</a>).</li>
+<li>Various documentation fixes and enhancements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/217">#217</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/218">#218</a>,
+<a class="reference external" href="https://github.com/esa/pagmo2/pull/220">#220</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/221">#221</a>).</li>
 </ul>
 </div>
 </div>
