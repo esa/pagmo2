@@ -34,13 +34,6 @@ from __future__ import absolute_import as _ai
 from threading import Lock as _Lock
 
 
-def _evolve_func(algo, pop):
-    # The evolve function that is actually run from the separate processes
-    # in both mp_island and ipyparallel_island.
-    new_pop = algo.evolve(pop)
-    return algo, new_pop
-
-
 class _temp_disable_sigint(object):
     # A small helper context class to disable CTRL+C temporarily.
 
@@ -56,18 +49,68 @@ class _temp_disable_sigint(object):
         signal.signal(signal.SIGINT, self._prev_signal)
 
 
+def _evolve_func(algo, pop):
+    # The evolve function that is actually run from the separate processes
+    # in both mp_island (when using the pool) and ipyparallel_island.
+    new_pop = algo.evolve(pop)
+    return algo, new_pop
+
+
+def _evolve_func_pipe(conn, algo, pop):
+    # The evolve function that is actually run from the separate processes
+    # in mp_island (when *not* using the pool). Communication with the
+    # parent process happens through the conn pipe.
+    # NOTE: disable SIGINT with the goal of preventing the user from accidentally
+    # interrupting the evolution via hitting Ctrl+C in an interactive session
+    # in the parent process. Note that this disables the signal only during
+    # evolution, but the signal is still enabled when the process is bootstrapping
+    # (so the user can still cause troubles in the child process with a well-timed
+    # Ctrl+C). There's nothing we can do about it: the only way would be to disable
+    # SIGINT before creating the child process, but unfortunately the creation
+    # of a child process happens in a separate thread and Python disallows messing
+    # with signal handlers from a thread different from the main one :(
+    with _temp_disable_sigint():
+        try:
+            new_pop = algo.evolve(pop)
+            conn.send((algo, new_pop))
+        except Exception as e:
+            conn.send(RuntimeError(
+                "An exception was raised in the evolution of a multiprocessing island. The full error message is:\n{}".format(e)))
+        finally:
+            conn.close()
+
+
 class mp_island(object):
     """Multiprocessing island.
 
-    This user-defined island (UDI) will dispatch evolution tasks to a pool of processes
-    created via the standard Python :mod:`multiprocessing module <multiprocessing>`. The pool is shared between
-    different instances of :class:`~pygmo.mp_island`, and it is created
-    either implicitly by the construction of the first :class:`~pygmo.mp_island`
-    object or explicitly via the :func:`~pygmo.mp_island.init_pool()` static method.
-    The default number of processes in the pool is equal to the number of logical CPUs on the
+    .. versionadded:: 2.10
+
+       The *use_pool* parameter (in previous versions, :class:`~pygmo.mp_island` always used a process pool).
+
+    This user-defined island (UDI) will dispatch evolution tasks to an external Python process
+    using the facilities provided by the standard Python :mod:`multiprocessing` module.
+
+    If the construction argument *use_pool* is :data:`True`, then a process from a global
+    :class:`pool <multiprocessing.pool.Pool>` shared between different instances of
+    :class:`~pygmo.mp_island` will be used. The pool is created either implicitly by the construction
+    of the first :class:`~pygmo.mp_island` object or explicitly via the :func:`~pygmo.mp_island.init_pool()`
+    static method. The default number of processes in the pool is equal to the number of logical CPUs on the
     current machine. The pool's size can be queried via :func:`~pygmo.mp_island.get_pool_size()`,
     and changed via :func:`~pygmo.mp_island.resize_pool()`. The pool can be stopped via
     :func:`~pygmo.mp_island.shutdown_pool()`.
+
+    If *use_pool* is :data:`False`, each evolution launched by an :class:`~pygmo.mp_island` will be offloaded
+    to a new :class:`process <multiprocessing.Process>` which will then be terminated at the end of the evolution.
+
+    Generally speaking, a process pool will be faster (and will use fewer resources) than spawning a new process
+    for every evolution. A process pool, however, by its very nature limits the number of evolutions that can
+    be run simultaneously on the system, and it introduces a serializing behaviour that might not be desirable
+    in certain situations (e.g., when studying parallel evolution with migration in an :class:`~pygmo.archipelago`).
+
+    .. note::
+
+       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
+       this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.
 
     .. note::
 
@@ -77,34 +120,106 @@ class mp_island(object):
        will be raised. In such a situation, the user should ensure to call :func:`~pygmo.mp_island.init_pool()`
        from the main thread before spawning the secondary thread.
 
-    .. note::
+    .. warning::
 
-       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
-       this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.
+       Due to internal limitations of CPython, sending an interrupt signal (e.g., by pressing ``Ctrl+C`` in an interactive
+       Python session) while an :class:`~pygmo.mp_island` is evolving might end up sending an interrupt signal also to the
+       external evolution process(es). This can lead to unpredictable runtime behaviour (e.g., the session may hang). Although
+       pygmo tries hard to limit as much as possible the chances of this occurrence, it cannot eliminate them completely. Users
+       are thus advised to tread carefully with interrupt signals (especially in interactive sessions) when using
+       :class:`~pygmo.mp_island`.
 
     """
+
+    # Static variables for the pool.
     _pool_lock = _Lock()
     _pool = None
     _pool_size = None
 
-    def __init__(self):
+    @staticmethod
+    def _platform_checks():
+        # Platform-specific checks: the mp island requires either Windows or at least Python 3.4.
+        import sys
+        import os
+        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
+            raise RuntimeError(
+                "The multiprocessing island is supported only on Windows or on Python >= 3.4.")
+
+    def __init__(self, use_pool=True):
         """
+        Args:
+
+           use_pool(bool): if :data:`True`, a process from a global pool will be used to run the evolution, otherwise a new
+              process will be spawned for each evolution
+
         Raises:
 
-           unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
+           TypeError: is *use_pool* is not of type :class:`bool`
+           RuntimeError: if the multiprocessing island is not supported on the current platform and *use_pool* is :data:`False`
+           unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()` if *use_pool* is :data:`True`
 
         """
-        # Init the process pool, if necessary.
-        mp_island.init_pool()
+        self._init(use_pool)
+
+    def _init(self, use_pool):
+        # Implementation of the ctor. Factored out
+        # because it's re-used in the pickling support.
+        if not isinstance(use_pool, bool):
+            raise TypeError(
+                "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead.".format(type(use_pool)))
+        self._use_pool = use_pool
+        if self._use_pool:
+            # Init the process pool, if necessary.
+            mp_island.init_pool()
+        else:
+            # Run the platform checks (when using the pool,
+            # they are run inside init_pool()).
+            mp_island._platform_checks()
+            # Init the pid member and associated lock.
+            self._pid_lock = _Lock()
+            self._pid = None
+
+    @property
+    def use_pool(self):
+        """Pool usage flag (read-only).
+
+        Returns:
+
+           bool: :data:`True` if this island uses a process pool, :data:`False` otherwise
+
+        """
+        return self._use_pool
+
+    def __copy__(self):
+        # For copy/deepcopy, construct a new instance
+        # with the same arguments used to construct self.
+        # NOTE: no need for locking, as _use_pool is set
+        # on construction and never touched again.
+        return mp_island(self._use_pool)
+
+    def __deepcopy__(self, d):
+        return self.__copy__()
+
+    def __getstate__(self):
+        # For pickle/unpickle, we employ the construction
+        # argument, which will be used to re-init the class
+        # during unpickle.
+        return self._use_pool
+
+    def __setstate__(self, state):
+        # NOTE: we need to do a full init of the object,
+        # in order to set the use_pool flag and, if necessary,
+        # construct the _pid and _pid_lock objects.
+        self._init(state)
 
     def run_evolve(self, algo, pop):
         """Evolve population.
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
         :class:`~pygmo.algorithm` *algo*, and return *algo* and the evolved population. The evolution
-        is run on one of the processes of the pool backing :class:`~pygmo.mp_island`.
-        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking
-        this function will raise an exception.
+        is run either on one of the processes of the pool backing :class:`~pygmo.mp_island`, or in
+        a new separate process. If this island is using a pool, and the pool was previously
+        shut down via :func:`~pygmo.mp_island.shutdown_pool()`, an exception will be raised.
 
         Args:
 
@@ -123,19 +238,79 @@ class mp_island(object):
 
 
         """
-        with mp_island._pool_lock:
-            # NOTE: run this while the pool is locked. We have
-            # functions to modify the pool (e.g., resize()) and
-            # we need to make sure we are not trying to touch
-            # the pool while we are sending tasks to it.
-            if mp_island._pool is None:
-                raise RuntimeError(
-                    "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool().")
-            res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
-        # NOTE: there might be a bug in need of a workaround lurking in here:
-        # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
-        # Just keep it in mind.
-        return res.get()
+        if self._use_pool:
+            with mp_island._pool_lock:
+                # NOTE: run this while the pool is locked. We have
+                # functions to modify the pool (e.g., resize()) and
+                # we need to make sure we are not trying to touch
+                # the pool while we are sending tasks to it.
+                if mp_island._pool is None:
+                    raise RuntimeError(
+                        "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool().")
+                res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
+            # NOTE: there might be a bug in need of a workaround lurking in here:
+            # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
+            # Just keep it in mind.
+            return res.get()
+        else:
+            import multiprocessing as mp
+            import sys
+            import os
+            # The context functionality in the mp module is available since
+            # Python 3.4. It is used to force the process creation with the
+            # "spawn" method.
+            has_context = sys.version_info[0] > 3 or (
+                sys.version_info[0] == 3 and sys.version_info[1] >= 4)
+            if has_context:
+                mp_ctx = mp.get_context('spawn')
+            else:
+                # NOTE: for Python < 3.4, only Windows is supported and we
+                # should never end up here (the island will throw on construction
+                # when we do platform checks).
+                assert(os.name == 'nt')
+                mp_ctx = mp
+            parent_conn, child_conn = mp_ctx.Pipe(duplex=False)
+            p = mp_ctx.Process(target=_evolve_func_pipe,
+                               args=(child_conn, algo, pop))
+            p.start()
+            with self._pid_lock:
+                self._pid = p.pid
+            # NOTE: after setting the pid, wrap everything
+            # in a try block with a finally clause for
+            # resetting the pid to None. This way, even
+            # if there are exceptions, we are sure the pid
+            # is set back to None.
+            try:
+                res = parent_conn.recv()
+                p.join()
+            finally:
+                with self._pid_lock:
+                    self._pid = None
+            if isinstance(res, RuntimeError):
+                raise res
+            return res
+
+    @property
+    def pid(self):
+        """ID of the evolution process (read-only).
+
+        This property is available only if the island is *not* using a process pool.
+
+        Returns:
+
+           int: the ID of the process running the current evolution, or :data:`None` if no evolution is ongoing
+
+        Raises:
+
+           ValueError: if the island is using a process pool
+
+        """
+        if self._use_pool:
+            raise ValueError(
+                "The 'pid' property is available only when the island is configured to spawn new processes, but this mp_island is using a process pool instead.")
+        with self._pid_lock:
+            pid = self._pid
+        return pid
 
     def get_name(self):
         """Island's name.
@@ -150,19 +325,31 @@ class mp_island(object):
     def get_extra_info(self):
         """Island's extra info.
 
-        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
-        function will trigger the creation of a new process pool.
+        If the island uses a process pool and the pool was previously shut down via :func:`~pygmo.mp_island.shutdown_pool()`,
+        invoking this function will trigger the creation of a new pool.
 
         Returns:
 
-           str: a string specifying the current number of processes in the pool
+           str: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
 
         Raises:
 
            unspecified: any exception thrown by :func:`~pygmo.mp_island.get_pool_size()`
 
         """
-        return "\tNumber of processes in the pool: {}".format(mp_island.get_pool_size())
+        retval = "\tUsing a process pool: {}\n".format(
+            "yes" if self._use_pool else "no")
+        if self._use_pool:
+            retval += "\tNumber of processes in the pool: {}".format(
+                mp_island.get_pool_size())
+        else:
+            with self._pid_lock:
+                pid = self._pid
+            if pid is None:
+                retval += "\tNo active evolution process"
+            else:
+                retval += "\tEvolution process ID: {}".format(pid)
+        return retval
 
     @staticmethod
     def _make_pool(processes):
@@ -220,12 +407,8 @@ class mp_island(object):
         """
         # Helper to create a new pool. It will do something
         # only if the pool has never been created before.
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            raise RuntimeError(
-                "The multiprocessing island is supported only on Windows or on Python >= 3.4.")
+        # Run the platform checks.
+        mp_island._platform_checks()
         if processes is not None and not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be None or an int")
         if processes is not None and processes <= 0:
@@ -240,8 +423,8 @@ class mp_island(object):
     def get_pool_size():
         """Get the size of the process pool.
 
-        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
-        function will trigger the creation of a new process pool.
+        If the process pool was previously shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
+        function will trigger the creation of a new pool.
 
         Returns:
 
@@ -262,8 +445,8 @@ class mp_island(object):
 
         This method will resize the process pool backing :class:`~pygmo.mp_island`.
 
-        If the process pool was explicitly shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
-        function will trigger the creation of a new process pool.
+        If the process pool was previously shut down via :func:`~pygmo.mp_island.shutdown_pool()`, invoking this
+        function will trigger the creation of a new pool.
 
         Args:
 
@@ -459,7 +642,7 @@ class ipyparallel_island(object):
         """Island's name.
 
         Returns:
-            ``str``: ``"Ipyparallel island"``
+            str: ``"Ipyparallel island"``
 
         """
         return "Ipyparallel island"
@@ -468,7 +651,7 @@ class ipyparallel_island(object):
         """Island's extra info.
 
         Returns:
-            ``str``: a string with extra information about the status of the island
+            str: a string with extra information about the status of the island
 
         """
         with self._view_lock:

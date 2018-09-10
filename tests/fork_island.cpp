@@ -86,16 +86,16 @@ BOOST_AUTO_TEST_CASE(fork_island_basic)
         fork_island fi_1(fi_0), fi_2(std::move(fi_0));
         BOOST_CHECK(fi_1.get_child_pid() == pid_t(0));
         BOOST_CHECK(fi_2.get_child_pid() == pid_t(0));
-        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
-        BOOST_CHECK(boost::contains(fi_1.get_extra_info(), "No active child."));
-        BOOST_CHECK(boost::contains(fi_2.get_extra_info(), "No active child."));
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child"));
+        BOOST_CHECK(boost::contains(fi_1.get_extra_info(), "No active child"));
+        BOOST_CHECK(boost::contains(fi_2.get_extra_info(), "No active child"));
         BOOST_CHECK_EQUAL(fi_0.get_name(), "Fork island");
     }
     {
         // Test: try to kill a running island.
         island fi_0(fork_island{}, de{200}, godot1{20}, 20);
         BOOST_CHECK(fi_0.extract<fork_island>() != nullptr);
-        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child"));
         fi_0.evolve();
         // Busy wait until the child is running.
         pid_t child_pid;
@@ -108,14 +108,14 @@ BOOST_AUTO_TEST_CASE(fork_island_basic)
         kill(child_pid, SIGTERM);
         // Check that killing the child raised an error in the parent process.
         BOOST_CHECK_THROW(fi_0.wait_check(), std::exception);
-        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child"));
     }
     {
         // Test: try to generate an error in the evolution.
         // NOTE: de wants more than 1 individual in the pop.
         island fi_0(fork_island{}, de{1}, rosenbrock{}, 1);
         BOOST_CHECK(fi_0.extract<fork_island>() != nullptr);
-        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child."));
+        BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child"));
         fi_0.evolve();
         BOOST_CHECK_EXCEPTION(fi_0.wait_check(), std::runtime_error, [](const std::runtime_error &re) {
             return boost::contains(re.what(), "needs at least 5 individuals in the population");

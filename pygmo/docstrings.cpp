@@ -85,7 +85,7 @@ std::string population_random_decision_vector_docstring()
 This method will create a random decision vector within the problem's bounds.
 
 Returns:
-    1D NumPy float array: a random decision vector within the problem’s bounds
+    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
 
 Raises:
     unspecified: any exception thrown by :func:`pygmo.problem.fitness()` or by failures at the intersection between C++ and
