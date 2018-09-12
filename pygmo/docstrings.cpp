@@ -85,7 +85,7 @@ std::string population_random_decision_vector_docstring()
 This method will create a random decision vector within the problem's bounds.
 
 Returns:
-    1D NumPy float array: a random decision vector within the problem’s bounds
+    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
 
 Raises:
     unspecified: any exception thrown by :func:`pygmo.problem.fitness()` or by failures at the intersection between C++ and
@@ -366,8 +366,8 @@ Every UDP must implement at least the following two methods:
    def get_bounds(self):
      ...
 
-The ``fitness()`` method is expected to return the fitness of the input decision vector (
-* concatenating the objectives, the equality and the inequality constraints), while
+The ``fitness()`` method is expected to return the fitness of the input decision vector (concatenating
+the objectives, the equality and the inequality constraints), while
 ``get_bounds()`` is expected to return the box bounds of the problem,
 :math:`(\mathbf{lb}, \mathbf{ub})`, which also implicitly define the dimension of the problem.
 The ``fitness()`` and ``get_bounds()`` methods of the UDP are accessible from the corresponding
@@ -3289,6 +3289,8 @@ where :math:`d_1 = (\mathbf f - \mathbf z^*) \cdot \hat {\mathbf i}_{\lambda}` ,
 :math:`d_2 = \vert (\mathbf f - \mathbf z^*) - d_1 \hat {\mathbf i}_{\lambda})\vert` , and 
 :math:`\hat {\mathbf i}_{\lambda} = \frac{\boldsymbol \lambda}{\vert \boldsymbol \lambda \vert}`
 
+Note that while `ref_point` is required, it does not impact the calculation for the `weighted` method as shown above.
+
 Args:
     objs (array-like object): the objective vectors
     weights (array-like object): the weights :math:`\boldsymbol \lambda`
@@ -3306,6 +3308,10 @@ Examples:
     >>> import pygmo as pg
     >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[5,5,5], method = "weighted") # doctest: +SKIP
     array([ 2.7])
+    >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[0,0,0], method = "weighted") # doctest: +SKIP
+    array([ 2.7])
+    >>> pg.decompose_objectives(objs = [1,2,3], weights = [0.1,0.1,0.8], ref_point=[5,5,5], method = "tchebycheff") # doctest: +SKIP
+    array([ 1.6])
 )";
 }
 
@@ -4210,6 +4216,9 @@ the separate thread of execution within :class:`pygmo.island`. Evolution tasks r
 UDI must involve :class:`~pygmo.algorithm` and :class:`~pygmo.problem` instances
 that provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee, otherwise
 errors will be raised during the evolution.
+
+Note that algorithms and problems implemented in Python are never considered thread safe, and thus
+this UDI can be used only with algorithms and problems implemented in C++.
 
 See also the documentation of the corresponding C++ class :cpp:class:`pagmo::thread_island`.
 

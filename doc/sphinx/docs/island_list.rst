@@ -4,8 +4,8 @@ List of islands (UDIs) available in pagmo/pygmo
 ================================================
 
 This is the list of user defined islands (UDIs) currently provided with pagmo/pygmo. These are classes that 
-can be used to construct a :cpp:class:`pagmo::island`, or :class:`pygmo.island` which will then provide a unified 
-interface to acces their parallelization functionalities.
+can be used to construct a :cpp:class:`pagmo::island` (C++), or a :class:`pygmo.island` (Python), which will then
+provide a unified interface to access the island's functionalities.
 
 ========================================================== ========================================= =========================================
 Common Name                                                Docs of the C++ class                     Docs of the python class                 

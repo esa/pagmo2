@@ -3,12 +3,6 @@
 List of islands available in pygmo
 ==================================
 
-Islands exposed from C++
--------------------------
-
-.. autoclass:: pygmo.thread_island
-   :members:
-
 Islands implemented in Python
 -----------------------------
 
@@ -16,4 +10,12 @@ Islands implemented in Python
    :members:
 
 .. autoclass:: pygmo.ipyparallel_island
+   :members:
+
+.. _py_islands_cpp:
+
+Islands exposed from C++
+-------------------------
+
+.. autoclass:: pygmo.thread_island
    :members:

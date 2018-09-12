@@ -47,7 +47,10 @@ breathe_default_project = "pagmo"
 breathe_default_members = ('members',)
 
 # Intersphinx mappings.
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+intersphinx_mapping = {'python': (
+    'https://docs.python.org/3', None),
+    'ipyparallel': ('https://ipyparallel.readthedocs.io/en/latest/', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

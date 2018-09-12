@@ -3,6 +3,16 @@
 List of problems available in pygmo
 ===================================
 
+.. _py_problems_py:
+
+Problems implemented in Python
+------------------------------
+
+.. autoclass:: pygmo.decorator_problem
+   :members:
+
+.. _py_problems_cpp:
+
 Problems exposed from C++
 -------------------------
 
@@ -97,9 +107,4 @@ Problems exposed from C++
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.unconstrain
-   :members:
-
--------------------------------------------------------------
-
-.. autoclass:: pygmo.decorator_problem
    :members:

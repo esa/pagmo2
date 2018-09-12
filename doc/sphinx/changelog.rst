@@ -1,7 +1,28 @@
 Changelog
 =========
 
-2.9 (unreleased)
+2.10 (unreleased)
+-----------------
+
+New
+~~~
+
+- The Python multiprocessing island :class:`~pygmo.mp_island` can now optionally spawn a new process for each
+  evolution, rather than using a process pool (`#221 <https://github.com/esa/pagmo2/pull/221>`__).
+
+- Python user-defined classes can now be extracted from their type-erased containers using the
+  Python :class:`object` type (`#219 <https://github.com/esa/pagmo2/pull/219>`__). This allows extraction
+  without knowing the exact type of the object being extracted.
+
+Fix
+~~~
+
+- Tentative fix for a pygmo build failure in Cygwin (`#221 <https://github.com/esa/pagmo2/pull/221>`__).
+
+- Various documentation fixes and enhancements (`#217 <https://github.com/esa/pagmo2/pull/217>`__, `#218 <https://github.com/esa/pagmo2/pull/218>`__,
+  `#220 <https://github.com/esa/pagmo2/pull/220>`__, `#221 <https://github.com/esa/pagmo2/pull/221>`__).
+
+2.9 (2018-08-31)
 ----------------
 
 New

@@ -395,7 +395,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
             (void)new_x;
 
             std::copy(x, x + n, m_dv.begin());
-            // Compute the full gradient (this includes the cosntraints as well).
+            // Compute the full gradient (this includes the constraints as well).
             const auto gradient = m_prob.gradient(m_dv);
 
             if (m_prob.has_gradient_sparsity()) {

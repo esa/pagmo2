@@ -287,7 +287,7 @@ private:
             // Otherwise, sort the points in preparation for the next recursive step
             // Bind the object under "this" pointer to the cmp_points method so it can be used as a valid comparator
             // function for std::sort
-            // We need that in order for the cmp_points to have acces to the m_current_slice member variable.
+            // We need that in order for the cmp_points to have access to the m_current_slice member variable.
             std::sort(points, points + n_points, [this](double *a, double *b) { return this->cmp_points(a, b); });
         }
 

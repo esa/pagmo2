@@ -29,7 +29,7 @@ Fork island
    that thread-unsafe problems and algorithms are always run in only one thread at a time.
    This capability is particularly useful when wrapping in pagmo third-party code which does not support execution
    in multithreaded contexts (a notable example is the :cpp:class:`~pagmo::ipopt` algorithm,
-   which uses the thread-unsafe IPOPT optimiser).
+   which uses the thread-unsafe Ipopt optimiser).
 
    :cpp:class:`~pagmo::fork_island` is the UDI type automatically selected by the constructors of :cpp:class:`~pagmo::island`
    on POSIX platforms when the island's problem and/or algorithm do not provide the basic :cpp:type:`~pagmo::thread_safety`
@@ -51,7 +51,8 @@ Fork island
    .. cpp:function:: fork_island(const fork_island &)
    .. cpp:function:: fork_island(fork_island &&) noexcept
 
-      :cpp:class:`~pagmo::fork_island` is default, copy and move-constructible.
+   :cpp:class:`~pagmo::fork_island` is default, copy and move-constructible. The copy and move constructor are equivalent
+   to the default constructor.
 
    .. cpp:function:: void run_evolve(island &isl) const
 
@@ -79,7 +80,7 @@ Fork island
    .. cpp:function:: std::string get_extra_info() const
 
       :return: if an evolution is ongoing, this method will return a string
-         representation of the ID of the child process. Otherwise, the ``"No active child."`` string will be returned.
+         representation of the ID of the child process. Otherwise, the ``"No active child"`` string will be returned.
 
    .. cpp:function:: pid_t get_child_pid() const
 
@@ -93,3 +94,10 @@ Fork island
       Note that :cpp:class:`~pagmo::fork_island` is stateless, and thus this (de)serialisation function is empty and performs no work.
 
 .. cpp:namespace-pop::
+
+Types
+-----
+
+.. cpp:type:: pid_t
+
+   The POSIX type used to represent a process ID. It is an alias for a fundamental signed integral type.
