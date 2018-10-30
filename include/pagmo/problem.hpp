@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PROBLEM_HPP
 
 #include <algorithm>
+#include <atomic>
 #include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
@@ -1235,13 +1236,14 @@ public:
      * - the copying of the internal UDP.
      */
     problem(const problem &other)
-        : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
-          m_lb(other.m_lb), m_ub(other.m_ub), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic),
-          m_nix(other.m_nix), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
-          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
-          m_thread_safety(other.m_thread_safety)
+        : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals.load(std::memory_order_relaxed)),
+          m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
+          m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(other.m_lb), m_ub(other.m_ub),
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(other.m_c_tol),
+          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+          m_has_set_seed(other.m_has_set_seed), m_name(other.m_name), m_gs_dim(other.m_gs_dim),
+          m_hs_dim(other.m_hs_dim), m_thread_safety(other.m_thread_safety)
     {
     }
 
@@ -1250,13 +1252,15 @@ public:
      * @param other the problem from which \p this will be move-constructed.
      */
     problem(problem &&other) noexcept
-        : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
-          m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec),
-          m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(std::move(other.m_c_tol)),
-          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
-          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-          m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
-          m_hs_dim(other.m_hs_dim), m_thread_safety(std::move(other.m_thread_safety))
+        : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load(std::memory_order_relaxed)),
+          m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
+          m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(std::move(other.m_lb)),
+          m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix),
+          m_c_tol(std::move(other.m_c_tol)), m_has_gradient(other.m_has_gradient),
+          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
+          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
+          m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
+          m_thread_safety(std::move(other.m_thread_safety))
     {
     }
 
@@ -1270,9 +1274,9 @@ public:
     {
         if (this != &other) {
             m_ptr = std::move(other.m_ptr);
-            m_fevals = other.m_fevals;
-            m_gevals = other.m_gevals;
-            m_hevals = other.m_hevals;
+            m_fevals.store(other.m_fevals.load(std::memory_order_relaxed), std::memory_order_relaxed);
+            m_gevals.store(other.m_gevals.load(std::memory_order_relaxed), std::memory_order_relaxed);
+            m_hevals.store(other.m_hevals.load(std::memory_order_relaxed), std::memory_order_relaxed);
             m_lb = std::move(other.m_lb);
             m_ub = std::move(other.m_ub);
             m_nobj = other.m_nobj;
@@ -1398,14 +1402,29 @@ public:
      */
     vector_double fitness(const vector_double &dv) const
     {
+        // NOTE: it is important that we can call this method on the same object from multiple threads,
+        // for parallel initialisation in populations/archis. Such thread safety must be maintained
+        // if we change the implementation of this method.
+
         // 1 - checks the decision vector
+        // NOTE: the check compares dv to the stored problem bounds. This is const and thread-safe.
         check_decision_vector(dv);
+
         // 2 - computes the fitness
+        // NOTE: the thread safety here depends on the thread safety of the UDP. We make sure in the
+        // parallel init methods that we never invoke this method concurrently if the UDP is not
+        // sufficiently thread-safe.
         vector_double retval(ptr()->fitness(dv));
+
         // 3 - checks the fitness vector
+        // NOTE: as above, we are just making sure the fitness length is consistent with the fitness
+        // length stored in the problem. This is const and thread-safe.
         check_fitness_vector(retval);
+
         // 4 - increments fitness evaluation counter
-        ++m_fevals;
+        // NOTE: this is an atomic variable, thread-safe.
+        m_fevals.fetch_add(1u, std::memory_order_relaxed);
+
         return retval;
     }
 
@@ -1446,7 +1465,7 @@ public:
         // 3 - checks the gradient vector
         check_gradient_vector(retval);
         // 4 - increments gradient evaluation counter
-        ++m_gevals;
+        m_gevals.fetch_add(1u, std::memory_order_relaxed);
         return retval;
     }
 
@@ -1574,7 +1593,7 @@ public:
         // 3 - checks the hessians
         check_hessians_vector(retval);
         // 4 - increments hessians evaluation counter
-        ++m_hevals;
+        m_hevals.fetch_add(1u, std::memory_order_relaxed);
         return retval;
     }
 
@@ -1845,7 +1864,19 @@ public:
      */
     unsigned long long get_fevals() const
     {
-        return m_fevals;
+        return m_fevals.load(std::memory_order_relaxed);
+    }
+
+    /// Set the number of fitness evaluations.
+    /**
+     * An internal counter is automatically increased every time problem::fitness() is called. This method
+     * allows to explicitly set this counter to any desired value.
+     *
+     * @param fevals the desired value for the internal fitness evaluations counter.
+     */
+    void set_fevals(unsigned long long fevals)
+    {
+        m_fevals.store(fevals, std::memory_order_relaxed);
     }
 
     /// Number of gradient evaluations.
@@ -1858,7 +1889,7 @@ public:
      */
     unsigned long long get_gevals() const
     {
-        return m_gevals;
+        return m_gevals.load(std::memory_order_relaxed);
     }
 
     /// Number of hessians evaluations.
@@ -1871,7 +1902,7 @@ public:
      */
     unsigned long long get_hevals() const
     {
-        return m_hevals;
+        return m_hevals.load(std::memory_order_relaxed);
     }
 
     /// Set the seed for the stochastic variables.
@@ -2076,7 +2107,8 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals, m_gevals, m_hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_gradient,
+        ar(m_ptr, m_fevals.load(std::memory_order_relaxed), m_gevals.load(std::memory_order_relaxed),
+           m_hevals.load(std::memory_order_relaxed), m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_gradient,
            m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim,
            m_thread_safety);
     }
@@ -2094,10 +2126,14 @@ public:
     {
         // Deserialize in a separate object and move it in later, for exception safety.
         problem tmp_prob;
-        ar(tmp_prob.m_ptr, tmp_prob.m_fevals, tmp_prob.m_gevals, tmp_prob.m_hevals, tmp_prob.m_lb, tmp_prob.m_ub,
-           tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_gradient,
-           tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity,
-           tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+        unsigned long long fevals, gevals, hevals;
+        ar(tmp_prob.m_ptr, fevals, gevals, hevals, tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj, tmp_prob.m_nec,
+           tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_gradient, tmp_prob.m_has_gradient_sparsity,
+           tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity, tmp_prob.m_has_set_seed, tmp_prob.m_name,
+           tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+        tmp_prob.m_fevals.store(fevals, std::memory_order_relaxed);
+        tmp_prob.m_gevals.store(gevals, std::memory_order_relaxed);
+        tmp_prob.m_hevals.store(hevals, std::memory_order_relaxed);
         *this = std::move(tmp_prob);
     }
 
@@ -2238,11 +2274,11 @@ private:
     // Pointer to the inner base problem
     std::unique_ptr<detail::prob_inner_base> m_ptr;
     // Counter for calls to the fitness
-    mutable unsigned long long m_fevals;
+    mutable std::atomic<unsigned long long> m_fevals;
     // Counter for calls to the gradient
-    mutable unsigned long long m_gevals;
+    mutable std::atomic<unsigned long long> m_gevals;
     // Counter for calls to the hessians
-    mutable unsigned long long m_hevals;
+    mutable std::atomic<unsigned long long> m_hevals;
     // Various problem properties determined at construction time
     // from the concrete problem. These will be constant for the lifetime
     // of problem, but we cannot mark them as such because of serialization.
