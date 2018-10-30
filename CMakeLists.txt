@@ -113,6 +113,9 @@ endif()
 if(PAGMO_BUILD_PAGMO)
     # pagmo dependencies.
 
+    # TBB.
+    find_package(TBB REQUIRED)
+
     # Eigen3
     if(PAGMO_WITH_EIGEN3)
         find_package(Eigen3 REQUIRED)
@@ -164,6 +167,9 @@ if(PAGMO_BUILD_PAGMO)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>)
+
+    # TBB.
+    target_link_libraries(pagmo INTERFACE TBB::tbb)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.
@@ -250,7 +256,7 @@ if(PAGMO_BUILD_PAGMO)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindEigen3.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
-        DESTINATION "lib/cmake/pagmo")
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindTBB.cmake" DESTINATION "lib/cmake/pagmo")
     install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)

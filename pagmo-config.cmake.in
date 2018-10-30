@@ -5,6 +5,7 @@ get_filename_component(_PAGMO_CONFIG_SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(_PAGMO_CONFIG_OLD_MODULE_PATH "${CMAKE_MODULE_PATH}")
 list(APPEND CMAKE_MODULE_PATH "${_PAGMO_CONFIG_SELF_DIR}")
 find_package(Threads REQUIRED)
+find_package(TBB REQUIRED)
 include(PagmoFindBoost)
 @_PAGMO_CONFIG_OPTIONAL_DEPS@
 # Restore original module path.
