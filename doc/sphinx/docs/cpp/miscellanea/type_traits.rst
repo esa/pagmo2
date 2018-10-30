@@ -3,9 +3,53 @@
 Type traits and enums
 =====================
 
-Type traits and enums used in PaGMO
+Type traits and enums used in pagmo.
 
-.. doxygenenum:: pagmo::thread_safety
+.. cpp:namespace-push:: pagmo
+
+.. cpp:enum-class:: thread_safety
+
+   This enum defines a set of values that can be used to specify
+   the thread safety level of problems, algorithms, etc.
+
+   .. cpp:enumerator:: none
+
+      No thread safety: concurrent operations on distinct instances are unsafe.
+
+   .. cpp:enumerator:: basic
+
+      Basic thread safety: concurrent operations on distinct instances are safe.
+
+   .. cpp:enumerator:: constant
+
+      Constant thread safety: constant (i.e., read-only) concurrent operations on the same instance are safe.
+
+.. cpp:function:: bool operator<(thread_safety t1, thread_safety t2)
+
+.. cpp:function:: bool operator<=(thread_safety t1, thread_safety t2)
+
+.. cpp:function:: bool operator>(thread_safety t1, thread_safety t2)
+
+.. cpp:function:: bool operator>=(thread_safety t1, thread_safety t2)
+
+Comparison operators for the :cpp:enum:`~pagmo::thread_safety` levels. The thread safety
+levels are ordered in the following way: :cpp:enumerator:`~pagmo::thread_safety::none`
+\< :cpp:enumerator:`~pagmo::thread_safety::basic`
+\< :cpp:enumerator:`~pagmo::thread_safety::constant`.
+
+.. cpp:function:: std::ostream &operator<<(std::ostream &os, thread_safety ts)
+
+   Stream operator for :cpp:enum:`~pagmo::thread_safety`. It will direct to the stream *os*
+   a human-readable representation of *ts*.
+
+   :param os: an output stream.
+   :param ts: the :cpp:enum:`~pagmo::thread_safety` to be directed to the output stream.
+
+   :return: a reference to *os*.
+
+   :exception unspecified: any exception raised by the public interface of ``std::ostream``.
+
+.. cpp:namespace-pop::
 
 .. doxygenclass:: pagmo::is_udp
    :members:

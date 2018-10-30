@@ -503,8 +503,8 @@ inline void default_island_factory(const algorithm &algo, const population &pop,
     (void)algo;
     (void)pop;
 #if defined(PAGMO_WITH_FORK_ISLAND)
-    if (static_cast<int>(algo.get_thread_safety()) < static_cast<int>(thread_safety::basic)
-        || static_cast<int>(pop.get_problem().get_thread_safety()) < static_cast<int>(thread_safety::basic)) {
+    if (algo.get_thread_safety() < thread_safety::basic
+        || pop.get_problem().get_thread_safety() < thread_safety::basic) {
         ptr = make_unique<isl_inner<fork_island>>();
         return;
     }
@@ -1413,12 +1413,12 @@ private:
 inline void thread_island::run_evolve(island &isl) const
 {
     const auto i_ts = isl.get_thread_safety();
-    if (static_cast<int>(i_ts[0]) < static_cast<int>(thread_safety::basic)) {
+    if (i_ts[0] < thread_safety::basic) {
         pagmo_throw(std::invalid_argument,
                     "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
                     "thread safety guarantee");
     }
-    if (static_cast<int>(i_ts[1]) < static_cast<int>(thread_safety::basic)) {
+    if (i_ts[1] < thread_safety::basic) {
         pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
                                            "thread safety guarantee");
     }
