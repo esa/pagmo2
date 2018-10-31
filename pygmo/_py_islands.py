@@ -136,15 +136,6 @@ class mp_island(object):
     _pool = None
     _pool_size = None
 
-    @staticmethod
-    def _platform_checks():
-        # Platform-specific checks: the mp island requires either Windows or at least Python 3.4.
-        import sys
-        import os
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            raise RuntimeError(
-                "The multiprocessing island is supported only on Windows or on Python >= 3.4.")
-
     def __init__(self, use_pool=True):
         """
         Args:
@@ -164,6 +155,9 @@ class mp_island(object):
     def _init(self, use_pool):
         # Implementation of the ctor. Factored out
         # because it's re-used in the pickling support.
+
+        from ._mp_utils import _platform_checks
+
         if not isinstance(use_pool, bool):
             raise TypeError(
                 "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead.".format(type(use_pool)))
@@ -174,7 +168,7 @@ class mp_island(object):
         else:
             # Run the platform checks (when using the pool,
             # they are run inside init_pool()).
-            mp_island._platform_checks()
+            _platform_checks()
             # Init the pid member and associated lock.
             self._pid_lock = _Lock()
             self._pid = None
@@ -253,22 +247,11 @@ class mp_island(object):
             # Just keep it in mind.
             return res.get()
         else:
-            import multiprocessing as mp
-            import sys
-            import os
-            # The context functionality in the mp module is available since
-            # Python 3.4. It is used to force the process creation with the
-            # "spawn" method.
-            has_context = sys.version_info[0] > 3 or (
-                sys.version_info[0] == 3 and sys.version_info[1] >= 4)
-            if has_context:
-                mp_ctx = mp.get_context('spawn')
-            else:
-                # NOTE: for Python < 3.4, only Windows is supported and we
-                # should never end up here (the island will throw on construction
-                # when we do platform checks).
-                assert(os.name == 'nt')
-                mp_ctx = mp
+            from ._mp_utils import _get_spawn_context
+
+            # Get the context for spawning the process.
+            mp_ctx = _get_spawn_context()
+
             parent_conn, child_conn = mp_ctx.Pipe(duplex=False)
             p = mp_ctx.Process(target=_evolve_func_pipe,
                                args=(child_conn, algo, pop))
@@ -359,28 +342,20 @@ class mp_island(object):
         # created processes will ignore the SIGINT signal (this prevents
         # troubles when the user issues an interruption with ctrl+c from
         # the main process).
-        import sys
-        import os
-        import multiprocessing as mp
-        # The context functionality in the mp module is available since
-        # Python 3.4. It is used to force the process creation with the
-        # "spawn" method.
-        has_context = sys.version_info[0] > 3 or (
-            sys.version_info[0] == 3 and sys.version_info[1] >= 4)
+        from ._mp_utils import _get_spawn_context
+
+        # Get the context for spawning the process.
+        mp_ctx = _get_spawn_context()
+
+        # NOTE: we temporarily disable sigint while creating the pool.
+        # This ensures that the processes created in the pool will ignore
+        # interruptions issued via ctrl+c (only the main process will
+        # be affected by them).
         with _temp_disable_sigint():
-            # NOTE: we temporarily disable sigint while creating the pool.
-            # This ensures that the processes created in the pool will ignore
-            # interruptions issued via ctrl+c (only the main process will
-            # be affected by them).
-            if has_context:
-                ctx = mp.get_context("spawn")
-                pool = ctx.Pool(processes=processes)
-            else:
-                # NOTE: for Python < 3.4, only Windows is supported and we
-                # should never end up here.
-                assert(os.name == 'nt')
-                pool = mp.Pool(processes=processes)
-        pool_size = mp.cpu_count() if processes is None else processes
+            pool = mp_ctx.Pool(processes=processes)
+
+        pool_size = mp_ctx.cpu_count() if processes is None else processes
+
         # Return the created pool and its size.
         return pool, pool_size
 
@@ -407,8 +382,10 @@ class mp_island(object):
         """
         # Helper to create a new pool. It will do something
         # only if the pool has never been created before.
+        from ._mp_utils import _platform_checks
+
         # Run the platform checks.
-        mp_island._platform_checks()
+        _platform_checks()
         if processes is not None and not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be None or an int")
         if processes is not None and processes <= 0:
