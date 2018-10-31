@@ -30,7 +30,7 @@ install:
 # NOTE: we are installing some extra packages here (the same as in the python builds, even though we don't
 # use Python here), because otherwise there's some error arising when trying to detect the nlopt installation.
 # Not clear why that's the case, hopefully it's temporary.
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel tbb tbb-devel
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
 
@@ -39,7 +39,7 @@ install:
 # - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda clean --all -y
 # - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python35] conda create -y --name pagmo python=3.5 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel tbb tbb-devel
 - if [%BUILD_TYPE%]==[MSVC_64_Python35] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
@@ -47,7 +47,7 @@ install:
 # - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --all -y
 # - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update conda -y
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle ipyparallel tbb tbb-devel
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pagmo
 
 # Rename sh.exe as sh.exe in PATH interferes with MinGW.
