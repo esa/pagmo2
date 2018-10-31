@@ -34,21 +34,6 @@ from __future__ import absolute_import as _ai
 from threading import Lock as _Lock
 
 
-class _temp_disable_sigint(object):
-    # A small helper context class to disable CTRL+C temporarily.
-
-    def __enter__(self):
-        import signal
-        # Store the previous sigint handler and assign the new sig handler
-        # (i.e., ignore SIGINT).
-        self._prev_signal = signal.signal(signal.SIGINT, signal.SIG_IGN)
-
-    def __exit__(self, type, value, traceback):
-        import signal
-        # Restore the previous sighandler.
-        signal.signal(signal.SIGINT, self._prev_signal)
-
-
 def _evolve_func(algo, pop):
     # The evolve function that is actually run from the separate processes
     # in both mp_island (when using the pool) and ipyparallel_island.
@@ -69,6 +54,9 @@ def _evolve_func_pipe(conn, algo, pop):
     # SIGINT before creating the child process, but unfortunately the creation
     # of a child process happens in a separate thread and Python disallows messing
     # with signal handlers from a thread different from the main one :(
+
+    from ._mp_utils import _temp_disable_sigint
+
     with _temp_disable_sigint():
         try:
             new_pop = algo.evolve(pop)
@@ -329,31 +317,6 @@ class mp_island(object):
         return retval
 
     @staticmethod
-    def _make_pool(processes):
-        # A small private factory function to create a process pool.
-        # It accomplishes the tasks of selecting the correct method for
-        # starting the processes ("spawn") and making sure that the
-        # created processes will ignore the SIGINT signal (this prevents
-        # troubles when the user issues an interruption with ctrl+c from
-        # the main process).
-        from ._mp_utils import _get_spawn_context
-
-        # Get the context for spawning the process.
-        mp_ctx = _get_spawn_context()
-
-        # NOTE: we temporarily disable sigint while creating the pool.
-        # This ensures that the processes created in the pool will ignore
-        # interruptions issued via ctrl+c (only the main process will
-        # be affected by them).
-        with _temp_disable_sigint():
-            pool = mp_ctx.Pool(processes=processes)
-
-        pool_size = mp_ctx.cpu_count() if processes is None else processes
-
-        # Return the created pool and its size.
-        return pool, pool_size
-
-    @staticmethod
     def init_pool(processes=None):
         """Initialise the process pool.
 
@@ -374,17 +337,11 @@ class mp_island(object):
            TypeError: if *processes* is not :data:`None` and not an :class:`int`
 
         """
-        # Helper to create a new pool. It will do something
-        # only if the pool has never been created before.
-        if processes is not None and not isinstance(processes, int):
-            raise TypeError("The 'processes' argument must be None or an int")
-        if processes is not None and processes <= 0:
-            raise ValueError(
-                "The 'processes' argument, if not None, must be strictly positive")
+        from ._mp_utils import _make_pool
+
         with mp_island._pool_lock:
             if mp_island._pool is None:
-                mp_island._pool, mp_island._pool_size = mp_island._make_pool(
-                    processes)
+                mp_island._pool, mp_island._pool_size = _make_pool(processes)
 
     @staticmethod
     def get_pool_size():
@@ -426,12 +383,14 @@ class mp_island(object):
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
-        import multiprocessing as mp
+        from ._mp_utils import _make_pool
+
         if not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be an int")
         if processes <= 0:
             raise ValueError(
                 "The 'processes' argument must be strictly positive")
+
         mp_island.init_pool()
         with mp_island._pool_lock:
             if processes == mp_island._pool_size:
@@ -439,7 +398,7 @@ class mp_island(object):
                 # the size of the pool.
                 return
             # Create new pool.
-            new_pool, new_size = mp_island._make_pool(processes)
+            new_pool, new_size = _make_pool(processes)
             # Stop the current pool.
             mp_island._pool.close()
             mp_island._pool.join()
