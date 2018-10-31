@@ -32,16 +32,6 @@
 from __future__ import absolute_import as _ai
 
 
-def _platform_checks():
-    # Platform-specific checks: the multiprocessing bits in pygmo require
-    # Windows or at least Python 3.4.
-    import sys
-    import os
-    if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-        raise RuntimeError(
-            "Multiprocessing capabilities in pygmo are supported only on Windows or on Python >= 3.4.")
-
-
 def _get_spawn_context():
     # Small utlity to get a context that will use the 'spawn' method to
     # create new processes with the multiprocessing module. We want to enforce

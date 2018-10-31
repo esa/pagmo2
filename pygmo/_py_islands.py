@@ -155,9 +155,6 @@ class mp_island(object):
     def _init(self, use_pool):
         # Implementation of the ctor. Factored out
         # because it's re-used in the pickling support.
-
-        from ._mp_utils import _platform_checks
-
         if not isinstance(use_pool, bool):
             raise TypeError(
                 "The 'use_pool' parameter in the mp_island constructor must be a boolean, but it is of type {} instead.".format(type(use_pool)))
@@ -166,9 +163,6 @@ class mp_island(object):
             # Init the process pool, if necessary.
             mp_island.init_pool()
         else:
-            # Run the platform checks (when using the pool,
-            # they are run inside init_pool()).
-            _platform_checks()
             # Init the pid member and associated lock.
             self._pid_lock = _Lock()
             self._pid = None
@@ -382,10 +376,6 @@ class mp_island(object):
         """
         # Helper to create a new pool. It will do something
         # only if the pool has never been created before.
-        from ._mp_utils import _platform_checks
-
-        # Run the platform checks.
-        _platform_checks()
         if processes is not None and not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be None or an int")
         if processes is not None and processes <= 0:
