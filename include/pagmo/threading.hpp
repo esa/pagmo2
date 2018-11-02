@@ -39,27 +39,6 @@ namespace pagmo
 // Thread safety levels.
 enum class thread_safety { none, basic, constant };
 
-// Comparision operators for the thread safety levels.
-inline bool operator<(thread_safety t1, thread_safety t2)
-{
-    return static_cast<int>(t1) < static_cast<int>(t2);
-}
-
-inline bool operator>(thread_safety t1, thread_safety t2)
-{
-    return static_cast<int>(t1) > static_cast<int>(t2);
-}
-
-inline bool operator<=(thread_safety t1, thread_safety t2)
-{
-    return static_cast<int>(t1) <= static_cast<int>(t2);
-}
-
-inline bool operator>=(thread_safety t1, thread_safety t2)
-{
-    return static_cast<int>(t1) >= static_cast<int>(t2);
-}
-
 // Stream operator for the thread_safety enum.
 inline std::ostream &operator<<(std::ostream &os, thread_safety ts)
 {

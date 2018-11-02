@@ -11,6 +11,10 @@ Type traits and enums used in pagmo.
 
    This enum defines a set of values that can be used to specify
    the thread safety level of problems, algorithms, etc.
+   The thread safety levels are ordered in the following way:
+   :cpp:enumerator:`~pagmo::thread_safety::none`
+   \< :cpp:enumerator:`~pagmo::thread_safety::basic`
+   \< :cpp:enumerator:`~pagmo::thread_safety::constant`.
 
    .. cpp:enumerator:: none
 
@@ -23,19 +27,6 @@ Type traits and enums used in pagmo.
    .. cpp:enumerator:: constant
 
       Constant thread safety: constant (i.e., read-only) concurrent operations on the same instance are safe.
-
-.. cpp:function:: bool operator<(thread_safety t1, thread_safety t2)
-
-.. cpp:function:: bool operator<=(thread_safety t1, thread_safety t2)
-
-.. cpp:function:: bool operator>(thread_safety t1, thread_safety t2)
-
-.. cpp:function:: bool operator>=(thread_safety t1, thread_safety t2)
-
-Comparison operators for the :cpp:enum:`~pagmo::thread_safety` levels. The thread safety
-levels are ordered in the following way: :cpp:enumerator:`~pagmo::thread_safety::none`
-\< :cpp:enumerator:`~pagmo::thread_safety::basic`
-\< :cpp:enumerator:`~pagmo::thread_safety::constant`.
 
 .. cpp:function:: std::ostream &operator<<(std::ostream &os, thread_safety ts)
 
