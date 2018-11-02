@@ -94,9 +94,11 @@ if(NOT YACMA_COMPILER_IS_MSVC AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     ADD_PAGMO_TESTCASE(cec2014)
 endif()
 
-# NOTE: don't define _POSIX_C_SOURCE on OSX as it seems to create troubles with this test.
-if (PAGMO_WITH_FORK_ISLAND AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if (PAGMO_WITH_FORK_ISLAND)
     ADD_PAGMO_TESTCASE(fork_island)
-    # Set the _POSIX_C_SOURCE defintion to something reasonably modern.
-    target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=200112L)
+    # NOTE: don't define _POSIX_C_SOURCE on OSX as it seems to create troubles with this test.
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+        # Set the _POSIX_C_SOURCE defintion to something reasonably modern.
+        target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=200112L)
+    endif()
 endif()
