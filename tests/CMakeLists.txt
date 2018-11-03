@@ -96,5 +96,7 @@ endif()
 
 if (PAGMO_WITH_FORK_ISLAND)
     ADD_PAGMO_TESTCASE(fork_island)
-    target_compile_definitions(fork_island PRIVATE _XOPEN_SOURCE=700)
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+        target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=200112L)
+    endif()
 endif()

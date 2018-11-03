@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 // - verify in the build system that the required headers and the fork() function
 //   are present (which will set the PAGMO_ENABLE_FORK_ISLAND variable), and
 // - verify that the _POSIX_C_SOURCE definition is active during compilation.
-#if defined(_POSIX_C_SOURCE)
+#if defined(_POSIX_C_SOURCE) || defined(__apple_build_version__)
 @PAGMO_ENABLE_FORK_ISLAND@
 #endif
 // clang-format on
