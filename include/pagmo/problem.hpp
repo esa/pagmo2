@@ -1867,18 +1867,6 @@ public:
         return m_fevals.load(std::memory_order_relaxed);
     }
 
-    /// Set the number of fitness evaluations.
-    /**
-     * An internal counter is automatically increased every time problem::fitness() is called. This method
-     * allows to explicitly set this counter to any desired value.
-     *
-     * @param fevals the desired value for the internal fitness evaluations counter.
-     */
-    void set_fevals(unsigned long long fevals)
-    {
-        m_fevals.store(fevals, std::memory_order_relaxed);
-    }
-
     /// Number of gradient evaluations.
     /**
      * Each time a call to problem::gradient() successfully completes, an internal counter is increased by one.

@@ -337,7 +337,7 @@ setattr(cstrs_self_adaptive, "__init__", _cstrs_self_adaptive_init)
 __original_population_init = population.__init__
 
 
-def _population_init(self, prob=None, size=0, seed=None):
+def _population_init(self, prob=None, size=0, seed=None, init_mode="serial"):
     # NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
     # to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
     # from a C++ problem, and on the C++ exposition side we need only to
@@ -377,9 +377,14 @@ def _population_init(self, prob=None, size=0, seed=None):
         # work if prob is an exposed C++ problem or a Python UDP.
         prob_arg = problem(prob)
     if seed is None:
-        __original_population_init(self, prob_arg, size)
-    else:
-        __original_population_init(self, prob_arg, size, seed)
+        # Handle specially a None seed. This essentially
+        # replicates the nondeterministic rng we use on the
+        # C++ side, pagmo::random_device::next().
+        from random import randint
+        from .core import _max_unsigned
+        seed = randint(0, _max_unsigned())
+
+    __original_population_init(self, prob_arg, size, seed, init_mode)
 
 
 setattr(population, "__init__", _population_init)
@@ -619,10 +624,12 @@ setattr(archipelago, "push_back", _archi_push_back)
 # Register the cleanup function.
 import atexit as _atexit
 from .core import _cleanup as _cpp_cleanup
+from ._parinit import _cleanup as _parinit_cleanup
 
 
 def _cleanup():
     mp_island.shutdown_pool()
+    _parinit_cleanup()
     _cpp_cleanup()
 
 

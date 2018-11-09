@@ -69,7 +69,7 @@ namespace detail
 
 // Fwd-declaration of the struct holding the implementation of the
 // population's parallel initialisation functionality.
-template <typename>
+template <typename = void>
 struct pop_parinit;
 
 } // namespace detail
@@ -156,9 +156,12 @@ public:
                 push_back(random_decision_vector());
             }
         } else {
-            // NOTE: put T as type in here, which allows us to delay the instantiation
-            // of pop_parinit until after its implementation has been defined.
-            auto ret = detail::pop_parinit<T>::s_func(init_mode, m_prob, seed, pop_size);
+            // NOTE: small trick to delay the instantiation of of pop_parinit until
+            // after we have defined it.
+            auto ret = detail::pop_parinit<
+                typename std::conditional<detail::dependent_false<T>::value, T, void>::type>::s_func(init_mode, m_prob,
+                                                                                                     seed, pop_size,
+                                                                                                     m_e);
             // Double check the return value.
             assert(ret.first.size() == pop_size);
             assert(ret.second.size() == pop_size);
@@ -829,7 +832,7 @@ namespace detail
 template <typename>
 struct pop_parinit {
     using func_t = std::function<std::pair<std::vector<vector_double>, std::vector<vector_double>>(
-        const std::string &, problem &, unsigned, population::size_type)>;
+        const std::string &, problem &, unsigned, population::size_type, detail::random_engine_type &)>;
     static func_t s_func;
 };
 
@@ -878,9 +881,6 @@ inline void pop_parinit_thread(std::pair<std::vector<vector_double>, std::vector
         // to make a copy of prob for each parallel iteration.
         tbb::parallel_for(range_type(0u, pop_size),
                           [prob, &par_body](const range_type &range) { par_body(prob, range); });
-
-        // Update manually the fevals.
-        prob.set_fevals(prob.get_fevals() + pop_size);
     } else {
         pagmo_throw(
             std::invalid_argument,
@@ -890,19 +890,23 @@ inline void pop_parinit_thread(std::pair<std::vector<vector_double>, std::vector
 }
 
 inline std::pair<std::vector<vector_double>, std::vector<vector_double>>
-default_pop_parinit(const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size)
+default_pop_parinit(const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size,
+                    detail::random_engine_type &)
 {
+    constexpr char valid_modes[] = "['par_thread', 'par_auto']";
+
     // Prepare the return values.
     std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
     retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
     retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
 
-    if (init_mode == "par_thread" || init_mode == "par_auto") {
+    if (init_mode == "par_auto" || init_mode == "par_thread") {
         pop_parinit_thread(retval, prob, seed, pop_size);
     } else {
-        pagmo_throw(std::invalid_argument, "The '" + init_mode
-                                               + "' parallel population initialisation mode is not valid. The valid "
-                                                 "modes are 'par_thread' and 'par_auto'");
+        pagmo_throw(std::invalid_argument,
+                    "The '" + init_mode
+                        + "' parallel population initialisation mode is not valid. The valid modes are: "
+                        + valid_modes);
     }
 
     return retval;

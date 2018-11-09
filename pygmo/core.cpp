@@ -44,6 +44,18 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <tuple>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+#include <boost/functional/hash.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -65,13 +77,9 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
-#include <cstdint>
-#include <limits>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <tuple>
-#include <unordered_set>
+
+#include <tbb/blocked_range.h>
+#include <tbb/parallel_for.h>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
@@ -83,6 +91,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
@@ -293,6 +303,13 @@ static inline constexpr unsigned max_unsigned()
 // The set containing the list of registered APs.
 static std::unordered_set<std::string> ap_set;
 
+// Detect if pygmo can use the multiprocessing module.
+#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
+
+#define PYGMO_CAN_USE_MP
+
+#endif
+
 BOOST_PYTHON_MODULE(core)
 {
     using pygmo::lcast;
@@ -341,7 +358,7 @@ BOOST_PYTHON_MODULE(core)
                   // it we use the ensurer.
                   pygmo::gil_thread_ensurer gte;
                   bp::object py_island = bp::import("pygmo")
-#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
+#if defined(PYGMO_CAN_USE_MP)
                                              // NOTE: the mp_island is supported since Python 3.4 or on Windows.
                                              .attr("mp_island");
 #else
@@ -355,6 +372,84 @@ BOOST_PYTHON_MODULE(core)
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
     // destroyed at the end of island::wait().
     detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
+
+    // Override the default implementation of the parallel init functionality for the population class.
+    detail::pop_parinit<>::s_func = [](const std::string &init_mode, problem &prob, unsigned seed,
+                                       population::size_type pop_size, detail::random_engine_type &) {
+        constexpr char valid_modes[] = "['par_auto', 'par_thread'"
+#if defined(PYGMO_CAN_USE_MP)
+                                       ", 'par_mp'"
+#endif
+                                       ", 'par_ipyparallel']";
+
+        // Prepare the return values.
+        std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
+        retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
+        retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
+
+#if defined(PYGMO_CAN_USE_MP)
+        auto parinit_mp = [&]() {
+            // A few typing shortcuts.
+            using rng_type = detail::random_engine_type;
+            using rng_seed_type = typename rng_type::result_type;
+            using range_type = tbb::blocked_range<decltype(pop_size)>;
+
+            // NOTE: see explanation above about the use of a gte.
+            pygmo::gil_thread_ensurer gte;
+
+            // Import the module containing the python implementation of parallel init.
+            bp::object parinit_mod = bp::import("pygmo._parinit");
+
+            // Cache the problem bounds and the number of integer variables.
+            const auto prob_bounds = prob.get_bounds();
+            const auto nix = prob.get_nix();
+
+            // First let's generate in thread-parallel mode the dvs.
+            tbb::parallel_for(range_type(0u, pop_size), [seed, &retval, &prob_bounds, nix](const range_type &range) {
+                // Init a random engine with a local seed. We will mix
+                // the original seed with the limits of the current iteration.
+                auto local_seed = static_cast<std::size_t>(seed);
+                boost::hash_combine(local_seed, static_cast<std::size_t>(range.begin()));
+                boost::hash_combine(local_seed, static_cast<std::size_t>(range.end()));
+                rng_type eng(static_cast<rng_seed_type>(local_seed));
+
+                for (auto i = range.begin(); i != range.end(); ++i) {
+                    ret.first[i] = pagmo::random_decision_vector(prob_bounds, eng, nix);
+                }
+            });
+
+            std::vector<bp::object> futures;
+
+            for (population::size_type i = 0; i != pop_size; ++i) {
+                // Create a random dv, compute its fitness and move both into ret.
+                auto random_dv = random_decision_vector(prob_bounds, rng, nix);
+                futures.push_back(parinit_mod.attr("_mp_fitness_dispatch")(prob, pygmo::v_to_a(random_dv)));
+                retval.first[i] = std::move(random_dv);
+            }
+
+            for (population::size_type i = 0; i != pop_size; ++i) {
+                retval.second[i] = pygmo::to_vd(futures[i].attr("get")());
+            }
+        };
+#endif
+
+        if (init_mode == "par_auto") {
+        } else if (init_mode == "par_thread") {
+            detail::pop_parinit_thread(retval, prob, seed, pop_size);
+#if defined(PYGMO_CAN_USE_MP)
+        } else if (init_mode == "par_mp") {
+            parinit_mp();
+#endif
+        } else if (init_mode == "par_ipyparallel") {
+        } else {
+            pagmo_throw(std::invalid_argument,
+                        "The '" + init_mode
+                            + "' parallel population initialisation mode is not valid. The valid modes are: "
+                            + valid_modes);
+        }
+
+        return retval;
+    };
 
     // Setup doc options
     bp::docstring_options doc_options;
@@ -446,8 +541,8 @@ BOOST_PYTHON_MODULE(core)
     // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
     // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
     // This way we avoid having to expose a different ctor for every exposed C++ prob.
-    pop_class.def(bp::init<const problem &, population::size_type>())
-        .def(bp::init<const problem &, population::size_type, unsigned>())
+    pop_class
+        .def(bp::init<const problem &, population::size_type, unsigned, const std::string &>())
         // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
