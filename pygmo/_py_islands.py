@@ -34,17 +34,21 @@ from __future__ import absolute_import as _ai
 from threading import Lock as _Lock
 
 
-def _evolve_func(algo, pop):
+def _evolve_func_mp_pool(ser_algo_pop):
     # The evolve function that is actually run from the separate processes
-    # in both mp_island (when using the pool) and ipyparallel_island.
+    # in mp_island (when using the pool).
+    import pickle
+    algo, pop = pickle.loads(ser_algo_pop)
     new_pop = algo.evolve(pop)
-    return algo, new_pop
+    return pickle.dumps((algo, new_pop))
 
 
-def _evolve_func_pipe(conn, algo, pop):
+def _evolve_func_mp_pipe(conn, ser_algo_pop):
     # The evolve function that is actually run from the separate processes
     # in mp_island (when *not* using the pool). Communication with the
     # parent process happens through the conn pipe.
+    from ._mp_utils import _temp_disable_sigint
+
     # NOTE: disable SIGINT with the goal of preventing the user from accidentally
     # interrupting the evolution via hitting Ctrl+C in an interactive session
     # in the parent process. Note that this disables the signal only during
@@ -54,18 +58,24 @@ def _evolve_func_pipe(conn, algo, pop):
     # SIGINT before creating the child process, but unfortunately the creation
     # of a child process happens in a separate thread and Python disallows messing
     # with signal handlers from a thread different from the main one :(
-
-    from ._mp_utils import _temp_disable_sigint
-
     with _temp_disable_sigint():
+        import pickle
         try:
+            algo, pop = pickle.loads(ser_algo_pop)
             new_pop = algo.evolve(pop)
-            conn.send((algo, new_pop))
+            conn.send(pickle.dumps((algo, new_pop)))
         except Exception as e:
             conn.send(RuntimeError(
                 "An exception was raised in the evolution of a multiprocessing island. The full error message is:\n{}".format(e)))
         finally:
             conn.close()
+
+
+def _evolve_func_ipy(algo, pop):
+    # The evolve function that is actually run from the separate processes
+    # in ipyparallel_island.
+    new_pop = algo.evolve(pop)
+    return algo, new_pop
 
 
 class mp_island(object):
@@ -214,6 +224,15 @@ class mp_island(object):
 
 
         """
+        # NOTE: the idea here is that we pass the *already serialized*
+        # arguments to the mp machinery, instead of letting the multiprocessing
+        # module do the serialization. The advantage of doing so is
+        # that if there are serialization errors, we catch them early here rather
+        # than failing in the bootstrap phase of the remote process, which
+        # can lead to hangups.
+        import pickle
+        ser_algo_pop = pickle.dumps((algo, pop))
+
         if self._use_pool:
             with mp_island._pool_lock:
                 # NOTE: run this while the pool is locked. We have
@@ -223,11 +242,12 @@ class mp_island(object):
                 if mp_island._pool is None:
                     raise RuntimeError(
                         "The multiprocessing island pool was stopped. Please restart it via mp_island.init_pool().")
-                res = mp_island._pool.apply_async(_evolve_func, (algo, pop))
+                res = mp_island._pool.apply_async(
+                    _evolve_func_mp_pool, (ser_algo_pop,))
             # NOTE: there might be a bug in need of a workaround lurking in here:
             # http://stackoverflow.com/questions/11312525/catch-ctrlc-sigint-and-exit-multiprocesses-gracefully-in-python
             # Just keep it in mind.
-            return res.get()
+            return pickle.loads(res.get())
         else:
             from ._mp_utils import _get_spawn_context
 
@@ -235,8 +255,8 @@ class mp_island(object):
             mp_ctx = _get_spawn_context()
 
             parent_conn, child_conn = mp_ctx.Pipe(duplex=False)
-            p = mp_ctx.Process(target=_evolve_func_pipe,
-                               args=(child_conn, algo, pop))
+            p = mp_ctx.Process(target=_evolve_func_mp_pipe,
+                               args=(child_conn, ser_algo_pop))
             p.start()
             with self._pid_lock:
                 self._pid = p.pid
@@ -253,7 +273,7 @@ class mp_island(object):
                     self._pid = None
             if isinstance(res, RuntimeError):
                 raise res
-            return res
+            return pickle.loads(res)
 
     @property
     def pid(self):
@@ -429,14 +449,6 @@ class mp_island(object):
                 mp_island._pool_size = None
 
 
-# Make sure we use cloudpickle for serialization, if ipyparallel is available.
-try:
-    from ipyparallel import use_cloudpickle as _use_cloudpickle
-    _use_cloudpickle()
-except ImportError:
-    pass
-
-
 # NOTE: the idea here is that we don't want to create a new client for
 # every island: creation is expensive, and we cannot have too many clients
 # as after a certain threshold ipyparallel starts erroring out.
@@ -561,7 +573,7 @@ class ipyparallel_island(object):
 
         """
         with self._view_lock:
-            ret = self._lview.apply_async(_evolve_func, algo, pop)
+            ret = self._lview.apply_async(_evolve_func_ipy, algo, pop)
         return ret.get()
 
     def get_name(self):
