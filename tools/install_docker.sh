@@ -78,7 +78,7 @@ make -j2 install > /dev/null
 cd ..
 
 # Python deps
-/opt/python/${PYTHON_DIR}/bin/pip install cloudpickle numpy ipyparallel
+/opt/python/${PYTHON_DIR}/bin/pip install cloudpickle dill numpy ipyparallel
 /opt/python/${PYTHON_DIR}/bin/ipcluster start --daemonize=True
 sleep 20
 
