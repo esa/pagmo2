@@ -8,9 +8,7 @@ endif()
 # the dependency on Boost.Python muddies the waters, as BP itself does link to the Python
 # library, at least on some platforms. The following configuration seems to be working fine
 # on various CI setups.
-# NOTE: apparently homebrew requires NOT to link to the Python library. We might want
-# to add a config option to accommodate that eventually.
-if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(WIN32)
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
 else()
