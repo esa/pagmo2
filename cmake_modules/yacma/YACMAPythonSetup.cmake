@@ -136,6 +136,11 @@ function(YACMA_PYTHON_MODULE name)
         endif()
     endif()
     if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+      # On OSX + Clang this link flag is apparently necessary in order to avoid
+      # undefined references to symbols defined in the Python library. See also:
+      # https://github.com/potassco/clingo/issues/79
+      # https://stackoverflow.com/questions/25421479/clang-and-undefined-symbols-when-building-a-library
+      # https://cmake.org/pipermail/cmake/2017-March/065115.html
       set_target_properties(${name} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
     endif()
     target_link_libraries("${name}" PRIVATE YACMA::PythonModule)
