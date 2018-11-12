@@ -244,6 +244,9 @@ without knowing the exact type of the object being extracted.</li>
 <div class="section" id="fix">
 <h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li>Avoid linking pygmo to the Python library on OSX with clang. This may fix the <code class="docutils literal"><span class="pre">Fatal</span> <span class="pre">Python</span> <span class="pre">error:</span> <span class="pre">take_gil:</span> <span class="pre">NULL</span> <span class="pre">tstate</span></code>
+errors which are occasionally reported by users (<a class="reference external" href="https://github.com/esa/pagmo2/pull/230">#230</a>).</li>
+<li>Correct the detection of the Boost libraries’ version in the build system (<a class="reference external" href="https://github.com/esa/pagmo2/pull/230">#230</a>).</li>
 <li>Tentative fix for a pygmo build failure in Cygwin (<a class="reference external" href="https://github.com/esa/pagmo2/pull/221">#221</a>).</li>
 <li>Various documentation fixes and enhancements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/217">#217</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/218">#218</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/220">#220</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/221">#221</a>).</li>
