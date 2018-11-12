@@ -241,6 +241,68 @@ the past (value = 3)</p>
 
 </dd></dl>
 
+<hr class="docutils" />
+<dl class="function">
+<dt id="pygmo.set_serialization_backend">
+<code class="descclassname">pygmo.</code><code class="descname">set_serialization_backend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.set_serialization_backend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set pygmo’s serialization backend.</p>
+<p>This function allows to specify the serialization backend that is used internally by pygmo
+for the (de)serialization of pythonic user-defined entities (e.g., user-defined pythonic
+problems, algorithms, etc.).</p>
+<p>By default, pygmo uses the <a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>
+module, which extends the capabilities of the standard <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> module with support
+for lambdas, functions and classes defined interactively in the <code class="docutils literal"><span class="pre">__main__</span></code> module, etc.</p>
+<p>In some specific cases, however, different serialization backends might work better than cloudpickle,
+and thus pygmo provides the possibility for the cognizant user to switch to another
+serialization backend.</p>
+<p>The valid backends are:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">'pickle'</span></code> (i.e., the standard Python <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> module),</li>
+<li><code class="docutils literal"><span class="pre">'cloudpickle'</span></code>,</li>
+<li><code class="docutils literal"><span class="pre">'dill'</span></code> (from the <a class="reference external" href="https://pypi.org/project/dill/">dill</a> library).</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Setting the serialization backend is not thread-safe: do <strong>not</strong> set
+the serialization backend while concurrently setting/getting it from another thread.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the desired backend</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>name</em> is not a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if <em>name</em> is not one of <code class="docutils literal"><span class="pre">['pickle',</span> <span class="pre">'cloudpickle',</span> <span class="pre">'dill']</span></code></li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a> – if <em>name</em> is <code class="docutils literal"><span class="pre">'dill'</span></code> but the dill module is not installed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pygmo.get_serialization_backend">
+<code class="descclassname">pygmo.</code><code class="descname">get_serialization_backend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.get_serialization_backend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get pygmo’s serialization backend.</p>
+<p>This function will return pygmo’s current serialization backend (see
+<a class="reference internal" href="#pygmo.set_serialization_backend" title="pygmo.set_serialization_backend"><code class="xref py py-func docutils literal"><span class="pre">set_serialization_backend()</span></code></a> for an explanation of the
+available backends).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the current serialization backend (as a Python module)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/types.html#types.ModuleType" title="(in Python v3.7)">types.ModuleType</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
