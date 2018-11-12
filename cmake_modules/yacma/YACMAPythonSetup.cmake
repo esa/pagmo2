@@ -8,9 +8,7 @@ endif()
 # the dependency on Boost.Python muddies the waters, as BP itself does link to the Python
 # library, at least on some platforms. The following configuration seems to be working fine
 # on various CI setups.
-# NOTE: apparently homebrew requires NOT to link to the Python library. We might want
-# to add a config option to accommodate that eventually.
-if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(WIN32)
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
 else()
@@ -136,6 +134,14 @@ function(YACMA_PYTHON_MODULE name)
             message(STATUS "Python < 3 detected, setting up extra compiler flag '-fno-strict-aliasing' for the Python module '${name}'.")
             target_compile_options(${name} PRIVATE "-fno-strict-aliasing")
         endif()
+    endif()
+    if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+      # On OSX + Clang this link flag is apparently necessary in order to avoid
+      # undefined references to symbols defined in the Python library. See also:
+      # https://github.com/potassco/clingo/issues/79
+      # https://stackoverflow.com/questions/25421479/clang-and-undefined-symbols-when-building-a-library
+      # https://cmake.org/pipermail/cmake/2017-March/065115.html
+      set_target_properties(${name} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
     endif()
     target_link_libraries("${name}" PRIVATE YACMA::PythonModule)
 endfunction()
