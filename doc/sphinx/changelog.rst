@@ -21,6 +21,11 @@ New
 Fix
 ~~~
 
+- Avoid linking pygmo to the Python library on OSX with clang. This may fix the ``Fatal Python error: take_gil: NULL tstate``
+  errors which are occasionally reported by users (`#230 <https://github.com/esa/pagmo2/pull/230>`__).
+
+- Correct the detection of the Boost libraries' version in the build system (`#230 <https://github.com/esa/pagmo2/pull/230>`__).
+
 - The Python multiprocessing island :class:`~pygmo.mp_island` should now be more robust with respect
   to serialization errors in problems/algorithms (`#229 <https://github.com/esa/pagmo2/pull/229>`__).
 
