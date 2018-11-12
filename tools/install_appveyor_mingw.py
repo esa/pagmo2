@@ -111,7 +111,7 @@ if is_python_build:
     # NOTE: at the moment we have troubles installing ipyparallel.
     # Just skip it.
     # run_command(pip + ' install numpy cloudpickle ipyparallel')
-    run_command(pip + ' install numpy cloudpickle')
+    run_command(pip + ' install numpy cloudpickle dill')
     if is_release_build:
         run_command(pip + ' install twine')
 

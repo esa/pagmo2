@@ -128,6 +128,64 @@ class core_test_case(_ut.TestCase):
         a = random.rand(3, 2)
         self.assert_(all(tos(a) == a))
 
+        # Run the tests for the selection of the serialization backend.
+        self.run_s11n_test()
+
+    def run_s11n_test(self):
+        # Tests for the selection of the serialization backend.
+        import cloudpickle as clpickle
+        import pickle
+        from . import set_serialization_backend as ssb, get_serialization_backend as gsb
+        from . import problem, island, de
+        has_dill = False
+        try:
+            import dill
+            has_dill = True
+        except ImportError:
+            pass
+
+        # Default s11n backend.
+        self.assertTrue(gsb() == clpickle)
+
+        # Error checking.
+        with self.assertRaises(TypeError) as cm:
+            ssb(1)
+        err = cm.exception
+        self.assertTrue("The serialization backend must be specified as a string, but an object of type" in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            ssb("hello")
+        err = cm.exception
+        self.assertEqual("The serialization backend 'hello' is not valid. The valid backends are: ['pickle', 'cloudpickle', 'dill']", str(err))
+
+        if not has_dill:
+            with self.assertRaises(ImportError) as cm:
+                ssb("dill")
+            err = cm.exception
+            self.assertEqual("The 'dill' serialization backend was specified, but the dill module is not installed.", str(err))
+
+        ssb("pickle")
+        self.assertTrue(gsb() == pickle)
+
+        # Try to pickle something.
+        p = problem(_prob())
+        self.assertEqual(str(pickle.loads(pickle.dumps(p))), str(p))
+        isl = island(prob=p,algo=de(gen=500),size=20)
+        self.assertEqual(str(pickle.loads(pickle.dumps(isl))), str(isl))
+
+        # Try with dill as well, if available.
+        if has_dill:
+            ssb("dill")
+            self.assertTrue(gsb() == dill)
+
+            p = problem(_prob())
+            self.assertEqual(str(pickle.loads(pickle.dumps(p))), str(p))
+            isl = island(prob=p,algo=de(gen=500),size=20)
+            self.assertEqual(str(pickle.loads(pickle.dumps(isl))), str(isl))
+
+        # Reset to cloudpickle before exiting.
+        ssb("cloudpickle")
+        self.assertTrue(gsb() == clpickle)
 
 class population_test_case(_ut.TestCase):
     """Test case for the population class.

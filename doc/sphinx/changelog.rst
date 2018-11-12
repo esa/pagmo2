@@ -7,6 +7,10 @@ Changelog
 New
 ~~~
 
+- It is now possible to select a serialization backend other than cloudpickle. The other available
+  backends are the standard :mod:`pickle` module and `dill <https://pypi.org/project/dill/>`__
+  (`#229 <https://github.com/esa/pagmo2/pull/229>`__).
+
 - The Python multiprocessing island :class:`~pygmo.mp_island` can now optionally spawn a new process for each
   evolution, rather than using a process pool (`#221 <https://github.com/esa/pagmo2/pull/221>`__).
 
@@ -21,6 +25,9 @@ Fix
   errors which are occasionally reported by users (`#230 <https://github.com/esa/pagmo2/pull/230>`__).
 
 - Correct the detection of the Boost libraries' version in the build system (`#230 <https://github.com/esa/pagmo2/pull/230>`__).
+
+- The Python multiprocessing island :class:`~pygmo.mp_island` should now be more robust with respect
+  to serialization errors in problems/algorithms (`#229 <https://github.com/esa/pagmo2/pull/229>`__).
 
 - Tentative fix for a pygmo build failure in Cygwin (`#221 <https://github.com/esa/pagmo2/pull/221>`__).
 
