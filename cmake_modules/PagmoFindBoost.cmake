@@ -1,3 +1,8 @@
+# Run a first pass for finding the headers only,
+# and establishing the Boost version.
+set(_PAGMO_BOOST_MINIMUM_VERSION 1.55.0)
+find_package(Boost ${_PAGMO_BOOST_MINIMUM_VERSION} QUIET REQUIRED)
+
 set(_PAGMO_REQUIRED_BOOST_LIBS)
 if(_PAGMO_FIND_BOOST_PYTHON)
     # NOTE: since Boost 1.67, the naming of the Boost.Python library has changed to include the
@@ -14,7 +19,7 @@ if(_PAGMO_FIND_BOOST_PYTHON)
     endif()
 endif()
 message(STATUS "Required Boost libraries: ${_PAGMO_REQUIRED_BOOST_LIBS}")
-find_package(Boost 1.55.0 REQUIRED COMPONENTS "${_PAGMO_REQUIRED_BOOST_LIBS}")
+find_package(Boost ${_PAGMO_BOOST_MINIMUM_VERSION} REQUIRED COMPONENTS "${_PAGMO_REQUIRED_BOOST_LIBS}")
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Not all requested Boost components were found, exiting.")
 endif()
@@ -49,3 +54,6 @@ foreach(_PAGMO_BOOST_COMPONENT ${_PAGMO_REQUIRED_BOOST_LIBS})
             IMPORTED_LOCATION "${Boost_${_PAGMO_BOOST_UPPER_COMPONENT}_LIBRARY}")
     endif()
 endforeach()
+
+unset(_PAGMO_BOOST_MINIMUM_VERSION)
+unset(_PAGMO_REQUIRED_BOOST_LIBS)
