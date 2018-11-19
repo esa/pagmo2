@@ -167,7 +167,7 @@ public:
             assert(ret.second.size() == pop_size);
             // Push back the generated dvs and fitnesses.
             for (size_type i = 0u; i < pop_size; ++i) {
-                push_back(ret.first[i], ret.second[i]);
+                push_back(std::move(ret.first[i]), std::move(ret.second[i]));
             }
         }
     }
