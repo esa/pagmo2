@@ -7,7 +7,4 @@
         "doc/doxygen/xml/": true,
         "doc/sphinx/_build/": true
     },
-    "files.associations": {
-        "stdexcept": "cpp"
-    },
 }
