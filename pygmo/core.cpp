@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -303,6 +304,21 @@ static inline constexpr unsigned max_unsigned()
 // The set containing the list of registered APs.
 static std::unordered_set<std::string> ap_set;
 
+// Small private helper to generate a random decision vector
+// for the input problem p.
+static inline bp::object random_dv_for_problem(const problem &p)
+{
+    using rng_type = detail::random_engine_type;
+    using rng_seed_type = typename rng_type::result_type;
+
+    const auto prob_bounds = p.get_bounds();
+    const auto nix = p.get_nix();
+
+    rng_type eng(static_cast<rng_seed_type>(random_device::next()));
+
+    return pygmo::v_to_a(random_decision_vector(prob_bounds, eng, nix));
+}
+
 // Detect if pygmo can use the multiprocessing module.
 #if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
 
@@ -380,67 +396,77 @@ BOOST_PYTHON_MODULE(core)
 #if defined(PYGMO_CAN_USE_MP)
                                        ", 'par_mp'"
 #endif
-                                       ", 'par_ipyparallel']";
+                                       ", 'par_ipy']";
 
         // Prepare the return values.
         std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
         retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
         retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
 
-#if defined(PYGMO_CAN_USE_MP)
-        auto parinit_mp = [&]() {
-            // A few typing shortcuts.
-            using rng_type = detail::random_engine_type;
-            using rng_seed_type = typename rng_type::result_type;
-            using range_type = tbb::blocked_range<decltype(pop_size)>;
-
+        auto parinit_impl = [&](const std::string &backend) {
             // NOTE: see explanation above about the use of a gte.
             pygmo::gil_thread_ensurer gte;
 
-            // Import the module containing the python implementation of parallel init.
-            bp::object parinit_mod = bp::import("pygmo._parinit");
+            assert(backend == "mp" || backend == "ipy");
 
-            // Cache the problem bounds and the number of integer variables.
-            const auto prob_bounds = prob.get_bounds();
-            const auto nix = prob.get_nix();
+            // Import the function implementing the mp/ipy parallel generation of
+            // an individual.
+            bp::object gen_individual
+                = bp::import("pygmo._parinit").attr(("_" + backend + "_generate_individual").c_str());
 
-            // First let's generate in thread-parallel mode the dvs.
-            tbb::parallel_for(range_type(0u, pop_size), [seed, &retval, &prob_bounds, nix](const range_type &range) {
-                // Init a random engine with a local seed. We will mix
-                // the original seed with the limits of the current iteration.
-                auto local_seed = static_cast<std::size_t>(seed);
-                boost::hash_combine(local_seed, static_cast<std::size_t>(range.begin()));
-                boost::hash_combine(local_seed, static_cast<std::size_t>(range.end()));
-                rng_type eng(static_cast<rng_seed_type>(local_seed));
-
-                for (auto i = range.begin(); i != range.end(); ++i) {
-                    ret.first[i] = pagmo::random_decision_vector(prob_bounds, eng, nix);
-                }
-            });
-
+            // Init the vector of futures.
             std::vector<bp::object> futures;
+            // Small helper to wait on all the futures.
+            auto wait_all_futs = [&futures]() {
+                for (auto &f : futures) {
+                    f.attr("wait")();
+                }
+            };
 
-            for (population::size_type i = 0; i != pop_size; ++i) {
-                // Create a random dv, compute its fitness and move both into ret.
-                auto random_dv = random_decision_vector(prob_bounds, rng, nix);
-                futures.push_back(parinit_mod.attr("_mp_fitness_dispatch")(prob, pygmo::v_to_a(random_dv)));
-                retval.first[i] = std::move(random_dv);
+            try {
+                for (population::size_type i = 0; i != pop_size; ++i) {
+                    futures.push_back(gen_individual(prob));
+                }
+            } catch (...) {
+                // If anything goes wrong here, let's wait on all the
+                // futures created so far before re-throwing.
+                wait_all_futs();
+                throw;
             }
 
+            // Wait for the computations to finish.
+            wait_all_futs();
+
+            // Fetch the results from the futures and write them
+            // into retval. If any exception has been thrown in the remote
+            // process, it will be re-raised here.
             for (population::size_type i = 0; i != pop_size; ++i) {
-                retval.second[i] = pygmo::to_vd(futures[i].attr("get")());
+                auto ret = futures[i].attr("get")();
+                retval.first[i] = pygmo::to_vd(ret[0]);
+                retval.second[i] = pygmo::to_vd(ret[1]);
             }
         };
-#endif
 
         if (init_mode == "par_auto") {
+            if (prob.get_thread_safety() >= thread_safety::basic) {
+                detail::pop_parinit_thread(retval, prob, seed, pop_size);
+            } else {
+                parinit_impl(
+#if defined(PYGMO_CAN_USE_MP)
+                    "mp"
+#else
+                    "ipy"
+#endif
+                );
+            }
         } else if (init_mode == "par_thread") {
             detail::pop_parinit_thread(retval, prob, seed, pop_size);
 #if defined(PYGMO_CAN_USE_MP)
         } else if (init_mode == "par_mp") {
-            parinit_mp();
+            parinit_impl("mp");
 #endif
-        } else if (init_mode == "par_ipyparallel") {
+        } else if (init_mode == "par_ipy") {
+            parinit_impl("ipy");
         } else {
             pagmo_throw(std::invalid_argument,
                         "The '" + init_mode
@@ -483,6 +509,9 @@ BOOST_PYTHON_MODULE(core)
 
     // The max_unsigned() helper.
     bp::def("_max_unsigned", &max_unsigned);
+
+    // The random_dv_for_problem() helper.
+    bp::def("_random_dv_for_problem", &random_dv_for_problem);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");

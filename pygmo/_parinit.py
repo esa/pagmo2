@@ -38,11 +38,13 @@ _mp_pool_size = None
 _mp_pool_lock = _Lock()
 
 
-def _fitness_f(prob, dv):
-    return prob.fitness(dv)
+def _generate_individual(prob):
+    from .core import _random_dv_for_problem
+    dv = _random_dv_for_problem(prob)
+    return (dv, prob.fitness(dv))
 
 
-def _mp_fitness_dispatch(prob, dv):
+def _mp_generate_individual(prob):
     from ._mp_utils import _make_pool
 
     global _mp_pool
@@ -52,7 +54,7 @@ def _mp_fitness_dispatch(prob, dv):
     with _mp_pool_lock:
         if _mp_pool is None:
             _mp_pool, _mp_pool_size = _make_pool(None)
-        return _mp_pool.apply_async(_fitness_f, (prob, dv))
+        return _mp_pool.apply_async(_generate_individual, (prob, ))
 
 
 def _cleanup():
@@ -66,3 +68,18 @@ def _cleanup():
             _mp_pool.join()
             _mp_pool = None
             _mp_pool_size = None
+
+
+_ipy_view = None
+_ipy_lock = _Lock()
+
+
+def _ipy_generate_individual(prob):
+    global _ipy_view
+    global _ipy_lock
+
+    with _ipy_lock:
+        if _ipy_view is None:
+            from ipyparallel import Client
+            _ipy_view = Client().load_balanced_view()
+        return _ipy_view.apply_async(_generate_individual, prob)
