@@ -45,7 +45,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <memory>
@@ -56,7 +55,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include <boost/functional/hash.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -323,6 +321,7 @@ static inline unsigned random_device_next()
 }
 
 // Detect if pygmo can use the multiprocessing module.
+// NOTE: the mp machinery is supported since Python 3.4 or on Windows.
 #if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
 
 #define PYGMO_CAN_USE_MP
@@ -378,7 +377,6 @@ BOOST_PYTHON_MODULE(core)
                   pygmo::gil_thread_ensurer gte;
                   bp::object py_island = bp::import("pygmo")
 #if defined(PYGMO_CAN_USE_MP)
-                                             // NOTE: the mp_island is supported since Python 3.4 or on Windows.
                                              .attr("mp_island");
 #else
                                              .attr("ipyparallel_island");
@@ -451,6 +449,8 @@ BOOST_PYTHON_MODULE(core)
         };
 
         if (init_mode == "par_auto") {
+            // Auto-detected parallel mode: threading if possible,
+            // otherwise mp or ipy.
             if (prob.get_thread_safety() >= thread_safety::basic) {
                 detail::pop_parinit_thread(retval, prob, seed, pop_size);
             } else {
@@ -463,14 +463,19 @@ BOOST_PYTHON_MODULE(core)
                 );
             }
         } else if (init_mode == "par_thread") {
+            // The user specifically requested parallel threaded mode.
+            // This will throw if the problem is not thread-safe.
             detail::pop_parinit_thread(retval, prob, seed, pop_size);
 #if defined(PYGMO_CAN_USE_MP)
         } else if (init_mode == "par_mp") {
+            // Explicitly requested parallel mp mode.
             parinit_impl("mp");
 #endif
         } else if (init_mode == "par_ipy") {
+            // Explicitly requested parallel ipy mode.
             parinit_impl("ipy");
         } else {
+            // Wrong mode.
             pagmo_throw(std::invalid_argument,
                         "The '" + init_mode
                             + "' parallel population initialisation mode is not valid. The valid modes are: "

@@ -33,18 +33,31 @@ from __future__ import absolute_import as _ai
 
 from threading import Lock as _Lock
 
+
+def _generate_individual(prob):
+    # Main function to generate a random individual
+    # for the given problem. It will randomly
+    # generate the dv, compute its fitness f,
+    # and then return both dv and f.
+
+    from .core import _random_dv_for_problem
+
+    dv = _random_dv_for_problem(prob)
+    return (dv, prob.fitness(dv))
+
+
+# Global variables for the multiprocessing
+# implementation of parallel intit.
 _mp_pool = None
 _mp_pool_size = None
 _mp_pool_lock = _Lock()
 
 
-def _generate_individual(prob):
-    from .core import _random_dv_for_problem
-    dv = _random_dv_for_problem(prob)
-    return (dv, prob.fitness(dv))
-
-
 def _mp_generate_individual(prob):
+    # Generate a random individual for the problem prob.
+    # The computation will be performed in a separate process
+    # via Python's multiprocessing machinery.
+
     from ._mp_utils import _make_pool
 
     global _mp_pool
@@ -58,6 +71,9 @@ def _mp_generate_individual(prob):
 
 
 def _cleanup():
+    # Cleanup function to ensure the pool for mp
+    # parallel init is properly cleaned up at shutdown.
+
     global _mp_pool
     global _mp_pool_size
     global _mp_pool_lock
@@ -70,11 +86,17 @@ def _cleanup():
             _mp_pool_size = None
 
 
+# Global variables for the ipyparallel
+# implementation of parallel intit.
 _ipy_view = None
 _ipy_lock = _Lock()
 
 
 def _ipy_generate_individual(prob):
+    # Generate a random individual for the problem prob.
+    # The computation will be performed in a separate process
+    # via ipyparallel's machinery.
+
     global _ipy_view
     global _ipy_lock
 
