@@ -377,12 +377,11 @@ def _population_init(self, prob=None, size=0, seed=None, init_mode="serial"):
         # work if prob is an exposed C++ problem or a Python UDP.
         prob_arg = problem(prob)
     if seed is None:
-        # Handle specially a None seed. This essentially
-        # replicates the nondeterministic rng we use on the
-        # C++ side, pagmo::random_device::next().
-        from random import randint
-        from .core import _max_unsigned
-        seed = randint(0, _max_unsigned())
+        # A None seed means that we are randomly generating
+        # the seed. We will be using pagmo's random_device::next()
+        # function for that.
+        from .core import _random_device_next
+        seed = _random_device_next()
 
     __original_population_init(self, prob_arg, size, seed, init_mode)
 

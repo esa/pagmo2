@@ -79,9 +79,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <tbb/blocked_range.h>
-#include <tbb/parallel_for.h>
-
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
 #include <pagmo/detail/make_unique.hpp>
@@ -319,6 +316,12 @@ static inline bp::object random_dv_for_problem(const problem &p)
     return pygmo::v_to_a(random_decision_vector(prob_bounds, eng, nix));
 }
 
+// Small wrapper for pagmo::random_device::next().
+static inline unsigned random_device_next()
+{
+    return random_device::next();
+}
+
 // Detect if pygmo can use the multiprocessing module.
 #if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
 
@@ -512,6 +515,9 @@ BOOST_PYTHON_MODULE(core)
 
     // The random_dv_for_problem() helper.
     bp::def("_random_dv_for_problem", &random_dv_for_problem);
+
+    // The random_device_next() helper.
+    bp::def("_random_device_next", &random_device_next);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
