@@ -391,99 +391,99 @@ BOOST_PYTHON_MODULE(core)
     detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
 
     // Override the default implementation of the parallel init functionality for the population class.
-    detail::pop_parinit<>::s_func = [](const std::string &init_mode, problem &prob, unsigned seed,
-                                       population::size_type pop_size, detail::random_engine_type &) {
-        constexpr char valid_modes[] = "['par_auto', 'par_thread'"
+    detail::pop_parinit<>::s_func
+        = [](const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size) {
+              constexpr char valid_modes[] = "['par_auto', 'par_thread'"
 #if defined(PYGMO_CAN_USE_MP)
-                                       ", 'par_mp'"
+                                             ", 'par_mp'"
 #endif
-                                       ", 'par_ipy']";
+                                             ", 'par_ipy']";
 
-        // Prepare the return values.
-        std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
-        retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
-        retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
+              // Prepare the return values.
+              std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
+              retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
+              retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
 
-        auto parinit_impl = [&](const std::string &backend) {
-            // NOTE: see explanation above about the use of a gte.
-            pygmo::gil_thread_ensurer gte;
+              auto parinit_impl = [&](const std::string &backend) {
+                  // NOTE: see explanation above about the use of a gte.
+                  pygmo::gil_thread_ensurer gte;
 
-            assert(backend == "mp" || backend == "ipy");
+                  assert(backend == "mp" || backend == "ipy");
 
-            // Import the function implementing the mp/ipy parallel generation of
-            // an individual.
-            bp::object gen_individual
-                = bp::import("pygmo._parinit").attr(("_" + backend + "_generate_individual").c_str());
+                  // Import the function implementing the mp/ipy parallel generation of
+                  // an individual.
+                  bp::object gen_individual
+                      = bp::import("pygmo._parinit").attr(("_" + backend + "_generate_individual").c_str());
 
-            // Init the vector of futures.
-            std::vector<bp::object> futures;
-            // Small helper to wait on all the futures.
-            auto wait_all_futs = [&futures]() {
-                for (auto &f : futures) {
-                    f.attr("wait")();
-                }
-            };
+                  // Init the vector of futures.
+                  std::vector<bp::object> futures;
+                  // Small helper to wait on all the futures.
+                  auto wait_all_futs = [&futures]() {
+                      for (auto &f : futures) {
+                          f.attr("wait")();
+                      }
+                  };
 
-            try {
-                for (population::size_type i = 0; i != pop_size; ++i) {
-                    futures.push_back(gen_individual(prob));
-                }
-            } catch (...) {
-                // If anything goes wrong here, let's wait on all the
-                // futures created so far before re-throwing.
-                wait_all_futs();
-                throw;
-            }
+                  try {
+                      for (population::size_type i = 0; i != pop_size; ++i) {
+                          futures.push_back(gen_individual(prob));
+                      }
+                  } catch (...) {
+                      // If anything goes wrong here, let's wait on all the
+                      // futures created so far before re-throwing.
+                      wait_all_futs();
+                      throw;
+                  }
 
-            // Wait for the computations to finish.
-            wait_all_futs();
+                  // Wait for the computations to finish.
+                  wait_all_futs();
 
-            // Fetch the results from the futures and write them
-            // into retval. If any exception has been thrown in the remote
-            // process, it will be re-raised here.
-            for (population::size_type i = 0; i != pop_size; ++i) {
-                auto ret = futures[i].attr("get")();
-                retval.first[i] = pygmo::to_vd(ret[0]);
-                retval.second[i] = pygmo::to_vd(ret[1]);
-            }
-        };
+                  // Fetch the results from the futures and write them
+                  // into retval. If any exception has been thrown in the remote
+                  // process, it will be re-raised here.
+                  for (population::size_type i = 0; i != pop_size; ++i) {
+                      auto ret = futures[i].attr("get")();
+                      retval.first[i] = pygmo::to_vd(ret[0]);
+                      retval.second[i] = pygmo::to_vd(ret[1]);
+                  }
+              };
 
-        if (init_mode == "par_auto") {
-            // Auto-detected parallel mode: threading if possible,
-            // otherwise mp or ipy.
-            if (prob.get_thread_safety() >= thread_safety::basic) {
-                detail::pop_parinit_thread(retval, prob, seed, pop_size);
-            } else {
-                parinit_impl(
+              if (init_mode == "par_auto") {
+                  // Auto-detected parallel mode: threading if possible,
+                  // otherwise mp or ipy.
+                  if (prob.get_thread_safety() >= thread_safety::basic) {
+                      detail::pop_parinit_thread(retval, prob, seed, pop_size);
+                  } else {
+                      parinit_impl(
 #if defined(PYGMO_CAN_USE_MP)
-                    "mp"
+                          "mp"
 #else
-                    "ipy"
+                          "ipy"
 #endif
-                );
-            }
-        } else if (init_mode == "par_thread") {
-            // The user specifically requested parallel threaded mode.
-            // This will throw if the problem is not thread-safe.
-            detail::pop_parinit_thread(retval, prob, seed, pop_size);
+                      );
+                  }
+              } else if (init_mode == "par_thread") {
+                  // The user specifically requested parallel threaded mode.
+                  // This will throw if the problem is not thread-safe.
+                  detail::pop_parinit_thread(retval, prob, seed, pop_size);
 #if defined(PYGMO_CAN_USE_MP)
-        } else if (init_mode == "par_mp") {
-            // Explicitly requested parallel mp mode.
-            parinit_impl("mp");
+              } else if (init_mode == "par_mp") {
+                  // Explicitly requested parallel mp mode.
+                  parinit_impl("mp");
 #endif
-        } else if (init_mode == "par_ipy") {
-            // Explicitly requested parallel ipy mode.
-            parinit_impl("ipy");
-        } else {
-            // Wrong mode.
-            pagmo_throw(std::invalid_argument,
-                        "The '" + init_mode
-                            + "' parallel population initialisation mode is not valid. The valid modes are: "
-                            + valid_modes);
-        }
+              } else if (init_mode == "par_ipy") {
+                  // Explicitly requested parallel ipy mode.
+                  parinit_impl("ipy");
+              } else {
+                  // Wrong mode.
+                  pagmo_throw(std::invalid_argument,
+                              "The '" + init_mode
+                                  + "' parallel population initialisation mode is not valid. The valid modes are: "
+                                  + valid_modes);
+              }
 
-        return retval;
-    };
+              return retval;
+          };
 
     // Setup doc options
     bp::docstring_options doc_options;

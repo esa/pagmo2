@@ -160,8 +160,7 @@ public:
             // after we have defined it.
             auto ret = detail::pop_parinit<
                 typename std::conditional<detail::dependent_false<T>::value, T, void>::type>::s_func(init_mode, m_prob,
-                                                                                                     seed, pop_size,
-                                                                                                     m_e);
+                                                                                                     seed, pop_size);
             // Double check the return value.
             assert(ret.first.size() == pop_size);
             assert(ret.second.size() == pop_size);
@@ -832,7 +831,7 @@ namespace detail
 template <typename>
 struct pop_parinit {
     using func_t = std::function<std::pair<std::vector<vector_double>, std::vector<vector_double>>(
-        const std::string &, problem &, unsigned, population::size_type, detail::random_engine_type &)>;
+        const std::string &, problem &, unsigned, population::size_type)>;
     static func_t s_func;
 };
 
@@ -890,8 +889,7 @@ inline void pop_parinit_thread(std::pair<std::vector<vector_double>, std::vector
 }
 
 inline std::pair<std::vector<vector_double>, std::vector<vector_double>>
-default_pop_parinit(const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size,
-                    detail::random_engine_type &)
+default_pop_parinit(const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size)
 {
     constexpr char valid_modes[] = "['par_thread', 'par_auto']";
 
