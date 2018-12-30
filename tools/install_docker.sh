@@ -17,8 +17,10 @@ elif [[ ${PAGMO_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 elif [[ ${PAGMO_BUILD} == *35 ]]; then
 	PYTHON_DIR="cp35-cp35m"
-elif [[ ${PAGMO_BUILD} == *27 ]]; then
+elif [[ ${PAGMO_BUILD} == *27mu ]]; then
 	PYTHON_DIR="cp27-cp27mu"
+elif [[ ${PAGMO_BUILD} == *27m ]]; then
+	PYTHON_DIR="cp27-cp27m"
 else
 	echo "Invalid build type: ${PAGMO_BUILD}"
 	exit 1
