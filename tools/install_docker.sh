@@ -79,10 +79,17 @@ cd nlopt-${NLOPT_VERSION}
 make -j2 install > /dev/null
 cd ..
 
-# Python deps
-/opt/python/${PYTHON_DIR}/bin/pip install cloudpickle dill numpy ipyparallel
-/opt/python/${PYTHON_DIR}/bin/ipcluster start --daemonize=True
-sleep 20
+# Python mandatory deps.
+/opt/python/${PYTHON_DIR}/bin/pip install cloudpickle numpy
+# Python optional deps.
+if [[ ${PAGMO_BUILD} != *27m ]]; then
+	# NOTE: do not install the optional deps for the py27m build: some of the deps
+	# don't have binary wheels available for py27m, which makes pip try to
+	# install them from source (which fails).
+	/opt/python/${PYTHON_DIR}/bin/pip install dill ipyparallel
+	/opt/python/${PYTHON_DIR}/bin/ipcluster start --daemonize=True
+	sleep 20
+fi
 
 # pagmo & pygmo
 cd /pagmo2
