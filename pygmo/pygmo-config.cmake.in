@@ -1,0 +1,24 @@
+# Get current dir.
+get_filename_component(_PYGMO_CONFIG_SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+# Find the deps. Alter the cmake module path.
+set(_PYGMO_CONFIG_OLD_MODULE_PATH "${CMAKE_MODULE_PATH}")
+list(APPEND CMAKE_MODULE_PATH "${_PYGMO_CONFIG_SELF_DIR}")
+find_package(pagmo @pygmo_VERSION@ EXACT REQUIRED)
+include(YACMAPythonSetup)
+# Python version check.
+if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
+    message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+endif()
+find_package(NumPy REQUIRED)
+set(_PAGMO_FIND_BOOST_PYTHON TRUE)
+include(PagmoFindBoost)
+unset(_PAGMO_FIND_BOOST_PYTHON)
+# Restore original module path.
+set(CMAKE_MODULE_PATH "${_PYGMO_CONFIG_OLD_MODULE_PATH}")
+unset(_PYGMO_CONFIG_OLD_MODULE_PATH)
+
+include(${_PYGMO_CONFIG_SELF_DIR}/pygmo_export.cmake)
+
+# Clean up.
+unset(_PYGMO_CONFIG_SELF_DIR)

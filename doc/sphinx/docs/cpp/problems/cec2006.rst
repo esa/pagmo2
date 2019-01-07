@@ -1,0 +1,5 @@
+CEC 2006 Problem Suite (single-objective, constrained)
+======================================================
+
+.. doxygenclass:: pagmo::cec2006
+   :members:

@@ -1,0 +1,5 @@
+CEC 2014 Problem Suite (box-bound, single objective)
+====================================================
+
+.. doxygenclass:: pagmo::cec2014
+   :members:

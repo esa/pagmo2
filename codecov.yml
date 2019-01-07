@@ -1,0 +1,13 @@
+coverage:
+  ignore:
+  - "tests/.*"
+  - "tutorials/.*"
+  - "include/pagmo/external"
+
+  notify:
+    gitter:
+      default:
+        url: "https://webhooks.gitter.im/e/370824261ddf671fe05a"
+        threshold: 1%
+
+comment: off
