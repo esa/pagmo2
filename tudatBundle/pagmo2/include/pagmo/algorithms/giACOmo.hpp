@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_giACOmo_HPP
-#define PAGMO_ALGORITHMS_giACOmo_HPP
+#ifndef PAGMO_ALGORITHMS_GIACOMO_HPP
+#define PAGMO_ALGORITHMS_GIACOMO_HPP
 
 #include <algorithm> // std::shuffle, std::transform
 #include <iomanip>
@@ -65,7 +65,7 @@ namespace pagmo
  * See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
  * mixed integer non-linear programming. Computers & Operations Research.
  */
-class giACOmo
+class gi_aco_mo
 {
 public:
     /// Single entry of the log (gen, fevals, ideal_point)
@@ -79,73 +79,73 @@ public:
     *
     * @param[in] gen Generations: number of generations to evolve.
     * @param[in] acc Accuracy parameter: for inequality and equality constraints .
-    * @param[in] FSTOP Objective stopping criterion: when the objective value reaches this value, the algorithm is stopped [for multi-objective, this applies to the first obj. only].
-    * @param[in] IMPSTOP Improvement stopping criterion: if a positive integer is assigned here, the algorithm will count the runs without improvements, if this number will exceed IMPSTOP value, the algorithm will be stopped.
-    * @param[in] EVALSTOP Evaluation stopping criterion: same as previous one, but with function evaluations
-    * @param[in] FOCUS Focus parameter: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the current best solutions
-    * @param[in] KER Kernel: number of solutions stored in the solution archive
-    * @param[in] ORACLE Oracle parameter: this is the oracle parameter used in the penalty method
-    * @param[in] PARETOMAX Max number of non-dominated solutions: this regulates the max number of Pareto points to be stored
-    * @param[in] EPSILON Pareto precision: the smaller this parameter, the higher the chances to introduce a new solution in the Pareto front
+    * @param[in] fstop Objective stopping criterion: when the objective value reaches this value, the algorithm is stopped [for multi-objective, this applies to the first obj. only].
+    * @param[in] impstop Improvement stopping criterion: if a positive integer is assigned here, the algorithm will count the runs without improvements, if this number will exceed IMPSTOP value, the algorithm will be stopped.
+    * @param[in] evalstop Evaluation stopping criterion: same as previous one, but with function evaluations
+    * @param[in] focus Focus parameter: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the current best solutions
+    * @param[in] ker Kernel: number of solutions stored in the solution archive
+    * @param[in] oracle Oracle parameter: this is the oracle parameter used in the penalty method
+    * @param[in] paretomax Max number of non-dominated solutions: this regulates the max number of Pareto points to be stored
+    * @param[in] epsilon Pareto precision: the smaller this parameter, the higher the chances to introduce a new solution in the Pareto front
     * @param seed seed used by the internal random number generator (default is random)
-    * @throws std::invalid_argument if \p acc is not \f$ \in [0,1[\f$, \p FSTOP is not positive, \p IMPSTOP is not a
-    * positive integer, \p EVALSTOP is not a positive integer, \p FOCUS is not \f$ \in [0,1[\f$, \p ANTS is not a positive integer,
-    * \p KER is not a positive integer, \p ORACLE is not positive, \p PARETOMAX is not a positive integer, \p EPSILON is not \f$ \in [0,1[\f$
+    * @throws std::invalid_argument if \p acc is not \f$ \in [0,1[\f$, \p fstop is not positive, \p impstop is not a
+    * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ \in [0,1[\f$, \p ants is not a positive integer,
+    * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p epsilon is not \f$ \in [0,1[\f$
     */
-    giACOmo(unsigned gen = 1u, double acc = 0.95, unsigned int FSTOP = 1, unsigned int IMPSTOP = 1, unsigned int EVALSTOP = 1,
-          double FOCUS = 0.9,  unsigned int KER = 10, double ORACLE=1.0, unsigned int PARETOMAX = 10,
-            double EPSILON = 0.9, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_acc(acc), m_FSTOP(FSTOP), m_IMPSTOP(IMPSTOP), m_EVALSTOP(EVALSTOP), m_FOCUS(FOCUS),
-          m_KER(KER), m_ORACLE(ORACLE), m_PARETOMAX(PARETOMAX), m_EPSILON(EPSILON), m_e(seed), m_seed(seed), m_verbosity(0u),
+    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, unsigned int fstop = 1, unsigned int impstop = 1, unsigned int evalstop = 1,
+          double focus = 0.9,  unsigned int ker = 10, double oracle=1.0, unsigned int paretomax = 10,
+            double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
+        : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus),
+          m_ker(ker), m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log()
     {
         if (acc >= 1. || acc < 0.) {
             pagmo_throw(std::invalid_argument, "The accuracy parameter must be in the [0,1[ range, while a value of "
                                                    + std::to_string(acc) + " was detected");
         }
-        if (FSTOP < 0.) {
+        if (fstop < 0.) {
             pagmo_throw(std::invalid_argument, "The objective stopping criterion must be in the [0,inf[ range, while a value of "
-                                                   + std::to_string(FSTOP) + " was detected");
+                                                   + std::to_string(fstop) + " was detected");
         }
-        if (IMPSTOP < 0) {
+        if (impstop < 0) {
             pagmo_throw(std::invalid_argument,
                         "The improvement stopping criterion must be in [0, inf[, while a value of "
-                            + std::to_string(IMPSTOP) + " was detected");
+                            + std::to_string(impstop) + " was detected");
         }
-        if (EVALSTOP < 0) {
+        if (evalstop < 0) {
             pagmo_throw(std::invalid_argument,
                         "The evaluation stopping criterion must be in [0, inf[, while a value of "
-                            + std::to_string(EVALSTOP) + " was detected");
+                            + std::to_string(evalstop) + " was detected");
         }
 
-        if (FOCUS >= 1. || FOCUS < 0.) {
+        if (focus >= 1. || focus < 0.) {
             pagmo_throw(std::invalid_argument,
                         "The focus parameter must be in [0, inf[, while a value of "
-                            + std::to_string(FOCUS) + " was detected");
+                            + std::to_string(focus) + " was detected");
         }
 
-        if (KER < 0) {
+        if (ker < 0) {
             pagmo_throw(std::invalid_argument,
                         "The kernel parameter must be in [0, inf[, while a value of "
-                            + std::to_string(KER) + " was detected");
+                            + std::to_string(ker) + " was detected");
         }
 
-        if (ORACLE < 0.) {
+        if (oracle < 0.) {
             pagmo_throw(std::invalid_argument,
                         "The oracle parameter must be in [0, inf[, while a value of "
-                            + std::to_string(ORACLE) + " was detected");
+                            + std::to_string(oracle) + " was detected");
         }
 
-        if (PARETOMAX < 0) {
+        if (paretomax < 0) {
             pagmo_throw(std::invalid_argument,
                         "The max number of non-dominated solutions must be in [0, inf[, while a value of "
-                            + std::to_string(PARETOMAX) + " was detected");
+                            + std::to_string(paretomax) + " was detected");
         }
 
-        if (EPSILON >= 1. || EPSILON < 0.) {
+        if (epsilon >= 1. || epsilon < 0.) {
             pagmo_throw(std::invalid_argument,
                         "The Pareto precision parameter must be in [0, inf[, while a value of "
-                            + std::to_string(EPSILON) + " was detected");
+                            + std::to_string(epsilon) + " was detected");
         }
 
 
@@ -323,7 +323,7 @@ public:
      */
     std::string get_name() const
     {
-        return "giACOmo:";
+        return "gi_aco_mo:";
     }
     /// Extra informations
     /**
@@ -336,15 +336,15 @@ public:
         std::ostringstream ss;
         stream(ss, "\tGenerations: ", m_gen);
         stream(ss, "\n\tAccuracy parameter: ", m_acc);
-        stream(ss, "\n\tObjective stopping criterion: ", m_FSTOP);
-        stream(ss, "\n\tImprovement stopping criterion: ", m_IMPSTOP);
-        stream(ss, "\n\tEvaluation stopping criterion: ", m_EVALSTOP);
-        stream(ss, "\n\tFocus parameter: ", m_FOCUS);
-        stream(ss, "\n\tKernel: ", m_KER);
-        stream(ss, "\n\tOracle parameter: ", m_ORACLE);
-        stream(ss, "\n\tMax number of non-dominated solutions: ", m_PARETOMAX);
-        stream(ss, "\n\tPareto precision: ", m_EPSILON);
-        stream(ss, "\n\tDistribution index for mutation: ", m_EPSILON);
+        stream(ss, "\n\tObjective stopping criterion: ", m_fstop);
+        stream(ss, "\n\tImprovement stopping criterion: ", m_impstop);
+        stream(ss, "\n\tEvaluation stopping criterion: ", m_evalstop);
+        stream(ss, "\n\tFocus parameter: ", m_focus);
+        stream(ss, "\n\tKernel: ", m_ker);
+        stream(ss, "\n\tOracle parameter: ", m_oracle);
+        stream(ss, "\n\tMax number of non-dominated solutions: ", m_paretomax);
+        stream(ss, "\n\tPareto precision: ", m_epsilon);
+        stream(ss, "\n\tDistribution index for mutation: ", m_e);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
 
@@ -367,7 +367,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_acc, m_FSTOP, m_IMPSTOP, m_EVALSTOP, m_FOCUS, m_KER, m_ORACLE, m_PARETOMAX, m_EPSILON, m_e, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_acc, m_fstop, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e, m_seed, m_verbosity, m_log);
     }
 
 private:
@@ -375,14 +375,14 @@ private:
 
     unsigned int m_gen;
     double m_acc;
-    int m_FSTOP;
-    int m_IMPSTOP;
-    int m_EVALSTOP;
-    double m_FOCUS;
-    int m_KER;
-    double m_ORACLE;
-    int m_PARETOMAX;
-    double m_EPSILON;
+    int m_fstop;
+    int m_impstop;
+    int m_evalstop;
+    double m_focus;
+    int m_ker;
+    double m_oracle;
+    int m_paretomax;
+    double m_epsilon;
     mutable detail::random_engine_type m_e;
     unsigned int m_seed;
     unsigned int m_verbosity;
@@ -391,6 +391,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::giACOmo)
+PAGMO_REGISTER_ALGORITHM(pagmo::gi_aco_mo)
 
 #endif
