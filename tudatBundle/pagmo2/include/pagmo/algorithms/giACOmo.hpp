@@ -69,7 +69,7 @@ class gi_aco_mo
 {
 public:
     /// Single entry of the log (gen, fevals, ideal_point)
-    typedef std::tuple<unsigned int, unsigned long long, vector_double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, vector_double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -92,8 +92,8 @@ public:
     * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ \in [0,1[\f$, \p ants is not a positive integer,
     * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p epsilon is not \f$ \in [0,1[\f$
     */
-    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, unsigned int fstop = 1, unsigned int impstop = 1, unsigned int evalstop = 1,
-          double focus = 0.9,  unsigned int ker = 10, double oracle=1.0, unsigned int paretomax = 10,
+    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, unsigned  fstop = 1, unsigned impstop = 1, unsigned evalstop = 1,
+          double focus = 0.9,  unsigned ker = 10, double oracle=1.0, unsigned paretomax = 10,
             double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus),
           m_ker(ker), m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
@@ -103,48 +103,20 @@ public:
             pagmo_throw(std::invalid_argument, "The accuracy parameter must be in the [0,1[ range, while a value of "
                                                    + std::to_string(acc) + " was detected");
         }
-        if (fstop < 0.) {
-            pagmo_throw(std::invalid_argument, "The objective stopping criterion must be in the [0,inf[ range, while a value of "
-                                                   + std::to_string(fstop) + " was detected");
-        }
-        if (impstop < 0) {
-            pagmo_throw(std::invalid_argument,
-                        "The improvement stopping criterion must be in [0, inf[, while a value of "
-                            + std::to_string(impstop) + " was detected");
-        }
-        if (evalstop < 0) {
-            pagmo_throw(std::invalid_argument,
-                        "The evaluation stopping criterion must be in [0, inf[, while a value of "
-                            + std::to_string(evalstop) + " was detected");
-        }
-
         if (focus >= 1. || focus < 0.) {
             pagmo_throw(std::invalid_argument,
-                        "The focus parameter must be in [0, inf[, while a value of "
+                        "The focus parameter must be in the [0,1[ range, while a value of "
                             + std::to_string(focus) + " was detected");
         }
-
-        if (ker < 0) {
-            pagmo_throw(std::invalid_argument,
-                        "The kernel parameter must be in [0, inf[, while a value of "
-                            + std::to_string(ker) + " was detected");
-        }
-
         if (oracle < 0.) {
             pagmo_throw(std::invalid_argument,
-                        "The oracle parameter must be in [0, inf[, while a value of "
+                        "The oracle parameter must be >=0, while a value of "
                             + std::to_string(oracle) + " was detected");
-        }
-
-        if (paretomax < 0) {
-            pagmo_throw(std::invalid_argument,
-                        "The max number of non-dominated solutions must be in [0, inf[, while a value of "
-                            + std::to_string(paretomax) + " was detected");
         }
 
         if (epsilon >= 1. || epsilon < 0.) {
             pagmo_throw(std::invalid_argument,
-                        "The Pareto precision parameter must be in [0, inf[, while a value of "
+                        "The Pareto precision parameter must be in [0, 1[, while a value of "
                             + std::to_string(epsilon) + " was detected");
         }
 
@@ -174,8 +146,13 @@ public:
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
 
+        //Note that the number of equality and inequality constraints has to be set up manually in the problem definition,
+        //otherwise PaGMO assumes that there aren't any
+        auto NIC = prob.get_nic(); //number of inequality constraints
+        auto NEC = prob.get_nec(); //number of equality constraints
+
         auto fevals0 = prob.get_fevals(); // discount for the fevals already made
-        unsigned int count = 1u;          // regulates the screen output
+        unsigned count = 1u;          // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
@@ -192,11 +169,11 @@ public:
             pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
                                                    + get_name() + " cannot deal with them.");
         }
-        if (prob.get_nf() < 2u) {
-            pagmo_throw(std::invalid_argument,
-                        "This is a multiobjective algortihm, while number of objectives detected in " + prob.get_name()
-                            + " is " + std::to_string(prob.get_nf()));
+        if (m_gen == 0u){
+            return pop;
         }
+
+
 
         // ---------------------------------------------------------------------------------------------------------
 
@@ -205,8 +182,6 @@ public:
 
         // Declarations
 
-
-        // 0 - We initialize the first generation using a pseudo-random number generator:
 
         // Main ACO loop over generations:
         for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
@@ -245,15 +220,59 @@ public:
             // At each generation we make a copy of the population into popnew
             population popnew(pop);
 
+            //In the case the algorithm is multi-objective, a decomposition strategy is applied:
+            if ( prob.get_nf() - NIC - prob.get_nec() > 1u ) //there might be ineq and eq constraints, so I exclude them from the count
+            {
+
+                //THIS PART HAS NOT BEEN DEFINED YET
+            }
+            //I otherwise proceed with a single-objective algorithm:
+            else
+            {
+                //In this case, the fitness corresponds to the objective values, I can thus directly
+                //compute the penalty function values
+
+                auto X = pop.get_x();
+                auto fit = pop.get_f(); //this returns a vector in which objectives, equality and inequality
+                                        //constraints are concatenated
+
+                //note that pop.get_x()[n][k] goes through the different individuals of the population (index n) and the number of variables (index k)
+                //the number of variables can be easily be deducted from counting the bounds.
+
+                //0 - I still have to initialize and define the SA with the first generation of individuals
+
+                //1 - compute penalty functions
+
+                //I define the vector which will store the penalty function values:
+                std::vector<double> penalties(NP);
+
+                //loop over the individuals
+                for (decltype(NP) i=0u; i<NP; i++)
+                {
+
+                    //here, for the penalty computation, you have to pass the i_th element, and not all of them
+
+                    penalties.push_back( penalty_computation( fit[i], pop ) );
+
+                }
+
+                //2 - update and sort solutions in the SA
+
+                //3 - compute pheromone values
+
+                pheromone_computation(); //you still have to define the inputs to pass
+
+                //4 - use pheromone values to generate new ants, which will become the future generation's variables
+                //here you have to define a probability density function and use a random number generator to produce
+                //the new ants from it
+
+                //the pdf has the following form:
+                //G_h (t) = sum_{k=1}^{K} omega_{k,h} 1/(sigma_h * sqrt(2*pi)) * exp(- (t-mu_{k,h})^2 / (2*(sigma_h)^2) )
+                // I thus have all the elements (which I retrieved from the pheromone_computation function)
 
 
-            // 1 - Retrieve fitness values and use it to update and sort the solution archive
 
-
-            // 2 - Compute pheromone values
-
-
-            // 3 - Generate new generation of ants using the evolutionary operator
+            }
 
 
 
@@ -264,7 +283,7 @@ public:
     /**
      * @param seed the seed controlling the algorithm stochastic behaviour
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_e.seed(seed);
         m_seed = seed;
@@ -273,7 +292,7 @@ public:
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -303,7 +322,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
@@ -311,9 +330,17 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
+    }  
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
+    unsigned get_gen() const
+    {
+        return m_gen;
     }
     /// Algorithm name
     /**
@@ -372,8 +399,185 @@ public:
 
 private:
 
+    //here I define my penalty function computation using oracle penalty method
+    double penalty_computation ( const vector_double &f, const population &pop )
+    {
 
-    unsigned int m_gen;
+        const auto &prob = pop.get_problem();
+        auto nec = prob.get_nec();
+        //auto nic = prob.get_nic();
+        auto nfunc = prob.get_nf() - nec - nic;
+
+
+        //remember that the get_f() returns the objective vector, equality constraints vector, and inequality
+        //constraints vector in the order that I just mentioned.
+
+        double max_ec = f[nfunc];
+        double min_ic = f[nfunc+nec];
+        double ec_sum_1 = 0;
+        double ic_sum_1 = 0;
+        double ec_sum_2 = 0;
+        double ic_sum_2 = 0;
+        //I compute the sum over the equality and inequality constraints (to be used for the residual computation):
+        for ( decltype (i) = nfunc; i < nfunc+nec; i++ )
+        {
+            ec_sum_1 = ec_sum_1 + std::abs(f[i]);
+            ec_sum_2 = ec_sum_2 + std::pow(std::abs(f[i]),2);
+            if ( i>nfunc && max_ec<f[i] )
+            {
+                max_ec = f[i];
+            }
+        }
+
+        for ( decltype (j) = nfunc+nec; j < prob.get_nf(); j++ )
+        {
+            ic_sum_1 = ic_sum_1 + std::min(std::abs(f[j]),0);
+            ic_sum_2 = ic_sum_2 + std::pow(std::min(std::abs(f[j]),0),2);
+            if ( j> nfunc+nec && min_ic>f[j] )
+            {
+                min_ic=f[j];
+            }
+        }
+
+        unsigned L=2; //if L=1 --> it computes the L_1 norm,
+                          //if L=2 --> it computes the L_2 norm,
+                          //if L=3 --> it computes the L_inf norm
+
+        //The computation of the residual function is executed:
+        double res = 0;
+
+        if( L==1 ) {
+
+            res = ec_sum_1 - ic_sum_1;
+
+        } else if ( L==2 ) {
+
+            res = std::sqrt(ec_sum_2 + ic_sum_2);
+
+        } else {
+
+            res = std::max(max_ec,min_ic);
+        }
+
+
+        //Before computing the penalty function, I need the alpha parameter:
+
+        //I STILL DO NOT DECLARE THE fit VALUE, BECAUSE IT WILL DEPEND ALSO ON THE
+        //MULTI-OBJECTIVE PART HOW TO DEFINE IT
+
+        double alpha=0;
+        double diff = std::abs(fitness-m_oracle); //I define this value which I will use often
+
+        if ( fitness<=m_oracle ){
+            //In this case, I keep the value of alpha = 0
+        }
+
+        else if( fitness>m_oracle && res<diff/3.0 ) {
+
+            alpha = (diff* (6.0*std::sqrt(3.0)-2.0)/(6.0*std::sqrt(3)) - res) / (diff-res);
+
+        } else if (fitness>m_oracle && res>=diff/3.0 && res<=diff) {
+
+            alpha = 1.0 - 1.0/(2.0*std::sqrt(diff/res));
+
+        }
+        else{ //i.e., fitness>m_oracle && res>diff
+
+            alpha = 1.0/2.0*std::sqrt(diff/res);
+        }
+
+        //I now have all the elements to compute the penalty function value:
+        double penalty;
+
+        if( fitness>m_oracle && res<diff/3.0 ){
+
+            penalty = alpha*diff + (1-alpha)*res;
+        }
+        else{
+            penalty=-diff;
+        }
+
+        return penalty;
+
+    }
+
+    //in the next function I need: 1) the number of the population --> which I will call n_con, 2) the solution archive (where I should place the variables, the obj function
+    // the constraints violations and the penalty function values inside). The size of the SA is assumed to be defined as K
+    void pheromone_computation( std::vector <double> &OMEGA, std::vector <double> &SIGMA  ) //the size of OMEGA is K, of SIGMA is n_con
+    {
+
+        //retrieve K and n_con from the sizes of SA
+
+        //I compute omega (first pheromone value):
+        //I declare the omega vector for storing the omega values:
+
+
+        double omega;
+
+        std::vector<double> J(K) ; // vector with K doubles
+        std::iota (std::begin(J), std::end(J), 1); // Fill with 1,2,3,...,K
+
+        double sum = std::accumulate(J.begin(), J.end(),0);
+
+        for ( decltype(k)=0; k<K; k++ ){
+
+             omega = ( K-k+1.0 )/(sum);
+             OMEGA.push_back(omega);
+
+        }
+
+
+
+        //I compute sigma (second pheromone value):
+
+
+        for ( decltype (h) = 0; h < n_con; h++ ){
+
+            //I declare and define D_min and D_max:
+            double D_min = std::abs( SA[h][0]-SA[h][1] ); //at first I define D_min using the subtraction of the first two individuals of
+                                                          //the same variable stored in the SA --> the index are specified to clarify this
+                                                          //but I still have to pass SA to the function
+            std::vector <double> D_MIN(n_con);
+
+            double D_max = std::abs( SA[h][0]-SA[h][1] );
+            std::vector <double> D_MAX(n_con);
+
+
+            //I loop over the various individuals of the variable:
+            for ( decltype(count)=1; count<K-1; count++ ){
+
+                //I confront each individual with the following ones (until all the comparisons are executed):
+                for ( decltype(k)=count+1; k<K; k++ ){
+
+                    //I update D_min
+                    if ( std::abs( SA[h][count]-SA[h][k] )<D_min ){
+
+                        D_min = std::abs( SA[h][count]-SA[h][k]);
+                    }
+
+                    //I update D_max
+                    if ( std::abs( SA[h][count]-SA[h][k])>D_max ){
+
+                        D_max = std::abs( SA[h][count]-SA[h][k]);
+                    }
+                }
+
+            }
+
+            D_MIN.push_back( D_min );
+            D_MAX.push_back( D_max );
+
+            SIGMA.push_back( (D_max-D_min)/get_gen() );
+
+        }
+
+
+
+
+    }
+
+
+    unsigned m_gen;
     double m_acc;
     int m_fstop;
     int m_impstop;
@@ -384,8 +588,8 @@ private:
     int m_paretomax;
     double m_epsilon;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;  
 };
 
