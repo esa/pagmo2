@@ -186,36 +186,7 @@ public:
         // Main ACO loop over generations:
         for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
             // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-            if (m_verbosity > 0u) {
-                // Every m_verbosity generations print a log line
-                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                    // We compute the ideal point
-                    vector_double ideal_point = ideal(pop.get_f());
-                    // Every 50 lines print the column names
-                    if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:");
-                        for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
-                            if (i >= 5u) {
-                                print(std::setw(15), "... :");
-                                break;
-                            }
-                            print(std::setw(15), "ideal" + std::to_string(i + 1u) + ":");
-                        }
-                        print('\n');
-                    }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
-                    for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
-                        if (i >= 5u) {
-                            break;
-                        }
-                        print(std::setw(15), ideal_point[i]);
-                    }
-                    print('\n');
-                    ++count;
-                    // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, ideal_point);
-                }
-            }
+
 
             // At each generation we make a copy of the population into popnew
             population popnew(pop);
@@ -258,9 +229,71 @@ public:
 
                 //2 - update and sort solutions in the SA
 
+                //I create a vector where I will store the positions of the various individuals
+                std::vector<int> sort_list(NP);
+
+                //I store a vector where the penalties are sorted:
+                std::vector<double> sorted_penalties( penalties );
+                std::sort (sorted_penalties.begin(), sorted_penalties.end())
+
+                //I now create a vector where I store the position of the stored values: this will help
+                //me to find the corresponding individuals and their objective values, later on
+                for (decltype(NP) j=0u; j<NP; j++)
+                {
+                    int count=0;
+
+                    for (decltype(NP) i=0u; i<NP && count=0; i++)
+                    {
+                        if (sorted_penalties[j] == penalties[i])
+                        {
+                            if (j==0)
+                            {
+                                sort_list.push_back(i);
+                                count=1;
+                            }
+
+                            else
+                            {
+                                //with the following piece of code I avoid to store the same position in case that two another element
+                                //exist with the same value
+                              int count_2=0;
+                              for(decltype(sort_list.size()) jj=0u; jj<sort_list.size() && count_2=0; jj++)
+                              {
+                                  if (sort_list(jj)==i)
+                                  {
+                                      count_2=1;
+                                  }
+                              }
+                              if (count_2==0)
+                              {
+                                  sort_list.push_back(i);
+                                  count=1;
+                              }
+
+                            }
+
+                        }
+                    }
+                }
+
+                if (gen==1) {
+                    //here you have to initialize the solution archive (SA)
+
+                }
+                else {
+                    update_SA(pop, sorted_penalties, sort_list, SA); //you still have to define the SA (Solution Archive)
+
+                }
+
+
                 //3 - compute pheromone values
 
-                pheromone_computation(); //you still have to define the inputs to pass
+                std::vector <double> omega;
+                std::vector <double> sigma;
+                pheromone_computation(omega, sigma); //you still have to define the inputs to pass
+
+
+
 
                 //4 - use pheromone values to generate new ants, which will become the future generation's variables
                 //here you have to define a probability density function and use a random number generator to produce
@@ -519,7 +552,7 @@ private:
 
         double sum = std::accumulate(J.begin(), J.end(),0);
 
-        for ( decltype(k)=0; k<K; k++ ){
+        for ( int k=0; k<K; k++ ){
 
              omega = ( K-k+1.0 )/(sum);
              OMEGA.push_back(omega);
@@ -531,34 +564,34 @@ private:
         //I compute sigma (second pheromone value):
 
 
-        for ( decltype (h) = 0; h < n_con; h++ ){
+        for ( int h = 0; h < n_con; h++ ){
 
             //I declare and define D_min and D_max:
-            double D_min = std::abs( SA[h][0]-SA[h][1] ); //at first I define D_min using the subtraction of the first two individuals of
+            double D_min = std::abs( SA[0][h]-SA[1][h] ); //at first I define D_min using the subtraction of the first two individuals of
                                                           //the same variable stored in the SA --> the index are specified to clarify this
                                                           //but I still have to pass SA to the function
             std::vector <double> D_MIN(n_con);
 
-            double D_max = std::abs( SA[h][0]-SA[h][1] );
+            double D_max = std::abs( SA[0][h]-SA[1][h] );
             std::vector <double> D_MAX(n_con);
 
 
             //I loop over the various individuals of the variable:
-            for ( decltype(count)=1; count<K-1; count++ ){
+            for ( int count=1; count<K-1; count++ ){
 
                 //I confront each individual with the following ones (until all the comparisons are executed):
-                for ( decltype(k)=count+1; k<K; k++ ){
+                for ( int k = count+1; k<K; k++ ){
 
                     //I update D_min
-                    if ( std::abs( SA[h][count]-SA[h][k] )<D_min ){
+                    if ( std::abs( SA[count][h]-SA[k][h] )<D_min ){
 
-                        D_min = std::abs( SA[h][count]-SA[h][k]);
+                        D_min = std::abs( SA[count][h]-SA[k][h]);
                     }
 
                     //I update D_max
-                    if ( std::abs( SA[h][count]-SA[h][k])>D_max ){
+                    if ( std::abs( SA[count][h]-SA[k][h])>D_max ){
 
-                        D_max = std::abs( SA[h][count]-SA[h][k]);
+                        D_max = std::abs( SA[count][h]-SA[k][h]);
                     }
                 }
 
@@ -576,6 +609,55 @@ private:
 
     }
 
+    void update_SA(const population &pop, std::vector<double> &sorted_vector, std::vector<int> &sorted_list, std::vector< std::vector <double> > &Solution_Archive, )
+    {
+        //sorted_vector contains the penalties sorted (relative to the generation in which we currently are)
+        //sorted_list contains the position values of these penalties wrt their original position as it appears in get_x()
+        auto variables = pop.get_x();
+        auto objectives = pop.get_f();
+
+        //note that pop.get_x()[n][k] goes through the different individuals of the population (index n) and the number of variables (index k)
+        //the number of variables can be easily be deducted from counting the bounds.
+
+        //I now re-order the variables and objective vectors (remember that the objective vector also contains the eq and ineq constraints):
+        for (decltype(sorted_list.size()) i=0u; i<sorted_list.size(); i++) {
+            variables[i] = pop.get_x()[ sorted_list[i] ];
+            objectives[i] = pop.get_f()[ sorted_list[i] ];
+        }
+
+        //now I have the individuals sorted in such a way that the first one is the best of its generation, and the last one the worst
+        //I can thus compare these individuals with the SA: if for instance the first individual of the sorted generation is worse than
+        //the last individual of the SA, then all the others will also be worse, and I can thus interrupt the update. The same holds for
+        //the following elements
+
+        //I assume that SA has NP rows and n_con columns: so as many rows as the number of individuals and as many columns as the number
+        //of variables for each individual
+
+
+
+        int count_2=1;
+        for( decltype(SA.size()) j=Solution_Archive.size()-1; j>=0 && count_2==1; j-- )
+        {
+            count_2=0;
+            int count=0;
+                for (decltype(sorted_list.size()) i=0u; i<sorted_list.size() && count==0; i++)
+                {
+                    if (sorted_vector[i] <= Solution_Archive[j][k]) //you have to substitute k with the position in which you will place the penalty
+                                                  //function value of the variables in SA
+                    {
+                        Solution_Archive[j]=variables(i);
+                        count_2=1; //if count_2 remains equal to zero, then no values in the sorted vector is found that is better than SA
+                    }
+                    else
+                    {
+                        count=1;
+                    }
+                }
+        }
+
+
+
+    }
 
     unsigned m_gen;
     double m_acc;
