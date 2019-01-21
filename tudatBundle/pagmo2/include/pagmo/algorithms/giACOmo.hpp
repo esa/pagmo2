@@ -148,8 +148,9 @@ public:
 
         //Note that the number of equality and inequality constraints has to be set up manually in the problem definition,
         //otherwise PaGMO assumes that there aren't any
-        auto NIC = prob.get_nic(); //number of inequality constraints
-        auto NEC = prob.get_nec(); //number of equality constraints
+        auto NIC = prob.get_nic();        //number of inequality constraints
+        auto NEC = prob.get_nec();        //number of equality constraints
+        auto NOBJ = prob.get_nobj();      //number of objectives
 
         auto fevals0 = prob.get_fevals(); // discount for the fevals already made
         unsigned count = 1u;          // regulates the screen output
@@ -182,9 +183,14 @@ public:
 
         // Declarations
 
+        //here you initialize the solution archive (SA):
+        //I store in the first column the penalty values, in the following columns the variables, the objectives values
+        //the inequality constraints values and the equality constraints values. The number of rows of SA i
+        std::vector<std::vector<double>> SA( NP, std::vector<double> (1+dim+NOBJ+NEC+NIC,1) );
+
 
         // Main ACO loop over generations:
-        for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
+        for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++ ) {
             // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
 
 
@@ -207,6 +213,9 @@ public:
                 auto fit = pop.get_f(); //this returns a vector in which objectives, equality and inequality
                                         //constraints are concatenated
 
+                //I store the number of variables
+                auto n_con = X[0].size();
+
                 //note that pop.get_x()[n][k] goes through the different individuals of the population (index n) and the number of variables (index k)
                 //the number of variables can be easily be deducted from counting the bounds.
 
@@ -218,7 +227,7 @@ public:
                 std::vector<double> penalties(NP);
 
                 //loop over the individuals
-                for (decltype(NP) i=0u; i<NP; i++)
+                for ( decltype(NP) i=0u; i<NP; ++i )
                 {
 
                     //here, for the penalty computation, you have to pass the i_th element, and not all of them
@@ -238,11 +247,11 @@ public:
 
                 //I now create a vector where I store the position of the stored values: this will help
                 //me to find the corresponding individuals and their objective values, later on
-                for (decltype(NP) j=0u; j<NP; j++)
+                for ( decltype(NP) j=0u; j<NP; ++j )
                 {
                     int count=0;
 
-                    for (decltype(NP) i=0u; i<NP && count=0; i++)
+                    for (decltype(NP) i=0u; i<NP && count=0; ++i)
                     {
                         if (sorted_penalties[j] == penalties[i])
                         {
@@ -257,7 +266,7 @@ public:
                                 //with the following piece of code I avoid to store the same position in case that two another element
                                 //exist with the same value
                               int count_2=0;
-                              for(decltype(sort_list.size()) jj=0u; jj<sort_list.size() && count_2=0; jj++)
+                              for(decltype(sort_list.size()) jj=0u; jj<sort_list.size() && count_2=0; ++jj)
                               {
                                   if (sort_list(jj)==i)
                                   {
@@ -277,13 +286,28 @@ public:
                 }
 
                 if (gen==1) {
-                    //here you have to initialize the solution archive (SA)
+
+                    std::vector<std::vector<double>> *Sol_Arch=&SA;
+
+                    //I initialize the solution archive (SA): in order to do this I store the vectors generated in the first generation
+                    //by taking into account their penalty values. In this way, the first vector in the SA (i.e., the first row in which
+                    //penalty value, variables, objective functions values, equality constraints values, inequality constraints values are
+                    //stored) represents the best one (i.e., the one that has the smallest penalty function value among the individuals of
+                    //that generation), whereas the last vector represents the worst.
+                    for (decltype(sort_list.size()) i=0u; i<sort_list.size(); ++i){
+                        *Sol_Arch[i]={penalties[sorted_penalties[i]], X[sort_list[i]], fit[sort_list[i]]};
+                    }
+
+
+
 
                 }
-                else {
-                    update_SA(pop, sorted_penalties, sort_list, SA); //you still have to define the SA (Solution Archive)
+                else{
+
+                    update_SA(pop, sorted_penalties, sort_list, SA);
 
                 }
+
 
 
                 //3 - compute pheromone values
@@ -293,16 +317,13 @@ public:
                 pheromone_computation(omega, sigma); //you still have to define the inputs to pass
 
 
-
-
                 //4 - use pheromone values to generate new ants, which will become the future generation's variables
                 //here you have to define a probability density function and use a random number generator to produce
                 //the new ants from it
 
-                //the pdf has the following form:
-                //G_h (t) = sum_{k=1}^{K} omega_{k,h} 1/(sigma_h * sqrt(2*pi)) * exp(- (t-mu_{k,h})^2 / (2*(sigma_h)^2) )
-                // I thus have all the elements (which I retrieved from the pheromone_computation function)
-
+                //I create the vector of vectors where I will store all the new ants (i.e., individuals) which will be generated
+                std::vector < std::vector <double> > new_ants;
+                generate_new_ants( omega, sigma, SA, n_con, new_ants );
 
 
             }
@@ -452,7 +473,7 @@ private:
         double ec_sum_2 = 0;
         double ic_sum_2 = 0;
         //I compute the sum over the equality and inequality constraints (to be used for the residual computation):
-        for ( decltype (i) = nfunc; i < nfunc+nec; i++ )
+        for ( decltype (i) = nfunc; i < nfunc+nec; ++i )
         {
             ec_sum_1 = ec_sum_1 + std::abs(f[i]);
             ec_sum_2 = ec_sum_2 + std::pow(std::abs(f[i]),2);
@@ -462,7 +483,7 @@ private:
             }
         }
 
-        for ( decltype (j) = nfunc+nec; j < prob.get_nf(); j++ )
+        for ( decltype (j) = nfunc+nec; j < prob.get_nf(); ++j )
         {
             ic_sum_1 = ic_sum_1 + std::min(std::abs(f[j]),0);
             ic_sum_2 = ic_sum_2 + std::pow(std::min(std::abs(f[j]),0),2);
@@ -552,7 +573,7 @@ private:
 
         double sum = std::accumulate(J.begin(), J.end(),0);
 
-        for ( int k=0; k<K; k++ ){
+        for ( decltype(K) k=0; k<K; ++k ){
 
              omega = ( K-k+1.0 )/(sum);
              OMEGA.push_back(omega);
@@ -564,7 +585,7 @@ private:
         //I compute sigma (second pheromone value):
 
 
-        for ( int h = 0; h < n_con; h++ ){
+        for ( decltype(n_con) h = 0; h < n_con; ++h ){
 
             //I declare and define D_min and D_max:
             double D_min = std::abs( SA[0][h]-SA[1][h] ); //at first I define D_min using the subtraction of the first two individuals of
@@ -577,10 +598,10 @@ private:
 
 
             //I loop over the various individuals of the variable:
-            for ( int count=1; count<K-1; count++ ){
+            for ( decltype(K) count=1; count<K-1.0; ++count ){
 
                 //I confront each individual with the following ones (until all the comparisons are executed):
-                for ( int k = count+1; k<K; k++ ){
+                for ( decltype( K )  k = count+1; k<K; ++k ){
 
                     //I update D_min
                     if ( std::abs( SA[count][h]-SA[k][h] )<D_min ){
@@ -609,18 +630,19 @@ private:
 
     }
 
-    void update_SA(const population &pop, std::vector<double> &sorted_vector, std::vector<int> &sorted_list, std::vector< std::vector <double> > &Solution_Archive, )
+    void update_SA(const population &pop, std::vector<double> &sorted_vector, std::vector<int> &sorted_list, std::vector< std::vector <double> > &Solution_Archive )
     {
         //sorted_vector contains the penalties sorted (relative to the generation in which we currently are)
         //sorted_list contains the position values of these penalties wrt their original position as it appears in get_x()
         auto variables = pop.get_x();
         auto objectives = pop.get_f();
 
+
         //note that pop.get_x()[n][k] goes through the different individuals of the population (index n) and the number of variables (index k)
         //the number of variables can be easily be deducted from counting the bounds.
 
         //I now re-order the variables and objective vectors (remember that the objective vector also contains the eq and ineq constraints):
-        for (decltype(sorted_list.size()) i=0u; i<sorted_list.size(); i++) {
+        for (decltype(sorted_list.size()) i=0u; i<sorted_list.size(); ++i ) {
             variables[i] = pop.get_x()[ sorted_list[i] ];
             objectives[i] = pop.get_f()[ sorted_list[i] ];
         }
@@ -630,22 +652,37 @@ private:
         //the last individual of the SA, then all the others will also be worse, and I can thus interrupt the update. The same holds for
         //the following elements
 
-        //I assume that SA has NP rows and n_con columns: so as many rows as the number of individuals and as many columns as the number
-        //of variables for each individual
+        //I assume that SA has NP rows (which you call K in the lit. study) and n_con columns: so as many rows as the number of individuals
+        //and as many columns as the number of variables for each individual
 
 
 
         int count_2=1;
-        for( decltype(SA.size()) j=Solution_Archive.size()-1; j>=0 && count_2==1; j-- )
+        for( decltype(Solution_Archive.size()) j=Solution_Archive.size()-1; j>=0 && count_2==1; --j )
         {
             count_2=0;
             int count=0;
-                for (decltype(sorted_list.size()) i=0u; i<sorted_list.size() && count==0; i++)
+                for (decltype(sorted_list.size()) i=0u; i<sorted_list.size() && count==0; ++i )
                 {
-                    if (sorted_vector[i] <= Solution_Archive[j][k]) //you have to substitute k with the position in which you will place the penalty
-                                                  //function value of the variables in SA
+                    if (sorted_vector[i] <= Solution_Archive[j][0]) //you have to substitute the second entry with the position in which you will place the penalty
+                                                                    //function value of the variables in SA
                     {
-                        Solution_Archive[j]=variables(i);
+                        //I store the penalties inside the SA:
+                        Solution_Archive[j][0] = sorted_vector[i];
+
+                        //I store the variables inside the SA:
+                        for ( decltype(variables[0].size()) jj=0u; jj<variables[0].size(); ++jj ){
+                            Solution_Archive[j][1+jj] = variables[i][jj];
+
+                        }
+
+                        //I store the objectives, eq constraints and ineq constraints inside the SA:
+                        for ( decltype(objectives[0].size()) ii=0u; ii<objectives[0].size(); ++ii ){
+                            Solution_Archive[j][1+pop.get_problem().get_nx()+ii] = objectives[i][ii];
+
+                        }
+
+
                         count_2=1; //if count_2 remains equal to zero, then no values in the sorted vector is found that is better than SA
                     }
                     else
@@ -655,6 +692,67 @@ private:
                 }
         }
 
+
+
+    }
+
+    void generate_new_ants( std::vector <double> omega, std::vector <double> sigma, std::vector< std::vector <double> > &SA, double n_con, std::vector< std::vector <double> > &X_new )
+    {
+        /**
+        * Function which generates new individuals (i.e., ants)
+        *
+        * @param[in] omega Omega: one of the three pheromone values. These are the weights which are used in the multi-kernel gaussian probability distribution
+        * @param[in] sigma Sigma: one of the three pheromone values. These are the standard deviations which are used in the multi-kernel gaussian probability distribution
+        * @param[in] SA Solution archive: the solution archive is useful for retrieving the current individuals (which will be the means of the new pdf)
+        * @param[in] n_con Number of variables: this represents the number of variables of the problem
+        * @param[in] X_new New ants: in this vector the new ants which will be generated are stored
+        */
+
+        //I hereby generate the new ants based on a multi-kernel gaussian probability density function. This pdf is nothing more than a weighted sum of several gaussian pdf
+        //hence, in order to reproduce it, we first compute the numbers generated by the various gaussian pdf (using the mean and standard deviation values), and we then
+        //weight them over the weights (omega) --> weights and stddev were computed in the pheromone_computation function, whereas the mean of the various gaussian pdf is
+        //directly related to the previous individuals (i.e., indeed, their exact value is assumed to be the mean)
+
+
+        //X_new is the vector of vectors where I will store all the generated ants
+
+
+        // Mersenne twister PRNG
+        std::mt19937 generator(m_seed);
+
+
+        //the number of individuals which are contained in the solution archive is K, whereas I assume to pass the number of different variables which are to be optimized:
+        for ( decltype(SA.size()) j=0u; j<SA.size(); ++j )
+        {
+
+            std::vector <double> X_new_k; //here I store all the variables associated with the k_th element of the SA
+
+            for ( decltype(n_con) h=0u; h<n_con; ++h )
+            {
+                double g_h=0;
+
+                for ( decltype(SA.size()) k=0u; k< SA.size(); ++k )
+                {
+                    //after you define SA you have to correct this--> in this case I assumed that the SA has as many rows as the number of elements stored in the SA (i.e., K)
+                    //and as many columns as the 1 (this first element is useful for placing the penalty function values) +number of variables + number of objectives + number of iec
+                    //+ number of ec which are defined in the problem --> for accessing the variables, I thus have to go from 1 (i.e., second position) to n_con (number of variables stored
+                    //inside the SA)
+
+                    std::normal_distribution <double> gauss_pdf( SA[k][1+h], sigma[h] );
+
+                    g_h = g_h + omega(k)*gauss_pdf(generator);
+                    //the pdf has the following form:
+                    //G_h (t) = sum_{k=1}^{K} omega_{k,h} 1/(sigma_h * sqrt(2*pi)) * exp(- (t-mu_{k,h})^2 / (2*(sigma_h)^2) )
+                    // I thus have all the elements to compute it (which I retrieved from the pheromone_computation function)
+
+                }
+
+                X_new_k.push_back( g_h );
+
+            }
+            X_new.push_back(X_new_k);
+
+        }
 
 
     }
