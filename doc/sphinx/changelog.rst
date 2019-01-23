@@ -1,11 +1,13 @@
 Changelog
 =========
 
-2.10 (unreleased)
+2.10 (2019-01-02)
 -----------------
 
 New
 ~~~
+
+- Enable the ``py27m`` build variant for the manylinux packages (`#239 <https://github.com/esa/pagmo2/pull/239>`__).
 
 - It is now possible to select a serialization backend other than cloudpickle. The other available
   backends are the standard :mod:`pickle` module and `dill <https://pypi.org/project/dill/>`__

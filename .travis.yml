@@ -116,7 +116,11 @@ matrix:
     - env: PAGMO_BUILD="OSXPython27"
       os: osx
       osx_image: xcode6.4
-    - env: PAGMO_BUILD="manylinux64Py27" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+    - env: PAGMO_BUILD="manylinux64Py27m" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+      sudo: required
+      services:
+      - docker
+    - env: PAGMO_BUILD="manylinux64Py27mu" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
       sudo: required
       services:
       - docker
