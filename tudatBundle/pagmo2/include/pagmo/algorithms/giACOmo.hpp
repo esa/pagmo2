@@ -128,11 +128,11 @@ public:
     * @param[in] paretomax Max number of non-dominated solutions: this regulates the max number of Pareto points to be stored
     * @param[in] epsilon Pareto precision: the smaller this parameter, the higher the chances to introduce a new solution in the Pareto front
     * @param seed seed used by the internal random number generator (default is random)
-    * @throws std::invalid_argument if \p acc is not \f$ \in [0,1[\f$, \p fstop is not positive, \p impstop is not a
+    * @throws std::invalid_argument if \p acc is not \f$ \in [0,1[\f$, \p impstop is not a
     * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ \in [0,1[\f$, \p ants is not a positive integer,
     * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p epsilon is not \f$ \in [0,1[\f$
     */
-    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, unsigned  fstop = 1, unsigned impstop = 1, unsigned evalstop = 1,
+    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, double  fstop = 1, unsigned impstop = 1, unsigned evalstop = 1,
           double focus = 0.9,  unsigned ker = 10, double oracle=1.0, unsigned paretomax = 10,
             double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus),
@@ -242,6 +242,10 @@ public:
             // At each generation we make a copy of the population into popnew
             population popnew(pop);
 
+            //I define the variables which will count the runs without improvements and the function evaluations:
+            double count_impstop = 0;
+            double count_evalstop = 0;
+
             //In the case the algorithm is multi-objective, a decomposition strategy is applied:
             if ( prob.get_nobj() > 1u ) {
                 //THIS PART HAS NOT BEEN DEFINED YET
@@ -252,15 +256,23 @@ public:
             else
             {
 
+
                 auto X = pop.get_x();
                 //The following returns a vector of vectors in which objectives, equality and inequality constraints are concatenated,for each individual
                 auto fit = pop.get_f();
 
-                //I store the number of variables
-                auto n_con = X[0].size();
 
                 //note that pop.get_x()[n][k] goes through the different individuals of the population (index n) and the number of variables (index k)
                 //the number of variables can be easily be deducted from counting the bounds.
+
+                //I verify whether the maximum number of function evaluations or improvements has been exceeded, if yes I return the population and interrupt the algorithm
+                if ( m_impstop!=0 && count_impstop>=m_impstop ){
+                    return pop;
+                }
+
+                if ( m_evalstop!=0 && count_evalstop>=m_evalstop ){
+                    return pop;
+                }
 
                 //1 - compute penalty functions
 
@@ -269,10 +281,18 @@ public:
                 int feasible_set=0;
 
 
-                while(feasible_set < m_ker){
-                    int feasible_set=0;
+
+
                     for ( decltype(NP) i=0u; i<NP; ++i )
                     {
+
+                        //I first verify whether there is a solution that is smaller or equal the fstop parameter, in the case that it is different than zero
+                        if ( m_fstop!=0 && fit[i][0]<=m_fstop ){
+                            std::cout << "if a value of zero is desired as fstop, please insert a very small value instead (e.g. 0.0000001)" << std::endl;
+                            return pop;
+                        }
+
+
 
                         int T=0;
                         int T_2=0;
@@ -289,7 +309,7 @@ public:
                                 T_2=1;
                             }
                         }
-                        if (T_1==0 & T_2==0) {
+                        if (T==0 & T_2==0) {
                             //here, for the penalty computation, you have to pass the i_th element, and not all of them
                             penalties.push_back( penalty_computation( fit[i], pop ) );
                             feasible_set=feasible_set+1;
@@ -303,7 +323,7 @@ public:
 
                     }
 
-                    if (gen==1 && feasible_set>=m_ker){
+                    if (feasible_set>=m_ker){
                         //loop over the individuals
 
                         //2 - update and sort solutions in the SA (only the feasible ones)
@@ -360,13 +380,17 @@ public:
 
                             }
 
+                            if (m_impstop!=0){
+                                ++count_impstop;
+                            }
 
 
 
                         }
                         else{
 
-                            update_SA(pop, sorted_penalties, sort_list, SA);
+                            update_SA(pop, sorted_penalties, sort_list, SA, count_impstop, count_evalstop);
+
 
                         }
 
@@ -385,12 +409,13 @@ public:
 
                         //I create the vector of vectors where I will store all the new ants (i.e., individuals) which will be generated
                         std::vector < std::vector <double> > new_ants;
-                        generate_new_ants( omega, sigma, SA, n_con, new_ants );
+                        generate_new_ants( omega, sigma, SA, dim, new_ants );
 
                     }
                     else{
-                        //here you should generate a new first population, because the one you selected had not produced at least
-                        //'m_ker' feasible solutions
+                        pagmo_throw(std::invalid_argument,
+                                    " Error: the initial population does not have enough feasible solutions to be stored in the solution archive ");
+
                     }
 
 
@@ -398,11 +423,8 @@ public:
 
 
 
-            }
+            }// end of main ACO loop
 
-
-
-        } // end of main ACO loop
         return pop;
     }
     /// Sets the seed
@@ -581,15 +603,12 @@ private:
         double res = 0;
 
         if( L==1 ) {
-
             res = ec_sum_1 - ic_sum_1;
 
         } else if ( L==2 ) {
-
             res = std::sqrt(ec_sum_2 + ic_sum_2);
 
         } else {
-
             res = std::max(max_ec,min_ic);
         }
 
@@ -733,7 +752,7 @@ private:
 
     }
 
-    void update_SA(const population &pop, std::vector<double> &sorted_vector, std::vector<int> &sorted_list, std::vector< std::vector <double> > &Solution_Archive )
+    void update_SA(const population &pop, std::vector<double> &sorted_vector, std::vector<int> &sorted_list, std::vector< std::vector <double> > &Solution_Archive, double &N_impstop, double &N_evalstop)
     {
         /**
         * Function which updates the solution archive, if better solutions are found
@@ -743,6 +762,10 @@ private:
         * @param[in] stored_list Positions of stored penalties: this represents the positions of the individuals wrt their penalties as they are stored in the stored_vector
         * @param[in] Solution_Archive Solution archive: the solution archive is useful for retrieving the current individuals (which will be the means of the new pdf)
         */
+
+        bool N_impstop_count=false;
+        bool N_evalstop_count=false;
+
         //sorted_vector contains the penalties sorted (relative to the generation in which we currently are)
         //sorted_list contains the position values of these penalties wrt their original position as it appears in get_x()
         auto variables = pop.get_x();
@@ -791,6 +814,12 @@ private:
                         for ( decltype(objectives[0].size()) ii=0u; ii<objectives[0].size(); ++ii ){
                             Solution_Archive[j][1+pop.get_problem().get_nx()+ii] = objectives[i][ii];
 
+                            //I hereby reset to zero the evalstop parameter if the best solution of the SA is replaced with a new one
+                            if (j==0){
+                                N_evalstop = 0;
+                                N_evalstop_count = true;
+                            }
+
                         }
 
 
@@ -801,6 +830,23 @@ private:
                         count=1;
                     }
                 }
+
+                //I hereby reset to zero the impstop parameter if the SA is not updated at all
+                if ( count_2==0 && j=m_ker-1){
+                    N_impstop = 0;
+                    N_impstop_count = true;
+                }
+
+
+        }
+
+        //I increase the values of the impstop and evalstop parameters in the case that no improvements are found in both cases
+        if ( N_impstop_count==false ){
+            ++N_impstop;
+        }
+
+        if ( N_evalstop_count==false ){
+            ++N_evalstop;
         }
 
 
