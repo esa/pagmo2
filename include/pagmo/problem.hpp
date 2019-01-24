@@ -533,6 +533,30 @@ public:
 template <typename T>
 const bool override_has_hessians_sparsity<T>::value;
 
+template <typename T>
+class has_batch_fitness
+{
+    template <typename U>
+    using batch_fitness_t = decltype(std::declval<const U &>().batch_fitness(std::declval<const vector_double &>()));
+    static const bool implementation_defined = std::is_same<vector_double, detected_t<batch_fitness_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+class override_has_batch_fitness
+{
+    template <typename U>
+    using has_batch_fitness_t = decltype(std::declval<const U &>().has_batch_fitness());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_batch_fitness_t, T>>::value;
+
+public:
+    /// Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
 namespace detail
 {
 
@@ -663,6 +687,8 @@ struct prob_inner_base {
     virtual ~prob_inner_base() {}
     virtual std::unique_ptr<prob_inner_base> clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
+    virtual vector_double batch_fitness(const vector_double &) const = 0;
+    virtual bool has_batch_fitness() const = 0;
     virtual vector_double gradient(const vector_double &) const = 0;
     virtual bool has_gradient() const = 0;
     virtual sparsity_pattern gradient_sparsity() const = 0;
@@ -713,6 +739,14 @@ struct prob_inner final : prob_inner_base {
         return m_value.get_bounds();
     }
     // optional methods
+    virtual vector_double batch_fitness(const vector_double &dv) const override final
+    {
+        return batch_fitness_impl(m_value, dv);
+    }
+    virtual bool has_batch_fitness() const override final
+    {
+        return has_batch_fitness_impl(m_value);
+    }
     virtual vector_double::size_type get_nobj() const override final
     {
         return get_nobj_impl(m_value);
@@ -782,6 +816,34 @@ struct prob_inner final : prob_inner_base {
         return get_thread_safety_impl(m_value);
     }
     // Implementation of the optional methods.
+    template <typename U, enable_if_t<pagmo::has_batch_fitness<U>::value, int> = 0>
+    static vector_double batch_fitness_impl(const U &value, const vector_double &dv)
+    {
+        return value.batch_fitness(dv);
+    }
+    template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
+    [[noreturn]] static vector_double batch_fitness_impl(const U &, const vector_double &) // LCOV_EXCL_LINE
+    {
+        assert(false); // LCOV_EXCL_LINE
+        throw;
+    }
+    template <typename U,
+              enable_if_t<pagmo::has_batch_fitness<U>::value && pagmo::override_has_batch_fitness<U>::value, int> = 0>
+    static bool has_batch_fitness_impl(const U &p)
+    {
+        return p.has_batch_fitness();
+    }
+    template <typename U,
+              enable_if_t<pagmo::has_batch_fitness<U>::value && !pagmo::override_has_batch_fitness<U>::value, int> = 0>
+    static bool has_batch_fitness_impl(const U &)
+    {
+        return true;
+    }
+    template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
+    static bool has_batch_fitness_impl(const U &)
+    {
+        return false;
+    }
     template <typename U, enable_if_t<has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &value)
     {
@@ -1427,6 +1489,7 @@ public:
 
         return retval;
     }
+    vector_double batch_fitness(const vector_double &dv) const {}
 
     /// Gradient.
     /**
