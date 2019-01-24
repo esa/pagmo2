@@ -90,7 +90,7 @@ public:
     * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ \in [0,1[\f$, \p ants is not a positive integer,
     * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p epsilon is not \f$ \in [0,1[\f$
     */
-    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, unsigned  fstop = 1, unsigned impstop = 1, unsigned evalstop = 1,
+    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, double  fstop = 1, unsigned impstop = 1, unsigned evalstop = 1,
           double focus = 0.9,  unsigned ker = 10, double oracle=1.0, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus),
           m_ker(ker), m_oracle(oracle), m_e(seed), m_seed(seed), m_verbosity(0u),
@@ -231,7 +231,7 @@ public:
         //here you initialize the solution archive (SA):
         //I store in the first column the penalty values, in the following columns the variables, the objectives values
         //the inequality constraints values and the equality constraints values. The number of rows of SA i
-        std::vector<std::vector<double>> SA( m_ker, std::vector<double> (1+dim+NOBJ+NEC+NIC,1) );
+        std::vector< vector_double > SA( m_ker, vector_double (1+dim+NOBJ+NEC+NIC,1) );
 
 
         // Main ACO loop over generations:
@@ -277,7 +277,7 @@ public:
                 //1 - compute penalty functions
 
                 //I define the vector which will store the penalty function values:
-                std::vector<double> penalties(NP);
+                vector_double penalties(NP);
                 int feasible_set=0;
 
 
@@ -312,7 +312,7 @@ public:
                         if (T==0 & T_2==0) {
                             //here, for the penalty computation, you have to pass the i_th element, and not all of them
                             penalties.push_back( penalty_computation( fit[i], pop ) );
-                            feasible_set=feasible_set+1;
+                            ++feasible_set;
 
                         }
                         else{
@@ -323,7 +323,7 @@ public:
 
                     }
 
-                    if (feasible_set>=m_ker){
+                    if (feasible_set>=1){
                         //loop over the individuals
 
                         //2 - update and sort solutions in the SA (only the feasible ones)
@@ -332,7 +332,7 @@ public:
                         std::vector<int> sort_list( penalties.size() );
 
                         //I store a vector where the penalties are sorted:
-                        std::vector<double> sorted_penalties( penalties );
+                        vector_double sorted_penalties( penalties );
                         std::sort (sorted_penalties.begin(), sorted_penalties.end())
 
                         //I now create a vector where I store the position of the stored values: this will help
@@ -368,8 +368,15 @@ public:
                             }
                         }
 
+
+
                         if (gen==1) {
 
+                            if (feasible_set<m_ker){
+                                pagmo_throw(std::invalid_argument,
+                                            " Error: the initial population does not have at least m_ker feasible individuals to be stored in the solution archive ");
+
+                            }
                             //I initialize the solution archive (SA): in order to do this I store the vectors generated in the first generation
                             //by taking into account their penalty values. In this way, the first vector in the SA (i.e., the first row in which
                             //penalty value, variables, objective functions values, equality constraints values, inequality constraints values are
@@ -398,8 +405,8 @@ public:
 
                         //3 - compute pheromone values
 
-                        std::vector <double> omega;
-                        std::vector <double> sigma;
+                        vector_double omega;
+                        vector_double sigma;
                         pheromone_computation(omega, sigma, pop, SA);
 
 
@@ -408,13 +415,26 @@ public:
                         //the new ants from it
 
                         //I create the vector of vectors where I will store all the new ants (i.e., individuals) which will be generated
-                        std::vector < std::vector <double> > new_ants;
-                        generate_new_ants( omega, sigma, SA, dim, new_ants );
+                        std::vector < vector_double > new_ants;
+                        generate_new_ants( omega, sigma, SA, dim, new_ants, NP );
+
+                        vector_double ant(dim);
+
+                        for ( decltype(NP) i=0; i<NP; ++i){
+
+                            //I compute the fitness for each new individual which was generated in the generated_new_ants(..) function
+                            ant=new_ants[i];
+                            auto fitness = prob.fitness(ant);
+
+                            //I save the individuals for the next generation
+                            pop.set_xf(i, ant, fitness);
+
+                        }
 
                     }
                     else{
                         pagmo_throw(std::invalid_argument,
-                                    " Error: the initial population does not have enough feasible solutions to be stored in the solution archive ");
+                                    " Error: the population does not have any feasible individuals to be compared with the solution archive  ");
 
                     }
 
@@ -548,7 +568,7 @@ public:
 private:
 
     //here I define my penalty function computation using oracle penalty method
-    double penalty_computation ( const std::vector<double> &f, const population &pop )
+    double penalty_computation ( const vector_double &f, const population &pop )
     {
         /**
         * Function which computes the penalty function values for each individual of the population
@@ -618,6 +638,9 @@ private:
         //I STILL DO NOT DECLARE THE 'fitness' VALUE, BECAUSE IT WILL DEPEND ALSO ON THE
         //MULTI-OBJECTIVE PART HOW TO DEFINE IT
 
+        //for single objective, for now, is enough to do:
+        auto fitness = f[0];
+
         double alpha=0;
         double diff = std::abs(fitness-m_oracle); //I define this value which I will use often
 
@@ -656,7 +679,7 @@ private:
 
     //in the next function I need: 1) the number of the population --> which I will call n_con, 2) the solution archive (where I should place the variables, the obj function
     // the constraints violations and the penalty function values inside). The size of the SA is assumed to be defined as K
-    void pheromone_computation( std::vector <double> &OMEGA, std::vector <double> &SIGMA, const population &popul, std::vector< std::vector <double> > &SA  ) //the size of OMEGA is K, of SIGMA is n_con
+    void pheromone_computation( vector_double &OMEGA, vector_double &SIGMA, const population &popul, std::vector< vector_double > &SA  ) //the size of OMEGA is K, of SIGMA is n_con
     {
 
         /**
@@ -682,7 +705,7 @@ private:
 
         double omega;
 
-        std::vector<double> J(m_ker) ; // vector with 'ker' doubles
+        vector_double J(m_ker) ; // vector with 'ker' doubles
         std::iota (std::begin(J), std::end(J), 1); // Fill with 1,2,3,...,K
 
         double sum = std::accumulate(J.begin(), J.end(),0);
@@ -704,10 +727,10 @@ private:
             //I declare and define D_min and D_max:
             //at first I define D_min using the subtraction of the first two individuals of the same variable stored in the SA
             double D_min = std::abs( SA[0][h]-SA[1][h] );
-            std::vector <double> D_MIN(n_con);
+            vector_double D_MIN(n_con);
 
             double D_max = std::abs( SA[0][h]-SA[1][h] );
-            std::vector <double> D_MAX(n_con);
+            vector_double D_MAX(n_con);
 
 
             //I loop over the various individuals of the variable:
@@ -752,7 +775,7 @@ private:
 
     }
 
-    void update_SA(const population &pop, std::vector<double> &sorted_vector, std::vector<int> &sorted_list, std::vector< std::vector <double> > &Solution_Archive, double &N_impstop, double &N_evalstop)
+    void update_SA(const population &pop, vector_double &sorted_vector, std::vector<int> &sorted_list, std::vector< vector_double > &Solution_Archive, double &N_impstop, double &N_evalstop)
     {
         /**
         * Function which updates the solution archive, if better solutions are found
@@ -853,7 +876,7 @@ private:
 
     }
 
-    void generate_new_ants( std::vector <double> omega, std::vector <double> sigma, std::vector< std::vector <double> > &SA, double n_con, std::vector< std::vector <double> > &X_new )
+    void generate_new_ants( vector_double omega, vector_double sigma, std::vector< vector_double > &SA, auto n_con, std::vector< vector_double > &X_new, auto pop_size )
     {
         /**
         * Function which generates new individuals (i.e., ants)
@@ -879,10 +902,10 @@ private:
 
 
         //the number of individuals which are contained in the solution archive is K, whereas I assume to pass the number of different variables which are to be optimized:
-        for ( decltype(SA.size()) j=0u; j<SA.size(); ++j )
+        for ( decltype(pop_size) j=0u; j<pop_size; ++j )
         {
 
-            std::vector <double> X_new_k; //here I store all the variables associated with the k_th element of the SA
+            vector_double X_new_k; //here I store all the variables associated with the k_th element of the SA
 
             for ( decltype(n_con) h=0u; h<n_con; ++h )
             {
@@ -916,7 +939,7 @@ private:
 
     unsigned m_gen;
     double m_acc;
-    int m_fstop;
+    double m_fstop;
     int m_impstop;
     int m_evalstop;
     double m_focus;
