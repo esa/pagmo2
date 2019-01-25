@@ -75,44 +75,10 @@ public:
 
     /// Constructors
     /**
-    * Constructs the ACO user defined algorithm for single-objective optimization.
-    *
-    * @param[in] gen Generations: number of generations to evolve.
-    * @param[in] acc Accuracy parameter: for inequality and equality constraints .
-    * @param[in] fstop Objective stopping criterion: when the objective value reaches this value, the algorithm is stopped [for multi-objective, this applies to the first obj. only].
-    * @param[in] impstop Improvement stopping criterion: if a positive integer is assigned here, the algorithm will count the runs without improvements, if this number will exceed IMPSTOP value, the algorithm will be stopped.
-    * @param[in] evalstop Evaluation stopping criterion: same as previous one, but with function evaluations
-    * @param[in] focus Focus parameter: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the current best solutions
-    * @param[in] ker Kernel: number of solutions stored in the solution archive
-    * @param[in] oracle Oracle parameter: this is the oracle parameter used in the penalty method
-    * @param seed seed used by the internal random number generator (default is random)
-    * @throws std::invalid_argument if \p acc is not \f$ \in [0,1[\f$, \p fstop is not positive, \p impstop is not a
-    * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ \in [0,1[\f$, \p ants is not a positive integer,
-    * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p epsilon is not \f$ \in [0,1[\f$
-    */
-    gi_aco_mo(unsigned gen = 1u, double acc = 0.95, double  fstop = 1, unsigned impstop = 1, unsigned evalstop = 1,
-          double focus = 0.9,  unsigned ker = 10, double oracle=1.0, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus),
-          m_ker(ker), m_oracle(oracle), m_e(seed), m_seed(seed), m_verbosity(0u),
-          m_log()
-    {
-        if (acc >= 1. || acc < 0.) {
-            pagmo_throw(std::invalid_argument, "The accuracy parameter must be in the [0,1[ range, while a value of "
-                                                   + std::to_string(acc) + " was detected");
-        }
-        if (focus >= 1. || focus < 0.) {
-            pagmo_throw(std::invalid_argument,
-                        "The focus parameter must be in the [0,1[ range, while a value of "
-                            + std::to_string(focus) + " was detected");
-        }
-        if (oracle < 0.) {
-            pagmo_throw(std::invalid_argument,
-                        "The oracle parameter must be >=0, while a value of "
-                            + std::to_string(oracle) + " was detected");
-        }
+    * Empty constructor
+    * */
 
-
-    }
+    //gi_aco_mo( ){ }
 
     /**
     * Constructs the ACO user defined algorithm for multi-objective optimization.
@@ -191,6 +157,7 @@ public:
         auto NIC = prob.get_nic();        //number of inequality constraints
         auto NEC = prob.get_nec();        //number of equality constraints
         auto NOBJ = prob.get_nobj();      //number of objectives
+        auto NALL = prob.get_nf();        // NALL=NOBJ+NEC+NIC
 
         auto fevals0 = prob.get_fevals(); // discount for the fevals already made
         unsigned count = 1u;          // regulates the screen output
@@ -231,16 +198,14 @@ public:
         //here you initialize the solution archive (SA):
         //I store in the first column the penalty values, in the following columns the variables, the objectives values
         //the inequality constraints values and the equality constraints values. The number of rows of SA i
-        std::vector< vector_double > SA( m_ker, vector_double (1+dim+NOBJ+NEC+NIC,1) );
+        std::vector< vector_double > SA( m_ker, vector_double (1+dim+NALL,1) );;
 
 
         // Main ACO loop over generations:
         for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++ ) {
+
             // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
 
-
-            // At each generation we make a copy of the population into popnew
-            population popnew(pop);
 
             //I define the variables which will count the runs without improvements and the function evaluations:
             double count_impstop = 0;
@@ -257,9 +222,9 @@ public:
             {
 
 
-                auto X = pop.get_x();
+                std::vector<vector_double> X = pop.get_x();
                 //The following returns a vector of vectors in which objectives, equality and inequality constraints are concatenated,for each individual
-                auto fit = pop.get_f();
+                std::vector<vector_double> fit = pop.get_f();
 
 
                 //note that pop.get_x()[n][k] goes through the different individuals of the population (index n) and the number of variables (index k)
@@ -298,13 +263,13 @@ public:
                         int T_2=0;
 
                         //I verify that the equality and inequality constraints make the solutions feasible, if not, they are discarded:
-                        for ( decltype(NEC) i_nec=1u; i_nec<=NEC && T=0; ++i_nec ){
+                        for ( decltype(NEC) i_nec=1u; i_nec<=NEC && T==0; ++i_nec ){
                             if( std::abs(fit[i][i_nec]) > m_acc )
                             {
                                 T=1;
                             }
                         }
-                        for ( decltype(NIC) i_nic=1u; i_nic<=NIC && T_2=0; ++i_nic ){
+                        for ( decltype(NIC) i_nic=1u; i_nic<=NIC && T_2==0; ++i_nic ){
                             if( fit[i][i_nic] >= -m_acc ){ //remember that the ineq constraints are of the kind: g_ineq(X)>=0
                                 T_2=1;
                             }
@@ -317,7 +282,7 @@ public:
                         }
                         else{
                             //where this is not true, I store an infinity
-                            penalties.push_back( std::numeric_limits<double>::infinity())
+                            penalties.push_back( std::numeric_limits<double>::infinity());
                         }
 
 
@@ -329,18 +294,18 @@ public:
                         //2 - update and sort solutions in the SA (only the feasible ones)
 
                         //I create a vector where I will store the positions of the various individuals
-                        std::vector<int> sort_list( penalties.size() );
+                        std::vector<double> sort_list( penalties.size() );
 
                         //I store a vector where the penalties are sorted:
                         vector_double sorted_penalties( penalties );
-                        std::sort (sorted_penalties.begin(), sorted_penalties.end())
+                        std::sort (sorted_penalties.begin(), sorted_penalties.end());
 
                         //I now create a vector where I store the position of the stored values: this will help
                         //me to find the corresponding individuals and their objective values, later on
                         for ( decltype(penalties.size()) j=0u; j<penalties.size(); ++j ) {
                             int count=0;
 
-                            for ( decltype(penalties.size()) i=0u; i<penalties.size() && count=0; ++i ) {
+                            for ( decltype(penalties.size()) i=0u; i<penalties.size() && count==0; ++i ) {
                                 if (sorted_penalties[j] == penalties[i] && sorted_penalties[j]!=std::numeric_limits<double>::infinity() ) {
                                     if (j==0) {
                                         sort_list.push_back(i);
@@ -351,8 +316,8 @@ public:
                                         //with the following piece of code I avoid to store the same position in case that two another element
                                         //exist with the same value
                                       int count_2=0;
-                                      for(decltype(sort_list.size()) jj=0u; jj<sort_list.size() && count_2=0; ++jj) {
-                                          if (sort_list(jj)==i)
+                                      for(decltype(sort_list.size()) jj=0u; jj<sort_list.size() && count_2==0; ++jj) {
+                                          if (sort_list[jj]==i)
                                           {
                                               count_2=1;
                                           }
@@ -377,13 +342,25 @@ public:
                                             " Error: the initial population does not have at least m_ker feasible individuals to be stored in the solution archive ");
 
                             }
+
+
                             //I initialize the solution archive (SA): in order to do this I store the vectors generated in the first generation
                             //by taking into account their penalty values. In this way, the first vector in the SA (i.e., the first row in which
                             //penalty value, variables, objective functions values, equality constraints values, inequality constraints values are
                             //stored) represents the best one (i.e., the one that has the smallest penalty function value among the individuals of
                             //that generation), whereas the last vector represents the worst.
                             for (decltype(m_ker) i=0u; i<m_ker; ++i){
-                                SA[i]={penalties[sorted_penalties[i]], X[sort_list[i]], fit[sort_list[i]]};
+                                SA[i][0] = penalties[sorted_penalties[i]];
+
+                                for (decltype(dim) J=1; J<=dim; ++J){
+                                    double A = X[sort_list[i]][J];
+                                    SA[i][J] = A;
+
+                                }
+                                for (decltype(NALL) J=dim+1; J<=dim+NALL; ++J){
+                                    double B = fit[sort_list[i]][J];
+                                    SA[i][J] = B;
+                                }
 
                             }
 
@@ -568,7 +545,7 @@ public:
 private:
 
     //here I define my penalty function computation using oracle penalty method
-    double penalty_computation ( const vector_double &f, const population &pop )
+    double penalty_computation ( const vector_double &f, const population &pop ) const
     {
         /**
         * Function which computes the penalty function values for each individual of the population
@@ -607,8 +584,8 @@ private:
 
         for ( decltype ( prob.get_nf() ) j = nfunc+nec; j < prob.get_nf(); ++j )
         {
-            ic_sum_1 = ic_sum_1 + std::min(std::abs(f[j]),0);
-            ic_sum_2 = ic_sum_2 + std::pow(std::min(std::abs(f[j]),0),2);
+            ic_sum_1 = ic_sum_1 + std::min(std::abs(f[j]),0.0);
+            ic_sum_2 = ic_sum_2 + std::pow(std::min(std::abs(f[j]),0.0),2);
             if ( j> nfunc+nec && min_ic>f[j] )
             {
                 min_ic=f[j];
@@ -679,7 +656,7 @@ private:
 
     //in the next function I need: 1) the number of the population --> which I will call n_con, 2) the solution archive (where I should place the variables, the obj function
     // the constraints violations and the penalty function values inside). The size of the SA is assumed to be defined as K
-    void pheromone_computation( vector_double &OMEGA, vector_double &SIGMA, const population &popul, std::vector< vector_double > &SA  ) //the size of OMEGA is K, of SIGMA is n_con
+    void pheromone_computation( vector_double &OMEGA, vector_double &SIGMA, const population &popul, std::vector< vector_double > &SA  ) const //the size of OMEGA is K, of SIGMA is n_con
     {
 
         /**
@@ -775,7 +752,7 @@ private:
 
     }
 
-    void update_SA(const population &pop, vector_double &sorted_vector, std::vector<int> &sorted_list, std::vector< vector_double > &Solution_Archive, double &N_impstop, double &N_evalstop)
+    void update_SA(const population &pop, vector_double &sorted_vector, std::vector<double> &sorted_list, std::vector< vector_double > &Solution_Archive, double &N_impstop, double &N_evalstop) const
     {
         /**
         * Function which updates the solution archive, if better solutions are found
@@ -855,7 +832,7 @@ private:
                 }
 
                 //I hereby reset to zero the impstop parameter if the SA is not updated at all
-                if ( count_2==0 && j=m_ker-1){
+                if ( count_2==0 && j==m_ker-1){
                     N_impstop = 0;
                     N_impstop_count = true;
                 }
@@ -876,7 +853,7 @@ private:
 
     }
 
-    void generate_new_ants( vector_double omega, vector_double sigma, std::vector< vector_double > &SA, auto n_con, std::vector< vector_double > &X_new, auto pop_size )
+    void generate_new_ants( vector_double omega, vector_double sigma, std::vector< vector_double > &SA, int n_con, std::vector< vector_double > &X_new, int pop_size ) const
     {
         /**
         * Function which generates new individuals (i.e., ants)
@@ -920,7 +897,7 @@ private:
 
                     std::normal_distribution <double> gauss_pdf( SA[k][1+h], sigma[h] );
 
-                    g_h = g_h + omega(k)*gauss_pdf(generator);
+                    g_h = g_h + omega[k]*gauss_pdf(generator);
                     //the pdf has the following form:
                     //G_h (t) = sum_{k=1}^{K} omega_{k,h} 1/(sigma_h * sqrt(2*pi)) * exp(- (t-mu_{k,h})^2 / (2*(sigma_h)^2) )
                     // I thus have all the elements to compute it (which I retrieved from the pheromone_computation function)
