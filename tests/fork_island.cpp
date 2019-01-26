@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #include <sys/types.h>
 
@@ -210,5 +211,17 @@ BOOST_AUTO_TEST_CASE(fork_island_recurse)
         BOOST_CHECK_EXCEPTION(fi_0.wait_check(), std::runtime_error, [](const std::runtime_error &re) {
             return boost::contains(re.what(), "needs at least 5 individuals in the population");
         });
+    }
+}
+
+// Run a moderate amount of fork islands in parallel.
+BOOST_AUTO_TEST_CASE(fork_island_torture)
+{
+    std::vector<island> visl(100u, island(fork_island{}, compass_search{100}, rosenbrock{100}, 50, 0));
+    for (auto &isl : visl) {
+        isl.evolve();
+    }
+    for (auto &isl : visl) {
+        BOOST_CHECK_NO_THROW(isl.wait_check());
     }
 }
