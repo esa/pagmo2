@@ -31,9 +31,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <atomic>
-#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -42,6 +42,11 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
+
+#include <boost/numeric/conversion/cast.hpp>
+
+#include <tbb/blocked_range.h>
+#include <tbb/parallel_for.h>
 
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/detail/make_unique.hpp>
@@ -76,6 +81,21 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+
+// Forward declaration of the problem class.
+class problem;
+
+using batch_fitness_func_t = std::function<vector_double(const problem &, const vector_double &)>;
+
+namespace detail
+{
+
+template <typename = void>
+struct problem_generic_batch_fitness {
+    static batch_fitness_func_t func;
+};
+
+} // namespace detail
 
 /// Null problem
 /**
@@ -546,6 +566,9 @@ public:
 };
 
 template <typename T>
+const bool has_batch_fitness<T>::value;
+
+template <typename T>
 class override_has_batch_fitness
 {
     template <typename U>
@@ -556,6 +579,9 @@ public:
     /// Value of the type trait.
     static const bool value = implementation_defined;
 };
+
+template <typename T>
+const bool override_has_batch_fitness<T>::value;
 
 namespace detail
 {
@@ -1233,18 +1259,20 @@ public:
         if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
             pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
         }
-        // 4 - Presence of gradient and its sparsity.
+        // 4 - Presence of batch_fitness().
         // NOTE: all these m_has_* attributes refer to the presence of the features in the UDP.
+        m_has_batch_fitness = ptr()->has_batch_fitness();
+        // 5 - Presence of gradient and its sparsity.
         m_has_gradient = ptr()->has_gradient();
         m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
-        // 5 - Presence of Hessians and their sparsity.
+        // 6 - Presence of Hessians and their sparsity.
         m_has_hessians = ptr()->has_hessians();
         m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
-        // 5bis - Is this a stochastic problem?
+        // 7 - Is this a stochastic problem?
         m_has_set_seed = ptr()->has_set_seed();
-        // 6 - Name.
+        // 8 - Name.
         m_name = ptr()->get_name();
-        // 7 - Check the sparsities, and cache their sizes.
+        // 9 - Check the sparsities, and cache their sizes.
         if (m_has_gradient_sparsity) {
             // If the problem provides gradient sparsity, get it, check it
             // and store its size.
@@ -1281,9 +1309,9 @@ public:
             m_hs_dim.resize(boost::numeric_cast<decltype(m_hs_dim.size())>(nf));
             std::fill(m_hs_dim.begin(), m_hs_dim.end(), nx * (nx - 1u) / 2u + nx); // lower triangular
         }
-        // 8 - Constraint tolerance
+        // 10 - Constraint tolerance
         m_c_tol.resize(m_nec + m_nic);
-        // 9 - Thread safety.
+        // 11 - Thread safety.
         m_thread_safety = ptr()->get_thread_safety();
     }
 
@@ -1302,10 +1330,11 @@ public:
           m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
           m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(other.m_lb), m_ub(other.m_ub),
           m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(other.m_c_tol),
-          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
-          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-          m_has_set_seed(other.m_has_set_seed), m_name(other.m_name), m_gs_dim(other.m_gs_dim),
-          m_hs_dim(other.m_hs_dim), m_thread_safety(other.m_thread_safety)
+          m_has_batch_fitness(other.m_has_batch_fitness), m_has_gradient(other.m_has_gradient),
+          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
+          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
+          m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
+          m_thread_safety(other.m_thread_safety)
     {
     }
 
@@ -1318,11 +1347,11 @@ public:
           m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
           m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(std::move(other.m_lb)),
           m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix),
-          m_c_tol(std::move(other.m_c_tol)), m_has_gradient(other.m_has_gradient),
-          m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-          m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-          m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
-          m_thread_safety(std::move(other.m_thread_safety))
+          m_c_tol(std::move(other.m_c_tol)), m_has_batch_fitness(other.m_has_batch_fitness),
+          m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+          m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+          m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
+          m_hs_dim(other.m_hs_dim), m_thread_safety(std::move(other.m_thread_safety))
     {
     }
 
@@ -1346,6 +1375,7 @@ public:
             m_nic = other.m_nic;
             m_nix = other.m_nix;
             m_c_tol = std::move(other.m_c_tol);
+            m_has_batch_fitness = other.m_has_batch_fitness;
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
             m_has_hessians = other.m_has_hessians;
@@ -1469,7 +1499,7 @@ public:
         // if we change the implementation of this method.
 
         // 1 - checks the decision vector
-        // NOTE: the check compares dv to the stored problem bounds. This is const and thread-safe.
+        // NOTE: the check uses UDP properties cached on construction. This is const and thread-safe.
         check_decision_vector(dv);
 
         // 2 - computes the fitness
@@ -1489,7 +1519,102 @@ public:
 
         return retval;
     }
-    vector_double batch_fitness(const vector_double &dv) const {}
+    vector_double batch_fitness(const vector_double &dvs, const batch_fitness_func_t &func = {}) const
+    {
+        // Check the input decision vectors.
+        const auto n_dim = get_nx();
+        // Get the total number of decision vectors.
+        const auto n_dvs = dvs.size() / n_dim;
+        // dvs represent a sequence of decision vectors lying next to each other.
+        // Hence, its size must be divided by the problem's dimension exactly.
+        if (dvs.size() % n_dim) {
+            pagmo_throw(
+                std::invalid_argument,
+                "Invalid argument for batch_fitness(): the length of the vector representing the decision vectors, "
+                    + std::to_string(dvs.size()) + ", is not an exact multiple of the dimension of the problem, "
+                    + std::to_string(n_dim));
+        }
+        // Check all the decision vectors.
+        using range_t = tbb::blocked_range<decltype(dvs.size())>;
+        tbb::parallel_for(range_t(0u, n_dvs), [this, n_dim, &dvs](const range_t &range) {
+            // Prepare a local temporary dv for calling the check_decision_vector()
+            // method below.
+            vector_double tmp_dv;
+            tmp_dv.resize(n_dim);
+            for (auto i = range.begin(); i != range.end(); ++i) {
+                auto ptr = dvs.data() + i * n_dim;
+                std::copy(ptr, ptr + n_dim, tmp_dv.begin());
+                // NOTE: the check_decision_vector() method uses UDP properties cached on construction, hence it is
+                // thread-safe.
+                this->check_decision_vector(tmp_dv);
+            }
+        });
+
+        // Helper to check the vector of fitnesses that will be produced
+        // by this method.
+        auto check_fitness_vectors = [this, n_dvs](const vector_double &fvs) {
+            const auto f_dim = this->get_nf();
+            const auto n_fvs = fvs.size() / f_dim;
+            if (fvs.size() % f_dim) {
+                // The size of the vector of fitnesses must be divided exactly
+                // by the fitness dimension of the problem.
+                pagmo_throw(std::invalid_argument,
+                            "An invalid result was produced by batch_fitness(): the length of "
+                            "the vector representing the fitness vectors, "
+                                + std::to_string(fvs.size())
+                                + ", is not an exact multiple of the fitness dimension of the problem, "
+                                + std::to_string(f_dim));
+            }
+            if (n_fvs != n_dvs) {
+                // The number of fitness vectors produced must be equal to the number of input
+                // decision vectors.
+                pagmo_throw(
+                    std::invalid_argument,
+                    "An invalid result was produced by batch_fitness(): the number of produced fitness vectors, "
+                        + std::to_string(n_fvs) + ", differs from the number of input decision vectors, "
+                        + std::to_string(n_dvs));
+            }
+            // Check all fitness vectors.
+            tbb::parallel_for(range_t(0u, n_fvs), [this, f_dim, &fvs](const range_t &range) {
+                // Prepare a local temporary fv for calling the check_fitness_vector()
+                // method below.
+                vector_double tmp_fv;
+                tmp_fv.resize(f_dim);
+                for (auto i = range.begin(); i != range.end(); ++i) {
+                    auto ptr = fvs.data() + i * f_dim;
+                    std::copy(ptr, ptr + f_dim, tmp_fv.begin());
+                    // NOTE: the check_fitness_vector() method uses UDP properties cached on construction, hence it is
+                    // thread-safe.
+                    this->check_fitness_vector(tmp_fv);
+                }
+            });
+        };
+
+        if (func) {
+            // The user provided an explicit override for the batch fitness function. Use it.
+            auto retval = func(*this, dvs);
+            check_fitness_vectors(retval);
+            return retval;
+        }
+
+        if (has_batch_fitness()) {
+            // The UDP provides an implementation of batch_fitness(). Use it.
+            auto retval = ptr()->batch_fitness(dvs);
+            check_fitness_vectors(retval);
+            return retval;
+        }
+
+        // The user did not provide an explicit override for batch_fitness(), and the
+        // UDP does not have an implementation either. We will have to resort to the
+        // hard-coded generic implementation.
+        auto retval = detail::problem_generic_batch_fitness<>::func(*this, dvs);
+        check_fitness_vectors(retval);
+        return retval;
+    }
+    bool has_batch_fitness() const
+    {
+        return m_has_batch_fitness;
+    }
 
     /// Gradient.
     /**
@@ -2121,6 +2246,7 @@ public:
         stream(os, p.get_bounds().first, '\n');
         os << "\tUpper bounds: ";
         stream(os, p.get_bounds().second, '\n');
+        stream(os, "\tUser implemented batch fitness evaluation: ", p.m_has_batch_fitness, '\n');
         stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
         stream(os, "\tUser implemented gradient sparsity: ", p.m_has_gradient_sparsity, '\n');
         if (p.has_gradient()) {
@@ -2159,9 +2285,9 @@ public:
     void save(Archive &ar) const
     {
         ar(m_ptr, m_fevals.load(std::memory_order_relaxed), m_gevals.load(std::memory_order_relaxed),
-           m_hevals.load(std::memory_order_relaxed), m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_gradient,
-           m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim,
-           m_thread_safety);
+           m_hevals.load(std::memory_order_relaxed), m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol,
+           m_has_batch_fitness, m_has_gradient, m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity,
+           m_has_set_seed, m_name, m_gs_dim, m_hs_dim, m_thread_safety);
     }
 
     /// Load from archive.
@@ -2179,9 +2305,9 @@ public:
         problem tmp_prob;
         unsigned long long fevals, gevals, hevals;
         ar(tmp_prob.m_ptr, fevals, gevals, hevals, tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj, tmp_prob.m_nec,
-           tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_gradient, tmp_prob.m_has_gradient_sparsity,
-           tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity, tmp_prob.m_has_set_seed, tmp_prob.m_name,
-           tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+           tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_batch_fitness, tmp_prob.m_has_gradient,
+           tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity,
+           tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
         tmp_prob.m_fevals.store(fevals, std::memory_order_relaxed);
         tmp_prob.m_gevals.store(gevals, std::memory_order_relaxed);
         tmp_prob.m_hevals.store(hevals, std::memory_order_relaxed);
@@ -2332,7 +2458,8 @@ private:
     mutable std::atomic<unsigned long long> m_hevals;
     // Various problem properties determined at construction time
     // from the concrete problem. These will be constant for the lifetime
-    // of problem, but we cannot mark them as such because of serialization.
+    // of problem, but we cannot mark them as such because we want to be
+    // able to assign and deserialise problems.
     vector_double m_lb;
     vector_double m_ub;
     vector_double::size_type m_nobj;
@@ -2340,6 +2467,7 @@ private:
     vector_double::size_type m_nic;
     vector_double::size_type m_nix;
     vector_double m_c_tol;
+    bool m_has_batch_fitness;
     bool m_has_gradient;
     bool m_has_gradient_sparsity;
     bool m_has_hessians;
@@ -2354,6 +2482,127 @@ private:
     // Thread safety.
     thread_safety m_thread_safety;
 };
+
+namespace detail
+{
+
+// Implementation of multithreaded *and* serial batch fitness evaluation for a generic problem.
+// Both implementations are rolled into the same function because they share some code. The Threaded
+// boolean indicates whether we are requesting the multithreaded (true) or serial (false) implementation.
+template <bool Threaded>
+inline vector_double batch_fitness_mt_serial(const problem &prob, const vector_double &dvs)
+{
+    // Fetch a few quantities from the problem.
+    // Problem dimension.
+    const auto n_dim = prob.get_nx();
+    // Fitness dimension.
+    const auto f_dim = prob.get_nf();
+    // Total number of dvs.
+    const auto n_dvs = dvs.size() / n_dim;
+
+    // Function name for error messages.
+    const char *fname = Threaded ? "batch_fitness_mt()" : "batch_fitness_serial()";
+
+    // Check input dvs.
+    if (dvs.size() % n_dim) {
+        pagmo_throw(std::invalid_argument,
+                    std::string("Invalid argument for ") + fname
+                        + ": the length of the vector representing the decision vectors, " + std::to_string(dvs.size())
+                        + ", is not an exact multiple of the dimension of the problem, " + std::to_string(n_dim));
+    }
+
+    // Prepare the return value.
+    vector_double retval;
+    // Guard against overflow.
+    // LCOV_EXCL_START
+    if (n_dvs > std::numeric_limits<vector_double::size_type>::max() / f_dim) {
+        pagmo_throw(std::overflow_error,
+                    std::string("Overflow detected in the computation of the size of the output of ") + fname);
+    }
+    // LCOV_EXCL_STOP
+    retval.resize(n_dvs * f_dim);
+
+    // Functor to implement the fitness evaluation of a range of input dvs. begin/end are the indices
+    // of the individuals in dv (ranging from 0 to n_dvs), the resulting fitnesses will be written directly into retval.
+    auto range_evaluator
+        = [&dvs, &retval, n_dim, f_dim, n_dvs](const problem &p, decltype(dvs.size()) begin, decltype(dvs.size()) end) {
+              assert(begin <= end);
+              assert(end <= n_dvs);
+              (void)n_dvs;
+
+              // Temporary dv that will be used for fitness evaluation.
+              vector_double tmp_dv;
+              tmp_dv.resize(n_dim);
+              for (; begin != end; ++begin) {
+                  auto in_ptr = dvs.data() + begin * n_dim;
+                  auto out_ptr = retval.data() + begin * f_dim;
+                  std::copy(in_ptr, in_ptr + n_dim, tmp_dv.begin());
+                  const auto fv = p.fitness(tmp_dv);
+                  assert(fv.size() == f_dim);
+                  std::copy(fv.begin(), fv.end(), out_ptr);
+              }
+          };
+
+    if (Threaded) {
+        // Multithreaded implementation.
+        using range_t = tbb::blocked_range<decltype(dvs.size())>;
+        if (prob.get_thread_safety() >= thread_safety::constant) {
+            // We can concurrently call the objfun on the input prob, hence we can
+            // capture it by reference and do all the fitness calls on the same object.
+            tbb::parallel_for(range_t(0u, n_dvs), [&prob, &range_evaluator](const range_t &range) {
+                range_evaluator(prob, range.begin(), range.end());
+            });
+        } else if (prob.get_thread_safety() == thread_safety::basic) {
+            // We cannot concurrently call the objfun on the input prob. We will need
+            // to make a copy of prob for each parallel iteration.
+            tbb::parallel_for(range_t(0u, n_dvs), [prob, &range_evaluator](const range_t &range) {
+                range_evaluator(prob, range.begin(), range.end());
+            });
+        } else {
+            pagmo_throw(std::invalid_argument, "Cannot use the multithreaded batch fitness evaluator on the problem '"
+                                                   + prob.get_name()
+                                                   + "', which does not provide the required level of thread safety");
+        }
+    } else {
+        // Serial implementation.
+        range_evaluator(prob, 0, n_dvs);
+    }
+
+    return retval;
+}
+
+} // namespace detail
+
+// Serial implementation of the batch fitness evaluator.
+inline vector_double batch_fitness_serial(const problem &prob, const vector_double &dvs)
+{
+    return detail::batch_fitness_mt_serial<false>(prob, dvs);
+}
+
+// Multithreaded implementation of the batch fitness evaluator.
+inline vector_double batch_fitness_mt(const problem &prob, const vector_double &dvs)
+{
+    return detail::batch_fitness_mt_serial<true>(prob, dvs);
+}
+
+namespace detail
+{
+
+// Default implementation of the generic batch fitness evaluator for problems.
+// It will try to run the evaluations in multithreaded mode, if possible, otherwise
+// it will just run a serial for loop.
+inline vector_double problem_default_generic_batch_fitness(const problem &prob, const vector_double &dvs)
+{
+    if (prob.get_thread_safety() >= thread_safety::basic) {
+        return batch_fitness_mt(prob, dvs);
+    }
+    return batch_fitness_serial(prob, dvs);
+}
+
+template <typename T>
+batch_fitness_func_t problem_generic_batch_fitness<T>::func = problem_default_generic_batch_fitness;
+
+} // namespace detail
 
 } // namespace pagmo
 
