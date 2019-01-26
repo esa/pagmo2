@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.11 (unreleased)
+-----------------
+
+Fix
+~~~
+
+- The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
+
 2.10 (2019-01-02)
 -----------------
 
