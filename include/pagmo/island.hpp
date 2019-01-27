@@ -77,6 +77,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #endif
@@ -1470,8 +1471,6 @@ inline void fork_island::run_evolve(island &isl) const
             // Close the write descriptor, we don't need to send anything to the child.
             p.close_w();
             // Prepare a local buffer and a stringstream, then read the data from the child.
-            // NOTE: make the buffer small enough that its size can be represented by any
-            // integral type.
             char buffer[100];
             std::stringstream ss;
             {
@@ -1502,8 +1501,22 @@ inline void fork_island::run_evolve(island &isl) const
                 std::exit(1);
                 // LCOV_EXCL_STOP
             }
+            // Issue also a waitpid in order to clean up the zombie process.
+            // Ignore the return value, as we are just trying to clean up here.
+            ::waitpid(child_pid, nullptr, 0);
             // Re-raise.
             throw;
+        }
+        // Wait on the child.
+        // NOTE: this is necessary because, if we don't do this,
+        // the child process becomes a zombie and its entry in the process
+        // table is not freed up. This will eventually lead to
+        // failure in the creation of new child processes.
+        if (::waitpid(child_pid, nullptr, 0) != child_pid) {
+            // LCOV_EXCL_START
+            pagmo_throw(std::runtime_error, "The waitpid() function returned an error while attempting to wait for the "
+                                            "child process in fork_island");
+            // LCOV_EXCL_STOP
         }
         // At this point, we have received the data from the child, and we can insert
         // it into isl, or raise an error.
