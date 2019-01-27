@@ -29,8 +29,9 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
         conda_pkgs="$conda_pkgs graphviz doxygen"
     fi
 
-    conda create -q -p $deps_dir -y $conda_pkgs
+    conda create -q -p $deps_dir -y
     source activate $deps_dir
+    conda install -c conda-forge/label/cf201901 $conda_pkgs -y
 fi
 
 set +e
