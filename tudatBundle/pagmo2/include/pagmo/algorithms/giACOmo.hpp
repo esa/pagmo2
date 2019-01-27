@@ -382,9 +382,7 @@ public:
                                 std::cout << "New Individual" << std::endl;
                                 std::cout << "Oracle:" << std::endl;
                                 std::cout << m_oracle << std::endl;
-                                if (i==1){
-                                    std::cout << "cazzo" << std::endl;
-                                }
+
                                 std::cout << "Penalty:" << std::endl;
                                 SA[i][0] = penalties[sort_list[i]];
                                 std::cout << SA[i][0] << std::endl;
