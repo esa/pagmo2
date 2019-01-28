@@ -51,6 +51,25 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+namespace detail
+{
+/// Checks that all elements of the problem bounds are not equal
+inline bool some_bound_is_equal(const problem &prob)
+{
+    // Some variable renaming
+    const auto bounds = prob.get_bounds();
+    const auto &lb = bounds.first;
+    const auto &ub = bounds.second;
+    // Since the bounds are extracted from problem we can be sure they have equal length
+    for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
+        if (lb[i] == ub[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+}
+
 /// Generates a random number within some lower and upper bounds
 /**
  * Creates a random number within a closed range. If

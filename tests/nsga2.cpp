@@ -71,9 +71,29 @@ BOOST_AUTO_TEST_CASE(nsga2_algorithm_construction)
     BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, .98, 32u}), std::invalid_argument);
 }
 
+
+struct mo_equal_bounds {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0., 0.};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 0.}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
 {
     // We check that the problem is checked to be suitable
+    // Some bound is equal
+    BOOST_CHECK_THROW(nsga2{10u}.evolve(population{problem{mo_equal_bounds{}}, 0u}), std::invalid_argument);
     // stochastic
     BOOST_CHECK_THROW((nsga2{}.evolve(population{inventory{}, 5u, 23u})), std::invalid_argument);
     // constrained prob
