@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/utils/generic.hpp>         // kNN
+#include <pagmo/utils/generic.hpp>         // kNN, some_bound_is_equal
 #include <pagmo/utils/multi_objective.hpp> // ideal
 
 namespace pagmo
@@ -176,6 +176,9 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
+        if (detail::some_bound_is_equal(prob)) {
+            pagmo_throw(std::invalid_argument, get_name() + " cannot work on problems having a lower bound equal to an upper bound. Check your bounds.");
+        }
         if (!NP) {
             pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
         }
