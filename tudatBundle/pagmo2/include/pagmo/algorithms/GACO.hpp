@@ -276,6 +276,7 @@ public:
 
 
 
+
                 //std::cout << "penalties:" << std::endl;
                 for ( decltype(NP) i=0u; i<NP; ++i )
                 {
