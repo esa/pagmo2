@@ -26,7 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_GAC0_HPP
+#ifndef PAGMO_ALGORITHMS_GACO_HPP
 #define PAGMO_ALGORITHMS_GACO_HPP
 
 #include <algorithm> // std::shuffle, std::transform
@@ -103,7 +103,7 @@ public:
     * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p epsilon is not \f$ \in [0,1[\f$
     */
     g_aco(unsigned gen = 100u, double acc = 0.95, double  fstop = 0.0000001, int impstop = 100, int evalstop = 100,
-          double focus = 0,  unsigned ker = 250, double oracle=10000, unsigned paretomax = 10,
+          double focus = 0,  unsigned ker = 350, double oracle=10, unsigned paretomax = 10,
             double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus),
           m_ker(ker), m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
@@ -228,10 +228,10 @@ public:
 
                 auto X = pop.get_x();
                 //std::cout << "Individuals (X and Y):" << std::endl;
-                //for (int MM=0; MM<NP && gen==1; ++MM){
-                    //std::cout <<  X[MM][0] << std::endl;
-                    //std::cout <<  X[MM][1] << std::endl;
-                //}
+                for (int MM=0; MM<NP && gen==1; ++MM){
+                    std::cout <<  X[MM][0] << std::endl;
+                    std::cout <<  X[MM][1] << std::endl;
+                }
                 //std::cout <<  X[0][0] << std::endl;
                 //std::cout <<  X[0][1] << std::endl;
                 //std::cout << X[0].size() << std::endl;
@@ -355,6 +355,7 @@ public:
                     //I now create a vector where I store the position of the stored values: this will help
                     //me to find the corresponding individuals and their objective values, later on
                     //std::cout << "PENALTIES STORED" << std::endl;
+                    std::cout << "Lento Penalties"<<std::endl;
                     for ( decltype(penalties.size()) j=0u; j<penalties.size(); ++j ) {
                         int count=0;
 
@@ -406,34 +407,34 @@ public:
                             //stored) represents the best one (i.e., the one that has the smallest penalty function value among the individuals of
                             //that generation), whereas the last vector represents the worst.
 
-                            for (int i=0u; i<m_ker; ++i){
-                                //std::cout << "New Individual" << std::endl;
-                                //std::cout << "Oracle:" << std::endl;
-                                //std::cout << m_oracle << std::endl;
+//                            for (int i=0u; i<m_ker; ++i){
+//                                //std::cout << "New Individual" << std::endl;
+//                                //std::cout << "Oracle:" << std::endl;
+//                                //std::cout << m_oracle << std::endl;
 
-                                //std::cout << "Penalty:" << std::endl;
-                                SA[i][0] = penalties[sort_list[i]];
-                                //std::cout << SA[i][0] << std::endl;
+//                                //std::cout << "Penalty:" << std::endl;
+//                                SA[i][0] = penalties[sort_list[i]];
+//                                //std::cout << SA[i][0] << std::endl;
 
-                                //std::cout << "Variables:" << std::endl;
-                                for (decltype(dim) J=0; J<dim; ++J){
-                                    SA[i][J+1] = X[sort_list[i]][J];
-                                    //std::cout << SA[i][J+1] << std::endl;
+//                                //std::cout << "Variables:" << std::endl;
+//                                for (decltype(dim) J=0; J<dim; ++J){
+//                                    SA[i][J+1] = X[sort_list[i]][J];
+//                                    //std::cout << SA[i][J+1] << std::endl;
 
-                                }
-                                //std::cout << "Objectives" << std::endl;
-                                for (decltype(NALL) J=0; J<NALL; ++J){
-                                    SA[i][J+1+dim] = fit[sort_list[i]][J];
-                                    //std::cout << fit[sort_list[i]][J] << std::endl;
-                                    //std::cout << i << std::endl;
-                                    //std::cout << SA[i][0] << std::endl;
-
-
-
-                                }
+//                                }
+//                                //std::cout << "Objectives" << std::endl;
+//                                for (decltype(NALL) J=0; J<NALL; ++J){
+//                                    SA[i][J+1+dim] = fit[sort_list[i]][J];
+//                                    //std::cout << fit[sort_list[i]][J] << std::endl;
+//                                    //std::cout << i << std::endl;
+//                                    //std::cout << SA[i][0] << std::endl;
 
 
-                            }
+
+//                                }
+
+
+//                            }
 
 
                             if (m_impstop!=0){
@@ -470,7 +471,7 @@ public:
                                 // The population flattness in fitness
                                 df = std::abs(SA[m_ker-1][1+dim] - SA[0][1+dim]);
                                 // Every 50 lines print the column names
-                                if ( count_screen>0 ){ //count_screen % 50u == 1u) {
+                                if ( count_screen>=1 ) {//% 50u == 1u) {
                                     print("\n", std::setw(7), "Gen:", std::setw(15),
                                           "Best:", std::setw(15), "Best penalty:", std::setw(15), "Worst:", std::setw(15),
                                           "Best X:", std::setw(15), "Best Y:", std::setw(15),
@@ -497,6 +498,7 @@ public:
                         vector_double omega;
                         vector_double sigma;
 
+                        std::cout << "Lento Penalty computation"<<std::endl;
                         pheromone_computation( omega, sigma, pop, gen, SA );
 
                         //std::cout << "size of SIGMA" << std::endl;
@@ -511,6 +513,7 @@ public:
                         //I create the vector of vectors where I will store all the new ants (i.e., individuals) which will be generated
                         std::vector < vector_double > new_ants;
 
+                        std::cout << "Lento ANts computation"<<std::endl;
                         generate_new_ants( popnew, omega, sigma, dim, new_ants, NP, gen, SA );
 
                         if (gen==1 || gen==5 || gen==9){
@@ -527,6 +530,7 @@ public:
 
 
 
+                        std::cout << "Fine Lento Ants"<<std::endl;
                         //std::cout << "fitness set:" << std::endl;
                         for ( population::size_type i=0; i<NP; ++i){
                             vector_double ant;
@@ -548,6 +552,7 @@ public:
                         }
 
                         //the oracle parameter is updated after each optimization run:
+                        std::cout << "Lento Oracle computation"<<std::endl;
                         if ( SA[0][1+dim]<m_oracle && res==0 ){
                             m_oracle = SA[0][1+dim];
                             if (gen>0){
@@ -593,7 +598,7 @@ public:
 
                         }
 
-
+std::cout << "Fine Lento ORacle"<<std::endl;
                         if (gen==1 || gen==2 || gen==3){
                             //std::cout << "Solution archive variables" << std::endl;
                             for(decltype(m_ker) M=0u; M<m_ker; ++M){
@@ -1288,11 +1293,10 @@ private:
 
 
                 if(g_h<lb[h] || g_h>ub[h]){
-                     std::cout << "Lower or upper bounds violated, the ant is replaced:" << std::endl;
+                     //std::cout << "Lower or upper bounds violated, the ant is replaced:" << std::endl;
 
-                     std::cout << g_h << std::endl;
+                     //std::cout << g_h << std::endl;
                      while (g_h<lb[h] || g_h>ub[h]){
-                         std::cout << "IMPALLATO" << std::endl;
                          g_h=0;
                          double index=pagmo::random_device::next();
 
@@ -1306,11 +1310,11 @@ private:
                              g_h += l_h;
                          }
                      }
-                     std::cout<<"BOUNDS"<<std::endl;
-                     std::cout<<lb[h]<<std::endl;
-                     std::cout<<ub[h]<<std::endl;
-                     std::cout<<"NEW"<<std::endl;
-                     std::cout<<g_h<<std::endl;
+                     //std::cout<<"BOUNDS"<<std::endl;
+                     //std::cout<<lb[h]<<std::endl;
+                     //std::cout<<ub[h]<<std::endl;
+                     //std::cout<<"NEW"<<std::endl;
+                     //std::cout<<g_h<<std::endl;
                 }
 
                 X_new_k.push_back( g_h );
