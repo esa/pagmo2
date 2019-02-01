@@ -1,30 +1,18 @@
 #include <iostream>
-#include "pagmo/algorithms/de1220.hpp"
-#include "pagmo/algorithms/pso.hpp"
-#include "pagmo/algorithms/de.hpp"
-#include "pagmo/algorithms/sga.hpp"
-#include "pagmo/algorithms/sade.hpp"
-#include "pagmo/island.hpp"
-#include "pagmo/problem.hpp"
-#include "Problems/himmelblau.h"
-#include "Problems/applicationOutput.h"
-#include "Problems/saveOptimizationResults.h"
+#include <pagmo/problem.hpp>
+#include <pagmo/algorithm.hpp>
 
-
-#include <pagmo/algorithms/GACO.hpp>
+#include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 
 using namespace pagmo;
 int main( )
 {
-    using namespace tudat_pagmo_applications;
-
     //Set seed for reproducible results
     pagmo::random_device::set_seed( 12345 );
 
-
     // Algorithm (setting generations to 100)
-    pagmo::algorithm algo{ g_aco {30} };
+    pagmo::algorithm algo{ gaco {30} };
 
     // Set the algo to log something at each iteration
     algo.set_verbosity(1);
