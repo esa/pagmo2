@@ -41,7 +41,7 @@ int main( )
     // Print to console
     std::cout << pop << std::endl;
 
-   pagmo::algorithm algo{ pagmo::de( ) };
+   //pagmo::algorithm algo{ pagmo::de( ) };
 
     return 0;
 
