@@ -7,6 +7,9 @@ Changelog
 Fix
 ~~~
 
+- Fix the behaviour of NSGA2 and MOEAD when the problem has equal lower/upper bounds (`#244 <https://github.com/esa/pagmo2/pull/244>`__).
+- Various documentation, build system and unit testing improvements (`#243 <https://github.com/esa/pagmo2/pull/243>`__,
+  `#245 <https://github.com/esa/pagmo2/pull/245>`__)
 - The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
 
 2.10 (2019-01-02)
