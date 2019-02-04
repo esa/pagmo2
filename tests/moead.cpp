@@ -133,6 +133,23 @@ struct mo_many {
     }
 };
 
+struct mo_equal_bounds {
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        return {0., 0.};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 0.}};
+    }
+};
+
 BOOST_AUTO_TEST_CASE(moead_evolve_test)
 {
     // Here we only test that evolution is deterministic if the
@@ -160,6 +177,8 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
     // We then check that the method evolve fails when called on unsuitable problems (populations)
+    // Some bound is equal
+    BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{mo_equal_bounds{}}, 0u}), std::invalid_argument);
     // Empty population.
     BOOST_CHECK_THROW(moead{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // Single objective problem

@@ -1,11 +1,21 @@
 Changelog
 =========
 
-2.10 (unreleased)
+2.11 (unreleased)
+-----------------
+
+Fix
+~~~
+
+- The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
+
+2.10 (2019-01-02)
 -----------------
 
 New
 ~~~
+
+- Enable the ``py27m`` build variant for the manylinux packages (`#239 <https://github.com/esa/pagmo2/pull/239>`__).
 
 - It is now possible to select a serialization backend other than cloudpickle. The other available
   backends are the standard :mod:`pickle` module and `dill <https://pypi.org/project/dill/>`__
