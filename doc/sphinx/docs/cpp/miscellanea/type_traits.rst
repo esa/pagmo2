@@ -18,15 +18,16 @@ Type traits and enums used in pagmo.
 
    .. cpp:enumerator:: none
 
-      No thread safety: concurrent operations on distinct instances are unsafe.
+      No thread safety: concurrent operations on distinct objects are unsafe.
 
    .. cpp:enumerator:: basic
 
-      Basic thread safety: concurrent operations on distinct instances are safe.
+      Basic thread safety: concurrent operations on distinct objects are safe.
 
    .. cpp:enumerator:: constant
 
-      Constant thread safety: constant (i.e., read-only) concurrent operations on the same instance are safe.
+      Constant thread safety: constant (i.e., read-only) concurrent operations
+      on the same object are safe.
 
 .. cpp:function:: std::ostream &operator<<(std::ostream &os, thread_safety ts)
 
