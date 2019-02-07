@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/utils/generic.hpp>         // uniform_real_from_range
+#include <pagmo/utils/generic.hpp>         // uniform_real_from_range, some_bound_is_equal
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
 
 namespace pagmo
@@ -135,6 +135,9 @@ public:
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
+        if (detail::some_bound_is_equal(prob)) {
+            pagmo_throw(std::invalid_argument, get_name() + " cannot work on problems having a lower bound equal to an upper bound. Check your bounds.");
+        }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");

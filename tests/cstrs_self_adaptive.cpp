@@ -36,7 +36,7 @@
 #include <string>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/algorithms/cmaes.hpp>
+#include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/io.hpp>
@@ -101,12 +101,12 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
     { // default constructor
         cstrs_self_adaptive udp;
         BOOST_CHECK(udp.get_inner_algorithm().extract<de>() != NULL);
-        BOOST_CHECK(udp.get_inner_algorithm().extract<cmaes>() == NULL);
+        BOOST_CHECK(udp.get_inner_algorithm().extract<compass_search>() == NULL);
     }
     { // constructor from iters
         BOOST_CHECK_NO_THROW((cstrs_self_adaptive{1500u}));
         BOOST_CHECK_NO_THROW((cstrs_self_adaptive{1500u, de{}}));
-        BOOST_CHECK_NO_THROW((cstrs_self_adaptive{1500u, cmaes{}, 32u}));
+        BOOST_CHECK_NO_THROW((cstrs_self_adaptive{1500u, de{}, 32u}));
     }
     // Here we only test that evolution is deterministic if the
     // seed is controlled

@@ -114,6 +114,16 @@ conda will automatically install all of pygmo's dependencies for you. Please ref
 for instructions on how to setup and manage your conda installation.
 
 
+Installation with homebrew
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+A `Homebrew <https://brew.sh/>`__ recipe for pagmo has been generously contributed by the community. In order to install
+pagmo on OSX with Homebrew, it is sufficient to execute the following command:
+
+.. code-block:: bash
+
+   brew install pagmo
+
+
 Installation with pip
 ^^^^^^^^^^^^^^^^^^^^^
 The installation of pygmo with pip is also straightforward:
