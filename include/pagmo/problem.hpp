@@ -33,7 +33,6 @@ see https://www.gnu.org/licenses/. */
 #include <atomic>
 #include <cassert>
 #include <cmath>
-#include <functional>
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -45,11 +44,10 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/numeric/conversion/cast.hpp>
 
-#include <tbb/blocked_range.h>
-#include <tbb/parallel_for.h>
-
+#include <pagmo/detail/bfe_impl.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/serialization.hpp>
@@ -81,21 +79,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-// Forward declaration of the problem class.
-class problem;
-
-using batch_fitness_func_t = std::function<vector_double(const problem &, const vector_double &)>;
-
-namespace detail
-{
-
-template <typename = void>
-struct problem_generic_batch_fitness {
-    static batch_fitness_func_t func;
-};
-
-} // namespace detail
 
 /// Null problem
 /**
@@ -848,10 +831,11 @@ struct prob_inner final : prob_inner_base {
         return value.batch_fitness(dv);
     }
     template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
-    [[noreturn]] static vector_double batch_fitness_impl(const U &, const vector_double &) // LCOV_EXCL_LINE
+    [[noreturn]] static vector_double batch_fitness_impl(const U &value, const vector_double &)
     {
-        assert(false); // LCOV_EXCL_LINE
-        throw;
+        pagmo_throw(not_implemented_error,
+                    "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U,
               enable_if_t<pagmo::has_batch_fitness<U>::value && pagmo::override_has_batch_fitness<U>::value, int> = 0>
@@ -886,9 +870,11 @@ struct prob_inner final : prob_inner_base {
         return value.gradient(dv);
     }
     template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
-    static vector_double gradient_impl(const U &, const vector_double &)
+    [[noreturn]] static vector_double gradient_impl(const U &value, const vector_double &)
     {
-        pagmo_throw(not_implemented_error, "The gradient has been requested but it is not implemented in the UDP");
+        pagmo_throw(not_implemented_error,
+                    "The gradient has been requested, but it is not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
@@ -945,9 +931,11 @@ struct prob_inner final : prob_inner_base {
         return value.hessians(dv);
     }
     template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
-    static std::vector<vector_double> hessians_impl(const U &, const vector_double &)
+    [[noreturn]] static std::vector<vector_double> hessians_impl(const U &value, const vector_double &)
     {
-        pagmo_throw(not_implemented_error, "The hessians have been requested but they are not implemented in the UDP");
+        pagmo_throw(not_implemented_error,
+                    "The hessians have been requested, but they are not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
@@ -1034,10 +1022,11 @@ struct prob_inner final : prob_inner_base {
         value.set_seed(seed);
     }
     template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
-    static void set_seed_impl(U &, unsigned int)
+    [[noreturn]] static void set_seed_impl(U &value, unsigned int)
     {
         pagmo_throw(not_implemented_error,
-                    "The set_seed() method has been invoked but it is not implemented in the UDP");
+                    "The set_seed() method has been invoked, but it is not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &p)
@@ -1462,7 +1451,7 @@ public:
 
     /// Check if the UDP used for construction is of type \p T.
     /**
-     * @return \p true if the UDP used in construction is of type \p T, \p false otherwise.
+     * @return \p true if the UDP used for construction is of type \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const
@@ -1500,7 +1489,7 @@ public:
 
         // 1 - checks the decision vector
         // NOTE: the check uses UDP properties cached on construction. This is const and thread-safe.
-        check_decision_vector(dv);
+        detail::prob_check_dv(*this, dv.data(), dv.size());
 
         // 2 - computes the fitness
         // NOTE: the thread safety here depends on the thread safety of the UDP. We make sure in the
@@ -1511,7 +1500,7 @@ public:
         // 3 - checks the fitness vector
         // NOTE: as above, we are just making sure the fitness length is consistent with the fitness
         // length stored in the problem. This is const and thread-safe.
-        check_fitness_vector(retval);
+        detail::prob_check_fv(*this, retval.data(), retval.size());
 
         // 4 - increments fitness evaluation counter
         // NOTE: this is an atomic variable, thread-safe.
@@ -1519,96 +1508,14 @@ public:
 
         return retval;
     }
-    vector_double batch_fitness(const vector_double &dvs, const batch_fitness_func_t &func = {}) const
+    vector_double batch_fitness(const vector_double &dvs) const
     {
-        // Check the input decision vectors.
-        const auto n_dim = get_nx();
-        // Get the total number of decision vectors.
-        const auto n_dvs = dvs.size() / n_dim;
-        // dvs represent a sequence of decision vectors lying next to each other.
-        // Hence, its size must be divided by the problem's dimension exactly.
-        if (dvs.size() % n_dim) {
-            pagmo_throw(
-                std::invalid_argument,
-                "Invalid argument for batch_fitness(): the length of the vector representing the decision vectors, "
-                    + std::to_string(dvs.size()) + ", is not an exact multiple of the dimension of the problem, "
-                    + std::to_string(n_dim));
-        }
-        // Check all the decision vectors.
-        using range_t = tbb::blocked_range<decltype(dvs.size())>;
-        tbb::parallel_for(range_t(0u, n_dvs), [this, n_dim, &dvs](const range_t &range) {
-            // Prepare a local temporary dv for calling the check_decision_vector()
-            // method below.
-            vector_double tmp_dv;
-            tmp_dv.resize(n_dim);
-            for (auto i = range.begin(); i != range.end(); ++i) {
-                auto ptr = dvs.data() + i * n_dim;
-                std::copy(ptr, ptr + n_dim, tmp_dv.begin());
-                // NOTE: the check_decision_vector() method uses UDP properties cached on construction, hence it is
-                // thread-safe.
-                this->check_decision_vector(tmp_dv);
-            }
-        });
-
-        // Helper to check the vector of fitnesses that will be produced
-        // by this method.
-        auto check_fitness_vectors = [this, n_dvs](const vector_double &fvs) {
-            const auto f_dim = this->get_nf();
-            const auto n_fvs = fvs.size() / f_dim;
-            if (fvs.size() % f_dim) {
-                // The size of the vector of fitnesses must be divided exactly
-                // by the fitness dimension of the problem.
-                pagmo_throw(std::invalid_argument,
-                            "An invalid result was produced by batch_fitness(): the length of "
-                            "the vector representing the fitness vectors, "
-                                + std::to_string(fvs.size())
-                                + ", is not an exact multiple of the fitness dimension of the problem, "
-                                + std::to_string(f_dim));
-            }
-            if (n_fvs != n_dvs) {
-                // The number of fitness vectors produced must be equal to the number of input
-                // decision vectors.
-                pagmo_throw(
-                    std::invalid_argument,
-                    "An invalid result was produced by batch_fitness(): the number of produced fitness vectors, "
-                        + std::to_string(n_fvs) + ", differs from the number of input decision vectors, "
-                        + std::to_string(n_dvs));
-            }
-            // Check all fitness vectors.
-            tbb::parallel_for(range_t(0u, n_fvs), [this, f_dim, &fvs](const range_t &range) {
-                // Prepare a local temporary fv for calling the check_fitness_vector()
-                // method below.
-                vector_double tmp_fv;
-                tmp_fv.resize(f_dim);
-                for (auto i = range.begin(); i != range.end(); ++i) {
-                    auto ptr = fvs.data() + i * f_dim;
-                    std::copy(ptr, ptr + f_dim, tmp_fv.begin());
-                    // NOTE: the check_fitness_vector() method uses UDP properties cached on construction, hence it is
-                    // thread-safe.
-                    this->check_fitness_vector(tmp_fv);
-                }
-            });
-        };
-
-        if (func) {
-            // The user provided an explicit override for the batch fitness function. Use it.
-            auto retval = func(*this, dvs);
-            check_fitness_vectors(retval);
-            return retval;
-        }
-
-        if (has_batch_fitness()) {
-            // The UDP provides an implementation of batch_fitness(). Use it.
-            auto retval = ptr()->batch_fitness(dvs);
-            check_fitness_vectors(retval);
-            return retval;
-        }
-
-        // The user did not provide an explicit override for batch_fitness(), and the
-        // UDP does not have an implementation either. We will have to resort to the
-        // hard-coded generic implementation.
-        auto retval = detail::problem_generic_batch_fitness<>::func(*this, dvs);
-        check_fitness_vectors(retval);
+        // Check the input dvs.
+        detail::bfe_check_input_dvs(*this, dvs);
+        // Invoke the batch fitness from the UDP.
+        auto retval(ptr()->batch_fitness(dvs));
+        // Check the produced vector of fitnesses.
+        detail::bfe_check_output_fvs(*this, dvs, retval);
         return retval;
     }
     bool has_batch_fitness() const
@@ -1647,7 +1554,7 @@ public:
     vector_double gradient(const vector_double &dv) const
     {
         // 1 - checks the decision vector
-        check_decision_vector(dv);
+        detail::prob_check_dv(*this, dv.data(), dv.size());
         // 2 - compute the gradients
         vector_double retval(ptr()->gradient(dv));
         // 3 - checks the gradient vector
@@ -1775,7 +1682,7 @@ public:
     std::vector<vector_double> hessians(const vector_double &dv) const
     {
         // 1 - checks the decision vector
-        check_decision_vector(dv);
+        detail::prob_check_dv(*this, dv.data(), dv.size());
         // 2 - computes the hessians
         auto retval(ptr()->hessians(dv));
         // 3 - checks the hessians
@@ -2246,7 +2153,7 @@ public:
         stream(os, p.get_bounds().first, '\n');
         os << "\tUpper bounds: ";
         stream(os, p.get_bounds().second, '\n');
-        stream(os, "\tUser implemented batch fitness evaluation: ", p.m_has_batch_fitness, '\n');
+        stream(os, "\tHas batch fitness evaluation: ", p.m_has_batch_fitness, '\n');
         stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
         stream(os, "\tUser implemented gradient sparsity: ", p.m_has_gradient_sparsity, '\n');
         if (p.has_gradient()) {
@@ -2397,26 +2304,6 @@ private:
             }
         }
     }
-    void check_decision_vector(const vector_double &dv) const
-    {
-        // 1 - check decision vector for length consistency
-        if (dv.size() != get_nx()) {
-            pagmo_throw(std::invalid_argument, "Length of decision vector is " + std::to_string(dv.size())
-                                                   + ", should be " + std::to_string(get_nx()));
-        }
-        // 2 - Here is where one could check if the decision vector
-        // is in the bounds. At the moment not implemented
-    }
-
-    void check_fitness_vector(const vector_double &f) const
-    {
-        auto nf = get_nf();
-        // Checks dimension of returned fitness
-        if (f.size() != nf) {
-            pagmo_throw(std::invalid_argument,
-                        "Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(nf));
-        }
-    }
 
     void check_gradient_vector(const vector_double &gr) const
     {
@@ -2485,6 +2372,8 @@ private:
 
 namespace detail
 {
+
+#if 0
 
 // Implementation of multithreaded *and* serial batch fitness evaluation for a generic problem.
 // Both implementations are rolled into the same function because they share some code. The Threaded
@@ -2601,6 +2490,8 @@ inline vector_double problem_default_generic_batch_fitness(const problem &prob, 
 
 template <typename T>
 batch_fitness_func_t problem_generic_batch_fitness<T>::func = problem_default_generic_batch_fitness;
+
+#endif
 
 } // namespace detail
 

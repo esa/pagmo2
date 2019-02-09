@@ -16,6 +16,7 @@ we suggest to follow the tutorials / examples.
   population
   island
   archipelago
+  bfe
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -79,6 +80,14 @@ Implemented islands
 
   islands/thread_island
   islands/fork_island
+
+Implemented batch evaluators
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  batch_evaluators/default_bfe
 
 Utilities
 ^^^^^^^^^
