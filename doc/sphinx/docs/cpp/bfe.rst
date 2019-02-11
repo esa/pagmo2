@@ -25,7 +25,7 @@ Batch fitness evaluator
    Like :cpp:class:`~pagmo::problem`, :cpp:class:`~pagmo::algorithm`, and many other
    pagmo classes, :cpp:class:`~pagmo::batch_fitness_evaluator` is a generic container
    (or, in the parlance of C++, a *type-erased* class) which stores internally
-   a user-defined batch fitness evaluator (or, UDBFE for short) which actually
+   a user-defined batch fitness evaluator (UDBFE for short) which actually
    implements the fitness evaluation in batch mode. Users are free to either
    use one of the evaluators provided with pagmo, or to write their own UDBFE.
 
@@ -52,8 +52,8 @@ Batch fitness evaluator
       std::string get_name() const;
       thread_safety get_thread_safety() const;
 
-   See the documentation of the corresponding methods in this class for details on how the optional
-   methods in the UDBFE are used by :cpp:class:`~pagmo::batch_fitness_evaluator`.
+   See the documentation of the corresponding member functions in this class for details on how the optional
+   member functions in the UDBFE are used by :cpp:class:`~pagmo::batch_fitness_evaluator`.
 
    .. warning::
 
@@ -83,11 +83,17 @@ Batch fitness evaluator
 
       Generic constructor from a UDBFE.
 
-      This constructor participates in overload resolution only if :cpp:type:`T`, after the removal of reference
+      This constructor participates in overload resolution only if ``T``, after the removal of reference
       and cv qualifiers, is not :cpp:class:`~pagmo::batch_fitness_evaluator` and if it satisfies :cpp:class:`pagmo::is_udbfe`.
 
-      This constructor will construct a :cpp:class:`~pagmo::batch_fitness_evaluator` from the UDBFE :cpp:any:`x`
-      of type :cpp:type:`T`. :cpp:any:`x` will be perfectly forwarded to construct the internal UDBFE.
+      Additionally, the constructor will also be enabled if ``T``, after the removal of reference and cv qualifiers, is a function type with
+      the following signature
+
+      .. code-block:: c++
+
+         vector_double (const problem &, const vector_double &)
+
+      The input parameter *x* will be perfectly forwarded to construct the internal UDBFE instance.
 
       :param x: the input UDBFE.
 
@@ -98,6 +104,106 @@ Batch fitness evaluator
 
       Extract a (const) pointer to the internal UDBFE instance.
 
+      If ``T`` is the type of the UDBFE currently stored within this object, then this function
+      will return a (const) pointer to the internal UDBFE instance. Otherwise, ``nullptr`` will be returned.
 
+      The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+      of ``this``, and ``delete`` must never be called on the pointer.
+
+      .. warning::
+
+         The non-const overload of this function is provided only in order to allow to call non-const
+         member functions on the internal UDBFE instance. Assigning a new UDBFE via pointers obtained
+         through this function is undefined behaviour.
+
+      :return: a (const) pointer to the internal UDBFE instance, or ``nullptr``.
+
+   .. cpp:function:: template <typename T> bool is() const noexcept
+
+      Check the type of the UDBFE.
+
+      :return: ``true`` if ``T`` is the type of the UDBFE currently stored within this object, ``false`` otherwise.
+
+   .. cpp:function:: vector_double operator()(const problem &p, const vector_double &dvs) const
+
+      Call operator.
+
+      The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
+      of the decision vectors stored in *dvs* using the input problem *p*, and it will return the corresponding
+      fitness vectors.
+
+      The input decision vectors must be stored contiguously in *dvs*: for a problem with dimension :math:`n`, the first
+      decision vector in *dvs* occupies the index range :math:`\left[0, n\right)`, the second decision vector
+      occupies the range :math:`\left[n, 2n\right)`, and so on. Similarly, the output fitness vectors must be
+      laid out contiguously in the return value: for a problem with fitness dimension :math:`f`, the first fitness
+      vector will occupy the index range :math:`\left[0, f\right)`, the second fitness vector
+      will occupy the range :math:`\left[f, 2f\right)`, and so on.
+
+      This function will perform a variety of sanity checks on both *dvs* and on the return value.
+
+      :param p: the input :cpp:class:`~pagmo::problem`.
+      :param dvs: the input decision vectors that will be evaluated in batch mode.
+
+      :return: the fitness vectors corresponding to the input decision vectors in *dvs*.
+
+      :exception std\:\:invalid_argument: if *dvs* or the return value produced by the UDBFE are incompatible with the input problem *p*.
+      :exception unspecified: any exception raised by the invocation of the UDBFE.
+
+   .. cpp:function:: std::string get_name() const
+
+      Get the name of this batch fitness evaluator.
+
+      If the UDBFE satisfies :cpp:class:`pagmo::has_name`, then this member function will return the output of its ``get_name()`` member function.
+      Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.
+
+      :return: the name of this batch fitness evaluator.
+
+      :exception unspecified: any exception thrown by copying an ``std::string`` object.
+
+   .. cpp:function:: std::string get_extra_info() const
+
+      Extra info for this batch fitness evaluator.
+
+      If the UDBFE satisfies :cpp:class:`pagmo::has_extra_info`, then this member function will return the output of its
+      ``get_extra_info()`` member function. Otherwise, an empty string will be returned.
+
+      :return: extra info about the UDBFE.
+
+      :exception unspecified: any exception thrown by the ``get_extra_info()`` member function of the UDBFE, or by copying an ``std::string`` object.
+
+   .. cpp:function:: thread_safety get_thread_safety() const
+
+      Thread safety level of this batch fitness evaluator.
+
+      If the UDBFE satisfies :cpp:class:`pagmo::has_get_thread_safety`, then this member function will return the output of its
+      ``get_thread_safety()`` member function. Otherwise, :cpp:enumerator:`pagmo::thread_safety::basic` will be returned.
+      That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDBFE instances.
+
+      :return: the thread safety level of the UDBFE.
+
+   .. cpp:function:: template <typename Archive> void save(Archive &ar) const
+   .. cpp:function:: template <typename Archive> void load(Archive &ar)
+
+      Serialisation support.
+
+      These two member functions are used to implement the (de)serialisation of an evaluator to/from an archive.
+
+      :param ar: the input/output archive.
+
+      :exception unspecified: any exception raised by the (de)serialisation of primitive types or of the UDBFE.
+
+   .. cpp:function:: friend std::ostream &operator<<(std::ostream &os, const batch_fitness_evaluator &bfe)
+
+      Stream insertion operator.
+
+      This function will direct to *os* a human-readable representation of the input
+      :cpp:class:`~pagmo::batch_fitness_evaluator` *bfe*.
+
+      :param os: the input ``std::ostream``.
+      :param bfe: the batch fitness evaluator that will be directed to *os*.
+
+      :return: a reference to *os*.
+
+      :exception unspecified: any exception thrown by querying various properties of the evaluator and directing them to *os*.
 
 .. cpp:namespace-pop::

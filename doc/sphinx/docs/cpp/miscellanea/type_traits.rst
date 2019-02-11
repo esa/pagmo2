@@ -3,14 +3,26 @@
 Type traits and enums
 =====================
 
-Type traits and enums used in pagmo.
-
 .. cpp:namespace-push:: pagmo
 
 .. cpp:enum-class:: thread_safety
 
    This enum defines a set of values that can be used to specify
-   the thread safety level of problems, algorithms, etc.
+   the thread safety level of an object.
+
+   Most of the user-defined classes
+   that can be implemented in pagmo (i.e., problems, algorithms, etc.) provide
+   mechanisms to specify which thread safety level is provided by objects of
+   these classes. The information on the thread safety level is used by pagmo
+   to establish at runtime whether or not it is safe to use an object in a
+   multithreaded context.
+
+   For instance, :cpp:class:`~pagmo::thread_island` will refuse to run
+   parallel optimisations in multiple threads if the involved
+   :cpp:class:`~pagmo::problem` or :cpp:class:`~pagmo::algorithm`
+   do not provide at least the :cpp:enumerator:`~pagmo::thread_safety::basic`
+   thread safety level.
+
    The thread safety levels are ordered in the following way:
    :cpp:enumerator:`~pagmo::thread_safety::none`
    \< :cpp:enumerator:`~pagmo::thread_safety::basic`

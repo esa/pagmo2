@@ -43,5 +43,6 @@ inline vector_double faruppo(const problem &, const vector_double &)
 BOOST_AUTO_TEST_CASE(bfe_test)
 {
     batch_fitness_evaluator bfe0;
-    batch_fitness_evaluator bfe1(&faruppo);
+    batch_fitness_evaluator bfe1(faruppo);
+    std::cout << bfe1 << '\n';
 }

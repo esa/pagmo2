@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_BATCH_FITNESS_EVALUATOR_HPP
 #define PAGMO_BATCH_FITNESS_EVALUATOR_HPP
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -58,7 +59,6 @@ class has_bfe_call_operator
     static const bool implementation_defined = std::is_same<detected_t<call_t, T>, vector_double>::value;
 
 public:
-    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
@@ -74,7 +74,6 @@ class is_udbfe
           && std::is_destructible<T>::value && has_bfe_call_operator<T>::value;
 
 public:
-    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
@@ -189,11 +188,30 @@ public:
 class batch_fitness_evaluator
 {
     // Enable the generic ctor only if T is not a bfe (after removing
-    // const/reference qualifiers), and if T is a udbfe.
+    // const/reference qualifiers), and if T is a udbfe. Additionally,
+    // enable the ctor also if T is a function type (in that case, we
+    // will convert the function type to a function pointer in
+    // the machinery below).
     template <typename T>
     using generic_ctor_enabler
-        = enable_if_t<!std::is_same<batch_fitness_evaluator, uncvref_t<T>>::value && is_udbfe<uncvref_t<T>>::value,
+        = enable_if_t<(!std::is_same<batch_fitness_evaluator, uncvref_t<T>>::value && is_udbfe<uncvref_t<T>>::value)
+                          || std::is_same<vector_double(const problem &, const vector_double &), uncvref_t<T>>::value,
                       int>;
+    // Dispatching for the generic ctor. We have a special case if T is
+    // a function type, in which case we will manually do the conversion to
+    // function pointer and delegate to the other overload.
+    template <typename T>
+    explicit batch_fitness_evaluator(T &&x, std::true_type)
+        : batch_fitness_evaluator(
+              static_cast<vector_double (*)(const problem &, const vector_double &)>(std::forward<T>(x)),
+              std::false_type{})
+    {
+    }
+    template <typename T>
+    explicit batch_fitness_evaluator(T &&x, std::false_type)
+        : m_ptr(detail::make_unique<detail::batch_fitness_evaluator_inner<uncvref_t<T>>>(std::forward<T>(x)))
+    {
+    }
 
 public:
     // Default ctor.
@@ -201,7 +219,7 @@ public:
     // Constructor from a UDBFE.
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit batch_fitness_evaluator(T &&x)
-        : m_ptr(detail::make_unique<detail::batch_fitness_evaluator_inner<uncvref_t<T>>>(std::forward<T>(x)))
+        : batch_fitness_evaluator(std::forward<T>(x), std::is_function<uncvref_t<T>>{})
     {
         // Assign the name.
         m_name = ptr()->get_name();
@@ -235,72 +253,25 @@ public:
         // Copy ctor + move assignment.
         return *this = batch_fitness_evaluator(other);
     }
-    /// Extract a const pointer to the UDBFE used for construction.
-    /**
-     * This method will extract a const pointer to the internal instance of the UDBFE. If \p T is not the same type
-     * as the UDBFE used during construction (after removal of cv and reference qualifiers), this method will
-     * return \p nullptr.
-     *
-     * \verbatim embed:rst:leading-asterisk
-     * .. note::
-     *
-     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of ``this``, and ``delete`` must never be called on the pointer.
-     *
-     * \endverbatim
-     *
-     * @return a const pointer to the internal UDBFE, or \p nullptr
-     * if \p T does not correspond exactly to the original UDBFE type used
-     * in the constructor.
-     */
+    // Extraction and related.
     template <typename T>
     const T *extract() const noexcept
     {
         auto p = dynamic_cast<const detail::batch_fitness_evaluator_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
     }
-    /// Extract a pointer to the UDBFE used for construction.
-    /**
-     * This method will extract a pointer to the internal instance of the UDBFE. If \p T is not the same type
-     * as the UDBFE used during construction (after removal of cv and reference qualifiers), this method will
-     * return \p nullptr.
-     *
-     * \verbatim embed:rst:leading-asterisk
-     * .. note::
-     *
-     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of ``this``, and ``delete`` must never be called on the pointer.
-     *
-     * .. note::
-     *
-     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
-     *    methods on the internal UDBFE instance. Assigning a new UDBFE via this pointer is undefined behaviour.
-     *
-     * \endverbatim
-     *
-     * @return a pointer to the internal UDBFE, or \p nullptr
-     * if \p T does not correspond exactly to the original UDBFE type used
-     * in the constructor.
-     */
     template <typename T>
     T *extract() noexcept
     {
         auto p = dynamic_cast<detail::batch_fitness_evaluator_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
     }
-    /// Check if the UDBFE used for construction is of type \p T.
-    /**
-     * @return \p true if the UDBFE used for construction is of type \p T, \p false otherwise.
-     */
     template <typename T>
-    bool is() const
+    bool is() const noexcept
     {
         return extract<T>() != nullptr;
     }
-    /// Call operator.
-    /**
-     *
-     */
+    // Call operator.
     vector_double operator()(const problem &p, const vector_double &dvs) const
     {
         // Check the input dvs.
@@ -311,27 +282,27 @@ public:
         detail::bfe_check_output_fvs(p, dvs, retval);
         return retval;
     }
-    /// Save to archive.
-    /**
-     * This method will save \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDBFE and of primitive types.
-     */
+    // Name.
+    std::string get_name() const
+    {
+        return m_name;
+    }
+    // Extra info.
+    std::string get_extra_info() const
+    {
+        return ptr()->get_extra_info();
+    }
+    // Thread safety level.
+    thread_safety get_thread_safety() const
+    {
+        return m_thread_safety;
+    }
+    // Serialisation support.
     template <typename Archive>
     void save(Archive &ar) const
     {
         ar(m_ptr, m_name, m_thread_safety);
     }
-    /// Load from archive.
-    /**
-     * This method will deserialize into \p this the content of \p ar.
-     *
-     * @param ar source archive.
-     *
-     * @throws unspecified any exception thrown by the deserialization of the UDBFE and of primitive types.
-     */
     template <typename Archive>
     void load(Archive &ar)
     {
@@ -339,6 +310,17 @@ public:
         batch_fitness_evaluator tmp_bfe;
         ar(tmp_bfe.m_ptr, tmp_bfe.m_name, tmp_bfe.m_thread_safety);
         *this = std::move(tmp_bfe);
+    }
+    // Stream operator.
+    friend std::ostream &operator<<(std::ostream &os, const batch_fitness_evaluator &bfe)
+    {
+        os << "BFE name: " << bfe.get_name() << '\n';
+        os << "\n\tThread safety: " << bfe.get_thread_safety() << '\n';
+        const auto extra_str = bfe.get_extra_info();
+        if (!extra_str.empty()) {
+            os << "\nExtra info:\n" << extra_str << '\n';
+        }
+        return os;
     }
 
 private:
