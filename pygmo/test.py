@@ -365,6 +365,15 @@ class population_test_case(_ut.TestCase):
         p = loads(dumps(pop))
         self.assertEqual(repr(pop), repr(p))
 
+class lennard_jones_test_case(_ut.TestCase):
+    """Test case for the UDA de
+
+    """
+
+    def runTest(self):
+        from .core import lennard_jones
+        udp = lennard_jones(3)
+        udp = lennard_jones(atoms = 3)
 
 class pso_test_case(_ut.TestCase):
     """Test case for the UDA pso
@@ -1857,6 +1866,7 @@ def run_test_suite(level=0):
     suite.addTest(_island_test.island_test_case())
     suite.addTest(_island_test.mp_island_test_case(level))
     suite.addTest(_island_test.ipyparallel_island_test_case(level))
+    suite.addTest(lennard_jones_test_case())
     suite.addTest(de_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(pso_gen_test_case())

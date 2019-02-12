@@ -25,6 +25,7 @@ Ackley                                                     :cpp:class:`pagmo::ac
 Griewank                                                   :cpp:class:`pagmo::griewank`              :class:`pygmo.griewank`                   S-U
 Hock Schittkowsky 71                                       :cpp:class:`pagmo::hock_shittkowski_71`   :class:`pygmo.hock_shittkowski_71`        S-C
 Inventory                                                  :cpp:class:`pagmo::inventory`             :class:`pygmo.inventory`                  S-U-sto
+Lennard Jones                                              :cpp:class:`pagmo::lennard_jones`         :class:`pygmo.lennard_jones`              S-U
 Luksan Vlcek 1                                             :cpp:class:`pagmo::luksan_vlcek1`         :class:`pygmo.luksan_vlcek1`              S-C
 Rastrigin                                                  :cpp:class:`pagmo::rastrigin`             :class:`pygmo.rastrigin`                  S-U
 MINLP Rastrigin                                            :cpp:class:`pagmo::minlp_rastrigin`       :class:`pygmo.minlp_rastrigin`            S-U-I
