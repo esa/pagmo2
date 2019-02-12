@@ -46,7 +46,7 @@ namespace pagmo
 /// The Lennard Jones Cluster problem.
 /**
  *
- * \image html lennardjones.jpg "Pictures of Lennard-Jones clusters." width=3cm
+ * \image html lennard_jones.jpg "Pictures of Lennard-Jones clusters." width=3cm
  *
  * This is a box-constrained continuous single-objecive problem. It represents the minimization
  * of the energy of a cluster of atoms assuming a Lennard-Jones potential between each pair.
