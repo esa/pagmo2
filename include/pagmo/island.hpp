@@ -982,7 +982,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    const T *extract() const
+    const T *extract() const noexcept
     {
         auto isl = dynamic_cast<const detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
         return isl == nullptr ? nullptr : &(isl->m_value);
@@ -1011,7 +1011,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    T *extract()
+    T *extract() noexcept
     {
         auto isl = dynamic_cast<detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
         return isl == nullptr ? nullptr : &(isl->m_value);
@@ -1021,7 +1021,7 @@ public:
      * @return \p true if the UDI used in construction is of type \p T, \p false otherwise.
      */
     template <typename T>
-    bool is() const
+    bool is() const noexcept
     {
         return extract<T>() != nullptr;
     }
