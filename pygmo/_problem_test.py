@@ -286,6 +286,13 @@ class problem_test_case(_ut.TestCase):
         prob = problem(p())
         self.assert_(all(prob.fitness([1, 2]) == array([42])))
 
+        # Test that construction from another pygmo.problem fails.
+        with self.assertRaises(TypeError) as cm:
+            problem(prob)
+        err = cm.exception
+        self.assertTrue(
+            "the construction of a pygmo.problem from another pygmo.problem is disabled, please use the standard Python copy()/deepcopy() functions if you need to copy-construct a pygmo.problem" in str(err))
+
     def run_ctol_tests(self):
         from .core import problem
         from numpy import array

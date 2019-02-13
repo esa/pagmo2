@@ -74,6 +74,22 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     algo_inner &operator=(algo_inner &&) = delete;
     explicit algo_inner(const bp::object &o)
     {
+        // Forbid the use of a pygmo.algorithm as a UDA.
+        // The motivation here is consistency with C++. In C++, the use of
+        // a pagmo::algorithm as a UDA is forbidden and prevented by the fact
+        // that the generic constructor from UDA is disabled if the input
+        // object is a pagmo::algorithm (the copy/move constructor is
+        // invoked instead). In order to achieve an equivalent behaviour
+        // in pygmo, we throw an error if o is a algorithm, and instruct
+        // the user to employ the standard copy/deepcopy facilities
+        // for creating a copy of the input algorithm.
+        if (pygmo::type(o) == bp::import("pygmo").attr("algorithm")) {
+            pygmo_throw(
+                PyExc_TypeError,
+                ("the construction of a pygmo.algorithm from another pygmo.algorithm is disabled, please use the "
+                 "standard Python copy()/deepcopy() functions if you need to copy-construct a pygmo.algorithm"));
+        }
+        // Check that o is an instance of a class, and not a type.
         check_not_type(o, "algorithm");
         check_mandatory_method(o, "evolve", "algorithm");
         m_value = pygmo::deepcopy(o);
