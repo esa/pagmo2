@@ -1,6 +1,10 @@
 Batch fitness evaluator
 =======================
 
+.. versionadded:: 2.11
+
+*#include <pagmo/batch_evaluators/batch_fitness_evaluator.hpp>*
+
 .. cpp:namespace-push:: pagmo
 
 .. cpp:class:: batch_fitness_evaluator
@@ -205,5 +209,40 @@ Batch fitness evaluator
       :return: a reference to *os*.
 
       :exception unspecified: any exception thrown by querying various properties of the evaluator and directing them to *os*.
+
+Associated type traits
+----------------------
+
+.. cpp:class:: template <typename T> has_bfe_call_operator
+
+   This type trait detects if ``T`` is a callable whose signature is compatible with the one
+   required by :cpp:class:`~pagmo::batch_fitness_evaluator`.
+
+   Specifically, the :cpp:any:`value` of this type trait will be ``true`` if the expression
+   ``B(p, dvs)``, where
+
+   * ``B`` is a const reference to an instance of ``T``,
+   * ``p`` is a const reference to a :cpp:class:`~pagmo::problem`, and
+   * ``dvs`` is a const reference to a :cpp:type:`~pagmo::vector_double`,
+
+   is well-formed and if it returns a :cpp:type:`~pagmo::vector_double`.
+
+   .. cpp:member:: static const bool value
+
+      The value of the type trait.
+
+.. cpp:class:: template <typename T> is_udbfe
+
+   This type trait detects if ``T`` is a user-defined batch fitness evaluator (or UDBFE).
+
+   Specifically, the :cpp:any:`value` of this type trait will be ``true`` if:
+
+   * ``T`` is not a reference or cv qualified,
+   * ``T`` is destructible, default, copy and move constructible, and
+   * ``T`` satisfies :cpp:class:`pagmo::has_bfe_call_operator`.
+
+   .. cpp:member:: static const bool value
+
+      The value of the type trait.
 
 .. cpp:namespace-pop::

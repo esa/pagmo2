@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+// Check if T has a call operator conforming to the UDBFE requirements.
 template <typename T>
 class has_bfe_call_operator
 {
@@ -65,6 +66,7 @@ public:
 template <typename T>
 const bool has_bfe_call_operator<T>::value;
 
+// Check if T is a UDBFE.
 template <typename T>
 class is_udbfe
 {
@@ -172,6 +174,7 @@ struct batch_fitness_evaluator_inner final : batch_fitness_evaluator_inner_base 
 
 } // namespace detail
 
+// Default bfe implementation.
 class default_bfe
 {
 public:
