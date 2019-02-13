@@ -291,7 +291,7 @@ class problem_test_case(_ut.TestCase):
             problem(prob)
         err = cm.exception
         self.assertTrue(
-            "the construction of a pygmo.problem from another pygmo.problem is disabled, please use the standard Python copy()/deepcopy() functions if you need to copy-construct a pygmo.problem" in str(err))
+            "a pygmo.problem cannot be used as a UDP for another pygmo.problem (if you need to copy a problem please use the standard Python copy()/deepcopy() functions)" in str(err))
 
     def run_ctol_tests(self):
         from .core import problem

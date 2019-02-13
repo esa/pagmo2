@@ -102,8 +102,8 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         // for creating a copy of the input problem.
         if (pygmo::type(o) == bp::import("pygmo").attr("problem")) {
             pygmo_throw(PyExc_TypeError,
-                        ("the construction of a pygmo.problem from another pygmo.problem is disabled, please use the "
-                         "standard Python copy()/deepcopy() functions if you need to copy-construct a pygmo.problem"));
+                        ("a pygmo.problem cannot be used as a UDP for another pygmo.problem (if you need to copy a "
+                         "problem please use the standard Python copy()/deepcopy() functions)"));
         }
         // Check that o is an instance of a class, and not a type.
         check_not_type(o, "problem");

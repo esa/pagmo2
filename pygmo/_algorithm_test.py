@@ -145,7 +145,7 @@ class algorithm_test_case(_ut.TestCase):
             algorithm(algo)
         err = cm.exception
         self.assertTrue(
-            "the construction of a pygmo.algorithm from another pygmo.algorithm is disabled, please use the standard Python copy()/deepcopy() functions if you need to copy-construct a pygmo.algorithm" in str(err))
+            "a pygmo.algorithm cannot be used as a UDA for another pygmo.algorithm (if you need to copy an algorithm please use the standard Python copy()/deepcopy() functions)" in str(err))
 
     def run_extract_tests(self):
         from .core import algorithm, _test_algorithm, mbh, de

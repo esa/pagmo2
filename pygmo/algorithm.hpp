@@ -86,8 +86,8 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
         if (pygmo::type(o) == bp::import("pygmo").attr("algorithm")) {
             pygmo_throw(
                 PyExc_TypeError,
-                ("the construction of a pygmo.algorithm from another pygmo.algorithm is disabled, please use the "
-                 "standard Python copy()/deepcopy() functions if you need to copy-construct a pygmo.algorithm"));
+                ("a pygmo.algorithm cannot be used as a UDA for another pygmo.algorithm (if you need to copy an "
+                 "algorithm please use the standard Python copy()/deepcopy() functions)"));
         }
         // Check that o is an instance of a class, and not a type.
         check_not_type(o, "algorithm");
