@@ -1,14 +1,16 @@
-Lennard Jones Cluster
+Optimal Golomb Ruler
 ======================================================
 
 .. versionadded:: 2.11
 
-*#include <pagmo/problems/lennard_jones.hpp>*
+*#include <pagmo/problems/golomb_ruler.hpp>*
 
-.. doxygenclass:: pagmo::lennard_jones
+.. doxygenclass:: pagmo::golomb_ruler
    :members:
 
 This UDP is typically used to construct a :cpp:class:`~pagmo::problem`. 
+
+
 
 
 

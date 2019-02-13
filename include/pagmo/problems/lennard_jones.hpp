@@ -61,7 +61,7 @@ namespace pagmo
 class lennard_jones
 {
 public:
-    /// Constructor from dimension
+    /// Constructor from number of atoms
     /**
      * Constructs a Lennard Jones Clusters global optimisation problem
      *

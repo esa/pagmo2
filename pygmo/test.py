@@ -365,6 +365,16 @@ class population_test_case(_ut.TestCase):
         p = loads(dumps(pop))
         self.assertEqual(repr(pop), repr(p))
 
+class golomb_ruler_test_case(_ut.TestCase):
+    """Test case for the UDA de
+
+    """
+
+    def runTest(self):
+        from .core import golomb_ruler
+        udp = golomb_ruler(4, 10)
+        udp = golomb_ruler(order = 4, upper_bound=10)
+
 class lennard_jones_test_case(_ut.TestCase):
     """Test case for the UDA de
 
@@ -372,6 +382,7 @@ class lennard_jones_test_case(_ut.TestCase):
 
     def runTest(self):
         from .core import lennard_jones
+        udp = lennard_jones()
         udp = lennard_jones(3)
         udp = lennard_jones(atoms = 3)
 
@@ -1866,6 +1877,7 @@ def run_test_suite(level=0):
     suite.addTest(_island_test.island_test_case())
     suite.addTest(_island_test.mp_island_test_case(level))
     suite.addTest(_island_test.ipyparallel_island_test_case(level))
+    suite.addTest(golomb_ruler_test_case())
     suite.addTest(lennard_jones_test_case())
     suite.addTest(de_test_case())
     suite.addTest(pso_test_case())

@@ -159,9 +159,9 @@ void expose_problems_0()
     griew.def(bp::init<unsigned>((bp::arg("dim"))));
     griew.def("best_known", &best_known_wrapper<griewank>, problem_get_best_docstring("Griewank").c_str());
     // Lennard Jones
-    auto lj = expose_problem_pygmo<lennard_jones>("lennard_jones", "__init__(atoms = 1)\n\nThe Lennard Jones Cluster problem.\n\n"
+    auto lj = expose_problem_pygmo<lennard_jones>("lennard_jones", "__init__(atoms = 3)\n\nThe Lennard Jones Cluster problem.\n\n"
                                                                    "See :cpp:class:`pagmo::lennard_jones`.\n\n");
-    lj.def(bp::init<unsigned>((bp::arg("atoms"))));
+    lj.def(bp::init<unsigned>((bp::arg("atoms") = 3u)));
     // DTLZ.
     auto dtlz_p = expose_problem_pygmo<dtlz>("dtlz", dtlz_docstring().c_str());
     dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(

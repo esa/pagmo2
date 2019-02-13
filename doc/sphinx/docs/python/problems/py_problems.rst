@@ -76,6 +76,11 @@ Problems exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.golomb_ruler
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.zdt
    :members:
 
