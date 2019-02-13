@@ -73,6 +73,7 @@ Problems exposed from C++
 
 .. autoclass:: pygmo.lennard_jones
    :members:
+
 -------------------------------------------------------------
 
 .. autoclass:: pygmo.zdt
