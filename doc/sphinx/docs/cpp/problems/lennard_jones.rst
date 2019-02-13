@@ -27,14 +27,14 @@ Lennard Jones Cluster
       Constructs a UDP representing the Lennard Jones Clusters global optimisation problem.
 
       :param atoms: the number of atoms in the cluster.
-      :exception std\:\:invalid_argument: if **atoms** is < 3
+      :exception std\:\:invalid_argument: if *atoms* is < 3
 
    .. cpp:function:: vector_double fitness(const vector_double &x) const
 
       Computes the fitness for this UDP. The complexity is :math:`n^2`, where :math:`n^2` is the number of atoms.
     
       :param x: the decision vector.
-      :return: the fitness of **x**.
+      :return: the fitness of *x*.
 
    .. cpp:function:: std::pair<vector_double, vector_double> get_bounds() const
 
@@ -46,18 +46,16 @@ Lennard Jones Cluster
 
       Returns the problem name.
 
-      :return: a string containing the problem name: "Lennard Jones Cluster (**atoms** atoms)".
+      :return: a string containing the problem name: "Lennard Jones Cluster (*atoms* atoms)".
 
    .. cpp:function:: template <typename Archive> void serialize(Archive &ar)
 
       Object serialization.
 
-      This method will save/load this into the archive **ar**.
+      This method will save/load this into the archive *ar*.
 
       :param ar: target archive.
       :exception unspecified: any exception thrown by the serialization of the UDP and of primitive types.
-
-This UDP is typically used to construct a :cpp:class:`~pagmo::problem`. 
 
 
 

@@ -52,15 +52,15 @@ Optimal Golomb Ruler
       :param order: the ruler order.
       :param upper_bound: maximum distance between consecutive ticks.
 
-      :exception std\:\:invalid_argument: if **order** is < 2 or **upper_bound** is < 1.
-      :exception std\:\:overflow_error: if **upper_bound** is too large.
+      :exception std\:\:invalid_argument: if *order* is < 2 or *upper_bound* is < 1.
+      :exception std\:\:overflow_error: if *upper_bound* is too large.
 
    .. cpp:function:: vector_double fitness(const vector_double &x) const
 
       Computes the fitness for this UDP. The complexity is :math:`n^2`, where :math:`n^2` is the ruler order.
       
       :param x: the decision vector.
-      :return: the fitness of **x**.
+      :return: the fitness of *x*.
 
    .. cpp:function:: vector_double::size_type get_nec() const
 
@@ -72,7 +72,7 @@ Optimal Golomb Ruler
 
       The integer dimension of the problem.
            
-      :return: the ruler **order** minus 1.
+      :return: the ruler *order* minus 1.
 
    .. cpp:function:: std::pair<vector_double, vector_double> get_bounds() const
 
@@ -84,19 +84,17 @@ Optimal Golomb Ruler
 
       Returns the problem name.
 
-      :return: a string containing the problem name: "Golomb Ruler (order **order**)".
+      :return: a string containing the problem name: "Golomb Ruler (order *order*)".
 
    .. cpp:function:: template <typename Archive> void serialize(Archive &ar)
 
       Object serialization.
 
-      This method will save/load this into the archive **ar**.
+      This method will save/load this into the archive *ar*.
 
       :param ar: target archive.
       :exception unspecified: any exception thrown by the serialization of the UDP and of primitive types.
   
-This UDP is typically used to construct a :cpp:class:`~pagmo::problem`. 
-
 
 
 

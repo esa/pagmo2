@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -46,6 +47,7 @@ BOOST_AUTO_TEST_CASE(lennard_jones_test)
     BOOST_CHECK_THROW(lennard_jones{0u}, std::invalid_argument);
     BOOST_CHECK_THROW(lennard_jones{1u}, std::invalid_argument);
     BOOST_CHECK_THROW(lennard_jones{2u}, std::invalid_argument);
+    BOOST_CHECK_THROW(lennard_jones{std::numeric_limits<unsigned>::max() / 2}, std::overflow_error);
 
     lennard_jones lj{3u};
     BOOST_CHECK_NO_THROW(problem{lj});

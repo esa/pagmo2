@@ -26,9 +26,10 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_LENNARDJONES_HPP
-#define PAGMO_PROBLEM_LENNARDJONES_HPP
+#ifndef PAGMO_PROBLEM_LENNARD_JONES_HPP
+#define PAGMO_PROBLEM_LENNARD_JONES_HPP
 
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -76,6 +77,10 @@ public:
                                                "positive and greater than 2, while a number of "
                                                    + std::to_string(atoms) + " was detected.");
         }
+        if (m_atoms - 2u > std::numeric_limits<unsigned>::max() / 3u) {
+            pagmo_throw(std::overflow_error,
+                        "Overflow caused by the number of atoms requested: " + std::to_string(m_atoms));
+        }
     }
     /// Fitness computation
     /**
@@ -88,11 +93,10 @@ public:
     vector_double fitness(const vector_double &x) const
     {
         vector_double f(1, 0.);
-        double sixth, dist;
-        f[0] = 0;
         // We evaluate the potential
-        for (unsigned i = 0u; i < (m_atoms - 1u); ++i) {
-            for (unsigned j = (i + 1u); j < m_atoms; ++j) {
+        for (vector_double::size_type i = 0u; i < (m_atoms - 1u); ++i) {
+            for (vector_double::size_type j = (i + 1u); j < m_atoms; ++j) {
+                double sixth, dist;
                 dist = std::pow(_r(i, 0u, x) - _r(j, 0u, x), 2) + std::pow(_r(i, 1u, x) - _r(j, 1u, x), 2)
                        + std::pow(_r(i, 2u, x) - _r(j, 2u, x), 2); // rij^2
                 if (dist == 0.0) {

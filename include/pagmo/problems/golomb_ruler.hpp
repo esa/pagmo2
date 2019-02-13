@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_GOLOMBRULER_HPP
-#define PAGMO_PROBLEM_GOLOMBRULER_HPP
+#ifndef PAGMO_PROBLEM_GOLOMB_RULER_HPP
+#define PAGMO_PROBLEM_GOLOMB_RULER_HPP
 
 #include <iostream>
 #include <limits>
@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp> // needed for cereal registration macro
 #include <pagmo/types.hpp>
@@ -109,8 +110,7 @@ public:
                     + std::to_string(upper_bound) + " was requested.");
         }
         // Overflow can occur when evaluating the fitness later if the upper_bound is too large.
-        if (static_cast<double>(upper_bound) * (order - 1u)
-            > static_cast<double>(std::numeric_limits<unsigned>::max())) {
+        if (upper_bound > std::numeric_limits<unsigned>::max() / (order - 1u)) {
             pagmo_throw(
                 std::overflow_error,
                 "Overflow in Golomb ruler problem, select a smaller maximum distance between consecutive ticks.");
@@ -133,16 +133,17 @@ public:
         f[0] = ticks.back();
         // 2 - We compute all pairwise distances
         vector_double distances;
+        distances.reserve(x.size() * (x.size() - 1) / 2);
         for (decltype(ticks.size()) i = 0; i < ticks.size() - 1; ++i) {
             for (decltype(ticks.size()) j = i + 1; j < ticks.size(); ++j) {
-                auto tmp = ticks[j] - ticks[i];
-                distances.push_back(tmp);
+                distances.push_back(ticks[j] - ticks[i]);
             }
         }
         // 3 - We compute how many duplicate distances are there.
-        std::sort(distances.begin(), distances.end());
+        std::sort(distances.begin(), distances.end(), detail::less_than_f<double>);
         f[1] = static_cast<double>(distances.size())
-               - std::distance(distances.begin(), std::unique(distances.begin(), distances.end()));
+               - std::distance(distances.begin(),
+                               std::unique(distances.begin(), distances.end(), detail::equal_to_f<double>));
         return f;
     }
     /// Box-bounds
