@@ -1,18 +1,18 @@
 #include <iostream>
-#include <pagmo/problem.hpp>
 #include <pagmo/algorithm.hpp>
+#include <pagmo/problem.hpp>
 
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 
 using namespace pagmo;
-int main( )
+int main()
 {
-    //Set seed for reproducible results
-    pagmo::random_device::set_seed( 12345 );
+    // Set seed for reproducible results
+    pagmo::random_device::set_seed(12345);
 
-    // Algorithm (setting generations to 100)
-    pagmo::algorithm algo{ gaco {30} };
+    // Algorithm (setting generations to 2000)
+    pagmo::algorithm algo{g_aco{2000}};
 
     // Set the algo to log something at each iteration
     algo.set_verbosity(1);
@@ -21,16 +21,13 @@ int main( )
     pagmo::problem prob{rosenbrock{10}};
 
     // Population
-    pagmo::population pop{prob, 1000};
+    pagmo::population pop{prob, 200};
 
-    // Evolve for 100 generations
+    // Evolve for 2000 generations
     pop = algo.evolve(pop);
 
     // Print to console
     std::cout << pop << std::endl;
 
-   //pagmo::algorithm algo{ pagmo::de( ) };
-
     return 0;
-
 }
