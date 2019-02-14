@@ -174,6 +174,10 @@ class island_test_case(_ut.TestCase):
         self.assertTrue(
             "the 'run_evolve()' method of a user-defined island must return a tuple, but it returned an object of type '" in str(err))
 
+        # Test that construction from another pygmo.island fails.
+        with self.assertRaises(NotImplementedError) as cm:
+            island(prob=rosenbrock(), udi=isl, size=11, algo=de(), seed=15)
+
     def run_concurrent_access_tests(self):
         import threading as thr
         from .core import island, de, rosenbrock
