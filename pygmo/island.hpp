@@ -79,6 +79,11 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     isl_inner &operator=(isl_inner &&) = delete;
     explicit isl_inner(const bp::object &o)
     {
+        // NOTE: unlike pygmo.problem/algorithm, we don't have to enforce
+        // that o is not a pygmo.island, because pygmo.island does not satisfy
+        // the UDI interface and thus check_mandatory_method() below will fail
+        // if o is a pygmo.island.
+        // Check that o is an instance of a class, and not a type.
         check_not_type(o, "island");
         check_mandatory_method(o, "run_evolve", "island");
         m_value = pygmo::deepcopy(o);

@@ -1328,7 +1328,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    const T *extract() const
+    const T *extract() const noexcept
     {
         auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
@@ -1358,7 +1358,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    T *extract()
+    T *extract() noexcept
     {
         auto p = dynamic_cast<detail::prob_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
@@ -1369,7 +1369,7 @@ public:
      * @return \p true if the UDP used in construction is of type \p T, \p false otherwise.
      */
     template <typename T>
-    bool is() const
+    bool is() const noexcept
     {
         return extract<T>() != nullptr;
     }

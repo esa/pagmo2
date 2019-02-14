@@ -802,6 +802,10 @@ public:
     }
 
 private:
+    // NOTE: here and elsewhere, we don't have to put the constraint that Isl is not pagmo::island,
+    // like we do in pagmo::problem/pagmo::algorithm: pagmo::island does not satisfy the interface
+    // requirements of a UDI, thus it is impossible to create a pagmo::island containing another
+    // pagmo::island as a UDI.
     template <typename Isl, typename Algo, typename Pop>
     using isl_algo_pop_enabler
         = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
@@ -982,7 +986,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    const T *extract() const
+    const T *extract() const noexcept
     {
         auto isl = dynamic_cast<const detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
         return isl == nullptr ? nullptr : &(isl->m_value);
@@ -1011,7 +1015,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    T *extract()
+    T *extract() noexcept
     {
         auto isl = dynamic_cast<detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
         return isl == nullptr ? nullptr : &(isl->m_value);
@@ -1021,7 +1025,7 @@ public:
      * @return \p true if the UDI used in construction is of type \p T, \p false otherwise.
      */
     template <typename T>
-    bool is() const
+    bool is() const noexcept
     {
         return extract<T>() != nullptr;
     }

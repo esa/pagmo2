@@ -286,6 +286,13 @@ class problem_test_case(_ut.TestCase):
         prob = problem(p())
         self.assert_(all(prob.fitness([1, 2]) == array([42])))
 
+        # Test that construction from another pygmo.problem fails.
+        with self.assertRaises(TypeError) as cm:
+            problem(prob)
+        err = cm.exception
+        self.assertTrue(
+            "a pygmo.problem cannot be used as a UDP for another pygmo.problem (if you need to copy a problem please use the standard Python copy()/deepcopy() functions)" in str(err))
+
     def run_ctol_tests(self):
         from .core import problem
         from numpy import array
