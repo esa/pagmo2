@@ -4,13 +4,19 @@ Changelog
 2.11 (unreleased)
 -----------------
 
+Changes
+~~~~~~~
+
+- **BREAKING**: :class:`pygmo.problem` and :class:`pygmo.algorithm` cannot be used as UDPs and UDAs any more.
+  This change makes the behaviour of pygmo consistent with the behaviour of pagmo (`#248 <https://github.com/esa/pagmo2/pull/248>`__).
+
 Fix
 ~~~
 
 - Fix the behaviour of NSGA2 and MOEAD when the problem has equal lower/upper bounds (`#244 <https://github.com/esa/pagmo2/pull/244>`__).
 
-- Various documentation, build system and unit testing improvements (`#243 <https://github.com/esa/pagmo2/pull/243>`__,
-  `#245 <https://github.com/esa/pagmo2/pull/245>`__)
+- Various documentation, build system and unit testing fixes/improvements (`#243 <https://github.com/esa/pagmo2/pull/243>`__,
+  `#245 <https://github.com/esa/pagmo2/pull/245>`__, `#248 <https://github.com/esa/pagmo2/pull/248>`__).
 
 - The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
 

@@ -128,13 +128,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.11 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.10 (2019-01-02)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id3">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id13">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id15">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id17">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id21">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id24">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id7">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id11">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id14">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id16">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id18">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id22">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id25">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -333,7 +333,7 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo9algorithm7extractEv">
-<span id="pagmo::algorithm::extractC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1a5b33d2ff1cc408ca9f90584a2e78dd36"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::algorithm::extractC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1a4e25781dbf954f24e6292f2aa97b605f"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a const pointer to the UDA. </p>
 <p>This method will extract a const pointer to the internal instance of the UDA. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
 <p><div class="admonition note">
@@ -351,7 +351,7 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo9algorithm7extractEv">
-<span id="pagmo::algorithm::extract"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1abfa120ed91dbe6a8997957b92b958bed"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::algorithm::extract"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1aa4d55918c2e9ef19782c6a254b00b42d"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a pointer to the UDA. </p>
 <p>This method will extract a pointer to the internal instance of the UDA. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
 <p><div class="admonition note">
@@ -375,7 +375,7 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo9algorithm2isEv">
-<span id="pagmo::algorithm::isC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1ae04bb04a3034ca6a27a51f8d7c17984a"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm2isEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::algorithm::isC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1ac6e4006999c2fee8a1fc0921443cfdb1"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm2isEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks the user-defined algorithm type at run-time. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>

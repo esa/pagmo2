@@ -128,13 +128,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.11 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.10 (2019-01-02)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id3">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id13">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id15">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id17">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id21">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id24">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id7">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id11">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id14">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id16">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id18">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id22">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id25">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -475,7 +475,7 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv2N5pagmo9alg
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island7extractEv">
-<span id="pagmo::island::extractC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1aa3f9b3e7c5e2795122f0d039ed3d7dab"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::extractC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1a42727a5f86c607200d9bbd17280b6932"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a const pointer to the UDI used for construction. </p>
 <p>This method will extract a const pointer to the internal instance of the UDI. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDI used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
 <p><div class="admonition note">
@@ -493,7 +493,7 @@ of <code class="docutils literal"><span class="pre">this</span></code>, and <cod
 
 <dl class="function">
 <dt id="_CPPv2N5pagmo6island7extractEv">
-<span id="pagmo::island::extract"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1a31fbb60b6a24d56f575e94bd6aac1cd8"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::extract"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1a8b45e64d91929f06a614e835e8cd5d1d"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6island7extractEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a pointer to the UDI used for construction. </p>
 <p>This method will extract a pointer to the internal instance of the UDI. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDI used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
 <p><div class="admonition note">
@@ -516,7 +516,7 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 
 <dl class="function">
 <dt id="_CPPv2NK5pagmo6island2isEv">
-<span id="pagmo::island::isC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1a67bee065ca4df29c6eaf3348ffa4e0dc"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island2isEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="pagmo::island::isC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1island_1aeafa3946c15523a51de1d7b8cc9a2595"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6island2isEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Check if the UDI used for construction is of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
