@@ -94,8 +94,8 @@ public:
     {
         vector_double f(1, 0.);
         // We evaluate the potential
-        for (vector_double::size_type i = 0u; i < (m_atoms - 1u); ++i) {
-            for (vector_double::size_type j = (i + 1u); j < m_atoms; ++j) {
+        for (unsigned i = 0u; i < (m_atoms - 1u); ++i) {
+            for (unsigned j = (i + 1u); j < m_atoms; ++j) {
                 double sixth, dist;
                 dist = std::pow(_r(i, 0u, x) - _r(j, 0u, x), 2) + std::pow(_r(i, 1u, x) - _r(j, 1u, x), 2)
                        + std::pow(_r(i, 2u, x) - _r(j, 2u, x), 2); // rij^2
