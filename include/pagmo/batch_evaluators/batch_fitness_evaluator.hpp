@@ -182,6 +182,10 @@ public:
     {
         return vector_double{};
     }
+    std::string get_name() const
+    {
+        return "Default batch fitness evaluator";
+    }
     template <typename Archive>
     void serialize(Archive &)
     {
