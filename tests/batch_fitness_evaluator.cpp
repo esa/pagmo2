@@ -39,7 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <pagmo/batch_evaluators/batch_fitness_evaluator.hpp>
+#include <pagmo/batch_fitness_evaluator.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>

@@ -174,6 +174,24 @@ struct batch_fitness_evaluator_inner final : batch_fitness_evaluator_inner_base 
 
 } // namespace detail
 
+// Multi-threaded bfe.
+class thread_bfe
+{
+public:
+    vector_double operator()(const problem &, const vector_double &) const
+    {
+        return vector_double{};
+    }
+    std::string get_name() const
+    {
+        return "Multi-threaded batch fitness evaluator";
+    }
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+
 // Default bfe implementation.
 class default_bfe
 {
