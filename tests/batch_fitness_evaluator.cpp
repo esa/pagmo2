@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE bfe_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <functional>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -61,6 +62,9 @@ BOOST_AUTO_TEST_CASE(type_traits_tests)
     BOOST_CHECK(!is_udbfe<default_bfe &>::value);
     BOOST_CHECK(!is_udbfe<const default_bfe &>::value);
 
+    BOOST_CHECK(is_udbfe<decltype(&udbfe0)>::value);
+    BOOST_CHECK(is_udbfe<udbfe_func_t>::value);
+
     struct non_udbfe_00 {
     };
     BOOST_CHECK(!is_udbfe<non_udbfe_00>::value);
@@ -92,6 +96,9 @@ BOOST_AUTO_TEST_CASE(type_traits_tests)
         vector_double operator()(const problem &, const vector_double &) const;
     };
     BOOST_CHECK(is_udbfe<udbfe_00>::value);
+
+    // Test std::function as well.
+    BOOST_CHECK(is_udbfe<std::function<vector_double(const problem &, const vector_double &)>>::value);
 }
 
 struct udbfe1 {
@@ -429,4 +436,27 @@ BOOST_AUTO_TEST_CASE(s11n)
     BOOST_CHECK_EQUAL(before, after);
     BOOST_CHECK(bfe0.is<udbfe_a>());
     BOOST_CHECK(bfe0.extract<udbfe_a>()->state = -42);
+}
+
+BOOST_AUTO_TEST_CASE(lambda_std_function)
+{
+    auto fun = [](const problem &p, const vector_double &dvs) {
+        return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
+    };
+    BOOST_CHECK(!is_udbfe<decltype(fun)>::value);
+    BOOST_CHECK(is_udbfe<decltype(+fun)>::value);
+    auto stdfun = std::function<vector_double(const problem &, const vector_double &)>(fun);
+    BOOST_CHECK(is_udbfe<decltype(stdfun)>::value);
+
+    {
+        batch_fitness_evaluator bfe0{+fun};
+        BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
+        BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
+    }
+
+    {
+        batch_fitness_evaluator bfe0{stdfun};
+        BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
+        BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
+    }
 }
