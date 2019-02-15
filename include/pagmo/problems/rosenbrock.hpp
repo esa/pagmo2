@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -140,6 +141,10 @@ struct rosenbrock {
     void serialize(Archive &ar)
     {
         ar(m_dim);
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::constant;
     }
     /// Problem dimensions
     vector_double::size_type m_dim;
