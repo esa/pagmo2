@@ -3,7 +3,7 @@ Batch fitness evaluator
 
 .. versionadded:: 2.11
 
-*#include <pagmo/batch_evaluators/batch_fitness_evaluator.hpp>*
+*#include <pagmo/batch_fitness_evaluator.hpp>*
 
 .. cpp:namespace-push:: pagmo
 

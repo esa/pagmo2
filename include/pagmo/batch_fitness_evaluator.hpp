@@ -29,15 +29,23 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_BATCH_FITNESS_EVALUATOR_HPP
 #define PAGMO_BATCH_FITNESS_EVALUATOR_HPP
 
+#include <algorithm>
+#include <cassert>
 #include <iostream>
+#include <limits>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
 
+#include <tbb/blocked_range.h>
+#include <tbb/parallel_for.h>
+
 #include <pagmo/detail/bfe_impl.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -178,9 +186,73 @@ struct batch_fitness_evaluator_inner final : batch_fitness_evaluator_inner_base 
 class thread_bfe
 {
 public:
-    vector_double operator()(const problem &, const vector_double &) const
+    vector_double operator()(const problem &p, const vector_double &dvs) const
     {
-        return vector_double{};
+        // Fetch a few quantities from the problem.
+        // Problem dimension.
+        const auto n_dim = p.get_nx();
+        // Fitness dimension.
+        const auto f_dim = p.get_nf();
+        // Total number of dvs.
+        const auto n_dvs = dvs.size() / n_dim;
+
+        // NOTE: as usual, we assume that thread_bfe is always wrapped
+        // by a batch_fitness_evaluator, where we already check that dvs
+        // is compatible with p.
+        // NOTE: this is what we always do with user-defined classes:
+        // we do the sanity checks in the type-erased container.
+        assert(dvs.size() % n_dim == 0u);
+
+        // Prepare the return value.
+        // Guard against overflow.
+        // LCOV_EXCL_START
+        if (n_dvs > std::numeric_limits<vector_double::size_type>::max() / f_dim) {
+            pagmo_throw(std::overflow_error,
+                        "Overflow detected in the computation of the size of the output of a thread_bfe");
+        }
+        // LCOV_EXCL_STOP
+        vector_double retval(n_dvs * f_dim);
+
+        // Functor to implement the fitness evaluation of a range of input dvs. begin/end are the indices
+        // of the individuals in dv (ranging from 0 to n_dvs), the resulting fitnesses will be written directly into
+        // retval.
+        auto range_evaluator = [&dvs, &retval, n_dim, f_dim, n_dvs](const problem &prob, decltype(dvs.size()) begin,
+                                                                    decltype(dvs.size()) end) {
+            assert(begin <= end);
+            assert(end <= n_dvs);
+            (void)n_dvs;
+
+            // Temporary dv that will be used for fitness evaluation.
+            vector_double tmp_dv(n_dim);
+            for (; begin != end; ++begin) {
+                auto in_ptr = dvs.data() + begin * n_dim;
+                auto out_ptr = retval.data() + begin * f_dim;
+                std::copy(in_ptr, in_ptr + n_dim, tmp_dv.begin());
+                const auto fv = prob.fitness(tmp_dv);
+                assert(fv.size() == f_dim);
+                std::copy(fv.begin(), fv.end(), out_ptr);
+            }
+        };
+
+        using range_t = tbb::blocked_range<decltype(dvs.size())>;
+        if (p.get_thread_safety() >= thread_safety::constant) {
+            // We can concurrently call the objfun on the input prob, hence we can
+            // capture it by reference and do all the fitness calls on the same object.
+            tbb::parallel_for(range_t(0u, n_dvs), [&p, &range_evaluator](const range_t &range) {
+                range_evaluator(p, range.begin(), range.end());
+            });
+        } else if (p.get_thread_safety() == thread_safety::basic) {
+            // We cannot concurrently call the objfun on the input prob. We will need
+            // to make a copy of p for each parallel iteration.
+            tbb::parallel_for(range_t(0u, n_dvs), [p, &range_evaluator](const range_t &range) {
+                range_evaluator(p, range.begin(), range.end());
+            });
+        } else {
+            pagmo_throw(std::invalid_argument, "Cannot use a thread_bfe on the problem '" + p.get_name()
+                                                   + "', which does not provide the required level of thread safety");
+        }
+
+        return retval;
     }
     std::string get_name() const
     {
