@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Ackley &#8212; pagmo 2.11 documentation</title>
+    <title>Optimal Golomb Ruler &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
@@ -28,8 +28,8 @@
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Optimal Golomb Ruler" href="golomb_ruler.html" />
-    <link rel="prev" title="Schwefel" href="schwefel.html" />
+    <link rel="next" title="Griewank" href="griewank.html" />
+    <link rel="prev" title="Ackley" href="ackley.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
   <body>
@@ -150,7 +150,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Ackley</a></li>
+<li><a class="reference internal" href="#">Optimal Golomb Ruler</a></li>
 </ul>
 </ul>
 </li>
@@ -180,119 +180,155 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="ackley">
-<h1>Ackley<a class="headerlink" href="#ackley" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="optimal-golomb-ruler">
+<h1>Optimal Golomb Ruler<a class="headerlink" href="#optimal-golomb-ruler" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.11.</span></p>
+</div>
+<p><em>#include &lt;pagmo/problems/golomb_ruler.hpp&gt;</em></p>
+<div class="figure" id="id1">
+<img alt="../../../_images/golomb_ruler.png" src="../../../_images/golomb_ruler.png" />
+<p class="caption"><span class="caption-text">The optimal (and perfect) Golomb ruler of order 4.</span></p>
+</div>
 <dl class="class">
-<dt id="_CPPv2N5pagmo6ackleyE">
-<span id="pagmo::ackley"></span><span class="target" id="structpagmo_1_1ackley"></span><em class="property">struct </em><code class="descname">ackley</code><a class="headerlink" href="#_CPPv2N5pagmo6ackleyE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>The Ackley problem. </p>
-<p><img alt="../../../_images/ackley.png" src="../../../_images/ackley.png" /></p>
-<p>This is a scalable box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Ackley function: <div class="math">
-\[ F\left(x_1,\ldots,x_n\right) = 20 + e - 20e^{-\frac 15 \sqrt{\frac 1n \sum_{i=1}^n x_i^2}} - e^{\frac 1n \sum_{i=1}^n \cos(2\pi x_i)}, \quad x_i \in \left[ -15,30 \right]. \]</div>
- The global minimum is in <span class="math">\(x_i=0\)</span>, where <span class="math">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dt id="_CPPv2N5pagmo12golomb_rulerE">
+<span id="pagmo::golomb_ruler"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">golomb_ruler</code><a class="headerlink" href="#_CPPv2N5pagmo12golomb_rulerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>In mathematics, a Golomb ruler is a set of marks at integer positions along an imaginary ruler such that no two pairs
+of marks are the same distance apart. The number of marks on the ruler is its order, and the largest distance between
+two of its marks is its length. Translation and reflection of a Golomb ruler are considered trivial, so the smallest
+mark is customarily put at 0 and the next mark at the smaller of its two possible values.  There is no requirement
+that a Golomb ruler be able to measure all distances up to its length, but if it does, it is called a perfect Golomb
+ruler.</p>
+<p>A Golomb ruler is optimal if no shorter Golomb ruler of the same order exists. Creating Golomb rulers is easy,
+but finding the optimal Golomb ruler (or rulers) for a specified order is computationally very challenging.</p>
+<p>This UDP represents the problem of finding an optimal Golomb ruler of a given order <span class="math">\(n\)</span>. A maximal distance
+<span class="math">\(l_{max}\)</span> between consecutive marks is also specified to make the problem representation possible. The resulting
+optimization problem is an integer programming problem with one equality constraint.</p>
+<p>In this UDP, the decision vector is <span class="math">\(x=[d_1, d_2, d_{n-1}]\)</span>, where the distances between consecutive ticks are
+indicated with <span class="math">\(d_i\)</span>. The ticks on the ruler can then be reconstructed as <span class="math">\(a_0 = 0\)</span>, <span class="math">\(a_i = \sum_{j=1}^i d_i, i=1 .. n-1\)</span></p>
+<p>Its formulation can thus be written as:</p>
+<div class="math">
+\[\begin{split}\begin{array}{rl}
+\mbox{find:} &amp; 1 \le d_i \le l_{max}, \forall i=1..n-1 \\
+\mbox{to minimize: } &amp; \sum_i d_i  \\
+\mbox{subject to:} &amp; |a_i-a_j| \neq |a_l - a_m|, \forall (\mbox{distinct}) i,j,l,m \in [0, n]
+\end{array}\end{split}\]</div>
+<p>We transcribe the constraints as one single equality constraint: <span class="math">\(c = 0\)</span> where <span class="math">\(c\)</span> is the count of
+repeated distances.</p>
+<p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Golomb_ruler">https://en.wikipedia.org/wiki/Golomb_ruler</a></p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo6ackley6ackleyEj">
-<span id="pagmo::ackley::ackley__unsigned-i"></span><span class="target" id="structpagmo_1_1ackley_1a666926cf3ca2cb027d71dfdfe40c13e0"></span><code class="descname">ackley</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6ackley6ackleyEj" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Constructor from dimension. </p>
-<p>Constructs an Ackley problem</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">dim</span></code>: the problem dimensions.</li>
+<dt id="_CPPv2N5pagmo12golomb_ruler12golomb_rulerEjj">
+<span id="pagmo::golomb_ruler::golomb_ruler__unsigned.unsigned"></span><code class="descclassname"></code><code class="descname">golomb_ruler</code><span class="sig-paren">(</span>unsigned <em>order</em> = 3u, unsigned <em>upper_bound</em> = 10<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo12golomb_ruler12golomb_rulerEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a UDP representing the search for an optimal Golomb ruler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>order</strong> – the ruler order.</li>
+<li><strong>upper_bound</strong> – maximum distance between consecutive ticks.</li>
 </ul>
-</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">dim</span></code> is &lt; 1 </li>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Throws:</th><td class="field-body"><ul class="first last simple">
+<li><strong>std::invalid_argument</strong> – if <em>order</em> is &lt; 2 or <em>upper_bound</em> is &lt; 1.</li>
+<li><strong>std::overflow_error</strong> – if <em>upper_bound</em> is too large.</li>
 </ul>
-</dd>
-</dl>
-</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo6ackley7fitnessERK13vector_double">
-<span id="pagmo::ackley::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1ackley_1af07db4a96bea5905aeb0c67a890b14c5"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6ackley7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Fitness computation. </p>
-<p>Computes the fitness for this UDP</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
-</ul>
-</dd>
-</dl>
-</p>
+<dt id="_CPPv2NK5pagmo12golomb_ruler7fitnessERK13vector_double">
+<span id="pagmo::golomb_ruler::fitness__vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname"></code><code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo12golomb_ruler7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Computes the fitness for this UDP. The complexity is <span class="math">\(n^2\)</span>, where <span class="math">\(n^2\)</span> is the ruler order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – the decision vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the fitness of <em>x</em>.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo6ackley10get_boundsEv">
-<span id="pagmo::ackley::get_boundsC"></span><span class="target" id="structpagmo_1_1ackley_1aa27ade6653ae1e6f643a4eb290f653c2"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6ackley10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Box-bounds. </p>
-<p>It returns the box-bounds for this UDP.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the lower and upper bounds for each of the decision vector components </dd>
-</dl>
-</p>
+<dt id="_CPPv2NK5pagmo12golomb_ruler7get_necEv">
+<span id="pagmo::golomb_ruler::get_necC"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descclassname"></code><code class="descname">get_nec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo12golomb_ruler7get_necEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of equality constraints of the UDP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number 1.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo6ackley8get_nameEv">
-<span id="pagmo::ackley::get_nameC"></span><span class="target" id="structpagmo_1_1ackley_1a8bc14c09f376f91d4f30b36dcc1daa23"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6ackley8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Problem name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the problem name </dd>
-</dl>
-</p>
+<dt id="_CPPv2NK5pagmo12golomb_ruler7get_nixEv">
+<span id="pagmo::golomb_ruler::get_nixC"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descclassname"></code><code class="descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo12golomb_ruler7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The integer dimension of the problem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the ruler <em>order</em> minus 1.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo6ackley10best_knownEv">
-<span id="pagmo::ackley::best_knownC"></span><span class="target" id="structpagmo_1_1ackley_1a3177a91aab5aae11bc3cdf6b3aa2aef6"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo6ackley10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Optimal solution. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the decision vector corresponding to the best solution for this problem. </dd>
-</dl>
-</p>
+<dt id="_CPPv2NK5pagmo12golomb_ruler10get_boundsEv">
+<span id="pagmo::golomb_ruler::get_boundsC"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descclassname"></code><code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo12golomb_ruler10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the box-bounds for this UDP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the lower and upper bounds for each of the decision vector components.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo6ackley9serializeER7Archive">
-<span id="pagmo::ackley::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="structpagmo_1_1ackley_1a8fea9792e5b6ede00ecb62a505ef4a51"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo6ackley9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
-</ul>
-</dd>
-</dl>
-</p>
+<dt id="_CPPv2NK5pagmo12golomb_ruler8get_nameEv">
+<span id="pagmo::golomb_ruler::get_nameC"></span>std::string <code class="descclassname"></code><code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo12golomb_ruler8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the problem name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string containing the problem name: “Golomb Ruler (order <em>order</em>)”.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
-<dt id="_CPPv2N5pagmo6ackley5m_dimE">
-<span id="pagmo::ackley::m_dim__unsigned-i"></span><span class="target" id="structpagmo_1_1ackley_1af8e48042b527ef5221db06e70b49c7fd"></span>unsigned int <code class="descname">m_dim</code><a class="headerlink" href="#_CPPv2N5pagmo6ackley5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Problem dimensions. </p>
+<dl class="function">
+<dt id="_CPPv2I0EN5pagmo12golomb_ruler9serializeER7Archive">
+template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descclassname"></code><code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2I0EN5pagmo12golomb_ruler9serializeER7Archive" title="pagmo::golomb_ruler::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2I0EN5pagmo12golomb_ruler9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization.</p>
+<p>This method will save/load this into the archive <em>ar</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ar</strong> – target archive.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Throws:</th><td class="field-body"><strong>unspecified</strong> – any exception thrown by the serialization of the UDP and of primitive types.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</div>
 </dd></dl>
 
 </div>

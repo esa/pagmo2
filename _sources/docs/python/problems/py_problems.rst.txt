@@ -71,6 +71,16 @@ Problems exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.lennard_jones
+   :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.golomb_ruler
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.zdt
    :members:
 
