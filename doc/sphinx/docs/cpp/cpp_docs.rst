@@ -56,7 +56,9 @@ Implemented problems
   problems/rastrigin
   problems/schwefel
   problems/ackley
+  problems/golomb_ruler
   problems/griewank
+  problems/lennard_jones
   problems/zdt
   problems/dtlz
   problems/hock_schittkowsky_71
