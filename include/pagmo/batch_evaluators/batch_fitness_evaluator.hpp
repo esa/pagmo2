@@ -238,12 +238,8 @@ public:
         : m_ptr(other.ptr()->clone()), m_name(other.m_name), m_thread_safety(other.m_thread_safety)
     {
     }
-    // Move constructor.
-    batch_fitness_evaluator(batch_fitness_evaluator &&other) noexcept
-        : m_ptr(std::move(other.m_ptr)), m_name(std::move(other.m_name)),
-          m_thread_safety(std::move(other.m_thread_safety))
-    {
-    }
+    // Move constructor. The default implementation is fine.
+    batch_fitness_evaluator(batch_fitness_evaluator &&) noexcept = default;
     // Move assignment operator
     batch_fitness_evaluator &operator=(batch_fitness_evaluator &&other) noexcept
     {

@@ -29,13 +29,18 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_MODULE bfe_test
 #include <boost/test/included/unit_test.hpp>
 
+#include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/batch_evaluators/batch_fitness_evaluator.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
@@ -44,14 +49,82 @@ using namespace pagmo;
 
 using udbfe_func_t = vector_double (*)(const problem &, const vector_double &);
 
-inline vector_double udbfe0(const problem &, const vector_double &)
+inline vector_double udbfe0(const problem &p, const vector_double &dvs)
 {
-    return vector_double{};
+    return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), .5);
 }
+
+BOOST_AUTO_TEST_CASE(type_traits_tests)
+{
+    BOOST_CHECK(is_udbfe<default_bfe>::value);
+    BOOST_CHECK(!is_udbfe<const default_bfe>::value);
+    BOOST_CHECK(!is_udbfe<default_bfe &>::value);
+    BOOST_CHECK(!is_udbfe<const default_bfe &>::value);
+
+    struct non_udbfe_00 {
+    };
+    BOOST_CHECK(!is_udbfe<non_udbfe_00>::value);
+    BOOST_CHECK(!has_bfe_call_operator<non_udbfe_00>::value);
+
+    struct non_udbfe_01 {
+        vector_double operator()();
+    };
+    BOOST_CHECK(!is_udbfe<non_udbfe_01>::value);
+    BOOST_CHECK(!has_bfe_call_operator<non_udbfe_01>::value);
+
+    struct non_udbfe_02 {
+        // NOTE: non-const operator.
+        vector_double operator()(const problem &, const vector_double &);
+    };
+    BOOST_CHECK(!is_udbfe<non_udbfe_02>::value);
+    BOOST_CHECK(!has_bfe_call_operator<non_udbfe_02>::value);
+
+    struct non_udbfe_03 {
+        // NOTE: not def ctible.
+        non_udbfe_03() = delete;
+        vector_double operator()(const problem &, const vector_double &) const;
+    };
+    BOOST_CHECK(!is_udbfe<non_udbfe_03>::value);
+    BOOST_CHECK(has_bfe_call_operator<non_udbfe_03>::value);
+
+    BOOST_CHECK(is_udbfe<decltype(&udbfe0)>::value);
+    struct udbfe_00 {
+        vector_double operator()(const problem &, const vector_double &) const;
+    };
+    BOOST_CHECK(is_udbfe<udbfe_00>::value);
+}
+
+struct udbfe1 {
+    vector_double operator()(const problem &, const vector_double &) const
+    {
+        return vector_double{};
+    }
+    std::string foo = "hello world";
+};
+
+struct udbfe2 {
+    udbfe2() = default;
+    udbfe2(const udbfe2 &other) : foo{new std::string{*other.foo}} {}
+    udbfe2(udbfe2 &&) = default;
+    vector_double operator()(const problem &, const vector_double &) const
+    {
+        return vector_double{};
+    }
+    std::string get_name() const
+    {
+        return "frobniz";
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::constant;
+    }
+    std::unique_ptr<std::string> foo = std::unique_ptr<std::string>{new std::string{"hello world"}};
+};
 
 BOOST_AUTO_TEST_CASE(basic_tests)
 {
     batch_fitness_evaluator bfe0;
+    problem p;
 
     // Public methods.
     BOOST_CHECK(bfe0.extract<default_bfe>() != nullptr);
@@ -68,6 +141,50 @@ BOOST_AUTO_TEST_CASE(basic_tests)
     batch_fitness_evaluator bfe1{udbfe0};
     BOOST_CHECK(bfe1.is<udbfe_func_t>());
     BOOST_CHECK(*bfe1.extract<udbfe_func_t>() == udbfe0);
+    // Generic constructor with copy.
+    udbfe1 b1;
+    batch_fitness_evaluator bfe2{b1};
+    BOOST_CHECK(b1.foo == "hello world");
+    BOOST_CHECK(bfe2.extract<udbfe1>()->foo == "hello world");
+    // Generic constructor with move.
+    udbfe2 b2;
+    batch_fitness_evaluator bfe3{std::move(b2)};
+    BOOST_CHECK(b2.foo.get() == nullptr);
+    BOOST_CHECK(bfe3.extract<udbfe2>()->foo.get() != nullptr);
+    BOOST_CHECK(*bfe3.extract<udbfe2>()->foo == "hello world");
+    // Copy constructor.
+    udbfe2 b3;
+    batch_fitness_evaluator bfe4{b3}, bfe5{bfe4};
+    BOOST_CHECK(*bfe5.extract<udbfe2>()->foo == "hello world");
+    BOOST_CHECK(bfe5.extract<udbfe2>()->foo.get() != bfe4.extract<udbfe2>()->foo.get());
+    BOOST_CHECK(bfe5(p, vector_double{}) == vector_double{});
+    BOOST_CHECK(bfe5.get_name() == "frobniz");
+    BOOST_CHECK(bfe5.get_thread_safety() == thread_safety::constant);
+    // Move constructor.
+    batch_fitness_evaluator bfe6{std::move(bfe5)};
+    BOOST_CHECK(*bfe6.extract<udbfe2>()->foo == "hello world");
+    BOOST_CHECK(bfe6(p, vector_double{}) == vector_double{});
+    BOOST_CHECK(bfe6.get_name() == "frobniz");
+    BOOST_CHECK(bfe6.get_thread_safety() == thread_safety::constant);
+    // Revive bfe5 via copy assignment.
+    bfe5 = bfe6;
+    BOOST_CHECK(*bfe5.extract<udbfe2>()->foo == "hello world");
+    BOOST_CHECK(bfe5(p, vector_double{}) == vector_double{});
+    BOOST_CHECK(bfe5.get_name() == "frobniz");
+    BOOST_CHECK(bfe5.get_thread_safety() == thread_safety::constant);
+    // Revive bfe5 via move assignment.
+    batch_fitness_evaluator bfe7{std::move(bfe5)};
+    bfe5 = std::move(bfe6);
+    BOOST_CHECK(*bfe5.extract<udbfe2>()->foo == "hello world");
+    BOOST_CHECK(bfe5(p, vector_double{}) == vector_double{});
+    BOOST_CHECK(bfe5.get_name() == "frobniz");
+    BOOST_CHECK(bfe5.get_thread_safety() == thread_safety::constant);
+    // Self move-assignment.
+    bfe5 = std::move(*&bfe5);
+    BOOST_CHECK(*bfe5.extract<udbfe2>()->foo == "hello world");
+    BOOST_CHECK(bfe5(p, vector_double{}) == vector_double{});
+    BOOST_CHECK(bfe5.get_name() == "frobniz");
+    BOOST_CHECK(bfe5.get_thread_safety() == thread_safety::constant);
 
     // Minimal iostream test.
     {
@@ -95,4 +212,221 @@ BOOST_AUTO_TEST_CASE(basic_tests)
         BOOST_CHECK(before == boost::lexical_cast<std::string>(bfe0));
         BOOST_CHECK(bfe0.is<default_bfe>());
     }
+}
+
+BOOST_AUTO_TEST_CASE(optional_tests)
+{
+    // get_name().
+    struct udbfe_00 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        std::string get_name() const
+        {
+            return "frobniz";
+        }
+    };
+    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_00{}}.get_name(), "frobniz");
+    struct udbfe_01 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        // Missing const.
+        std::string get_name()
+        {
+            return "frobniz";
+        }
+    };
+    BOOST_CHECK(batch_fitness_evaluator{udbfe_01{}}.get_name() != "frobniz");
+
+    // get_extra_info().
+    struct udbfe_02 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        std::string get_extra_info() const
+        {
+            return "frobniz";
+        }
+    };
+    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_02{}}.get_extra_info(), "frobniz");
+    struct udbfe_03 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        // Missing const.
+        std::string get_extra_info()
+        {
+            return "frobniz";
+        }
+    };
+    BOOST_CHECK(batch_fitness_evaluator{udbfe_03{}}.get_extra_info().empty());
+
+    // get_thread_safety().
+    struct udbfe_04 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        thread_safety get_thread_safety() const
+        {
+            return thread_safety::constant;
+        }
+    };
+    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_04{}}.get_thread_safety(), thread_safety::constant);
+    struct udbfe_05 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        // Missing const.
+        thread_safety get_thread_safety()
+        {
+            return thread_safety::constant;
+        }
+    };
+    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_05{}}.get_thread_safety(), thread_safety::basic);
+}
+
+BOOST_AUTO_TEST_CASE(stream_operator)
+{
+    struct udbfe_00 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+    };
+    {
+        std::ostringstream oss;
+        oss << batch_fitness_evaluator{udbfe_00{}};
+        BOOST_CHECK(!oss.str().empty());
+    }
+    struct udbfe_01 {
+        vector_double operator()(const problem &, const vector_double &) const
+        {
+            return vector_double{};
+        }
+        std::string get_extra_info() const
+        {
+            return "bartoppo";
+        }
+    };
+    {
+        std::ostringstream oss;
+        oss << batch_fitness_evaluator{udbfe_01{}};
+        const auto st = oss.str();
+        BOOST_CHECK(boost::contains(st, "bartoppo"));
+        BOOST_CHECK(boost::contains(st, "Extra info:"));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(call_operator)
+{
+    struct udbfe_00 {
+        vector_double operator()(const problem &p, const vector_double &dvs) const
+        {
+            return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
+        }
+    };
+    batch_fitness_evaluator bfe0{udbfe_00{}};
+    BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
+    BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
+    // Try with a function.
+    batch_fitness_evaluator bfe0a{udbfe0};
+    BOOST_CHECK(bfe0a(problem{null_problem{3}}, vector_double{.5}) == (vector_double{.5, .5, .5}));
+    // Try passing in a wrong dvs.
+    BOOST_CHECK_EXCEPTION(
+        bfe0(problem{rosenbrock{}}, vector_double{.5}), std::invalid_argument, [](const std::invalid_argument &ia) {
+            return boost::contains(
+                ia.what(),
+                "Invalid argument for a batch fitness evaluation: the length of the vector "
+                "representing the decision vectors, 1, is not an exact multiple of the dimension of the problem, 2");
+        });
+    // Try a udfbe which returns a bogus vector of fitnesses.
+    struct udbfe_01 {
+        vector_double operator()(const problem &p, const vector_double &dvs) const
+        {
+            return vector_double(p.get_nf() * (dvs.size() / p.get_nx()) + 1u, 1.);
+        }
+    };
+    batch_fitness_evaluator bfe1{udbfe_01{}};
+    BOOST_CHECK_EXCEPTION(
+        bfe1(problem{null_problem{3}}, vector_double{.5}), std::invalid_argument, [](const std::invalid_argument &ia) {
+            return boost::contains(ia.what(),
+                                   "An invalid result was produced by a batch fitness evaluation: the length of "
+                                   "the vector representing the fitness vectors, 4, is not an exact multiple of "
+                                   "the fitness dimension of the problem, 3");
+        });
+    // Try a udfbe which returns a bogus number of fitnesses.
+    struct udbfe_02 {
+        vector_double operator()(const problem &p, const vector_double &dvs) const
+        {
+
+            return vector_double(p.get_nf() * ((dvs.size() + 1u) / p.get_nx()), 1.);
+        }
+    };
+    batch_fitness_evaluator bfe2{udbfe_02{}};
+    BOOST_CHECK_EXCEPTION(
+        bfe2(problem{null_problem{3}}, vector_double{.5}), std::invalid_argument, [](const std::invalid_argument &ia) {
+            return boost::contains(ia.what(),
+                                   "An invalid result was produced by a batch fitness evaluation: the number of "
+                                   "produced fitness vectors, 2, differs from the number of input decision vectors, 1");
+        });
+}
+
+struct udbfe_a {
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
+    }
+    std::string get_name() const
+    {
+        return "abba";
+    }
+    std::string get_extra_info() const
+    {
+        return "dabba";
+    }
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::constant;
+    }
+    template <typename Archive>
+    void serialize(Archive &ar)
+    {
+        ar &state;
+    }
+    int state = 42;
+};
+
+PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(udbfe_a)
+
+// Serialization tests.
+BOOST_AUTO_TEST_CASE(s11n)
+{
+    batch_fitness_evaluator bfe0{udbfe_a{}};
+    BOOST_CHECK(bfe0.extract<udbfe_a>()->state == 42);
+    bfe0.extract<udbfe_a>()->state = -42;
+    // Store the string representation.
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(bfe0);
+    // Now serialize, deserialize and compare the result.
+    {
+        cereal::JSONOutputArchive oarchive(ss);
+        oarchive(bfe0);
+    }
+    // Change the content of p before deserializing.
+    bfe0 = batch_fitness_evaluator{};
+    {
+        cereal::JSONInputArchive iarchive(ss);
+        iarchive(bfe0);
+    }
+    auto after = boost::lexical_cast<std::string>(bfe0);
+    BOOST_CHECK_EQUAL(before, after);
+    BOOST_CHECK(bfe0.is<udbfe_a>());
+    BOOST_CHECK(bfe0.extract<udbfe_a>()->state = -42);
 }
