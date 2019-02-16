@@ -536,6 +536,7 @@ public:
 template <typename T>
 const bool override_has_hessians_sparsity<T>::value;
 
+// Detect the batch_fitness() member function.
 template <typename T>
 class has_batch_fitness
 {
@@ -544,13 +545,13 @@ class has_batch_fitness
     static const bool implementation_defined = std::is_same<vector_double, detected_t<batch_fitness_t, T>>::value;
 
 public:
-    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
 template <typename T>
 const bool has_batch_fitness<T>::value;
 
+// Detect the has_batch_fitness() member function.
 template <typename T>
 class override_has_batch_fitness
 {
@@ -559,7 +560,6 @@ class override_has_batch_fitness
     static const bool implementation_defined = std::is_same<bool, detected_t<has_batch_fitness_t, T>>::value;
 
 public:
-    /// Value of the type trait.
     static const bool value = implementation_defined;
 };
 
@@ -1135,6 +1135,8 @@ struct prob_inner final : prob_inner_base {
  * unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the
  * following methods:
  * @code{.unparsed}
+ * vector_double batch_fitness(const vector_double &) const;
+ * bool has_batch_fitness() const;
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
@@ -1504,20 +1506,79 @@ public:
 
         // 4 - increments fitness evaluation counter
         // NOTE: this is an atomic variable, thread-safe.
-        m_fevals.fetch_add(1u, std::memory_order_relaxed);
+        increment_fevals(1);
 
         return retval;
     }
+
+    /// Batch fitness.
+    /**
+     * This method implements the evaluation of multiple decision vectors in batch mode
+     * by invoking the <tt>%batch_fitness()</tt> method of the UDP. The <tt>%batch_fitness()</tt>
+     * method of the UDP accepts in input a batch of decision vectors, \p dvs, stored contiguously:
+     * for a problem with dimension \f$ n \f$, the first decision vector in \p dvs occupies
+     * the index range \f$ \left[0, n\right) \f$, the second decision vector occupies the range
+     * \f$ \left[n, 2n\right) \f$, and so on. The return value is the batch of fitness vectors \p fvs
+     * resulting from computing the fitness of the input decision vectors.
+     * \p fvs is also stored contiguously: for a problem with fitness dimension \f$ f \f$, the first fitness
+     * vector will occupy the index range \f$ \left[0, f\right) \f$, the second fitness vector
+     * will occupy the range \f$ \left[f, 2f\right) \f$, and so on.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * If the UDP satisfies :cpp:class:`pagmo::has_batch_fitness`, this method will forward ``dvs``
+     * to the ``batch_fitness()`` method of the UDP after sanity checks. The output of the ``batch_fitness()``
+     * method of the UDP will also be checked before being returned. If the UDP does not satisfy
+     * :cpp:class:`pagmo::has_batch_fitness`, an error will be raised.
+     * \endverbatim
+     *
+     * A successful call of this method will increase the internal fitness evaluation counter (see
+     * problem::get_fevals()).
+     *
+     * @param dvs the input batch of decision vectors.
+     *
+     * @return the fitnesses of the decision vectors in \p dvs.
+     *
+     * @throws std::invalid_argument if either \p dvs or the return value are incompatible
+     * with the properties of this problem.
+     * @throws not_implemented_error if the UDP does not have a <tt>%batch_fitness()</tt> method.
+     * @throws unspecified any exception thrown by the <tt>%batch_fitness()</tt> method of the UDP.
+     */
     vector_double batch_fitness(const vector_double &dvs) const
     {
         // Check the input dvs.
         detail::bfe_check_input_dvs(*this, dvs);
+
         // Invoke the batch fitness from the UDP.
         auto retval(ptr()->batch_fitness(dvs));
+
         // Check the produced vector of fitnesses.
         detail::bfe_check_output_fvs(*this, dvs, retval);
+
+        // Increment the number of fitness evaluations.
+        increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / get_nx()));
+
         return retval;
     }
+
+    /// Check if the UDP is capable of fitness evaluation in batch mode.
+    /**
+     * This method will return \p true if the UDP is capable of fitness evaluation in batch mode, \p false otherwise.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * The batch fitness evaluation capability of the UDP is determined as follows:
+     *
+     * * if the UDP does not satisfy :cpp:class:`pagmo::has_batch_fitness`, then this method will always return
+     *   ``false``;
+     * * if the UDP satisfies :cpp:class:`pagmo::has_batch_fitness` but it does not satisfy
+     *   :cpp:class:`pagmo::override_has_batch_fitness`, then this method will always return ``true``;
+     * * if the UDP satisfies both :cpp:class:`pagmo::has_batch_fitness` and
+     *   :cpp:class:`pagmo::override_has_batch_fitness`, then this method will return the output of the
+     *   ``has_batch_fitness()`` method of the UDP.
+     *
+     * \endverbatim
+     *
+     * @return a flag signalling the availability of fitness evaluation in batch mode in the UDP.
+     */
     bool has_batch_fitness() const
     {
         return m_has_batch_fitness;
