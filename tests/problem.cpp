@@ -1333,3 +1333,15 @@ BOOST_AUTO_TEST_CASE(minlp_test)
     BOOST_CHECK((problem{minlp{3u}}.get_nx() == 3u));
     BOOST_CHECK_THROW(problem{minlp{5u}}, std::invalid_argument);
 }
+
+BOOST_AUTO_TEST_CASE(increase_counter)
+{
+    problem p;
+    BOOST_CHECK(p.get_fevals() == 0u);
+    p.increment_fevals(100u);
+    BOOST_CHECK(p.get_fevals() == 100u);
+    p.increment_fevals(10u);
+    BOOST_CHECK(p.get_fevals() == 110u);
+    p.increment_fevals(0u);
+    BOOST_CHECK(p.get_fevals() == 110u);
+}

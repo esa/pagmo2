@@ -1962,6 +1962,17 @@ public:
         return m_fevals.load(std::memory_order_relaxed);
     }
 
+    /// Increment the number of fitness evaluations.
+    /**
+     * This method will increase the internal counter of fitness evaluations by \p n.
+     *
+     * @param n the amount by which the internal counter of fitness evaluations will be increased.
+     */
+    void increment_fevals(unsigned long long n) const
+    {
+        m_fevals.fetch_add(n, std::memory_order_relaxed);
+    }
+
     /// Number of gradient evaluations.
     /**
      * Each time a call to problem::gradient() successfully completes, an internal counter is increased by one.
