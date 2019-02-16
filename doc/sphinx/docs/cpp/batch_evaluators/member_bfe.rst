@@ -11,8 +11,8 @@ Member function BFE
 
    This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
    construct a :cpp:class:`~pagmo::batch_fitness_evaluator`.
-   :cpp:class:`~pagmo::member_bfe` will employ the input problem's
-   :cpp:func:`pagmo::problem::batch_fitness()` member function.
+   :cpp:class:`~pagmo::member_bfe` is a simple wrapper which delegates batch fitness evaluations
+   to the input problem's :cpp:func:`pagmo::problem::batch_fitness()` member function.
 
    .. cpp:function:: vector_double operator()(const problem &p, const vector_double &dvs) const
 
