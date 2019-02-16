@@ -90,6 +90,7 @@ Implemented batch evaluators
   :maxdepth: 1
 
   batch_evaluators/default_bfe
+  batch_evaluators/thread_bfe
 
 Utilities
 ^^^^^^^^^

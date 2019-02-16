@@ -40,6 +40,8 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include <boost/numeric/conversion/cast.hpp>
+
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 
@@ -186,6 +188,7 @@ struct batch_fitness_evaluator_inner final : batch_fitness_evaluator_inner_base 
 class thread_bfe
 {
 public:
+    // Call operator.
     vector_double operator()(const problem &p, const vector_double &dvs) const
     {
         // Fetch a few quantities from the problem.
@@ -247,6 +250,9 @@ public:
             tbb::parallel_for(range_t(0u, n_dvs), [p, &range_evaluator](const range_t &range) {
                 range_evaluator(p, range.begin(), range.end());
             });
+            // Manually increment the fitness eval counter in p. Since we used copies
+            // of p for the parallel fitness evaluations, the counter in p did not change.
+            p.increment_fevals(boost::numeric_cast<unsigned long long>(n_dvs));
         } else {
             pagmo_throw(std::invalid_argument, "Cannot use a thread_bfe on the problem '" + p.get_name()
                                                    + "', which does not provide the required level of thread safety");
@@ -254,10 +260,12 @@ public:
 
         return retval;
     }
+    // Name.
     std::string get_name() const
     {
         return "Multi-threaded batch fitness evaluator";
     }
+    // Serialization support.
     template <typename Archive>
     void serialize(Archive &)
     {
@@ -445,5 +453,6 @@ private:
 } // namespace pagmo
 
 PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::default_bfe)
+PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::thread_bfe)
 
 #endif
