@@ -91,6 +91,7 @@ Implemented batch evaluators
 
   batch_evaluators/default_bfe
   batch_evaluators/thread_bfe
+  batch_evaluators/member_bfe
 
 Utilities
 ^^^^^^^^^

@@ -272,6 +272,27 @@ public:
     }
 };
 
+// Bfe that uses problem's member function.
+class member_bfe
+{
+public:
+    // Call operator.
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        return detail::prob_invoke_mem_batch_fitness(p, dvs);
+    }
+    // Name.
+    std::string get_name() const
+    {
+        return "Member function batch fitness evaluator";
+    }
+    // Serialization support.
+    template <typename Archive>
+    void serialize(Archive &)
+    {
+    }
+};
+
 // Default bfe implementation.
 class default_bfe
 {
@@ -452,7 +473,8 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::default_bfe)
 PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::thread_bfe)
+PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::member_bfe)
+PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::default_bfe)
 
 #endif

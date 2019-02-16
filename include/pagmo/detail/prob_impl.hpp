@@ -32,6 +32,8 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 
+#include <boost/numeric/conversion/cast.hpp>
+
 #include <pagmo/exceptions.hpp>
 #include <pagmo/types.hpp>
 
@@ -77,6 +79,23 @@ inline void prob_check_fv(const P &p, const double *fv, vector_double::size_type
                                                + ", while the fitness vector has a size of " + std::to_string(s)
                                                + " (the two values should be equal)");
     }
+}
+
+// Small helper for the invocation of the UDP's batch_fitness() *without* checks.
+// This is useful for avoiding doing double checks on the input/output values
+// of batch_fitness() when we are sure that the checks have been performed elsewhere already.
+// This helper will also take care of increasing the fevals counter in the
+// input problem.
+template <typename P>
+inline vector_double prob_invoke_mem_batch_fitness(const P &p, const vector_double &dvs)
+{
+    // Invoke the batch fitness from the UDP.
+    auto retval(p.ptr()->batch_fitness(dvs));
+
+    // Increment the number of fitness evaluations.
+    p.increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / p.get_nx()));
+
+    return retval;
 }
 
 } // namespace detail

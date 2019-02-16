@@ -43,4 +43,4 @@ Associated type traits
 
       The value of the type trait.
 
-.. cpp:namespace-pop:: pagmo
+.. cpp:namespace-pop::

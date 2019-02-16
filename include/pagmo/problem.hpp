@@ -1511,6 +1511,14 @@ public:
         return retval;
     }
 
+private:
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+    // Make friends with the batch_fitness() invocation helper.
+    template <typename P>
+    friend vector_double detail::prob_invoke_mem_batch_fitness(const P &, const vector_double &);
+#endif
+
+public:
     /// Batch fitness.
     /**
      * This method implements the evaluation of multiple decision vectors in batch mode
@@ -1548,14 +1556,12 @@ public:
         // Check the input dvs.
         detail::bfe_check_input_dvs(*this, dvs);
 
-        // Invoke the batch fitness from the UDP.
-        auto retval(ptr()->batch_fitness(dvs));
+        // Invoke the batch fitness function of the UDP, and
+        // increase the fevals counter as well.
+        auto retval = detail::prob_invoke_mem_batch_fitness(*this, dvs);
 
         // Check the produced vector of fitnesses.
         detail::bfe_check_output_fvs(*this, dvs, retval);
-
-        // Increment the number of fitness evaluations.
-        increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / get_nx()));
 
         return retval;
     }
