@@ -35,7 +35,6 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <iterator>
 #include <limits>
-#include <numeric>
 #include <random>
 #include <stdexcept>
 #include <vector>
@@ -199,41 +198,10 @@ public:
         assert(m_ID.size() == m_f.size());
     }
 
-    /// Adds one decision vector (chromosome) to the population.
-    /**
-     * Appends a new chromosome \p x to the population, evaluating
-     * its fitness and creating a new unique identifier for the newly
-     * born individual.
-     *
-     * In case of exceptions, the population will not be altered.
-     *
-     * @param x decision vector to be added to the population.
-     *
-     * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
-     */
-    void push_back(const vector_double &x)
-    {
-        // This line will throw if dv dimensions are wrong, or fitness dimensions are worng
-        auto f = m_prob.fitness(x);
-        push_back(x, f);
-    }
-
-    /// Adds one decision vector/fitness vector to the population
-    /**
-     * Appends a new chromosome \p x to the population, and sets
-     * its fitness to \p f creating a new unique identifier for the newly
-     * born individual.
-     *
-     * In case of exceptions, the population will not be altered.
-     *
-     * @param x decision vector to be added to the population.
-     * @param f fitness vector corresponding to the decision vector
-     *
-     * @throws std::invalid_argument if the size of \p x differs from the problem's dimension,
-     * or if the size of \p f differs from the fitness dimension.
-     * @throws unspecified any exception thrown by memory errors in standard containers.
-     */
-    void push_back(const vector_double &x, const vector_double &f)
+private:
+    // Internal implementation of push_back().
+    template <typename T, typename U>
+    void push_back_impl(T &&x, U &&f)
     {
         // Checks on the input vectors.
         if (x.size() != m_prob.get_nx()) {
@@ -246,23 +214,97 @@ public:
                         "Trying to add a fitness of dimension: " + std::to_string(f.size())
                             + ", while the problem's fitness has dimension: " + std::to_string(m_prob.get_nf()));
         }
+        // LCOV_EXCL_START
+        if (m_ID.size() == std::numeric_limits<decltype(m_ID.size())>::max()
+            || m_x.size() == std::numeric_limits<decltype(m_x.size())>::max()) {
+            pagmo_throw(std::overflow_error, "Cannot add a new individual to this population: the maximum number of "
+                                             "individuals per population has been reached");
+        }
+        // LCOV_EXCL_STOP
 
         // Prepare quantities to be appended to the internal vectors.
         const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
-        auto x_copy(x);
-        auto f_copy(f);
+        auto x_copy(std::forward<T>(x));
+        auto f_copy(std::forward<U>(f));
         // Reserve space in the vectors.
-        // NOTE: in face of overflow here, reserve(0) will be called, which is fine.
-        // The first push_back below will then fail, with no modifications to the class taking place.
         m_ID.reserve(m_ID.size() + 1u);
         m_x.reserve(m_x.size() + 1u);
         m_f.reserve(m_f.size() + 1u);
 
-        // update champion either throws before modfying anything, or completes successfully. The rest is noexcept.
-        update_champion(x, f);
+        // update_champion() either throws before modfying anything, or it completes successfully. The rest is noexcept.
+        update_champion(x_copy, f_copy);
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
         m_f.push_back(std::move(f_copy));
+    }
+
+public:
+    /// Adds one decision vector (chromosome) to the population.
+    /**
+     * Appends a new chromosome \p x to the population, evaluating
+     * its fitness and creating a new unique identifier for the newly
+     * born individual.
+     *
+     * In case of exceptions, the population will not be altered.
+     *
+     * @param x decision vector to be added to the population.
+     *
+     * @throws std::overflow_error if the addition of ``x`` to the population would overflow the population size limit.
+     * @throws std::invalid_argument if the size of ``x`` differs from the problem's dimension.
+     * @throws unspecified any exception thrown by memory errors in standard containers or by problem::fitness().
+     */
+    void push_back(const vector_double &x)
+    {
+        push_back_impl(x, m_prob.fitness(x));
+    }
+    /// Adds one decision vector (chromosome) to the population (move overload).
+    /**
+     * This overload behaves like the previous one, the only difference being that ``x``
+     * will be moved (rather than copied) into the population.
+     *
+     * @param x decision vector to be added to the population.
+     *
+     * @throws unspecified any exception thrown by the previous ``push_back()`` overload.
+     */
+    void push_back(vector_double &&x)
+    {
+        push_back_impl(std::move(x), m_prob.fitness(x));
+    }
+
+    /// Adds one decision vector/fitness vector to the population.
+    /**
+     * Appends a new chromosome \p x to the population, and sets
+     * its fitness to \p f creating a new unique identifier for the newly
+     * born individual.
+     *
+     * In case of exceptions, the population will not be altered.
+     *
+     * @param x decision vector to be added to the population.
+     * @param f fitness vector corresponding to the decision vector.
+     *
+     * @throws std::overflow_error if the addition of ``x`` to the population would overflow the population size limit.
+     * @throws std::invalid_argument if the size of ``x`` differs from the problem's dimension,
+     * or if the size of ``f`` differs from the fitness dimension.
+     * @throws unspecified any exception thrown by memory errors in standard containers.
+     */
+    void push_back(const vector_double &x, const vector_double &f)
+    {
+        push_back_impl(x, f);
+    }
+
+    /// Adds one decision vector/fitness vector to the population (move overload).
+    /**
+     * This overload behaves like the previous one, the only difference being that ``x``
+     * and ``f`` will be moved (rather than copied) into the population.
+     *
+     * @param x decision vector to be added to the population.
+     * @param f fitness vector corresponding to the decision vector.
+     *
+     * @throws unspecified any exception thrown by the previous ``push_back()`` overload.
+     */
+    void push_back(vector_double &&x, vector_double &&f)
+    {
+        push_back_impl(std::move(x), std::move(f));
     }
 
     /// Creates a random decision vector
@@ -294,6 +336,7 @@ public:
      *
      * @returns the index of the best individual.
      *
+     * @throws std::overflow_error if the size of the population exceeds an implementation-defined limit.
      * @throws std::invalid_argument if the problem is multiobjective and thus
      * a best individual is not well defined, or if the population is empty.
      * @throws unspecified any exception thrown by pagmo::sort_population_con().
@@ -309,6 +352,7 @@ public:
      *
      * @returns the index of the best individual.
      *
+     * @throws std::overflow_error if the size of the population exceeds an implementation-defined limit.
      * @throws std::invalid_argument if the problem is multiobjective and thus
      * a best individual is not well defined, or if the population is empty.
      * @throws unspecified any exception thrown by pagmo::sort_population_con().
@@ -325,11 +369,19 @@ public:
         if (m_prob.get_nc() > 0u) { // TODO: should we also code a min_element_population_con?
             return sort_population_con(m_f, m_prob.get_nec(), tol)[0];
         }
-        // Sort for single objective, unconstrained optimization
-        std::vector<size_type> indexes(size());
-        std::iota(indexes.begin(), indexes.end(), size_type(0u));
-        return *std::min_element(indexes.begin(), indexes.end(),
-                                 [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
+        // Overflow check on the iterator diff type.
+        using it_diff_t = std::iterator_traits<decltype(m_f.begin())>::difference_type;
+        using it_udiff_t = std::make_unsigned<it_diff_t>::type;
+        // Check that we can represent any index in the population via the iterator difference type.
+        // NOTE: size - 1 is fine, as we know that here size cannot be zero.
+        // LCOV_EXCL_START
+        if (m_f.size() - 1u > static_cast<it_udiff_t>(std::numeric_limits<it_diff_t>::max())) {
+            pagmo_throw(std::overflow_error, "The size of the population, " + std::to_string(m_f.size())
+                                                 + ", is too large, and it results in an overflow condition when "
+                                                   "trying to determine the index of the best individual");
+        }
+        // LCOV_EXCL_STOP
+        return static_cast<size_type>(std::min_element(m_f.begin(), m_f.end()) - m_f.begin());
     }
 
     /// Index of the best individual (accounting for a scalar tolerance)
@@ -337,6 +389,8 @@ public:
      * @param tol scalar tolerance to be considered for each constraint.
      *
      * @return index of the best individual.
+     *
+     * @throws unspecified any exception thrown by the previous ``best_idx()`` overload.
      */
     size_type best_idx(double tol) const
     {
@@ -359,6 +413,7 @@ public:
      *
      * @returns the index of the worst individual.
      *
+     * @throws std::overflow_error if the size of the population exceeds an implementation-defined limit.
      * @throws std::invalid_argument if the problem is multiobjective and thus
      * a worst individual is not well defined, or if the population is empty.
      * @throws unspecified any exception thrown by pagmo::sort_population_con().
@@ -382,6 +437,7 @@ public:
      *
      * @returns the index of the worst individual.
      *
+     * @throws std::overflow_error if the size of the population exceeds an implementation-defined limit.
      * @throws std::invalid_argument if the problem is multiobjective and thus
      * a worst individual is not well defined, or if the population is empty.
      * @throws unspecified any exception thrown by pagmo::sort_population_con().
@@ -398,11 +454,19 @@ public:
         if (m_prob.get_nc() > 0u) { // TODO: should we also code a min_element_population_con?
             return sort_population_con(m_f, m_prob.get_nec(), tol).back();
         }
-        // Sort for single objective, unconstrained optimization
-        std::vector<size_type> indexes(size());
-        std::iota(indexes.begin(), indexes.end(), size_type(0u));
-        return *std::max_element(indexes.begin(), indexes.end(),
-                                 [this](size_type idx1, size_type idx2) { return m_f[idx1] < m_f[idx2]; });
+        // Overflow check on the iterator diff type.
+        using it_diff_t = std::iterator_traits<decltype(m_f.begin())>::difference_type;
+        using it_udiff_t = std::make_unsigned<it_diff_t>::type;
+        // Check that we can represent any index in the population via the iterator difference type.
+        // NOTE: size - 1 is fine, as we know that here size cannot be zero.
+        // LCOV_EXCL_START
+        if (m_f.size() - 1u > static_cast<it_udiff_t>(std::numeric_limits<it_diff_t>::max())) {
+            pagmo_throw(std::overflow_error, "The size of the population, " + std::to_string(m_f.size())
+                                                 + ", is too large, and it results in an overflow condition when "
+                                                   "trying to determine the index of the worst individual");
+        }
+        // LCOV_EXCL_STOP
+        return static_cast<size_type>(std::max_element(m_f.begin(), m_f.end()) - m_f.begin());
     }
 
     /// Index of the worst individual (accounting for a scalar tolerance)
@@ -410,6 +474,8 @@ public:
      * @param tol scalar tolerance to be considered for each constraint.
      *
      * @return index of the worst individual.
+     *
+     * @throws unspecified any exception thrown by the previous ``worst_idx()`` overload.
      */
     size_type worst_idx(double tol) const
     {
@@ -685,21 +751,22 @@ private:
     {
         assert(f.size() > 0u);
         // If the problem has multiple objectives do nothing
-        if (m_prob.get_nobj() == 1u) {
-            // If the champion does not exist create it, otherwise update it if worse than the new solution
-            if (m_champion_x.size() == 0u) {
+        if (m_prob.get_nobj() != 1u) {
+            return;
+        }
+        // If the champion does not exist create it, otherwise update it if worse than the new solution
+        if (m_champion_x.size() == 0u) {
+            m_champion_x = std::move(x);
+            m_champion_f = std::move(f);
+        } else if (m_prob.get_nc() == 0u) { // unconstrained
+            if (f[0] < m_champion_f[0]) {
                 m_champion_x = std::move(x);
                 m_champion_f = std::move(f);
-            } else if (m_prob.get_nc() == 0u) { // unconstrained
-                if (f[0] < m_champion_f[0]) {
-                    m_champion_x = std::move(x);
-                    m_champion_f = std::move(f);
-                }
-            } else { // constrained
-                if (compare_fc(f, m_champion_f, m_prob.get_nec(), m_prob.get_c_tol())) {
-                    m_champion_x = std::move(x);
-                    m_champion_f = std::move(f);
-                }
+            }
+        } else { // constrained
+            if (compare_fc(f, m_champion_f, m_prob.get_nec(), m_prob.get_c_tol())) {
+                m_champion_x = std::move(x);
+                m_champion_f = std::move(f);
             }
         }
     }

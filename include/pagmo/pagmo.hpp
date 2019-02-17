@@ -82,9 +82,11 @@ see https://www.gnu.org/licenses/. */
 #endif
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
+#include <pagmo/problems/golomb_ruler.hpp>
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rastrigin.hpp>
