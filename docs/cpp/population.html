@@ -127,14 +127,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.11 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id3">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id7">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id11">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id14">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id16">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id18">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id22">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id25">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id15">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id17">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id19">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id23">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id26">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -333,7 +333,29 @@ in undefined behaviour.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if the addition of <code class="docutils literal"><span class="pre">x</span></code> to the population would overflow the population size limit. </li>
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the size of <code class="docutils literal"><span class="pre">x</span></code> differs from the problem’s dimension. </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers or by <a class="reference internal" href="problem.html#classpagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population9push_backERR13vector_double">
+<span id="pagmo::population::push_back__vector_doubleRR"></span><span class="target" id="classpagmo_1_1population_1a06c3e1bc93c11cb60925cb12eb2a7a31"></span>void <code class="descname">push_back</code><span class="sig-paren">(</span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population9push_backERR13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds one decision vector (chromosome) to the population (move overload). </p>
+<p>This overload behaves like the previous one, the only difference being that <code class="docutils literal"><span class="pre">x</span></code> will be moved (rather than copied) into the population.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: decision vector to be added to the population.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the previous <code class="docutils literal"><a class="reference internal" href="#classpagmo_1_1population_1aacd5b3e4fd6c43a521db1c9a34cc05cb"><span class="std std-ref"><span class="pre">push_back()</span></span></a></code> overload. </li>
 </ul>
 </dd>
 </dl>
@@ -350,13 +372,35 @@ in undefined behaviour.</p>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">x</span></code>: decision vector to be added to the population. </li>
-<li><code class="docutils literal"><span class="pre">f</span></code>: fitness vector corresponding to the decision vector</li>
+<li><code class="docutils literal"><span class="pre">f</span></code>: fitness vector corresponding to the decision vector.</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if the addition of <code class="docutils literal"><span class="pre">x</span></code> to the population would overflow the population size limit. </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the size of <code class="docutils literal"><span class="pre">x</span></code> differs from the problem’s dimension, or if the size of <code class="docutils literal"><span class="pre">f</span></code> differs from the fitness dimension. </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo10population9push_backERR13vector_doubleRR13vector_double">
+<span id="pagmo::population::push_back__vector_doubleRR.vector_doubleRR"></span><span class="target" id="classpagmo_1_1population_1aee96820c81385b2aa42cd3ceabd48c38"></span>void <code class="descname">push_back</code><span class="sig-paren">(</span><a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;&amp;<em>x</em>, <a class="reference internal" href="types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;&amp;<em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo10population9push_backERR13vector_doubleRR13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds one decision vector/fitness vector to the population (move overload). </p>
+<p>This overload behaves like the previous one, the only difference being that <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">f</span></code> will be moved (rather than copied) into the population.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: decision vector to be added to the population. </li>
+<li><code class="docutils literal"><span class="pre">f</span></code>: fitness vector corresponding to the decision vector.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the previous <code class="docutils literal"><a class="reference internal" href="#classpagmo_1_1population_1aacd5b3e4fd6c43a521db1c9a34cc05cb"><span class="std std-ref"><span class="pre">push_back()</span></span></a></code> overload. </li>
 </ul>
 </dd>
 </dl>
@@ -391,6 +435,7 @@ in undefined behaviour.</p>
 <dd>the index of the best individual.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if the size of the population exceeds an implementation-defined limit. </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty. </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#namespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
 </ul>
@@ -413,6 +458,7 @@ in undefined behaviour.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if the size of the population exceeds an implementation-defined limit. </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a best individual is not well defined, or if the population is empty. </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#namespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
 </ul>
@@ -427,10 +473,15 @@ in undefined behaviour.</p>
 <dd><p>Index of the best individual (accounting for a scalar tolerance) </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>index of the best individual. </dd>
+<dd>index of the best individual.</dd>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">tol</span></code>: scalar tolerance to be considered for each constraint.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the previous <code class="docutils literal"><a class="reference internal" href="#classpagmo_1_1population_1a336395f04ade40f2f2c7c99a1c68011d"><span class="std std-ref"><span class="pre">best_idx()</span></span></a></code> overload. </li>
 </ul>
 </dd>
 </dl>
@@ -448,6 +499,7 @@ in undefined behaviour.</p>
 <dd>the index of the worst individual.</dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if the size of the population exceeds an implementation-defined limit. </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty. </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#namespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
 </ul>
@@ -471,6 +523,7 @@ in undefined behaviour.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: if the size of the population exceeds an implementation-defined limit. </li>
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multiobjective and thus a worst individual is not well defined, or if the population is empty. </li>
 <li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="utils/constrained.html#namespacepagmo_1a468115a79891255d62c38f01b8732872"><span class="std std-ref">pagmo::sort_population_con()</span></a>. </li>
 </ul>
@@ -485,10 +538,15 @@ in undefined behaviour.</p>
 <dd><p>Index of the worst individual (accounting for a scalar tolerance) </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>index of the worst individual. </dd>
+<dd>index of the worst individual.</dd>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">tol</span></code>: scalar tolerance to be considered for each constraint.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the previous <code class="docutils literal"><a class="reference internal" href="#classpagmo_1_1population_1a70fc0097798288a5d29135de6d05490f"><span class="std std-ref"><span class="pre">worst_idx()</span></span></a></code> overload. </li>
 </ul>
 </dd>
 </dl>

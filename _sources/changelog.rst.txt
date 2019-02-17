@@ -4,8 +4,15 @@ Changelog
 2.11 (unreleased)
 -----------------
 
+New
+~~~
+
+- Implement the Lennard-Jones and Golomb ruler problems (`#247 <https://github.com/esa/pagmo2/pull/247>`__).
+
 Changes
 ~~~~~~~
+
+- Various performance improvements in the :cpp:class:`~pagmo::population` API (`#250 <https://github.com/esa/pagmo2/pull/250>`__).
 
 - **BREAKING**: :class:`pygmo.problem` and :class:`pygmo.algorithm` cannot be used as UDPs and UDAs any more.
   This change makes the behaviour of pygmo consistent with the behaviour of pagmo (`#248 <https://github.com/esa/pagmo2/pull/248>`__).
