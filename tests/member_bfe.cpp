@@ -48,8 +48,6 @@ see https://www.gnu.org/licenses/. */
 
 using namespace pagmo;
 
-// static std::mt19937 rng;
-
 BOOST_AUTO_TEST_CASE(basic_tests)
 {
     BOOST_CHECK(is_udbfe<member_bfe>::value);
