@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -293,18 +294,55 @@ public:
     }
 };
 
+namespace detail
+{
+
+// Usual trick for global variables in header file.
+template <typename = void>
+struct default_bfe_impl {
+    static std::function<vector_double(const problem &, const vector_double &)> s_func;
+};
+
+// C++ implementation of the heuristic for the automatic deduction of the "best"
+// bfe strategy.
+inline vector_double default_bfe_cpp_impl(const problem &p, const vector_double &dvs)
+{
+    // The member function batch_fitness() of p, if present, has priority.
+    if (p.has_batch_fitness()) {
+        return member_bfe{}(p, dvs);
+    }
+    // Otherwise, we run the generic thread-based bfe, if the problem
+    // is thread-safe enough.
+    if (p.get_thread_safety() >= thread_safety::basic) {
+        return thread_bfe{}(p, dvs);
+    }
+    pagmo_throw(std::invalid_argument,
+                "Cannot execute fitness evaluations in batch mode for a problem of type '" + p.get_name()
+                    + "': the problem does not implement the batch_fitness() member function, and its thread safety "
+                      "level is not sufficient to run a thread-based batch fitness evaluation implementation");
+}
+
+template <typename T>
+std::function<vector_double(const problem &, const vector_double &)> default_bfe_impl<T>::s_func
+    = &default_bfe_cpp_impl;
+
+} // namespace detail
+
 // Default bfe implementation.
 class default_bfe
 {
 public:
-    vector_double operator()(const problem &, const vector_double &) const
+    // Call operator.
+    vector_double operator()(const problem &p, const vector_double &dvs) const
     {
-        return vector_double{};
+        return detail::default_bfe_impl<>::s_func(p, dvs);
     }
+    // Name.
     std::string get_name() const
     {
         return "Default batch fitness evaluator";
     }
+    // Serialization support.
     template <typename Archive>
     void serialize(Archive &)
     {
