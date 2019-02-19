@@ -64,7 +64,7 @@ class g_aco
 {
 public:
     /// Single entry of the log (gen, best_fit, m_ker, worst_fit, m_oracle, dx, dp)
-    typedef std::tuple<unsigned, double, double, double, double, double, double, double, double, double> log_line_type;
+    typedef std::tuple<unsigned, double, unsigned, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -177,6 +177,7 @@ public:
         vector_double omega(m_ker);
         vector_double prob_cumulative(m_ker);
         std::uniform_real_distribution<> dist(0, 1);
+        std::normal_distribution<double> gauss{0., 1.};
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
@@ -217,7 +218,7 @@ public:
 
                 auto dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
                                         // population (index n) and the number of variables (index k) the number of
-                                        //variables can be easily be deduced from counting the bounds.
+                                        // variables can be easily be deduced from counting the bounds.
                 auto fit = pop.get_f(); // The following returns a vector of vectors in which objectives, equality and
                                         // inequality constraints are concatenated,for each individual
 
@@ -294,7 +295,7 @@ public:
 
                     // We initialize the solution archive (sol_archive). This is done by storing the individuals from
                     // the best one (in terms of penalty), placed in the first row, to the worst one, placed in the last
-                    //row:
+                    // row:
                     for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
                         sol_archive[i][0] = penalties[sort_list[i]];
                         for (decltype(dim) k = 0; k < dim; ++k) {
@@ -345,7 +346,7 @@ public:
                 // 5 - use pheromone values to generate new ants (i.e., individuals)
                 // I create the vector of vectors where I will store all the new ants which will be generated:
                 std::vector<vector_double> new_ants(pop_size, vector_double(dim, 1));
-                generate_new_ants(popnew, dist, prob_cumulative, omega, sigma, new_ants, gen, sol_archive);
+                generate_new_ants(popnew, dist, gauss, prob_cumulative, omega, sigma, new_ants, sol_archive);
 
                 for (population::size_type i = 0; i < pop_size; ++i) {
                     vector_double ant(dim);
@@ -489,7 +490,7 @@ public:
         stream(ss, "\n\tOracle parameter: ", m_oracle);
         stream(ss, "\n\tMax number of non-dominated solutions: ", m_paretomax);
         stream(ss, "\n\tPareto precision: ", m_epsilon);
-        stream(ss, "\n\tDistribution index for generating multi-kernel gaussian pdfs: ", m_e);
+        stream(ss, "\n\tPseudo-random number generator (Marsenne Twister 19937): ", m_e);
         stream(ss, "\n\tSeed: ", m_seed);
         stream(ss, "\n\tVerbosity: ", m_verbosity);
 
@@ -842,8 +843,9 @@ private:
      * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current individuals
      * (which will be the means of the new pdf)
      */
-    void generate_new_ants(const population &pop, std::uniform_real_distribution<> dist, vector_double prob_cumulative,
-                           vector_double omega, vector_double sigma, std::vector<vector_double> &dvs_new, double gen,
+    void generate_new_ants(const population &pop, std::uniform_real_distribution<> dist,
+                           std::normal_distribution<double> gauss_pdf, vector_double prob_cumulative,
+                           vector_double omega, vector_double sigma, std::vector<vector_double> &dvs_new,
                            std::vector<vector_double> &sol_archive) const
     {
 
@@ -857,8 +859,8 @@ private:
         vector_double fitness_new;
 
         // I hereby generate the new ants based on a multi-kernel gaussian probability density function. In particular,
-        // I select one of the pdfs that make up the multi-kernel, by using the probability stored in the prob_cumulative
-        // vector. A multi-kernel pdf is a weighted sum of several gaussian pdf.
+        // I select one of the pdfs that make up the multi-kernel, by using the probability stored in the
+        // prob_cumulative vector. A multi-kernel pdf is a weighted sum of several gaussian pdf.
 
         if (m_omega_strategy == 1) {
             for (decltype(pop_size) j = 0u; j < pop_size; ++j) {
@@ -869,8 +871,7 @@ private:
                     double g_h = 0;
 
                     for (decltype(sol_archive.size()) k = 0u; k < sol_archive.size(); ++k) {
-                        std::normal_distribution<double> gauss_pdf_1{sol_archive[k][1 + h], sigma[h]};
-                        g_h += omega[k] * gauss_pdf_1(m_e);
+                        g_h += omega[k] * (sol_archive[k][1 + h] + sigma[h] * gauss_pdf(m_e));
 
                         // the pdf has the following form:
                         // G_h (t) = sum_{k=1}^{K} omega_{k,h} 1/(sigma_h * sqrt(2*pi)) * exp(- (t-mu_{k,h})^2 /
@@ -885,16 +886,7 @@ private:
                             g_h = 0;
 
                             for (decltype(sol_archive.size()) k = 0u; k < sol_archive.size(); ++k) {
-                                if (gen > 9000) {
-
-                                    if (k == 0) {
-                                        std::normal_distribution<double> gauss_pdf_2{sol_archive[0][1 + h], sigma[h]};
-                                        g_h += gauss_pdf_2(m_e);
-                                    }
-                                } else {
-                                    std::normal_distribution<double> gauss_pdf_3{sol_archive[k][1 + h], sigma[h]};
-                                    g_h += omega[k] * gauss_pdf_3(m_e);
-                                }
+                                g_h += omega[k] * (sol_archive[k][1 + h] + sigma[h] * gauss_pdf(m_e));
                             }
                         }
                     }
@@ -929,14 +921,12 @@ private:
                     }
                 }
                 for (decltype(n_con) h = 0u; h < n_con; ++h) {
-                    std::normal_distribution<double> gauss_pdf_4{sol_archive[k_omega][1 + h], sigma[h]};
-                    g_h = gauss_pdf_4(m_e);
+                    g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
 
                     if (g_h < lb[h] || g_h > ub[h]) {
 
                         while (g_h < lb[h] || g_h > ub[h]) {
-                            std::normal_distribution<double> gauss_pdf_5{sol_archive[k_omega][1 + h], sigma[h]};
-                            g_h = gauss_pdf_5(m_e);
+                            g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
                         }
                     }
                     dvs_new_j[h] = g_h;
