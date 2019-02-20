@@ -22,7 +22,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ALGORITHMS_GACO_HPP
 
 #include <algorithm> // std::shuffle, std::transform
-#include <cmath>
+#include <boost/math/constants/constants.hpp>
 #include <iomanip>
 #include <numeric> // std::iota, std::inner_product
 #include <random>
@@ -426,20 +426,22 @@ public:
      *
      * Example (verbosity 1):
      * @code{.unparsed}
-     * Gen:        Fevals:        ideal1:        ideal2:        ideal3:
-     *   1              0      0.0257554       0.267768       0.974592
-     *   2             52      0.0257554       0.267768       0.908174
-     *   3            104      0.0257554       0.124483       0.822804
-     *   4            156      0.0130094       0.121889       0.650099
-     *   5            208     0.00182705      0.0987425       0.650099
-     *   6            260      0.0018169      0.0873995       0.509662
-     *   7            312     0.00154273      0.0873995       0.492973
-     *   8            364     0.00154273      0.0873995       0.471251
-     *   9            416    0.000379582      0.0873995       0.471251
-     *  10            468    0.000336743      0.0855247       0.432144
+     * Gen:         Fevals   Best Penalty          Best:         Kernel         Worst:         Oracle            dx: dp:
+     *    1              0        77636.4        96138.2             63         920565              0        44.1659
+     * 665766 2            200        22325.2        27645.6             63         449229              0        28.0738
+     * 340449 3            400        22325.2        27645.6             63         274093              0        28.4459
+     * 199019 4            600        22325.2        27645.6             63         212784              0        30.2934
+     * 149509 5            800        8762.61        10850.9             63         147873              0        31.2753
+     * 110652 6           1000        5969.79        7392.47             63          86471              0        22.0092
+     * 63859.9 7           1200        5969.79        7392.47             63        52813.5 0        16.0056 36679.7 8
+     * 1400        1769.84        2191.62             63        39405.9              0        23.9469        30052.4 9
+     * 1600        1507.57        1866.85             63        26963.2              0        9.18125        20266.6 10
+     * 1800        1507.57        1866.85             63        15884.5              0        11.3995          11320
      * @endcode
-     * Gen, is the generation number, Fevals the number of function evaluation used. The ideal point of the current
-     * population follows cropped to its 5th component.
+     * Gen, is the generation number, Fevals the number of function evaluation used, Best Penalty is the best penalty
+     * function value found until that generation, Best is the best fitness function value found until that generation,
+     * Kernel is the kernel size, Worst is the worst fitness, Oracle is the oracle parameter value, dx is the flatness
+     * in the individuals, dp is the flatness in the penalty function values.
      *
      * @param level verbosity level
      */
@@ -499,7 +501,14 @@ public:
         return ss.str();
     }
     /// Get log
-
+    /**
+     * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
+     * <tt>std::vector</tt> is a g_aco::log_line_type containing: gen, fevals, best_pen, best_fit, m_ker,
+     * worst_fit, m_oracle, dx, dp
+     * as described in g_aco::set_verbosity
+     * @return an <tt>std::vector</tt> of g_aco::log_line_type containing the logged values gen, fevals, best_pen,
+     * best_fit, m_ker, worst_fit, m_oracle, dx, dp
+     */
     const log_type &get_log() const
     {
         return m_log;
@@ -637,8 +646,8 @@ private:
      */
 
     void update_sol_archive(unsigned &gen_mark, const population &pop, vector_double &sorted_vector,
-                            std::vector<unsigned long> &sorted_list, unsigned &n_impstop, unsigned &n_evalstop,
-                            std::vector<vector_double> &sol_archive) const
+                            std::vector<decltype(sorted_vector.size())> &sorted_list, unsigned &n_impstop,
+                            unsigned &n_evalstop, std::vector<vector_double> &sol_archive) const
     {
 
         auto variables = pop.get_x();
@@ -780,8 +789,9 @@ private:
 
             double omega_new;
             double sum_omega = 0;
+
             for (decltype(m_ker) l = 1; l <= m_ker; ++l) {
-                omega_new = 1.0 / (m_q * m_ker * std::sqrt(2 * M_PI))
+                omega_new = 1.0 / (m_q * m_ker * std::sqrt(2 * boost::math::constants::pi<double>()))
                             * exp(-std::pow(l - 1.0, 2) / (2.0 * std::pow(m_q, 2) * std::pow(m_ker, 2)));
                 omega_vec[l - 1] = omega_new;
                 sum_omega += omega_new;
