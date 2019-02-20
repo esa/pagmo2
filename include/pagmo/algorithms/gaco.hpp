@@ -22,6 +22,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ALGORITHMS_GACO_HPP
 
 #include <algorithm> // std::shuffle, std::transform
+#include <cmath>
 #include <iomanip>
 #include <numeric> // std::iota, std::inner_product
 #include <random>
@@ -46,7 +47,6 @@ namespace pagmo
 {
 /// Extended ACO
 /**
- * \image html ACO.jpg "The ACO flowchart" width=3cm [TO BE ADDED]
  * ACO is inspired by the natural mechanism with which real ant colonies forage food.
  * This algorithm has shown promising results in many trajectory optimization problems.
  * The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
@@ -63,8 +63,8 @@ namespace pagmo
 class g_aco
 {
 public:
-    /// Single entry of the log (gen, best_fit, m_ker, worst_fit, m_oracle, dx, dp)
-    typedef std::tuple<unsigned, double, unsigned, double, double, double, double> log_line_type;
+    /// Single entry of the log (gen, fevals, best_pen, best_fit, m_ker, worst_fit, m_oracle, dx, dp)
+    typedef std::tuple<unsigned, unsigned, double, double, unsigned, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -72,6 +72,7 @@ public:
      * Constructs the ACO user defined algorithm for single and multi-objective optimization.
      *
      * @param[in] gen Generations: number of generations to evolve.
+     * @param[in] ker Kernel: number of solutions stored in the solution archive
      * @param[in] acc Accuracy parameter: for maintaining a minimum penalty function's values distances.
      * @param[in] fstop Objective stopping criterion: when the objective value reaches this value, the algorithm is
      * stopped [for multi-objective, this applies to the first obj. only].
@@ -81,7 +82,6 @@ public:
      * @param[in] focus Focus parameter: this parameter makes the search for the optimum greedier and more focused on
      * local improvements (the higher the greedier). If the value is very high, the search is more focused around the
      * current best solutions
-     * @param[in] ker Kernel: number of solutions stored in the solution archive
      * @param[in] oracle Oracle parameter: this is the oracle parameter used in the penalty method
      * @param[in] paretomax Max number of non-dominated solutions: this regulates the max number of Pareto points to be
      * stored
@@ -257,7 +257,7 @@ public:
                 // 2 - update and sort solutions in the sol_archive, based on the computed penalties
 
                 // I declare a vector where I will store the positions of the various individuals:
-                std::vector<unsigned long> sort_list;
+                std::vector<decltype(penalties.size())> sort_list;
                 // I declare a vector where the penalties are sorted:
                 vector_double sorted_penalties(penalties);
                 // This sorts the penalties from the smallest ([0]) to the biggest ([end])
@@ -314,6 +314,7 @@ public:
                     // Every m_verbosity generations print a log line
                     if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                         auto best_fit = sol_archive[0][1 + dim];
+                        auto best_pen = sol_archive[0][0];
                         auto worst_fit = sol_archive[m_ker - 1][1 + dim];
                         double dx = 0., dp = 0.;
                         // The population flattness in variables
@@ -324,18 +325,19 @@ public:
                         dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
                         // Every line print the column names
                         if (count_screen % 50u == 1u) {
-                            print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals", std::setw(15),
-                                  "Best:", std::setw(15), "Kernel", std::setw(15), "Worst:", std::setw(15), "Oracle",
-                                  std::setw(15), "dx:", std::setw(15), std::setw(15), "dp:", '\n');
+                            print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals", std::setw(15), "Best Penalty",
+                                  std::setw(15), "Best:", std::setw(15), "Kernel", std::setw(15),
+                                  "Worst:", std::setw(15), "Oracle", std::setw(15), "dx:", std::setw(15), std::setw(15),
+                                  "dp:", '\n');
                         }
 
-                        print(std::setw(7), gen, std::setw(15), fevals, std::setw(15), best_fit, std::setw(15), m_ker,
-                              std::setw(15), worst_fit, std::setw(15), m_oracle, std::setw(15), dx, std::setw(15), dp,
-                              '\n');
+                        print(std::setw(7), gen, std::setw(15), fevals, std::setw(15), best_pen, std::setw(15),
+                              best_fit, std::setw(15), m_ker, std::setw(15), worst_fit, std::setw(15), m_oracle,
+                              std::setw(15), dx, std::setw(15), dp, '\n');
 
                         ++count_screen;
                         // Logs
-                        m_log.emplace_back(gen, best_fit, m_ker, worst_fit, m_oracle, dx, dp);
+                        m_log.emplace_back(gen, fevals, best_pen, best_fit, m_ker, worst_fit, m_oracle, dx, dp);
                     }
                 }
 
@@ -523,13 +525,14 @@ private:
      *
      * @param[in] f Fitness values: vector in which the objective functions values, equality constraints and inequality
      * constraints are stored for each passed individual
-     * @param[in] nfunc Number of objectives: the number of objectives is passed
+     * @param[in] pop Population: the population of individuals is passed
+     * @param[in] nobj Number of objectives: the number of objectives is passed
      * @param[in] nec Number of equality constraints: the number of equality constraints is passed
      * @param[in] nic Number of inequality constraints: the number of inequality constraints is passed
      */
 
-    double penalty_computation(const vector_double &f, const population &pop, const unsigned long nobj,
-                               const unsigned long nec, const unsigned long nic) const
+    double penalty_computation(const vector_double &f, const population &pop, const unsigned long long nobj,
+                               const unsigned long long nec, const unsigned long long nic) const
     {
 
         // I retrieve the tolerance vector:
@@ -622,14 +625,14 @@ private:
      * @param[in] gen_mark Generation mark: the generation mark parameter is hereby defined and it will be used for the
      * standard deviations computation
      * @param[in] pop Population: the current population is passed
-     * @param[in] stored_vector Stored penalty vector: the vector in which the penalties of the current population are
+     * @param[in] sorted_vector Stored penalty vector: the vector in which the penalties of the current population are
      * stored from the best to the worst is passed
-     * @param[in] stored_list Positions of stored penalties: this represents the positions of the individuals wrt their
+     * @param[in] sorted_list Positions of stored penalties: this represents the positions of the individuals wrt their
      * penalties as they are stored in the stored_vector
      * @param[in] n_impstop Impstop counter: it counts number of runs in which the sol_archive is not updated
      * @param[in] n_evalstop Evalstop counter: it counts the number of runs in which the best solution of the
      * sol_archive is not updated
-     * @param[in] Solution_Archive Solution archive: the solution archive is useful for retrieving the current
+     * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current
      * individuals (which will be the means of the new pdf)
      */
 
@@ -832,14 +835,15 @@ private:
      * Function which generates new individuals (i.e., ants)
      *
      * @param[in] pop Population: the current population of individuals is passed
+     * @param[in] dist Uniform real distribution: the uniform real pdf is passed
+     * @param[in] gauss_pdf Gaussian real distribution: the gaussian pdf is passed
      * @param[in] prob_cumulative Cumulative probability vector: this vector determines the probability for choosing the
      * pdf to generate new individuals
      * @param[in] omega Omega: one of the three pheromone values. These are the weights which are used in the
      * multi-kernel gaussian probability distribution
      * @param[in] sigma Sigma: one of the three pheromone values. These are the standard deviations which are used in
      * the multi-kernel gaussian probability distribution
-     * @param[in] X_new New ants: in this vector the new ants which will be generated are stored
-     * @param[in] gen Current number of generation: this represents the current generation number
+     * @param[in] dvs_new New ants: in this vector the new ants which will be generated are stored
      * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current individuals
      * (which will be the means of the new pdf)
      */
