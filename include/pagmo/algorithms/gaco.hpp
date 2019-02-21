@@ -769,11 +769,11 @@ private:
         // (either 1 or 2)
         if (gen == 1 && m_omega_strategy == 1) {
             // We declare a vector with 'ker' doubles
-            vector_double ker_vector(m_ker);
+            std::vector<unsigned> ker_vector(m_ker);
             // We fill it with 1,2,3,...,K
             std::iota(std::begin(ker_vector), std::end(ker_vector), 1);
             // We compute the sum of the elements
-            double sum = std::accumulate(ker_vector.begin(), ker_vector.end(), 0);
+            unsigned sum = std::accumulate(ker_vector.begin(), ker_vector.end(), 0u);
             // We compute omega (first pheromone value):
             double omega;
 
