@@ -526,6 +526,10 @@ BOOST_PYTHON_MODULE(core)
                  return bp::make_tuple(pygmo::v_to_a(retval.first), pygmo::v_to_a(retval.second));
              }),
              pygmo::problem_get_bounds_docstring().c_str())
+        .def("get_lb", lcast([](const pagmo::problem &p) { return pygmo::v_to_a(p.get_lb()); }),
+             pygmo::problem_get_lb_docstring().c_str())
+        .def("get_ub", lcast([](const pagmo::problem &p) { return pygmo::v_to_a(p.get_ub()); }),
+             pygmo::problem_get_ub_docstring().c_str())
         .def("gradient", lcast([](const pagmo::problem &p, const bp::object &dv) {
                  return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv)));
              }),

@@ -487,8 +487,8 @@ std::string problem_get_bounds_docstring()
 
 Box-bounds.
 
-This method will invoke the ``get_bounds()`` method of the UDP to return the box-bounds
-:math:`(\mathbf{lb}, \mathbf{ub})` of the problem. Infinities in the bounds are allowed.
+This method will return the box-bounds :math:`(\mathbf{lb}, \mathbf{ub})` of the problem,
+as returned by the ``get_bounds()`` method of the UDP. Infinities in the bounds are allowed.
 
 The ``get_bounds()`` method of the UDP must return the box-bounds as a tuple of 2 elements,
 the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
@@ -497,6 +497,44 @@ of a :class:`~pygmo.problem`.
 
 Returns:
     ``tuple``: a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem
+
+Raises:
+    unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_lb_docstring()
+{
+    return R"(get_lb()
+
+Lower box-bounds.
+
+This method will return the lower box-bounds for this problem. See :func:`~pygmo.problem.get_bounds()`
+for a detailed explanation of how the bounds are determined.
+
+Returns:
+    1D NumPy float array: an array representing the lower box-bounds of this problem
+
+Raises:
+    unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_ub_docstring()
+{
+    return R"(get_ub()
+
+Upper box-bounds.
+
+This method will return the upper box-bounds for this problem. See :func:`~pygmo.problem.get_bounds()`
+for a detailed explanation of how the bounds are determined.
+
+Returns:
+    1D NumPy float array: an array representing the upper box-bounds of this problem
 
 Raises:
     unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
