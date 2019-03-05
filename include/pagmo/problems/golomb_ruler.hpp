@@ -142,8 +142,8 @@ public:
         // 3 - We compute how many duplicate distances are there.
         std::sort(distances.begin(), distances.end(), detail::less_than_f<double>);
         f[1] = static_cast<double>(distances.size())
-               - std::distance(distances.begin(),
-                               std::unique(distances.begin(), distances.end(), detail::equal_to_f<double>));
+               - static_cast<double>(std::distance(
+                     distances.begin(), std::unique(distances.begin(), distances.end(), detail::equal_to_f<double>)));
         return f;
     }
     /// Box-bounds
