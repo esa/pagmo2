@@ -102,7 +102,7 @@ Index of the best individual.
 If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem
 is, instead, single objective, but with constraints, the best will be defined using the criteria specified in :func:`pygmo.sort_population_con()`.
 If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population
-individuals by calling the :func:`pygmo.sort_population_ mo()` function.
+individuals by calling the :func:`pygmo.sort_population_mo()` function.
 
 Args:
     tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints. By default, the c_tol attribute 
@@ -127,7 +127,7 @@ Index of the worst individual.
 If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem
 is, instead, single objective, but with constraints, the worst will be defined using the criteria specified in :func:`pygmo.sort_population_con()`.
 If the problem is multi-objective one single worst is not well defined. In this case the user can still obtain a strict ordering of the population
-individuals by calling the :func:`pygmo.sort_population_ mo()` function.
+individuals by calling the :func:`pygmo.sort_population_mo()` function.
 
 Args:
     tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
