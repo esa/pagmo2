@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -218,8 +219,8 @@ public:
                         nter = (nter + 1u) % dim;
                         // We modify the current point by mutating its nter component within the adaptive step
                         auto width = step[nter] * (ub[nter] - lb[nter]);
-                        xNEW[nter] = std::uniform_real_distribution<>(std::max(xOLD[nter] - width, lb[nter]),
-                                                                      std::min(xOLD[nter] + width, ub[nter]))(m_e);
+                        xNEW[nter] = uniform_real_from_range(std::max(xOLD[nter] - width, lb[nter]),
+                                                             std::min(xOLD[nter] + width, ub[nter]), m_e);
                         // And we valuate the objective function for the new point
                         fNEW = prob.fitness(xNEW);
                         // We decide wether to accept or discard the point
