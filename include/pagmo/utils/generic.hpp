@@ -162,8 +162,14 @@ inline double uniform_integral_from_range_impl(double lb, double ub, Rng &r_engi
     // result to double precision.
     // NOTE: the use of numeric_cast ensures that the conversion to long long is checked
     // (in case of overflow, an exception will be thrown).
-    const auto l = boost::numeric_cast<long long>(lb);
-    const auto u = boost::numeric_cast<long long>(ub);
+    long long l, u;
+    try {
+        l = boost::numeric_cast<long long>(lb);
+        u = boost::numeric_cast<long long>(ub);
+    } catch (...) {
+        pagmo_throw(std::invalid_argument, "Cannot generate a random integer if the lower/upper bounds are not within "
+                                           "the bounds of the long long type");
+    }
     // NOTE: it should be safe here to do a raw cast, as the result
     // will be within the original bounds and thus representable by double.
     return static_cast<double>(std::uniform_int_distribution<long long>(l, u)(r_engine));
@@ -209,8 +215,8 @@ inline double uniform_integral_from_range_impl(double lb, double ub, Rng &r_engi
  * @throws std::invalid_argument if:
  * - the bounds are not finite,
  * - \f$ lb > ub \f$,
- * - \f$ lb \f$ and/or \f$ ub \f$ are not integral values.
- * @throws unspecified any exception raised by <tt>boost::numeric_cast()</tt>.
+ * - \f$ lb \f$ and/or \f$ ub \f$ are not integral values,
+ * - \f$ lb \f$ and/or \f$ ub \f$ are not within the bounds of the ``long long`` type.
  *
  * @returns a random integral value
  */

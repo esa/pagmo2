@@ -2970,7 +2970,6 @@ Returns:
 
 Raises:
     ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
-    OverflowError: if the problem's discrete bounds exceed the range of the ``long long`` C++ type
 
 )";
 }

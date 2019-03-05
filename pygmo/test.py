@@ -1073,11 +1073,11 @@ class random_decision_vector_test_case(_ut.TestCase):
         self.assertRaises(
             ValueError, lambda: random_decision_vector(problem(prob([0, -nan], [1, nan]))))
         self.assertRaises(
-            OverflowError, lambda: random_decision_vector(problem(prob([0, 0], [1, 1E100], 1))))
+            ValueError, lambda: random_decision_vector(problem(prob([0, 0], [1, 1E100], 1))))
         self.assertRaises(
-            OverflowError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 0], 1))))
+            ValueError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 0], 1))))
         self.assertRaises(
-            OverflowError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 1E100], 1))))
+            ValueError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 1E100], 1))))
 
 
 class luksan_vlcek1_test_case(_ut.TestCase):

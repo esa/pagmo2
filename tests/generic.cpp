@@ -132,8 +132,18 @@ BOOST_AUTO_TEST_CASE(uniform_real_from_range_test)
         });
     if (big > static_cast<double>(std::numeric_limits<long long>::max())
         && -big < static_cast<double>(std::numeric_limits<long long>::min())) {
-        BOOST_CHECK_THROW(uniform_integral_from_range(0, big, r_engine), boost::numeric::positive_overflow);
-        BOOST_CHECK_THROW(uniform_integral_from_range(-big, 0, r_engine), boost::numeric::negative_overflow);
+        BOOST_CHECK_EXCEPTION(
+            uniform_integral_from_range(0, big, r_engine), std::invalid_argument, [](const std::invalid_argument &ia) {
+                return boost::contains(ia.what(),
+                                       "Cannot generate a random integer if the lower/upper bounds are not within "
+                                       "the bounds of the long long type");
+            });
+        BOOST_CHECK_EXCEPTION(
+            uniform_integral_from_range(-big, 0, r_engine), std::invalid_argument, [](const std::invalid_argument &ia) {
+                return boost::contains(ia.what(),
+                                       "Cannot generate a random integer if the lower/upper bounds are not within "
+                                       "the bounds of the long long type");
+            });
     }
 }
 
@@ -181,10 +191,20 @@ BOOST_AUTO_TEST_CASE(random_decision_vector_test)
                           });
     if (big > static_cast<double>(std::numeric_limits<long long>::max())
         && -big < static_cast<double>(std::numeric_limits<long long>::min())) {
-        BOOST_CHECK_THROW(random_decision_vector(problem{udp00{{0, 0}, {1, big}, 1}}, r_engine),
-                          boost::numeric::positive_overflow);
-        BOOST_CHECK_THROW(random_decision_vector(problem{udp00{{0, -big}, {1, 0}, 1}}, r_engine),
-                          boost::numeric::negative_overflow);
+        BOOST_CHECK_EXCEPTION(random_decision_vector(problem{udp00{{0, 0}, {1, big}, 1}}, r_engine),
+                              std::invalid_argument, [](const std::invalid_argument &ia) {
+                                  return boost::contains(
+                                      ia.what(),
+                                      "Cannot generate a random integer if the lower/upper bounds are not within "
+                                      "the bounds of the long long type");
+                              });
+        BOOST_CHECK_EXCEPTION(random_decision_vector(problem{udp00{{0, -big}, {1, 0}, 1}}, r_engine),
+                              std::invalid_argument, [](const std::invalid_argument &ia) {
+                                  return boost::contains(
+                                      ia.what(),
+                                      "Cannot generate a random integer if the lower/upper bounds are not within "
+                                      "the bounds of the long long type");
+                              });
     }
 
     // Test the results
