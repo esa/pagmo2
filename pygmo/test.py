@@ -151,18 +151,21 @@ class core_test_case(_ut.TestCase):
         with self.assertRaises(TypeError) as cm:
             ssb(1)
         err = cm.exception
-        self.assertTrue("The serialization backend must be specified as a string, but an object of type" in str(err))
+        self.assertTrue(
+            "The serialization backend must be specified as a string, but an object of type" in str(err))
 
         with self.assertRaises(ValueError) as cm:
             ssb("hello")
         err = cm.exception
-        self.assertEqual("The serialization backend 'hello' is not valid. The valid backends are: ['pickle', 'cloudpickle', 'dill']", str(err))
+        self.assertEqual(
+            "The serialization backend 'hello' is not valid. The valid backends are: ['pickle', 'cloudpickle', 'dill']", str(err))
 
         if not has_dill:
             with self.assertRaises(ImportError) as cm:
                 ssb("dill")
             err = cm.exception
-            self.assertEqual("The 'dill' serialization backend was specified, but the dill module is not installed.", str(err))
+            self.assertEqual(
+                "The 'dill' serialization backend was specified, but the dill module is not installed.", str(err))
 
         ssb("pickle")
         self.assertTrue(gsb() == pickle)
@@ -170,7 +173,7 @@ class core_test_case(_ut.TestCase):
         # Try to pickle something.
         p = problem(_prob())
         self.assertEqual(str(pickle.loads(pickle.dumps(p))), str(p))
-        isl = island(prob=p,algo=de(gen=500),size=20)
+        isl = island(prob=p, algo=de(gen=500), size=20)
         self.assertEqual(str(pickle.loads(pickle.dumps(isl))), str(isl))
 
         # Try with dill as well, if available.
@@ -180,12 +183,13 @@ class core_test_case(_ut.TestCase):
 
             p = problem(_prob())
             self.assertEqual(str(pickle.loads(pickle.dumps(p))), str(p))
-            isl = island(prob=p,algo=de(gen=500),size=20)
+            isl = island(prob=p, algo=de(gen=500), size=20)
             self.assertEqual(str(pickle.loads(pickle.dumps(isl))), str(isl))
 
         # Reset to cloudpickle before exiting.
         ssb("cloudpickle")
         self.assertTrue(gsb() == clpickle)
+
 
 class population_test_case(_ut.TestCase):
     """Test case for the population class.
@@ -365,6 +369,7 @@ class population_test_case(_ut.TestCase):
         p = loads(dumps(pop))
         self.assertEqual(repr(pop), repr(p))
 
+
 class golomb_ruler_test_case(_ut.TestCase):
     """Test case for the UDA de
 
@@ -373,7 +378,8 @@ class golomb_ruler_test_case(_ut.TestCase):
     def runTest(self):
         from .core import golomb_ruler
         udp = golomb_ruler(4, 10)
-        udp = golomb_ruler(order = 4, upper_bound=10)
+        udp = golomb_ruler(order=4, upper_bound=10)
+
 
 class lennard_jones_test_case(_ut.TestCase):
     """Test case for the UDA de
@@ -384,7 +390,8 @@ class lennard_jones_test_case(_ut.TestCase):
         from .core import lennard_jones
         udp = lennard_jones()
         udp = lennard_jones(3)
-        udp = lennard_jones(atoms = 3)
+        udp = lennard_jones(atoms=3)
+
 
 class pso_test_case(_ut.TestCase):
     """Test case for the UDA pso
@@ -1015,40 +1022,62 @@ class random_decision_vector_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        from .core import random_decision_vector, set_global_rng_seed
+        from .core import random_decision_vector, set_global_rng_seed, problem
+
+        class prob(object):
+            def __init__(self, lb, ub, nix=0):
+                self.lb = lb
+                self.ub = ub
+                self.nix = nix
+
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return self.lb, self.ub
+
+            def get_nix(self):
+                return self.nix
+
         set_global_rng_seed(42)
-        x = random_decision_vector(lb=[1.1, 2.1, -3], ub=[2.1, 3.4, 5], nix=1)
+        x = random_decision_vector(
+            problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)))
         self.assertTrue(int(x[-1]) == x[-1])
         self.assertTrue(int(x[1]) != x[1])
+
         set_global_rng_seed(42)
-        y = random_decision_vector(lb=[1.1, 2.1, -3], ub=[2.1, 3.4, 5], nix=1)
+        y = random_decision_vector(
+            problem(prob(lb=[1.1, 2.1, -3], ub=[2.1, 3.4, 5], nix=1)))
         self.assertTrue((x == y).all())
+
+        self.assertTrue(random_decision_vector(
+            problem(prob(lb=[1.1], ub=[1.1])))[0] == 1.1)
+        self.assertTrue(random_decision_vector(
+            problem(prob(lb=[1], ub=[1], nix=1)))[0] == 1)
+        self.assertTrue(random_decision_vector(
+            problem(prob(lb=[0], ub=[3], nix=1)))[0] in [0, 1, 2, 3])
+
         nan = float("nan")
         inf = float("inf")
+
         self.assertRaises(
-            ValueError, lambda: random_decision_vector([1, 2], [0, 3]))
+            ValueError, lambda: random_decision_vector(problem(prob([0, 0], [1, inf]))))
         self.assertRaises(
-            ValueError, lambda: random_decision_vector([1, -inf], [0, 32]))
+            ValueError, lambda: random_decision_vector(problem(prob([0, -inf], [1, 0]))))
         self.assertRaises(
-            ValueError, lambda: random_decision_vector([1, 2, 3], [0, 3]))
+            ValueError, lambda: random_decision_vector(problem(prob([0, -inf], [1, inf]))))
         self.assertRaises(
-            ValueError, lambda: random_decision_vector([0, 2, 3], [1, 4, nan]))
+            ValueError, lambda: random_decision_vector(problem(prob([0, 0], [1, nan]))))
         self.assertRaises(
-            ValueError, lambda: random_decision_vector([0, 2, nan], [1, 4, 4]))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, nan, 3], [1, nan, 4]))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, 2, 3], [1, 4, 5], 4))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, 2, 3.1], [1, 4, 5], 1))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, 2, 3], [1, 4, 5.2], 1))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, -1.1, 3], [1, 2, 5], 2))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, -1.1, -inf], [1, 2, inf], 2))
-        self.assertRaises(ValueError, lambda: random_decision_vector(
-            [0, -1.1, inf], [1, 2, inf], 2))
+            ValueError, lambda: random_decision_vector(problem(prob([0, -nan], [1, 0]))))
+        self.assertRaises(
+            ValueError, lambda: random_decision_vector(problem(prob([0, -nan], [1, nan]))))
+        self.assertRaises(
+            OverflowError, lambda: random_decision_vector(problem(prob([0, 0], [1, 1E100], 1))))
+        self.assertRaises(
+            OverflowError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 0], 1))))
+        self.assertRaises(
+            OverflowError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 1E100], 1))))
 
 
 class luksan_vlcek1_test_case(_ut.TestCase):

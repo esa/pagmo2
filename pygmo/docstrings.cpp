@@ -88,8 +88,7 @@ Returns:
     :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
 
 Raises:
-    unspecified: any exception thrown by :func:`pygmo.problem.fitness()` or by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.)
+    unspecified: any exception thrown by :func:`pygmo.random_decision_vector()`
 
 )";
 }
@@ -2950,27 +2949,29 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 
 std::string random_decision_vector_docstring()
 {
-    return R"(random_decision_vector_docstring(lb, ub, nix = 0)
+    return R"(random_decision_vector(prob)
 
-Creates a random decision vector within some bounds using pygmo's global rng. If
-both the lower and upper bounds are finite numbers, then the :math:`i`-th
-component of the randomly generated pagmo::vector_double will be such that
-:math:`lb_i \le x_i < ub_i`. If :math:`lb_i == ub_i` then :math:`lb_i` is
-returned. If an integer part *nix* is specified then the last *nix* components
-are guaranteed to be integers within the specified (integer) bounds.
+This function will generate a decision vector whose values are randomly chosen with uniform probability within
+the lower and upper bounds :math:`lb` and :math:`ub` of the input :class:`~pygmo.problem` *prob*.
+
+For the continuous part of the decision vector, the :math:`i`-th component of the randomly generated decision
+vector will be such that :math:`lb_i \le x_i < ub_i`.
+
+For the discrete part of the decision vector, the :math:`i`-th component of the randomly generated decision vector
+is guaranteed to be an integral value such that :math:`lb_i \le x_i \le ub_i`.
+
+For both the continuous and discrete parts of the decision vector, if :math:`lb_i == ub_i` then :math:`lb_i` is returned.
 
 Args:
-    lb (array-like object): the lower bounds
-    ub (array-like object): the upper bounds
-    nix (``int``): the integer size
-
-Raises:
-    ValueError: if *nix* is negative or greater than an implementation-defined value
-    ValueError: if *lb* and *ub* are malformed (unequal lenght, zero size, *nix* larger than ``len(lb)`` or bounds are not integers in their last *nix* components)
-    TypeError: if *lb* or *ub* cannot be converted to a vector of floats
+    prob (:class:`~pygmo.problem`): the input problem
 
 Returns:
-    1D NumPy float array: the random decision vector
+    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+
+Raises:
+    ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
+    OverflowError: if the problem's discrete bounds exceed the range of the ``long long`` C++ type
+
 )";
 }
 
@@ -3649,7 +3650,10 @@ std::string set_global_rng_seed_docstring()
 In pygmo it is, in general, possible to control the seed of all random generators by a dedicated *seed* kwarg passed on via various
 constructors. If no *seed* is passed pygmo randomly creates a seed for you using its global random number generator. 
 
-This function allows to be able to reset the seed of auch a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily. 
+This function allows to be able to reset the seed of such a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily. 
+
+Args:
+    seed (int): the new global seed for random number generation
 
 .. note::
    In complex parallel evolutions obtaining a deterministic behaviour is not possible even setting the global seed as

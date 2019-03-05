@@ -385,8 +385,8 @@ inline std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<
 namespace detail
 {
 // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds
-inline void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub,
-                                detail::random_engine_type &r_engine)
+template <typename Rng>
+inline void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub, Rng &r_engine)
 {
     assert(x.size() == lb.size());
     assert(x.size() == ub.size());
