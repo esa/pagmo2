@@ -102,10 +102,10 @@ public:
      * [0,1[\f$, \p q is not \f$ >=0 \f$
      */
 
-    g_aco(unsigned gen = 100u, unsigned ker = 63u, double acc = 0., double fstop = 0.0000001, unsigned impstop = 10000u,
-          unsigned evalstop = 10000u, double focus = 0., double oracle = 0., unsigned paretomax = 10u, double q = 1.0,
-          unsigned threshold = 1000u, unsigned omega_strategy = 2u, unsigned n_gen_mark = 7u, double epsilon = 0.9,
-          unsigned seed = pagmo::random_device::next())
+    g_aco(unsigned gen = 100u, unsigned ker = 63u, double q = 1, double oracle = 0., double acc = 0.01,
+          unsigned threshold = 9u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u,
+          unsigned omega_strategy = 2u, unsigned impstop = 100000u, unsigned evalstop = 100000u, double focus = 0.,
+          unsigned paretomax = 10u, double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
           m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log(), m_res(), m_threshold(threshold), m_q(q), m_omega_strategy(omega_strategy), m_n_gen_mark(n_gen_mark)
@@ -118,10 +118,6 @@ public:
             pagmo_throw(std::invalid_argument,
                         "The focus parameter must be >=0  while a value of " + std::to_string(focus) + " was detected");
         }
-        if (oracle < 0.) {
-            pagmo_throw(std::invalid_argument, "The oracle parameter must be >=0, while a value of "
-                                                   + std::to_string(oracle) + " was detected");
-        }
 
         if (epsilon >= 1. || epsilon < 0.) {
             pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
@@ -132,7 +128,7 @@ public:
             pagmo_throw(std::invalid_argument, "The omega strategy parameter must be either 1 or 2 while a value of "
                                                    + std::to_string(omega_strategy) + " was detected");
         }
-        if (threshold < 1 || threshold > gen) {
+        if ((threshold < 1 || threshold > gen) && gen != 0) {
             pagmo_throw(std::invalid_argument, "The threshold parameter must be either in [1,m_gen] while a value of "
                                                    + std::to_string(threshold) + " was detected");
         }
@@ -153,7 +149,8 @@ public:
         // We store some useful variables
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed
-        auto dim = prob.get_nx(); // This getter does not return a const reference but a copy of the number of variables
+        auto dim = prob.get_nx();   // This getter does not return a const reference but a copy of the number of
+                                    // continuous variables
         auto pop_size = pop.size(); // Population size
         unsigned count_screen = 1u; // regulates the screen output
 
@@ -190,6 +187,10 @@ public:
             pagmo_throw(std::invalid_argument,
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
         }
+        if (prob.get_nix() != 0u) {
+            pagmo_throw(std::invalid_argument, "Integer variables detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
+        }
         if (m_gen == 0u) {
             return pop;
         }
@@ -197,6 +198,10 @@ public:
         if (m_ker > pop_size) {
             pagmo_throw(std::invalid_argument,
                         get_name() + " cannot work with a solution archive bigger than the population size");
+        }
+        if (n_obj != 1u) {
+            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                                   + get_name() + " cannot deal with them");
         }
         // ---------------------------------------------------------------------------------------------------------
 
@@ -241,12 +246,10 @@ public:
                 for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
                     // I first verify whether there is a solution that is smaller or equal the fstop parameter (in the
                     // case that this latter is different than zero)
-                    if (m_fstop != 0. && std::abs(fit[i][0]) <= m_fstop) {
+                    if (m_fstop != 0. && std::abs(sol_archive[0][1 + dim] - m_fstop) <= 1e-8) {
                         std::cout << "Fitness value:" << std::endl;
-                        std::cout << fit[i][0] << std::endl;
-                        std::cout << "if a value of zero is desired as fstop, please insert a very small value instead "
-                                     "(e.g. 0.0000001)"
-                                  << std::endl;
+                        std::cout << sol_archive[0][1 + dim] << std::endl;
+                        std::cout << "Detected fitness is 1e-8 away from fstop value " << std::endl;
                         return pop;
                     }
 
@@ -782,8 +785,8 @@ private:
                 omega_vec[k - 1] = omega;
             }
         }
-        if (gen == 1 && m_omega_strategy == 2) {
-            if (gen >= m_threshold) {
+        if ((gen == 1 || gen == m_threshold) && m_omega_strategy == 2) {
+            if (gen == m_threshold) {
                 m_q = 0.01;
             }
 
