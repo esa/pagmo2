@@ -214,6 +214,10 @@ BOOST_AUTO_TEST_CASE(random_decision_vector_test)
     BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 1}}}, r_engine)[1] < 1.));
     BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 0}}}, r_engine)[1] == 0.));
     for (auto i = 0; i < 100; ++i) {
+        const auto tmp = random_decision_vector(problem{udp00{{0}, {2}, 1}}, r_engine)[0];
+        BOOST_CHECK(tmp == 0. || tmp == 1. || tmp == 2.);
+    }
+    for (auto i = 0; i < 100; ++i) {
         const auto res = random_decision_vector(problem{udp00{{0, -20}, {1, 20}, 1}}, r_engine);
         BOOST_CHECK(std::trunc(res[1]) == res[1]);
     }
