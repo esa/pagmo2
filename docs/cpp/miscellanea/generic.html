@@ -185,19 +185,13 @@
 <p>A number of utilities to compute quantities that are of general relevance.</p>
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE">
-<span id="pagmo::uniform_real_from_range__double.double.detail::random_engine_typeR"></span><span class="target" id="namespacepagmo_1ad65ef1a7b6c32f708387f82db4012037"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Generates a random number within some lower and upper bounds. </p>
-<p>Creates a random number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x &lt; ub\)</span>. If <span class="math">\(lb == ub\)</span> then <span class="math">\(lb\)</span> is returned.</p>
-<p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This helper function has to be preferred to <code class="docutils literal"><span class="pre">std::uniform_real&lt;double&gt;(r_engine)</span></code> as it
-also performs additional checks avoiding undefined behaviour in pagmo.</p>
-</div>
-</p>
+<dt id="_CPPv2N5pagmo23uniform_real_from_rangeEddR3Rng">
+<span id="pagmo::uniform_real_from_range__double.double.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo23uniform_real_from_rangeEddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a random real number within some lower and upper bounds. </p>
+<p>This function will create a random real number within a half-open range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x &lt; ub\)</span>. If <span class="math">\(lb = ub\)</span>, then <span class="math">\(lb\)</span> is returned.</p>
 <p>Example:</p>
 <p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_real_from_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">value</span>
+<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_real_from_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">real</span> <span class="ow">in</span> <span class="n">the</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="nb">range</span><span class="o">.</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_real_from_range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">value</span> <span class="mf">2.</span>
 </pre></div>
 </div>
@@ -209,14 +203,15 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">lb</span></code>: lower bound </li>
 <li><code class="docutils literal"><span class="pre">ub</span></code>: upper bound </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a <code class="docutils literal"><span class="pre">std::mt19937</span></code> random engine</li>
+<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if:<ul>
-<li>the bounds contain NaNs or infs, or <span class="math">\( lb &gt; ub \)</span>,</li>
-<li>if <span class="math">\(ub-lb\)</span> is larger than implementation-defined value</li>
+<li>the bounds are not finite,</li>
+<li><span class="math">\( lb &gt; ub \)</span>,</li>
+<li><span class="math">\( ub - lb \)</span> is larger than an implementation-defined value.</li>
 </ul>
 </li>
 </ul>
@@ -227,33 +222,49 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE">
-<span id="pagmo::random_decision_vector__std::pair:vector_double.vector_double:CR.detail::random_engine_typeR.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a1a56fc4c21217673c67fd1454fe33e6f"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>bounds</em>, detail::random_engine_type &amp;<em>r_engine</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Generates a random decision vector. </p>
-<p>Creates a random decision vector within some bounds. If both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th component of the randomly generated <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned. If an integer part is specified then the corresponding components are guaranteed to be integers.</p>
+<dt id="_CPPv2N5pagmo27uniform_integral_from_rangeEddR3Rng">
+<span id="pagmo::uniform_integral_from_range__double.double.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_integral_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo27uniform_integral_from_rangeEddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a random integral number within some lower and upper bounds. </p>
+<p>This function will create a random integral number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x \le ub\)</span>.</p>
 <p>Example:</p>
 <p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">}},</span> <span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">vector</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">}},</span> <span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">vector</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">}},</span> <span class="n">r_engine</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">vector</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span> <span class="ow">or</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span> <span class="ow">or</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">}</span>
+<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_integral_from_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">one</span> <span class="n">of</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span><span class="o">.</span>
+<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_integral_from_range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">value</span> <span class="mf">2.</span>
 </pre></div>
+</div>
+</p>
+<p><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The return value is created internally via an integral random number
+generator based on the <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> type, and then cast back to <code class="docutils literal"><span class="pre">double</span></code>.
+Thus, if the absolute values of the lower/upper bounds are large enough, any of
+the following may happen:</p>
+<ul class="simple">
+<li>the conversion of the lower/upper bounds to <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> may produce an overflow error,</li>
+<li>the conversion of the randomly-generated <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> integer back to <code class="docutils literal"><span class="pre">double</span></code> may yield an
+inexact result.</li>
+</ul>
+<p class="last">In pratice, on modern mainstream computer architectures, this function will produce uniformly-distributed
+integral values as long as the absolute values of the bounds do not exceed <span class="math">\(2^{53}\)</span>.</p>
 </div>
 </p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
-<dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
+<dd>a random integral value </dd>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">bounds</span></code>: an <code class="docutils literal"><span class="pre">std::pair</span></code> containing the bounds </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a <code class="docutils literal"><span class="pre">std::mt19937</span></code> random engine </li>
-<li><code class="docutils literal"><span class="pre">nix</span></code>: size of the integer part</li>
+<li><code class="docutils literal"><span class="pre">lb</span></code>: lower bound </li>
+<li><code class="docutils literal"><span class="pre">ub</span></code>: upper bound </li>
+<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
 <li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if:<ul>
-<li>the bounds are not of equal length, they have zero size, they contain NaNs or infs, <span class="math">\( \mathbf{ub} &lt; \mathbf {lb}\)</span>, the integer part is larger than the bounds size or the bounds of the integer part are not integers.</li>
-<li>if <span class="math">\(ub_i-lb_i\)</span> is larger than implementation-defined value</li>
+<li>the bounds are not finite,</li>
+<li><span class="math">\( lb &gt; ub \)</span>,</li>
+<li><span class="math">\( lb \)</span> and/or <span class="math">\( ub \)</span> are not integral values,</li>
+<li><span class="math">\( lb \)</span> and/or <span class="math">\( ub \)</span> are not within the bounds of the <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> type.</li>
 </ul>
 </li>
 </ul>
@@ -264,36 +275,24 @@ also performs additional checks avoiding undefined behaviour in pagmo.</p>
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE">
-<span id="pagmo::random_decision_vector__vector_doubleCR.vector_doubleCR.detail::random_engine_typeR.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a81071f23fb126f795ac2f11e34e55afe"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>lb</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>ub</em>, detail::random_engine_type &amp;<em>r_engine</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Generates a random decision vector. </p>
-<p>Creates a random decision vector within some bounds. If both the lower and upper bounds are finite numbers, then the <span class="math">\(i\)</span>-th component of the randomly generated <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>. If <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned. If an integer part is specified then the corresponding components are guaranteed to be integers.</p>
-<p>Example:</p>
-<p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">},</span> <span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">vector</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},</span> <span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">vector</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span>
-<span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random_decision_vector</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">},{</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">}},</span> <span class="n">r_engine</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">vector</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span> <span class="ow">or</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span> <span class="ow">or</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">}</span>
-</pre></div>
-</div>
-</p>
+<dt id="_CPPv2N5pagmo22random_decision_vectorERK7problemR3Rng">
+<span id="pagmo::random_decision_vector__problemCR.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>prob</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERK7problemR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a random decision vector compatible with a problem. </p>
+<p>This function will generate a decision vector whose values are randomly chosen with uniform probability within the input problem’s bounds.</p>
+<p>For the continuous part of the decision vector, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
+<p>For the discrete part of the decision vector, the values will be generated via <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p>
 <p><dl class="docutils">
 <dt><strong>Return</strong></dt>
 <dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
 <dt><strong>Parameters</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">lb</span></code>: a vector_double containing the lower bounds </li>
-<li><code class="docutils literal"><span class="pre">ub</span></code>: a vector_double containing the upper bounds </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a <code class="docutils literal"><span class="pre">std::mt19937</span></code> random engine </li>
-<li><code class="docutils literal"><span class="pre">nix</span></code>: size of the integer part</li>
+<li><code class="docutils literal"><span class="pre">prob</span></code>: the input <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> </li>
+<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
 <dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if:<ul>
-<li>the bounds are not of equal length, they have zero size, they contain NaNs or infs, <span class="math">\( \mathbf{ub} &lt; \mathbf {lb}\)</span>, the integer part is larger than the bounds size or the bounds of the integer part are not integers.</li>
-<li>if <span class="math">\(ub_i-lb_i\)</span> is larger than implementation-defined value</li>
-</ul>
-</li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</li>
 </ul>
 </dd>
 </dl>

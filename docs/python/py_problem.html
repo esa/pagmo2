@@ -485,8 +485,8 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
 <dt id="pygmo.problem.get_bounds">
 <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Box-bounds.</p>
-<p>This method will invoke the <code class="docutils literal"><span class="pre">get_bounds()</span></code> method of the UDP to return the box-bounds
-<span class="math">\((\mathbf{lb}, \mathbf{ub})\)</span> of the problem. Infinities in the bounds are allowed.</p>
+<p>This method will return the box-bounds <span class="math">\((\mathbf{lb}, \mathbf{ub})\)</span> of the problem,
+as returned by the <code class="docutils literal"><span class="pre">get_bounds()</span></code> method of the UDP. Infinities in the bounds are allowed.</p>
 <p>The <code class="docutils literal"><span class="pre">get_bounds()</span></code> method of the UDP must return the box-bounds as a tuple of 2 elements,
 the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
 1D NumPy arrays, lists, tuples, etc.). The box-bounds returned by the UDP are checked upon the construction
@@ -579,6 +579,27 @@ reset. Copy operations copy the counter as well.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of times <a class="reference internal" href="#pygmo.problem.hessians" title="pygmo.problem.hessians"><code class="xref py py-func docutils literal"><span class="pre">hessians()</span></code></a> was successfully called</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.problem.get_lb">
+<code class="descname">get_lb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_lb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower box-bounds.</p>
+<p>This method will return the lower box-bounds for this problem. See <a class="reference internal" href="#pygmo.problem.get_bounds" title="pygmo.problem.get_bounds"><code class="xref py py-func docutils literal"><span class="pre">get_bounds()</span></code></a>
+for a detailed explanation of how the bounds are determined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an array representing the lower box-bounds of this problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy float array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the invoked method of the underlying C++ class, or failures at the
+intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
 </table>
@@ -773,6 +794,27 @@ UDPs, the returned value will be unconditionally <a class="reference internal" h
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the thread safety level of the UDP</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a value of <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.problem.get_ub">
+<code class="descname">get_ub</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.get_ub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upper box-bounds.</p>
+<p>This method will return the upper box-bounds for this problem. See <a class="reference internal" href="#pygmo.problem.get_bounds" title="pygmo.problem.get_bounds"><code class="xref py py-func docutils literal"><span class="pre">get_bounds()</span></code></a>
+for a detailed explanation of how the bounds are determined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">an array representing the upper box-bounds of this problem</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">1D NumPy float array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the invoked method of the underlying C++ class, or failures at the
+intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
 </tr>
 </tbody>
 </table>

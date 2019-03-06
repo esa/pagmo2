@@ -408,6 +408,8 @@
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.get_last_opt_result">(pygmo.nlopt method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_lb">get_lb() (pygmo.problem method)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.bee_colony.get_log">get_log() (pygmo.bee_colony method)</a>
 
       <ul>
@@ -534,6 +536,8 @@
         <li><a href="docs/python/py_problem.html#pygmo.problem.get_thread_safety">(pygmo.problem method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/python/py_problem.html#pygmo.problem.get_ub">get_ub() (pygmo.problem method)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_verbosity">get_verbosity() (pygmo.mbh method)</a>
 </li>
       <li><a href="docs/python/py_population.html#pygmo.population.get_x">get_x() (pygmo.population method)</a>
@@ -1486,12 +1490,12 @@
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh6evolveE10population">pagmo::mbh::evolve (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh14get_extra_infoEv">pagmo::mbh::get_extra_info (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2N5pagmo3mbh19get_inner_algorithmEv">pagmo::mbh::get_inner_algorithm (C++ function)</a>, <a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh19get_inner_algorithmEv">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh7get_logEv">pagmo::mbh::get_log (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/mbh.html#_CPPv2NK5pagmo3mbh8get_nameEv">pagmo::mbh::get_name (C++ function)</a>
@@ -1812,6 +1816,8 @@
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem10get_hevalsEv">pagmo::problem::get_hevals (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem6get_lbEv">pagmo::problem::get_lb (C++ function)</a>
+</li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem8get_nameEv">pagmo::problem::get_name (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem6get_ncEv">pagmo::problem::get_nc (C++ function)</a>
@@ -1831,6 +1837,8 @@
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem6get_nxEv">pagmo::problem::get_nx (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem17get_thread_safetyEv">pagmo::problem::get_thread_safety (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem6get_ubEv">pagmo::problem::get_ub (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv2NK5pagmo7problem8gradientERK13vector_double">pagmo::problem::gradient (C++ function)</a>
 </li>
@@ -1918,7 +1926,7 @@
 </li>
       <li><a href="docs/cpp/algorithms/pso_gen.html#_CPPv2N5pagmo7pso_gen13set_verbosityEj">pagmo::pso_gen::set_verbosity (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERK13vector_doubleRK13vector_doubleRN6detail18random_engine_typeEN13vector_double9size_typeE">pagmo::random_decision_vector (C++ function)</a>, <a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERKNSt4pairI13vector_double13vector_doubleEERN6detail18random_engine_typeEN13vector_double9size_typeE">[1]</a>
+      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo22random_decision_vectorERK7problemR3Rng">pagmo::random_decision_vector (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/rastrigin.html#_CPPv2N5pagmo9rastriginE">pagmo::rastrigin (C++ class)</a>
 </li>
@@ -2176,7 +2184,9 @@
 </li>
       <li><a href="docs/cpp/problems/unconstrain.html#_CPPv2N5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double">pagmo::unconstrain::unconstrain (C++ function)</a>, <a href="docs/cpp/problems/unconstrain.html#_CPPv2N5pagmo11unconstrain11unconstrainEv">[1]</a>
 </li>
-      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo23uniform_real_from_rangeEddRN6detail18random_engine_typeE">pagmo::uniform_real_from_range (C++ function)</a>
+      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo27uniform_integral_from_rangeEddR3Rng">pagmo::uniform_integral_from_range (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/miscellanea/generic.html#_CPPv2N5pagmo23uniform_real_from_rangeEddR3Rng">pagmo::uniform_real_from_range (C++ function)</a>
 </li>
       <li><a href="docs/cpp/utils/discrepancy.html#_CPPv2N5pagmo14van_der_corputE">pagmo::van_der_corput (C++ class)</a>
 </li>
