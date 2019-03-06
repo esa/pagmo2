@@ -29,23 +29,20 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_UTILS_GENERIC_HPP
 #define PAGMO_UTILS_GENERIC_HPP
 
-/** \file generic.hpp
- * \brief Utilities of general interest
- *
- * This header contains utilities useful in general for PaGMO purposes
- */
-
+#include <cassert>
 #include <cmath>
 #include <limits>
 #include <numeric>
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <utility>
 
+#include <boost/numeric/conversion/cast.hpp>
+
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -53,13 +50,13 @@ namespace pagmo
 
 namespace detail
 {
-/// Checks that all elements of the problem bounds are not equal
+
+// Checks that all elements of the problem bounds are not equal
 inline bool some_bound_is_equal(const problem &prob)
 {
     // Some variable renaming
-    const auto bounds = prob.get_bounds();
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
+    const auto &lb = prob.get_lb();
+    const auto &ub = prob.get_ub();
     // Since the bounds are extracted from problem we can be sure they have equal length
     for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
         if (lb[i] == ub[i]) {
@@ -68,158 +65,249 @@ inline bool some_bound_is_equal(const problem &prob)
     }
     return false;
 }
-}
 
-/// Generates a random number within some lower and upper bounds
-/**
- * Creates a random number within a closed range. If
- * both the lower and upper bounds are finite numbers, then the generated value
- * \f$ x \f$ will be such that \f$lb \le x < ub\f$. If \f$lb == ub\f$ then \f$lb\f$ is
- * returned.
- *
- * \verbatim embed:rst:leading-asterisk
- * .. note::
- *
- *    This helper function has to be preferred to ``std::uniform_real<double>(r_engine)`` as it
- *    also performs additional checks avoiding undefined behaviour in pagmo.
- *
- * \endverbatim
- *
- * Example:
- *
- * @code{.unparsed}
- * std::mt19937 r_engine(32u);
- * auto x = uniform_real_from_range(3,5,r_engine); // a random value
- * auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
- * @endcode
- *
- * @param lb lower bound
- * @param ub upper bound
- * @param r_engine a <tt>std::mt19937</tt> random engine
- *
- * @throws std::invalid_argument if:
- * - the bounds contain NaNs or infs,
- *   or \f$ lb > ub \f$,
- * - if \f$ub-lb\f$ is larger than implementation-defined value
- *
- * @returns a random floating-point value
- */
-inline double uniform_real_from_range(double lb, double ub, detail::random_engine_type &r_engine)
+// Check that the lower/upper bounds lb/ub are suitable for the
+// generation of a real number. The boolean flags specify at
+// compile time which checks to run.
+template <bool FiniteCheck, bool LbUbCheck, bool RangeCheck>
+inline void uniform_real_from_range_checks(double lb, double ub)
 {
     // NOTE: see here for the requirements for floating-point RNGS:
     // http://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution/uniform_real_distribution
 
     // 0 - Forbid random generation when bounds are not finite.
-    if (!std::isfinite(lb) || !std::isfinite(ub)) {
-        pagmo_throw(std::invalid_argument, "Cannot generate a random point if the bounds are not finite");
+    if (FiniteCheck) {
+        if (!std::isfinite(lb) || !std::isfinite(ub)) {
+            pagmo_throw(std::invalid_argument, "Cannot generate a random real if the bounds are not finite");
+        }
+    } else {
+        assert(std::isfinite(lb) && std::isfinite(ub));
     }
+
     // 1 - Check that lb is <= ub
-    if (lb > ub) {
-        pagmo_throw(std::invalid_argument,
-                    "Lower bound is greater than upper bound. Cannot generate a random point in [lb, ub]");
+    if (LbUbCheck) {
+        if (lb > ub) {
+            pagmo_throw(std::invalid_argument,
+                        "Cannot generate a random real if the lower bound is larger than the upper bound");
+        }
+    } else {
+        assert(lb <= ub);
     }
+
     // 2 - Bounds cannot be too large
-    const auto delta = ub - lb;
-    if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
-        pagmo_throw(std::invalid_argument, "Cannot generate a random point within bounds that are too large");
+    if (RangeCheck) {
+        const auto delta = ub - lb;
+        if (!std::isfinite(delta) || delta > std::numeric_limits<double>::max()) {
+            pagmo_throw(std::invalid_argument, "Cannot generate a random real within bounds that are too large");
+        }
+    } else {
+        assert(std::isfinite(ub - lb) && (ub - lb) <= std::numeric_limits<double>::max());
     }
-    // 3 - If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
-    if (lb == ub) {
-        return lb;
-    }
-    return std::uniform_real_distribution<double>(lb, ub)(r_engine);
 }
 
-/// Generates a random decision vector
+// Implementation of the uniform_real_from_range() function.
+template <bool FiniteCheck, bool LbUbCheck, bool RangeCheck, typename Rng>
+inline double uniform_real_from_range_impl(double lb, double ub, Rng &r_engine)
+{
+    // Run the checks on the bounds.
+    uniform_real_from_range_checks<FiniteCheck, LbUbCheck, RangeCheck>(lb, ub);
+    // If the bounds are equal we don't call the RNG, as that would be undefined behaviour.
+    return (lb == ub) ? lb : std::uniform_real_distribution<double>(lb, ub)(r_engine);
+}
+
+// Check that the lower/upper bounds lb/ub are suitable for the
+// generation of an integral number. The boolean flags specify at
+// compile time which checks to run.
+template <bool FiniteCheck, bool LbUbCheck, bool IntCheck>
+inline void uniform_integral_from_range_checks(double lb, double ub)
+{
+    // 0 - Check for finite bounds.
+    if (FiniteCheck) {
+        if (!std::isfinite(lb) || !std::isfinite(ub)) {
+            pagmo_throw(std::invalid_argument, "Cannot generate a random integer if the bounds are not finite");
+        }
+    } else {
+        assert(std::isfinite(lb) && std::isfinite(ub));
+    }
+
+    // 1 - Check that lb is <= ub
+    if (LbUbCheck) {
+        if (lb > ub) {
+            pagmo_throw(std::invalid_argument,
+                        "Cannot generate a random integer if the lower bound is larger than the upper bound");
+        }
+    } else {
+        assert(lb <= ub);
+    }
+
+    // 2 - Check that lb/ub are integral values.
+    if (IntCheck) {
+        if (std::trunc(lb) != lb || std::trunc(ub) != ub) {
+            pagmo_throw(std::invalid_argument,
+                        "Cannot generate a random integer if the lower/upper bounds are not integral values");
+        }
+    } else {
+        assert(std::trunc(lb) == lb && std::trunc(ub) == ub);
+    }
+}
+
+// Implementation of the uniform_integral_from_range() function.
+template <bool FiniteCheck, bool LbUbCheck, bool IntCheck, typename Rng>
+inline double uniform_integral_from_range_impl(double lb, double ub, Rng &r_engine)
+{
+    // Run the checks on the bounds.
+    uniform_integral_from_range_checks<FiniteCheck, LbUbCheck, IntCheck>(lb, ub);
+    // We will convert ub/lb to the widest signed integral type possible (long long),
+    // do the generation using uniform_int_distribution, and finally convert back the
+    // result to double precision.
+    // NOTE: the use of numeric_cast ensures that the conversion to long long is checked
+    // (in case of overflow, an exception will be thrown).
+    long long l, u;
+    try {
+        l = boost::numeric_cast<long long>(lb);
+        u = boost::numeric_cast<long long>(ub);
+    } catch (...) {
+        pagmo_throw(std::invalid_argument, "Cannot generate a random integer if the lower/upper bounds are not within "
+                                           "the bounds of the long long type");
+    }
+    // NOTE: it should be safe here to do a raw cast, as the result
+    // will be within the original bounds and thus representable by double.
+    return static_cast<double>(std::uniform_int_distribution<long long>(l, u)(r_engine));
+}
+
+} // namespace detail
+
+/// Generate a random integral number within some lower and upper bounds
 /**
- * Creates a random decision vector within some bounds. If
- * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated pagmo::vector_double will be such that
- * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned. If an integer part is specified then the corresponding components
- * are guaranteed to be integers.
+ * This function will create a random integral number within a closed range. If
+ * both the lower and upper bounds are finite numbers, then the generated value
+ * \f$ x \f$ will be such that \f$lb \le x \le ub\f$.
  *
  * Example:
  *
  * @code{.unparsed}
  * std::mt19937 r_engine(32u);
- * auto x = random_decision_vector({{1,3},{3,5}}, r_engine); // a random vector
- * auto x = random_decision_vector({{1,3},{1,3}}, r_engine); // the vector {1,3}
- * auto x = random_decision_vector({{1,3},{1,5}}, r_engine, 1); // the vector {1,3} or {1,4} or {1,5}
+ * auto x = uniform_integral_from_range(3,5,r_engine); // one of [3, 4, 5].
+ * auto x = uniform_integral_from_range(2,2,r_engine); // the value 2.
  * @endcode
  *
- * @param bounds an <tt>std::pair</tt> containing the bounds
- * @param r_engine a <tt>std::mt19937</tt> random engine
- * @param nix size of the integer part
+ * \verbatim embed:rst:leading-asterisk
+ * .. note::
+ *
+ *    The return value is created internally via an integral random number
+ *    generator based on the ``long long`` type, and then cast back to ``double``.
+ *    Thus, if the absolute values of the lower/upper bounds are large enough, any of
+ *    the following may happen:
+ *
+ *    * the conversion of the lower/upper bounds to ``long long`` may produce an overflow error,
+ *    * the conversion of the randomly-generated ``long long`` integer back to ``double`` may yield an
+ *      inexact result.
+ *
+ *    In pratice, on modern mainstream computer architectures, this function will produce uniformly-distributed
+ *    integral values as long as the absolute values of the bounds do not exceed :math:`2^{53}`.
+ *
+ * \endverbatim
+ *
+ * @param lb lower bound
+ * @param ub upper bound
+ * @param r_engine a C++ random engine
  *
  * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
- *   \f$ \mathbf{ub} < \mathbf {lb}\f$, the integer part is larger than the bounds size or
- *   the bounds of the integer part are not integers.
- * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
+ * - the bounds are not finite,
+ * - \f$ lb > ub \f$,
+ * - \f$ lb \f$ and/or \f$ ub \f$ are not integral values,
+ * - \f$ lb \f$ and/or \f$ ub \f$ are not within the bounds of the ``long long`` type.
+ *
+ * @returns a random integral value
+ */
+template <typename Rng>
+inline double uniform_integral_from_range(double lb, double ub, Rng &r_engine)
+{
+    // Activate all checks on lb/ub.
+    return detail::uniform_integral_from_range_impl<true, true, true>(lb, ub, r_engine);
+}
+
+/// Generate a random real number within some lower and upper bounds
+/**
+ * This function will create a random real number within a half-open range. If
+ * both the lower and upper bounds are finite numbers, then the generated value
+ * \f$ x \f$ will be such that \f$lb \le x < ub\f$. If \f$lb = ub\f$, then \f$lb\f$ is
+ * returned.
+ *
+ * Example:
+ *
+ * @code{.unparsed}
+ * std::mt19937 r_engine(32u);
+ * auto x = uniform_real_from_range(3,5,r_engine); // a random real in the [3, 5) range.
+ * auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
+ * @endcode
+ *
+ * @param lb lower bound
+ * @param ub upper bound
+ * @param r_engine a C++ random engine
+ *
+ * @throws std::invalid_argument if:
+ * - the bounds are not finite,
+ * - \f$ lb > ub \f$,
+ * - \f$ ub - lb \f$ is larger than an implementation-defined value.
+ *
+ * @returns a random floating-point value
+ */
+template <typename Rng>
+inline double uniform_real_from_range(double lb, double ub, Rng &r_engine)
+{
+    // Activate all checks on lb/ub.
+    return detail::uniform_real_from_range_impl<true, true, true>(lb, ub, r_engine);
+}
+
+/// Generate a random decision vector compatible with a problem
+/**
+ * This function will generate a decision vector whose values
+ * are randomly chosen with uniform probability within
+ * the input problem's bounds.
+ *
+ * For the continuous part of the decision vector, the values will be
+ * generated via pagmo::uniform_real_from_range().
+ *
+ * For the discrete part of the decision vector, the values will be generated
+ * via pagmo::uniform_integral_from_range().
+ *
+ * @param prob the input pagmo::problem
+ * @param r_engine a C++ random engine
+ *
+ * @throws unspecified any exception thrown by pagmo::uniform_real_from_range() or pagmo::uniform_integral_from_range().
  *
  * @returns a pagmo::vector_double containing a random decision vector
  */
-inline vector_double random_decision_vector(const std::pair<vector_double, vector_double> &bounds,
-                                            detail::random_engine_type &r_engine, vector_double::size_type nix = 0u)
+template <typename Rng>
+inline vector_double random_decision_vector(const problem &prob, Rng &r_engine)
 {
-    // This will check for consistent vector lengths, non-null sizes, lb <= ub, no NaNs and consistency in
-    // the integer part
-    detail::check_problem_bounds(bounds, nix);
-    auto nx = bounds.first.size();
-    vector_double retval(nx);
-    auto ncx = nx - nix;
+    // Prepare the return value.
+    vector_double out(prob.get_nx());
 
-    for (decltype(ncx) i = 0u; i < ncx; ++i) {
-        retval[i] = uniform_real_from_range(bounds.first[i], bounds.second[i], r_engine);
+    // Fetch a few quantities from prob.
+    const auto nx = prob.get_nx();
+    const auto nix = prob.get_nix();
+    const auto ncx = nx - nix;
+    const auto &lb = prob.get_lb();
+    const auto &ub = prob.get_ub();
+
+    // Continuous part.
+    for (vector_double::size_type i = 0u; i < ncx; ++i) {
+        // NOTE: the lb<=ub check is not needed, as it is ensured by the problem class.
+        // Still need to check for finiteness and range.
+        out[i] = detail::uniform_real_from_range_impl<true, false, true>(lb[i], ub[i], r_engine);
     }
+
+    // Integer part.
     for (auto i = ncx; i < nx; ++i) {
-        // To ensure a uniform int distribution from a uniform float distribution we floor the result
-        // adding 1 tot he upper bound so that e.g.
-        // [0,1] -> draw a float from [0,2] and floor it (that is 0. or 1. with 50%)
-        // [3,3] -> draw a float from [3,4] and floor it (that is always 3.)
-        double lb = bounds.first[i], ub = bounds.second[i];
-        auto tmp = uniform_real_from_range(lb, ub + 1, r_engine);
-        retval[i] = std::floor(tmp);
+        // NOTE: the lb<=ub check and the check that lb/ub are integral values are not needed,
+        // as they are ensured by the problem class.
+        // Still need to check for finiteness.
+        out[i] = detail::uniform_integral_from_range_impl<true, false, false>(lb[i], ub[i], r_engine);
     }
-    return retval;
-}
 
-/// Generates a random decision vector
-/**
- * Creates a random decision vector within some bounds. If
- * both the lower and upper bounds are finite numbers, then the \f$i\f$-th
- * component of the randomly generated pagmo::vector_double will be such that
- * \f$lb_i \le x_i < ub_i\f$. If \f$lb_i == ub_i\f$ then \f$lb_i\f$ is
- * returned. If an integer part is specified then the corresponding components
- * are guaranteed to be integers.
- *
- * Example:
- *
- * @code{.unparsed}
- * std::mt19937 r_engine(32u);
- * auto x = random_decision_vector({1,3},{3,5}, r_engine); // a random vector
- * auto x = random_decision_vector({1,3},{1,3}, r_engine); // the vector {1,3}
- * auto x = random_decision_vector({{1,3},{1,5}}, r_engine, 1); // the vector {1,3} or {1,4} or {1,5}
- * @endcode
- *
- * @param lb a vector_double containing the lower bounds
- * @param ub a vector_double containing the upper bounds
- * @param r_engine a <tt>std::mt19937</tt> random engine
- * @param nix size of the integer part
- *
- * @throws std::invalid_argument if:
- * - the bounds are not of equal length, they have zero size, they contain NaNs or infs,
- *   \f$ \mathbf{ub} < \mathbf {lb}\f$, the integer part is larger than the bounds size or
- *   the bounds of the integer part are not integers.
- * - if \f$ub_i-lb_i\f$ is larger than implementation-defined value
- *
- * @returns a pagmo::vector_double containing a random decision vector
- */
-inline vector_double random_decision_vector(const vector_double &lb, const vector_double &ub,
-                                            detail::random_engine_type &r_engine, vector_double::size_type nix = 0u)
-{
-    return random_decision_vector({lb, ub}, r_engine, nix);
+    return out;
 }
 
 /// Binomial coefficient
@@ -303,8 +391,8 @@ inline std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<
 namespace detail
 {
 // modifies a chromosome so that it will be in the bounds. elements that are off are resampled at random in the bounds
-inline void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub,
-                                detail::random_engine_type &r_engine)
+template <typename Rng>
+inline void force_bounds_random(vector_double &x, const vector_double &lb, const vector_double &ub, Rng &r_engine)
 {
     assert(x.size() == lb.size());
     assert(x.size() == ub.size());

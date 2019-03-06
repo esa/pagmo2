@@ -354,7 +354,7 @@ public:
      */
     vector_double random_decision_vector() const
     {
-        return pagmo::random_decision_vector(m_prob.get_bounds(), m_e, get_problem().get_nix());
+        return pagmo::random_decision_vector(m_prob, m_e);
     }
 
     /// Index of the best individual
