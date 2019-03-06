@@ -23,24 +23,26 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(construction_test)
 {
-    g_aco user_algo{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 23u};
+    g_aco user_algo{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK((user_algo.get_log() == g_aco::log_type{}));
 
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, -0.1, 10u, 0.9, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, -0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, -0.1, 10u, 0.9, 2u, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, -0.1, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, -0.1, 10u, 0.9, 2u, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 1.1, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, -0.1, 2u, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 3u, 1000u, 1000u, 0.0, 10u, 0.9, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 1.1, 2u, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 0u, 1000u, 1000u, 0.0, 10u, 0.9, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 3u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 101u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 0u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 0u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 23u}),
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 101u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((g_aco{100u, 13u, 1.0, 0.0, 0.01, 0u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u}),
                       std::invalid_argument);
 }
 
@@ -74,21 +76,19 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 
         for (unsigned int j = 1u; j <= 2u; ++j) {
             for (unsigned int i = 1u; i < 10u; ++i) {
-                std::cout << "qui1" << std::endl;
-                g_aco user_algo1{10u, 13u, 1.0, 0.0, 0.01, i, 1e-7, 7u, j, 1000u, 1000u, 0.0, 10u, 0.9, 23u};
-                std::cout << "qui2" << std::endl;
+                g_aco user_algo1{10u, 13u, 1.0, 1e9, 0.01, i, 1e-7, 7u, j, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
                 user_algo1.set_verbosity(1u);
                 pop1 = user_algo1.evolve(pop1);
 
                 BOOST_CHECK(user_algo1.get_log().size() > 0u);
 
-                g_aco user_algo2{10u, 13u, 1.0, 0.0, 0.01, i, 1e-7, 7u, j, 1000u, 1000u, 0.0, 10u, 0.9, 23u};
+                g_aco user_algo2{10u, 13u, 1.0, 1e9, 0.01, i, 1e-7, 7u, j, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
                 user_algo2.set_verbosity(1u);
                 pop2 = user_algo2.evolve(pop2);
 
                 BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
 
-                g_aco user_algo3{10u, 13u, 1.0, 0.0, 0.01, i, 1e-7, 7u, j, 1000u, 1000u, 0.0, 10u, 0.9, 23u};
+                g_aco user_algo3{10u, 13u, 1.0, 1e9, 0.01, i, 1e-7, 7u, j, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
                 user_algo3.set_verbosity(1u);
                 pop3 = user_algo3.evolve(pop3);
 
@@ -99,7 +99,15 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     // Here we check that the exit condition of impstop, evalstop and fstop actually provoke an exit within 300u gen
     // (rosenbrock{10} and rosenbrock{2} are used)
     {
-        g_aco user_algo{2000u, 150u, 1.0, 0.0, 0.01, 1500u, 1.0, 7u, 2u, 3u, 1000u, 0.0, 10u, 0.9, 23u};
+        g_aco user_algo{2000u, 5u, 1.0, 0.0, 0.01, 1500u, 1e-7, 7u, 2u, 2u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
+        user_algo.set_verbosity(1u);
+        problem prob{rosenbrock{2u}};
+        population pop{prob, 10u, 23u};
+        pop = user_algo.evolve(pop);
+        BOOST_CHECK(user_algo.get_log().size() < 2000u);
+    }
+    {
+        g_aco user_algo{2000u, 150u, 1.0, 0.0, 0.01, 1500u, 1e-7, 7u, 2u, 1000u, 3u, 0.0, 10u, 0.9, 2u, 23u};
         user_algo.set_verbosity(1u);
         problem prob{rosenbrock{2u}};
         population pop{prob, 200u, 23u};
@@ -107,15 +115,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         BOOST_CHECK(user_algo.get_log().size() < 2000u);
     }
     {
-        g_aco user_algo{2000u, 150u, 1.0, 0.0, 0.01, 1500u, 1.0, 7u, 2u, 1000u, 3u, 0.0, 10u, 0.9, 23u};
-        user_algo.set_verbosity(1u);
-        problem prob{rosenbrock{2u}};
-        population pop{prob, 200u, 23u};
-        pop = user_algo.evolve(pop);
-        BOOST_CHECK(user_algo.get_log().size() < 2000u);
-    }
-    {
-        g_aco user_algo{2000u, 150u, 1.0, 0.0, 0.01, 1500u, 1.0, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 23u};
+        g_aco user_algo{2000u, 150u, 1.0, 0.0, 0.01, 1500u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
         user_algo.set_verbosity(1u);
         problem prob{rosenbrock{2u}};
         population pop{prob, 200u, 23u};
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 
 BOOST_AUTO_TEST_CASE(setters_getters_test)
 {
-    g_aco user_algo{10000000u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 23u};
+    g_aco user_algo{10000000u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
     user_algo.set_verbosity(23u);
     BOOST_CHECK(user_algo.get_verbosity() == 23u);
     user_algo.set_seed(23u);
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     // Make one evolution
     problem prob{rosenbrock{2u}};
     population pop{prob, 15u, 23u};
-    algorithm algo{g_aco{10000000u, 13u, 1.0, 0.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 23u}};
+    algorithm algo{g_aco{10000000u, 13u, 1.0, 100.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 
@@ -192,4 +192,38 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_CLOSE(std::get<7>(before_log[i]), std::get<7>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<8>(before_log[i]), std::get<8>(after_log[i]), 1e-8);
     }
+}
+
+BOOST_AUTO_TEST_CASE(miscellaneous_tests)
+{
+    problem prob{hock_schittkowsky_71{}};
+    population population1{prob, 15u, 23u};
+    prob.set_c_tol(10.0);
+    g_aco user_algo1{100u, 13u, 1.0, 1500.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 1000.0, 10u, 0.9, 2u, 23u};
+    user_algo1.set_verbosity(1u);
+    population1 = user_algo1.evolve(population1);
+    population population2{prob, 15u, 23u};
+    g_aco user_algo2{10000u, 13u, 1.0, 2700.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
+    user_algo2.set_verbosity(1u);
+    population2 = user_algo2.evolve(population2);
+    population population3{prob, 15u, 23u};
+    g_aco user_algo3{10000u, 13u, 1.0, 1500.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 2u, 23u};
+    user_algo3.set_verbosity(1u);
+    population3 = user_algo3.evolve(population3);
+    population population4{prob, 15u, 23u};
+    g_aco user_algo4{1000u, 13u, 1.0, 1500.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 1u, 23u};
+    user_algo4.set_verbosity(1u);
+    population4 = user_algo4.evolve(population4);
+    population population5{prob, 15u, 23u};
+    g_aco user_algo5{1000u, 13u, 1.0, 1500.0, 0.01, 90u, 1e-7, 7u, 2u, 1000u, 1000u, 0.0, 10u, 0.9, 3u, 23u};
+    user_algo5.set_verbosity(1u);
+    population5 = user_algo5.evolve(population5);
+    problem prob_ros{rosenbrock{10u}};
+    population population6{prob_ros, 200u, 23u};
+    g_aco user_algo6{2000u, 150u, 1.0, 0.0, 0.0, 90u, 1e-7, 7u, 2u, 10000u, 10000u, 0.0, 10u, 0.9, 2u, 23u};
+    user_algo6.set_verbosity(1u);
+    population6 = user_algo6.evolve(population6);
+    BOOST_CHECK(user_algo1.get_log().size() > 0u);
+    BOOST_CHECK(user_algo2.get_log().size() > 0u);
+    BOOST_CHECK(user_algo3.get_log().size() > 0u);
 }

@@ -94,6 +94,7 @@ public:
      * @param[in] n_gen_mark This parameters determines the convergence speed of the standard deviations values
      * @param[in] epsilon Pareto precision: the smaller this parameter, the higher the chances to introduce a new
      * solution in the Pareto front
+     * @param[in] norm_value Norm value parameter: this determines which norm has to be used (L_1, L_2 or L_inf)
      * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$, \p ants is not a positive
@@ -102,13 +103,15 @@ public:
      * [0,1[\f$, \p q is not \f$ >=0 \f$
      */
 
-    g_aco(unsigned gen = 100u, unsigned ker = 63u, double q = 1, double oracle = 0., double acc = 0.01,
+    g_aco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
           unsigned threshold = 9u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u,
           unsigned omega_strategy = 2u, unsigned impstop = 100000u, unsigned evalstop = 100000u, double focus = 0.,
-          unsigned paretomax = 10u, double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
+          unsigned paretomax = 10u, double epsilon = 0.9, unsigned norm_value = 2u,
+          unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
           m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
-          m_log(), m_res(), m_threshold(threshold), m_q(q), m_omega_strategy(omega_strategy), m_n_gen_mark(n_gen_mark)
+          m_log(), m_res(), m_threshold(threshold), m_q(q), m_omega_strategy(omega_strategy), m_n_gen_mark(n_gen_mark),
+          m_norm_value(norm_value)
     {
         if (acc < 0.) {
             pagmo_throw(std::invalid_argument, "The accuracy parameter must be >=0, while a value of "
@@ -124,13 +127,17 @@ public:
                                                    + std::to_string(epsilon) + " was detected");
         }
 
-        if (omega_strategy != 1 && omega_strategy != 2) {
+        if (omega_strategy != 1u && omega_strategy != 2u) {
             pagmo_throw(std::invalid_argument, "The omega strategy parameter must be either 1 or 2 while a value of "
                                                    + std::to_string(omega_strategy) + " was detected");
         }
         if ((threshold < 1 || threshold > gen) && gen != 0) {
             pagmo_throw(std::invalid_argument, "The threshold parameter must be either in [1,m_gen] while a value of "
                                                    + std::to_string(threshold) + " was detected");
+        }
+        if (norm_value != 1u && norm_value != 2u && norm_value != 3u) {
+            pagmo_throw(std::invalid_argument, "The norm value parameter must be either 1, 2 or 3 while a value of "
+                                                   + std::to_string(omega_strategy) + " was detected");
         }
     }
 
@@ -367,33 +374,84 @@ public:
                     pop.set_xf(i, ant, fitness);
                 }
 
-                // The oracle parameter is updated after each optimization run:
-                if (sol_archive[0][1 + dim] < m_oracle && m_res == 0) {
+                // The oracle parameter is updated after each optimization run, if needed:
+                if (sol_archive[0][1 + dim] < m_oracle) {
                     m_oracle = sol_archive[0][1 + dim];
-
+                    double residual = 0.0;
                     for (decltype(m_ker) rows = 0u; rows < m_ker; ++rows) {
+                        if (n_ic != 0 || n_ec != 0) {
+
+                            vector_double f(n_obj + n_ec + n_ic);
+                            for (decltype(n_obj + n_ec + n_ic) jj = 0u; jj < n_obj + n_ec + n_ic; ++jj) {
+                                f[jj] = sol_archive[rows][1 + dim + jj];
+                            }
+                            // if m_norm_value=1 --> it computes the L_1 norm,
+                            // if m_norm_value=2 --> it computes the L_2 norm,
+                            // if m_norm_value=3 --> it computes the L_inf norm
+
+                            // If norm_value==2, then the built-in PaGMO functions can be used for computing the L2 norm
+                            if (m_norm_value == 2) {
+                                auto violation_ic = detail::test_eq_constraints(
+                                    f.data() + n_obj, f.data() + n_obj + n_ec, prob.get_c_tol().data());
+                                auto violation_ec = detail::test_ineq_constraints(
+                                    f.data() + n_obj + n_ec, f.data() + f.size(), prob.get_c_tol().data() + n_ec);
+                                residual
+                                    = std::sqrt(std::pow(violation_ic.second, 2) + std::pow(violation_ec.second, 2));
+                            } else {
+                                // In the fitness vector the objective vector, equality constraints vector, and
+                                // inequality constraints vector, respectively, are stored in this order
+                                double max_ec = f[n_obj];
+                                double min_ic = f[n_obj + n_ec];
+                                double ec_sum_1 = 0;
+                                double ic_sum_1 = 0;
+
+                                // I compute the sum over the equality and inequality constraints (to be used for the
+                                // residual computation):
+                                for (decltype(n_obj + n_ec) i = n_obj; i < n_obj + n_ec; ++i) {
+                                    ec_sum_1 = ec_sum_1 + std::abs(f[i]);
+
+                                    if (i > n_obj && max_ec < f[i]) {
+                                        max_ec = f[i];
+                                    }
+                                }
+
+                                for (decltype(n_obj + n_ec) j = n_obj + n_ec; j < n_obj + n_ec + n_ic; ++j) {
+                                    ic_sum_1 = ic_sum_1 + std::min(std::abs(f[j]), 0.0);
+
+                                    if (j > n_obj + n_ec && min_ic > f[j]) {
+                                        min_ic = f[j];
+                                    }
+                                }
+
+                                if (m_norm_value == 1) {
+                                    residual = ec_sum_1 - ic_sum_1;
+
+                                } else {
+                                    residual = std::max(max_ec, min_ic);
+                                }
+                            }
+                        }
+
                         double fitness_value = sol_archive[rows][1 + dim];
-                        double alpha = 0;
+                        double alpha = 0.0;
                         double diff = std::abs(fitness_value - m_oracle); // I define this value which I will use often
 
-                        if (fitness_value > m_oracle && m_res < diff / 3.0) {
-                            alpha
-                                = (diff * (6.0 * std::sqrt(3.0) - 2.0) / (6.0 * std::sqrt(3)) - m_res) / (diff - m_res);
+                        if (fitness_value > m_oracle && residual < diff / 3.0) {
+                            alpha = (diff * (6.0 * std::sqrt(3.0) - 2.0) / (6.0 * std::sqrt(3)) - residual)
+                                    / (diff - residual);
 
-                        } else if (fitness_value > m_oracle && m_res >= diff / 3.0 && m_res <= diff) {
+                        } else if (fitness_value > m_oracle && residual >= diff / 3.0 && residual <= diff) {
+                            alpha = 1.0 - 1.0 / (2.0 * std::sqrt(diff / residual));
 
-                            alpha = 1.0 - 1.0 / (2.0 * std::sqrt(diff / m_res));
-
-                        } else if (fitness_value > m_oracle && m_res > diff) {
-
-                            alpha = 1.0 / 2.0 * std::sqrt(diff / m_res);
+                        } else if (fitness_value > m_oracle && residual > diff) {
+                            alpha = 1.0 / 2.0 * std::sqrt(diff / residual);
                         }
 
                         // I can now compute the penalty function value
-                        if (fitness_value > m_oracle || m_res > 0) {
-                            sol_archive[rows][0] = alpha * diff + (1 - alpha) * m_res;
+                        if (fitness_value > m_oracle || residual > 0) {
+                            sol_archive[rows][0] = alpha * diff + (1 - alpha) * residual;
 
-                        } else if (fitness_value <= m_oracle && m_res == 0) {
+                        } else if (fitness_value <= m_oracle && residual == 0) {
                             sol_archive[rows][0] = -diff;
                         }
                     }
@@ -556,12 +614,12 @@ private:
 
         if (nic != 0 || nec != 0) {
 
-            unsigned L = 2u; // if L=1 --> it computes the L_1 norm,
-                             // if L=2 --> it computes the L_2 norm,
-                             // if L=3 --> it computes the L_inf norm
+            // if m_norm_value=1 --> it computes the L_1 norm,
+            // if m_norm_value=2 --> it computes the L_2 norm,
+            // if m_norm_value=3 --> it computes the L_inf norm
 
-            // If L==2, then the built-in PaGMO functions can be used for computing the L2 norm
-            if (L == 2) {
+            // If norm_value==2, then the built-in PaGMO functions can be used for computing the L2 norm
+            if (m_norm_value == 2) {
                 auto violation_ic = detail::test_eq_constraints(f.data() + nobj, f.data() + nobj + nec, tol_vec.data());
                 auto violation_ec
                     = detail::test_ineq_constraints(f.data() + nobj + nec, f.data() + f.size(), tol_vec.data() + nec);
@@ -592,7 +650,7 @@ private:
                     }
                 }
 
-                if (L == 1) {
+                if (m_norm_value == 1) {
                     m_res = ec_sum_1 - ic_sum_1;
 
                 } else {
@@ -641,7 +699,7 @@ private:
      * stored from the best to the worst is passed
      * @param[in] sorted_list Positions of stored penalties: this represents the positions of the individuals wrt their
      * penalties as they are stored in the stored_vector
-     * @param[in] n_impstop Impstop counter: it counts number of runs in which the sol_archive is not updated
+     * @param[in] n_impstop Impstop counter: it counts number of runs in which the sol_archive is not updated at all
      * @param[in] n_evalstop Evalstop counter: it counts the number of runs in which the best solution of the
      * sol_archive is not updated
      * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current
@@ -838,6 +896,7 @@ private:
                 // In case a value for the focus parameter (different than zero) is passed, this limits the maximum
                 // value of the standard deviation
                 sigma_vec[h - 1] = (ub[h - 1] - lb[h - 1]) / m_focus;
+
             } else {
                 sigma_vec[h - 1] = (d_max - d_min) / gen_mark;
             }
@@ -972,6 +1031,7 @@ private:
     mutable double m_q;
     unsigned m_omega_strategy;
     unsigned m_n_gen_mark;
+    unsigned m_norm_value;
 };
 
 } // namespace pagmo
