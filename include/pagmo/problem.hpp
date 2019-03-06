@@ -1741,6 +1741,24 @@ public:
         return std::make_pair(m_lb, m_ub);
     }
 
+    /// Lower bounds.
+    /**
+     * @return a const reference to the vector of lower box bounds for this problem.
+     */
+    const vector_double &get_lb() const
+    {
+        return m_lb;
+    }
+
+    /// Upper bounds.
+    /**
+     * @return a const reference to the vector of upper box bounds for this problem.
+     */
+    const vector_double &get_ub() const
+    {
+        return m_ub;
+    }
+
     /// Number of equality constraints.
     /**
      * This method will return \f$ n_{ec} \f$, the number of equality constraints of the problem.

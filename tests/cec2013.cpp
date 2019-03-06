@@ -50,8 +50,7 @@ BOOST_AUTO_TEST_CASE(cec2013_test)
     for (unsigned int i = 1u; i <= 28u; ++i) {
         for (auto dim : allowed_dims) {
             cec2013 udp{i, dim};
-            auto x = random_decision_vector({vector_double(dim, -100.), vector_double(dim, 100.)},
-                                            r_engine); // a random vector
+            auto x = random_decision_vector(problem(udp), r_engine); // a random vector
             BOOST_CHECK_NO_THROW(udp.fitness(x));
         }
         BOOST_CHECK((cec2013{i, 2u}.get_name().find("CEC2013 - f")) != std::string::npos);
