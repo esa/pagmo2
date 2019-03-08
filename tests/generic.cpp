@@ -223,6 +223,87 @@ BOOST_AUTO_TEST_CASE(random_decision_vector_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(batch_random_decision_vector_test)
+{
+    auto inf = std::numeric_limits<double>::infinity();
+    auto big = std::numeric_limits<double>::max();
+    detail::random_engine_type r_engine(pagmo::random_device::next());
+
+    // Test the throws
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{0}, {inf}}}, 0, r_engine), std::invalid_argument,
+                          [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random real if the bounds are not finite");
+                          });
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{-inf}, {0}}}, 0, r_engine), std::invalid_argument,
+                          [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random real if the bounds are not finite");
+                          });
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{-inf}, {inf}}}, 0, r_engine),
+                          std::invalid_argument, [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random real if the bounds are not finite");
+                          });
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{-big}, {big}}}, 0, r_engine),
+                          std::invalid_argument, [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random real within bounds that are too large");
+                          });
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{0, 0}, {1, inf}, 1}}, 0, r_engine),
+                          std::invalid_argument, [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random integer if the bounds are not finite");
+                          });
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{0, -inf}, {1, 0}, 1}}, 0, r_engine),
+                          std::invalid_argument, [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random integer if the bounds are not finite");
+                          });
+    BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{0, -inf}, {1, inf}, 1}}, 0, r_engine),
+                          std::invalid_argument, [](const std::invalid_argument &ia) {
+                              return boost::contains(ia.what(),
+                                                     "Cannot generate a random integer if the bounds are not finite");
+                          });
+    if (big > static_cast<double>(std::numeric_limits<long long>::max())
+        && -big < static_cast<double>(std::numeric_limits<long long>::min())) {
+        BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{0, 0}, {1, big}, 1}}, 10, r_engine),
+                              std::invalid_argument, [](const std::invalid_argument &ia) {
+                                  return boost::contains(
+                                      ia.what(),
+                                      "Cannot generate a random integer if the lower/upper bounds are not within "
+                                      "the bounds of the long long type");
+                              });
+        BOOST_CHECK_EXCEPTION(batch_random_decision_vector(problem{udp00{{0, -big}, {1, 0}, 1}}, 10, r_engine),
+                              std::invalid_argument, [](const std::invalid_argument &ia) {
+                                  return boost::contains(
+                                      ia.what(),
+                                      "Cannot generate a random integer if the lower/upper bounds are not within "
+                                      "the bounds of the long long type");
+                              });
+    }
+
+    // Test the results
+    BOOST_CHECK(
+        (batch_random_decision_vector(problem{udp00{{3, 4}, {3, 4}}}, 3, r_engine) == vector_double{3, 4, 3, 4, 3, 4}));
+    BOOST_CHECK((batch_random_decision_vector(problem{udp00{{3, 4}, {3, 4}, 1}}, 3, r_engine)
+                 == vector_double{3, 4, 3, 4, 3, 4}));
+
+    BOOST_CHECK((random_decision_vector(problem{udp00{{3, 4}, {3, 4}}}, r_engine) == vector_double{3, 4}));
+    BOOST_CHECK((random_decision_vector(problem{udp00{{3, 4}, {3, 4}, 1}}, r_engine) == vector_double{3, 4}));
+    BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 1}}}, r_engine)[0] >= 0.));
+    BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 1}}}, r_engine)[1] < 1.));
+    BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 0}}}, r_engine)[1] == 0.));
+    for (auto i = 0; i < 100; ++i) {
+        const auto tmp = random_decision_vector(problem{udp00{{0}, {2}, 1}}, r_engine)[0];
+        BOOST_CHECK(tmp == 0. || tmp == 1. || tmp == 2.);
+    }
+    for (auto i = 0; i < 100; ++i) {
+        const auto res = random_decision_vector(problem{udp00{{0, -20}, {1, 20}, 1}}, r_engine);
+        BOOST_CHECK(std::trunc(res[1]) == res[1]);
+    }
+}
+
 BOOST_AUTO_TEST_CASE(force_bounds_test)
 {
     detail::random_engine_type r_engine(32u);
