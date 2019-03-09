@@ -2970,6 +2970,42 @@ Returns:
 
 Raises:
     ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string batch_random_decision_vector_docstring()
+{
+    return R"(batch_random_decision_vector(prob, n)
+
+This function will generate a batch of *n* decision vectors whose values are randomly chosen with uniform probability within
+the lower and upper bounds :math:`lb` and :math:`ub` of the input :class:`~pygmo.problem` *prob*.
+The decision vectors are laid out contiguously in the return value: for a problem with dimension :math:`x`,
+the first decision vector in the return value occupies the index range :math:`\left[0, x\right)`, the second decision vector
+occupies the range :math:`\left[x, 2x\right)`, and so on.
+
+For the continuous parts of the decision vectors, the :math:`i`-th components of the randomly generated decision
+vectors will be such that :math:`lb_i \le x_i < ub_i`.
+
+For the discrete parts of the decision vectors, the :math:`i`-th components of the randomly generated decision vectors
+are guaranteed to be integral values such that :math:`lb_i \le x_i \le ub_i`.
+
+For both the continuous and discrete parts of the decision vectors, if :math:`lb_i == ub_i` then :math:`lb_i` is returned.
+
+Args:
+    prob (:class:`~pygmo.problem`): the input problem
+    n (int): the number of decision vectors that will be generated
+
+Returns:
+    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+
+Raises:
+    OverflowError: in case of (unlikely) overflows
+    ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
 
 )";
 }

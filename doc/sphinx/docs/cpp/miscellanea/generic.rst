@@ -19,6 +19,10 @@ A number of utilities to compute quantities that are of general relevance.
 
 --------------------------------------------------------------------------
 
+.. doxygenfunction:: pagmo::batch_random_decision_vector
+
+--------------------------------------------------------------------------
+
 .. doxygenfunction:: pagmo::binomial_coefficient
 
 --------------------------------------------------------------------------
