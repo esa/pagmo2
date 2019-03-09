@@ -338,6 +338,11 @@ inline vector_double random_decision_vector(const problem &prob, Rng &r_engine)
 template <typename Rng>
 inline vector_double batch_random_decision_vector(const problem &prob, vector_double::size_type n, Rng &r_engine)
 {
+    // NOTE: it is possible in principle to do this in a parallel fashion, e.g., see code
+    // at the commit 13d4182a41e4e71034c6e1085699c5138805d21c. The price to pay however is
+    // the loss of determinism. We can reconsider in the future whether it's worth it
+    // to add an option to this constructor, e.g., par_random, defaulting to false.
+
     // Fetch a few quantities from prob.
     const auto nx = prob.get_nx();
     const auto ncx = nx - prob.get_nix();
