@@ -32,7 +32,6 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstddef>
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -41,12 +40,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <boost/functional/hash.hpp>
-#include <boost/numeric/conversion/cast.hpp>
-
-#include <tbb/blocked_range.h>
-#include <tbb/parallel_for.h>
 
 #include <pagmo/bfe.hpp>
 #include <pagmo/exceptions.hpp>
@@ -146,35 +139,54 @@ public:
         }
     }
 
-    template <typename T, generic_ctor_enabler<T> = 0>
+    /// Constructor from a problem and a batch fitness evaluator.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if :cpp:class:`pagmo::problem` is constructible from ``T``.
+     *
+     *
+     * Constructs a population with *pop_size* individuals associated
+     * to the problem *x* and setting the population random seed
+     * to *seed*. The input problem *x* can be either a :cpp:class:`pagmo::problem` or a user-defined problem
+     * (UDP). The fitnesses of the individuals will be evaluated with the input
+     * :cpp:class:`pagmo::bfe` *b*.
+     *
+     * \endverbatim
+     *
+     * @param x the problem the population refers to.
+     * @param b the batch fitness evaluator that will be used to evaluate the fitnesses of the individuals.
+     * @param pop_size population size (i.e. number of individuals therein).
+     * @param seed seed of the random number generator used, for example, to
+     * create new random individuals within the bounds.
+     *
+     * @throws unspecified any exception thrown by batch_random_decision_vector(), the call operator of \p b,
+     * push_back(), or by the invoked constructor of pagmo::problem.
+     */
+    template <typename T, std::is_constructible<problem, T &&>::value = 0>
     explicit population(T &&x, const bfe &b, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
-#if 0
-        // Cache a few problem properties.
+        // Create a batch of random decision vectors.
+        const auto dvs = batch_random_decision_vector(m_prob, pop_size, m_e);
+
+        // Evaluate them in batch mode.
+        const auto fvs = b(m_prob, dvs);
+
+        // Sanity checks.
+        assert(pop_size == 0u || dvs.size() % pop_size == 0u);
+        assert(pop_size == 0u || fvs.size() % pop_size == 0u);
+
+        // Add the dvs/fvs to the population.
         const auto nx = m_prob.get_nx();
-        const auto nix = m_prob.get_nix();
-        const auto bounds = m_prob.get_bounds();
-
-        // Prepare the batch of dvs to be evaluated.
-        // LCOV_EXCL_START
-        if (pop_size > std::numeric_limits<vector_double::size_type>::max() / nx) {
-            pagmo_throw(std::overflow_error, "The number of individuals requested in the constructor of a population, "
-                                                 + std::to_string(pop_size)
-                                                 + ", is too large and it results in an overflow condition");
-        }
-        // LCOV_EXCL_STOP
-        vector_double dvs(nx * pop_size);
-
-        // Create the dvs.
-        // NOTE: it is possible in principle to do this in a parallel fashion, e.g., see code
-        // at the commit 13d4182a41e4e71034c6e1085699c5138805d21c. The price to pay however is
-        // the loss of determinism. We can reconsider in the future whether it's worth it
-        // to add an option to this constructor, e.g., par_random, defaulting to false.
+        const auto nf = m_prob.get_nf();
+        assert(dvs.size() % nx == 0u);
+        assert(fvs.size() % nf == 0u);
         for (size_type i = 0; i < pop_size; ++i) {
-            pagmo::random_decision_vector(dvs.data() + i * nx, bounds.first, bounds.second, m_e, nix);
+            push_back(vector_double(dvs.data() + i * nx, dvs.data() + (i + 1u) * nx),
+                      vector_double(fvs.data() + i * nf, fvs.data() + (i + 1u) * nf));
         }
-#endif
     }
 
     /// Defaulted copy constructor.
@@ -829,97 +841,6 @@ private:
     // Seed.
     unsigned m_seed;
 };
-
-namespace detail
-{
-
-// Machinery for the default implementation of parallel initialisation.
-template <typename>
-struct pop_parinit {
-    using func_t = std::function<std::pair<std::vector<vector_double>, std::vector<vector_double>>(
-        const std::string &, problem &, unsigned, population::size_type)>;
-    static func_t s_func;
-};
-
-// Parallel initialisation via multiple threads.
-inline void pop_parinit_thread(std::pair<std::vector<vector_double>, std::vector<vector_double>> &ret, problem &prob,
-                               unsigned seed, population::size_type pop_size)
-{
-    // A few typing shortcuts.
-    using rng_type = detail::random_engine_type;
-    using rng_seed_type = typename rng_type::result_type;
-    using range_type = tbb::blocked_range<decltype(pop_size)>;
-
-    // Check the input retval.
-    assert(ret.first.size() == pop_size);
-    assert(ret.second.size() == pop_size);
-
-    // Cache the problem bounds and the number of integer variables.
-    const auto prob_bounds = prob.get_bounds();
-    const auto nix = prob.get_nix();
-
-    // Body of the parallel functors below.
-    auto par_body = [&ret, seed, &prob_bounds, nix](const problem &p, const range_type &range) {
-        // Init a random engine with a local seed. We will mix
-        // the original seed with the limits of the current iteration.
-        auto local_seed = static_cast<std::size_t>(seed);
-        boost::hash_combine(local_seed, static_cast<std::size_t>(range.begin()));
-        boost::hash_combine(local_seed, static_cast<std::size_t>(range.end()));
-        rng_type eng(static_cast<rng_seed_type>(local_seed));
-
-        for (auto i = range.begin(); i != range.end(); ++i) {
-            // Create a random dv, compute its fitness and move both into ret.
-            auto random_dv = pagmo::random_decision_vector(prob_bounds, eng, nix);
-            auto fitness = p.fitness(random_dv);
-            ret.first[i] = std::move(random_dv);
-            ret.second[i] = std::move(fitness);
-        }
-    };
-
-    if (prob.get_thread_safety() >= thread_safety::constant) {
-        // We can concurrently call the objfun on the input prob, hence we can
-        // capture it by reference and do all the fitness calls on the same object.
-        tbb::parallel_for(range_type(0u, pop_size),
-                          [&prob, &par_body](const range_type &range) { par_body(prob, range); });
-    } else if (prob.get_thread_safety() == thread_safety::basic) {
-        // We cannot concurrently call the objfun on the input prob. We will need
-        // to make a copy of prob for each parallel iteration.
-        tbb::parallel_for(range_type(0u, pop_size),
-                          [prob, &par_body](const range_type &range) { par_body(prob, range); });
-    } else {
-        pagmo_throw(
-            std::invalid_argument,
-            "The 'par_thread' parallel population initialisation mode was selected, but the problem '" + prob.get_name()
-                + "' does not provide the required level of thread safety. Please choose another initialisation mode");
-    }
-}
-
-inline std::pair<std::vector<vector_double>, std::vector<vector_double>>
-default_pop_parinit(const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size)
-{
-    constexpr char valid_modes[] = "['par_thread', 'par_auto']";
-
-    // Prepare the return values.
-    std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
-    retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
-    retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
-
-    if (init_mode == "par_auto" || init_mode == "par_thread") {
-        pop_parinit_thread(retval, prob, seed, pop_size);
-    } else {
-        pagmo_throw(std::invalid_argument,
-                    "The '" + init_mode
-                        + "' parallel population initialisation mode is not valid. The valid modes are: "
-                        + valid_modes);
-    }
-
-    return retval;
-}
-
-template <typename T>
-typename pop_parinit<T>::func_t pop_parinit<T>::s_func = default_pop_parinit;
-
-} // namespace detail
 
 } // namespace pagmo
 

@@ -55,7 +55,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-#define PAGMO_REGISTER_BFE(bfe) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::bfe_inner<bfe>, "udbfe " #bfe)
+#define PAGMO_REGISTER_BFE(b) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::bfe_inner<b>, "udbfe " #b)
 
 namespace pagmo
 {
