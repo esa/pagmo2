@@ -3,31 +3,31 @@ Batch fitness evaluator
 
 .. versionadded:: 2.11
 
-*#include <pagmo/batch_fitness_evaluator.hpp>*
+*#include <pagmo/bfe.hpp>*
 
 .. cpp:namespace-push:: pagmo
 
-.. cpp:class:: batch_fitness_evaluator
+.. cpp:class:: bfe
 
    This class implements the evaluation of decision vectors in batch mode. That is,
    whereas a :cpp:class:`pagmo::problem` provides the means to evaluate a single decision
    vector via the :cpp:func:`pagmo::problem::fitness()` member function, a
-   :cpp:class:`~pagmo::batch_fitness_evaluator` enables a :cpp:class:`~pagmo::problem`
+   :cpp:class:`~pagmo::bfe` (short for *batch fitness evaluator*) enables a :cpp:class:`~pagmo::problem`
    to evaluate the fitnesses of a group (or a *batch*) of decision vectors, possibly
    in a parallel/vectorised fashion.
 
    Together with the :cpp:func:`pagmo::problem::batch_fitness()` member function,
-   :cpp:class:`~pagmo::batch_fitness_evaluator` is one of the mechanisms provided
+   :cpp:class:`~pagmo::bfe` is one of the mechanisms provided
    by pagmo to enable a form of parallelism on a finer level than the
    :cpp:class:`~pagmo::archipelago` and :cpp:class:`~pagmo::island` classes.
    However, while the :cpp:func:`pagmo::problem::batch_fitness()` member function must be
-   implemented on a UDP-by-UDP basis, a :cpp:class:`~pagmo::batch_fitness_evaluator`
+   implemented on a UDP-by-UDP basis, a :cpp:class:`~pagmo::bfe`
    provides generic batch fitness evaluation capabilities for any :cpp:class:`~pagmo::problem`,
    and it can thus be used also with UDPs which do not implement the
    :cpp:func:`pagmo::problem::batch_fitness()` member function.
 
    Like :cpp:class:`~pagmo::problem`, :cpp:class:`~pagmo::algorithm`, and many other
-   pagmo classes, :cpp:class:`~pagmo::batch_fitness_evaluator` is a generic container
+   pagmo classes, :cpp:class:`~pagmo::bfe` is a generic container
    (or, in the parlance of C++, a *type-erased* class) which stores internally
    a user-defined batch fitness evaluator (UDBFE for short) which actually
    implements the fitness evaluation in batch mode. Users are free to either
@@ -57,38 +57,38 @@ Batch fitness evaluator
       thread_safety get_thread_safety() const;
 
    See the documentation of the corresponding member functions in this class for details on how the optional
-   member functions in the UDBFE are used by :cpp:class:`~pagmo::batch_fitness_evaluator`.
+   member functions in the UDBFE are used by :cpp:class:`~pagmo::bfe`.
 
    .. warning::
 
-      A moved-from :cpp:class:`~pagmo::batch_fitness_evaluator` is destructible and assignable. Any other operation will result
+      A moved-from :cpp:class:`~pagmo::bfe` is destructible and assignable. Any other operation will result
       in undefined behaviour.
 
-   .. cpp:function:: batch_fitness_evaluator()
+   .. cpp:function:: bfe()
 
       Default constructor.
 
-      The default constructor will initialize a :cpp:class:`~pagmo::batch_fitness_evaluator` containing a :cpp:class:`~pagmo::default_bfe`.
+      The default constructor will initialize a :cpp:class:`~pagmo::bfe` containing a :cpp:class:`~pagmo::default_bfe`.
 
       :exception unspecified: any exception raised by the constructor from a generic UDBFE.
 
-   .. cpp:function:: batch_fitness_evaluator(const batch_fitness_evaluator &)
-   .. cpp:function:: batch_fitness_evaluator(batch_fitness_evaluator &&) noexcept
-   .. cpp:function:: batch_fitness_evaluator &operator=(const batch_fitness_evaluator &)
-   .. cpp:function:: batch_fitness_evaluator &operator=(batch_fitness_evaluator &&) noexcept
+   .. cpp:function:: bfe(const bfe &)
+   .. cpp:function:: bfe(bfe &&) noexcept
+   .. cpp:function:: bfe &operator=(const bfe &)
+   .. cpp:function:: bfe &operator=(bfe &&) noexcept
 
-      :cpp:class:`~pagmo::batch_fitness_evaluator` is copy/move constructible, and copy/move assignable.
+      :cpp:class:`~pagmo::bfe` is copy/move constructible, and copy/move assignable.
       Copy construction/assignment will perform deep copies, move operations will leave the moved-from object in
       a state which is destructible and assignable.
 
       :exception unspecified: when performing copy operations, any exception raised by the UDBFE upon copying, or by memory allocation failures.
 
-   .. cpp:function:: template <typename T> explicit batch_fitness_evaluator(T &&x)
+   .. cpp:function:: template <typename T> explicit bfe(T &&x)
 
       Generic constructor from a UDBFE.
 
       This constructor participates in overload resolution only if ``T``, after the removal of reference
-      and cv qualifiers, is not :cpp:class:`~pagmo::batch_fitness_evaluator` and if it satisfies :cpp:class:`pagmo::is_udbfe`.
+      and cv qualifiers, is not :cpp:class:`~pagmo::bfe` and if it satisfies :cpp:class:`pagmo::is_udbfe`.
 
       Additionally, the constructor will also be enabled if ``T``, after the removal of reference and cv qualifiers, is a function type with
       the following signature
@@ -196,15 +196,15 @@ Batch fitness evaluator
 
       :exception unspecified: any exception raised by the (de)serialisation of primitive types or of the UDBFE.
 
-   .. cpp:function:: friend std::ostream &operator<<(std::ostream &os, const batch_fitness_evaluator &bfe)
+   .. cpp:function:: friend std::ostream &operator<<(std::ostream &os, const bfe &b)
 
       Stream insertion operator.
 
       This function will direct to *os* a human-readable representation of the input
-      :cpp:class:`~pagmo::batch_fitness_evaluator` *bfe*.
+      :cpp:class:`~pagmo::bfe` *b*.
 
       :param os: the input ``std::ostream``.
-      :param bfe: the batch fitness evaluator that will be directed to *os*.
+      :param b: the batch fitness evaluator that will be directed to *os*.
 
       :return: a reference to *os*.
 
@@ -216,7 +216,7 @@ Associated type traits
 .. cpp:class:: template <typename T> has_bfe_call_operator
 
    This type trait detects if ``T`` is a callable whose signature is compatible with the one
-   required by :cpp:class:`~pagmo::batch_fitness_evaluator`.
+   required by :cpp:class:`~pagmo::bfe`.
 
    Specifically, the :cpp:any:`value` of this type trait will be ``true`` if the expression
    ``B(p, dvs)``, where

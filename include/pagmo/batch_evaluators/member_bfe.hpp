@@ -29,8 +29,8 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_BATCH_EVALUATORS_MEMBER_BFE_HPP
 #define PAGMO_BATCH_EVALUATORS_MEMBER_BFE_HPP
 
-// NOTE: the member_bfe is defined in batch_fitness_evaluator.hpp
+// NOTE: the member_bfe is defined in bfe.hpp
 // because it is part of the heuristic for choosing the default_bfe.
-#include <pagmo/batch_fitness_evaluator.hpp>
+#include <pagmo/bfe.hpp>
 
 #endif

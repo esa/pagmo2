@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_BATCH_FITNESS_EVALUATOR_HPP
-#define PAGMO_BATCH_FITNESS_EVALUATOR_HPP
+#ifndef PAGMO_BFE_HPP
+#define PAGMO_BFE_HPP
 
 #include <algorithm>
 #include <cassert>
@@ -55,8 +55,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-#define PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(bfe)                                                                    \
-    CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::batch_fitness_evaluator_inner<bfe>, "udbfe " #bfe)
+#define PAGMO_REGISTER_BFE(bfe) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::bfe_inner<bfe>, "udbfe " #bfe)
 
 namespace pagmo
 {
@@ -96,9 +95,9 @@ const bool is_udbfe<T>::value;
 namespace detail
 {
 
-struct batch_fitness_evaluator_inner_base {
-    virtual ~batch_fitness_evaluator_inner_base() {}
-    virtual std::unique_ptr<batch_fitness_evaluator_inner_base> clone() const = 0;
+struct bfe_inner_base {
+    virtual ~bfe_inner_base() {}
+    virtual std::unique_ptr<bfe_inner_base> clone() const = 0;
     virtual vector_double operator()(const problem &, const vector_double &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
@@ -110,20 +109,20 @@ struct batch_fitness_evaluator_inner_base {
 };
 
 template <typename T>
-struct batch_fitness_evaluator_inner final : batch_fitness_evaluator_inner_base {
+struct bfe_inner final : bfe_inner_base {
     // We just need the def ctor, delete everything else.
-    batch_fitness_evaluator_inner() = default;
-    batch_fitness_evaluator_inner(const batch_fitness_evaluator_inner &) = delete;
-    batch_fitness_evaluator_inner(batch_fitness_evaluator_inner &&) = delete;
-    batch_fitness_evaluator_inner &operator=(const batch_fitness_evaluator_inner &) = delete;
-    batch_fitness_evaluator_inner &operator=(batch_fitness_evaluator_inner &&) = delete;
+    bfe_inner() = default;
+    bfe_inner(const bfe_inner &) = delete;
+    bfe_inner(bfe_inner &&) = delete;
+    bfe_inner &operator=(const bfe_inner &) = delete;
+    bfe_inner &operator=(bfe_inner &&) = delete;
     // Constructors from T (copy and move variants).
-    explicit batch_fitness_evaluator_inner(const T &x) : m_value(x) {}
-    explicit batch_fitness_evaluator_inner(T &&x) : m_value(std::move(x)) {}
-    // The clone method, used in the copy constructor of batch_fitness_evaluator.
-    virtual std::unique_ptr<batch_fitness_evaluator_inner_base> clone() const override final
+    explicit bfe_inner(const T &x) : m_value(x) {}
+    explicit bfe_inner(T &&x) : m_value(std::move(x)) {}
+    // The clone method, used in the copy constructor of bfe.
+    virtual std::unique_ptr<bfe_inner_base> clone() const override final
     {
-        return make_unique<batch_fitness_evaluator_inner>(m_value);
+        return make_unique<bfe_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double operator()(const problem &p, const vector_double &dvs) const override final
@@ -178,7 +177,7 @@ struct batch_fitness_evaluator_inner final : batch_fitness_evaluator_inner_base 
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(cereal::base_class<batch_fitness_evaluator_inner_base>(this), m_value);
+        ar(cereal::base_class<bfe_inner_base>(this), m_value);
     }
     T m_value;
 };
@@ -201,7 +200,7 @@ public:
         const auto n_dvs = dvs.size() / n_dim;
 
         // NOTE: as usual, we assume that thread_bfe is always wrapped
-        // by a batch_fitness_evaluator, where we already check that dvs
+        // by a bfe, where we already check that dvs
         // is compatible with p.
         // NOTE: this is what we always do with user-defined classes:
         // we do the sanity checks in the type-erased container.
@@ -349,7 +348,7 @@ public:
     }
 };
 
-class batch_fitness_evaluator
+class bfe
 {
     // Enable the generic ctor only if T is not a bfe (after removing
     // const/reference qualifiers), and if T is a udbfe. Additionally,
@@ -358,32 +357,30 @@ class batch_fitness_evaluator
     // the machinery below).
     template <typename T>
     using generic_ctor_enabler
-        = enable_if_t<(!std::is_same<batch_fitness_evaluator, uncvref_t<T>>::value && is_udbfe<uncvref_t<T>>::value)
+        = enable_if_t<(!std::is_same<bfe, uncvref_t<T>>::value && is_udbfe<uncvref_t<T>>::value)
                           || std::is_same<vector_double(const problem &, const vector_double &), uncvref_t<T>>::value,
                       int>;
     // Dispatching for the generic ctor. We have a special case if T is
     // a function type, in which case we will manually do the conversion to
     // function pointer and delegate to the other overload.
     template <typename T>
-    explicit batch_fitness_evaluator(T &&x, std::true_type)
-        : batch_fitness_evaluator(
-              static_cast<vector_double (*)(const problem &, const vector_double &)>(std::forward<T>(x)),
+    explicit bfe(T &&x, std::true_type)
+        : bfe(static_cast<vector_double (*)(const problem &, const vector_double &)>(std::forward<T>(x)),
               std::false_type{})
     {
     }
     template <typename T>
-    explicit batch_fitness_evaluator(T &&x, std::false_type)
-        : m_ptr(detail::make_unique<detail::batch_fitness_evaluator_inner<uncvref_t<T>>>(std::forward<T>(x)))
+    explicit bfe(T &&x, std::false_type)
+        : m_ptr(detail::make_unique<detail::bfe_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
     }
 
 public:
     // Default ctor.
-    batch_fitness_evaluator() : batch_fitness_evaluator(default_bfe{}) {}
+    bfe() : bfe(default_bfe{}) {}
     // Constructor from a UDBFE.
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit batch_fitness_evaluator(T &&x)
-        : batch_fitness_evaluator(std::forward<T>(x), std::is_function<uncvref_t<T>>{})
+    explicit bfe(T &&x) : bfe(std::forward<T>(x), std::is_function<uncvref_t<T>>{})
     {
         // Assign the name.
         m_name = ptr()->get_name();
@@ -391,14 +388,11 @@ public:
         m_thread_safety = ptr()->get_thread_safety();
     }
     // Copy constructor.
-    batch_fitness_evaluator(const batch_fitness_evaluator &other)
-        : m_ptr(other.ptr()->clone()), m_name(other.m_name), m_thread_safety(other.m_thread_safety)
-    {
-    }
+    bfe(const bfe &other) : m_ptr(other.ptr()->clone()), m_name(other.m_name), m_thread_safety(other.m_thread_safety) {}
     // Move constructor. The default implementation is fine.
-    batch_fitness_evaluator(batch_fitness_evaluator &&) noexcept = default;
+    bfe(bfe &&) noexcept = default;
     // Move assignment operator
-    batch_fitness_evaluator &operator=(batch_fitness_evaluator &&other) noexcept
+    bfe &operator=(bfe &&other) noexcept
     {
         if (this != &other) {
             m_ptr = std::move(other.m_ptr);
@@ -408,22 +402,22 @@ public:
         return *this;
     }
     // Copy assignment operator
-    batch_fitness_evaluator &operator=(const batch_fitness_evaluator &other)
+    bfe &operator=(const bfe &other)
     {
         // Copy ctor + move assignment.
-        return *this = batch_fitness_evaluator(other);
+        return *this = bfe(other);
     }
     // Extraction and related.
     template <typename T>
     const T *extract() const noexcept
     {
-        auto p = dynamic_cast<const detail::batch_fitness_evaluator_inner<T> *>(ptr());
+        auto p = dynamic_cast<const detail::bfe_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
     }
     template <typename T>
     T *extract() noexcept
     {
-        auto p = dynamic_cast<detail::batch_fitness_evaluator_inner<T> *>(ptr());
+        auto p = dynamic_cast<detail::bfe_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
     }
     template <typename T>
@@ -467,16 +461,16 @@ public:
     void load(Archive &ar)
     {
         // Deserialize in a separate object and move it in later, for exception safety.
-        batch_fitness_evaluator tmp_bfe;
+        bfe tmp_bfe;
         ar(tmp_bfe.m_ptr, tmp_bfe.m_name, tmp_bfe.m_thread_safety);
         *this = std::move(tmp_bfe);
     }
     // Stream operator.
-    friend std::ostream &operator<<(std::ostream &os, const batch_fitness_evaluator &bfe)
+    friend std::ostream &operator<<(std::ostream &os, const bfe &b)
     {
-        os << "BFE name: " << bfe.get_name() << '\n';
-        os << "\n\tThread safety: " << bfe.get_thread_safety() << '\n';
-        const auto extra_str = bfe.get_extra_info();
+        os << "BFE name: " << b.get_name() << '\n';
+        os << "\n\tThread safety: " << b.get_thread_safety() << '\n';
+        const auto extra_str = b.get_extra_info();
         if (!extra_str.empty()) {
             os << "\nExtra info:\n" << extra_str << '\n';
         }
@@ -486,12 +480,12 @@ public:
 private:
     // Just two small helpers to make sure that whenever we require
     // access to the pointer it actually points to something.
-    detail::batch_fitness_evaluator_inner_base const *ptr() const
+    detail::bfe_inner_base const *ptr() const
     {
         assert(m_ptr.get() != nullptr);
         return m_ptr.get();
     }
-    detail::batch_fitness_evaluator_inner_base *ptr()
+    detail::bfe_inner_base *ptr()
     {
         assert(m_ptr.get() != nullptr);
         return m_ptr.get();
@@ -499,7 +493,7 @@ private:
 
 private:
     // Pointer to the inner base bfe
-    std::unique_ptr<detail::batch_fitness_evaluator_inner_base> m_ptr;
+    std::unique_ptr<detail::bfe_inner_base> m_ptr;
     // Various properties determined at construction time
     // from the udbfe. These will be constant for the lifetime
     // of bfe, but we cannot mark them as such because we want to be
@@ -511,8 +505,8 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::thread_bfe)
-PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::member_bfe)
-PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(pagmo::default_bfe)
+PAGMO_REGISTER_BFE(pagmo::thread_bfe)
+PAGMO_REGISTER_BFE(pagmo::member_bfe)
+PAGMO_REGISTER_BFE(pagmo::default_bfe)
 
 #endif

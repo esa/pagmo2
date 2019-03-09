@@ -10,7 +10,7 @@ Multithreaded BFE
 .. cpp:class:: thread_bfe
 
    This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
-   construct a :cpp:class:`~pagmo::batch_fitness_evaluator`.
+   construct a :cpp:class:`~pagmo::bfe`.
    :cpp:class:`~pagmo::thread_bfe` will use multiple threads of execution to parallelise
    the evaluation of the fitnesses of a batch of input decision vectors.
 

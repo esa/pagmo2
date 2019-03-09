@@ -10,8 +10,8 @@ Default BFE
 .. cpp:class:: default_bfe
 
    This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
-   construct a :cpp:class:`~pagmo::batch_fitness_evaluator`.
-   :cpp:class:`~pagmo::default_bfe` is the default UDBFE used by :cpp:class:`~pagmo::batch_fitness_evaluator`, and,
+   construct a :cpp:class:`~pagmo::bfe`.
+   :cpp:class:`~pagmo::default_bfe` is the default UDBFE used by :cpp:class:`~pagmo::bfe`, and,
    depending on the properties of the input :cpp:class:`~pagmo::problem`, it will delegate the implementation
    of its call operator to :cpp:class:`~pagmo::member_bfe` or :cpp:class:`~pagmo::thread_bfe`.
 

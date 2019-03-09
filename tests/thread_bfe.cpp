@@ -40,7 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
-#include <pagmo/batch_fitness_evaluator.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
 {
     BOOST_CHECK(is_udbfe<thread_bfe>::value);
 
-    batch_fitness_evaluator bfe0{thread_bfe{}};
+    bfe bfe0{thread_bfe{}};
     BOOST_CHECK(bfe0.get_name() == "Multi-threaded batch fitness evaluator");
     BOOST_CHECK(bfe0.get_extra_info().empty());
     BOOST_CHECK_EQUAL(bfe0.get_thread_safety(), thread_safety::basic);
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
 
 BOOST_AUTO_TEST_CASE(s11n)
 {
-    batch_fitness_evaluator bfe0{thread_bfe{}};
+    bfe bfe0{thread_bfe{}};
     BOOST_CHECK(bfe0.is<thread_bfe>());
     // Store the string representation.
     std::stringstream ss;
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE(s11n)
         oarchive(bfe0);
     }
     // Change the content of p before deserializing.
-    bfe0 = batch_fitness_evaluator{};
+    bfe0 = bfe{};
     BOOST_CHECK(!bfe0.is<thread_bfe>());
     {
         cereal::JSONInputArchive iarchive(ss);

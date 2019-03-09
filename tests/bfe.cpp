@@ -39,7 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <pagmo/batch_fitness_evaluator.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/serialization.hpp>
@@ -130,14 +130,14 @@ struct udbfe2 {
 
 BOOST_AUTO_TEST_CASE(basic_tests)
 {
-    batch_fitness_evaluator bfe0;
+    bfe bfe0;
     problem p;
 
     // Public methods.
     BOOST_CHECK(bfe0.extract<default_bfe>() != nullptr);
     BOOST_CHECK(bfe0.extract<udbfe_func_t>() == nullptr);
-    BOOST_CHECK(static_cast<const batch_fitness_evaluator &>(bfe0).extract<default_bfe>() != nullptr);
-    BOOST_CHECK(static_cast<const batch_fitness_evaluator &>(bfe0).extract<udbfe_func_t>() == nullptr);
+    BOOST_CHECK(static_cast<const bfe &>(bfe0).extract<default_bfe>() != nullptr);
+    BOOST_CHECK(static_cast<const bfe &>(bfe0).extract<udbfe_func_t>() == nullptr);
     BOOST_CHECK(bfe0.is<default_bfe>());
     BOOST_CHECK(!bfe0.is<udbfe_func_t>());
     BOOST_CHECK(bfe0.get_name() == "Default batch fitness evaluator");
@@ -145,30 +145,30 @@ BOOST_AUTO_TEST_CASE(basic_tests)
     BOOST_CHECK(bfe0.get_thread_safety() == thread_safety::basic);
 
     // Constructors, assignments.
-    batch_fitness_evaluator bfe1{udbfe0};
+    bfe bfe1{udbfe0};
     BOOST_CHECK(bfe1.is<udbfe_func_t>());
     BOOST_CHECK(*bfe1.extract<udbfe_func_t>() == udbfe0);
     // Generic constructor with copy.
     udbfe1 b1;
-    batch_fitness_evaluator bfe2{b1};
+    bfe bfe2{b1};
     BOOST_CHECK(b1.foo == "hello world");
     BOOST_CHECK(bfe2.extract<udbfe1>()->foo == "hello world");
     // Generic constructor with move.
     udbfe2 b2;
-    batch_fitness_evaluator bfe3{std::move(b2)};
+    bfe bfe3{std::move(b2)};
     BOOST_CHECK(b2.foo.get() == nullptr);
     BOOST_CHECK(bfe3.extract<udbfe2>()->foo.get() != nullptr);
     BOOST_CHECK(*bfe3.extract<udbfe2>()->foo == "hello world");
     // Copy constructor.
     udbfe2 b3;
-    batch_fitness_evaluator bfe4{b3}, bfe5{bfe4};
+    bfe bfe4{b3}, bfe5{bfe4};
     BOOST_CHECK(*bfe5.extract<udbfe2>()->foo == "hello world");
     BOOST_CHECK(bfe5.extract<udbfe2>()->foo.get() != bfe4.extract<udbfe2>()->foo.get());
     BOOST_CHECK(bfe5(p, vector_double{}) == vector_double{});
     BOOST_CHECK(bfe5.get_name() == "frobniz");
     BOOST_CHECK(bfe5.get_thread_safety() == thread_safety::constant);
     // Move constructor.
-    batch_fitness_evaluator bfe6{std::move(bfe5)};
+    bfe bfe6{std::move(bfe5)};
     BOOST_CHECK(*bfe6.extract<udbfe2>()->foo == "hello world");
     BOOST_CHECK(bfe6(p, vector_double{}) == vector_double{});
     BOOST_CHECK(bfe6.get_name() == "frobniz");
@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
     BOOST_CHECK(bfe5.get_name() == "frobniz");
     BOOST_CHECK(bfe5.get_thread_safety() == thread_safety::constant);
     // Revive bfe5 via move assignment.
-    batch_fitness_evaluator bfe7{std::move(bfe5)};
+    bfe bfe7{std::move(bfe5)};
     bfe5 = std::move(bfe6);
     BOOST_CHECK(*bfe5.extract<udbfe2>()->foo == "hello world");
     BOOST_CHECK(bfe5(p, vector_double{}) == vector_double{});
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
             cereal::JSONOutputArchive oarchive(ss);
             oarchive(bfe0);
         }
-        bfe0 = batch_fitness_evaluator{udbfe0};
+        bfe0 = bfe{udbfe0};
         BOOST_CHECK(bfe0.is<udbfe_func_t>());
         BOOST_CHECK(before != boost::lexical_cast<std::string>(bfe0));
         {
@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE(optional_tests)
             return "frobniz";
         }
     };
-    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_00{}}.get_name(), "frobniz");
+    BOOST_CHECK_EQUAL(bfe{udbfe_00{}}.get_name(), "frobniz");
     struct udbfe_01 {
         vector_double operator()(const problem &, const vector_double &) const
         {
@@ -246,7 +246,7 @@ BOOST_AUTO_TEST_CASE(optional_tests)
             return "frobniz";
         }
     };
-    BOOST_CHECK(batch_fitness_evaluator{udbfe_01{}}.get_name() != "frobniz");
+    BOOST_CHECK(bfe{udbfe_01{}}.get_name() != "frobniz");
 
     // get_extra_info().
     struct udbfe_02 {
@@ -259,7 +259,7 @@ BOOST_AUTO_TEST_CASE(optional_tests)
             return "frobniz";
         }
     };
-    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_02{}}.get_extra_info(), "frobniz");
+    BOOST_CHECK_EQUAL(bfe{udbfe_02{}}.get_extra_info(), "frobniz");
     struct udbfe_03 {
         vector_double operator()(const problem &, const vector_double &) const
         {
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(optional_tests)
             return "frobniz";
         }
     };
-    BOOST_CHECK(batch_fitness_evaluator{udbfe_03{}}.get_extra_info().empty());
+    BOOST_CHECK(bfe{udbfe_03{}}.get_extra_info().empty());
 
     // get_thread_safety().
     struct udbfe_04 {
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(optional_tests)
             return thread_safety::constant;
         }
     };
-    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_04{}}.get_thread_safety(), thread_safety::constant);
+    BOOST_CHECK_EQUAL(bfe{udbfe_04{}}.get_thread_safety(), thread_safety::constant);
     struct udbfe_05 {
         vector_double operator()(const problem &, const vector_double &) const
         {
@@ -296,7 +296,7 @@ BOOST_AUTO_TEST_CASE(optional_tests)
             return thread_safety::constant;
         }
     };
-    BOOST_CHECK_EQUAL(batch_fitness_evaluator{udbfe_05{}}.get_thread_safety(), thread_safety::basic);
+    BOOST_CHECK_EQUAL(bfe{udbfe_05{}}.get_thread_safety(), thread_safety::basic);
 }
 
 BOOST_AUTO_TEST_CASE(stream_operator)
@@ -309,7 +309,7 @@ BOOST_AUTO_TEST_CASE(stream_operator)
     };
     {
         std::ostringstream oss;
-        oss << batch_fitness_evaluator{udbfe_00{}};
+        oss << bfe{udbfe_00{}};
         BOOST_CHECK(!oss.str().empty());
     }
     struct udbfe_01 {
@@ -324,7 +324,7 @@ BOOST_AUTO_TEST_CASE(stream_operator)
     };
     {
         std::ostringstream oss;
-        oss << batch_fitness_evaluator{udbfe_01{}};
+        oss << bfe{udbfe_01{}};
         const auto st = oss.str();
         BOOST_CHECK(boost::contains(st, "bartoppo"));
         BOOST_CHECK(boost::contains(st, "Extra info:"));
@@ -339,11 +339,11 @@ BOOST_AUTO_TEST_CASE(call_operator)
             return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
         }
     };
-    batch_fitness_evaluator bfe0{udbfe_00{}};
+    bfe bfe0{udbfe_00{}};
     BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
     BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
     // Try with a function.
-    batch_fitness_evaluator bfe0a{udbfe0};
+    bfe bfe0a{udbfe0};
     BOOST_CHECK(bfe0a(problem{null_problem{3}}, vector_double{.5}) == (vector_double{.5, .5, .5}));
     // Try passing in a wrong dvs.
     BOOST_CHECK_EXCEPTION(
@@ -360,7 +360,7 @@ BOOST_AUTO_TEST_CASE(call_operator)
             return vector_double(p.get_nf() * (dvs.size() / p.get_nx()) + 1u, 1.);
         }
     };
-    batch_fitness_evaluator bfe1{udbfe_01{}};
+    bfe bfe1{udbfe_01{}};
     BOOST_CHECK_EXCEPTION(
         bfe1(problem{null_problem{3}}, vector_double{.5}), std::invalid_argument, [](const std::invalid_argument &ia) {
             return boost::contains(ia.what(),
@@ -376,7 +376,7 @@ BOOST_AUTO_TEST_CASE(call_operator)
             return vector_double(p.get_nf() * ((dvs.size() + 1u) / p.get_nx()), 1.);
         }
     };
-    batch_fitness_evaluator bfe2{udbfe_02{}};
+    bfe bfe2{udbfe_02{}};
     BOOST_CHECK_EXCEPTION(
         bfe2(problem{null_problem{3}}, vector_double{.5}), std::invalid_argument, [](const std::invalid_argument &ia) {
             return boost::contains(ia.what(),
@@ -410,12 +410,12 @@ struct udbfe_a {
     int state = 42;
 };
 
-PAGMO_REGISTER_BATCH_FITNESS_EVALUATOR(udbfe_a)
+PAGMO_REGISTER_BFE(udbfe_a)
 
 // Serialization tests.
 BOOST_AUTO_TEST_CASE(s11n)
 {
-    batch_fitness_evaluator bfe0{udbfe_a{}};
+    bfe bfe0{udbfe_a{}};
     BOOST_CHECK(bfe0.extract<udbfe_a>()->state == 42);
     bfe0.extract<udbfe_a>()->state = -42;
     // Store the string representation.
@@ -427,7 +427,7 @@ BOOST_AUTO_TEST_CASE(s11n)
         oarchive(bfe0);
     }
     // Change the content of p before deserializing.
-    bfe0 = batch_fitness_evaluator{};
+    bfe0 = bfe{};
     {
         cereal::JSONInputArchive iarchive(ss);
         iarchive(bfe0);
@@ -449,13 +449,13 @@ BOOST_AUTO_TEST_CASE(lambda_std_function)
     BOOST_CHECK(is_udbfe<decltype(stdfun)>::value);
 
     {
-        batch_fitness_evaluator bfe0{+fun};
+        bfe bfe0{+fun};
         BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
         BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
     }
 
     {
-        batch_fitness_evaluator bfe0{stdfun};
+        bfe bfe0{stdfun};
         BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
         BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
     }

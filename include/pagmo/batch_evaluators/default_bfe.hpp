@@ -29,9 +29,9 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_BATCH_EVALUATORS_DEFAULT_BFE_HPP
 #define PAGMO_BATCH_EVALUATORS_DEFAULT_BFE_HPP
 
-// NOTE: the default_bfe is defined in batch_fitness_evaluator.hpp
+// NOTE: the default_bfe is defined in bfe.hpp
 // because is the default UDBFE used in the construction of
-// a batch_fitness_evaluator.
-#include <pagmo/batch_fitness_evaluator.hpp>
+// a bfe.
+#include <pagmo/bfe.hpp>
 
 #endif

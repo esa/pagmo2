@@ -32,7 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <functional>
+#include <cstddef>
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -48,6 +48,8 @@ see https://www.gnu.org/licenses/. */
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 
+#include <pagmo/bfe.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/type_traits.hpp>
@@ -63,17 +65,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-namespace detail
-{
-
-// Fwd-declaration of the struct holding the implementation of the
-// population's parallel initialisation functionality.
-template <typename = void>
-struct pop_parinit;
-
-} // namespace detail
-
 /// Population class.
 /**
  * \image html pop_no_text.png
@@ -147,28 +138,43 @@ public:
      * invoked constructor of pagmo::problem.
      */
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit population(T &&x, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next(),
-                        const std::string &init_mode = "serial")
+    explicit population(T &&x, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
-        if (init_mode == "serial") {
-            for (size_type i = 0u; i < pop_size; ++i) {
-                push_back(random_decision_vector());
-            }
-        } else {
-            // NOTE: small trick to delay the instantiation of of pop_parinit until
-            // after we have defined it.
-            auto ret = detail::pop_parinit<
-                typename std::conditional<detail::dependent_false<T>::value, T, void>::type>::s_func(init_mode, m_prob,
-                                                                                                     seed, pop_size);
-            // Double check the return value.
-            assert(ret.first.size() == pop_size);
-            assert(ret.second.size() == pop_size);
-            // Push back the generated dvs and fitnesses.
-            for (size_type i = 0u; i < pop_size; ++i) {
-                push_back(std::move(ret.first[i]), std::move(ret.second[i]));
-            }
+        for (size_type i = 0u; i < pop_size; ++i) {
+            push_back(random_decision_vector());
         }
+    }
+
+    template <typename T, generic_ctor_enabler<T> = 0>
+    explicit population(T &&x, const bfe &b, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
+        : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
+    {
+#if 0
+        // Cache a few problem properties.
+        const auto nx = m_prob.get_nx();
+        const auto nix = m_prob.get_nix();
+        const auto bounds = m_prob.get_bounds();
+
+        // Prepare the batch of dvs to be evaluated.
+        // LCOV_EXCL_START
+        if (pop_size > std::numeric_limits<vector_double::size_type>::max() / nx) {
+            pagmo_throw(std::overflow_error, "The number of individuals requested in the constructor of a population, "
+                                                 + std::to_string(pop_size)
+                                                 + ", is too large and it results in an overflow condition");
+        }
+        // LCOV_EXCL_STOP
+        vector_double dvs(nx * pop_size);
+
+        // Create the dvs.
+        // NOTE: it is possible in principle to do this in a parallel fashion, e.g., see code
+        // at the commit 13d4182a41e4e71034c6e1085699c5138805d21c. The price to pay however is
+        // the loss of determinism. We can reconsider in the future whether it's worth it
+        // to add an option to this constructor, e.g., par_random, defaulting to false.
+        for (size_type i = 0; i < pop_size; ++i) {
+            pagmo::random_decision_vector(dvs.data() + i * nx, bounds.first, bounds.second, m_e, nix);
+        }
+#endif
     }
 
     /// Defaulted copy constructor.

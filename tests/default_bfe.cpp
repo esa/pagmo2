@@ -40,7 +40,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
-#include <pagmo/batch_fitness_evaluator.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
 {
     BOOST_CHECK(is_udbfe<default_bfe>::value);
 
-    batch_fitness_evaluator bfe0{};
+    bfe bfe0{};
     BOOST_CHECK(bfe0.is<default_bfe>());
     BOOST_CHECK(bfe0.get_name() == "Default batch fitness evaluator");
     BOOST_CHECK(bfe0.get_extra_info().empty());
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
 
 BOOST_AUTO_TEST_CASE(s11n)
 {
-    batch_fitness_evaluator bfe0{default_bfe{}};
+    bfe bfe0{default_bfe{}};
     BOOST_CHECK(bfe0.is<default_bfe>());
     // Store the string representation.
     std::stringstream ss;
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE(s11n)
         oarchive(bfe0);
     }
     // Change the content of p before deserializing.
-    bfe0 = batch_fitness_evaluator{member_bfe{}};
+    bfe0 = bfe{member_bfe{}};
     BOOST_CHECK(!bfe0.is<default_bfe>());
     {
         cereal::JSONInputArchive iarchive(ss);
