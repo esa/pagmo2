@@ -1040,8 +1040,8 @@ class random_decision_vector_test_case(_ut.TestCase):
                 return self.nix
 
         set_global_rng_seed(42)
-        x = random_decision_vector(
-            problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)))
+        x = random_decision_vector(prob=problem(
+            prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)))
         self.assertTrue(int(x[-1]) == x[-1])
         self.assertTrue(int(x[1]) != x[1])
 
@@ -1111,7 +1111,7 @@ class batch_random_decision_vector_test_case(_ut.TestCase):
         np.all([_ >= 2.1 and _ < 3.4 for _ in x[:, 1]])
         np.all([_ in range(-3, 6) for _ in x[:, 2]])
 
-        x2 = brdv(problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)), 0)
+        x2 = brdv(prob=problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)), n=0)
         self.assertTrue(x2.shape == (0,))
 
         set_global_rng_seed(42)
