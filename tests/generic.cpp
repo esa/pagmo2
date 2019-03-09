@@ -284,23 +284,37 @@ BOOST_AUTO_TEST_CASE(batch_random_decision_vector_test)
     }
 
     // Test the results
+    BOOST_CHECK(batch_random_decision_vector(problem{udp00{{3, 4}, {3, 4}}}, 0, r_engine).empty());
     BOOST_CHECK(
         (batch_random_decision_vector(problem{udp00{{3, 4}, {3, 4}}}, 3, r_engine) == vector_double{3, 4, 3, 4, 3, 4}));
     BOOST_CHECK((batch_random_decision_vector(problem{udp00{{3, 4}, {3, 4}, 1}}, 3, r_engine)
                  == vector_double{3, 4, 3, 4, 3, 4}));
-
-    BOOST_CHECK((random_decision_vector(problem{udp00{{3, 4}, {3, 4}}}, r_engine) == vector_double{3, 4}));
-    BOOST_CHECK((random_decision_vector(problem{udp00{{3, 4}, {3, 4}, 1}}, r_engine) == vector_double{3, 4}));
-    BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 1}}}, r_engine)[0] >= 0.));
-    BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 1}}}, r_engine)[1] < 1.));
-    BOOST_CHECK((random_decision_vector(problem{udp00{{0, 0}, {1, 0}}}, r_engine)[1] == 0.));
+    auto tmp = batch_random_decision_vector(problem{udp00{{0, 0}, {1, 1}}}, 3, r_engine);
+    BOOST_CHECK(tmp.size() == 6u);
+    BOOST_CHECK(tmp[0] >= 0.);
+    BOOST_CHECK(tmp[2] >= 0.);
+    BOOST_CHECK(tmp[4] >= 0.);
+    BOOST_CHECK(tmp[1] < 1.);
+    BOOST_CHECK(tmp[3] < 1.);
+    BOOST_CHECK(tmp[5] < 1.);
+    tmp = batch_random_decision_vector(problem{udp00{{0, 0}, {1, 0}}}, 3, r_engine);
+    BOOST_CHECK(tmp.size() == 6u);
+    BOOST_CHECK(tmp[1] == 0.);
+    BOOST_CHECK(tmp[3] == 0.);
+    BOOST_CHECK(tmp[5] == 0.);
     for (auto i = 0; i < 100; ++i) {
-        const auto tmp = random_decision_vector(problem{udp00{{0}, {2}, 1}}, r_engine)[0];
-        BOOST_CHECK(tmp == 0. || tmp == 1. || tmp == 2.);
+        tmp = batch_random_decision_vector(problem{udp00{{0}, {2}, 1}}, 3, r_engine);
+        BOOST_CHECK(tmp.size() == 3u);
+        BOOST_CHECK(tmp[0] == 0. || tmp[0] == 1. || tmp[0] == 2.);
+        BOOST_CHECK(tmp[1] == 0. || tmp[1] == 1. || tmp[1] == 2.);
+        BOOST_CHECK(tmp[2] == 0. || tmp[2] == 1. || tmp[2] == 2.);
     }
     for (auto i = 0; i < 100; ++i) {
-        const auto res = random_decision_vector(problem{udp00{{0, -20}, {1, 20}, 1}}, r_engine);
-        BOOST_CHECK(std::trunc(res[1]) == res[1]);
+        tmp = batch_random_decision_vector(problem{udp00{{0, -20}, {1, 20}, 1}}, 3, r_engine);
+        BOOST_CHECK(tmp.size() == 6u);
+        BOOST_CHECK(std::trunc(tmp[1]) == tmp[1]);
+        BOOST_CHECK(std::trunc(tmp[3]) == tmp[3]);
+        BOOST_CHECK(std::trunc(tmp[5]) == tmp[5]);
     }
 }
 
