@@ -1017,7 +1017,7 @@ class minlp_rastrigin_test_case(_ut.TestCase):
 
 
 class random_decision_vector_test_case(_ut.TestCase):
-    """Test case for random_decision_vector
+    """Test case for random_decision_vector().
 
     """
 
@@ -1078,6 +1078,74 @@ class random_decision_vector_test_case(_ut.TestCase):
             ValueError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 0], 1))))
         self.assertRaises(
             ValueError, lambda: random_decision_vector(problem(prob([0, -1E100], [1, 1E100], 1))))
+
+
+class batch_random_decision_vector_test_case(_ut.TestCase):
+    """Test case for batch_random_decision_vector().
+
+    """
+
+    def runTest(self):
+        from .core import batch_random_decision_vector as brdv, set_global_rng_seed, problem
+        import numpy as np
+
+        class prob(object):
+            def __init__(self, lb, ub, nix=0):
+                self.lb = lb
+                self.ub = ub
+                self.nix = nix
+
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return self.lb, self.ub
+
+            def get_nix(self):
+                return self.nix
+
+        set_global_rng_seed(42)
+        x = brdv(
+            problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)), 10).reshape(10, 3)
+        np.all([_ >= 1.1 and _ < 2.1 for _ in x[:, 0]])
+        np.all([_ >= 2.1 and _ < 3.4 for _ in x[:, 1]])
+        np.all([_ in range(-3, 6) for _ in x[:, 2]])
+
+        x2 = brdv(problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)), 0)
+        self.assertTrue(x2.shape == (0,))
+
+        set_global_rng_seed(42)
+        y = brdv(
+            problem(prob([1.1, 2.1, -3], [2.1, 3.4, 5], 1)), 10).reshape(10, 3)
+        self.assertTrue(np.all(x == y))
+
+        x = brdv(problem(prob([1.1], [1.1])), 10)
+        self.assertTrue(np.all(x == 1.1))
+
+        x = brdv(problem(prob([-1], [-1], 1)), 10)
+        self.assertTrue(np.all(x == -1))
+
+        nan = float("nan")
+        inf = float("inf")
+
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, 0], [1, inf])), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, -inf], [1, 0])), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, -inf], [1, inf])), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, 0], [1, nan])), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, -nan], [1, 0])), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, -nan], [1, nan])), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, 0], [1, 1E100], 1)), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, -1E100], [1, 0], 1)), 1))
+        self.assertRaises(
+            ValueError, lambda: brdv(problem(prob([0, -1E100], [1, 1E100], 1)), 1))
 
 
 class luksan_vlcek1_test_case(_ut.TestCase):
@@ -1927,6 +1995,7 @@ def run_test_suite(level=0):
     suite.addTest(estimate_sparsity_test_case())
     suite.addTest(estimate_gradient_test_case())
     suite.addTest(random_decision_vector_test_case())
+    suite.addTest(batch_random_decision_vector_test_case())
     try:
         from .core import cmaes
         suite.addTest(cmaes_test_case())

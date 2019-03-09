@@ -359,7 +359,9 @@ inline vector_double batch_random_decision_vector(const problem &prob, vector_do
 
     // Check the problem bounds, and prepare the random distributions.
     std::vector<std::uniform_real_distribution<double>> v_rdist;
+    v_rdist.reserve(boost::numeric_cast<decltype(v_rdist.size())>(ncx));
     std::vector<std::uniform_int_distribution<long long>> v_idist;
+    v_idist.reserve(boost::numeric_cast<decltype(v_idist.size())>(nx - ncx));
     for (vector_double::size_type i = 0u; i < ncx; ++i) {
         // NOTE: the lb<=ub check is not needed, as it is ensured by the problem class.
         // Still need to check for finiteness and range.
