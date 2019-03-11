@@ -85,30 +85,29 @@ public:
      * @param[in] oracle Oracle parameter: this is the oracle parameter used in the penalty method
      * @param[in] paretomax Max number of non-dominated solutions: this regulates the max number of Pareto points to be
      * stored
-     * @param[in] q This parameter is useful for managing the convergence speed towards the found minima (the smaller
-     * the faster)
-     * @param[in] threshold This parameter is coupled with q: when the generations reach the threshold then q is set to
+     * @param[in] q Convergence speed parameter: this parameter is useful for managing the convergence speed towards the
+     * found minima (the smaller the faster)
+     * @param[in] threshold Threshold parameter: when the generations reach the threshold then q is set to
      * 0.01 automatically
-     * @param[in] omega_strategy This parameter determines how to compute the weights for the gaussian pdf (it can be
-     * done in two different ways)
-     * @param[in] n_gen_mark This parameters determines the convergence speed of the standard deviations values
-     * @param[in] epsilon Pareto precision: the smaller this parameter, the higher the chances to introduce a new
-     * solution in the Pareto front
+     * @param[in] n_gen_mark Standard deviations convergence speed parameter: this parameters determines the convergence
+     * speed of the standard deviations values
+     * @param[in] epsilon Pareto precision parameter: the smaller this parameter, the higher the chances to introduce a
+     * new solution in the Pareto front
      * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$, \p ants is not a positive
      * integer, \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p
-     * threshold is not \f$ \in [1,gen] \f$, \p omega_strategy is not \f$ ==1 or ==2 \f$, \p epsilon is not \f$ \in
+     * threshold is not \f$ \in [1,gen] \f$, \p epsilon is not \f$ \in
      * [0,1[\f$, \p q is not \f$ >=0 \f$
      */
 
     g_aco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
-          unsigned threshold = 1u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u,
-          unsigned omega_strategy = 2u, unsigned impstop = 100000u, unsigned evalstop = 100000u, double focus = 0.,
-          unsigned paretomax = 10u, double epsilon = 0.9, unsigned seed = pagmo::random_device::next())
+          unsigned threshold = 1u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u, unsigned impstop = 100000u,
+          unsigned evalstop = 100000u, double focus = 0., unsigned paretomax = 10u, double epsilon = 0.9,
+          unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
           m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
-          m_log(), m_res(), m_threshold(threshold), m_q(q), m_omega_strategy(omega_strategy), m_n_gen_mark(n_gen_mark)
+          m_log(), m_res(), m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark)
     {
         if (acc < 0.) {
             pagmo_throw(std::invalid_argument, "The accuracy parameter must be >=0, while a value of "
@@ -122,11 +121,6 @@ public:
         if (epsilon >= 1. || epsilon < 0.) {
             pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
                                                    + std::to_string(epsilon) + " was detected");
-        }
-
-        if (omega_strategy != 1u && omega_strategy != 2u) {
-            pagmo_throw(std::invalid_argument, "The omega strategy parameter must be either 1 or 2 while a value of "
-                                                   + std::to_string(omega_strategy) + " was detected");
         }
         if ((threshold < 1 || threshold > gen) && gen != 0) {
             pagmo_throw(std::invalid_argument, "The threshold parameter must be either in [1,m_gen] while a value of "
@@ -329,10 +323,10 @@ public:
                         dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
                         // Every line print the column names
                         if (count_screen % 50u == 1u) {
-                            print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals", std::setw(15), "Best Penalty",
-                                  std::setw(15), "Best:", std::setw(15), "Kernel", std::setw(15),
-                                  "Worst:", std::setw(15), "Oracle", std::setw(15), "dx:", std::setw(15), std::setw(15),
-                                  "dp:", '\n');
+                            print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                                  "Best Penalty:", std::setw(15), "Best:", std::setw(15), "Kernel:", std::setw(15),
+                                  "Worst:", std::setw(15), "Oracle:", std::setw(15), "dx:", std::setw(15),
+                                  std::setw(15), "dp:", '\n');
                         }
 
                         print(std::setw(7), gen, std::setw(15), fevals, std::setw(15), best_pen, std::setw(15),
@@ -352,7 +346,7 @@ public:
                 // 5 - use pheromone values to generate new ants (i.e., individuals)
                 // I create the vector of vectors where I will store all the new ants which will be generated:
                 std::vector<vector_double> new_ants(pop_size, vector_double(dim, 1));
-                generate_new_ants(popnew, dist, gauss, prob_cumulative, omega, sigma, new_ants, sol_archive);
+                generate_new_ants(popnew, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
                 for (population::size_type i = 0; i < pop_size; ++i) {
                     vector_double ant(dim);
@@ -749,24 +743,8 @@ private:
         const auto &ub = bounds.second;
         auto n_con = prob.get_nx();
 
-        // Here I define the weights. Their definition depends on the user's selection of the m_omega_strategy parameter
-        // (either 1 or 2)
-        if (gen == 1 && m_omega_strategy == 1) {
-            // We declare a vector with 'ker' doubles
-            std::vector<unsigned> ker_vector(m_ker);
-            // We fill it with 1,2,3,...,K
-            std::iota(std::begin(ker_vector), std::end(ker_vector), 1);
-            // We compute the sum of the elements
-            unsigned sum = std::accumulate(ker_vector.begin(), ker_vector.end(), 0u);
-            // We compute omega (first pheromone value):
-            double omega;
-
-            for (decltype(m_ker) k = 1; k <= m_ker; ++k) {
-                omega = (m_ker - k + 1.0) / (sum);
-                omega_vec[k - 1] = omega;
-            }
-        }
-        if ((gen == 1 || gen == m_threshold) && m_omega_strategy == 2) {
+        // Here I define the weights.
+        if (gen == 1 || gen == m_threshold) {
             if (gen == m_threshold) {
                 m_q = 0.01;
             }
@@ -834,8 +812,6 @@ private:
      * @param[in] gauss_pdf Gaussian real distribution: the gaussian pdf is passed
      * @param[in] prob_cumulative Cumulative probability vector: this vector determines the probability for choosing the
      * pdf to generate new individuals
-     * @param[in] omega Omega: one of the three pheromone values. These are the weights which are used in the
-     * multi-kernel gaussian probability distribution
      * @param[in] sigma Sigma: one of the three pheromone values. These are the standard deviations which are used in
      * the multi-kernel gaussian probability distribution
      * @param[in] dvs_new New ants: in this vector the new ants which will be generated are stored
@@ -844,7 +820,7 @@ private:
      */
     void generate_new_ants(const population &pop, std::uniform_real_distribution<> dist,
                            std::normal_distribution<double> gauss_pdf, vector_double prob_cumulative,
-                           vector_double omega, vector_double sigma, std::vector<vector_double> &dvs_new,
+                           vector_double sigma, std::vector<vector_double> &dvs_new,
                            std::vector<vector_double> &sol_archive) const
     {
 
@@ -861,77 +837,38 @@ private:
         // I select one of the pdfs that make up the multi-kernel, by using the probability stored in the
         // prob_cumulative vector. A multi-kernel pdf is a weighted sum of several gaussian pdf.
 
-        if (m_omega_strategy == 1) {
-            for (decltype(pop_size) j = 0u; j < pop_size; ++j) {
-                vector_double dvs_new_j(
-                    n_con); // here I store all the variables associated with the j_th element of the sol_archive
+        for (decltype(pop_size) j = 0u; j < pop_size; ++j) {
+            vector_double dvs_new_j(n_con);
 
-                for (decltype(n_con) h = 0u; h < n_con; ++h) {
-                    double g_h = 0;
+            double number = dist(m_e);
+            double g_h = 0;
+            unsigned long k_omega = 0u;
 
-                    for (decltype(sol_archive.size()) k = 0u; k < sol_archive.size(); ++k) {
-                        g_h += omega[k] * (sol_archive[k][1 + h] + sigma[h] * gauss_pdf(m_e));
+            if (number <= prob_cumulative[0]) {
+                k_omega = 0;
 
-                        // the pdf has the following form:
-                        // G_h (t) = sum_{k=1}^{K} omega_{k,h} 1/(sigma_h * sqrt(2*pi)) * exp(- (t-mu_{k,h})^2 /
-                        // (2*(sigma_h)^2) )
-                        // I thus have all the elements to compute it (which I retrieved from the pheromone_computation
-                        // function)
+            } else if (number > prob_cumulative[m_ker - 2]) {
+                k_omega = m_ker - 1;
+
+            } else {
+                for (decltype(m_ker) k = 1u; k < m_ker - 1; ++k) {
+                    if (number > prob_cumulative[k - 1] && number <= prob_cumulative[k]) {
+                        k_omega = k;
                     }
-
-                    if (g_h < lb[h] || g_h > ub[h]) {
-
-                        while (g_h < lb[h] || g_h > ub[h]) {
-                            g_h = 0;
-
-                            for (decltype(sol_archive.size()) k = 0u; k < sol_archive.size(); ++k) {
-                                g_h += omega[k] * (sol_archive[k][1 + h] + sigma[h] * gauss_pdf(m_e));
-                            }
-                        }
-                    }
-
-                    dvs_new_j[h] = g_h;
                 }
-
-                dvs_new[j] = dvs_new_j;
             }
-        }
+            for (decltype(n_con) h = 0u; h < n_con; ++h) {
+                g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
 
-        else if (m_omega_strategy == 2) {
+                if (g_h < lb[h] || g_h > ub[h]) {
 
-            for (decltype(pop_size) j = 0u; j < pop_size; ++j) {
-                vector_double dvs_new_j(n_con);
-
-                double number = dist(m_e);
-                double g_h = 0;
-                unsigned long k_omega = 0u;
-
-                if (number <= prob_cumulative[0]) {
-                    k_omega = 0;
-
-                } else if (number > prob_cumulative[m_ker - 2]) {
-                    k_omega = m_ker - 1;
-
-                } else {
-                    for (decltype(m_ker) k = 1u; k < m_ker - 1; ++k) {
-                        if (number > prob_cumulative[k - 1] && number <= prob_cumulative[k]) {
-                            k_omega = k;
-                        }
+                    while (g_h < lb[h] || g_h > ub[h]) {
+                        g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
                     }
                 }
-                for (decltype(n_con) h = 0u; h < n_con; ++h) {
-                    g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
-
-                    if (g_h < lb[h] || g_h > ub[h]) {
-
-                        while (g_h < lb[h] || g_h > ub[h]) {
-                            g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
-                        }
-                    }
-                    dvs_new_j[h] = g_h;
-                }
-                dvs_new[j] = dvs_new_j;
+                dvs_new_j[h] = g_h;
             }
+            dvs_new[j] = dvs_new_j;
         }
     }
 
@@ -952,7 +889,6 @@ private:
     mutable double m_res;
     unsigned m_threshold;
     mutable double m_q;
-    unsigned m_omega_strategy;
     unsigned m_n_gen_mark;
 };
 
