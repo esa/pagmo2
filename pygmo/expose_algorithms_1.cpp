@@ -191,7 +191,7 @@ void expose_algorithms_1()
 
     nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());
     // GACO
-    auto gaco_ = expose_algorithm_pygmo<g_aco>("g_aco", gaco_docstring().c_str());
+    auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());
     gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, double, unsigned, unsigned, unsigned,
                        double, unsigned, double>(
         (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0., bp::arg("acc") = 0.01,
@@ -205,7 +205,7 @@ void expose_algorithms_1()
          bp::arg("impstop") = 100000u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("paretomax") = 10u,
          bp::arg("epsilon") = 0.9, bp::arg("seed"))));
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
-    gaco_.def("get_seed", &g_aco::get_seed, generic_uda_get_seed_docstring().c_str());
+    gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
     auto nlopt_ = expose_algorithm_pygmo<nlopt>("nlopt", nlopt_docstring().c_str());

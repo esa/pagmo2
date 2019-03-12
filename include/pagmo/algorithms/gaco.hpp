@@ -60,7 +60,7 @@ namespace pagmo
  * See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
  * mixed integer non-linear programming. Computers & Operations Research.
  */
-class g_aco
+class gaco
 {
 public:
     /// Single entry of the log (gen, fevals, best_pen, best_fit, m_ker, worst_fit, m_oracle, dx, dp)
@@ -72,28 +72,28 @@ public:
      * Constructs the ACO user defined algorithm for single and multi-objective optimization.
      *
      * @param[in] gen Generations: number of generations to evolve.
-     * @param[in] ker Kernel: number of solutions stored in the solution archive
+     * @param[in] ker Kernel: number of solutions stored in the solution archive.
+     * @param[in] q Convergence speed parameter: this parameter is useful for managing the convergence speed towards the
+     * found minima (the smaller the faster).
+     * @param[in] oracle Oracle parameter: this is the oracle parameter used in the penalty method.
      * @param[in] acc Accuracy parameter: for maintaining a minimum penalty function's values distances.
+     * @param[in] threshold Threshold parameter: when the generations reach the threshold then q is set to
+     * 0.01 automatically.
      * @param[in] fstop Objective stopping criterion: when the objective value reaches this value, the algorithm is
      * stopped [for multi-objective, this applies to the first obj. only].
+     * @param[in] n_gen_mark Standard deviations convergence speed parameter: this parameters determines the convergence
+     * speed of the standard deviations values.
      * @param[in] impstop Improvement stopping criterion: if a positive integer is assigned here, the algorithm will
-     * count the runs without improvements, if this number will exceed IMPSTOP value, the algorithm will be stopped.
-     * @param[in] evalstop Evaluation stopping criterion: same as previous one, but with function evaluations
+     * count the runs without improvements, if this number will exceed impstop value, the algorithm will be stopped.
+     * @param[in] evalstop Evaluation stopping criterion: same as previous one, but with function evaluations.
      * @param[in] focus Focus parameter: this parameter makes the search for the optimum greedier and more focused on
      * local improvements (the higher the greedier). If the value is very high, the search is more focused around the
-     * current best solutions
-     * @param[in] oracle Oracle parameter: this is the oracle parameter used in the penalty method
+     * current best solutions.
      * @param[in] paretomax Max number of non-dominated solutions: this regulates the max number of Pareto points to be
-     * stored
-     * @param[in] q Convergence speed parameter: this parameter is useful for managing the convergence speed towards the
-     * found minima (the smaller the faster)
-     * @param[in] threshold Threshold parameter: when the generations reach the threshold then q is set to
-     * 0.01 automatically
-     * @param[in] n_gen_mark Standard deviations convergence speed parameter: this parameters determines the convergence
-     * speed of the standard deviations values
+     * stored.
      * @param[in] epsilon Pareto precision parameter: the smaller this parameter, the higher the chances to introduce a
-     * new solution in the Pareto front
-     * @param seed seed used by the internal random number generator (default is random)
+     * new solution in the Pareto front.
+     * @param seed seed used by the internal random number generator (default is random).
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$, \p ants is not a positive
      * integer, \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p
@@ -101,10 +101,10 @@ public:
      * [0,1[\f$, \p q is not \f$ >=0 \f$
      */
 
-    g_aco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
-          unsigned threshold = 1u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u, unsigned impstop = 100000u,
-          unsigned evalstop = 100000u, double focus = 0., unsigned paretomax = 10u, double epsilon = 0.9,
-          unsigned seed = pagmo::random_device::next())
+    gaco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
+         unsigned threshold = 1u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u, unsigned impstop = 100000u,
+         unsigned evalstop = 100000u, double focus = 0., unsigned paretomax = 10u, double epsilon = 0.9,
+         unsigned seed = pagmo::random_device::next())
         : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
           m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log(), m_res(), m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark)
@@ -519,10 +519,10 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a g_aco::log_line_type containing: gen, fevals, best_pen, best_fit, m_ker,
+     * <tt>std::vector</tt> is a gaco::log_line_type containing: gen, fevals, best_pen, best_fit, m_ker,
      * worst_fit, m_oracle, dx, dp
-     * as described in g_aco::set_verbosity
-     * @return an <tt>std::vector</tt> of g_aco::log_line_type containing the logged values gen, fevals, best_pen,
+     * as described in gaco::set_verbosity
+     * @return an <tt>std::vector</tt> of gaco::log_line_type containing the logged values gen, fevals, best_pen,
      * best_fit, m_ker, worst_fit, m_oracle, dx, dp
      */
     const log_type &get_log() const
@@ -894,6 +894,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::g_aco)
+PAGMO_REGISTER_ALGORITHM(pagmo::gaco)
 
 #endif

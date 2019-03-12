@@ -2342,7 +2342,20 @@ std::string gaco_docstring()
 fstop = 0.000000000001, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
 paretomax = 10u, epsilon = 0.9, seed = random)
 
-Giacomo's Ant Colony Optimization algorithm (GACO).
+Extended Ant Colony Optimization algorithm (GACO).
+
+ACO is inspired by the natural mechanism with which real ant colonies forage food.
+This algorithm has shown promising results in many trajectory optimization problems.
+The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
+ACO generates future generations of ants by using the a multi-kernel gaussian distribution
+based on three parameters (i.e., pheromone values) which are computed depending on the quality
+of each previous solution. The solutions are ranked through an oracle penalty method.
+
+
+The version implemented in pagmo can be applied to box-bounded multiple-objective optimization.
+
+See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
+mixed integer non-linear programming. Computers & Operations Research.
 
 Args:
     gen (``int``): number of generations
@@ -2369,7 +2382,7 @@ Raises:
       * *epsilon* is not in [0,1].
       * *threshold* is not in [1,gen] when gen!=0.
 
-See also the docs of the C++ class :cpp:class:`pagmo::g_aco`.
+See also the docs of the C++ class :cpp:class:`pagmo::gaco`.
 
 )";
 }
@@ -2380,7 +2393,7 @@ std::string gaco_get_log_docstring()
 
 Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
 parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
-constructed with a :class:`~pygmo.g_aco`. A verbosity of ``N`` implies a log line each ``N`` generations.
+constructed with a :class:`~pygmo.gaco`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
     ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
@@ -2397,7 +2410,7 @@ Returns:
 
 Examples:
     >>> from pygmo import *
-    >>> algo = algorithm(g_aco(gen=100))
+    >>> algo = algorithm(gaco(gen=100))
     >>> algo.set_verbosity(20)
     >>> pop = population(rosenbrock(2u), 70)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
@@ -2407,11 +2420,11 @@ Examples:
      41           2800     0.00205721     0.00254747             63         1.4876              0        0.67768        1.19926
      61           4200     0.00205721     0.00254747             63         1.2311              0          2.035       0.992116
      81           5600    0.000498068    0.000616765             63        1.10471              0       0.809709       0.891612
-    >>> uda = algo.extract(g_aco)
+    >>> uda = algo.extract(gaco)
     >>> uda.get_log() # doctest: +SKIP
     [(1, 0, 13.172, 16.311, 63, 515097, 0, 12.4998, 415954), (21, 1400, 0.029947, ...
 
-See also the docs of the relevant C++ method :cpp:func:`pagmo::g_aco::get_log`.
+See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
 
 )";
 }
