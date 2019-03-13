@@ -196,13 +196,63 @@ is guaranteed to be an integral value such that <span class="math">\(lb_i \le x_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>) – the input problem</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>) – the input problem</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a random decision vector within the problem’s bounds</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a random decision vector within the problem’s bounds</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="pygmo.batch_random_decision_vector">
+<code class="descclassname">pygmo.</code><code class="descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em>prob</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.batch_random_decision_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will generate a batch of <em>n</em> decision vectors whose values are randomly chosen with uniform probability within
+the lower and upper bounds <span class="math">\(lb\)</span> and <span class="math">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> <em>prob</em>.
+The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math">\(x\)</span>,
+the first decision vector in the return value occupies the index range <span class="math">\(\left[0, x\right)\)</span>, the second decision vector
+occupies the range <span class="math">\(\left[x, 2x\right)\)</span>, and so on.</p>
+<p>For the continuous parts of the decision vectors, the <span class="math">\(i\)</span>-th components of the randomly generated decision
+vectors will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>.</p>
+<p>For the discrete parts of the decision vectors, the <span class="math">\(i\)</span>-th components of the randomly generated decision vectors
+are guaranteed to be integral values such that <span class="math">\(lb_i \le x_i \le ub_i\)</span>.</p>
+<p>For both the continuous and discrete parts of the decision vectors, if <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>) – the input problem</li>
+<li><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of decision vectors that will be generated</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a random decision vector within the problem’s bounds</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – in case of (unlikely) overflows</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+type conversion errors, mismatched function signatures, etc.)</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

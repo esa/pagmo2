@@ -301,6 +301,34 @@ integral values as long as the absolute values of the bounds do not exceed <span
 
 <hr class="docutils" />
 <dl class="function">
+<dt id="_CPPv2N5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng">
+<span id="pagmo::batch_random_decision_vector__problemCR.vector_double::size_type.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>prob</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate a batch of random decision vectors compatible with a problem. </p>
+<p>This function will generate <code class="docutils literal"><span class="pre">n</span></code> decision vectors whose values are randomly chosen with uniform probability within the input problem’s bounds. The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math">\( d \)</span>, the first decision vector in the return value occupies the index range <span class="math">\( \left[0, d\right) \)</span>, the second decision vector occupies the range <span class="math">\( \left[d, 2d\right) \)</span>, and so on.</p>
+<p>For the continuous parts of the decision vectors, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
+<p>For the discrete parts of the decision vectors, the values will be generated via <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing <code class="docutils literal"><span class="pre">n</span></code> random decision vectors </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">prob</span></code>: the input <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> </li>
+<li><code class="docutils literal"><span class="pre">n</span></code>: how many decision vectors will be generated </li>
+<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: in case of (unlikely) overflow errors. </li>
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
 <dt id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
 <span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span>double <code class="descclassname">pagmo::</code><code class="descname">binomial_coefficient</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Binomial coefficient. </p>
