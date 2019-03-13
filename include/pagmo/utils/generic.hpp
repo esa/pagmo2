@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <boost/numeric/conversion/cast.hpp>
 
@@ -287,8 +288,7 @@ inline vector_double random_decision_vector(const problem &prob, Rng &r_engine)
 
     // Fetch a few quantities from prob.
     const auto nx = prob.get_nx();
-    const auto nix = prob.get_nix();
-    const auto ncx = nx - nix;
+    const auto ncx = nx - prob.get_nix();
     const auto &lb = prob.get_lb();
     const auto &ub = prob.get_ub();
 
@@ -305,6 +305,97 @@ inline vector_double random_decision_vector(const problem &prob, Rng &r_engine)
         // as they are ensured by the problem class.
         // Still need to check for finiteness.
         out[i] = detail::uniform_integral_from_range_impl<true, false, false>(lb[i], ub[i], r_engine);
+    }
+
+    return out;
+}
+
+/// Generate a batch of random decision vectors compatible with a problem
+/**
+ * This function will generate \p n decision vectors whose values
+ * are randomly chosen with uniform probability within
+ * the input problem's bounds. The decision vectors are laid
+ * out contiguously in the return value: for a problem with dimension \f$ d \f$,
+ * the first decision vector in the return value occupies
+ * the index range \f$ \left[0, d\right) \f$, the second decision vector occupies the range
+ * \f$ \left[d, 2d\right) \f$, and so on.
+ *
+ * For the continuous parts of the decision vectors, the values will be
+ * generated via pagmo::uniform_real_from_range().
+ *
+ * For the discrete parts of the decision vectors, the values will be generated
+ * via pagmo::uniform_integral_from_range().
+ *
+ * @param prob the input pagmo::problem
+ * @param n how many decision vectors will be generated
+ * @param r_engine a C++ random engine
+ *
+ * @throws std::overflow_error in case of (unlikely) overflow errors.
+ * @throws unspecified any exception thrown by pagmo::uniform_real_from_range() or pagmo::uniform_integral_from_range().
+ *
+ * @returns a pagmo::vector_double containing \p n random decision vectors
+ */
+template <typename Rng>
+inline vector_double batch_random_decision_vector(const problem &prob, vector_double::size_type n, Rng &r_engine)
+{
+    // NOTE: it is possible in principle to do this in a parallel fashion, e.g., see code
+    // at the commit 13d4182a41e4e71034c6e1085699c5138805d21c. The price to pay however is
+    // the loss of determinism. We can reconsider in the future whether it's worth it
+    // to add an option to this constructor, e.g., par_random, defaulting to false.
+
+    // Fetch a few quantities from prob.
+    const auto nx = prob.get_nx();
+    const auto ncx = nx - prob.get_nix();
+    const auto &lb = prob.get_lb();
+    const auto &ub = prob.get_ub();
+
+    // LCOV_EXCL_START
+    if (n > std::numeric_limits<vector_double::size_type>::max() / nx) {
+        pagmo_throw(std::overflow_error,
+                    "Cannot generate " + std::to_string(n)
+                        + " random decision vectors in batch mode, as that would result in an overflow error");
+    }
+    // LCOV_EXCL_STOP
+
+    // Check the problem bounds.
+    for (vector_double::size_type i = 0u; i < ncx; ++i) {
+        // NOTE: the lb<=ub check is not needed, as it is ensured by the problem class.
+        // Still need to check for finiteness and range.
+        detail::uniform_real_from_range_checks<true, false, true>(lb[i], ub[i]);
+    }
+    for (auto i = ncx; i < nx; ++i) {
+        // NOTE: the lb<=ub check and the check that lb/ub are integral values are not needed,
+        // as they are ensured by the problem class.
+        // Still need to check for finiteness.
+        detail::uniform_integral_from_range_checks<true, false, false>(lb[i], ub[i]);
+        try {
+            // Check that the bounds can be converted safely to long long.
+            boost::numeric_cast<long long>(lb[i]);
+            boost::numeric_cast<long long>(ub[i]);
+        } catch (...) {
+            pagmo_throw(std::invalid_argument,
+                        "Cannot generate a random integer if the lower/upper bounds are not within "
+                        "the bounds of the long long type");
+        }
+    }
+
+    // Prepare the return value.
+    vector_double out(nx * n);
+
+    // Proceed to the random number generation.
+    std::uniform_real_distribution<double> rdist;
+    std::uniform_int_distribution<long long> idist;
+    for (vector_double::size_type i = 0; i < out.size(); i += nx) {
+        for (vector_double::size_type j = 0; j < ncx; ++j) {
+            out[i + j] = (lb[j] == ub[j])
+                             ? lb[j]
+                             : rdist(r_engine, std::uniform_real_distribution<double>::param_type(lb[j], ub[j]));
+        }
+        for (vector_double::size_type j = ncx; j < nx; ++j) {
+            out[i + j] = static_cast<double>(
+                idist(r_engine, std::uniform_int_distribution<long long>::param_type(static_cast<long long>(lb[j]),
+                                                                                     static_cast<long long>(ub[j]))));
+        }
     }
 
     return out;

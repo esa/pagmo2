@@ -781,6 +781,14 @@ BOOST_PYTHON_MODULE(core)
                 return pygmo::v_to_a(retval);
             }),
             pygmo::random_decision_vector_docstring().c_str(), (bp::arg("prob")));
+    bp::def("batch_random_decision_vector",
+            lcast([](const pagmo::problem &p, pagmo::vector_double::size_type n) -> bp::object {
+                using reng_t = pagmo::detail::random_engine_type;
+                reng_t tmp_rng(static_cast<reng_t::result_type>(pagmo::random_device::next()));
+                auto retval = batch_random_decision_vector(p, n, tmp_rng);
+                return pygmo::v_to_a(retval);
+            }),
+            pygmo::batch_random_decision_vector_docstring().c_str(), (bp::arg("prob"), bp::arg("n")));
 
     // Gradient and Hessians utilities
     bp::def("estimate_sparsity", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
