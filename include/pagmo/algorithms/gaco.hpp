@@ -1,4 +1,4 @@
-/* Copyright 2017 PaGMO development team
+/* Copyright 2017-2018 PaGMO development team
 This file is part of the PaGMO library.
 The PaGMO library is free software; you can redistribute it and/or modify
 it under the terms of either:
@@ -308,7 +308,7 @@ public:
                 }
 
                 // 3 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-                if (m_verbosity > 0u) {
+                if (m_verbosity > 0u && gen != m_gen) {
                     // Every m_verbosity generations print a log line
                     if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                         auto best_fit = sol_archive[0][1 + dim];
@@ -335,6 +335,7 @@ public:
 
                         ++count_screen;
                         // Logs
+
                         m_log.emplace_back(gen, fevals, best_pen, best_fit, m_ker, worst_fit, m_oracle, dx, dp);
                     }
                 }
@@ -413,6 +414,40 @@ public:
                 }
             }
         } // end of main ACO loop
+
+        // Before returning the population I make sure that the solution archive is included:
+        for (decltype(m_ker) i_ker = 0; i_ker < m_ker; ++i_ker) {
+            vector_double ant_final(dim);
+            vector_double fitness_final(n_f);
+            for (decltype(dim) ii_dim = 0u; ii_dim < dim; ++ii_dim) {
+                ant_final[ii_dim] = sol_archive[i_ker][1 + ii_dim];
+            }
+
+            for (decltype(n_f) ii_f = 0u; ii_f < n_f; ++ii_f) {
+                fitness_final[ii_f] = sol_archive[i_ker][1 + dim + ii_f];
+            }
+            pop.set_xf(i_ker, ant_final, fitness_final);
+        }
+        if (m_verbosity > 0u) {
+            if (m_gen % m_verbosity == 1u || m_verbosity == 1u) {
+                auto best_pen = sol_archive[0][0];
+                auto worst_fit = sol_archive[m_ker - 1][1 + dim];
+                double dx = 0., dp = 0.;
+                // The population flattness in variables
+                for (decltype(dim) i = 0u; i < dim; ++i) {
+                    dx += std::abs(sol_archive[m_ker - 1][1 + i] - sol_archive[0][1 + i]);
+                }
+                // The population flattness in penalty
+                dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
+
+                print(std::setw(7), m_gen, std::setw(15), fevals, std::setw(15), best_pen, std::setw(15),
+                      pop.champion_f()[0], std::setw(15), m_ker, std::setw(15), worst_fit, std::setw(15), m_oracle,
+                      std::setw(15), dx, std::setw(15), dp, '\n');
+
+                // Logs
+                m_log.emplace_back(m_gen, fevals, best_pen, pop.champion_f()[0], m_ker, worst_fit, m_oracle, dx, dp);
+            }
+        }
 
         return pop;
     }
