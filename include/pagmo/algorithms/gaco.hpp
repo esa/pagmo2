@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/utils/constrained.hpp>
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/generic.hpp>         // uniform_real_from_range
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
@@ -55,7 +56,8 @@ namespace pagmo
  * of each previous solution. The solutions are ranked through an oracle penalty method.
  *
  *
- * The version implemented in pagmo can be applied to box-bounded multiple-objective optimization.
+ * The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation
+ * is an extension of Schlueter's originally proposed ACO algorithm.
  *
  * See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
  * mixed integer non-linear programming. Computers & Operations Research.
@@ -63,8 +65,8 @@ namespace pagmo
 class gaco
 {
 public:
-    /// Single entry of the log (gen, fevals, best_pen, best_fit, m_ker, worst_fit, m_oracle, dx, dp)
-    typedef std::tuple<unsigned, unsigned, double, double, unsigned, double, double, double, double> log_line_type;
+    /// Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp)
+    typedef std::tuple<unsigned, unsigned, double, unsigned, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -79,8 +81,6 @@ public:
      * @param[in] acc Accuracy parameter: for maintaining a minimum penalty function's values distances.
      * @param[in] threshold Threshold parameter: when the generations reach the threshold then q is set to
      * 0.01 automatically.
-     * @param[in] fstop Objective stopping criterion: when the objective value reaches this value, the algorithm is
-     * stopped [for multi-objective, this applies to the first obj. only].
      * @param[in] n_gen_mark Standard deviations convergence speed parameter: this parameters determines the convergence
      * speed of the standard deviations values.
      * @param[in] impstop Improvement stopping criterion: if a positive integer is assigned here, the algorithm will
@@ -93,21 +93,23 @@ public:
      * stored.
      * @param[in] epsilon Pareto precision parameter: the smaller this parameter, the higher the chances to introduce a
      * new solution in the Pareto front.
+     * @param[in] memory Memory parameter: if true, memory is activated in the algorithm for multiple calls
      * @param seed seed used by the internal random number generator (default is random).
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
-     * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$, \p ants is not a positive
-     * integer, \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p
-     * threshold is not \f$ \in [1,gen] \f$, \p epsilon is not \f$ \in
-     * [0,1[\f$, \p q is not \f$ >=0 \f$
+     * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$,
+     * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p
+     * threshold is not \f$ \in [1,gen] \f$ when \f$memory=false\f$ and  \f$gen!=0\f$, \p threshold is not \f$ >=1 \f$
+     * when \f$memory=true\f$ and \f$gen!=0\f$, \p epsilon is not \f$ \in [0,1[\f$, \p q is not \f$ >=0 \f$
      */
 
     gaco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
-         unsigned threshold = 1u, double fstop = 0.000000000001, unsigned n_gen_mark = 7u, unsigned impstop = 100000u,
-         unsigned evalstop = 100000u, double focus = 0., unsigned paretomax = 10u, double epsilon = 0.9,
+         unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned impstop = 100000u, unsigned evalstop = 100000u,
+         double focus = 0., unsigned paretomax = 10u, double epsilon = 0.9, bool memory = false,
          unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_acc(acc), m_fstop(fstop), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
+        : m_gen(gen), m_acc(acc), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
           m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
-          m_log(), m_res(), m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark)
+          m_log(), m_res(), m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u),
+          m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u)
     {
         if (acc < 0.) {
             pagmo_throw(std::invalid_argument, "The accuracy parameter must be >=0, while a value of "
@@ -122,9 +124,15 @@ public:
             pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
                                                    + std::to_string(epsilon) + " was detected");
         }
-        if ((threshold < 1 || threshold > gen) && gen != 0) {
-            pagmo_throw(std::invalid_argument, "The threshold parameter must be either in [1,m_gen] while a value of "
-                                                   + std::to_string(threshold) + " was detected");
+        if ((threshold < 1 || threshold > gen) && gen != 0 && memory == false) {
+            pagmo_throw(std::invalid_argument,
+                        "If memory is inactive, the threshold parameter must be either in [1,m_gen] while a value of "
+                            + std::to_string(threshold) + " was detected");
+        }
+        if (threshold < 1 && gen != 0 && memory == true) {
+            pagmo_throw(std::invalid_argument,
+                        "If memory is active, the threshold parameter must be >=1 while a value of "
+                            + std::to_string(threshold) + " was detected");
         }
     }
 
@@ -140,7 +148,12 @@ public:
 
     population evolve(population pop) const
     {
-        // We store some useful variables
+        // If the memory is active, we increase the counter:
+        if (m_memory == true) {
+            ++m_counter;
+        }
+
+        // We store some useful variables:
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                               // allowed
         auto dim = prob.get_nx();   // This getter does not return a const reference but a copy of the number of
@@ -149,21 +162,13 @@ public:
         unsigned count_screen = 1u; // regulates the screen output
 
         // Note that the number of equality and inequality constraints has to be set up manually in the problem
-        // definition, otherwise PaGMO assumes that there aren't any
+        // definition, otherwise PaGMO assumes that there aren't any.
         auto n_obj = prob.get_nobj();
         auto n_ec = prob.get_nec();
         auto n_ic = prob.get_nic();
         auto n_f = prob.get_nf(); // n_f=prob.get_nobj()+prob.get_nec()+prob.get_nic()
 
-        // We define the variables which will count the runs without improvements in both the best solution of the
-        // solution archive and in the the solution archive as a whole:
-        unsigned n_impstop = 1u;
-        unsigned n_evalstop = 1u;
-        // We declare the variable which will count the number of function evaluations:
-        unsigned fevals = 0u;
-
         // Other useful variables are stored:
-        unsigned gen_mark = 1u;
         std::vector<vector_double> sol_archive(m_ker, vector_double(1 + dim + n_f, 1));
         vector_double omega(m_ker);
         vector_double prob_cumulative(m_ker);
@@ -205,7 +210,6 @@ public:
 
         // Main ACO loop over generations:
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-
             // At each generation we make a copy of the population into popnew
             population popnew(pop);
 
@@ -215,7 +219,6 @@ public:
             }
             // I otherwise proceed with a single-objective algorithm:
             else {
-
                 auto dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
                                         // population (index n) and the number of variables (index k) the number of
                                         // variables can be easily be deduced from counting the bounds.
@@ -223,12 +226,12 @@ public:
                                         // inequality constraints are concatenated,for each individual
 
                 // I check whether the maximum number of function evaluations or improvements has been exceeded:
-                if (m_impstop != 0 && n_impstop >= m_impstop) {
+                if (m_impstop != 0 && m_n_impstop >= m_impstop) {
                     std::cout << "max number of impstop exceeded" << std::endl;
                     return pop;
                 }
 
-                if (m_evalstop != 0 && n_evalstop >= m_evalstop) {
+                if (m_evalstop != 0 && m_n_evalstop >= m_evalstop) {
                     std::cout << "max number of evalstop exceeded" << std::endl;
                     return pop;
                 }
@@ -239,57 +242,29 @@ public:
                 vector_double penalties(pop_size);
 
                 for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
-                    // I first verify whether there is a solution that is smaller or equal the fstop parameter (in the
-                    // case that this latter is different than zero)
-                    if (m_fstop != 0. && (sol_archive[0][1 + dim] - m_fstop) <= 1e-8) {
-                        std::cout << "Fitness value:" << std::endl;
-                        std::cout << sol_archive[0][1 + dim] << std::endl;
-                        std::cout << "Detected fitness is 1e-8 or less away from fstop value " << std::endl;
-                        return pop;
-                    }
-
                     // Penalty computation is here executed:
                     penalties[i] = penalty_computation(fit[i], pop, n_obj, n_ec, n_ic);
                 }
 
                 // 2 - update and sort solutions in the sol_archive, based on the computed penalties
 
-                // I declare a vector where I will store the positions of the various individuals:
-                std::vector<decltype(penalties.size())> sort_list;
                 // I declare a vector where the penalties are sorted:
                 vector_double sorted_penalties(penalties);
                 // This sorts the penalties from the smallest ([0]) to the biggest ([end])
                 std::sort(sorted_penalties.begin(), sorted_penalties.end(), detail::less_than_f<double>);
+                // I declare a vector where I will store the positions of the various individuals:
+                std::vector<decltype(penalties.size())> sort_list(penalties.size());
+                // We fill it with 0,1,2,3,...,K
+                std::iota(std::begin(sort_list), std::end(sort_list), 0);
+                std::sort(sort_list.begin(), sort_list.end(),
+                          [&penalties](decltype(penalties.size()) idx1, decltype(penalties.size()) idx2) {
+                              return detail::less_than_f(penalties[idx1], penalties[idx2]);
+                          });
 
-                // I now create a vector where I store the position of the stored values. This will help
-                // us to find the corresponding individuals and their objective values, later on
-                for (decltype(penalties.size()) j = 0u; j < penalties.size(); ++j) {
-                    int count = 0;
-                    for (decltype(penalties.size()) i = 0u; i < penalties.size() && count == 0; ++i) {
-                        if (sorted_penalties[j] == penalties[i]) {
-                            if (j == 0) {
-                                sort_list.push_back(i);
-                                count = 1;
-
-                            } else {
-                                // with the following piece of code I avoid to store the same position in case that two
-                                // another element exist with the same value
-                                int count_2 = 0;
-                                for (decltype(sort_list.size()) jj = 0u; jj < sort_list.size() && count_2 == 0; ++jj) {
-                                    if (sort_list[jj] == i) {
-                                        count_2 = 1;
-                                    }
-                                }
-                                if (count_2 == 0) {
-                                    sort_list.push_back(i);
-                                    count = 1;
-                                }
-                            }
-                        }
-                    }
+                if (m_memory == true && m_counter > 1) {
+                    sol_archive = m_sol_archive;
                 }
-
-                if (gen == 1) {
+                if (gen == 1 && m_counter < 2) {
 
                     // We initialize the solution archive (sol_archive). This is done by storing the individuals from
                     // the best one (in terms of penalty), placed in the first row, to the worst one, placed in the last
@@ -303,17 +278,23 @@ public:
                             sol_archive[i][j + 1 + dim] = fit[sort_list[i]][j];
                         }
                     }
+                    if (m_memory == true) {
+                        m_sol_archive = sol_archive;
+                    }
+
                 } else {
-                    update_sol_archive(gen_mark, pop, sorted_penalties, sort_list, n_impstop, n_evalstop, sol_archive);
+                    update_sol_archive(pop, sorted_penalties, sort_list, sol_archive, n_ec);
+                    if (m_memory == true) {
+                        m_sol_archive = sol_archive;
+                    }
                 }
 
                 // 3 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-                if (m_verbosity > 0u && gen != m_gen) {
+
+                if ((m_verbosity > 0u && gen != m_gen) || (m_verbosity > 0u && m_memory == true)) {
                     // Every m_verbosity generations print a log line
                     if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                         auto best_fit = sol_archive[0][1 + dim];
-                        auto best_pen = sol_archive[0][0];
-                        auto worst_fit = sol_archive[m_ker - 1][1 + dim];
                         double dx = 0., dp = 0.;
                         // The population flattness in variables
                         for (decltype(dim) i = 0u; i < dim; ++i) {
@@ -322,29 +303,35 @@ public:
                         // The population flattness in penalty
                         dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
                         // Every line print the column names
-                        if (count_screen % 50u == 1u) {
-                            print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
-                                  "Best Penalty:", std::setw(15), "Best:", std::setw(15), "Kernel:", std::setw(15),
-                                  "Worst:", std::setw(15), "Oracle:", std::setw(15), "dx:", std::setw(15),
-                                  std::setw(15), "dp:", '\n');
-                        }
+                        if (m_memory == false) {
+                            if (count_screen % 50u == 1u) {
+                                print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                                      "Best:", std::setw(15), "Kernel:", std::setw(15), "Oracle:", std::setw(15),
+                                      "dx:", std::setw(15), std::setw(15), "dp:", '\n');
+                            }
 
-                        print(std::setw(7), gen, std::setw(15), fevals, std::setw(15), best_pen, std::setw(15),
-                              best_fit, std::setw(15), m_ker, std::setw(15), worst_fit, std::setw(15), m_oracle,
-                              std::setw(15), dx, std::setw(15), dp, '\n');
+                        } else if ((m_memory == true && m_counter == 1)
+                                   || (m_memory == true && m_counter % 50u == 1u)) {
+                            print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                                  "Best:", std::setw(15), "Kernel:", std::setw(15), "Oracle:", std::setw(15),
+                                  "dx:", std::setw(15), std::setw(15), "dp:", '\n');
+                        }
+                        print(std::setw(7), gen, std::setw(15), m_fevals, std::setw(15), best_fit, std::setw(15), m_ker,
+                              std::setw(15), m_oracle, std::setw(15), dx, std::setw(15), dp, '\n');
 
                         ++count_screen;
                         // Logs
-
-                        m_log.emplace_back(gen, fevals, best_pen, best_fit, m_ker, worst_fit, m_oracle, dx, dp);
+                        m_log.emplace_back(gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp);
                     }
                 }
 
                 // 4 - compute pheromone values
+
                 vector_double sigma(dim);
-                pheromone_computation(gen_mark, gen, prob_cumulative, omega, sigma, pop, sol_archive);
+                pheromone_computation(gen, prob_cumulative, omega, sigma, pop, sol_archive);
 
                 // 5 - use pheromone values to generate new ants (i.e., individuals)
+
                 // I create the vector of vectors where I will store all the new ants which will be generated:
                 std::vector<vector_double> new_ants(pop_size, vector_double(dim, 1));
                 generate_new_ants(popnew, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
@@ -358,7 +345,7 @@ public:
                     }
 
                     auto fitness = prob.fitness(ant);
-                    ++fevals;
+                    ++m_fevals;
                     // I set the individuals for the next generation
                     pop.set_xf(i, ant, fitness);
                 }
@@ -367,7 +354,7 @@ public:
                 if (sol_archive[0][1 + dim] < m_oracle) {
                     double residual = 0.0;
                     for (decltype(m_ker) rows = 0u; rows < m_ker; ++rows) {
-                        if (rows == 0 && n_ic == 0 && n_ec == 0) {
+                        if (rows == 0u && n_ic == 0 && n_ec == 0) {
                             m_oracle = sol_archive[0][1 + dim];
 
                         } else {
@@ -383,7 +370,7 @@ public:
                                 f.data() + n_obj + n_ec, f.data() + f.size(), prob.get_c_tol().data() + n_ec);
                             residual = std::sqrt(std::pow(violation_ic.second, 2) + std::pow(violation_ec.second, 2));
 
-                            if (rows == 0 && residual == 0.0) {
+                            if (rows == 0u && residual == 0.0) {
                                 m_oracle = sol_archive[0][1 + dim];
                             }
                         }
@@ -411,27 +398,35 @@ public:
                             sol_archive[rows][0] = -diff;
                         }
                     }
+                    if (m_memory == true) {
+                        m_sol_archive = sol_archive;
+                    }
                 }
-            }
+
+            } // end of single objective part
+
         } // end of main ACO loop
 
-        // Before returning the population I make sure that the solution archive is included:
-        for (decltype(m_ker) i_ker = 0; i_ker < m_ker; ++i_ker) {
-            vector_double ant_final(dim);
-            vector_double fitness_final(n_f);
-            for (decltype(dim) ii_dim = 0u; ii_dim < dim; ++ii_dim) {
-                ant_final[ii_dim] = sol_archive[i_ker][1 + ii_dim];
-            }
+        // Before returning the final population I make sure that the solution archive is included and the oracle
+        // parameter is finally updated:
+        if (m_memory == false) {
+            for (decltype(m_ker) i_ker = 0; i_ker < m_ker; ++i_ker) {
 
-            for (decltype(n_f) ii_f = 0u; ii_f < n_f; ++ii_f) {
-                fitness_final[ii_f] = sol_archive[i_ker][1 + dim + ii_f];
+                vector_double ant_final(dim);
+                vector_double fitness_final(n_f);
+                for (decltype(dim) ii_dim = 0u; ii_dim < dim; ++ii_dim) {
+                    ant_final[ii_dim] = sol_archive[i_ker][1 + ii_dim];
+                }
+
+                for (decltype(n_f) ii_f = 0u; ii_f < n_f; ++ii_f) {
+                    fitness_final[ii_f] = sol_archive[i_ker][1 + dim + ii_f];
+                }
+                pop.set_xf(i_ker, ant_final, fitness_final);
             }
-            pop.set_xf(i_ker, ant_final, fitness_final);
         }
-        if (m_verbosity > 0u) {
+
+        if (m_verbosity > 0u && m_memory == false) {
             if (m_gen % m_verbosity == 1u || m_verbosity == 1u) {
-                auto best_pen = sol_archive[0][0];
-                auto worst_fit = sol_archive[m_ker - 1][1 + dim];
                 double dx = 0., dp = 0.;
                 // The population flattness in variables
                 for (decltype(dim) i = 0u; i < dim; ++i) {
@@ -440,15 +435,18 @@ public:
                 // The population flattness in penalty
                 dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
 
-                print(std::setw(7), m_gen, std::setw(15), fevals, std::setw(15), best_pen, std::setw(15),
-                      pop.champion_f()[0], std::setw(15), m_ker, std::setw(15), worst_fit, std::setw(15), m_oracle,
-                      std::setw(15), dx, std::setw(15), dp, '\n');
+                if (m_gen == 1) {
+                    print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15),
+                          "Kernel:", std::setw(15), "Oracle:", std::setw(15), "dx:", std::setw(15), std::setw(15),
+                          "dp:", '\n');
+                }
+                print(std::setw(7), m_gen, std::setw(15), m_fevals, std::setw(15), pop.champion_f()[0], std::setw(15),
+                      m_ker, std::setw(15), m_oracle, std::setw(15), dx, std::setw(15), dp, '\n');
 
                 // Logs
-                m_log.emplace_back(m_gen, fevals, best_pen, pop.champion_f()[0], m_ker, worst_fit, m_oracle, dx, dp);
+                m_log.emplace_back(m_gen, m_fevals, pop.champion_f()[0], m_ker, m_oracle, dx, dp);
             }
         }
-
         return pop;
     }
     /// Sets the seed
@@ -477,22 +475,21 @@ public:
      *
      * Example (verbosity 1):
      * @code{.unparsed}
-     * Gen:         Fevals   Best Penalty          Best:         Kernel         Worst:         Oracle            dx: dp:
-     *    1              0        77636.4        96138.2             63         920565              0        44.1659
-     * 665766 2            200        22325.2        27645.6             63         449229              0        28.0738
-     * 340449 3            400        22325.2        27645.6             63         274093              0        28.4459
-     * 199019 4            600        22325.2        27645.6             63         212784              0        30.2934
-     * 149509 5            800        8762.61        10850.9             63         147873              0        31.2753
-     * 110652 6           1000        5969.79        7392.47             63          86471              0        22.0092
-     * 63859.9 7           1200        5969.79        7392.47             63        52813.5 0        16.0056 36679.7 8
-     * 1400        1769.84        2191.62             63        39405.9              0        23.9469        30052.4 9
-     * 1600        1507.57        1866.85             63        26963.2              0        9.18125        20266.6 10
-     * 1800        1507.57        1866.85             63        15884.5              0        11.3995          11320
+     *Gen:        Fevals:          Best:        Kernel:        Oracle:            dx:            dp:
+     *  1              0        179.464             13            100        4.33793          47876
+     *  2             15         14.205             13            100        5.20084        5928.12
+     *  3             30         14.205             13         14.205        1.24173        1037.44
+     *  4             45         14.205             13         14.205        3.05807         395.89
+     *  5             60        7.91087             13         14.205       0.711446        286.599
+     *  6             75        2.81437             13        7.91087        5.80451        71.8174
+     *  7             90        2.81437             13        2.81437        1.90561        48.3829
+     *  8            105        2.81437             13        2.81437         1.3072        26.9496
+     *  9            120         1.4161             13        2.81437        1.61732        10.6527
+     * 10            150         1.4161             13         1.4161        2.54262        3.67034
      * @endcode
-     * Gen, is the generation number, Fevals the number of function evaluation used, Best Penalty is the best penalty
-     * function value found until that generation, Best is the best fitness function value found until that generation,
-     * Kernel is the kernel size, Worst is the worst fitness, Oracle is the oracle parameter value, dx is the flatness
-     * in the individuals, dp is the flatness in the penalty function values.
+     * Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function
+     *value found until that generation, Kernel is the kernel size, Oracle is the oracle parameter value, dx is the
+     *flatness in the individuals, dp is the flatness in the penalty function values.
      *
      * @param level verbosity level
      */
@@ -537,7 +534,6 @@ public:
         std::ostringstream ss;
         stream(ss, "\tGenerations: ", m_gen);
         stream(ss, "\n\tAccuracy parameter: ", m_acc);
-        stream(ss, "\n\tObjective stopping criterion: ", m_fstop);
         stream(ss, "\n\tImprovement stopping criterion: ", m_impstop);
         stream(ss, "\n\tEvaluation stopping criterion: ", m_evalstop);
         stream(ss, "\n\tFocus parameter: ", m_focus);
@@ -554,11 +550,11 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a gaco::log_line_type containing: gen, fevals, best_pen, best_fit, m_ker,
-     * worst_fit, m_oracle, dx, dp
+     * <tt>std::vector</tt> is a gaco::log_line_type containing: gen, m_fevals, best_fit, m_ker,
+     * m_oracle, dx, dp
      * as described in gaco::set_verbosity
-     * @return an <tt>std::vector</tt> of gaco::log_line_type containing the logged values gen, fevals, best_pen,
-     * best_fit, m_ker, worst_fit, m_oracle, dx, dp
+     * @return an <tt>std::vector</tt> of gaco::log_line_type containing the logged values gen, m_fevals,
+     * best_fit, m_ker, m_oracle, dx, dp
      */
     const log_type &get_log() const
     {
@@ -575,8 +571,9 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_acc, m_fstop, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e, m_seed,
-           m_verbosity, m_log, m_res, m_q, m_threshold);
+        ar(m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e, m_seed,
+           m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter, m_n_evalstop, m_n_impstop,
+           m_gen_mark, m_fevals);
     }
 
 private:
@@ -594,15 +591,14 @@ private:
     double penalty_computation(const vector_double &f, const population &pop, const unsigned long long nobj,
                                const unsigned long long nec, const unsigned long long nic) const
     {
-
-        // I retrieve the tolerance vector:
         const auto &prob = pop.get_problem();
-        auto tol_vec = prob.get_c_tol();
 
         // The residual function variable is assigned:
-        m_res = 0;
+        m_res = 0.0;
 
         if (nic != 0 || nec != 0) {
+            // I first retrieve the tolerance vector:
+            auto tol_vec = prob.get_c_tol();
             // Here we compute the L_2 norm of the constraint violations
             auto violation_ic = detail::test_eq_constraints(f.data() + nobj, f.data() + nobj + nec, tol_vec.data());
             auto violation_ec
@@ -612,7 +608,7 @@ private:
 
         // I compute the alpha parameter:
 
-        //(for single objective, for now, is enough to do:)
+        // for single objective, for now, is enough to do:
         auto fitness = f[0];
 
         double alpha = 0.0;
@@ -643,27 +639,39 @@ private:
     /**
      * Function which updates the solution archive, if better solutions are found
      *
-     * @param[in] gen_mark Generation mark: the generation mark parameter is hereby defined and it will be used for the
-     * standard deviations computation
      * @param[in] pop Population: the current population is passed
      * @param[in] sorted_vector Stored penalty vector: the vector in which the penalties of the current population are
      * stored from the best to the worst is passed
      * @param[in] sorted_list Positions of stored penalties: this represents the positions of the individuals wrt their
      * penalties as they are stored in the stored_vector
-     * @param[in] n_impstop Impstop counter: it counts number of runs in which the sol_archive is not updated at all
-     * @param[in] n_evalstop Evalstop counter: it counts the number of runs in which the best solution of the
-     * sol_archive is not updated
      * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current
      * individuals (which will be the means of the new pdf)
+     * @param[in] nec Number of equality constraints: the number of equality constraints is passed
      */
 
-    void update_sol_archive(unsigned &gen_mark, const population &pop, vector_double &sorted_vector,
-                            std::vector<decltype(sorted_vector.size())> &sorted_list, unsigned &n_impstop,
-                            unsigned &n_evalstop, std::vector<vector_double> &sol_archive) const
+    void update_sol_archive(const population &pop, vector_double &sorted_vector,
+                            std::vector<decltype(sorted_vector.size())> &sorted_list,
+                            std::vector<vector_double> &sol_archive, const unsigned long long nec) const
     {
 
         auto variables = pop.get_x();
         auto fitness = pop.get_f();
+
+        // This part can only be used for single obj:
+        vector_double fitness_sol_arch(fitness[0].size());
+
+        for (decltype(fitness[0].size()) j = 0u; j < fitness[0].size(); ++j) {
+            fitness_sol_arch[j] = sol_archive[0][1 + variables[0].size() + j];
+        }
+
+        bool check = compare_fc(fitness_sol_arch, pop.champion_f(), nec, pop.get_problem().get_c_tol());
+
+        // We increment the evalstop counter in case the best of the population is not better than the solution archive
+        // best:
+        if (check == true) {
+            ++m_n_evalstop;
+        }
+
         std::vector<vector_double> old_archive(sol_archive);
         std::vector<vector_double> temporary_archive(sol_archive);
         vector_double temporary_penalty(m_ker);
@@ -673,8 +681,8 @@ private:
         // than the worst individual stored in the solution archive
         if (sorted_vector[0] < old_archive[m_ker - 1][0]) {
 
-            // I reset the impstop parameter since the solution archive is updated:
-            n_impstop = 1;
+            // I reset the impstop counter since the solution archive is updated:
+            m_n_impstop = 1;
             // I save the variables, objectives, eq. constraints, ineq. constraints and penalties in three different
             // vectors:
             for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
@@ -688,6 +696,7 @@ private:
             temporary_penalty.insert(temporary_penalty.end(), sorted_vector.begin(), sorted_vector.end());
             // I now reorder them depending on the penalty values (smallest first):
             std::sort(temporary_penalty.begin(), temporary_penalty.end(), detail::less_than_f<double>);
+
             saved_value_position.push_back(0);
             temporary_archive[0][0] = temporary_penalty[0];
             unsigned j;
@@ -729,34 +738,24 @@ private:
                 }
             }
 
-            // I increase the evalstop parameter only if the best solution of the archive is updated:
-            if (sol_archive[0][0] == temporary_archive[0][0]) {
-                ++n_evalstop;
-
-            } else {
-                n_evalstop = 1;
-            }
-
             // I hereby update the solution archive:
             for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
                 sol_archive[i] = temporary_archive[i];
             }
         } else {
-            ++n_impstop;
-            ++n_evalstop;
+            ++m_n_impstop;
         }
-        if (n_evalstop == 1 || n_evalstop > 2) {
-            ++gen_mark;
+        if (m_n_evalstop == 1 || m_n_evalstop > 2) {
+            ++m_gen_mark;
         }
-        if (gen_mark > m_n_gen_mark) {
-            gen_mark = 1;
+        if (m_gen_mark > m_n_gen_mark) {
+            m_gen_mark = 1;
         }
     }
 
     /**
      * Function which computes the pheromone values (useful for generating offspring)
      *
-     * @param[in] gen_mark Generation mark: this parameter is used to reduce the standard deviation
      * @param[in] gen Generations: current generation number is passed
      * @param[in] prob_cumulative Cumulative probability vector: this vector will be crucial for the new individuals'
      * creation
@@ -767,8 +766,8 @@ private:
      * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current individuals
      * (which will be the means of the new pdf)
      */
-    void pheromone_computation(unsigned gen_mark, const unsigned gen, vector_double &prob_cumulative,
-                               vector_double &omega_vec, vector_double &sigma_vec, const population &popul,
+    void pheromone_computation(const unsigned gen, vector_double &prob_cumulative, vector_double &omega_vec,
+                               vector_double &sigma_vec, const population &popul,
                                std::vector<vector_double> &sol_archive) const
     {
 
@@ -778,9 +777,33 @@ private:
         const auto &ub = bounds.second;
         auto n_con = prob.get_nx();
 
-        // Here I define the weights.
-        if (gen == 1 || gen == m_threshold) {
-            if (gen == m_threshold) {
+        // Here we define the weights:
+        if (m_memory == false) {
+            if (gen == 1 || gen == m_threshold) {
+                if (gen == m_threshold) {
+                    m_q = 0.01;
+                }
+
+                double omega_new;
+                double sum_omega = 0;
+
+                for (decltype(m_ker) l = 1; l <= m_ker; ++l) {
+                    omega_new = 1.0 / (m_q * m_ker * std::sqrt(2 * boost::math::constants::pi<double>()))
+                                * exp(-std::pow(l - 1.0, 2) / (2.0 * std::pow(m_q, 2) * std::pow(m_ker, 2)));
+                    omega_vec[l - 1] = omega_new;
+                    sum_omega += omega_new;
+                }
+
+                for (decltype(m_ker) k = 0u; k < m_ker; ++k) {
+                    double cumulative = 0;
+                    for (decltype(m_ker) j = 0u; j <= k; ++j) {
+                        cumulative += omega_vec[j] / sum_omega;
+                    }
+                    prob_cumulative[k] = cumulative;
+                }
+            }
+        } else {
+            if (m_counter == m_threshold) {
                 m_q = 0.01;
             }
 
@@ -803,7 +826,7 @@ private:
             }
         }
 
-        // I now compute the standard deviations (sigma):
+        // We now compute the standard deviations (sigma):
         for (decltype(n_con) h = 1; h <= n_con; ++h) {
 
             // I declare and define D_min and D_max:
@@ -828,13 +851,17 @@ private:
                 }
             }
 
-            if (m_focus != 0. && ((d_max - d_min) / gen > (ub[h - 1] - lb[h - 1]) / m_focus)) {
-                // In case a value for the focus parameter (different than zero) is passed, this limits the maximum
-                // value of the standard deviation
+            // In case a value for the focus parameter (different than zero) is passed, this limits the maximum
+            // value of the standard deviation
+            if (m_focus != 0. && ((d_max - d_min) / gen > (ub[h - 1] - lb[h - 1]) / m_focus) && m_memory == false) {
+                sigma_vec[h - 1] = (ub[h - 1] - lb[h - 1]) / m_focus;
+
+            } else if (m_focus != 0. && ((d_max - d_min) / m_counter > (ub[h - 1] - lb[h - 1]) / m_focus)
+                       && m_memory == true) {
                 sigma_vec[h - 1] = (ub[h - 1] - lb[h - 1]) / m_focus;
 
             } else {
-                sigma_vec[h - 1] = (d_max - d_min) / gen_mark;
+                sigma_vec[h - 1] = (d_max - d_min) / m_gen_mark;
             }
         }
     }
@@ -876,7 +903,7 @@ private:
             vector_double dvs_new_j(n_con);
 
             double number = dist(m_e);
-            double g_h = 0;
+            double g_h = 0.0;
             unsigned long k_omega = 0u;
 
             if (number <= prob_cumulative[0]) {
@@ -897,8 +924,18 @@ private:
 
                 if (g_h < lb[h] || g_h > ub[h]) {
 
-                    while (g_h < lb[h] || g_h > ub[h]) {
+                    // We define the max number of attempts to reset the ant within the bounds,
+                    // before placing it to the bounds themselves (in case every attempt fails)
+                    unsigned attempts = 0u;
+                    while ((g_h < lb[h] || g_h > ub[h]) && attempts < 20u) {
                         g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
+                        ++attempts;
+                    }
+                    if (attempts == 20 && g_h > ub[h]) {
+                        g_h = ub[h];
+                    }
+                    if (attempts == 20 && g_h < lb[h]) {
+                        g_h = lb[h];
                     }
                 }
                 dvs_new_j[h] = g_h;
@@ -909,7 +946,6 @@ private:
 
     unsigned m_gen;
     double m_acc;
-    double m_fstop;
     unsigned m_impstop;
     unsigned m_evalstop;
     double m_focus;
@@ -925,6 +961,13 @@ private:
     unsigned m_threshold;
     mutable double m_q;
     unsigned m_n_gen_mark;
+    bool m_memory;
+    mutable unsigned m_counter;
+    mutable std::vector<vector_double> m_sol_archive;
+    mutable unsigned m_n_evalstop;
+    mutable unsigned m_n_impstop;
+    mutable unsigned m_gen_mark;
+    mutable unsigned m_fevals;
 };
 
 } // namespace pagmo

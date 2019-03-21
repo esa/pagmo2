@@ -2338,9 +2338,9 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::nsga2::get_log`.
 
 std::string gaco_docstring()
 {
-    return R"(__init__(gen = 1, ker = 63u, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u,
-fstop = 0.000000000001, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
-paretomax = 10u, epsilon = 0.9, seed = random)
+    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u,
+n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
+paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
 
 Extended Ant Colony Optimization algorithm (GACO).
 
@@ -2352,7 +2352,7 @@ based on three parameters (i.e., pheromone values) which are computed depending 
 of each previous solution. The solutions are ranked through an oracle penalty method.
 
 
-The version implemented in pagmo can be applied to box-bounded multiple-objective optimization.
+The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation is an extension of Schlueter's originally proposed ACO algorithm.
 
 See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
 mixed integer non-linear programming. Computers & Operations Research.
@@ -2364,13 +2364,13 @@ Args:
     oracle (``float``): oracle parameter
     acc (``float``): accuracy parameter
     threshold (``int``): threshold parameter
-    fstop (``float``): objective stopping criterion
     n_gen_mark (``int``): std convergence speed parameter
     impstop (``int``): improvement stopping criterion
     evalstop (``int``): evaluation stopping criterion
     focus (``float``): focus parameter
     paretomax (``int``): max number of non-dominated solutions
     epsilon (``float``): pareto decision parameter
+    memory (``bool``): memory parameter
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
@@ -2380,7 +2380,8 @@ Raises:
       * *acc* is not >=0.
       * *focus* is not >=0.
       * *epsilon* is not in [0,1].
-      * *threshold* is not in [1,gen] when gen!=0.
+      * *threshold* is not in [1,gen] when gen!=0 and memory==false.
+      * *threshold* is not in >=1 when gen!=0 and memory==true.
 
 See also the docs of the C++ class :cpp:class:`pagmo::gaco`.
 
@@ -2396,33 +2397,37 @@ parameter (by default nothing is logged) which can be set calling the method :fu
 constructed with a :class:`~pygmo.gaco`. A verbosity of ``N`` implies a log line each ``N`` generations.
 
 Returns:
-    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``Best``, ``Kernel``, ``Oracle``, ``dx``, ``dp``, where:
 
     * ``Gen`` (``int``), generation number
     * ``Fevals`` (``int``), number of functions evaluation made
-    * ``Best Penalty`` (``float``), best penalty function value
     * ``Best`` (``float``), best fitness function value
     * ``Kernel`` (``int``), kernel size
-    * ``Worst`` (``float``), worst fitness function value
     * ``Oracle`` (``float``), oracle parameter
     * ``dx`` (``float``), sum of the absolute value of the difference between the variables' values of the best and worst solutions
     * ``dp`` (``float``), absolute value of the difference between the worst and best solutions' penalty values
 
 Examples:
-    >>> from pygmo import *
-    >>> algo = algorithm(gaco(gen=100))
-    >>> algo.set_verbosity(20)
-    >>> pop = population(rosenbrock(2u), 70)
+    >>> from pygmo as pg
+    >>> prob = pg.problem(pg.rosenbrock(dim = 2))
+    >>> pop = pg.population(prob, 13, 23)
+    >>> algo = pg.algorithm(pg.gaco(10, 13, 1.0, 1e9, 0.0, 1, 7, 100000, 100000, 0.0, 10, 0.9, False, 23))
+    >>> algo.set_verbosity(1)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
-   Gen:         Fevals   Best Penalty          Best:         Kernel         Worst:         Oracle            dx:            dp:
-      1              0         13.172        16.3111             63         515097              0        12.4998         415954
-     21           1400       0.029947      0.0370837             63        4.83413              0       0.272002        3.87385
-     41           2800     0.00205721     0.00254747             63         1.4876              0        0.67768        1.19926
-     61           4200     0.00205721     0.00254747             63         1.2311              0          2.035       0.992116
-     81           5600    0.000498068    0.000616765             63        1.10471              0       0.809709       0.891612
+     Gen:        Fevals:          Best:        Kernel:        Oracle:            dx:            dp:
+        1              0        179.464             13          1e+09        13.1007         649155
+        2             13        166.317             13        179.464        5.11695        15654.1
+        3             26        3.81781             13        166.317        5.40633        2299.95
+        4             39        3.81781             13        3.81781        2.11767        385.781
+        5             52        2.32543             13        3.81781        1.30415        174.982
+        6             65        2.32543             13        2.32543        4.58441         43.808
+        7             78        1.17205             13        2.32543        1.18585        21.6315
+        8             91        1.17205             13        1.17205       0.806727        12.0702
+        9            104        1.17205             13        1.17205       0.806727        12.0702
+       10            130       0.586187             13       0.586187       0.806727        12.0702
     >>> uda = algo.extract(gaco)
     >>> uda.get_log() # doctest: +SKIP
-    [(1, 0, 13.172, 16.311, 63, 515097, 0, 12.4998, 415954), (21, 1400, 0.029947, ...
+    [(1, 0, 179.464, 13, 1e+09, 13.1007, 649155), (2, 15, 166.317, 13, 179.464, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
 
