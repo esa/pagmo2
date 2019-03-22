@@ -265,8 +265,6 @@ struct udp_nan {
 
 BOOST_AUTO_TEST_CASE(test_for_inf)
 {
-    problem prob(udp_inf);
-    problem prob_2(udp_nan);
     gaco{10, 10, 1., -15., 0., 7}.evolve(population{problem{udp_inf{}}, 15u});
     gaco{10, 10, 1., -15., 0., 7}.evolve(population{problem{udp_nan{}}, 15u});
 }
