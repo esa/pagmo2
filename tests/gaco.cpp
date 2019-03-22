@@ -224,7 +224,8 @@ struct udp_inf {
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
-        return {-1.0 / 0.0};
+        double inf = std::numeric_limits<double>::infinity();
+        return {-inf};
     }
     vector_double::size_type get_nobj() const
     {
@@ -240,10 +241,34 @@ struct udp_inf {
     unsigned int m_dim;
 };
 
+struct udp_nan {
+    
+    /// Fitness
+    vector_double fitness(const vector_double &) const
+    {
+        double nan = std::numeric_limits<double>::quiet_NaN();
+        return {nan};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 1u;
+    }
+    
+    /// Problem bounds
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 1.}};
+    }
+    /// Problem dimensions
+    unsigned int m_dim;
+};
+
 BOOST_AUTO_TEST_CASE(test_for_inf)
 {
     problem prob(udp_inf);
+    problem prob_2(udp_nan);
     gaco{10, 10, 1., -15., 0., 7}.evolve(population{problem{udp_inf{}}, 15u});
+    gaco{10, 10, 1., -15., 0., 7}.evolve(population{problem{udp_nan{}}, 15u});
 }
 
 BOOST_AUTO_TEST_CASE(memory_test)
