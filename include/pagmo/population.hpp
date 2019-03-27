@@ -146,7 +146,6 @@ public:
      *
      *    This constructor is enabled only if :cpp:class:`pagmo::problem` is constructible from ``T``.
      *
-     *
      * Constructs a population with *pop_size* individuals associated
      * to the problem *x* and setting the population random seed
      * to *seed*. The input problem *x* can be either a :cpp:class:`pagmo::problem` or a user-defined problem

@@ -156,12 +156,6 @@ void tuple_for_each(Tuple &&t, const F &f)
                        make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
 }
 
-// Dependent false for static_assert in if constexpr.
-// http://en.cppreference.com/w/cpp/language/if#Constexpr_If
-template <typename T>
-struct dependent_false : std::false_type {
-};
-
 } // namespace detail
 
 /// Implementation of \p std::is_detected.
