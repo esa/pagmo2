@@ -736,7 +736,7 @@ struct prob_inner final : prob_inner_base {
     // The clone method, used in the copy constructor of problem.
     virtual std::unique_ptr<prob_inner_base> clone() const override final
     {
-        return make_unique<prob_inner>(m_value);
+        return detail::make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final

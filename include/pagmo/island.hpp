@@ -199,7 +199,7 @@ struct isl_inner final : isl_inner_base {
     // The clone method, used in the copy constructor of island.
     virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
-        return make_unique<isl_inner>(m_value);
+        return detail::make_unique<isl_inner>(m_value);
     }
     // The mandatory run_evolve() method.
     virtual void run_evolve(island &isl) const override final
@@ -506,11 +506,11 @@ inline void default_island_factory(const algorithm &algo, const population &pop,
 #if defined(PAGMO_WITH_FORK_ISLAND)
     if (algo.get_thread_safety() < thread_safety::basic
         || pop.get_problem().get_thread_safety() < thread_safety::basic) {
-        ptr = make_unique<isl_inner<fork_island>>();
+        ptr = detail::make_unique<isl_inner<fork_island>>();
         return;
     }
 #endif
-    ptr = make_unique<isl_inner<thread_island>>();
+    ptr = detail::make_unique<isl_inner<thread_island>>();
 }
 
 // Static init.
@@ -524,7 +524,7 @@ struct island_data {
     // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
     // are both thread safe.
     island_data()
-        : isl_ptr(make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
+        : isl_ptr(detail::make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
           pop(std::make_shared<population>())
     {
     }
@@ -540,7 +540,7 @@ struct island_data {
     // As above, but the UDI is explicitly passed by the user.
     template <typename Isl, typename Algo, typename Pop>
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
-        : isl_ptr(make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+        : isl_ptr(detail::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
@@ -740,8 +740,8 @@ public:
      * - the copy constructors of pagmo::algorithm and pagmo::population.
      */
     island(const island &other)
-        : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(),
-                                             other.get_population()))
+        : m_ptr(
+            detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population()))
     {
         // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
         assert(m_ptr->archi_ptr == nullptr);

@@ -97,7 +97,7 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     virtual std::unique_ptr<algo_inner_base> clone() const override final
     {
         // This will make a deep copy using the ctor above.
-        return make_unique<algo_inner>(m_value);
+        return detail::make_unique<algo_inner>(m_value);
     }
     // Mandatory methods.
     virtual population evolve(const population &pop) const override final

@@ -117,7 +117,7 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     virtual std::unique_ptr<prob_inner_base> clone() const override final
     {
         // This will make a deep copy using the ctor above.
-        return make_unique<prob_inner>(m_value);
+        return detail::make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final

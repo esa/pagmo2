@@ -122,7 +122,7 @@ struct bfe_inner final : bfe_inner_base {
     // The clone method, used in the copy constructor of bfe.
     virtual std::unique_ptr<bfe_inner_base> clone() const override final
     {
-        return make_unique<bfe_inner>(m_value);
+        return detail::make_unique<bfe_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double operator()(const problem &p, const vector_double &dvs) const override final
