@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <cassert>
 #include <functional>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <memory>
 #include <stdexcept>
@@ -230,10 +231,23 @@ public:
             for (; begin != end; ++begin) {
                 auto in_ptr = dvs.data() + begin * n_dim;
                 auto out_ptr = retval.data() + begin * f_dim;
-                std::copy(in_ptr, in_ptr + n_dim, tmp_dv.begin());
+                std::copy(
+#if defined(_MSC_VER)
+                    stdext::make_checked_array_iterator(in_ptr, n_dim),
+                    stdext::make_checked_array_iterator(in_ptr, n_dim, ndim), tmp_dv.begin()
+#else
+                    in_ptr, in_ptr + n_dim, tmp_dv.begin()
+#endif
+                );
                 const auto fv = prob.fitness(tmp_dv);
                 assert(fv.size() == f_dim);
-                std::copy(fv.begin(), fv.end(), out_ptr);
+                std::copy(
+#if defined(_MSC_VER)
+                    fv.begin(), fv.end(), stdext::make_checked_array_iterator(out_ptr, f_dim)
+#else
+                    fv.begin(), fv.end(), out_ptr
+#endif
+                );
             }
         };
 
