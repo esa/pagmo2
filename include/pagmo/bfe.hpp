@@ -234,7 +234,7 @@ public:
                 std::copy(
 #if defined(_MSC_VER)
                     stdext::make_checked_array_iterator(in_ptr, n_dim),
-                    stdext::make_checked_array_iterator(in_ptr, n_dim, ndim), tmp_dv.begin()
+                    stdext::make_checked_array_iterator(in_ptr, n_dim, n_dim), tmp_dv.begin()
 #else
                     in_ptr, in_ptr + n_dim, tmp_dv.begin()
 #endif
