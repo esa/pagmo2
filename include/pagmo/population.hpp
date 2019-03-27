@@ -163,7 +163,7 @@ public:
      * @throws unspecified any exception thrown by batch_random_decision_vector(), the call operator of \p b,
      * push_back(), or by the invoked constructor of pagmo::problem.
      */
-    template <typename T, std::is_constructible<problem, T &&>::value = 0>
+    template <typename T, enable_if_t<std::is_constructible<problem, T &&>::value, int> = 0>
     explicit population(T &&x, const bfe &b, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {
