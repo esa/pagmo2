@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(island_constructors)
     BOOST_CHECK(isl9.get_population().size() == 28u);
     // Self assignment.
     BOOST_CHECK((std::is_same<island &, decltype(isl9 = isl9)>::value));
-    isl9 = isl9;
+    isl9 = *&isl9;
     BOOST_CHECK(isl9.get_algorithm().is<de>());
     BOOST_CHECK(isl9.get_population().get_problem().is<rosenbrock>());
     BOOST_CHECK(isl9.get_population().size() == 28u);
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(island_thread_safety)
     island isl{de{}, population{rosenbrock{}, 25}};
     auto ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::basic);
-    BOOST_CHECK(ts[1] == thread_safety::basic);
+    BOOST_CHECK(ts[1] == thread_safety::constant);
     isl.evolve();
     isl.wait_check();
     isl = island{de{}, population{prob_02{}, 25}};
@@ -295,7 +295,7 @@ BOOST_AUTO_TEST_CASE(island_thread_safety)
     isl = island{algo_01{}, population{rosenbrock{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::none);
-    BOOST_CHECK(ts[1] == thread_safety::basic);
+    BOOST_CHECK(ts[1] == thread_safety::constant);
     isl.evolve();
     isl.wait();
     BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
