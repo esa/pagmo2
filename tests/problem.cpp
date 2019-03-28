@@ -692,6 +692,8 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK((p1.get_c_tol() == vector_double{0., 0., 0., 0., 0., 0., 0.}));
     BOOST_CHECK(p1.get_nf() == 2 + 3 + 4);
     BOOST_CHECK((p1.get_bounds() == std::pair<vector_double, vector_double>{{13, 13}, {17, 17}}));
+    BOOST_CHECK((p1.get_lb() == vector_double{13, 13}));
+    BOOST_CHECK((p1.get_ub() == vector_double{17, 17}));
 
     // Making some evaluations
     auto N = 1235u;

@@ -26,46 +26,48 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE cec2013_test
+#define BOOST_TEST_MODULE lennard_jones_test
 #include <boost/test/included/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/cec2013.hpp>
+#include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/utils/generic.hpp>
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(cec2013_test)
+BOOST_AUTO_TEST_CASE(lennard_jones_test)
 {
-    std::mt19937 r_engine(32u);
-    // We check that all problems can be constructed at all dimensions and that the name returned makes sense
-    // (only for dim =2 for speed). We also perform a fitness test (we only check no throws, not correctness)
-    std::vector<unsigned int> allowed_dims = {2u, 5u, 10u, 20u, 30u, 40u, 50u, 60u, 70u, 80u, 90u, 100u};
-    for (unsigned int i = 1u; i <= 28u; ++i) {
-        for (auto dim : allowed_dims) {
-            cec2013 udp{i, dim};
-            auto x = random_decision_vector(problem(udp), r_engine); // a random vector
-            BOOST_CHECK_NO_THROW(udp.fitness(x));
-        }
-        BOOST_CHECK((cec2013{i, 2u}.get_name().find("CEC2013 - f")) != std::string::npos);
-    }
-    // We check that wrong problem ids and dimensions cannot be constructed
-    BOOST_CHECK_THROW((cec2013{0u, 2u}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{29u, 2u}), std::invalid_argument);
-    BOOST_CHECK_THROW((cec2013{10u, 3u}), std::invalid_argument);
+    // Problem construction
+    BOOST_CHECK_THROW(lennard_jones{0u}, std::invalid_argument);
+    BOOST_CHECK_THROW(lennard_jones{1u}, std::invalid_argument);
+    BOOST_CHECK_THROW(lennard_jones{2u}, std::invalid_argument);
+    BOOST_CHECK_THROW(lennard_jones{std::numeric_limits<unsigned>::max() / 2}, std::overflow_error);
+
+    lennard_jones lj{3u};
+    BOOST_CHECK_NO_THROW(problem{lj});
+    // Pick a few reference points
+    vector_double x1 = {1.12, -0.33, 2.34};
+    vector_double x2 = {1.23, -1.23, 0.33};
+    // Fitness test
+    BOOST_CHECK_CLOSE(lj.fitness(x1)[0], -1.7633355813175688, 1e-13);
+    BOOST_CHECK_CLOSE(lj.fitness(x2)[0], -1.833100934753864, 1e-13);
+    // Bounds Test
+    BOOST_CHECK((lj.get_bounds() == std::pair<vector_double, vector_double>{{-3, -3, -3}, {3, 3, 3}}));
+    // Name and extra info tests
+    BOOST_CHECK(lj.get_name().find("Jones") != std::string::npos);
 }
 
-BOOST_AUTO_TEST_CASE(cec2013_serialization_test)
+BOOST_AUTO_TEST_CASE(lennard_jones_serialization_test)
 {
-    problem p{cec2013{1u, 2u}};
+    problem p{lennard_jones{30u}};
     // Call objfun to increase the internal counters.
-    p.fitness(vector_double(2u, 0.));
+    p.fitness(vector_double(30u * 3 - 6u, 0.1));
     // Store the string representation of p.
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(p);

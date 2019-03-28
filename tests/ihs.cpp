@@ -183,3 +183,19 @@ BOOST_AUTO_TEST_CASE(ihs_serialization_test)
         BOOST_CHECK_CLOSE(std::get<7>(before_log[i])[0], std::get<7>(after_log[i])[0], 1e-8);
     }
 }
+
+BOOST_AUTO_TEST_CASE(ihs_integer_test)
+{
+    // We test that on integer problems the evolution returns integer results.
+    minlp_rastrigin udp(0u, 10u); 
+    problem prob(udp);
+    population pop(prob, 20u, 32u);
+    ihs uda{10u, 0.99, 0.99, 0.99, 1e-5, 5, 42u};
+    algorithm algo(uda);
+    pop = algo.evolve(pop);
+    for (auto x : pop.get_x()) {
+        for (auto c : x) {
+            BOOST_CHECK_EQUAL(static_cast<int>(c), c);
+        }
+    }
+}

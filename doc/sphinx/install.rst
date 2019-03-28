@@ -28,15 +28,20 @@ command:
    git clone https://github.com/esa/pagmo2.git
 
 Once you are in pagmo's source tree, you must configure your build using ``cmake``. This will allow
-you to enable support for optional dependencies, configure the install destination, etc. When done,
-you can install pagmo via the command
+you to enable support for optional dependencies, configure the install destination, etc. For example,
+
+.. code-block:: bash
+
+   cmake -DCMAKE_INSTALL_PREFIX=~/.local .
+
+The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory.
+When done, you can install pagmo via the command:
 
 .. code-block:: bash
 
    make install
 
-The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory. To check that all went well
-compile the :ref:`quick-start example <getting_started_c++>`.
+To check that all went well compile the :ref:`quick-start example <getting_started_c++>`.
 
 pagmo is also available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows.
 In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
@@ -112,6 +117,16 @@ and then we can immediately install pygmo:
 
 conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`__
 for instructions on how to setup and manage your conda installation.
+
+
+Installation with homebrew
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+A `Homebrew <https://brew.sh/>`__ recipe for pagmo has been generously contributed by the community. In order to install
+pagmo on OSX with Homebrew, it is sufficient to execute the following command:
+
+.. code-block:: bash
+
+   brew install pagmo
 
 
 Installation with pip

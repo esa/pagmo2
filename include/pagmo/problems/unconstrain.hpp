@@ -100,7 +100,8 @@ public:
      * @throws unspecified any exception thrown by the pagmo::problem constructor
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit unconstrain(T &&p, const std::string &method = "death penalty", const vector_double &weights = {})
+    explicit unconstrain(T &&p, const std::string &method = "death penalty",
+                         const vector_double &weights = vector_double())
         : m_problem(std::forward<T>(p)), m_weights(weights)
     {
         // The number of constraints in the original udp

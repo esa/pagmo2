@@ -56,15 +56,15 @@ BOOST_AUTO_TEST_CASE(min_lp_rastrigin_test)
     // Fitness test
     detail::random_engine_type r_engine(pagmo::random_device::next());
     for (auto i = 0u; i < 100; ++i) {
-        auto x = random_decision_vector({-5.12, -10}, {5.12, -5}, r_engine, 0u);
+        auto x = random_decision_vector(problem(minlp_rastrigin{2u, 0u}), r_engine);
         BOOST_CHECK((minlp_rastrigin{2u, 0u}.fitness(x)) == rastrigin{2u}.fitness(x));
         BOOST_CHECK((minlp_rastrigin{2u, 0u}.gradient(x)) == rastrigin{2u}.gradient(x));
         BOOST_CHECK((minlp_rastrigin{2u, 0u}.hessians(x)) == rastrigin{2u}.hessians(x));
-        x = random_decision_vector({-5.12, -10}, {5.12, -5}, r_engine, 1u);
+        x = random_decision_vector(problem(minlp_rastrigin{1u, 1u}), r_engine);
         BOOST_CHECK((minlp_rastrigin{1u, 1u}.fitness(x)) == rastrigin{2u}.fitness(x));
         BOOST_CHECK((minlp_rastrigin{1u, 1u}.gradient(x)) == rastrigin{2u}.gradient(x));
         // BOOST_CHECK((minlp_rastrigin{1u, 1u}.hessians(x)) == rastrigin{2u}.hessians(x));
-        x = random_decision_vector({-5, -10}, {-4, -5}, r_engine, 2u);
+        x = random_decision_vector(problem(minlp_rastrigin{0u, 2u}), r_engine);
         BOOST_CHECK((minlp_rastrigin{0u, 2u}.fitness(x)) == rastrigin{2u}.fitness(x));
         BOOST_CHECK((minlp_rastrigin{0u, 2u}.gradient(x)) == rastrigin{2u}.gradient(x));
         BOOST_CHECK((minlp_rastrigin{0u, 2u}.hessians(x)) == rastrigin{2u}.hessians(x));
