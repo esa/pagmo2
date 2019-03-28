@@ -26,6 +26,13 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+// Disable warnings from MSVC.
+#pragma warning(disable : 4822)
+
+#endif
+
 #define BOOST_TEST_MODULE bfe_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -444,15 +451,19 @@ BOOST_AUTO_TEST_CASE(lambda_std_function)
         return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
     };
     BOOST_CHECK(!is_udbfe<decltype(fun)>::value);
+#if !defined(_MSC_VER)
     BOOST_CHECK(is_udbfe<decltype(+fun)>::value);
+#endif
     auto stdfun = std::function<vector_double(const problem &, const vector_double &)>(fun);
     BOOST_CHECK(is_udbfe<decltype(stdfun)>::value);
 
+#if !defined(_MSC_VER)
     {
         bfe bfe0{+fun};
         BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
         BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
     }
+#endif
 
     {
         bfe bfe0{stdfun};
