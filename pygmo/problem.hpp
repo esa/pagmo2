@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/extract.hpp>
+#include <boost/python/import.hpp>
 #include <boost/python/list.hpp>
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
@@ -90,6 +91,21 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     prob_inner &operator=(prob_inner &&) = delete;
     explicit prob_inner(const bp::object &o)
     {
+        // Forbid the use of a pygmo.problem as a UDP.
+        // The motivation here is consistency with C++. In C++, the use of
+        // a pagmo::problem as a UDP is forbidden and prevented by the fact
+        // that the generic constructor from UDP is disabled if the input
+        // object is a pagmo::problem (the copy/move constructor is
+        // invoked instead). In order to achieve an equivalent behaviour
+        // in pygmo, we throw an error if o is a problem, and instruct
+        // the user to employ the standard copy/deepcopy facilities
+        // for creating a copy of the input problem.
+        if (pygmo::type(o) == bp::import("pygmo").attr("problem")) {
+            pygmo_throw(PyExc_TypeError,
+                        ("a pygmo.problem cannot be used as a UDP for another pygmo.problem (if you need to copy a "
+                         "problem please use the standard Python copy()/deepcopy() functions)"));
+        }
+        // Check that o is an instance of a class, and not a type.
         check_not_type(o, "problem");
         // Check the presence of the mandatory methods (these are static asserts
         // in the C++ counterpart).

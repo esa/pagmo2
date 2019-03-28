@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(cec2009_fitness_test)
     // We check that all problems return a fitness of the correct dims
     for (unsigned i = 1u; i <= 10u; ++i) {
         cec2009 udp{i, false};
-        auto x = random_decision_vector(udp.get_bounds(), r_engine); // a random vector
+        auto x = random_decision_vector(problem(udp), r_engine); // a random vector
         auto f = udp.fitness(x);
         BOOST_CHECK_EQUAL(f.size(), udp.get_nobj());
         BOOST_CHECK((udp.get_name().find("CEC2009 - UF")) != std::string::npos);
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(cec2009_fitness_test)
     // We check that all problems return a fitness of the correct dims
     for (unsigned i = 1u; i <= 10u; ++i) {
         cec2009 udp{i, true};
-        auto x = random_decision_vector(udp.get_bounds(), r_engine); // a random vector
+        auto x = random_decision_vector(problem(udp), r_engine); // a random vector
         auto f = udp.fitness(x);
         BOOST_CHECK_EQUAL(f.size(), statics::m_nic[i - 1u] + udp.get_nobj());
         BOOST_CHECK((udp.get_name().find("CEC2009 - CF")) != std::string::npos);

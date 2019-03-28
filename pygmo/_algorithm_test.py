@@ -140,6 +140,13 @@ class algorithm_test_case(_ut.TestCase):
         self.assertRaises(TypeError, lambda: algo.evolve(
             population(null_problem(), 5)))
 
+        # Test that construction from another pygmo.algorithm fails.
+        with self.assertRaises(TypeError) as cm:
+            algorithm(algo)
+        err = cm.exception
+        self.assertTrue(
+            "a pygmo.algorithm cannot be used as a UDA for another pygmo.algorithm (if you need to copy an algorithm please use the standard Python copy()/deepcopy() functions)" in str(err))
+
     def run_extract_tests(self):
         from .core import algorithm, _test_algorithm, mbh, de
         import sys

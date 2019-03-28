@@ -26,7 +26,7 @@ elif [[ "${PAGMO_BUILD}" == "CoverageGCC6" ]]; then
     CXX=g++-6 CC=gcc-6 cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="--coverage -fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
     ctest;
-    bash <(curl -s https://codecov.io/bash) -x gcov-6;
+    bash <(curl -s https://codecov.io/bash) -x gcov-6 > /dev/null
 elif [[ "${PAGMO_BUILD}" == "DebugGCC7" ]]; then
     CXX=g++-7 CC=gcc-7 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
     make -j2 VERBOSE=1;

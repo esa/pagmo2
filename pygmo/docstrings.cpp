@@ -88,8 +88,7 @@ Returns:
     :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
 
 Raises:
-    unspecified: any exception thrown by :func:`pygmo.problem.fitness()` or by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.)
+    unspecified: any exception thrown by :func:`pygmo.random_decision_vector()`
 
 )";
 }
@@ -103,7 +102,7 @@ Index of the best individual.
 If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem
 is, instead, single objective, but with constraints, the best will be defined using the criteria specified in :func:`pygmo.sort_population_con()`.
 If the problem is multi-objective one single best is not well defined. In this case the user can still obtain a strict ordering of the population
-individuals by calling the :func:`pygmo.sort_population_ mo()` function.
+individuals by calling the :func:`pygmo.sort_population_mo()` function.
 
 Args:
     tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints. By default, the c_tol attribute 
@@ -128,7 +127,7 @@ Index of the worst individual.
 If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem
 is, instead, single objective, but with constraints, the worst will be defined using the criteria specified in :func:`pygmo.sort_population_con()`.
 If the problem is multi-objective one single worst is not well defined. In this case the user can still obtain a strict ordering of the population
-individuals by calling the :func:`pygmo.sort_population_ mo()` function.
+individuals by calling the :func:`pygmo.sort_population_mo()` function.
 
 Args:
     tol (``float`` or array-like object): scalar tolerance or vector of tolerances to be applied to each constraints
@@ -487,8 +486,8 @@ std::string problem_get_bounds_docstring()
 
 Box-bounds.
 
-This method will invoke the ``get_bounds()`` method of the UDP to return the box-bounds
-:math:`(\mathbf{lb}, \mathbf{ub})` of the problem. Infinities in the bounds are allowed.
+This method will return the box-bounds :math:`(\mathbf{lb}, \mathbf{ub})` of the problem,
+as returned by the ``get_bounds()`` method of the UDP. Infinities in the bounds are allowed.
 
 The ``get_bounds()`` method of the UDP must return the box-bounds as a tuple of 2 elements,
 the lower bounds vector and the upper bounds vector, which must be represented as iterable Python objects (e.g.,
@@ -497,6 +496,44 @@ of a :class:`~pygmo.problem`.
 
 Returns:
     ``tuple``: a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem
+
+Raises:
+    unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_lb_docstring()
+{
+    return R"(get_lb()
+
+Lower box-bounds.
+
+This method will return the lower box-bounds for this problem. See :func:`~pygmo.problem.get_bounds()`
+for a detailed explanation of how the bounds are determined.
+
+Returns:
+    1D NumPy float array: an array representing the lower box-bounds of this problem
+
+Raises:
+    unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
+      intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_get_ub_docstring()
+{
+    return R"(get_ub()
+
+Upper box-bounds.
+
+This method will return the upper box-bounds for this problem. See :func:`~pygmo.problem.get_bounds()`
+for a detailed explanation of how the bounds are determined.
+
+Returns:
+    1D NumPy float array: an array representing the upper box-bounds of this problem
 
 Raises:
     unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
@@ -3010,27 +3047,64 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_anneali
 
 std::string random_decision_vector_docstring()
 {
-    return R"(random_decision_vector_docstring(lb, ub, nix = 0)
+    return R"(random_decision_vector(prob)
 
-Creates a random decision vector within some bounds using pygmo's global rng. If
-both the lower and upper bounds are finite numbers, then the :math:`i`-th
-component of the randomly generated pagmo::vector_double will be such that
-:math:`lb_i \le x_i < ub_i`. If :math:`lb_i == ub_i` then :math:`lb_i` is
-returned. If an integer part *nix* is specified then the last *nix* components
-are guaranteed to be integers within the specified (integer) bounds.
+This function will generate a decision vector whose values are randomly chosen with uniform probability within
+the lower and upper bounds :math:`lb` and :math:`ub` of the input :class:`~pygmo.problem` *prob*.
+
+For the continuous part of the decision vector, the :math:`i`-th component of the randomly generated decision
+vector will be such that :math:`lb_i \le x_i < ub_i`.
+
+For the discrete part of the decision vector, the :math:`i`-th component of the randomly generated decision vector
+is guaranteed to be an integral value such that :math:`lb_i \le x_i \le ub_i`.
+
+For both the continuous and discrete parts of the decision vector, if :math:`lb_i == ub_i` then :math:`lb_i` is returned.
 
 Args:
-    lb (array-like object): the lower bounds
-    ub (array-like object): the upper bounds
-    nix (``int``): the integer size
-
-Raises:
-    ValueError: if *nix* is negative or greater than an implementation-defined value
-    ValueError: if *lb* and *ub* are malformed (unequal lenght, zero size, *nix* larger than ``len(lb)`` or bounds are not integers in their last *nix* components)
-    TypeError: if *lb* or *ub* cannot be converted to a vector of floats
+    prob (:class:`~pygmo.problem`): the input problem
 
 Returns:
-    1D NumPy float array: the random decision vector
+    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+
+Raises:
+    ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string batch_random_decision_vector_docstring()
+{
+    return R"(batch_random_decision_vector(prob, n)
+
+This function will generate a batch of *n* decision vectors whose values are randomly chosen with uniform probability within
+the lower and upper bounds :math:`lb` and :math:`ub` of the input :class:`~pygmo.problem` *prob*.
+The decision vectors are laid out contiguously in the return value: for a problem with dimension :math:`x`,
+the first decision vector in the return value occupies the index range :math:`\left[0, x\right)`, the second decision vector
+occupies the range :math:`\left[x, 2x\right)`, and so on.
+
+For the continuous parts of the decision vectors, the :math:`i`-th components of the randomly generated decision
+vectors will be such that :math:`lb_i \le x_i < ub_i`.
+
+For the discrete parts of the decision vectors, the :math:`i`-th components of the randomly generated decision vectors
+are guaranteed to be integral values such that :math:`lb_i \le x_i \le ub_i`.
+
+For both the continuous and discrete parts of the decision vectors, if :math:`lb_i == ub_i` then :math:`lb_i` is returned.
+
+Args:
+    prob (:class:`~pygmo.problem`): the input problem
+    n (int): the number of decision vectors that will be generated
+
+Returns:
+    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+
+Raises:
+    OverflowError: in case of (unlikely) overflows
+    ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
 )";
 }
 
@@ -3709,7 +3783,10 @@ std::string set_global_rng_seed_docstring()
 In pygmo it is, in general, possible to control the seed of all random generators by a dedicated *seed* kwarg passed on via various
 constructors. If no *seed* is passed pygmo randomly creates a seed for you using its global random number generator. 
 
-This function allows to be able to reset the seed of auch a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily. 
+This function allows to be able to reset the seed of such a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily. 
+
+Args:
+    seed (int): the new global seed for random number generation
 
 .. note::
    In complex parallel evolutions obtaining a deterministic behaviour is not possible even setting the global seed as

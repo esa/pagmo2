@@ -1328,7 +1328,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    const T *extract() const
+    const T *extract() const noexcept
     {
         auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
@@ -1358,7 +1358,7 @@ public:
      * in the constructor.
      */
     template <typename T>
-    T *extract()
+    T *extract() noexcept
     {
         auto p = dynamic_cast<detail::prob_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
@@ -1369,7 +1369,7 @@ public:
      * @return \p true if the UDP used in construction is of type \p T, \p false otherwise.
      */
     template <typename T>
-    bool is() const
+    bool is() const noexcept
     {
         return extract<T>() != nullptr;
     }
@@ -1739,6 +1739,24 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const
     {
         return std::make_pair(m_lb, m_ub);
+    }
+
+    /// Lower bounds.
+    /**
+     * @return a const reference to the vector of lower box bounds for this problem.
+     */
+    const vector_double &get_lb() const
+    {
+        return m_lb;
+    }
+
+    /// Upper bounds.
+    /**
+     * @return a const reference to the vector of upper box bounds for this problem.
+     */
+    const vector_double &get_ub() const
+    {
+        return m_ub;
     }
 
     /// Number of equality constraints.

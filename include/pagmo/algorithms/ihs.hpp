@@ -225,7 +225,7 @@ public:
                     }
                 } else {
                     // Pick randomly within the bounds.
-                    new_x[i] = std::uniform_real_distribution<>(lb[i], ub[i])(m_e);
+                    new_x[i] = uniform_real_from_range(lb[i], ub[i], m_e);
                 }
             }
 
@@ -236,17 +236,15 @@ public:
                     new_x[i] = pop.get_x()[uni_int(m_e)][i];
                     // Do pitch adjustment with ppar_cur probability.
                     if (drng(m_e) < ppar_cur) {
-                        // This generates minimum 1 and, only if bw_cur ==1 the pitch will be bigger
-                        // than the width. WHich is anyway dealt with later by the bound reflection
-                        unsigned pitch = static_cast<unsigned>(1u + bw_cur * lu_diff[i]);
+                        // This generates minimum 1 and, only if bw_cur == 1 the pitch will be bigger
+                        // than the width. Which is anyway dealt with later by the bound reflection
+                        const double pitch = std::trunc(1 + bw_cur * lu_diff[i]);
                         // Randomly, add or subtract pitch from the current chromosome element.
-                        new_x[i] += std::uniform_real_distribution<>(new_x[i] - pitch, new_x[i] + pitch)(m_e);
+                        new_x[i] += uniform_integral_from_range(new_x[i] - pitch, new_x[i] + pitch, m_e);
                     }
                 } else {
-                    // We need to draw a random integer in [lb, ub]. Since these are floats we
-                    // cannot use integer distributions without risking overflows, hence we use a real
-                    // distribution
-                    new_x[i] = std::floor(uniform_real_from_range(lb[i], ub[i] + 1, m_e));
+                    // Draw a random integer in [lb, ub].
+                    new_x[i] = uniform_integral_from_range(lb[i], ub[i], m_e);
                 }
             }
 

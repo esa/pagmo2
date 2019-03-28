@@ -26,7 +26,7 @@ if((NOT PAGMO_BUILD_PAGMO) AND (NOT PAGMO_BUILD_PYGMO))
 endif()
 
 # Main pagmo/pygmo project version.
-set(PAGMO_PROJECT_VERSION 2.10)
+set(PAGMO_PROJECT_VERSION 2.11)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
@@ -54,12 +54,13 @@ if(PAGMO_BUILD_PAGMO)
     include(CheckCXXSymbolExists)
     include(CMakePushCheckState)
     CHECK_INCLUDE_FILE_CXX("sys/types.h" PAGMO_HAVE_SYS_TYPES_H)
+    CHECK_INCLUDE_FILE_CXX("sys/wait.h" PAGMO_HAVE_SYS_WAIT_H)
     CHECK_INCLUDE_FILE_CXX("unistd.h" PAGMO_HAVE_UNISTD_H)
     cmake_push_check_state(RESET)
     set(CMAKE_REQUIRED_DEFINITIONS -D_POSIX_C_SOURCE=1)
     CHECK_CXX_SYMBOL_EXISTS(fork "unistd.h;sys/types.h" PAGMO_HAVE_FORK_SYSCALL)
     cmake_pop_check_state()
-    if(PAGMO_HAVE_SYS_TYPES_H AND PAGMO_HAVE_UNISTD_H AND PAGMO_HAVE_FORK_SYSCALL)
+    if(PAGMO_HAVE_SYS_TYPES_H AND PAGMO_HAVE_SYS_WAIT_H AND PAGMO_HAVE_UNISTD_H AND PAGMO_HAVE_FORK_SYSCALL)
         message(STATUS "The fork_island UDI will be available.")
         set(PAGMO_WITH_FORK_ISLAND YES)
         set(PAGMO_ENABLE_FORK_ISLAND "#define PAGMO_WITH_FORK_ISLAND")

@@ -27,12 +27,15 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE cmaes_test
-#include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
-#include <boost/test/included/unit_test.hpp>
+
+#include <initializer_list>
 #include <iostream>
 #include <limits> //  std::numeric_limits<double>::infinity();
 #include <string>
+
+#include <boost/lexical_cast.hpp>
+#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/included/unit_test.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cmaes.hpp>
@@ -190,8 +193,8 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     population pop_lb{problem{unbounded_lb{}}};
     population pop_ub{problem{unbounded_ub{}}};
     for (auto i = 0u; i < 20u; ++i) {
-        pop_lb.push_back(pagmo::random_decision_vector({0.}, {1.}, r_engine));
-        pop_ub.push_back(pagmo::random_decision_vector({0.}, {1.}, r_engine));
+        pop_lb.push_back(vector_double{pagmo::uniform_real_from_range(0., 1., r_engine)});
+        pop_ub.push_back(vector_double{pagmo::uniform_real_from_range(0., 1., r_engine)});
     }
     BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_lb), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(pop_ub), std::invalid_argument);
