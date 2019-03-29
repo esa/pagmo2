@@ -506,4 +506,33 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
             BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
         }
     }
+
+    // Try also a ctor with bfe argument but without seed argument.
+    archi00 = archipelago{100, de{}, rosenbrock{20}, bfe{}, 100};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // Try also a ctor with UDI, bfe argument but without seed argument.
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.is<thread_island>());
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
 }

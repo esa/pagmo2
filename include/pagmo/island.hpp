@@ -31,8 +31,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <array>
-#include <boost/any.hpp>
-#include <boost/iterator/indirect_iterator.hpp>
 #include <cassert>
 #include <chrono>
 #include <cstddef>
@@ -51,6 +49,10 @@ see https://www.gnu.org/licenses/. */
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
+#include <boost/any.hpp>
+#include <boost/iterator/indirect_iterator.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
@@ -1781,19 +1783,19 @@ public:
 
 private:
 #if defined(_MSC_VER)
-    template <typename... Args>
+    template <typename...>
     using n_ctor_enabler = int;
 #else
     template <typename... Args>
-    using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args &&...>::value, int>;
+    using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args...>::value, int>;
 #endif
     // The "default" constructor from n islands. Just forward
     // the input arguments to n calls to push_back().
     template <typename... Args>
-    void n_ctor(size_type n, Args &&... args)
+    void n_ctor(size_type n, const Args &... args)
     {
         for (size_type i = 0; i < n; ++i) {
-            // NOTE: don't forward, in order to avoid moving twice
+            // NOTE: we don't perfectly forward, in order to avoid moving twice
             // from the same objects. This also ensures that, when
             // using a ctor without seed, the seed is set to random
             // for each island.
@@ -1804,13 +1806,16 @@ private:
     // We need to constrain with enable_if otherwise, due to the default
     // arguments in the island constructors, the wrong constructor would be called.
     template <typename Algo, typename Prob, typename S1, typename S2,
-              enable_if_t<std::is_constructible<algorithm, Algo &&>::value, int> = 0>
-    void n_ctor(size_type n, Algo &&a, Prob &&p, S1 size, S2 seed)
+              enable_if_t<std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Algo &a, const Prob &p, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
-            push_back(a, p, size, udist(eng));
+            push_back(a, p, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
     // Same as previous, with bfe argument.
@@ -1819,35 +1824,44 @@ private:
     // (whereas now we batch init n times, one for each island). Keep this in mind
     // for future developments.
     template <typename Algo, typename Prob, typename S1, typename S2,
-              enable_if_t<std::is_constructible<algorithm, Algo &&>::value, int> = 0>
-    void n_ctor(size_type n, Algo &&a, Prob &&p, const bfe &b, S1 size, S2 seed)
+              enable_if_t<std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Algo &a, const Prob &p, const bfe &b, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
-            push_back(a, p, b, size, udist(eng));
+            push_back(a, p, b, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
     // Constructor with UDI argument.
     template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
-              enable_if_t<is_udi<uncvref_t<Isl>>::value, int> = 0>
-    void n_ctor(size_type n, Isl &&isl, Algo &&a, Prob &&p, S1 size, S2 seed)
+              enable_if_t<is_udi<Isl>::value && std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
-            push_back(isl, a, p, size, udist(eng));
+            push_back(isl, a, p, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
     // Same as previous, with bfe argument.
     template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
-              enable_if_t<is_udi<uncvref_t<Isl>>::value, int> = 0>
-    void n_ctor(size_type n, Isl &&isl, Algo &&a, Prob &&p, const bfe &b, S1 size, S2 seed)
+              enable_if_t<is_udi<Isl>::value && std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, const bfe &b, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
-            push_back(isl, a, p, b, size, udist(eng));
+            push_back(isl, a, p, b, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
 
@@ -1877,10 +1891,10 @@ public:
      * @throws unspecified any exception thrown by the invoked pagmo::island constructor
      * or by archipelago::push_back().
      */
-    template <typename... Args, n_ctor_enabler<Args...> = 0>
-    explicit archipelago(size_type n, Args &&... args)
+    template <typename... Args, n_ctor_enabler<const Args &...> = 0>
+    explicit archipelago(size_type n, const Args &... args)
     {
-        n_ctor(n, std::forward<Args>(args)...);
+        n_ctor(n, args...);
     }
     /// Copy assignment.
     /**
@@ -1998,8 +2012,13 @@ public:
     }
 
 private:
+#if defined(_MSC_VER)
+    template <typename...>
+    using push_back_enabler = int;
+#else
     template <typename... Args>
-    using push_back_enabler = n_ctor_enabler<Args...>;
+    using push_back_enabler = enable_if_t<std::is_constructible<island, Args...>::value, int>;
+#endif
 
 public:
     /// Add island.
@@ -2021,7 +2040,7 @@ public:
      * @throws unspecified any exception thrown by memory allocation errors or by the invoked constructor
      * of pagmo::island.
      */
-    template <typename... Args, push_back_enabler<Args...> = 0>
+    template <typename... Args, push_back_enabler<Args &&...> = 0>
     void push_back(Args &&... args)
     {
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
