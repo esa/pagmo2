@@ -60,6 +60,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -846,10 +847,8 @@ public:
 
 private:
     template <typename Algo, typename Prob>
-    using algo_prob_enabler
-        = enable_if_t<std::is_constructible<algorithm, Algo &&>::value
-                          && std::is_constructible<population, Prob &&, population::size_type, unsigned>::value,
-                      int>;
+    using algo_prob_enabler = enable_if_t<
+        std::is_constructible<algorithm, Algo &&>::value && std::is_constructible<problem, Prob &&>::value, int>;
 
 public:
     /// Constructor from algorithm, problem, size and seed.
@@ -858,8 +857,8 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
-     *    :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm`, and ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`.
      *
      * \endverbatim
      *
@@ -908,7 +907,7 @@ private:
     template <typename Isl, typename Algo, typename Prob>
     using isl_algo_prob_enabler
         = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
-                          && std::is_constructible<population, Prob &&, population::size_type, unsigned>::value,
+                          && std::is_constructible<problem, Prob &&>::value,
                       int>;
 
 public:
@@ -918,8 +917,8 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
-     *    construct a :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
-     *    :cpp:class:`pagmo::population`.
+     *    construct a :cpp:class:`pagmo::algorithm`, and ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`.
      *
      * \endverbatim
      *
