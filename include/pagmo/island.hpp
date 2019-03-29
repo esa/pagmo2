@@ -53,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
@@ -879,6 +880,30 @@ public:
     {
     }
 
+    /// Constructor from algorithm, problem, batch fitness evaluator, size and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * This constructor is equivalent to the previous one, the only difference being that
+     * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
+     * *b*.
+     * \endverbatim
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input batch fitness evaluator.
+     * @param size the population size.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
+     * island(Algo &&, Pop &&).
+     */
+    template <typename Algo, typename Prob, algo_prob_enabler<Algo, Prob> = 0>
+    explicit island(Algo &&a, Prob &&p, const bfe &b, population::size_type size,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), b, size, seed))
+    {
+    }
+
 private:
     template <typename Isl, typename Algo, typename Prob>
     using isl_algo_prob_enabler
@@ -916,6 +941,31 @@ public:
     explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
+    {
+    }
+
+    /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * This constructor is equivalent to the previous one, the only difference being that
+     * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
+     * *b*.
+     * \endverbatim
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input batch fitness evaluator.
+     * @param size the population size.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
+     * island(Algo &&, Pop &&).
+     */
+    template <typename Isl, typename Algo, typename Prob, isl_algo_prob_enabler<Isl, Algo, Prob> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, const bfe &b, population::size_type size,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), b, size, seed))
     {
     }
     /// Destructor.
