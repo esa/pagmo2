@@ -480,7 +480,7 @@ BOOST_AUTO_TEST_CASE(archipelago_throw_on_ctor)
 
 BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
 {
-    archipelago archi00{100, de{}, rosenbrock{20}, bfe{}, 100, 42};
+    archipelago archi00{100, de{}, rosenbrock{20}, bfe{}, 100u, 42u};
     BOOST_CHECK(archi00.size() == 100u);
     for (const auto &isl : archi00) {
         BOOST_CHECK(isl.get_algorithm().is<de>());
@@ -493,7 +493,7 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
         }
     }
 
-    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100, 42};
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100u, 42u};
     BOOST_CHECK(archi00.size() == 100u);
     for (const auto &isl : archi00) {
         BOOST_CHECK(isl.is<thread_island>());
@@ -508,7 +508,7 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
     }
 
     // Try also a ctor with bfe argument but without seed argument.
-    archi00 = archipelago{100, de{}, rosenbrock{20}, bfe{}, 100};
+    archi00 = archipelago{100, de{}, rosenbrock{20}, bfe{}, 100u};
     BOOST_CHECK(archi00.size() == 100u);
     for (const auto &isl : archi00) {
         BOOST_CHECK(isl.get_algorithm().is<de>());
@@ -522,7 +522,7 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
     }
 
     // Try also a ctor with UDI, bfe argument but without seed argument.
-    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100};
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100u};
     BOOST_CHECK(archi00.size() == 100u);
     for (const auto &isl : archi00) {
         BOOST_CHECK(isl.is<thread_island>());
