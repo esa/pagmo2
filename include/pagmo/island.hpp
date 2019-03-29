@@ -1801,7 +1801,7 @@ private:
             push_back(args...);
         }
     }
-    // These two implement the constructor which contains a seed argument.
+    // These implement the constructor which contains a seed argument.
     // We need to constrain with enable_if otherwise, due to the default
     // arguments in the island constructors, the wrong constructor would be called.
     template <typename Algo, typename Prob, typename S1, typename S2,
@@ -1814,6 +1814,22 @@ private:
             push_back(a, p, size, udist(eng));
         }
     }
+    // Same as previous, with bfe argument.
+    // NOTE: performance wise, it would be better for these constructors from bfe
+    // to batch initialise *all* archi individuals
+    // (whereas now we batch init n times, one for each island). Keep this in mind
+    // for future developments.
+    template <typename Algo, typename Prob, typename S1, typename S2,
+              enable_if_t<std::is_constructible<algorithm, Algo &&>::value, int> = 0>
+    void n_ctor(size_type n, Algo &&a, Prob &&p, const bfe &b, S1 size, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(a, p, b, size, udist(eng));
+        }
+    }
+    // Constructor with UDI argument.
     template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
               enable_if_t<is_udi<uncvref_t<Isl>>::value, int> = 0>
     void n_ctor(size_type n, Isl &&isl, Algo &&a, Prob &&p, S1 size, S2 seed)
@@ -1822,6 +1838,17 @@ private:
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
             push_back(isl, a, p, size, udist(eng));
+        }
+    }
+    // Same as previous, with bfe argument.
+    template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
+              enable_if_t<is_udi<uncvref_t<Isl>>::value, int> = 0>
+    void n_ctor(size_type n, Isl &&isl, Algo &&a, Prob &&p, const bfe &b, S1 size, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(isl, a, p, b, size, udist(eng));
         }
     }
 
