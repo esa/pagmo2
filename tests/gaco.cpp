@@ -1,4 +1,3 @@
-
 #define BOOST_TEST_MODULE gaco_test
 #include <boost/test/included/unit_test.hpp>
 
@@ -10,10 +9,10 @@
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/gaco.hpp>
-#include <pagmo/algorithms/sade.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/cec2006.hpp>
+#include <pagmo/problems/golomb_ruler.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
@@ -24,6 +23,7 @@
 
 using namespace pagmo;
 
+// Construction tests: we verify that the algorithm throws an error for wrong input parameters
 BOOST_AUTO_TEST_CASE(construction_test)
 {
     gaco user_algo{2u, 13u, 1.0, 0.0, 0.01, 1u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 
     // We then check that the evolve throws if called on unsuitable problems
     // Integer variables problem
-    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{minlp_rastrigin{}}, 64u}), std::invalid_argument);
+    //    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{minlp_rastrigin{}}, 64u}), std::invalid_argument);
     // Multi-objective problem
     BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{zdt{}}, 64u}), std::invalid_argument);
     // Empty population
@@ -165,6 +165,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     }
 }
 
+// Coverage tests: we make sure that the algorithm is tested in all the lines
 BOOST_AUTO_TEST_CASE(miscellaneous_tests)
 {
     problem prob{hock_schittkowsky_71{}};
@@ -219,6 +220,7 @@ BOOST_AUTO_TEST_CASE(construction_test_2)
     pop = algo.evolve(pop);
 }
 
+// Inf and NaN tests: we verify that the algo can handle NaN and inf has objectives w/o returning errors
 struct udp_inf {
 
     /// Fitness
@@ -242,7 +244,7 @@ struct udp_inf {
 };
 
 struct udp_nan {
-    
+
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -253,7 +255,7 @@ struct udp_nan {
     {
         return 1u;
     }
-    
+
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -263,12 +265,13 @@ struct udp_nan {
     unsigned int m_dim;
 };
 
-BOOST_AUTO_TEST_CASE(test_for_inf)
+BOOST_AUTO_TEST_CASE(test_for_inf_and_nan)
 {
     gaco{10, 10, 1., -15., 0., 7}.evolve(population{problem{udp_inf{}}, 15u});
     gaco{10, 10, 1., -15., 0., 7}.evolve(population{problem{udp_nan{}}, 15u});
 }
 
+// Memory test: we verify that the algorithm has implemented memory correctly
 BOOST_AUTO_TEST_CASE(memory_test)
 {
     gaco uda{1u, 20u, 1.0, 1e9, 0.01, 1u, 7u, 1000u, 1000u, 100.0, 10u, 0.9, true, 23u};
@@ -283,4 +286,29 @@ BOOST_AUTO_TEST_CASE(memory_test)
     }
     pop_2 = uda_2.evolve(pop_2);
     BOOST_CHECK_EQUAL(pop_1.champion_f()[0], pop_2.champion_f()[0]);
+}
+
+// Integer tests: we verify that the returned population is actually made by integers
+BOOST_AUTO_TEST_CASE(integer_test_1)
+{
+    population pop{minlp_rastrigin{3u, 3u}, 10u, 23u};
+    gaco uda{10u, 10u, 1.0, 1e9, 0.0, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
+    uda.set_verbosity(1u);
+    pop = uda.evolve(pop);
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        auto x = pop.get_x()[i];
+        std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); });
+    }
+}
+
+BOOST_AUTO_TEST_CASE(integer_test_2)
+{
+    population pop{golomb_ruler{7, 10}, 10u, 23u};
+    gaco uda{10u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
+    uda.set_verbosity(1u);
+    pop = uda.evolve(pop);
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        auto x = pop.get_x()[i];
+        std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); });
+    }
 }

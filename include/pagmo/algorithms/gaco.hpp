@@ -1,22 +1,22 @@
 /* Copyright 2017-2018 PaGMO development team
-This file is part of the PaGMO library.
-The PaGMO library is free software; you can redistribute it and/or modify
-it under the terms of either:
-  * the GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 3 of the License, or (at your
-    option) any later version.
-or
-  * the GNU General Public License as published by the Free Software
-    Foundation; either version 3 of the License, or (at your option) any
-    later version.
-or both in parallel, as here.
-The PaGMO library is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
-You should have received copies of the GNU General Public License and the
-GNU Lesser General Public License along with the PaGMO library.  If not,
-see https://www.gnu.org/licenses/. */
+ This file is part of the PaGMO library.
+ The PaGMO library is free software; you can redistribute it and/or modify
+ it under the terms of either:
+ * the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 3 of the License, or (at your
+ option) any later version.
+ or
+ * the GNU General Public License as published by the Free Software
+ Foundation; either version 3 of the License, or (at your option) any
+ later version.
+ or both in parallel, as here.
+ The PaGMO library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+ You should have received copies of the GNU General Public License and the
+ GNU Lesser General Public License along with the PaGMO library.  If not,
+ see https://www.gnu.org/licenses/. */
 
 #ifndef PAGMO_ALGORITHMS_GACO_HPP
 #define PAGMO_ALGORITHMS_GACO_HPP
@@ -155,9 +155,9 @@ public:
 
         // We store some useful variables:
         const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                              // allowed
-        auto dim = prob.get_nx();   // This getter does not return a const reference but a copy of the number of
-                                    // continuous variables
+        // allowed
+        auto n_x = prob.get_nx(); // This getter does not return a const reference but a copy of the number of
+        // all the variables
         auto pop_size = pop.size(); // Population size
         unsigned count_screen = 1u; // regulates the screen output
 
@@ -169,7 +169,7 @@ public:
         auto n_f = prob.get_nf(); // n_f=prob.get_nobj()+prob.get_nec()+prob.get_nic()
 
         // Other useful variables are stored:
-        std::vector<vector_double> sol_archive(m_ker, vector_double(1 + dim + n_f, 1));
+        std::vector<vector_double> sol_archive(m_ker, vector_double(1 + n_x + n_f, 1));
         vector_double omega(m_ker);
         vector_double prob_cumulative(m_ker);
         std::uniform_real_distribution<> dist(0, 1);
@@ -185,10 +185,6 @@ public:
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
                         "The problem appears to be stochastic " + get_name() + " cannot deal with it");
-        }
-        if (prob.get_nix() != 0u) {
-            pagmo_throw(std::invalid_argument, "Integer variables detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
         }
         if (m_gen == 0u) {
             return pop;
@@ -213,197 +209,188 @@ public:
             // At each generation we make a copy of the population into popnew
             population popnew(pop);
 
-            // In the case the algorithm is multi-objective, a decomposition strategy is applied:
-            if (prob.get_nobj() > 1u) {
-                // THIS PART HAS NOT BEEN DEFINED YET
+            auto dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
+            // population (index n) and the number of variables (index k) the number of
+            // variables can be easily be deduced from counting the bounds.
+            auto fit = pop.get_f(); // The following returns a vector of vectors in which objectives, equality and
+            // inequality constraints are concatenated,for each individual
+
+            // I check whether the maximum number of function evaluations or improvements has been exceeded:
+            if (m_impstop != 0 && m_n_impstop >= m_impstop) {
+                std::cout << "max number of impstop exceeded" << std::endl;
+                return pop;
             }
-            // I otherwise proceed with a single-objective algorithm:
-            else {
-                auto dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
-                                        // population (index n) and the number of variables (index k) the number of
-                                        // variables can be easily be deduced from counting the bounds.
-                auto fit = pop.get_f(); // The following returns a vector of vectors in which objectives, equality and
-                                        // inequality constraints are concatenated,for each individual
 
-                // I check whether the maximum number of function evaluations or improvements has been exceeded:
-                if (m_impstop != 0 && m_n_impstop >= m_impstop) {
-                    std::cout << "max number of impstop exceeded" << std::endl;
-                    return pop;
-                }
+            if (m_evalstop != 0 && m_n_evalstop >= m_evalstop) {
+                std::cout << "max number of evalstop exceeded" << std::endl;
+                return pop;
+            }
 
-                if (m_evalstop != 0 && m_n_evalstop >= m_evalstop) {
-                    std::cout << "max number of evalstop exceeded" << std::endl;
-                    return pop;
-                }
+            // 1 - compute penalty functions
 
-                // 1 - compute penalty functions
+            // I declare some useful variables:
+            vector_double penalties(pop_size);
 
-                // I declare some useful variables:
-                vector_double penalties(pop_size);
+            for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+                // Penalty computation is here executed:
+                penalties[i] = penalty_computation(fit[i], pop, n_obj, n_ec, n_ic);
+            }
 
-                for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
-                    // Penalty computation is here executed:
-                    penalties[i] = penalty_computation(fit[i], pop, n_obj, n_ec, n_ic);
-                }
+            // 2 - update and sort solutions in the sol_archive, based on the computed penalties
 
-                // 2 - update and sort solutions in the sol_archive, based on the computed penalties
+            // I declare a vector where the penalties are sorted:
+            vector_double sorted_penalties(penalties);
+            // This sorts the penalties from the smallest ([0]) to the biggest ([end])
+            std::sort(sorted_penalties.begin(), sorted_penalties.end(), detail::less_than_f<double>);
+            // I declare a vector where I will store the positions of the various individuals:
+            std::vector<decltype(penalties.size())> sort_list(penalties.size());
+            // We fill it with 0,1,2,3,...,K
+            std::iota(std::begin(sort_list), std::end(sort_list), 0);
+            std::sort(sort_list.begin(), sort_list.end(),
+                      [&penalties](decltype(penalties.size()) idx1, decltype(penalties.size()) idx2) {
+                          return detail::less_than_f(penalties[idx1], penalties[idx2]);
+                      });
 
-                // I declare a vector where the penalties are sorted:
-                vector_double sorted_penalties(penalties);
-                // This sorts the penalties from the smallest ([0]) to the biggest ([end])
-                std::sort(sorted_penalties.begin(), sorted_penalties.end(), detail::less_than_f<double>);
-                // I declare a vector where I will store the positions of the various individuals:
-                std::vector<decltype(penalties.size())> sort_list(penalties.size());
-                // We fill it with 0,1,2,3,...,K
-                std::iota(std::begin(sort_list), std::end(sort_list), 0);
-                std::sort(sort_list.begin(), sort_list.end(),
-                          [&penalties](decltype(penalties.size()) idx1, decltype(penalties.size()) idx2) {
-                              return detail::less_than_f(penalties[idx1], penalties[idx2]);
-                          });
+            if (m_memory == true && m_counter > 1) {
+                sol_archive = m_sol_archive;
+            }
+            if (gen == 1 && m_counter < 2) {
 
-                if (m_memory == true && m_counter > 1) {
-                    sol_archive = m_sol_archive;
-                }
-                if (gen == 1 && m_counter < 2) {
-
-                    // We initialize the solution archive (sol_archive). This is done by storing the individuals from
-                    // the best one (in terms of penalty), placed in the first row, to the worst one, placed in the last
-                    // row:
-                    for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
-                        sol_archive[i][0] = penalties[sort_list[i]];
-                        for (decltype(dim) k = 0; k < dim; ++k) {
-                            sol_archive[i][k + 1] = dvs[sort_list[i]][k];
-                        }
-                        for (decltype(n_f) j = 0; j < n_f; ++j) {
-                            sol_archive[i][j + 1 + dim] = fit[sort_list[i]][j];
-                        }
+                // We initialize the solution archive (sol_archive). This is done by storing the individuals from
+                // the best one (in terms of penalty), placed in the first row, to the worst one, placed in the last
+                // row:
+                for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
+                    sol_archive[i][0] = penalties[sort_list[i]];
+                    for (decltype(n_x) k = 0; k < n_x; ++k) {
+                        sol_archive[i][k + 1] = dvs[sort_list[i]][k];
                     }
-                    if (m_memory == true) {
-                        m_sol_archive = sol_archive;
-                    }
-
-                } else {
-                    update_sol_archive(pop, sorted_penalties, sort_list, sol_archive, n_ec);
-                    if (m_memory == true) {
-                        m_sol_archive = sol_archive;
+                    for (decltype(n_f) j = 0; j < n_f; ++j) {
+                        sol_archive[i][j + 1 + n_x] = fit[sort_list[i]][j];
                     }
                 }
+                if (m_memory == true) {
+                    m_sol_archive = sol_archive;
+                }
 
-                // 3 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+            } else {
+                update_sol_archive(pop, sorted_penalties, sort_list, sol_archive, n_ec);
+                if (m_memory == true) {
+                    m_sol_archive = sol_archive;
+                }
+            }
 
-                if ((m_verbosity > 0u && gen != m_gen) || (m_verbosity > 0u && m_memory == true)) {
-                    // Every m_verbosity generations print a log line
-                    if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                        auto best_fit = sol_archive[0][1 + dim];
-                        double dx = 0., dp = 0.;
-                        // The population flattness in variables
-                        for (decltype(dim) i = 0u; i < dim; ++i) {
-                            dx += std::abs(sol_archive[m_ker - 1][1 + i] - sol_archive[0][1 + i]);
-                        }
-                        // The population flattness in penalty
-                        dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
-                        // Every line print the column names
-                        if (m_memory == false) {
-                            if (count_screen % 50u == 1u) {
-                                print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
-                                      "Best:", std::setw(15), "Kernel:", std::setw(15), "Oracle:", std::setw(15),
-                                      "dx:", std::setw(15), std::setw(15), "dp:", '\n');
-                            }
+            // 3 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
 
-                        } else if ((m_memory == true && m_counter == 1)
-                                   || (m_memory == true && m_counter % 50u == 1u)) {
+            if ((m_verbosity > 0u && gen != m_gen) || (m_verbosity > 0u && m_memory == true)) {
+                // Every m_verbosity generations print a log line
+                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                    auto best_fit = sol_archive[0][1 + n_x];
+                    double dx = 0., dp = 0.;
+                    // The population flattness in variables
+                    for (decltype(n_x) i = 0u; i < n_x; ++i) {
+                        dx += std::abs(sol_archive[m_ker - 1][1 + i] - sol_archive[0][1 + i]);
+                    }
+                    // The population flattness in penalty
+                    dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
+                    // Every line print the column names
+                    if (m_memory == false) {
+                        if (count_screen % 50u == 1u) {
                             print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
                                   "Best:", std::setw(15), "Kernel:", std::setw(15), "Oracle:", std::setw(15),
                                   "dx:", std::setw(15), std::setw(15), "dp:", '\n');
                         }
-                        print(std::setw(7), gen, std::setw(15), m_fevals, std::setw(15), best_fit, std::setw(15), m_ker,
-                              std::setw(15), m_oracle, std::setw(15), dx, std::setw(15), dp, '\n');
 
-                        ++count_screen;
-                        // Logs
-                        m_log.emplace_back(gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp);
+                    } else if ((m_memory == true && m_counter == 1) || (m_memory == true && m_counter % 50u == 1u)) {
+                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
+                              "Best:", std::setw(15), "Kernel:", std::setw(15), "Oracle:", std::setw(15),
+                              "dx:", std::setw(15), std::setw(15), "dp:", '\n');
                     }
+                    print(std::setw(7), gen, std::setw(15), m_fevals, std::setw(15), best_fit, std::setw(15), m_ker,
+                          std::setw(15), m_oracle, std::setw(15), dx, std::setw(15), dp, '\n');
+
+                    ++count_screen;
+                    // Logs
+                    m_log.emplace_back(gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp);
+                }
+            }
+
+            // 4 - compute pheromone values
+
+            vector_double sigma(n_x);
+            pheromone_computation(gen, prob_cumulative, omega, sigma, pop, sol_archive);
+
+            // 5 - use pheromone values to generate new ants (i.e., individuals)
+
+            // I create the vector of vectors where I will store all the new ants which will be generated:
+            std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
+            generate_new_ants(popnew, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
+
+            for (population::size_type i = 0; i < pop_size; ++i) {
+                vector_double ant(n_x);
+                // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
+                // function
+                for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
+                    ant[ii] = new_ants[i][ii];
                 }
 
-                // 4 - compute pheromone values
+                auto fitness = prob.fitness(ant);
+                ++m_fevals;
+                // I set the individuals for the next generation
+                pop.set_xf(i, ant, fitness);
+            }
 
-                vector_double sigma(dim);
-                pheromone_computation(gen, prob_cumulative, omega, sigma, pop, sol_archive);
+            // The oracle parameter is updated after each optimization run, if needed:
+            if (sol_archive[0][1 + n_x] < m_oracle) {
+                double residual = 0.0;
+                for (decltype(m_ker) rows = 0u; rows < m_ker; ++rows) {
+                    if (rows == 0u && n_ic == 0 && n_ec == 0) {
+                        m_oracle = sol_archive[0][1 + n_x];
 
-                // 5 - use pheromone values to generate new ants (i.e., individuals)
-
-                // I create the vector of vectors where I will store all the new ants which will be generated:
-                std::vector<vector_double> new_ants(pop_size, vector_double(dim, 1));
-                generate_new_ants(popnew, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
-
-                for (population::size_type i = 0; i < pop_size; ++i) {
-                    vector_double ant(dim);
-                    // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
-                    // function
-                    for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
-                        ant[ii] = new_ants[i][ii];
-                    }
-
-                    auto fitness = prob.fitness(ant);
-                    ++m_fevals;
-                    // I set the individuals for the next generation
-                    pop.set_xf(i, ant, fitness);
-                }
-
-                // The oracle parameter is updated after each optimization run, if needed:
-                if (sol_archive[0][1 + dim] < m_oracle) {
-                    double residual = 0.0;
-                    for (decltype(m_ker) rows = 0u; rows < m_ker; ++rows) {
-                        if (rows == 0u && n_ic == 0 && n_ec == 0) {
-                            m_oracle = sol_archive[0][1 + dim];
-
-                        } else {
-                            vector_double f(n_obj + n_ec + n_ic);
-                            for (decltype(n_obj + n_ec + n_ic) jj = 0u; jj < n_obj + n_ec + n_ic; ++jj) {
-                                f[jj] = sol_archive[rows][1 + dim + jj];
-                            }
-
-                            // Here we compute the L_2 norm of the penalty violations
-                            auto violation_ic = detail::test_eq_constraints(f.data() + n_obj, f.data() + n_obj + n_ec,
-                                                                            prob.get_c_tol().data());
-                            auto violation_ec = detail::test_ineq_constraints(
-                                f.data() + n_obj + n_ec, f.data() + f.size(), prob.get_c_tol().data() + n_ec);
-                            residual = std::sqrt(std::pow(violation_ic.second, 2) + std::pow(violation_ec.second, 2));
-
-                            if (rows == 0u && residual == 0.0) {
-                                m_oracle = sol_archive[0][1 + dim];
-                            }
+                    } else {
+                        vector_double f(n_obj + n_ec + n_ic);
+                        for (decltype(n_obj + n_ec + n_ic) jj = 0u; jj < n_obj + n_ec + n_ic; ++jj) {
+                            f[jj] = sol_archive[rows][1 + n_x + jj];
                         }
 
-                        double fitness_value = sol_archive[rows][1 + dim];
-                        double alpha = 0.0;
-                        double diff = std::abs(fitness_value - m_oracle); // I define this value which I will use often
+                        // Here we compute the L_2 norm of the penalty violations
+                        auto violation_ic = detail::test_eq_constraints(f.data() + n_obj, f.data() + n_obj + n_ec,
+                                                                        prob.get_c_tol().data());
+                        auto violation_ec = detail::test_ineq_constraints(f.data() + n_obj + n_ec, f.data() + f.size(),
+                                                                          prob.get_c_tol().data() + n_ec);
+                        residual = std::sqrt(std::pow(violation_ic.second, 2) + std::pow(violation_ec.second, 2));
 
-                        if (fitness_value > m_oracle && residual < diff / 3.0) {
-                            alpha = (diff * (6.0 * std::sqrt(3.0) - 2.0) / (6.0 * std::sqrt(3)) - residual)
-                                    / (diff - residual);
-
-                        } else if (fitness_value > m_oracle && residual >= diff / 3.0 && residual <= diff) {
-                            alpha = 1.0 - 1.0 / (2.0 * std::sqrt(diff / residual));
-
-                        } else if (fitness_value > m_oracle && residual > diff) {
-                            alpha = 1.0 / 2.0 * std::sqrt(diff / residual);
-                        }
-
-                        // I can now compute the penalty function value
-                        if (fitness_value > m_oracle || residual > 0) {
-                            sol_archive[rows][0] = alpha * diff + (1 - alpha) * residual;
-
-                        } else if (fitness_value <= m_oracle && residual == 0) {
-                            sol_archive[rows][0] = -diff;
+                        if (rows == 0u && residual == 0.0) {
+                            m_oracle = sol_archive[0][1 + n_x];
                         }
                     }
-                    if (m_memory == true) {
-                        m_sol_archive = sol_archive;
+
+                    double fitness_value = sol_archive[rows][1 + n_x];
+                    double alpha = 0.0;
+                    double diff = std::abs(fitness_value - m_oracle); // I define this value which I will use often
+
+                    if (fitness_value > m_oracle && residual < diff / 3.0) {
+                        alpha = (diff * (6.0 * std::sqrt(3.0) - 2.0) / (6.0 * std::sqrt(3)) - residual)
+                                / (diff - residual);
+
+                    } else if (fitness_value > m_oracle && residual >= diff / 3.0 && residual <= diff) {
+                        alpha = 1.0 - 1.0 / (2.0 * std::sqrt(diff / residual));
+
+                    } else if (fitness_value > m_oracle && residual > diff) {
+                        alpha = 1.0 / 2.0 * std::sqrt(diff / residual);
+                    }
+
+                    // I can now compute the penalty function value
+                    if (fitness_value > m_oracle || residual > 0) {
+                        sol_archive[rows][0] = alpha * diff + (1 - alpha) * residual;
+
+                    } else if (fitness_value <= m_oracle && residual == 0) {
+                        sol_archive[rows][0] = -diff;
                     }
                 }
-
-            } // end of single objective part
+                if (m_memory == true) {
+                    m_sol_archive = sol_archive;
+                }
+            }
 
         } // end of main ACO loop
 
@@ -412,14 +399,14 @@ public:
         if (m_memory == false) {
             for (decltype(m_ker) i_ker = 0; i_ker < m_ker; ++i_ker) {
 
-                vector_double ant_final(dim);
+                vector_double ant_final(n_x);
                 vector_double fitness_final(n_f);
-                for (decltype(dim) ii_dim = 0u; ii_dim < dim; ++ii_dim) {
+                for (decltype(n_x) ii_dim = 0u; ii_dim < n_x; ++ii_dim) {
                     ant_final[ii_dim] = sol_archive[i_ker][1 + ii_dim];
                 }
 
                 for (decltype(n_f) ii_f = 0u; ii_f < n_f; ++ii_f) {
-                    fitness_final[ii_f] = sol_archive[i_ker][1 + dim + ii_f];
+                    fitness_final[ii_f] = sol_archive[i_ker][1 + n_x + ii_f];
                 }
                 pop.set_xf(i_ker, ant_final, fitness_final);
             }
@@ -429,7 +416,7 @@ public:
             if (m_gen % m_verbosity == 1u || m_verbosity == 1u) {
                 double dx = 0., dp = 0.;
                 // The population flattness in variables
-                for (decltype(dim) i = 0u; i < dim; ++i) {
+                for (decltype(n_x) i = 0u; i < n_x; ++i) {
                     dx += std::abs(sol_archive[m_ker - 1][1 + i] - sol_archive[0][1 + i]);
                 }
                 // The population flattness in penalty
@@ -775,7 +762,8 @@ private:
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
-        auto n_con = prob.get_nx();
+        auto n_con = prob.get_ncx();
+        auto n_tot = prob.get_nx();
 
         // Here we define the weights:
         if (m_memory == false) {
@@ -827,7 +815,7 @@ private:
         }
 
         // We now compute the standard deviations (sigma):
-        for (decltype(n_con) h = 1; h <= n_con; ++h) {
+        for (decltype(n_tot) h = 1; h <= n_tot; ++h) {
 
             // I declare and define D_min and D_max:
             // at first I define D_min, D_max using the first two individuals stored in the sol_archive
@@ -861,7 +849,15 @@ private:
                 sigma_vec[h - 1] = (ub[h - 1] - lb[h - 1]) / m_focus;
 
             } else {
-                sigma_vec[h - 1] = (d_max - d_min) / m_gen_mark;
+                if (h <= n_con) {
+                    // continuous variables case:
+                    sigma_vec[h - 1] = (d_max - d_min) / m_gen_mark;
+
+                } else {
+                    // integer variables case:
+                    sigma_vec[h - 1] = std::max(std::max((d_max - d_min) / m_gen_mark, 1.0 / m_gen_mark),
+                                                (1.0 - 1.0 / (std::sqrt(n_tot - n_con))));
+                }
             }
         }
     }
@@ -888,7 +884,8 @@ private:
 
         const auto &prob = pop.get_problem();
         auto pop_size = pop.size();
-        auto n_con = prob.get_nx();
+        auto n_con = prob.get_ncx();
+        auto n_tot = prob.get_nx();
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
@@ -900,7 +897,7 @@ private:
         // prob_cumulative vector. A multi-kernel pdf is a weighted sum of several gaussian pdf.
 
         for (decltype(pop_size) j = 0u; j < pop_size; ++j) {
-            vector_double dvs_new_j(n_con);
+            vector_double dvs_new_j(n_tot);
 
             double number = dist(m_e);
             double g_h = 0.0;
@@ -919,7 +916,7 @@ private:
                     }
                 }
             }
-            for (decltype(n_con) h = 0u; h < n_con; ++h) {
+            for (decltype(n_tot) h = 0u; h < n_tot; ++h) {
                 g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
 
                 if (g_h < lb[h] || g_h > ub[h]) {
@@ -938,7 +935,11 @@ private:
                         g_h = lb[h];
                     }
                 }
-                dvs_new_j[h] = g_h;
+                if (h >= n_con) {
+                    dvs_new_j[h] = std::round(g_h);
+                } else {
+                    dvs_new_j[h] = g_h;
+                }
             }
             dvs_new[j] = dvs_new_j;
         }
