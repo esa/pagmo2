@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(cec2006_fitness_test)
     // We check that all problems return a fitness
     for (unsigned i = 1u; i <= 24u; ++i) {
         cec2006 udp{i};
-        auto x = random_decision_vector(statics::m_bounds[i - 1u], r_engine); // a random vector
+        auto x = random_decision_vector(problem(udp), r_engine); // a random vector
         auto f = udp.fitness(x);
         BOOST_CHECK_EQUAL(f.size(), statics::m_nec[i - 1u] + statics::m_nic[i - 1u] + 1);
         BOOST_CHECK((udp.get_name().find("CEC2006 - g")) != std::string::npos);

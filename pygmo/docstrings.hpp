@@ -54,6 +54,8 @@ std::string problem_docstring();
 std::string problem_get_best_docstring(const std::string &);
 std::string problem_fitness_docstring();
 std::string problem_get_bounds_docstring();
+std::string problem_get_lb_docstring();
+std::string problem_get_ub_docstring();
 std::string problem_get_nec_docstring();
 std::string problem_get_nic_docstring();
 std::string problem_get_nobj_docstring();
@@ -196,6 +198,7 @@ std::string generic_uda_inner_algorithm_docstring();
 // utilities
 // generic
 std::string random_decision_vector_docstring();
+std::string batch_random_decision_vector_docstring();
 // hypervolume
 std::string hv_init1_docstring();
 std::string hv_init2_docstring();
