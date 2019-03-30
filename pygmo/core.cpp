@@ -44,15 +44,12 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
-#include <cassert>
-#include <cstdint>
 #include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <tuple>
 #include <unordered_set>
-#include <utility>
 #include <vector>
 
 #include <boost/numeric/conversion/cast.hpp>
@@ -88,7 +85,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
@@ -299,27 +295,6 @@ static inline constexpr unsigned max_unsigned()
 // The set containing the list of registered APs.
 static std::unordered_set<std::string> ap_set;
 
-// Small private helper to generate a random decision vector
-// for the input problem p.
-static inline bp::object random_dv_for_problem(const problem &p)
-{
-    using rng_type = detail::random_engine_type;
-    using rng_seed_type = typename rng_type::result_type;
-
-    const auto prob_bounds = p.get_bounds();
-    const auto nix = p.get_nix();
-
-    rng_type eng(static_cast<rng_seed_type>(random_device::next()));
-
-    return pygmo::v_to_a(random_decision_vector(prob_bounds, eng, nix));
-}
-
-// Small wrapper for pagmo::random_device::next().
-static inline unsigned random_device_next()
-{
-    return random_device::next();
-}
-
 // Detect if pygmo can use the multiprocessing module.
 // NOTE: the mp machinery is supported since Python 3.4 or on Windows.
 #if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
@@ -390,101 +365,6 @@ BOOST_PYTHON_MODULE(core)
     // destroyed at the end of island::wait().
     detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
 
-    // Override the default implementation of the parallel init functionality for the population class.
-    detail::pop_parinit<>::s_func
-        = [](const std::string &init_mode, problem &prob, unsigned seed, population::size_type pop_size) {
-              constexpr char valid_modes[] = "['par_auto', 'par_thread'"
-#if defined(PYGMO_CAN_USE_MP)
-                                             ", 'par_mp'"
-#endif
-                                             ", 'par_ipy']";
-
-              // Prepare the return values.
-              std::pair<std::vector<vector_double>, std::vector<vector_double>> retval;
-              retval.first.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
-              retval.second.resize(boost::numeric_cast<vector_double::size_type>(pop_size));
-
-              auto parinit_impl = [&](const std::string &backend) {
-                  // NOTE: see explanation above about the use of a gte.
-                  pygmo::gil_thread_ensurer gte;
-
-                  assert(backend == "mp" || backend == "ipy");
-
-                  // Import the function implementing the mp/ipy parallel generation of
-                  // an individual.
-                  bp::object gen_individual
-                      = bp::import("pygmo._parinit").attr(("_" + backend + "_generate_individual").c_str());
-
-                  // Init the vector of futures.
-                  std::vector<bp::object> futures;
-                  // Small helper to wait on all the futures.
-                  auto wait_all_futs = [&futures]() {
-                      for (auto &f : futures) {
-                          f.attr("wait")();
-                      }
-                  };
-
-                  try {
-                      for (population::size_type i = 0; i != pop_size; ++i) {
-                          futures.push_back(gen_individual(prob));
-                      }
-                  } catch (...) {
-                      // If anything goes wrong here, let's wait on all the
-                      // futures created so far before re-throwing.
-                      wait_all_futs();
-                      throw;
-                  }
-
-                  // Wait for the computations to finish.
-                  wait_all_futs();
-
-                  // Fetch the results from the futures and write them
-                  // into retval. If any exception has been thrown in the remote
-                  // process, it will be re-raised here.
-                  for (population::size_type i = 0; i != pop_size; ++i) {
-                      auto ret = futures[i].attr("get")();
-                      retval.first[i] = pygmo::to_vd(ret[0]);
-                      retval.second[i] = pygmo::to_vd(ret[1]);
-                  }
-              };
-
-              if (init_mode == "par_auto") {
-                  // Auto-detected parallel mode: threading if possible,
-                  // otherwise mp or ipy.
-                  if (prob.get_thread_safety() >= thread_safety::basic) {
-                      detail::pop_parinit_thread(retval, prob, seed, pop_size);
-                  } else {
-                      parinit_impl(
-#if defined(PYGMO_CAN_USE_MP)
-                          "mp"
-#else
-                          "ipy"
-#endif
-                      );
-                  }
-              } else if (init_mode == "par_thread") {
-                  // The user specifically requested parallel threaded mode.
-                  // This will throw if the problem is not thread-safe.
-                  detail::pop_parinit_thread(retval, prob, seed, pop_size);
-#if defined(PYGMO_CAN_USE_MP)
-              } else if (init_mode == "par_mp") {
-                  // Explicitly requested parallel mp mode.
-                  parinit_impl("mp");
-#endif
-              } else if (init_mode == "par_ipy") {
-                  // Explicitly requested parallel ipy mode.
-                  parinit_impl("ipy");
-              } else {
-                  // Wrong mode.
-                  pagmo_throw(std::invalid_argument,
-                              "The '" + init_mode
-                                  + "' parallel population initialisation mode is not valid. The valid modes are: "
-                                  + valid_modes);
-              }
-
-              return retval;
-          };
-
     // Setup doc options
     bp::docstring_options doc_options;
     doc_options.enable_all();
@@ -517,12 +397,6 @@ BOOST_PYTHON_MODULE(core)
 
     // The max_unsigned() helper.
     bp::def("_max_unsigned", &max_unsigned);
-
-    // The random_dv_for_problem() helper.
-    bp::def("_random_dv_for_problem", &random_dv_for_problem);
-
-    // The random_device_next() helper.
-    bp::def("_random_device_next", &random_device_next);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
@@ -581,8 +455,8 @@ BOOST_PYTHON_MODULE(core)
     // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
     // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
     // This way we avoid having to expose a different ctor for every exposed C++ prob.
-    pop_class
-        .def(bp::init<const problem &, population::size_type, unsigned, const std::string &>())
+    pop_class.def(bp::init<const problem &, population::size_type>())
+        .def(bp::init<const problem &, population::size_type, unsigned>())
         // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
@@ -665,6 +539,11 @@ BOOST_PYTHON_MODULE(core)
              pygmo::problem_get_lb_docstring().c_str())
         .def("get_ub", lcast([](const pagmo::problem &p) { return pygmo::v_to_a(p.get_ub()); }),
              pygmo::problem_get_ub_docstring().c_str())
+        .def("batch_fitness", lcast([](const pagmo::problem &p, const bp::object &dvs) {
+                 return pygmo::v_to_a(p.batch_fitness(pygmo::to_vd(dvs)));
+             }),
+             pygmo::problem_batch_fitness_docstring().c_str(), (bp::arg("dvs")))
+        .def("has_batch_fitness", &problem::has_batch_fitness, pygmo::problem_has_batch_fitness_docstring().c_str())
         .def("gradient", lcast([](const pagmo::problem &p, const bp::object &dv) {
                  return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv)));
              }),

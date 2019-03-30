@@ -138,6 +138,35 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
         return std::make_pair(pygmo::to_vd(tup[0]), pygmo::to_vd(tup[1]));
     }
     // Optional methods.
+    virtual vector_double batch_fitness(const vector_double &dv) const override final
+    {
+        auto bf = pygmo::callable_attribute(m_value, "batch_fitness");
+        if (bf.is_none()) {
+            pygmo_throw(PyExc_NotImplementedError,
+                        ("the batch_fitness() method has been invoked, but it is not implemented "
+                         "in the user-defined Python problem '"
+                         + pygmo::str(m_value) + "' of type '" + pygmo::str(pygmo::type(m_value))
+                         + "': the method is either not present or not callable")
+                            .c_str());
+        }
+        return pygmo::to_vd(bf(pygmo::v_to_a(dv)));
+    }
+    virtual bool has_batch_fitness() const override final
+    {
+        // Same logic as in C++:
+        // - without a batch_fitness() method, return false;
+        // - with a batch_fitness() and no override, return true;
+        // - with a batch_fitness() and override, return the value from the override.
+        auto bf = pygmo::callable_attribute(m_value, "batch_fitness");
+        if (bf.is_none()) {
+            return false;
+        }
+        auto hbf = pygmo::callable_attribute(m_value, "has_batch_fitness");
+        if (hbf.is_none()) {
+            return true;
+        }
+        return bp::extract<bool>(hbf());
+    }
     virtual vector_double::size_type get_nobj() const override final
     {
         return getter_wrapper<vector_double::size_type>(m_value, "get_nobj", 1u);

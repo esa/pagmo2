@@ -1135,12 +1135,12 @@ struct prob_inner final : prob_inner_base {
  * unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the
  * following methods:
  * @code{.unparsed}
- * vector_double batch_fitness(const vector_double &) const;
- * bool has_batch_fitness() const;
  * vector_double::size_type get_nobj() const;
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
  * vector_double::size_type get_nix() const;
+ * vector_double batch_fitness(const vector_double &) const;
+ * bool has_batch_fitness() const;
  * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
  * bool has_gradient_sparsity() const;

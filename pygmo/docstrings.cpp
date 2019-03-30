@@ -388,6 +388,10 @@ methods:
      ...
    def get_nix(self):
      ...
+   def batch_fitness(self, dvs):
+     ...
+   def has_batch_fitness(self):
+     ...
    def has_gradient(self):
      ...
    def gradient(self, dv):
@@ -538,6 +542,71 @@ Returns:
 Raises:
     unspecified: any exception thrown by the invoked method of the underlying C++ class, or failures at the
       intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_batch_fitness_docstring()
+{
+    return R"(batch_fitness(dvs)
+
+This method implements the evaluation of multiple decision vectors in batch mode
+by invoking the ``batch_fitness()`` method of the UDP. The ``batch_fitness()``
+method of the UDP accepts in input a batch of decision vectors, *dvs*, stored contiguously:
+for a problem with dimension :math:`n`, the first decision vector in *dvs* occupies
+the index range :math:`\left[0, n\right)`, the second decision vector occupies the range
+:math:`\left[n, 2n\right)`, and so on. The return value is the batch of fitness vectors *fvs*
+resulting from computing the fitness of the input decision vectors.
+*fvs* is also stored contiguously: for a problem with fitness dimension :math:`f`, the first fitness
+vector will occupy the index range :math:`\left[0, f\right)`, the second fitness vector
+will occupy the range :math:`\left[f, 2f\right)`, and so on.
+
+If the UDP provides a ``batch_fitness()`` method, this method will forward ``dvs``
+to the ``batch_fitness()`` method of the UDP after sanity checks. The output of the ``batch_fitness()``
+method of the UDP will also be checked before being returned. If the UDP does not provide a
+``batch_fitness()`` method, an error will be raised.
+
+A successful call of this method will increase the internal fitness evaluation counter
+(see :func:`~pygmo.problem.get_fevals()`).
+
+The ``batch_fitness()`` method of the UDP must be able to take as input the decision vectors as a 1D NumPy array,
+and it must return the fitness vectors as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).
+
+Args:
+    dvs (array-like object): the decision vectors (chromosomes) to be evaluated in batch mode
+
+Returns:
+    1D NumPy float array: the fitness vectors of *dvs*
+
+Raises:
+    ValueError: if *dvs* and/or the return value are not compatible with the problem's properties
+    unspecified: any exception thrown by the ``batch_fitness()`` method of the UDP, or by failures at the intersection
+      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string problem_has_batch_fitness_docstring()
+{
+    return R"(has_batch_fitness()
+
+Check if the ``batch_fitness()`` method is available in the UDP.
+
+This method will return ``True`` if the ``batch_fitness()`` method is available in the UDP, ``False`` otherwise.
+
+The availability of the ``batch_fitness()`` method is determined as follows:
+
+* if the UDP does not provide a ``batch_fitness()`` method, then this method will always return ``False``;
+* if the UDP provides a ``batch_fitness()`` method but it does not provide a ``has_batch_fitness()`` method,
+  then this method will always return ``True``;
+* if the UDP provides both a ``batch_fitness()`` and a ``has_batch_fitness()`` method, then this method will return
+  the output of the ``has_batch_fitness()`` method of the UDP.
+
+The optional ``has_batch_fitness()`` method of the UDP must return a ``bool``. For information on how to
+implement the ``batch_fitness()`` method of the UDP, see :func:`~pygmo.problem.batch_fitness()`.
+
+Returns:
+    ``bool``: a flag signalling the availability of the ``batch_fitness()`` method in the UDP
 
 )";
 }
