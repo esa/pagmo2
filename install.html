@@ -21,10 +21,6 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -188,7 +184,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="installation-guide">
 <span id="install"></span><h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this headline">¶</a></h1>
@@ -212,13 +208,16 @@ command:</p>
 </pre></div>
 </div>
 <p>Once you are in pagmo’s source tree, you must configure your build using <code class="docutils literal"><span class="pre">cmake</span></code>. This will allow
-you to enable support for optional dependencies, configure the install destination, etc. When done,
-you can install pagmo via the command</p>
+you to enable support for optional dependencies, configure the install destination, etc. For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>~/.local .
+</pre></div>
+</div>
+<p>The headers will be installed in the <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX/include</span></code> directory.
+When done, you can install pagmo via the command:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install
 </pre></div>
 </div>
-<p>The headers will be installed in the <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX/include</span></code> directory. To check that all went well
-compile the <a class="reference internal" href="quickstart.html#getting-started-c"><span class="std std-ref">quick-start example</span></a>.</p>
+<p>To check that all went well compile the <a class="reference internal" href="quickstart.html#getting-started-c"><span class="std std-ref">quick-start example</span></a>.</p>
 <p>pagmo is also available via the <a class="reference external" href="https://conda.io/docs/">conda</a> package manager for Linux, OSX and Windows.
 In order to install pagmo via conda, you just need to add <code class="docutils literal"><span class="pre">conda-forge</span></code> to the channels,
 and then we can immediately install pagmo:</p>
