@@ -2445,7 +2445,7 @@ Returns:
     * ``dp`` (``float``), absolute value of the difference between the worst and best solutions' penalty values
 
 Examples:
-    >>> from pygmo as pg
+    >>> import pygmo as pg
     >>> prob = pg.problem(pg.rosenbrock(dim = 2))
     >>> pop = pg.population(prob, 13, 23)
     >>> algo = pg.algorithm(pg.gaco(10, 13, 1.0, 1e9, 0.0, 1, 7, 100000, 100000, 0.0, 10, 0.9, False, 23))

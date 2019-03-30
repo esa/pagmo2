@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(construction_test)
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 23u);
     BOOST_CHECK((user_algo.get_log() == gaco::log_type{}));
-
+    
     BOOST_CHECK_THROW((gaco{2u, 13u, 1.0, 0.0, -0.01, 1u, 7u, 1000u, 1000u, 0.1, 10u, 0.9, false, 23u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((gaco{2u, 13u, 1.0, 0.0, 0.01, 1u, 7u, 1000u, 1000u, -0.1, 10u, 0.9, false, 23u}),
@@ -56,24 +56,24 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         population pop1{prob, 10u, 23u};
         population pop2{prob, 10u, 23u};
         population pop3{prob, 10u, 23u};
-
+        
         for (unsigned int i = 1u; i < 3u; ++i) {
             gaco user_algo1{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
-
+            
             BOOST_CHECK(user_algo1.get_log().size() > 0u);
-
+            
             gaco user_algo2{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo2.set_verbosity(1u);
             pop2 = user_algo2.evolve(pop2);
-
+            
             BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
-
+            
             gaco user_algo3{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo3.set_verbosity(1u);
             pop3 = user_algo3.evolve(pop3);
-
+            
             BOOST_CHECK(user_algo2.get_log() == user_algo3.get_log());
         }
     }
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         pop = user_algo.evolve(pop);
         BOOST_CHECK(user_algo.get_log().size() < 200u);
     }
-
+    
     // We then check that the evolve throws if called on unsuitable problems
     // Integer variables problem
     //    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{minlp_rastrigin{}}, 64u}), std::invalid_argument);
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     algorithm algo{gaco{10u, 13u, 1.0, 100.0, 0.01, 9u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
-
+    
     // Store the string representation of p.
     std::stringstream ss;
     auto before_text = boost::lexical_cast<std::string>(algo);
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE(construction_test_2)
 
 // Inf and NaN tests: we verify that the algo can handle NaN and inf has objectives w/o returning errors
 struct udp_inf {
-
+    
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -233,7 +233,7 @@ struct udp_inf {
     {
         return 1u;
     }
-
+    
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -244,7 +244,7 @@ struct udp_inf {
 };
 
 struct udp_nan {
-
+    
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -255,7 +255,7 @@ struct udp_nan {
     {
         return 1u;
     }
-
+    
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -276,15 +276,23 @@ BOOST_AUTO_TEST_CASE(memory_test)
 {
     gaco uda{1u, 20u, 1.0, 1e9, 0.01, 1u, 7u, 1000u, 1000u, 100.0, 10u, 0.9, true, 23u};
     gaco uda_2{10u, 20u, 1.0, 1e9, 0.01, 1u, 7u, 1000u, 1000u, 100.0, 10u, 0.9, false, 23u};
+    // for coverage purposes we introduce also a third one:
+    gaco uda_3{1u, 2u, 1.0, 1e9, 0.01, 1u, 7u, 1000u, 1000u, 100.0, 10u, 0.9, false, 23u};
     uda.set_seed(23u);
     uda_2.set_seed(23u);
+    uda_3.set_seed(23u);
+    uda.set_verbosity(1u);
+    uda_2.set_verbosity(1u);
+    uda_3.set_verbosity(1u);
     problem prob{rosenbrock{2u}};
     population pop_1{prob, 20u, 23u};
     population pop_2{prob, 20u, 23u};
+    population pop_3{prob, 2u, 23u};
     for (int iter = 0u; iter < 10; ++iter) {
         pop_1 = uda.evolve(pop_1);
     }
     pop_2 = uda_2.evolve(pop_2);
+    pop_3 = uda_3.evolve(pop_3);
     BOOST_CHECK_EQUAL(pop_1.champion_f()[0], pop_2.champion_f()[0]);
 }
 

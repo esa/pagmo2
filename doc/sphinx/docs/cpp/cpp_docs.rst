@@ -29,6 +29,7 @@ Implemented algorithms
   algorithms/compass_search
   algorithms/de
   algorithms/de1220
+  algorithms/gaco
   algorithms/ihs
   algorithms/ipopt
   algorithms/moead

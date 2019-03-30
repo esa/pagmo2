@@ -42,25 +42,41 @@
 #include <pagmo/utils/constrained.hpp>
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/generic.hpp>         // uniform_real_from_range
-#include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
 
 namespace pagmo
 {
 /// Extended ACO
 /**
- * ACO is inspired by the natural mechanism with which real ant colonies forage food.
+ * \image html gaco.png "Ant Colony Optimization Illustration" width=0.5cm
+ *
+ * ACO is inspired by the natural mechanism through which real ant colonies forage food.
+ *
  * This algorithm has shown promising results in many trajectory optimization problems.
  * The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
  * ACO generates future generations of ants by using the a multi-kernel gaussian distribution
  * based on three parameters (i.e., pheromone values) which are computed depending on the quality
  * of each previous solution. The solutions are ranked through an oracle penalty method.
  *
+ * This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
+ * optimization, with both continuous and integer variables.
  *
- * The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation
- * is an extension of Schlueter's originally proposed ACO algorithm.
  *
- * See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
- * mixed integer non-linear programming. Computers & Operations Research.
+ * \verbatim embed:rst:leading-asterisk
+ * .. seealso::
+ *
+ *    M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex mixed integer non-linear programming.
+ *    Computers & Operations Research.
+ *
+ * .. note::
+ *
+ *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed ACO algorithm and it was
+ *    developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace Engineering MSc
+ *    Thesis in TU Delft.
+ *
+ *    Image credit: https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg
+ *
+ * \endverbatim
+ *
  */
 class gaco
 {
@@ -884,8 +900,8 @@ private:
 
         const auto &prob = pop.get_problem();
         auto pop_size = pop.size();
-        auto n_con = prob.get_ncx();
         auto n_tot = prob.get_nx();
+        auto n_con = prob.get_ncx();
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
