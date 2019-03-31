@@ -41,7 +41,7 @@
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/constrained.hpp>
 #include <pagmo/utils/generic.hpp>
-#include <pagmo/utils/generic.hpp>         // uniform_real_from_range
+#include <pagmo/utils/generic.hpp> // uniform_real_from_range
 
 namespace pagmo
 {
@@ -70,8 +70,8 @@ namespace pagmo
  * .. note::
  *
  *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed ACO algorithm and it was
- *    developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace Engineering MSc
- *    Thesis in TU Delft.
+ *    developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace Engineering
+ * MSc Thesis in TU Delft.
  *
  *    Image credit: https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg
  *
@@ -937,18 +937,8 @@ private:
 
                 if (g_h < lb[h] || g_h > ub[h]) {
 
-                    // We define the max number of attempts to reset the ant within the bounds,
-                    // before placing it to the bounds themselves (in case every attempt fails)
-                    unsigned attempts = 0u;
-                    while ((g_h < lb[h] || g_h > ub[h]) && attempts < 20u) {
+                    while ((g_h < lb[h] || g_h > ub[h])) {
                         g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
-                        ++attempts;
-                    }
-                    if (attempts == 20 && g_h > ub[h]) {
-                        g_h = ub[h];
-                    }
-                    if (attempts == 20 && g_h < lb[h]) {
-                        g_h = lb[h];
                     }
                 }
                 if (h >= n_con) {
@@ -957,6 +947,7 @@ private:
                     dvs_new_j[h] = g_h;
                 }
             }
+
             dvs_new[j] = dvs_new_j;
         }
     }
