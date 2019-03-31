@@ -222,8 +222,8 @@ public:
 
         // Main ACO loop over generations:
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-            // At each generation we make a copy of the population into popnew
-            population popnew(pop);
+            // At each generation we make a copy of the population into popold
+            population popold(pop);
 
             auto dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
             // population (index n) and the number of variables (index k) the number of
@@ -339,7 +339,7 @@ public:
 
             // I create the vector of vectors where I will store all the new ants which will be generated:
             std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
-            generate_new_ants(popnew, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
+            generate_new_ants(popold, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
             for (population::size_type i = 0; i < pop_size; ++i) {
                 vector_double ant(n_x);
@@ -353,6 +353,17 @@ public:
                 ++m_fevals;
                 // I set the individuals for the next generation
                 pop.set_xf(i, ant, fitness);
+            }
+            //If the current best of the population has not improved wrt to the previous one, then check=false
+            bool check = compare_fc(pop.champion_f(), popold.champion_f(), n_ec, pop.get_problem().get_c_tol());
+
+            // We increment the evalstop counter in case the best of the population is not better than the solution archive
+            // best:
+            if (check == false) {
+                ++m_n_evalstop;
+            }
+            else{
+                m_n_evalstop=1u;
             }
 
             // The oracle parameter is updated after each optimization run, if needed:
@@ -425,6 +436,7 @@ public:
                     fitness_final[ii_f] = sol_archive[i_ker][1 + n_x + ii_f];
                 }
                 pop.set_xf(i_ker, ant_final, fitness_final);
+
             }
         }
 
@@ -665,14 +677,6 @@ private:
 
         for (decltype(fitness[0].size()) j = 0u; j < fitness[0].size(); ++j) {
             fitness_sol_arch[j] = sol_archive[0][1 + variables[0].size() + j];
-        }
-
-        bool check = compare_fc(fitness_sol_arch, pop.champion_f(), nec, pop.get_problem().get_c_tol());
-
-        // We increment the evalstop counter in case the best of the population is not better than the solution archive
-        // best:
-        if (check == true) {
-            ++m_n_evalstop;
         }
 
         std::vector<vector_double> old_archive(sol_archive);
