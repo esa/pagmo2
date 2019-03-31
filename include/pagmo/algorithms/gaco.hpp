@@ -71,7 +71,7 @@ namespace pagmo
  *
  *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed ACO algorithm and it was
  *    developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace Engineering
- * MSc Thesis in TU Delft.
+ *    MSc Thesis in TU Delft.
  *
  *    Image credit: https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg
  *
