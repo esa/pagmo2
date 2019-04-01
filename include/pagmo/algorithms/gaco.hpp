@@ -289,7 +289,7 @@ public:
                 }
 
             } else {
-                update_sol_archive(pop, sorted_penalties, sort_list, sol_archive, n_ec);
+                update_sol_archive(pop, sorted_penalties, sort_list, sol_archive);
                 if (m_memory == true) {
                     m_sol_archive = sol_archive;
                 }
@@ -661,12 +661,11 @@ private:
      * penalties as they are stored in the stored_vector
      * @param[in] sol_archive Solution archive: the solution archive is useful for retrieving the current
      * individuals (which will be the means of the new pdf)
-     * @param[in] nec Number of equality constraints: the number of equality constraints is passed
      */
 
     void update_sol_archive(const population &pop, vector_double &sorted_vector,
                             std::vector<decltype(sorted_vector.size())> &sorted_list,
-                            std::vector<vector_double> &sol_archive, const unsigned long long nec) const
+                            std::vector<vector_double> &sol_archive) const
     {
 
         auto variables = pop.get_x();
