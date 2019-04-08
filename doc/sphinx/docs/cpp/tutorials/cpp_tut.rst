@@ -9,7 +9,7 @@ Basics
 After following the :ref:`install` you will be able to compile and run C++ pagmo
 programs. The following example shows the use with no multithreading of an algoritmic evolution:
 
-.. literalinclude:: docs/examples/nsga2.cpp
+.. literalinclude:: ../../docs/examples/nsga2.cpp
    :language: c++
    :linenos:
 
