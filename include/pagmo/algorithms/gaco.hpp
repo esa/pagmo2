@@ -197,13 +197,14 @@ public:
         // I create the vector of vectors where I will store all the new ants which will be generated:
         std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
         vector_double ant(n_x);
+        vector_double sigma(n_x);
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
         // particular algorithm.
 
         if (!pop_size) {
-            pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
+            return pop;
         }
         if (prob.is_stochastic()) {
             pagmo_throw(std::invalid_argument,
@@ -263,7 +264,7 @@ public:
 
             // 2 - update and sort solutions in the sol_archive, based on the computed penalties
             // We fill it with 0,1,2,3,...,K
-            std::iota(std::begin(sort_list), std::end(sort_list), 0);
+            std::iota(std::begin(sort_list), std::end(sort_list), decltype(penalties.size())(0));
             std::sort(sort_list.begin(), sort_list.end(),
                       [&penalties](decltype(penalties.size()) idx1, decltype(penalties.size()) idx2) {
                           return detail::less_than_f(penalties[idx1], penalties[idx2]);
@@ -335,12 +336,9 @@ public:
             }
 
             // 4 - compute pheromone values
-
-            vector_double sigma(n_x);
             pheromone_computation(gen, prob_cumulative, omega, sigma, pop, sol_archive);
 
             // 5 - use pheromone values to generate new ants (i.e., individuals)
-
             generate_new_ants(popold, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
             for (population::size_type i = 0; i < pop_size; ++i) {

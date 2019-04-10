@@ -97,8 +97,6 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     //    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{minlp_rastrigin{}}, 64u}), std::invalid_argument);
     // Multi-objective problem
     BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{zdt{}}, 64u}), std::invalid_argument);
-    // Empty population
-    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // Population size smaller than ker size
     BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{rosenbrock{}}, 60u}), std::invalid_argument);
     // Stochastic problem
