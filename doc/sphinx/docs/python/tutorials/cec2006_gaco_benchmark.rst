@@ -1,7 +1,7 @@
 .. _py_tutorial_cec2006_gaco_benchmark_comp:
 
-ACO Benchmark Using the CEC2006 Problems
-===============================================
+:class:`~pygmo.gaco` Benchmark Using the CEC2006 Problems
+===============================================================
 
 In this tutorial we will show how to use pygmo to run :class:`~pygmo.gaco` algorithm and benchmark it with the test problem suite used in the
 Special Session on Constrained Real-Parameter Optimization, CEC-06, Vancouver, Canada, 17-21 July.
@@ -10,7 +10,7 @@ All of the CEC 2006 problems are box-bounded, continuous, single objective const
 (user-defined problems) by pygmo in the class :class:`~pygmo.cec2006`. 
 We now want to benchmark three user-defined algorithms. Since this is a constrained probelm, we need a UDA (user-defined
 algorithm) which can handle constraints. In this respect, we can make use of the pygmo meta-algorithm :class:`~pygmo.cstrs_self_adaptive`
-to allow the use of any UDA for constrained problems. Hence, we will benchmark the ant colony optimization algorithm :class:`~pygmo.gaco`, 
+to allow the use of any UDA for constrained problems. Hence, we will benchmark the extended ant colony optimization algorithm :class:`~pygmo.gaco`, 
 with this same algorithm and with the self-adaptive differential evolution algorithm :class:`~pygmo.sade`, both coupled with a self-adaptive constraints handling technique. 
 
 In particular, we will make use of the three aforesaid UDAs on 6 of the 24 CEC2006 problems (namely, problems: 13, 14, 15,

@@ -53,7 +53,7 @@ namespace pagmo
  *
  * This algorithm has shown promising results in many trajectory optimization problems.
  * The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
- * ACO generates future generations of ants by using the a multi-kernel gaussian distribution
+ * Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution
  * based on three parameters (i.e., pheromone values) which are computed depending on the quality
  * of each previous solution. The solutions are ranked through an oracle penalty method.
  *
@@ -69,9 +69,10 @@ namespace pagmo
  *
  * .. note::
  *
- *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed ACO algorithm and it was
- *    developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace Engineering
- *    MSc Thesis in TU Delft.
+ *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed extended ACO algorithm and it is
+ *    being developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace
+ *    Engineering MSc degree in TU Delft. The main difference between the implemented version  and the original one lies in
+ *    how two of the three pheromone values are computed (in particular, the weights and the standard deviations).
  *
  *    Image credit: https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg
  *
@@ -125,7 +126,7 @@ public:
         : m_gen(gen), m_acc(acc), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker),
           m_oracle(oracle), m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u),
           m_log(), m_res(), m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u),
-          m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u)
+          m_sol_archive(), m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u)
     {
         if (acc < 0.) {
             pagmo_throw(std::invalid_argument, "The accuracy parameter must be >=0, while a value of "
@@ -189,7 +190,13 @@ public:
         vector_double omega(m_ker);
         vector_double prob_cumulative(m_ker);
         std::uniform_real_distribution<> dist(0, 1);
-        std::normal_distribution<double> gauss{0., 1.};
+        std::normal_distribution<> gauss{0., 1.};
+        vector_double penalties(pop_size);
+        // I declare a vector where I will store the positions of the various individuals:
+        std::vector<decltype(penalties.size())> sort_list(penalties.size());
+        // I create the vector of vectors where I will store all the new ants which will be generated:
+        std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
+        vector_double ant(n_x);
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
@@ -225,27 +232,29 @@ public:
             // At each generation we make a copy of the population into popold
             population popold(pop);
 
-            auto dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
+            const auto &dvs = pop.get_x(); // note that pop.get_x()[n][k] goes through the different individuals of the
             // population (index n) and the number of variables (index k) the number of
             // variables can be easily be deduced from counting the bounds.
-            auto fit = pop.get_f(); // The following returns a vector of vectors in which objectives, equality and
+            const auto &fit
+                = pop.get_f(); // The following returns a vector of vectors in which objectives, equality and
             // inequality constraints are concatenated,for each individual
 
             // I check whether the maximum number of function evaluations or improvements has been exceeded:
             if (m_impstop != 0 && m_n_impstop >= m_impstop) {
-                std::cout << "max number of impstop exceeded" << std::endl;
+                if (m_verbosity >= 1) {
+                    std::cout << "max number of impstop exceeded" << std::endl;
+                }
                 return pop;
             }
 
             if (m_evalstop != 0 && m_n_evalstop >= m_evalstop) {
-                std::cout << "max number of evalstop exceeded" << std::endl;
+                if (m_verbosity >= 1) {
+                    std::cout << "max number of evalstop exceeded" << std::endl;
+                }
                 return pop;
             }
 
             // 1 - compute penalty functions
-
-            // I declare some useful variables:
-            vector_double penalties(pop_size);
 
             for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
                 // Penalty computation is here executed:
@@ -253,13 +262,6 @@ public:
             }
 
             // 2 - update and sort solutions in the sol_archive, based on the computed penalties
-
-            // I declare a vector where the penalties are sorted:
-            vector_double sorted_penalties(penalties);
-            // This sorts the penalties from the smallest ([0]) to the biggest ([end])
-            std::sort(sorted_penalties.begin(), sorted_penalties.end(), detail::less_than_f<double>);
-            // I declare a vector where I will store the positions of the various individuals:
-            std::vector<decltype(penalties.size())> sort_list(penalties.size());
             // We fill it with 0,1,2,3,...,K
             std::iota(std::begin(sort_list), std::end(sort_list), 0);
             std::sort(sort_list.begin(), sort_list.end(),
@@ -289,7 +291,9 @@ public:
                 }
 
             } else {
-                update_sol_archive(pop, sorted_penalties, sort_list, sol_archive);
+                // This sorts the penalties from the smallest ([0]) to the biggest ([end])
+                std::sort(penalties.begin(), penalties.end(), detail::less_than_f<double>);
+                update_sol_archive(pop, penalties, sort_list, sol_archive);
                 if (m_memory == true) {
                     m_sol_archive = sol_archive;
                 }
@@ -337,12 +341,9 @@ public:
 
             // 5 - use pheromone values to generate new ants (i.e., individuals)
 
-            // I create the vector of vectors where I will store all the new ants which will be generated:
-            std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
             generate_new_ants(popold, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
             for (population::size_type i = 0; i < pop_size; ++i) {
-                vector_double ant(n_x);
                 // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
                 // function
                 for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
@@ -354,16 +355,15 @@ public:
                 // I set the individuals for the next generation
                 pop.set_xf(i, ant, fitness);
             }
-            //If the current best of the population has not improved wrt to the previous one, then check=false
+            // If the current best of the population has not improved wrt to the previous one, then check=false
             bool check = compare_fc(pop.champion_f(), popold.champion_f(), n_ec, pop.get_problem().get_c_tol());
 
-            // We increment the evalstop counter in case the best of the population is not better than the solution archive
-            // best:
+            // We increment the evalstop counter in case the best of the population is not better than the solution
+            // archive best:
             if (check == false) {
                 ++m_n_evalstop;
-            }
-            else{
-                m_n_evalstop=1u;
+            } else {
+                m_n_evalstop = 1u;
             }
 
             // The oracle parameter is updated after each optimization run, if needed:
@@ -436,7 +436,6 @@ public:
                     fitness_final[ii_f] = sol_archive[i_ker][1 + n_x + ii_f];
                 }
                 pop.set_xf(i_ker, ant_final, fitness_final);
-
             }
         }
 
@@ -587,8 +586,8 @@ public:
     void serialize(Archive &ar)
     {
         ar(m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e, m_seed,
-           m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter, m_n_evalstop, m_n_impstop,
-           m_gen_mark, m_fevals);
+           m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter, m_sol_archive, m_n_evalstop,
+           m_n_impstop, m_gen_mark, m_fevals);
     }
 
 private:

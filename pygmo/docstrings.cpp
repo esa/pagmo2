@@ -2379,17 +2379,18 @@ std::string gaco_docstring()
 n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
 paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
 
-Extended Ant Colony Optimization algorithm (GACO).
+Extended Ant Colony Optimization algorithm (gaco).
 
 ACO is inspired by the natural mechanism with which real ant colonies forage food.
 This algorithm has shown promising results in many trajectory optimization problems.
 The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
-ACO generates future generations of ants by using the a multi-kernel gaussian distribution
+Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution
 based on three parameters (i.e., pheromone values) which are computed depending on the quality
 of each previous solution. The solutions are ranked through an oracle penalty method.
 
 
-The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation is an extension of Schlueter's originally proposed ACO algorithm.
+The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation is an extension of Schlueter's originally proposed extended ACO algorithm.
+In particular, the main difference lies in how two of the three pheromone values (i.e., weights and standard deviations) are computed.
 
 See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
 mixed integer non-linear programming. Computers & Operations Research.
