@@ -40,17 +40,6 @@ matrix:
           - gcc-4.8
           - g++-4.8
           - binutils-gold
-    - env: PAGMO_BUILD="ReleaseClang50"
-      dist: trusty
-      compiler: clang
-      os: linux
-      addons:
-        apt:
-          sources:
-          - llvm-toolchain-trusty-5.0
-          - ubuntu-toolchain-r-test
-          packages:
-          - clang-5.0
     - env: PAGMO_BUILD="Python36"
       dist: trusty
       compiler: gcc
