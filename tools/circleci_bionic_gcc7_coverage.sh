@@ -7,7 +7,7 @@ set -x
 set -e
 
 # Core deps.
-sudo apt-get install build-essential cmake libboost-dev libnlopt-dev libeigen3-dev coinor-libipopt-dev
+sudo apt-get install build-essential cmake libboost-dev libnlopt-dev libeigen3-dev coinor-libipopt-dev curl
 
 # Create the build dir and cd into it.
 mkdir build
