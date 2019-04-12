@@ -33,12 +33,6 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_IPOPT)
 
-#include <IpIpoptApplication.hpp>
-#include <IpIpoptCalculatedQuantities.hpp>
-#include <IpIpoptData.hpp>
-#include <IpReturnCodes.hpp>
-#include <IpSmartPtr.hpp>
-#include <IpTNLP.hpp>
 #include <algorithm>
 #include <boost/any.hpp>
 #include <boost/numeric/conversion/cast.hpp>
@@ -59,6 +53,13 @@ see https://www.gnu.org/licenses/. */
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
+#include <IpIpoptApplication.hpp>
+#include <IpIpoptCalculatedQuantities.hpp>
+#include <IpIpoptData.hpp>
+#include <IpReturnCodes.hpp>
+#include <IpSmartPtr.hpp>
+#include <IpTNLP.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
