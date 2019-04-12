@@ -54,6 +54,9 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+// NOTE: on some Debian-derived distros, this definition
+// is apparently necessary:
+// https://github.com/casadi/casadi/issues/1010
 #define HAVE_CSTDDEF
 #include <IpIpoptApplication.hpp>
 #include <IpIpoptCalculatedQuantities.hpp>
