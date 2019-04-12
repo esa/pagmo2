@@ -54,12 +54,14 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#define HAVE_CSTDDEF
 #include <IpIpoptApplication.hpp>
 #include <IpIpoptCalculatedQuantities.hpp>
 #include <IpIpoptData.hpp>
 #include <IpReturnCodes.hpp>
 #include <IpSmartPtr.hpp>
 #include <IpTNLP.hpp>
+#undef HAVE_CSTDDEF
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
