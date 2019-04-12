@@ -63,6 +63,7 @@ Contents:
    :maxdepth: 1
 
    docs/cpp/cpp_docs
+   docs/cpp/tutorials/cpp_tut
    docs/python/python_docs
    docs/python/tutorials/python_tut
 
