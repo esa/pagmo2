@@ -7,6 +7,8 @@ Changelog
 New
 ~~~
 
+- Add CircleCI to the continuous integration pipeline (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
+
 - Implement the Lennard-Jones and Golomb ruler problems (`#247 <https://github.com/esa/pagmo2/pull/247>`__).
 
 Changes
@@ -20,10 +22,16 @@ Changes
 Fix
 ~~~
 
+- Fix a build failure in the Ipopt algorithm wrapper when using the Debian/Ubuntu Ipopt packages (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
+
+- Fix a few test suite build failures in debug mode when using recent Clang versions (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
+
 - Fix the behaviour of NSGA2 and MOEAD when the problem has equal lower/upper bounds (`#244 <https://github.com/esa/pagmo2/pull/244>`__).
 
 - Various documentation, build system and unit testing fixes/improvements (`#243 <https://github.com/esa/pagmo2/pull/243>`__,
-  `#245 <https://github.com/esa/pagmo2/pull/245>`__, `#248 <https://github.com/esa/pagmo2/pull/248>`__).
+  `#245 <https://github.com/esa/pagmo2/pull/245>`__, `#248 <https://github.com/esa/pagmo2/pull/248>`__,
+  `#257 <https://github.com/esa/pagmo2/pull/257>`__, `#262 <https://github.com/esa/pagmo2/pull/262>`__,
+  `#265 <https://github.com/esa/pagmo2/pull/265>`__, `#266 <https://github.com/esa/pagmo2/pull/266>`__).
 
 - The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
 
