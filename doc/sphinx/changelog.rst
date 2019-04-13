@@ -14,6 +14,10 @@ New
 Changes
 ~~~~~~~
 
+- **BREAKING**: unconditionally disable the CEC2013/CEC2014 problem suites on
+  OSX, as they cause build
+  issues when compiling pygmo (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
+
 - Various performance improvements in the :cpp:class:`~pagmo::population` API (`#250 <https://github.com/esa/pagmo2/pull/250>`__).
 
 - **BREAKING**: :class:`pygmo.problem` and :class:`pygmo.algorithm` cannot be used as UDPs and UDAs any more.
