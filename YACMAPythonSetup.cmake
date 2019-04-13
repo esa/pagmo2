@@ -10,7 +10,7 @@ endif()
 # on various CI setups.
 # NOTE: apparently homebrew requires NOT to link to the Python library. We might want
 # to add a config option to accommodate that eventually.
-if(WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(WIN32 OR APPLE)
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
 else()
@@ -66,7 +66,7 @@ set(_YACMA_PY_MODULE_EXTENSION "")
 
 # Platform-specific setup.
 if(UNIX)
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  if(APPLE)
     message(STATUS "OS X platform detected.")
     # Apparently on OS X Python expects the .so extension for compiled modules.
 	  message(STATUS "Output extension for compiled modules will be '.so'.")
