@@ -143,7 +143,7 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     make install VERBOSE=1;
     cd ../build;
     # Now pygmo.
-    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os" ../;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_CXX_FLAGS_DEBUG="-g0" ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
