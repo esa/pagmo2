@@ -153,24 +153,24 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     python -c "import pygmo; pygmo.test.run_test_suite(1)"
 
     # Additional serialization tests.
-    python travis_additional_tests.py
+    # python travis_additional_tests.py
 
-    # AP examples.
-    cd ../ap_examples/uda_basic;
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
-    make install VERBOSE=1;
-    cd ../../;
-    python test1.py
+    # # AP examples.
+    # cd ../ap_examples/uda_basic;
+    # mkdir build;
+    # cd build;
+    # cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    # make install VERBOSE=1;
+    # cd ../../;
+    # python test1.py
 
-    cd udp_basic;
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
-    make install VERBOSE=1;
-    cd ../../;
-    python test2.py
+    # cd udp_basic;
+    # mkdir build;
+    # cd build;
+    # cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    # make install VERBOSE=1;
+    # cd ../../;
+    # python test2.py
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     docker pull ${DOCKER_IMAGE};

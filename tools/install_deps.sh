@@ -31,10 +31,14 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
 
     conda create -q -p $deps_dir -y
     source activate $deps_dir
-    # NOTE: install the GCC 4.8 version of the conda packages,
-    # otherwise we have errors which I think are related to
-    # ABI issues.
-    conda install -c conda-forge/label/cf201901 $conda_pkgs -y
+    if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+        conda install $conda_pkgs -y
+    else
+        # NOTE: install the GCC 4.8 version of the conda packages,
+        # otherwise we have errors which I think are related to
+        # ABI issues.
+        conda install -c conda-forge/label/cf201901 $conda_pkgs -y
+    fi
 fi
 
 set +e
