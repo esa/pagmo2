@@ -64,7 +64,7 @@ set(_YACMA_PY_MODULE_EXTENSION "")
 
 # Platform-specific setup.
 if(UNIX)
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  if(APPLE)
     message(STATUS "OS X platform detected.")
     # Apparently on OS X Python expects the .so extension for compiled modules.
 	  message(STATUS "Output extension for compiled modules will be '.so'.")
