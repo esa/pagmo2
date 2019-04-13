@@ -118,8 +118,6 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # _YACMA_CHECK_ENABLE_CXX_FLAG(-Wzero-as-null-pointer-constant)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-pedantic-errors)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdisabled-optimization)
-        _YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility-inlines-hidden)
-        _YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility=hidden)
         # This is useful when the compiler decides the template backtrace is too verbose.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
         if(YACMA_COMPILER_IS_HCC)
