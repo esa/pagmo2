@@ -106,6 +106,7 @@ Advanced Examples
 .. toctree::
   :maxdepth: 2
 
+  cec2006_gaco_benchmark
   cec2013_comp
   solving_schwefel_20
   cmaes_vs_xnes

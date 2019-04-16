@@ -33,12 +33,6 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_IPOPT)
 
-#include <IpIpoptApplication.hpp>
-#include <IpIpoptCalculatedQuantities.hpp>
-#include <IpIpoptData.hpp>
-#include <IpReturnCodes.hpp>
-#include <IpSmartPtr.hpp>
-#include <IpTNLP.hpp>
 #include <algorithm>
 #include <boost/any.hpp>
 #include <boost/numeric/conversion/cast.hpp>
@@ -59,6 +53,18 @@ see https://www.gnu.org/licenses/. */
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
+// NOTE: on some Debian-derived distros, this definition
+// is apparently necessary:
+// https://github.com/casadi/casadi/issues/1010
+#define HAVE_CSTDDEF
+#include <IpIpoptApplication.hpp>
+#include <IpIpoptCalculatedQuantities.hpp>
+#include <IpIpoptData.hpp>
+#include <IpReturnCodes.hpp>
+#include <IpSmartPtr.hpp>
+#include <IpTNLP.hpp>
+#undef HAVE_CSTDDEF
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
