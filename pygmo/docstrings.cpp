@@ -2375,9 +2375,7 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::nsga2::get_log`.
 
 std::string gaco_docstring()
 {
-    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u,
-n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
-paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
+    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0., paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
 
 Extended Ant Colony Optimization algorithm (gaco).
 
