@@ -137,6 +137,8 @@ std::string moead_docstring();
 std::string moead_get_log_docstring();
 std::string nsga2_docstring();
 std::string nsga2_get_log_docstring();
+std::string gaco_docstring();
+std::string gaco_get_log_docstring();
 std::string pso_docstring();
 std::string pso_get_log_docstring();
 std::string pso_gen_docstring();
