@@ -17,26 +17,7 @@ if [[ "${PAGMO_BUILD}" == "ReleaseGCC48" ]]; then
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == "DebugGCC48" ]]; then
-    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fsanitize=address" ../;
-    make -j2 VERBOSE=1;
-    # NOTE: the fork island will produce false positives with the address sanitizer in the child process.
-    # Don't run its tests.
-    ctest -E fork_island;
-elif [[ "${PAGMO_BUILD}" == "CoverageGCC6" ]]; then
-    CXX=g++-6 CC=gcc-6 cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="--coverage" ../;
-    make -j2 VERBOSE=1;
-    ctest;
-    bash <(curl -s https://codecov.io/bash) -x gcov-6 > /dev/null
-elif [[ "${PAGMO_BUILD}" == "DebugGCC7" ]]; then
-    CXX=g++-7 CC=gcc-7 cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
-    make -j2 VERBOSE=1;
-    ctest;
-elif [[ "${PAGMO_BUILD}" == "DebugClang50" ]]; then
-    CXX=clang++-5.0 CC=clang-5.0 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
-    make -j2 VERBOSE=1;
-    ctest;
-elif [[ "${PAGMO_BUILD}" == "ReleaseClang50" ]]; then
-    CXX=clang++-5.0 CC=clang-5.0 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
+    CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
     ctest;
 elif [[ "${PAGMO_BUILD}" == "OSXDebug" ]]; then
@@ -162,7 +143,7 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     make install VERBOSE=1;
     cd ../build;
     # Now pygmo.
-    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os" ../;
+    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_CXX_FLAGS_DEBUG="-g0" ../;
     make install VERBOSE=1;
     ipcluster start --daemonize=True;
     # Give some time for the cluster to start up.
@@ -172,24 +153,24 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     python -c "import pygmo; pygmo.test.run_test_suite(1)"
 
     # Additional serialization tests.
-    python travis_additional_tests.py
+    # python travis_additional_tests.py
 
-    # AP examples.
-    cd ../ap_examples/uda_basic;
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
-    make install VERBOSE=1;
-    cd ../../;
-    python test1.py
+    # # AP examples.
+    # cd ../ap_examples/uda_basic;
+    # mkdir build;
+    # cd build;
+    # cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    # make install VERBOSE=1;
+    # cd ../../;
+    # python test1.py
 
-    cd udp_basic;
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
-    make install VERBOSE=1;
-    cd ../../;
-    python test2.py
+    # cd udp_basic;
+    # mkdir build;
+    # cd build;
+    # cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+    # make install VERBOSE=1;
+    # cd ../../;
+    # python test2.py
 elif [[ "${PAGMO_BUILD}" == manylinux* ]]; then
     cd ..;
     docker pull ${DOCKER_IMAGE};

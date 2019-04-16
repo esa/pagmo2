@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(population_construction_test)
 
     // Self assignments.
     pop_a = pop_b;
-    pop_a = pop_a;
+    pop_a = *&pop_a;
     BOOST_CHECK_EQUAL(pop_to_string(pop_a), pop_to_string(pop_b));
 #if !defined(__clang__)
     pop_a = std::move(pop_a);

@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     }
     BOOST_CHECK(archi5.size() == 0u);
     // Self assignment.
-    archi4 = archi4;
+    archi4 = *&archi4;
     BOOST_CHECK((std::is_same<archipelago &, decltype(archi4 = archi4)>::value));
     BOOST_CHECK(archi4.size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
