@@ -1,0 +1,436 @@
+ <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Extended Ant Colony Optimization (gaco) &#8212; pagmo 2.11 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Improved Harmony Search (IHS)" href="ihs.html" />
+    <link rel="prev" title="Self-adaptive Differential Evolution (DE 1220 aka pDE)" href="de1220.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.11</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.11 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id8">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id19">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id23">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Extended Ant Colony Optimization (gaco)</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="extended-ant-colony-optimization-gaco">
+<h1>Extended Ant Colony Optimization (gaco)<a class="headerlink" href="#extended-ant-colony-optimization-gaco" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv2N5pagmo4gacoE">
+<span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><em class="property">class </em><code class="descname">gaco</code><a class="headerlink" href="#_CPPv2N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extended ACO. </p>
+<p><img alt="../../../_images/gaco.png" src="../../../_images/gaco.png" /></p>
+<p>ACO is inspired by the natural mechanism through which real ant colonies forage food.</p>
+<p>This algorithm has shown promising results in many trajectory optimization problems. The first appearance of the algorithm happened in Dr. Marco Dorigo’s thesis, in 1992. Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution based on three parameters (i.e., pheromone values) which are computed depending on the quality of each previous solution. The solutions are ranked through an oracle penalty method.</p>
+<p>This algorithm can be applied to box-bounded single-objective, constrained and unconstrained optimization, with both continuous and integer variables.</p>
+<p><div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex mixed integer non-linear programming.
+Computers &amp; Operations Research.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The ACO version implemented in PaGMO is an extension of Schlueter’s originally proposed extended ACO algorithm and it is
+being developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace
+Engineering MSc degree in TU Delft. The main difference between the implemented version  and the original one lies in
+how two of the three pheromone values are computed (in particular, the weights and the standard deviations).</p>
+<p class="last">Image credit: <a class="reference external" href="https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg">https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg</a></p>
+</div>
+ </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5pagmo4gaco13log_line_typeE">
+<span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1aae2a87efdd827e42ad76be40bfad7a20"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned, double, unsigned, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp) </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5pagmo4gaco8log_typeE">
+<span id="pagmo::gaco::log_type"></span><span class="target" id="classpagmo_1_1gaco_1a9c6ebb983637ac1c268b254cd538c83f"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo4gaco13log_line_typeE" title="pagmo::gaco::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo4gaco8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The log. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdjdbj">
+<span id="pagmo::gaco::gaco__unsigned.unsigned.double.double.double.unsigned.unsigned.unsigned.unsigned.double.unsigned.double.b.unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4d5637dd4724f1b07ab7cb51829d54d0"></span><code class="descname">gaco</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 100u, unsigned <em>ker</em> = 63u, double <em>q</em> = 1.0, double <em>oracle</em> = 0., double <em>acc</em> = 0.01, unsigned <em>threshold</em> = 1u, unsigned <em>n_gen_mark</em> = 7u, unsigned <em>impstop</em> = 100000u, unsigned <em>evalstop</em> = 100000u, double <em>focus</em> = 0., unsigned <em>paretomax</em> = 10u, double <em>epsilon</em> = 0.9, bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdjdbj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs the ACO user defined algorithm for single and multi-objective optimization.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">gen</span></code>: Generations: number of generations to evolve. </li>
+<li><code class="docutils literal"><span class="pre">ker</span></code>: Kernel: number of solutions stored in the solution archive. </li>
+<li><code class="docutils literal"><span class="pre">q</span></code>: Convergence speed parameter: this parameter is useful for managing the convergence speed towards the found minima (the smaller the faster). </li>
+<li><code class="docutils literal"><span class="pre">oracle</span></code>: Oracle parameter: this is the oracle parameter used in the penalty method. </li>
+<li><code class="docutils literal"><span class="pre">acc</span></code>: Accuracy parameter: for maintaining a minimum penalty function’s values distances. </li>
+<li><code class="docutils literal"><span class="pre">threshold</span></code>: Threshold parameter: when the generations reach the threshold then q is set to 0.01 automatically. </li>
+<li><code class="docutils literal"><span class="pre">n_gen_mark</span></code>: Standard deviations convergence speed parameter: this parameters determines the convergence speed of the standard deviations values. </li>
+<li><code class="docutils literal"><span class="pre">impstop</span></code>: Improvement stopping criterion: if a positive integer is assigned here, the algorithm will count the runs without improvements, if this number will exceed impstop value, the algorithm will be stopped. </li>
+<li><code class="docutils literal"><span class="pre">evalstop</span></code>: Evaluation stopping criterion: same as previous one, but with function evaluations. </li>
+<li><code class="docutils literal"><span class="pre">focus</span></code>: Focus parameter: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the current best solutions. </li>
+<li><code class="docutils literal"><span class="pre">paretomax</span></code>: Max number of non-dominated solutions: this regulates the max number of Pareto points to be stored. </li>
+<li><code class="docutils literal"><span class="pre">epsilon</span></code>: Pareto precision parameter: the smaller this parameter, the higher the chances to introduce a new solution in the Pareto front. </li>
+<li><code class="docutils literal"><span class="pre">memory</span></code>: Memory parameter: if true, memory is activated in the algorithm for multiple calls </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random). </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">acc</span></code> is not <span class="math">\( &gt;=0 \)</span>, <code class="docutils literal"><span class="pre">impstop</span></code> is not a positive integer, <code class="docutils literal"><span class="pre">evalstop</span></code> is not a positive integer, <code class="docutils literal"><span class="pre">focus</span></code> is not <span class="math">\( &gt;=0 \)</span>, <code class="docutils literal"><span class="pre">ker</span></code> is not a positive integer, <code class="docutils literal"><span class="pre">oracle</span></code> is not positive, <code class="docutils literal"><span class="pre">paretomax</span></code> is not a positive integer, <code class="docutils literal"><span class="pre">threshold</span></code> is not <span class="math">\( \in [1,gen] \)</span> when <span class="math">\(memory=false\)</span> and <span class="math">\(gen!=0\)</span>, <code class="docutils literal"><span class="pre">threshold</span></code> is not <span class="math">\( &gt;=1 \)</span> when <span class="math">\(memory=true\)</span> and <span class="math">\(gen!=0\)</span>, <code class="docutils literal"><span class="pre">epsilon</span></code> is not <span class="math">\( \in [0,1[\)</span>, <code class="docutils literal"><span class="pre">q</span></code> is not <span class="math">\( &gt;=0 \)</span> </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco6evolveE10population">
+<span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1aefe289e664b8c9b2f2ec253538933ad0"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<p>Evolves the population for the requested number of generations.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>evolved population </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if pop.get_problem() is stochastic. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo4gaco8set_seedEj">
+<span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1aa922e0878eeb13b7f0ae46439aedad76"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4gaco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco8get_seedEv">
+<span id="pagmo::gaco::get_seedC"></span><span class="target" id="classpagmo_1_1gaco_1a448660cccce3b7af1154d2f6d7632c5d"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the seed. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the seed controlling the algorithm stochastic behaviour </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo4gaco13set_verbosityEj">
+<span id="pagmo::gaco::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4gaco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the algorithm verbosity. </p>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
+<li>0: no verbosity</li>
+<li>&gt;0: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
+</ul>
+</p>
+<p>Example (verbosity 1): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>        <span class="n">Kernel</span><span class="p">:</span>        <span class="n">Oracle</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">dp</span><span class="p">:</span>
+   <span class="mi">1</span>              <span class="mi">0</span>        <span class="mf">179.464</span>             <span class="mi">13</span>            <span class="mi">100</span>        <span class="mf">4.33793</span>          <span class="mi">47876</span>
+   <span class="mi">2</span>             <span class="mi">15</span>         <span class="mf">14.205</span>             <span class="mi">13</span>            <span class="mi">100</span>        <span class="mf">5.20084</span>        <span class="mf">5928.12</span>
+   <span class="mi">3</span>             <span class="mi">30</span>         <span class="mf">14.205</span>             <span class="mi">13</span>         <span class="mf">14.205</span>        <span class="mf">1.24173</span>        <span class="mf">1037.44</span>
+   <span class="mi">4</span>             <span class="mi">45</span>         <span class="mf">14.205</span>             <span class="mi">13</span>         <span class="mf">14.205</span>        <span class="mf">3.05807</span>         <span class="mf">395.89</span>
+   <span class="mi">5</span>             <span class="mi">60</span>        <span class="mf">7.91087</span>             <span class="mi">13</span>         <span class="mf">14.205</span>       <span class="mf">0.711446</span>        <span class="mf">286.599</span>
+   <span class="mi">6</span>             <span class="mi">75</span>        <span class="mf">2.81437</span>             <span class="mi">13</span>        <span class="mf">7.91087</span>        <span class="mf">5.80451</span>        <span class="mf">71.8174</span>
+   <span class="mi">7</span>             <span class="mi">90</span>        <span class="mf">2.81437</span>             <span class="mi">13</span>        <span class="mf">2.81437</span>        <span class="mf">1.90561</span>        <span class="mf">48.3829</span>
+   <span class="mi">8</span>            <span class="mi">105</span>        <span class="mf">2.81437</span>             <span class="mi">13</span>        <span class="mf">2.81437</span>         <span class="mf">1.3072</span>        <span class="mf">26.9496</span>
+   <span class="mi">9</span>            <span class="mi">120</span>         <span class="mf">1.4161</span>             <span class="mi">13</span>        <span class="mf">2.81437</span>        <span class="mf">1.61732</span>        <span class="mf">10.6527</span>
+  <span class="mi">10</span>            <span class="mi">150</span>         <span class="mf">1.4161</span>             <span class="mi">13</span>         <span class="mf">1.4161</span>        <span class="mf">2.54262</span>        <span class="mf">3.67034</span>
+</pre></div>
+</div>
+ Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function value found until that generation, Kernel is the kernel size, Oracle is the oracle parameter value, dx is the flatness in the individuals, dp is the flatness in the penalty function values.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco13get_verbosityEv">
+<span id="pagmo::gaco::get_verbosityC"></span><span class="target" id="classpagmo_1_1gaco_1abb6cade7b7e96320498c4d7633bf865a"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the verbosity level. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the verbosity level </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco7get_genEv">
+<span id="pagmo::gaco::get_genC"></span><span class="target" id="classpagmo_1_1gaco_1acb9c3c3d7a29943a3a6a39b266b5c4a8"></span>unsigned <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the generations. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>the number of generations to evolve for </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco8get_nameEv">
+<span id="pagmo::gaco::get_nameC"></span><span class="target" id="classpagmo_1_1gaco_1a89645ecde8e25dc44e713b43c121abeb"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm name. </p>
+<p>Returns the name of the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><code class="docutils literal"> <span class="pre">std::string</span> </code> containing the algorithm name </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco14get_extra_infoEv">
+<span id="pagmo::gaco::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gaco_1a017cfa405ec96a736d64a0ad8dfdb734"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra informations. </p>
+<p>Returns extra information on the algorithm.</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"> <span class="pre">std::string</span> </code> containing extra informations on the algorithm </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5pagmo4gaco7get_logEv">
+<span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo4gaco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get log. </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gaco_1aae2a87efdd827e42ad76be40bfad7a20"><span class="std std-ref">gaco::log_line_type</span></a> containing: gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp as described in <a class="reference internal" href="#classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"><span class="std std-ref">gaco::set_verbosity</span></a> <dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gaco_1aae2a87efdd827e42ad76be40bfad7a20"><span class="std std-ref">gaco::log_line_type</span></a> containing the logged values gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp </dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5pagmo4gaco9serializeER7Archive">
+<span id="pagmo::gaco::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1gaco_1a25abc2bd75c8d86d1935cda8e552fcf3"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo4gaco9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization. </p>
+<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-2018, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

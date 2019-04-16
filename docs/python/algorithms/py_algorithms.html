@@ -196,6 +196,131 @@
 
 <hr class="docutils" />
 <dl class="class">
+<dt id="pygmo.gaco">
+<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">gaco</code><a class="headerlink" href="#pygmo.gaco" title="Permalink to this definition">¶</a></dt>
+<dd><p>__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u,
+n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
+paretomax = 10u, epsilon = 0.9, memory = false, seed = random)</p>
+<p>Extended Ant Colony Optimization algorithm (gaco).</p>
+<p>ACO is inspired by the natural mechanism with which real ant colonies forage food.
+This algorithm has shown promising results in many trajectory optimization problems.
+The first appearance of the algorithm happened in Dr. Marco Dorigo’s thesis, in 1992.
+Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution
+based on three parameters (i.e., pheromone values) which are computed depending on the quality
+of each previous solution. The solutions are ranked through an oracle penalty method.</p>
+<p>The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation is an extension of Schlueter’s originally proposed extended ACO algorithm.
+In particular, the main difference lies in how two of the three pheromone values (i.e., weights and standard deviations) are computed.</p>
+<p>See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
+mixed integer non-linear programming. Computers &amp; Operations Research.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gen</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – number of generations</li>
+<li><strong>ker</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – kernel size</li>
+<li><strong>q</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – convergence speed parameter</li>
+<li><strong>oracle</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – oracle parameter</li>
+<li><strong>acc</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – accuracy parameter</li>
+<li><strong>threshold</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – threshold parameter</li>
+<li><strong>n_gen_mark</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – std convergence speed parameter</li>
+<li><strong>impstop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – improvement stopping criterion</li>
+<li><strong>evalstop</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – evaluation stopping criterion</li>
+<li><strong>focus</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – focus parameter</li>
+<li><strong>paretomax</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – max number of non-dominated solutions</li>
+<li><strong>epsilon</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – pareto decision parameter</li>
+<li><strong>memory</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – memory parameter</li>
+<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if either:<ul>
+<li><em>acc</em> is not &gt;=0.</li>
+<li><em>focus</em> is not &gt;=0.</li>
+<li><em>epsilon</em> is not in [0,1].</li>
+<li><em>threshold</em> is not in [1,gen] when gen!=0 and memory==false.</li>
+<li><em>threshold</em> is not in &gt;=1 when gen!=0 and memory==true.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/gaco.html#_CPPv2N5pagmo4gacoE" title="pagmo::gaco"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::gaco</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.gaco.get_log">
+<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.gaco.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal"><span class="pre">gaco</span></code></a>. A verbosity of <code class="docutils literal"><span class="pre">N</span></code> implies a log line each <code class="docutils literal"><span class="pre">N</span></code> generations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">at each logged epoch, the values <code class="docutils literal"><span class="pre">Gen</span></code>, <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Kernel</span></code>, <code class="docutils literal"><span class="pre">Oracle</span></code>, <code class="docutils literal"><span class="pre">dx</span></code>, <code class="docutils literal"><span class="pre">dp</span></code>, where:<ul class="simple">
+<li><code class="docutils literal"><span class="pre">Gen</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), generation number</li>
+<li><code class="docutils literal"><span class="pre">Fevals</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), number of functions evaluation made</li>
+<li><code class="docutils literal"><span class="pre">Best</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), best fitness function value</li>
+<li><code class="docutils literal"><span class="pre">Kernel</span></code> (<code class="docutils literal"><span class="pre">int</span></code>), kernel size</li>
+<li><code class="docutils literal"><span class="pre">Oracle</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), oracle parameter</li>
+<li><code class="docutils literal"><span class="pre">dx</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), sum of the absolute value of the difference between the variables’ values of the best and worst solutions</li>
+<li><code class="docutils literal"><span class="pre">dp</span></code> (<code class="docutils literal"><span class="pre">float</span></code>), absolute value of the difference between the worst and best solutions’ penalty values</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">tuples</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">gaco</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1e9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">23</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go"> Gen:        Fevals:          Best:        Kernel:        Oracle:            dx:            dp:</span>
+<span class="go">    1              0        179.464             13          1e+09        13.1007         649155</span>
+<span class="go">    2             13        166.317             13        179.464        5.11695        15654.1</span>
+<span class="go">    3             26        3.81781             13        166.317        5.40633        2299.95</span>
+<span class="go">    4             39        3.81781             13        3.81781        2.11767        385.781</span>
+<span class="go">    5             52        2.32543             13        3.81781        1.30415        174.982</span>
+<span class="go">    6             65        2.32543             13        2.32543        4.58441         43.808</span>
+<span class="go">    7             78        1.17205             13        2.32543        1.18585        21.6315</span>
+<span class="go">    8             91        1.17205             13        1.17205       0.806727        12.0702</span>
+<span class="go">    9            104        1.17205             13        1.17205       0.806727        12.0702</span>
+<span class="go">   10            130       0.586187             13       0.586187       0.806727        12.0702</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">gaco</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 0, 179.464, 13, 1e+09, 13.1007, 649155), (2, 15, 166.317, 13, 179.464, ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/gaco.html#_CPPv2NK5pagmo4gaco7get_logEv" title="pagmo::gaco::get_log"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::gaco::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.gaco.get_seed">
+<code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.gaco.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed used internally by this uda.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the random seed of the population</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
 <dt id="pygmo.bee_colony">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">bee_colony</code><span class="sig-paren">(</span><em>gen = 1</em>, <em>limit = 1</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bee_colony" title="Permalink to this definition">¶</a></dt>
 <dd><p>Artificial Bee Colony.</p>
