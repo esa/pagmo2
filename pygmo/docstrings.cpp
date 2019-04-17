@@ -2375,25 +2375,35 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::nsga2::get_log`.
 
 std::string gaco_docstring()
 {
-    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u,
-n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
-paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
+    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0., paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
 
 Extended Ant Colony Optimization algorithm (gaco).
 
-ACO is inspired by the natural mechanism with which real ant colonies forage food.
-This algorithm has shown promising results in many trajectory optimization problems.
-The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
+Ant colony optimization is a class of optimization algorithms modeled on the actions
+of an ant colony. Artificial 'ants' (e.g. simulation agents) locate optimal solutions by
+moving through a parameter space representing all possible solutions. Real ants lay down
+pheromones directing each other to resources while exploring their environment.
+The simulated 'ants' similarly record their positions and the quality of their solutions,
+so that in later simulation iterations more ants locate better solutions.
+
+In pygmo we propose a version of this algorithm called extended ACO and originally described
+by Schlueter et al.
 Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution
 based on three parameters (i.e., pheromone values) which are computed depending on the quality
 of each previous solution. The solutions are ranked through an oracle penalty method.
 
+This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
+optimization, with both continuous and integer variables.
 
-The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation is an extension of Schlueter's originally proposed extended ACO algorithm.
-In particular, the main difference lies in how two of the three pheromone values (i.e., weights and standard deviations) are computed.
+.. note::
 
-See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
-mixed integer non-linear programming. Computers & Operations Research.
+   The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed extended ACO algorithm.
+   The main difference between the implemented version  and the original one lies in
+   how two of the three pheromone values are computed (in particular, the weights and the standard deviations).
+
+.. seealso::
+
+   M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex mixed integer non-linear programming. Computers & Operations Research.
 
 Args:
     gen (``int``): number of generations

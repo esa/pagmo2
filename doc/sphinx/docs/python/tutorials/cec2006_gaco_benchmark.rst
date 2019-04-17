@@ -1,7 +1,7 @@
 .. _py_tutorial_cec2006_gaco_benchmark_comp:
 
-:class:`~pygmo.gaco` Benchmark Using the CEC2006 Problems
-===============================================================
+Benchmarking Extended Ant Colony Optimization on CEC2006 problems
+=================================================================
 
 In this tutorial we will show how to use pygmo to run :class:`~pygmo.gaco` algorithm and benchmark it with the test problem suite used in the
 Special Session on Constrained Real-Parameter Optimization, CEC-06, Vancouver, Canada, 17-21 July.
