@@ -185,10 +185,10 @@
 <dl class="class">
 <dt id="_CPPv2N5pagmo4gacoE">
 <span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><em class="property">class </em><code class="descname">gaco</code><a class="headerlink" href="#_CPPv2N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Extended ACO. </p>
+<dd><p>Extended Ant Colony Opitmization. </p>
 <p><img alt="../../../_images/gaco.png" src="../../../_images/gaco.png" /></p>
-<p>ACO is inspired by the natural mechanism through which real ant colonies forage food.</p>
-<p>This algorithm has shown promising results in many trajectory optimization problems. The first appearance of the algorithm happened in Dr. Marco Dorigo’s thesis, in 1992. Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution based on three parameters (i.e., pheromone values) which are computed depending on the quality of each previous solution. The solutions are ranked through an oracle penalty method.</p>
+<p>Ant colony optimization is a class of optimization algorithms modeled on the actions of an ant colony. Artificial ‘ants’ (e.g. simulation agents) locate optimal solutions by moving through a parameter space representing all possible solutions. Real ants lay down pheromones directing each other to resources while exploring their environment. The simulated ‘ants’ similarly record their positions and the quality of their solutions, so that in later simulation iterations more ants locate better solutions.</p>
+<p>In pagmo we propose a version of this algorithm called extended ACO and originally described by Schlueter et al. Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution based on three parameters (i.e., pheromone values) which are computed depending on the quality of each previous solution. The solutions are ranked through an oracle penalty method.</p>
 <p>This algorithm can be applied to box-bounded single-objective, constrained and unconstrained optimization, with both continuous and integer variables.</p>
 <p><div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -197,9 +197,8 @@ Computers &amp; Operations Research.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>The ACO version implemented in PaGMO is an extension of Schlueter’s originally proposed extended ACO algorithm and it is
-being developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace
-Engineering MSc degree in TU Delft. The main difference between the implemented version  and the original one lies in
+<p>The ACO version implemented in PaGMO is an extension of Schlueter’s originally proposed extended ACO algorithm.
+The main difference between the implemented version  and the original one lies in
 how two of the three pheromone values are computed (in particular, the weights and the standard deviations).</p>
 <p class="last">Image credit: <a class="reference external" href="https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg">https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg</a></p>
 </div>
@@ -241,7 +240,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 <li><code class="docutils literal"><span class="pre">paretomax</span></code>: Max number of non-dominated solutions: this regulates the max number of Pareto points to be stored. </li>
 <li><code class="docutils literal"><span class="pre">epsilon</span></code>: Pareto precision parameter: the smaller this parameter, the higher the chances to introduce a new solution in the Pareto front. </li>
 <li><code class="docutils literal"><span class="pre">memory</span></code>: Memory parameter: if true, memory is activated in the algorithm for multiple calls </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random). </li>
+<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt>
