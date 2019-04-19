@@ -16,7 +16,7 @@ cd build
 # Clang release build.
 CXX=clang++ CC=clang cmake ../ -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes
 make -j2 VERBOSE=1
-ctest
+ctest -V
 
 set +e
 set +x

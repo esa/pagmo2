@@ -18,7 +18,7 @@ cmake ../ -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=y
 make -j2 VERBOSE=1
 # Run the tests, except the fork island which
 # gives spurious warnings in the address sanitizer.
-ctest -E fork_island
+ctest -V -E fork_island
 
 set +e
 set +x
