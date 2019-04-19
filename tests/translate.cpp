@@ -244,8 +244,10 @@ BOOST_AUTO_TEST_CASE(translate_batch_fitness_test)
     std::iota(dvs.begin(), dvs.end(), 0.);
 
     auto fvs0 = p0.batch_fitness(dvs);
+    auto fvs1 = p1.batch_fitness(dvs);
     auto fvs2 = p2.batch_fitness(dvs);
 
+    BOOST_CHECK(fvs0 != fvs1);
     BOOST_CHECK(fvs0 == fvs2);
 
     auto no_bfe = problem{translate{hock_schittkowsky_71{}, {0.1, -0.2, 0.3, 0.4}}};
