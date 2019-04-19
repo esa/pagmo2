@@ -1,0 +1,4 @@
+E:/Projects/Pagmo2/pagmo2/CMakeFiles/INSTALL.dir
+E:/Projects/Pagmo2/pagmo2/CMakeFiles/RUN_TESTS.dir
+E:/Projects/Pagmo2/pagmo2/CMakeFiles/ALL_BUILD.dir
+E:/Projects/Pagmo2/pagmo2/CMakeFiles/ZERO_CHECK.dir
