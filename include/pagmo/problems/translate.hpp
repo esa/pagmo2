@@ -31,8 +31,12 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <stdexcept>
 #include <type_traits>
+
+#include <tbb/blocked_range.h>
+#include <tbb/parallel_for.h>
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -107,6 +111,50 @@ public:
     {
         vector_double x_deshifted = translate_back(x);
         return m_problem.fitness(x_deshifted);
+    }
+
+    /// Batch fitness.
+    /**
+     * The batch fitness computation is forwarded to the inner UDP, after the translation of \p xs.
+     *
+     * @param xs the input decision vectors.
+     *
+     * @return the fitnesses of \p xs.
+     *
+     * @throws unspecified any exception thrown by memory errors in standard containers,
+     * threading primitives, or by problem::batch_fitness().
+     */
+    vector_double batch_fitness(const vector_double &xs) const
+    {
+        const auto nx = m_problem.get_nx();
+        // Assume xs is sane.
+        assert(xs.size() % nx == 0u);
+        const auto n_dvs = xs.size() / nx;
+
+        // Prepare the deshifted dvs.
+        vector_double xs_deshifted(xs.size());
+
+        // Do the deshifting in parallel.
+        using range_t = tbb::blocked_range<decltype(xs.size())>;
+        tbb::parallel_for(range_t(0, n_dvs), [&xs, &xs_deshifted, nx, this](const range_t &range) {
+            for (auto i = range.begin(); i != range.end(); ++i) {
+                std::transform(xs.data() + i * nx, xs.data() + (i + 1u) * nx, m_translation.data(),
+                               xs_deshifted.data() + i * nx, std::minus<double>{});
+            }
+        });
+
+        // Invoke batch_fitness() from m_problem.
+        return m_problem.batch_fitness(xs_deshifted);
+    }
+
+    /// Check if the inner problem can compute fitnesses in batch mode.
+    /**
+     * @return the output of the <tt>has_batch_fitness()</tt> member function invoked
+     * by the inner problem.
+     */
+    bool has_batch_fitness() const
+    {
+        return m_problem.has_batch_fitness();
     }
 
     /// Box-bounds.
