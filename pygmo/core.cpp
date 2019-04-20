@@ -96,6 +96,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/multi_objective.hpp>
 
 #include <pygmo/algorithm.hpp>
+#include <pygmo/bfe.hpp>
 #include <pygmo/common_utils.hpp>
 #include <pygmo/docstrings.hpp>
 #include <pygmo/expose_algorithms.hpp>
@@ -141,6 +142,9 @@ std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // Exposed pagmo::island.
 std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+
+// Exposed pagmo::bfe.
+std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
 } // namespace pygmo
 
 // The cleanup function.
@@ -157,6 +161,8 @@ static inline void cleanup()
     pygmo::algorithm_ptr.reset();
 
     pygmo::island_ptr.reset();
+
+    pygmo::bfe_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -425,10 +431,21 @@ BOOST_PYTHON_MODULE(core)
     auto islands_module = bp::object(bp::handle<>(bp::borrowed(islands_module_ptr)));
     bp::scope().attr("islands") = islands_module;
 
+    // Create the batch_evaluators submodule.
+    std::string batch_evaluators_module_name
+        = bp::extract<std::string>(bp::scope().attr("__name__") + ".batch_evaluators");
+    PyObject *batch_evaluators_module_ptr = PyImport_AddModule(batch_evaluators_module_name.c_str());
+    if (!batch_evaluators_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'batch_evaluators' submodule");
+    }
+    auto batch_evaluators_module = bp::object(bp::handle<>(bp::borrowed(batch_evaluators_module_ptr)));
+    bp::scope().attr("batch_evaluators") = batch_evaluators_module;
+
     // Store the pointers to the classes that can be extended by APs.
     bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
     bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
     bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
+    bp::scope().attr("_bfe_address") = reinterpret_cast<std::uintptr_t>(&pygmo::bfe_ptr);
 
     // Fetch and store addresses to the internal cereal global objects that contain the
     // info for the serialization of polymorphic types.
