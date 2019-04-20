@@ -77,14 +77,28 @@ public:
 template <typename T>
 const bool has_bfe_call_operator<T>::value;
 
+namespace detail
+{
+
+// Specialise this to true in order to disable all the UDBFE checks and mark a type
+// as a UDBFE regardless of the features provided by it.
+// NOTE: this is needed when implementing the machinery for Python batch evaluators.
+// NOTE: leave this as an implementation detail for now.
+template <typename>
+struct disable_udbfe_checks : std::false_type {
+};
+
+} // namespace detail
+
 // Check if T is a UDBFE.
 template <typename T>
 class is_udbfe
 {
     static const bool implementation_defined
-        = std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-          && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-          && std::is_destructible<T>::value && has_bfe_call_operator<T>::value;
+        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
+           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
+           && std::is_destructible<T>::value && has_bfe_call_operator<T>::value)
+          || detail::disable_udbfe_checks<T>::value;
 
 public:
     static const bool value = implementation_defined;
