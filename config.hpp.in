@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 // NOTE: don't bother checking the _POSIX_C_SOURCE definition on OSX. Trying to set
 // it explicitly seems to create a lot of headaches, so we will just assume
 // that everything is already set appropriately on OSX for using fork().
-#if defined(_POSIX_C_SOURCE) || defined(__apple_build_version__)
+#if defined(_POSIX_C_SOURCE) || defined(__APPLE__)
 @PAGMO_ENABLE_FORK_ISLAND@
 #endif
 // clang-format on
