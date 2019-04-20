@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 
+#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -144,7 +145,15 @@ public:
         });
 
         // Invoke batch_fitness() from m_problem.
+        // NOTE: in non-debug mode, use the helper that avoids calling the checks in m_problem.batch_fitness().
+        // The translate metaproblem does not change the dimensionality of the problem
+        // or of the fitness, thus all the checks run by m_problem.batch_fitness()
+        // are redundant.
+#if defined(NDEBUG)
+        return detail::prob_invoke_mem_batch_fitness(m_problem, xs_deshifted);
+#else
         return m_problem.batch_fitness(xs_deshifted);
+#endif
     }
 
     /// Check if the inner problem can compute fitnesses in batch mode.
