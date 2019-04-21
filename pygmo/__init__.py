@@ -31,6 +31,19 @@
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
 
+import cloudpickle as _cloudpickle
+# Register the cleanup function.
+from .core import _cleanup as _cpp_cleanup
+import atexit as _atexit
+# Patch the island class.
+from . import _patch_island
+# Patch the algorithm class.
+from . import _patch_algorithm
+# Patch the problem class.
+from . import _patch_problem
+# And we explicitly import the test submodule
+from . import test
+
 # Version setup.
 from ._version import __version__
 
@@ -54,18 +67,6 @@ del _py_problems
 
 del item
 
-# And we explicitly import the test submodule
-from . import test
-
-# Patch the problem class.
-from . import _patch_problem
-
-# Patch the algorithm class.
-from . import _patch_algorithm
-
-# Patch the island class.
-from . import _patch_island
-
 
 class thread_safety(object):
     """Thread safety level.
@@ -74,10 +75,12 @@ class thread_safety(object):
 
     """
 
-    #: No thread safety: any concurrent operation on distinct instances is unsafe
+    #: No thread safety: concurrent operations on distinct objects are unsafe
     none = core._thread_safety.none
-    #: Basic thread safety: any concurrent operation on distinct instances is safe
+    #: Basic thread safety: concurrent operations on distinct objects are safe
     basic = core._thread_safety.basic
+    #: Constant thread safety: constant (i.e., read-only) concurrent operations on the same object are safe
+    constant = core._thread_safety.constant
 
 
 class evolve_status(object):
@@ -616,14 +619,7 @@ def _archi_push_back(self, **kwargs):
 
 setattr(archipelago, "push_back", _archi_push_back)
 
-# Register the cleanup function.
-import atexit as _atexit
-from .core import _cleanup as _cpp_cleanup
-from ._parinit import _cleanup as _parinit_cleanup
-
-
 # Machinery for the setup of the serialization backend.
-import cloudpickle as _cloudpickle
 _serialization_backend = _cloudpickle
 
 

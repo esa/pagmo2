@@ -380,7 +380,10 @@ BOOST_PYTHON_MODULE(core)
     doc_options.disable_py_signatures();
 
     // The thread_safety enum.
-    bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
+    bp::enum_<thread_safety>("_thread_safety")
+        .value("none", thread_safety::none)
+        .value("basic", thread_safety::basic)
+        .value("constant", thread_safety::constant);
 
     // The evolve_status enum.
     bp::enum_<evolve_status>("_evolve_status")

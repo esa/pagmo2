@@ -87,7 +87,7 @@ add_subdirectory(plotting)
 
 # Add the Python files.
 install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _patch_island.py _problem_test.py
-     _algorithm_test.py _island_test.py _py_islands.py _py_problems.py _mp_utils.py _parinit.py
+     _algorithm_test.py _island_test.py _py_islands.py _py_problems.py _mp_utils.py
      "${CMAKE_CURRENT_BINARY_DIR}/_version.py" DESTINATION ${PYGMO_INSTALL_PATH})
 
 # pygmo's public headers, to be installed.
