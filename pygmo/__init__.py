@@ -337,7 +337,7 @@ setattr(cstrs_self_adaptive, "__init__", _cstrs_self_adaptive_init)
 __original_population_init = population.__init__
 
 
-def _population_init(self, prob=None, size=0, seed=None, init_mode="serial"):
+def _population_init(self, prob=None, size=0, seed=None):
     # NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
     # to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
     # from a C++ problem, and on the C++ exposition side we need only to
@@ -377,13 +377,9 @@ def _population_init(self, prob=None, size=0, seed=None, init_mode="serial"):
         # work if prob is an exposed C++ problem or a Python UDP.
         prob_arg = problem(prob)
     if seed is None:
-        # A None seed means that we are randomly generating
-        # the seed. We will be using pagmo's random_device::next()
-        # function for that.
-        from .core import _random_device_next
-        seed = _random_device_next()
-
-    __original_population_init(self, prob_arg, size, seed, init_mode)
+        __original_population_init(self, prob_arg, size)
+    else:
+        __original_population_init(self, prob_arg, size, seed)
 
 
 setattr(population, "__init__", _population_init)
@@ -703,7 +699,6 @@ def get_serialization_backend():
 
 def _cleanup():
     mp_island.shutdown_pool()
-    _parinit_cleanup()
     _cpp_cleanup()
 
 
