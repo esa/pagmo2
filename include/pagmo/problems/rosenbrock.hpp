@@ -142,6 +142,10 @@ struct rosenbrock {
     {
         ar(m_dim);
     }
+    /// Thread safety level.
+    /**
+     * @return the ``constant`` thread safety level.
+     */
     thread_safety get_thread_safety() const
     {
         return thread_safety::constant;
