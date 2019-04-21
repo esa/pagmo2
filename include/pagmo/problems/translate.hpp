@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cassert>
 #include <functional>
+#include <iterator>
 #include <stdexcept>
 #include <type_traits>
 
@@ -140,7 +141,13 @@ public:
         tbb::parallel_for(range_t(0, n_dvs), [&xs, &xs_deshifted, nx, this](const range_t &range) {
             for (auto i = range.begin(); i != range.end(); ++i) {
                 std::transform(xs.data() + i * nx, xs.data() + (i + 1u) * nx, m_translation.data(),
-                               xs_deshifted.data() + i * nx, std::minus<double>{});
+#if defined(_MSC_VER)
+                               stdext::make_unchecked_array_iterator(xs_deshifted.data() + i * nx)
+#else
+                               xs_deshifted.data() + i * nx
+#endif
+                                   ,
+                               std::minus<double>{});
             }
         });
 
