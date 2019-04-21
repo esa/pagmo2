@@ -54,6 +54,7 @@ Batch fitness evaluator
    .. code-block:: c++
 
       std::string get_name() const;
+      std::string get_extra_info() const;
       thread_safety get_thread_safety() const;
 
    See the documentation of the corresponding member functions in this class for details on how the optional

@@ -76,6 +76,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
@@ -100,6 +101,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/common_utils.hpp>
 #include <pygmo/docstrings.hpp>
 #include <pygmo/expose_algorithms.hpp>
+#include <pygmo/expose_bfes.hpp>
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
 #include <pygmo/island.hpp>
@@ -926,4 +928,27 @@ BOOST_PYTHON_MODULE(core)
              }),
              pygmo::archipelago_get_champions_x_docstring().c_str());
     pygmo::add_property(archi_class, "status", &archipelago::status, pygmo::archipelago_status_docstring().c_str());
+
+    // Bfe class.
+    pygmo::bfe_ptr = detail::make_unique<bp::class_<bfe>>("bfe", pygmo::bfe_docstring().c_str(), bp::init<>());
+    auto &bfe_class = pygmo::get_bfe_class();
+    bfe_class.def(bp::init<const bp::object &>((bp::arg("udbfe"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::bfe_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<bfe>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<bfe>)
+        // UDBFE extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<bfe>)
+        // Bfe methods.
+        .def("__call__", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
+                 return pygmo::v_to_a(b(prob, pygmo::to_vd(dvs)));
+             }),
+             pygmo::bfe_call_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+        .def("get_name", &bfe::get_name, pygmo::bfe_get_name_docstring().c_str())
+        .def("get_extra_info", &bfe::get_extra_info, pygmo::bfe_get_extra_info_docstring().c_str())
+        .def("get_thread_safety", &bfe::get_thread_safety, pygmo::bfe_get_thread_safety_docstring().c_str());
+
+    // Expose bfes.
+    pygmo::expose_bfes();
 }
