@@ -4222,8 +4222,8 @@ An island can be initialised in a variety of ways using keyword arguments:
     then :class:`~pygmo.thread_island` will be selected as UDI type;
   * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.mp_island`
     will be selected as UDI type, else :class:`~pygmo.ipyparallel_island` will be chosen;
-* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi* and *seed*, then a :class:`~pygmo.population`
-  will be constructed from *prob*, *size* and *seed*, and the construction will then proceed in the same way detailed
+* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi*, *b* and *seed*, then a :class:`~pygmo.population`
+  will be constructed from *prob*, *size*, *b* and *seed*, and the construction will then proceed in the same way detailed
   above (i.e., *algo* and the newly-created population are used to initialise the island's algorithm and population,
   and the UDI, if not specified, will be chosen according to the heuristic detailed above).
 

@@ -300,6 +300,13 @@ static inline constexpr unsigned max_unsigned()
     return std::numeric_limits<unsigned>::max();
 }
 
+// Small helper to return the next random unsigned
+// from the global pagmo rng.
+static inline unsigned random_device_next()
+{
+    return pagmo::random_device::next();
+}
+
 // The set containing the list of registered APs.
 static std::unordered_set<std::string> ap_set;
 
@@ -409,6 +416,9 @@ BOOST_PYTHON_MODULE(core)
     // The max_unsigned() helper.
     bp::def("_max_unsigned", &max_unsigned);
 
+    // The random_device_next() helper.
+    bp::def("_random_device_next", &random_device_next);
+
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
     PyObject *problems_module_ptr = PyImport_AddModule(problems_module_name.c_str());
@@ -476,9 +486,10 @@ BOOST_PYTHON_MODULE(core)
     // Ctors from problem.
     // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
     // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
-    // This way we avoid having to expose a different ctor for every exposed C++ prob.
-    pop_class.def(bp::init<const problem &, population::size_type>())
-        .def(bp::init<const problem &, population::size_type, unsigned>())
+    // This way we avoid having to expose a different ctor for every exposed C++ prob. Same idea with
+    // the bfe argument.
+    pop_class.def(bp::init<const problem &, population::size_type, unsigned>())
+        .def(bp::init<const problem &, const bfe &, population::size_type, unsigned>())
         // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.

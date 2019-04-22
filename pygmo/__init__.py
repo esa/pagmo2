@@ -340,7 +340,7 @@ setattr(cstrs_self_adaptive, "__init__", _cstrs_self_adaptive_init)
 __original_population_init = population.__init__
 
 
-def _population_init(self, prob=None, size=0, seed=None):
+def _population_init(self, prob=None, size=0, b=None, seed=None):
     # NOTE: the idea of having the pop init here instead of exposed from C++ is that like this we don't need
     # to expose a new pop ctor each time we expose a new problem: in this method we will use the problem ctor
     # from a C++ problem, and on the C++ exposition side we need only to
@@ -348,20 +348,26 @@ def _population_init(self, prob=None, size=0, seed=None):
     """
     Args:
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-             (if *prob* ``None``, a :class:`~pygmo.null_problem` will be used in its stead)
-        size (``int``): the number of individuals
-        seed (``int``): the random seed (if *seed* is ``None``, a randomly-generated value will be used
+             (if *prob* is :data:`None`, a default-constructed :class:`~pygmo.problem` will be used
+             in its stead)
+        size (int): the number of individuals
+        b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
+             (if *b* is :data:`None`, the evaluation of the population's individuals will be performed
+             in sequential mode)
+        seed (int): the random seed (if *seed* is :data:`None`, a randomly-generated value will be used
              in its stead)
 
     Raises:
-        TypeError: if *size* is not an ``int`` or *seed* is not ``None`` and not an ``int``
+        TypeError: if *size* is not an :class:`int` or *seed* is not :data:`None` and not an :class:`int`
         OverflowError:  is *size* or *seed* are negative
-        unspecified: any exception thrown by the invoked C++ constructors or by the constructor of
-            :class:`~pygmo.problem`, or by failures at the intersection between C++ and
+        unspecified: any exception thrown by the invoked C++ constructors, by the constructor of
+            :class:`~pygmo.problem`, or the constructor of :class:`~pygmo.bfe`, or by failures at
+            the intersection between C++ and
             Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
     """
     import sys
+    from .core import _random_device_next
     int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check input params.
     if not isinstance(size, int_types):
@@ -369,20 +375,25 @@ def _population_init(self, prob=None, size=0, seed=None):
     if not seed is None and not isinstance(seed, int_types):
         raise TypeError("the 'seed' parameter must be None or an integer")
     if prob is None:
-        # Use the null problem for default init.
-        prob = null_problem()
-    if type(prob) == problem:
-        # If prob is a pygmo problem, we will pass it as-is to the
-        # original init.
-        prob_arg = prob
-    else:
-        # Otherwise, we attempt to create a problem from it. This will
+        # Problem not specified, def-construct it.
+        prob = problem()
+    elif type(prob) != problem:
+        # If prob is not a problem, we attempt to create a problem from it. This will
         # work if prob is an exposed C++ problem or a Python UDP.
-        prob_arg = problem(prob)
+        prob = problem(prob)
+
     if seed is None:
-        __original_population_init(self, prob_arg, size)
+        # Seed not specified, randomly generate it
+        # with the global pagmo rng.
+        seed = _random_device_next()
+
+    if b is None:
+        # No bfe specified, init in sequential mode.
+        __original_population_init(self, prob, size, seed)
     else:
-        __original_population_init(self, prob_arg, size, seed)
+        # A bfe was specified. Same as above with the problem.
+        __original_population_init(self, prob, b if type(
+            b) == bfe else bfe(b), size, seed)
 
 
 setattr(population, "__init__", _population_init)
@@ -398,8 +409,9 @@ def _island_init(self, **kwargs):
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-        size (``int``): the number of individuals
-        seed (``int``): the random seed (if not specified, it will be randomly-generated)
+        size (int): the number of individuals
+        b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
+        seed (int): the random seed (if not specified, it will be randomly-generated)
 
     Raises:
         KeyError: if the set of keyword arguments is invalid
@@ -418,33 +430,31 @@ def _island_init(self, **kwargs):
         return
 
     # If we are not dealing with a def ctor, we always need the algo argument.
-    if not "algo" in kwargs:
+    if not 'algo' in kwargs:
         raise KeyError(
             "the mandatory 'algo' parameter is missing from the list of arguments "
             "of the island constructor")
     algo = kwargs.pop('algo')
-    algo = algo if isinstance(algo, algorithm) else algorithm(algo)
+    algo = algo if type(algo) == algorithm else algorithm(algo)
 
     # Population setup. We either need an input pop, or the prob and size,
-    # plus optionally seed.
-    if 'pop' in kwargs and ('prob' in kwargs or 'size' in kwargs or 'seed' in kwargs):
+    # plus optionally seed and b.
+    if 'pop' in kwargs and ('prob' in kwargs or 'size' in kwargs or 'seed' in kwargs or 'b' in kwargs):
         raise KeyError(
-            "if the 'pop' argument is provided, the 'prob', 'size' and 'seed' "
+            "if the 'pop' argument is provided, the 'prob', 'size', 'seed' and 'b' "
             "arguments must not be provided")
     elif 'pop' in kwargs:
-        pop = kwargs.pop("pop")
+        pop = kwargs.pop('pop')
     elif 'prob' in kwargs and 'size' in kwargs:
-        if 'seed' in kwargs:
-            pop = population(kwargs.pop('prob'), kwargs.pop(
-                'size'), kwargs.pop('seed'))
-        else:
-            pop = population(kwargs.pop('prob'), kwargs.pop('size'))
+        pop = population(prob=kwargs.pop('prob'),
+                         size=kwargs.pop('size'), seed=kwargs.pop('seed') if 'seed' in kwargs else None,
+                         b=kwargs.pop('b') if 'b' in kwargs else None)
     else:
         raise KeyError(
             "unable to construct a population from the arguments of "
             "the island constructor: you must either pass a population "
             "('pop') or a set of arguments that can be used to build one "
-            "('prob', 'size' and, optionally, 'seed')")
+            "('prob', 'size' and, optionally, 'seed' and 'b')")
 
     # UDI, if any.
     if 'udi' in kwargs:
@@ -454,7 +464,7 @@ def _island_init(self, **kwargs):
 
     if len(kwargs) != 0:
         raise KeyError(
-            "unrecognised keyword arguments: {}".format(list(kwargs.keys())))
+            'unrecognised keyword arguments: {}'.format(list(kwargs.keys())))
 
     __original_island_init(self, *args)
 
@@ -481,15 +491,16 @@ def _archi_init(self, n=0, **kwargs):
     This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
 
     Args:
-        n (``int``): the number of islands in the archipelago
+        n (int): the number of islands in the archipelago
 
     Keyword Args:
         udi: a user-defined island, either Python or C++
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-        pop_size (``int``): the number of individuals for each island
-        seed (``int``): the random seed
+        pop_size (int): the number of individuals for each island
+        b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
+        seed (int): the random seed
 
     Raises:
         TypeError: if *n* is not an integral type
