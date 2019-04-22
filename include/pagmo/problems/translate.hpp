@@ -141,11 +141,11 @@ public:
         tbb::parallel_for(range_t(0, n_dvs), [&xs, &xs_deshifted, nx, this](const range_t &range) {
             for (auto i = range.begin(); i != range.end(); ++i) {
 #if defined(_MSC_VER)
-                std::transform(
-                    stdext::make_unchecked_array_iterator(xs.data() + i * nx),
-                    stdext::make_unchecked_array_iterator(xs.data() + (i + 1u) * nx),
-                    stdext::make_unchecked_array_iterator(m_translation.data()),
-                    stdext::make_unchecked_array_iterator(xs_deshifted.data() + i * nx, std::minus<double>{}));
+                std::transform(stdext::make_unchecked_array_iterator(xs.data() + i * nx),
+                               stdext::make_unchecked_array_iterator(xs.data() + (i + 1u) * nx),
+                               stdext::make_unchecked_array_iterator(m_translation.data()),
+                               stdext::make_unchecked_array_iterator(xs_deshifted.data() + i * nx),
+                               std::minus<double>{});
 #else
                 std::transform(xs.data() + i * nx, xs.data() + (i + 1u) * nx, m_translation.data(),
                                xs_deshifted.data() + i * nx, std::minus<double>{});
