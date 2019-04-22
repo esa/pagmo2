@@ -139,33 +139,10 @@ public:
         }
     }
 
-    /// Constructor from a problem and a batch fitness evaluator.
-    /**
-     * \verbatim embed:rst:leading-asterisk
-     * .. note::
-     *
-     *    This constructor is enabled only if :cpp:class:`pagmo::problem` is constructible from ``T``.
-     *
-     * Constructs a population with *pop_size* individuals associated
-     * to the problem *x* and setting the population random seed
-     * to *seed*. The input problem *x* can be either a :cpp:class:`pagmo::problem` or a user-defined problem
-     * (UDP). The fitnesses of the individuals will be evaluated with the input
-     * :cpp:class:`pagmo::bfe` *b*.
-     *
-     * \endverbatim
-     *
-     * @param x the problem the population refers to.
-     * @param b the batch fitness evaluator that will be used to evaluate the fitnesses of the individuals.
-     * @param pop_size population size (i.e. number of individuals therein).
-     * @param seed seed of the random number generator used, for example, to
-     * create new random individuals within the bounds.
-     *
-     * @throws unspecified any exception thrown by batch_random_decision_vector(), the call operator of \p b,
-     * push_back(), or by the invoked constructor of pagmo::problem.
-     */
-    template <typename T, enable_if_t<std::is_constructible<problem, T &&>::value, int> = 0>
-    explicit population(T &&x, const bfe &b, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
-        : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
+private:
+    // Implementation of the ctor from bfe. Distinguish the two cases
+    // in which bfe or a udbfe were provided.
+    void constructor_from_bfe_impl(const bfe &b, size_type pop_size, const std::true_type &)
     {
         // Create a batch of random decision vectors.
         const auto dvs = batch_random_decision_vector(m_prob, pop_size, m_e);
@@ -186,6 +163,47 @@ public:
             push_back(vector_double(dvs.data() + i * nx, dvs.data() + (i + 1u) * nx),
                       vector_double(fvs.data() + i * nf, fvs.data() + (i + 1u) * nf));
         }
+    }
+    template <typename U>
+    void constructor_from_bfe_impl(U &&b, size_type pop_size, const std::false_type &)
+    {
+        constructor_from_bfe_impl(bfe(std::forward<U>(b)), pop_size, std::true_type{});
+    }
+
+public:
+    /// Constructor from a problem and a batch fitness evaluator.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if :cpp:class:`pagmo::problem` is constructible from ``T``,
+     *    and :cpp:class:`pagmo::bfe` is constructible from ``U``.
+     *
+     * Constructs a population with *pop_size* individuals associated
+     * to the problem *x* and setting the population random seed
+     * to *seed*. The input problem *x* can be either a :cpp:class:`pagmo::problem` or a user-defined problem
+     * (UDP). The fitnesses of the individuals will be evaluated with the input
+     * :cpp:class:`pagmo::bfe` or UDBFE *b*.
+     *
+     * \endverbatim
+     *
+     * @param x the problem the population refers to.
+     * @param b the (user-defined) batch fitness evaluator that will be used to evaluate the fitnesses of the
+     * individuals.
+     * @param pop_size population size (i.e. number of individuals therein).
+     * @param seed seed of the random number generator used, for example, to
+     * create new random individuals within the bounds.
+     *
+     * @throws unspecified any exception thrown by batch_random_decision_vector(), the public API of the (user-defined)
+     * batch fitness evaluator, push_back(), or by the invoked constructor of pagmo::problem.
+     */
+    template <
+        typename T, typename U,
+        enable_if_t<std::is_constructible<problem, T &&>::value && std::is_constructible<bfe, U &&>::value, int> = 0>
+    explicit population(T &&x, U &&b, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
+        : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
+    {
+        constructor_from_bfe_impl(std::forward<U>(b), pop_size, std::is_same<uncvref_t<U>, bfe>{});
     }
 
     /// Defaulted copy constructor.

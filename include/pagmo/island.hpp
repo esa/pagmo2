@@ -881,27 +881,35 @@ public:
     {
     }
 
+private:
+    template <typename Algo, typename Prob, typename Bfe>
+    using algo_prob_bfe_enabler
+        = enable_if_t<std::is_constructible<algorithm, Algo &&>::value && std::is_constructible<problem, Prob &&>::value
+                          && std::is_constructible<bfe, Bfe &&>::value,
+                      int>;
+
+public:
     /// Constructor from algorithm, problem, batch fitness evaluator, size and seed.
     /**
      * \verbatim embed:rst:leading-asterisk
      * This constructor is equivalent to the previous one, the only difference being that
      * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
-     * *b*.
+     * or UDBFE *b*.
      * \endverbatim
      *
      * @param a the input algorithm.
      * @param p the input problem.
-     * @param b the input batch fitness evaluator.
+     * @param b the input (user-defined) batch fitness evaluator.
      * @param size the population size.
      * @param seed the population seed.
      *
      * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
      * island(Algo &&, Pop &&).
      */
-    template <typename Algo, typename Prob, algo_prob_enabler<Algo, Prob> = 0>
-    explicit island(Algo &&a, Prob &&p, const bfe &b, population::size_type size,
+    template <typename Algo, typename Prob, typename Bfe, algo_prob_bfe_enabler<Algo, Prob, Bfe> = 0>
+    explicit island(Algo &&a, Prob &&p, Bfe &&b, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
-        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), b, size, seed))
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
     {
     }
 
@@ -945,28 +953,39 @@ public:
     {
     }
 
+private:
+    template <typename Isl, typename Algo, typename Prob, typename Bfe>
+    using isl_algo_prob_bfe_enabler
+        = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
+                          && std::is_constructible<problem, Prob &&>::value
+                          && std::is_constructible<bfe, Bfe &&>::value,
+                      int>;
+
+public:
     /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size and seed.
     /**
      * \verbatim embed:rst:leading-asterisk
      * This constructor is equivalent to the previous one, the only difference being that
      * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
-     * *b*.
+     * or UDBFE *b*.
      * \endverbatim
      *
      * @param isl the input UDI.
      * @param a the input algorithm.
      * @param p the input problem.
-     * @param b the input batch fitness evaluator.
+     * @param b the input (user-defined) batch fitness evaluator.
      * @param size the population size.
      * @param seed the population seed.
      *
      * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
      * island(Algo &&, Pop &&).
      */
-    template <typename Isl, typename Algo, typename Prob, isl_algo_prob_enabler<Isl, Algo, Prob> = 0>
-    explicit island(Isl &&isl, Algo &&a, Prob &&p, const bfe &b, population::size_type size,
+    template <typename Isl, typename Algo, typename Prob, typename Bfe,
+              isl_algo_prob_bfe_enabler<Isl, Algo, Prob, Bfe> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, Bfe &&b, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
-        : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), b, size, seed))
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a),
+                 population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
     {
     }
     /// Destructor.
@@ -1823,12 +1842,13 @@ private:
     // to batch initialise *all* archi individuals
     // (whereas now we batch init n times, one for each island). Keep this in mind
     // for future developments.
-    template <typename Algo, typename Prob, typename S1, typename S2,
+    template <typename Algo, typename Prob, typename Bfe, typename S1, typename S2,
               enable_if_t<std::is_constructible<algorithm, const Algo &>::value
-                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_constructible<problem, const Prob &>::value
+                              && std::is_constructible<bfe, const Bfe &>::value && std::is_integral<S1>::value
                               && std::is_integral<S2>::value,
                           int> = 0>
-    void n_ctor(size_type n, const Algo &a, const Prob &p, const bfe &b, S1 size, S2 seed)
+    void n_ctor(size_type n, const Algo &a, const Prob &p, const Bfe &b, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
@@ -1851,12 +1871,13 @@ private:
         }
     }
     // Same as previous, with bfe argument.
-    template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
+    template <typename Isl, typename Algo, typename Prob, typename Bfe, typename S1, typename S2,
               enable_if_t<is_udi<Isl>::value && std::is_constructible<algorithm, const Algo &>::value
-                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_constructible<problem, const Prob &>::value
+                              && std::is_constructible<bfe, const Bfe &>::value && std::is_integral<S1>::value
                               && std::is_integral<S2>::value,
                           int> = 0>
-    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, const bfe &b, S1 size, S2 seed)
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, const Bfe &b, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;

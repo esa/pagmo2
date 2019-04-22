@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
@@ -408,6 +409,14 @@ BOOST_AUTO_TEST_CASE(population_bfe_ctor_test)
 
     // Same with 1000 individuals.
     population pop1000{rosenbrock{2u}, bfe{}, 1000};
+    BOOST_CHECK(pop1000.size() == 1000u);
+    BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+    }
+
+    // Do a test with a UDBFE.
+    pop1000 = population{rosenbrock{2u}, thread_bfe{}, 1000};
     BOOST_CHECK(pop1000.size() == 1000u);
     BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
     for (auto i = 0u; i < 1000u; ++i) {
