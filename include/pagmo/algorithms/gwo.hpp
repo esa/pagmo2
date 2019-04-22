@@ -105,9 +105,8 @@ public:
         const auto bounds = prob.get_bounds();
         const auto &lb = bounds.first;
         const auto &ub = bounds.second;
-        auto NP = pop.size();             // number of agent(wolf) equal to population size
-        auto fevals0 = prob.get_fevals(); // fevals already made
-        auto count = 1u;                  // regulates the screen output
+        auto NP = pop.size(); // number of agent(wolf) equal to population size
+        auto count = 1u;      // regulates the screen output
 
         // PREAMBLE-------------------------------------------------------------------------------------------------
         // We start by checking that the problem is suitable for this
@@ -159,7 +158,7 @@ public:
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
 
             auto fit = pop.get_f();
-            a = 2.0 - (double)gen * (2.0 / (double)m_gen);
+            a = 2.0 - static_cast<double>(gen) * (2.0 / static_cast<double>(m_gen));
             // for each agents
             for (decltype(NP) i = 0u; i < NP; ++i) {
 
