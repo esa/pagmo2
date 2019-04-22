@@ -81,7 +81,7 @@ public:
      */
 
     gwo(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next())
-        : m_gen(gen), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+        : m_gen(gen), m_seed(seed), m_e(seed), m_verbosity(0u), m_log()
     {
     }
 
