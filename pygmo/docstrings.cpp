@@ -2482,6 +2482,75 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
 )";
 }
 
+std::string gwo_docstring()
+{
+    return R"(__init__(gen = 1, seed = random)
+
+Grey Wolf Optimizer (gwo).
+
+Grey wolf optimizer is a class of optimization algorithms modeled on the hunting actions
+and social hierarchy of a grey wolf pack. Artificial 'wolf' (e.g. simulation agents) locate optimal solutions by
+moving through a parameter space around alpha, beta and delta wolf. In nature,
+alpha wolf is most experienced in hunting and gwo assume that optimal solutions are
+most likely to located around the alpha wolf.
+The simulated 'wolves' will randomly search area around alpha, beta and delta.
+In each iteration, alpha, beta and delta wolf are updated according to new fitness.
+
+This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
+optimization, with continuous value.
+
+Args:
+    gen (``int``): number of generations
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either:
+
+        * *gen* is not >=3.
+    
+See also the docs of the C++ class :cpp:class:`pagmo::gwo`.
+
+)";
+}
+
+std::string gwo_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.gwo`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``alpha`` (``float``), fitness function value of alpha
+    * ``beta`` (``float``), fitness function value of beta
+    * ``delta`` (``float``), fitness function value of delta
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(nsga2(gen=100))
+    >>> algo.set_verbosity(20)
+    >>> pop = population(zdt(1), 40)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:        ideal1:        ideal2:
+       1              0      0.0033062        2.44966
+      21            800    0.000275601       0.893137
+      41           1600    3.15834e-05        0.44117
+      61           2400     2.3664e-05       0.206365
+      81           3200     2.3664e-05       0.133305
+    >>> uda = algo.extract(nsga2)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::gwo::get_log`.
+
+)";
+}
+
 std::string moead_docstring()
 {
     return R"(__init__(gen = 1, weight_generation = "grid", decomposition = "tchebycheff", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
