@@ -2517,7 +2517,7 @@ Returns:
 Examples:
     >>> import pygmo as pg
     >>> prob = pg.problem(pg.rosenbrock(dim = 2))
-    >>> pop = pg.population(prob, 13, 23)
+    >>> pop = pg.population(prob, size=13, seed=23)
     >>> algo = pg.algorithm(pg.gaco(10, 13, 1.0, 1e9, 0.0, 1, 7, 100000, 100000, 0.0, 10, 0.9, False, 23))
     >>> algo.set_verbosity(1)
     >>> pop = algo.evolve(pop) # doctest: +SKIP

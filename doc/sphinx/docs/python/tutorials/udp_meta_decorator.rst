@@ -62,6 +62,7 @@ be that printing *drb* to screen will tell us that *rb* has been wrapped by a :c
            Inequality constraints dimension:       0
            Lower bounds: [-5, -5]
            Upper bounds: [10, 10]
+           Has batch fitness evaluation: false
    <BLANKLINE>
            Has gradient: true
            User implemented gradient sparsity: false
@@ -124,6 +125,7 @@ The string representation of *drb* will now reflect that the fitness function ha
            Inequality constraints dimension:       0
            Lower bounds: [-5, -5]
            Upper bounds: [10, 10]
+           Has batch fitness evaluation: false
    <BLANKLINE>
            Has gradient: true
            User implemented gradient sparsity: false

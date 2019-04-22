@@ -90,6 +90,7 @@ In order to check that the UDP above is well formed we try to construct a :class
     	Tolerances on constraints: [0, 0, 0, 0, 0, ... ]
     	Lower bounds: [-5, -5, -5, -5, -5, ... ]
     	Upper bounds: [5, 5, 5, 5, 5, ... ]
+        Has batch fitness evaluation: false
     <BLANKLINE>
     	Has gradient: false
     	User implemented gradient sparsity: false

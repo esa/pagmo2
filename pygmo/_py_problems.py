@@ -30,6 +30,10 @@
 
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
+# Import the unconstrain meta-problem so that we can re-use
+# the docstring of its inner_problem property in the documentation
+# of the inner_problem property of decorator_problem.
+from .core import unconstrain as _unconstrain
 
 
 def _with_decorator(f):
@@ -56,12 +60,6 @@ def _add_doc(value):
         func.__doc__ = value
         return func
     return _doc
-
-
-# Import the unconstrain meta-problem so that we can re-use
-# the docstring of its inner_problem property in the documentation
-# of the inner_problem property of decorator_problem.
-from .core import unconstrain as _unconstrain
 
 
 class decorator_problem(object):
@@ -162,6 +160,14 @@ class decorator_problem(object):
     @_with_decorator
     def fitness(self, dv):
         return self._prob.fitness(dv)
+
+    @_with_decorator
+    def batch_fitness(self, dvs):
+        return self._prob.batch_fitness(dvs)
+
+    @_with_decorator
+    def has_batch_fitness(self):
+        return self._prob.has_batch_fitness()
 
     @_with_decorator
     def get_bounds(self):

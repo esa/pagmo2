@@ -41,6 +41,8 @@ from . import _patch_island
 from . import _patch_algorithm
 # Patch the problem class.
 from . import _patch_problem
+# Patch the bfe class.
+from . import _patch_bfe
 # And we explicitly import the test submodule
 from . import test
 
