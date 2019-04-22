@@ -31,6 +31,7 @@ Extended Ant Colony Optimization (ACOmi)                   :cpp:class:`pagmo::ga
 Differential Evolution (DE)                                :cpp:class:`pagmo::de`                    :class:`pygmo.de`                         S-U
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U
+Grey wolf optimizer                                        :cpp:class:`pagmo::gwo`                   :class:`pygmo.gwo`                        S-U
 Improved Harmony Search                                    :cpp:class:`pagmo::ihs`                   :class:`pygmo.ihs`                        SM-CU-I
 Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::pso`                   :class:`pygmo.pso`                        S-U
 Particle Swarm Optimization Generational (GPSO)            :cpp:class:`pagmo::pso_gen`               :class:`pygmo.pso_gen`                    S-U-sto

@@ -48,7 +48,7 @@ namespace pagmo
  * greywolves, proposed by Seyedali Mirjalilia, Seyed Mohammad Mirjalilib, Andrew Lewis in 2014.
  *
  * The implementation provided for PaGMO is based on the pseudo-code provided in Seyedali and Andrew (2014) - Fig. 6.
- * pagmo::GWO is suitable for box-constrained single-objective continuous optimization.
+ * pagmo::gwo is suitable for box-constrained single-objective continuous optimization.
  *
  * \verbatim embed:rst:leading-asterisk
  *
@@ -196,8 +196,8 @@ public:
                     a_vector[1] = 2.0 * a * r1 - a;
                     c_vector[1] = 2.0 * r2;
 
-                    d_vector[1] = abs(c_vector[1] * beta_pos[k] - agents_position[i][k]); // Equation (3.5)-part 2
-                    x_vector[1] = beta_pos[k] - a_vector[1] * d_vector[1];                // Equation (3.6)-part 2
+                    d_vector[1] = std::abs(c_vector[1] * beta_pos[k] - agents_position[i][k]); // Equation (3.5)-part 2
+                    x_vector[1] = beta_pos[k] - a_vector[1] * d_vector[1];                     // Equation (3.6)-part 2
 
                     r1 = drng(m_e);
                     r2 = drng(m_e);
@@ -205,8 +205,8 @@ public:
                     a_vector[2] = 2.0 * a * r1 - a;
                     c_vector[2] = 2.0 * r2;
 
-                    d_vector[2] = abs(c_vector[2] * delta_pos[k] - agents_position[i][k]); // Equation (3.5)-part 3
-                    x_vector[2] = delta_pos[k] - a_vector[2] * d_vector[2];                // Equation (3.6)-part 3
+                    d_vector[2] = std::abs(c_vector[2] * delta_pos[k] - agents_position[i][k]); // Equation (3.5)-part 3
+                    x_vector[2] = delta_pos[k] - a_vector[2] * d_vector[2];                     // Equation (3.6)-part 3
 
                     agents_position[i][k] = (x_vector[0] + x_vector[1] + x_vector[2]) / 3.0; // Equation (3.7)
                 }
@@ -346,7 +346,7 @@ public:
     template <typename Archive>
     void serialize(Archive &ar)
     {
-        ar(m_gen, m_seed, m_verbosity, m_log);
+        ar(m_gen, m_seed, m_e, m_verbosity, m_log);
     }
 
 private:
