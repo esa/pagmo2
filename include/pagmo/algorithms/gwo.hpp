@@ -53,10 +53,10 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. seealso::
  *
- * https://www.sciencedirect.com/science/article/pii/S0965997813001853 for the paper that introduces Grey Wolf
- * Optimizer and the pseudo-code
+ *    https://www.sciencedirect.com/science/article/pii/S0965997813001853 for the paper that introduces Grey Wolf
+ *    Optimizer and the pseudo-code
  *
- * https://github.com/7ossam81/EvoloPy/blob/master/GWO.py for the Python implementation
+ *    https://github.com/7ossam81/EvoloPy/blob/master/GWO.py for the Python implementation
  *
  * \endverbatim
  *
