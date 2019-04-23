@@ -51,8 +51,8 @@ namespace pagmo
  * pagmo::gwo is suitable for box-constrained single-objective continuous optimization.
  *
  * \verbatim embed:rst:leading-asterisk
- *
  * .. seealso::
+ *
  * https://www.sciencedirect.com/science/article/pii/S0965997813001853 for the paper that introduces Grey Wolf
  * Optimizer and the pseudo-code
  *
@@ -61,7 +61,6 @@ namespace pagmo
  * \endverbatim
  *
  */
-
 class gwo
 {
 public:
