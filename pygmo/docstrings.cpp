@@ -2532,19 +2532,20 @@ Returns:
 
 Examples:
     >>> from pygmo import *
-    >>> algo = algorithm(nsga2(gen=100))
-    >>> algo.set_verbosity(20)
-    >>> pop = population(zdt(1), 40)
+    >>> algo = algorithm(gwo(gen=10))
+    >>> algo.set_verbosity(2)
+    >>> prob = problem(rosenbrock(dim=2))
+    >>> pop = population(prob, 13, 23)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
-    Gen:        Fevals:        ideal1:        ideal2:
-       1              0      0.0033062        2.44966
-      21            800    0.000275601       0.893137
-      41           1600    3.15834e-05        0.44117
-      61           2400     2.3664e-05       0.206365
-      81           3200     2.3664e-05       0.133305
-    >>> uda = algo.extract(nsga2)
+    Gen:         Alpha:          Beta:         Delta:
+      1        179.464        3502.82        3964.75
+      3        6.82024        30.2149        61.1906
+      5       0.321879        2.39373        3.46188
+      7       0.134441       0.342357       0.439651
+      9       0.100281       0.211849       0.297448
+    >>> uda = algo.extract(gwo)
     >>> uda.get_log() # doctest: +SKIP
-    [(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...
+    [(1, 179.46420983829944, 3502.8158822203472, 3964.7542658046486), ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::gwo::get_log`.
 
