@@ -30,7 +30,6 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PROBLEM_HPP
 
 #include <algorithm>
-#include <boost/numeric/conversion/cast.hpp>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -44,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/serialization.hpp>
@@ -80,7 +80,7 @@ namespace pagmo
 /**
  * This problem is used to implement the default constructors of pagmo::problem and of the meta-problems.
  */
-struct null_problem {
+struct PAGMO_PUBLIC null_problem {
     /// Constructor from number of objectives.
     /**
      * @param nobj the desired number of objectives.
@@ -91,32 +91,11 @@ struct null_problem {
      * @throws std::invalid_argument if \p nobj is zero.
      */
     null_problem(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u,
-                 vector_double::size_type nic = 0u, vector_double::size_type nix = 0u)
-        : m_nobj(nobj), m_nec(nec), m_nic(nic), m_nix(nix)
-    {
-        if (!nobj) {
-            pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
-        }
-        if (nix > 1u) {
-            pagmo_throw(std::invalid_argument, "The null problem must have an integer part strictly smaller than 2");
-        }
-    }
-    /// Fitness.
-    /**
-     * @return a zero-filled vector of size equal to the number of objectives.
-     */
-    vector_double fitness(const vector_double &) const
-    {
-        return vector_double(get_nobj() + get_nec() + get_nic(), 0.);
-    }
-    /// Problem bounds.
-    /**
-     * @return the pair <tt>([0.],[1.])</tt>.
-     */
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        return {{0.}, {1.}};
-    }
+                 vector_double::size_type nic = 0u, vector_double::size_type nix = 0u);
+    // Fitness.
+    vector_double fitness(const vector_double &) const;
+    // Problem bounds.
+    std::pair<vector_double, vector_double> get_bounds() const;
     /// Number of objectives.
     /**
      * @return the number of objectives of the problem (as specified upon construction).
@@ -579,84 +558,14 @@ namespace detail
 // - lower bounds greater than upper bounds.
 // - integer part larger than bounds size
 // - integer bounds not integers
-inline void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds,
-                                 vector_double::size_type nix = 0u)
-{
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
-    // 0 - Check that the size is at least 1.
-    if (lb.size() == 0u) {
-        pagmo_throw(std::invalid_argument, "The bounds dimension cannot be zero");
-    }
-    // 1 - check bounds have equal length
-    if (lb.size() != ub.size()) {
-        pagmo_throw(std::invalid_argument, "The length of the lower bounds vector is " + std::to_string(lb.size())
-                                               + ", the length of the upper bounds vector is "
-                                               + std::to_string(ub.size()));
-    }
-    // 2 - checks lower < upper for all values in lb, ub, and check for nans.
-    for (decltype(lb.size()) i = 0u; i < lb.size(); ++i) {
-        if (std::isnan(lb[i]) || std::isnan(ub[i])) {
-            pagmo_throw(std::invalid_argument,
-                        "A NaN value was encountered in the problem bounds, index: " + std::to_string(i));
-        }
-        if (lb[i] > ub[i]) {
-            pagmo_throw(std::invalid_argument,
-                        "The lower bound at position " + std::to_string(i) + " is " + std::to_string(lb[i])
-                            + " while the upper bound has the smaller value " + std::to_string(ub[i]));
-        }
-    }
-    // 3 - checks the integer part
-    if (nix) {
-        const auto nx = lb.size();
-        if (nix > nx) {
-            pagmo_throw(std::invalid_argument, "The integer part cannot be larger than the bounds size");
-        }
-        const auto ncx = nx - nix;
-        for (auto i = ncx; i < nx; ++i) {
-            if (std::isfinite(lb[i]) && lb[i] != std::trunc(lb[i])) {
-                pagmo_throw(std::invalid_argument, "A lower bound of the integer part of the decision vector is: "
-                                                       + std::to_string(lb[i]) + " and is not an integer.");
-            }
-            if (std::isfinite(ub[i]) && ub[i] != std::trunc(ub[i])) {
-                pagmo_throw(std::invalid_argument, "An upper bound of the integer part of the decision vector is: "
-                                                       + std::to_string(ub[i]) + " and is not an integer.");
-            }
-        }
-    }
-}
+PAGMO_PUBLIC void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds,
+                                       vector_double::size_type nix = 0u);
 
-// Helper functions to compute sparsity patterns in the dense case.
-// A single dense hessian (lower triangular symmetric matrix).
-inline sparsity_pattern dense_hessian(vector_double::size_type dim)
-{
-    sparsity_pattern retval;
-    for (decltype(dim) j = 0u; j < dim; ++j) {
-        for (decltype(dim) i = 0u; i <= j; ++i) {
-            retval.emplace_back(j, i);
-        }
-    }
-    return retval;
-}
+PAGMO_PUBLIC sparsity_pattern dense_hessian(vector_double::size_type);
 
-// A collection of f_dim identical dense hessians.
-inline std::vector<sparsity_pattern> dense_hessians(vector_double::size_type f_dim, vector_double::size_type dim)
-{
-    return std::vector<sparsity_pattern>(boost::numeric_cast<std::vector<sparsity_pattern>::size_type>(f_dim),
-                                         dense_hessian(dim));
-}
+PAGMO_PUBLIC std::vector<sparsity_pattern> dense_hessians(vector_double::size_type, vector_double::size_type);
 
-// Dense gradient.
-inline sparsity_pattern dense_gradient(vector_double::size_type f_dim, vector_double::size_type dim)
-{
-    sparsity_pattern retval;
-    for (decltype(f_dim) j = 0u; j < f_dim; ++j) {
-        for (decltype(dim) i = 0u; i < dim; ++i) {
-            retval.emplace_back(j, i);
-        }
-    }
-    return retval;
-}
+PAGMO_PUBLIC sparsity_pattern dense_gradient(vector_double::size_type, vector_double::size_type);
 
 struct prob_inner_base {
     virtual ~prob_inner_base() {}
@@ -1087,7 +996,7 @@ struct prob_inner final : prob_inner_base {
  *
  * \endverbatim
  */
-class problem
+class PAGMO_PUBLIC problem
 {
     // Enable the generic ctor only if T is not a problem (after removing
     // const/reference qualifiers), and if T is a udp.
@@ -1096,13 +1005,13 @@ class problem
         = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value && is_udp<uncvref_t<T>>::value, int>;
 
 public:
-    /// Default constructor.
-    /**
-     * The default constructor will initialize a pagmo::problem containing a pagmo::null_problem.
-     *
-     * @throws unspecified any exception thrown by the constructor from UDP.
-     */
-    problem() : problem(null_problem{}) {}
+    // Default constructor.
+    problem();
+
+private:
+    void generic_ctor_impl();
+
+public:
     /// Constructor from a user-defined problem of type \p T
     /**
      * \verbatim embed:rst:leading-asterisk
@@ -1139,89 +1048,7 @@ public:
         : m_ptr(detail::make_unique<detail::prob_inner<uncvref_t<T>>>(std::forward<T>(x))), m_fevals(0u), m_gevals(0u),
           m_hevals(0u)
     {
-        // 0 - Integer part
-        const auto tmp_size = ptr()->get_bounds().first.size();
-        m_nix = ptr()->get_nix();
-        if (m_nix > tmp_size) {
-            pagmo_throw(std::invalid_argument, "The integer part of the problem (" + std::to_string(m_nix)
-                                                   + ") is larger than its dimension (" + std::to_string(tmp_size)
-                                                   + ")");
-        }
-        // 1 - Bounds.
-        auto bounds = ptr()->get_bounds();
-        detail::check_problem_bounds(bounds, m_nix);
-        m_lb = std::move(bounds.first);
-        m_ub = std::move(bounds.second);
-        // 2 - Number of objectives.
-        m_nobj = ptr()->get_nobj();
-        if (!m_nobj) {
-            pagmo_throw(std::invalid_argument, "The number of objectives cannot be zero");
-        }
-        // NOTE: here we check that we can always compute nobj + nec + nic safely.
-        if (m_nobj > std::numeric_limits<decltype(m_nobj)>::max() / 3u) {
-            pagmo_throw(std::invalid_argument, "The number of objectives is too large");
-        }
-        // 3 - Constraints.
-        m_nec = ptr()->get_nec();
-        if (m_nec > std::numeric_limits<decltype(m_nec)>::max() / 3u) {
-            pagmo_throw(std::invalid_argument, "The number of equality constraints is too large");
-        }
-        m_nic = ptr()->get_nic();
-        if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
-            pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
-        }
-        // 4 - Presence of gradient and its sparsity.
-        // NOTE: all these m_has_* attributes refer to the presence of the features in the UDP.
-        m_has_gradient = ptr()->has_gradient();
-        m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
-        // 5 - Presence of Hessians and their sparsity.
-        m_has_hessians = ptr()->has_hessians();
-        m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
-        // 5bis - Is this a stochastic problem?
-        m_has_set_seed = ptr()->has_set_seed();
-        // 6 - Name.
-        m_name = ptr()->get_name();
-        // 7 - Check the sparsities, and cache their sizes.
-        if (m_has_gradient_sparsity) {
-            // If the problem provides gradient sparsity, get it, check it
-            // and store its size.
-            const auto gs = ptr()->gradient_sparsity();
-            check_gradient_sparsity(gs);
-            m_gs_dim = gs.size();
-        } else {
-            // If the problem does not provide gradient sparsity, we assume dense
-            // sparsity. We can compute easily the expected size of the sparsity
-            // in this case.
-            const auto nx = get_nx();
-            const auto nf = get_nf();
-            if (nx > std::numeric_limits<vector_double::size_type>::max() / nf) {
-                pagmo_throw(std::invalid_argument, "The size of the (dense) gradient sparsity is too large");
-            }
-            m_gs_dim = nx * nf;
-        }
-        // Same as above for the hessians.
-        if (m_has_hessians_sparsity) {
-            const auto hs = ptr()->hessians_sparsity();
-            check_hessians_sparsity(hs);
-            for (const auto &one_hs : hs) {
-                m_hs_dim.push_back(one_hs.size());
-            }
-        } else {
-            const auto nx = get_nx();
-            const auto nf = get_nf();
-            if (nx == std::numeric_limits<vector_double::size_type>::max()
-                || nx / 2u > std::numeric_limits<vector_double::size_type>::max() / (nx + 1u)) {
-                pagmo_throw(std::invalid_argument, "The size of the (dense) hessians sparsity is too large");
-            }
-            // We resize rather than push back here, so that an std::length_error is called quickly rather
-            // than an std::bad_alloc after waiting the growth
-            m_hs_dim.resize(boost::numeric_cast<decltype(m_hs_dim.size())>(nf));
-            std::fill(m_hs_dim.begin(), m_hs_dim.end(), nx * (nx - 1u) / 2u + nx); // lower triangular
-        }
-        // 8 - Constraint tolerance
-        m_c_tol.resize(m_nec + m_nic);
-        // 9 - Thread safety.
-        m_thread_safety = ptr()->get_thread_safety();
+        generic_ctor_impl();
     }
 
     /// Copy constructor.

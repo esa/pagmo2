@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/serialization.hpp>
@@ -431,7 +432,7 @@ struct algo_inner final : algo_inner_base {
  *
  * \endverbatim
  */
-class algorithm
+class PAGMO_PUBLIC algorithm
 {
     // Enable the generic ctor only if T is not an algorithm (after removing
     // const/reference qualifiers), and if T is a uda.
@@ -440,13 +441,13 @@ class algorithm
         = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value && is_uda<uncvref_t<T>>::value, int>;
 
 public:
-    /// Default constructor.
-    /**
-     * The default constructor will initialize a pagmo::algorithm containing a pagmo::null_algorithm.
-     *
-     * @throws unspecified any exception thrown by the constructor from UDA.
-     */
-    algorithm() : algorithm(null_algorithm{}) {}
+    // Default constructor.
+    algorithm();
+
+private:
+    void generic_ctor_impl();
+
+public:
     /// Constructor from a user-defined algorithm of type \p T
     /**
      * \verbatim embed:rst:leading-asterisk
@@ -471,72 +472,16 @@ public:
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit algorithm(T &&x) : m_ptr(detail::make_unique<detail::algo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
-        // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
-        m_has_set_seed = ptr()->has_set_seed();
-        // We detect if set_verbosity is implemented in the algorithm
-        m_has_set_verbosity = ptr()->has_set_verbosity();
-        // We store at construction the value returned from the user implemented get_name
-        m_name = ptr()->get_name();
-        // Store the thread safety value.
-        m_thread_safety = ptr()->get_thread_safety();
+        generic_ctor_impl();
     }
-    /// Copy constructor
-    /**
-     * The copy constructor will deep copy the input algorithm \p other.
-     *
-     * @param other the algorithm to be copied.
-     *
-     * @throws unspecified any exception thrown by:
-     * - memory allocation errors in standard containers,
-     * - the copying of the internal UDA.
-     */
-    algorithm(const algorithm &other)
-        : m_ptr(other.m_ptr->clone()), m_has_set_seed(other.m_has_set_seed),
-          m_has_set_verbosity(other.m_has_set_verbosity), m_name(other.m_name), m_thread_safety(other.m_thread_safety)
-    {
-    }
-    /// Move constructor
-    /**
-     * @param other the algorithm from which \p this will be move-constructed.
-     */
-    algorithm(algorithm &&other) noexcept
-        : m_ptr(std::move(other.m_ptr)), m_has_set_seed(std::move(other.m_has_set_seed)),
-          m_has_set_verbosity(other.m_has_set_verbosity), m_name(std::move(other.m_name)),
-          m_thread_safety(std::move(other.m_thread_safety))
-    {
-    }
-    /// Move assignment operator
-    /**
-     * @param other the assignment target.
-     *
-     * @return a reference to \p this.
-     */
-    algorithm &operator=(algorithm &&other) noexcept
-    {
-        if (this != &other) {
-            m_ptr = std::move(other.m_ptr);
-            m_has_set_seed = std::move(other.m_has_set_seed);
-            m_has_set_verbosity = other.m_has_set_verbosity;
-            m_name = std::move(other.m_name);
-            m_thread_safety = std::move(other.m_thread_safety);
-        }
-        return *this;
-    }
-    /// Copy assignment operator
-    /**
-     * Copy assignment is implemented as a copy constructor followed by a move assignment.
-     *
-     * @param other the assignment target.
-     *
-     * @return a reference to \p this.
-     *
-     * @throws unspecified any exception thrown by the copy constructor.
-     */
-    algorithm &operator=(const algorithm &other)
-    {
-        // Copy ctor + move assignment.
-        return *this = algorithm(other);
-    }
+    // Copy constructor
+    algorithm(const algorithm &);
+    // Move ctor.
+    algorithm(algorithm &&) noexcept;
+    // Move assignment.
+    algorithm &operator=(algorithm &&) noexcept;
+    // Copy assignment.
+    algorithm &operator=(const algorithm &);
 
     /// Extract a const pointer to the UDA.
     /**
@@ -606,37 +551,11 @@ public:
         return extract<T>() != nullptr;
     }
 
-    /// Evolve method.
-    /**
-     * This method will invoke the <tt>%evolve()</tt> method of the UDA. This is where the core of the optimization
-     * (*evolution*) is made.
-     *
-     * @param pop starting population
-     *
-     * @return evolved population
-     *
-     * @throws unspecified any exception thrown by the <tt>%evolve()</tt> method of the UDA.
-     */
-    population evolve(const population &pop) const
-    {
-        return ptr()->evolve(pop);
-    }
+    // Evolve method.
+    population evolve(const population &) const;
 
-    /// Set the seed for the stochastic evolution.
-    /**
-     * Sets the seed to be used in the <tt>%evolve()</tt> method of the UDA for all stochastic variables. If the UDA
-     * satisfies pagmo::has_set_seed, then its <tt>%set_seed()</tt> method will be invoked. Otherwise, an error will be
-     * raised.
-     *
-     * @param seed seed.
-     *
-     * @throws not_implemented_error if the UDA does not satisfy pagmo::has_set_seed.
-     * @throws unspecified any exception thrown by the <tt>%set_seed()</tt> method of the UDA.
-     */
-    void set_seed(unsigned seed)
-    {
-        ptr()->set_seed(seed);
-    }
+    // Set the seed for the stochastic evolution.
+    void set_seed(unsigned);
 
     /// Check if a <tt>%set_seed()</tt> method is available in the UDA.
     /**
@@ -665,22 +584,8 @@ public:
         return has_set_seed();
     }
 
-    /// Set the verbosity of logs and screen output.
-    /**
-     * This method will set the level of verbosity for the algorithm. If the UDA satisfies pagmo::has_set_verbosity,
-     * then its <tt>%set_verbosity()</tt> method will be invoked. Otherwise, an error will be raised.
-     *
-     * The exact meaning of the input parameter \p level is dependent on the UDA.
-     *
-     * @param level the desired verbosity level.
-     *
-     * @throws not_implemented_error if the UDA does not satisfy pagmo::has_set_verbosity.
-     * @throws unspecified any exception thrown by the <tt>%set_verbosity()</tt> method of the UDA.
-     */
-    void set_verbosity(unsigned level)
-    {
-        ptr()->set_verbosity(level);
-    }
+    // Set the verbosity of logs and screen output.
+    void set_verbosity(unsigned);
 
     /// Check if a <tt>%set_verbosity()</tt> method is available in the UDA.
     /**
@@ -715,19 +620,8 @@ public:
         return m_name;
     }
 
-    /// Algorithm's extra info.
-    /**
-     * If the UDA satisfies pagmo::has_extra_info, then this method will return the output of its
-     * <tt>%get_extra_info()</tt> method. Otherwise, an empty string will be returned.
-     *
-     * @return extra info about the UDA.
-     *
-     * @throws unspecified any exception thrown by the <tt>%get_extra_info()</tt> method of the UDA.
-     */
-    std::string get_extra_info() const
-    {
-        return ptr()->get_extra_info();
-    }
+    // Algorithm's extra info.
+    std::string get_extra_info() const;
 
     /// Algorithm's thread safety level.
     /**
@@ -740,34 +634,6 @@ public:
     thread_safety get_thread_safety() const
     {
         return m_thread_safety;
-    }
-
-    /// Streaming operator
-    /**
-     * This function will stream to \p os a human-readable representation of the input
-     * algorithm \p a.
-     *
-     * @param os input <tt>std::ostream</tt>.
-     * @param a pagmo::algorithm object to be streamed.
-     *
-     * @return a reference to \p os.
-     *
-     * @throws unspecified any exception thrown by querying various algorithm properties and streaming them into \p os.
-     */
-    friend std::ostream &operator<<(std::ostream &os, const algorithm &a)
-    {
-        os << "Algorithm name: " << a.get_name();
-        if (!a.has_set_seed()) {
-            stream(os, " [deterministic]");
-        } else {
-            stream(os, " [stochastic]");
-        }
-        stream(os, "\n\tThread safety: ", a.get_thread_safety(), '\n');
-        const auto extra_str = a.get_extra_info();
-        if (!extra_str.empty()) {
-            stream(os, "\nExtra info:\n", extra_str);
-        }
-        return os;
     }
 
     /// Save to archive.
@@ -824,6 +690,10 @@ private:
     std::string m_name;
     thread_safety m_thread_safety;
 };
+
+// Streaming operator for algorithm.
+PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
+
 } // namespace pagmo
 
 PAGMO_REGISTER_ALGORITHM(pagmo::null_algorithm)

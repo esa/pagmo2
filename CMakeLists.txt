@@ -158,29 +158,52 @@ endif()
 include(PagmoFindBoost)
 
 if(PAGMO_BUILD_PAGMO)
-    # Setup of the header-only pagmo library.
-    add_library(pagmo INTERFACE)
-    target_link_libraries(pagmo INTERFACE Threads::Threads Boost::boost)
-    target_include_directories(pagmo INTERFACE
+    # List of source files.
+    set(PAGMO_SRC_FILES
+        # Core classes.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/population.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problem.cpp"
+        # UDA.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
+    )
+    # Setup of the pagmo library.
+    add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
+    set_property(TARGET pagmo PROPERTY VERSION "${pagmo_VERSION_MAJOR}.${pagmo_VERSION_MINOR}")
+    set_property(TARGET pagmo PROPERTY SOVERSION 0)
+    target_compile_options(pagmo PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+    set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
+    set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
+    # NOTE: for clang-cl, cmake tries to set -std=c++11 here, which makes
+    # it error out. Disable it as MSVC 2015 is implicitly C++14 anyway.
+    if(NOT (YACMA_COMPILER_IS_MSVC AND YACMA_COMPILER_IS_CLANGXX))
+        # Let's setup the target C++ standard, but only if the user did not provide it manually.
+        if(NOT CMAKE_CXX_STANDARD)
+            set_property(TARGET pagmo PROPERTY CXX_STANDARD 11)
+        endif()
+        set_property(TARGET pagmo PROPERTY CXX_STANDARD_REQUIRED YES)
+        set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
+    endif()
+    target_include_directories(pagmo PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.
-        target_link_libraries(pagmo INTERFACE Eigen3::eigen3)
+        target_link_libraries(pagmo PUBLIC Eigen3::eigen3)
         set(PAGMO_ENABLE_EIGEN3 "#define PAGMO_WITH_EIGEN3")
     endif()
 
     if(PAGMO_WITH_NLOPT)
         # Link pagmo to NLopt.
-        target_link_libraries(pagmo INTERFACE NLOPT::nlopt)
+        target_link_libraries(pagmo PUBLIC NLOPT::nlopt)
         set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
     endif()
 
     if(PAGMO_WITH_IPOPT)
         # Link pagmo to Ipopt.
-        target_link_libraries(pagmo INTERFACE IPOPT::ipopt)
+        target_link_libraries(pagmo PUBLIC IPOPT::ipopt)
         set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
     endif()
 
