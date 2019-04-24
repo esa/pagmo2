@@ -44,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -89,9 +89,9 @@ struct base_p {
     }
 
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(m_nobj, m_nec, m_nic, m_ret_fit, m_lb, m_ub);
+        detail::archive(ar, m_nobj, m_nec, m_nic, m_ret_fit, m_lb, m_ub);
     }
 
     vector_double::size_type m_nobj;
@@ -123,16 +123,16 @@ struct grad_p : base_p {
     }
 
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<base_p>(this), m_g, m_gs);
+        detail::archive(ar, boost::serialization::base_object<base_p>(*this), m_g, m_gs);
     }
 
     vector_double m_g;
     sparsity_pattern m_gs;
 };
 
-PAGMO_REGISTER_PROBLEM(grad_p)
+PAGMO_S11N_PROBLEM_EXPORT(grad_p)
 
 // Generates a dummy problem with arbitrary dimensions and return values
 // having the gradient implemented but overriding the has methods
@@ -156,13 +156,13 @@ struct grad_p_override : grad_p {
     }
 
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<grad_p>(this));
+        ar &boost::serialization::base_object<grad_p>(*this);
     }
 };
 
-PAGMO_REGISTER_PROBLEM(grad_p_override)
+PAGMO_S11N_PROBLEM_EXPORT(grad_p_override)
 
 // Generates a dummy problem with arbitrary dimensions and return values
 // having the hessians implemented
@@ -185,16 +185,16 @@ struct hess_p : base_p {
     }
 
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<base_p>(this), m_h, m_hs);
+        detail::archive(ar, boost::serialization::base_object<base_p>(*this), m_h, m_hs);
     }
 
     std::vector<vector_double> m_h;
     std::vector<sparsity_pattern> m_hs;
 };
 
-PAGMO_REGISTER_PROBLEM(hess_p)
+PAGMO_S11N_PROBLEM_EXPORT(hess_p)
 
 // Generates a dummy problem with arbitrary dimensions and return values
 // having the hessians implemented but overriding the has methods
@@ -218,13 +218,13 @@ struct hess_p_override : hess_p {
     }
 
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<hess_p>(this));
+        ar &boost::serialization::base_object<hess_p>(*this);
     }
 };
 
-PAGMO_REGISTER_PROBLEM(hess_p_override)
+PAGMO_S11N_PROBLEM_EXPORT(hess_p_override)
 
 // Generates a dummy problem with arbitrary dimensions and return values
 // having the hessians and the gradients implemented
@@ -248,16 +248,16 @@ struct full_p : grad_p {
     }
 
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<grad_p>(this), m_h, m_hs);
+        detail::archive(ar, boost::serialization::base_object<grad_p>(*this), m_h, m_hs);
     }
 
     std::vector<vector_double> m_h;
     std::vector<sparsity_pattern> m_hs;
 };
 
-PAGMO_REGISTER_PROBLEM(full_p)
+PAGMO_S11N_PROBLEM_EXPORT(full_p)
 
 struct empty {
     vector_double fitness(const vector_double &) const
@@ -730,14 +730,14 @@ BOOST_AUTO_TEST_CASE(problem_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{grad_p{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
@@ -1045,15 +1045,15 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     BOOST_CHECK_EQUAL(p.get_nobj(), 1u);
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
@@ -1365,12 +1365,12 @@ struct bf_s11n {
         return vector_double(dvs.size(), 1.);
     }
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
 
-PAGMO_REGISTER_PROBLEM(bf_s11n)
+PAGMO_S11N_PROBLEM_EXPORT(bf_s11n)
 
 BOOST_AUTO_TEST_CASE(batch_fitness)
 {
@@ -1551,15 +1551,15 @@ BOOST_AUTO_TEST_CASE(batch_fitness)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{};
     BOOST_CHECK(!p.has_batch_fitness());
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

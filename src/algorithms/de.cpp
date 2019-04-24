@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -376,3 +377,5 @@ std::string de::get_extra_info() const
 }
 
 } // namespace pagmo
+
+PAGMO_S11N_ALGORITHM_IMPLEMENT(pagmo::de)

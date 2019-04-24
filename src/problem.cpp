@@ -915,3 +915,5 @@ void problem::check_hessians_vector(const std::vector<vector_double> &hs) const
 }
 
 } // namespace pagmo
+
+PAGMO_S11N_PROBLEM_IMPLEMENT(pagmo::null_problem)

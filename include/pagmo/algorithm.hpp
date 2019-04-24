@@ -38,30 +38,16 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
-/// Macro for the registration of the serialization functionality for user-defined algorithms.
-/**
- * This macro should always be invoked after the declaration of a user-defined algorithm: it will register
- * the algorithm with pagmo's serialization machinery. The macro should be called in the root namespace
- * and using the fully qualified name of the algorithm to be registered. For example:
- * @code{.unparsed}
- * namespace my_namespace
- * {
- *
- * class my_algorithm
- * {
- *    // ...
- * };
- *
- * }
- *
- * PAGMO_REGISTER_ALGORITHM(my_namespace::my_algorithm)
- * @endcode
- */
-#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, "uda " #algo)
+#define PAGMO_S11N_ALGORITHM_EXPORT_KEY(algo) BOOST_CLASS_EXPORT_KEY2(pagmo::detail::algo_inner<algo>, "uda " #algo)
+#define PAGMO_S11N_ALGORITHM_IMPLEMENT(algo) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::algo_inner<algo>)
+
+#define PAGMO_S11N_ALGORITHM_EXPORT(algo)                                                                              \
+    PAGMO_S11N_ALGORITHM_EXPORT_KEY(algo)                                                                              \
+    PAGMO_S11N_ALGORITHM_IMPLEMENT(algo)
 
 namespace pagmo
 {
@@ -70,20 +56,9 @@ namespace pagmo
 /**
  * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
  */
-struct null_algorithm {
-    /// Evolve method.
-    /**
-     * In the null algorithm, the evolve method just returns the input
-     * population.
-     *
-     * @param pop input population.
-     *
-     * @return a copy of the input population.
-     */
-    population evolve(const population &pop) const
-    {
-        return pop;
-    };
+struct PAGMO_PUBLIC null_algorithm {
+    // Evolve method.
+    population evolve(const population &) const;
     /// Algorithm name.
     /**
      * @return <tt>"Null algorithm"</tt>.
@@ -97,7 +72,7 @@ struct null_algorithm {
      * This class is stateless, no data will be loaded or saved during serialization.
      */
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
@@ -233,7 +208,7 @@ struct algo_inner_base {
     virtual std::string get_extra_info() const = 0;
     virtual thread_safety get_thread_safety() const = 0;
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
@@ -376,9 +351,9 @@ struct algo_inner final : algo_inner_base {
 
     // Serialization
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<algo_inner_base>(this), m_value);
+        detail::archive(ar, boost::serialization::base_object<algo_inner_base>(*this), m_value);
     }
     T m_value;
 };
@@ -645,9 +620,9 @@ public:
      * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
      */
     template <typename Archive>
-    void save(Archive &ar) const
+    void save(Archive &ar, unsigned) const
     {
-        ar(m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
+        detail::to_archive(ar, m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
     }
     /// Load from archive.
     /**
@@ -658,12 +633,14 @@ public:
      * @throws unspecified any exception thrown by the deserialization of the UDA and of primitive types.
      */
     template <typename Archive>
-    void load(Archive &ar)
+    void load(Archive &ar, unsigned)
     {
         algorithm tmp;
-        ar(tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name, tmp.m_thread_safety);
+        detail::from_archive(ar, tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name,
+                             tmp.m_thread_safety);
         *this = std::move(tmp);
     }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     // Two small helpers to make sure that whenever we require
@@ -696,6 +673,6 @@ PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::null_algorithm)
+PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::null_algorithm)
 
 #endif

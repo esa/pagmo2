@@ -193,7 +193,10 @@ if(PAGMO_BUILD_PAGMO)
         $<INSTALL_INTERFACE:include>)
 
     # TBB.
-    target_link_libraries(pagmo INTERFACE TBB::tbb)
+    target_link_libraries(pagmo PUBLIC TBB::tbb)
+
+    # Boost serialization.
+    target_link_libraries(pagmo PUBLIC Boost::serialization)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.

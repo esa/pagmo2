@@ -40,32 +40,20 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/detail/visibility.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/exceptions.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-/// Macro for the registration of the serialization functionality for user-defined problems.
-/**
- * This macro should always be invoked after the declaration of a user-defined problem: it will register
- * the problem with pagmo's serialization machinery. The macro should be called in the root namespace
- * and using the fully qualified name of the problem to be registered. For example:
- * @code{.unparsed}
- * namespace my_namespace
- * {
- *
- * class my_problem
- * {
- *    // ...
- * };
- *
- * }
- *
- * PAGMO_REGISTER_PROBLEM(my_namespace::my_problem)
- * @endcode
- */
-#define PAGMO_REGISTER_PROBLEM(prob) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::prob_inner<prob>, "udp " #prob)
+#define PAGMO_S11N_PROBLEM_EXPORT_KEY(prob) BOOST_CLASS_EXPORT_KEY2(pagmo::detail::prob_inner<prob>, "udp " #prob)
+#define PAGMO_S11N_PROBLEM_IMPLEMENT(prob) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::prob_inner<prob>)
+
+#define PAGMO_S11N_PROBLEM_EXPORT(prob)                                                                                \
+    PAGMO_S11N_PROBLEM_EXPORT_KEY(prob)                                                                                \
+    PAGMO_S11N_PROBLEM_IMPLEMENT(prob)
 
 namespace pagmo
 {
@@ -135,9 +123,9 @@ struct PAGMO_PUBLIC null_problem {
      * @param ar the target serialization archive.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(m_nobj, m_nec, m_nic, m_nix);
+        detail::archive(ar, m_nobj, m_nec, m_nic, m_nix);
     }
 
 private:
@@ -616,7 +604,7 @@ struct prob_inner_base {
     virtual std::string get_extra_info() const = 0;
     virtual thread_safety get_thread_safety() const = 0;
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
@@ -974,9 +962,9 @@ struct prob_inner final : prob_inner_base {
     }
     // Serialization.
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<prob_inner_base>(this), m_value);
+        detail::archive(ar, boost::serialization::base_object<prob_inner_base>(*this), m_value);
     }
     T m_value;
 };
@@ -1601,12 +1589,13 @@ public:
      * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
      */
     template <typename Archive>
-    void save(Archive &ar) const
+    void save(Archive &ar, unsigned) const
     {
-        ar(m_ptr, m_fevals.load(std::memory_order_relaxed), m_gevals.load(std::memory_order_relaxed),
-           m_hevals.load(std::memory_order_relaxed), m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol,
-           m_has_batch_fitness, m_has_gradient, m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity,
-           m_has_set_seed, m_name, m_gs_dim, m_hs_dim, m_thread_safety);
+        detail::to_archive(ar, m_ptr, m_fevals.load(std::memory_order_relaxed),
+                           m_gevals.load(std::memory_order_relaxed), m_hevals.load(std::memory_order_relaxed), m_lb,
+                           m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_batch_fitness, m_has_gradient,
+                           m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name,
+                           m_gs_dim, m_hs_dim, m_thread_safety);
     }
 
     /// Load from archive.
@@ -1618,20 +1607,22 @@ public:
      * @throws unspecified any exception thrown by the deserialization of the UDP and of primitive types.
      */
     template <typename Archive>
-    void load(Archive &ar)
+    void load(Archive &ar, unsigned)
     {
         // Deserialize in a separate object and move it in later, for exception safety.
         problem tmp_prob;
         unsigned long long fevals, gevals, hevals;
-        ar(tmp_prob.m_ptr, fevals, gevals, hevals, tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj, tmp_prob.m_nec,
-           tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_batch_fitness, tmp_prob.m_has_gradient,
-           tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity,
-           tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+        detail::from_archive(ar, tmp_prob.m_ptr, fevals, gevals, hevals, tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj,
+                             tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol,
+                             tmp_prob.m_has_batch_fitness, tmp_prob.m_has_gradient, tmp_prob.m_has_gradient_sparsity,
+                             tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity, tmp_prob.m_has_set_seed,
+                             tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
         tmp_prob.m_fevals.store(fevals, std::memory_order_relaxed);
         tmp_prob.m_gevals.store(gevals, std::memory_order_relaxed);
         tmp_prob.m_hevals.store(hevals, std::memory_order_relaxed);
         *this = std::move(tmp_prob);
     }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     // Just two small helpers to make sure that whenever we require
@@ -1691,6 +1682,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_PROBLEM(pagmo::null_problem)
+PAGMO_S11N_PROBLEM_EXPORT_KEY(pagmo::null_problem)
 
 #endif

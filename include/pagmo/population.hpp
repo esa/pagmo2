@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -175,16 +176,12 @@ public:
 
     // Copy constructor.
     population(const population &);
-
     // Move constructor.
     population(population &&) noexcept;
-
     // Copy assignment operator.
     population &operator=(const population &);
-
     // Move assignment operator.
     population &operator=(population &&) noexcept;
-
     // Destructor.
     ~population();
 
@@ -316,9 +313,9 @@ public:
      * types.
      */
     template <typename Archive>
-    void save(Archive &ar) const
+    void save(Archive &ar, unsigned) const
     {
-        ar(m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
+        detail::to_archive(ar, m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
     }
     /// Load from archive.
     /**
@@ -331,12 +328,14 @@ public:
      * types.
      */
     template <typename Archive>
-    void load(Archive &ar)
+    void load(Archive &ar, unsigned)
     {
         population tmp;
-        ar(tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f, tmp.m_e, tmp.m_seed);
+        detail::from_archive(ar, tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f, tmp.m_e,
+                             tmp.m_seed);
         *this = std::move(tmp);
     }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     // Problem.

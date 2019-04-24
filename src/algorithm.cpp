@@ -37,6 +37,20 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+/// Evolve method.
+/**
+ * In the null algorithm, the evolve method just returns the input
+ * population.
+ *
+ * @param pop input population.
+ *
+ * @return a copy of the input population.
+ */
+population null_algorithm::evolve(const population &pop) const
+{
+    return pop;
+}
+
 /// Default constructor.
 /**
  * The default constructor will initialize a pagmo::algorithm containing a pagmo::null_algorithm.
@@ -210,3 +224,5 @@ std::ostream &operator<<(std::ostream &os, const algorithm &a)
 }
 
 } // namespace pagmo
+
+PAGMO_S11N_ALGORITHM_IMPLEMENT(pagmo::null_algorithm)
