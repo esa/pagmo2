@@ -198,18 +198,20 @@ void problem::generic_ctor_impl()
     if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
     }
-    // 4 - Presence of gradient and its sparsity.
+    // 4 - Presence of batch_fitness().
     // NOTE: all these m_has_* attributes refer to the presence of the features in the UDP.
+    m_has_batch_fitness = ptr()->has_batch_fitness();
+    // 5 - Presence of gradient and its sparsity.
     m_has_gradient = ptr()->has_gradient();
     m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
-    // 5 - Presence of Hessians and their sparsity.
+    // 6 - Presence of Hessians and their sparsity.
     m_has_hessians = ptr()->has_hessians();
     m_has_hessians_sparsity = ptr()->has_hessians_sparsity();
-    // 5bis - Is this a stochastic problem?
+    // 7 - Is this a stochastic problem?
     m_has_set_seed = ptr()->has_set_seed();
-    // 6 - Name.
+    // 8 - Name.
     m_name = ptr()->get_name();
-    // 7 - Check the sparsities, and cache their sizes.
+    // 9 - Check the sparsities, and cache their sizes.
     if (m_has_gradient_sparsity) {
         // If the problem provides gradient sparsity, get it, check it
         // and store its size.
@@ -246,9 +248,9 @@ void problem::generic_ctor_impl()
         m_hs_dim.resize(boost::numeric_cast<decltype(m_hs_dim.size())>(nf));
         std::fill(m_hs_dim.begin(), m_hs_dim.end(), nx * (nx - 1u) / 2u + nx); // lower triangular
     }
-    // 8 - Constraint tolerance
+    // 10 - Constraint tolerance
     m_c_tol.resize(m_nec + m_nic);
-    // 9 - Thread safety.
+    // 11 - Thread safety.
     m_thread_safety = ptr()->get_thread_safety();
 }
 

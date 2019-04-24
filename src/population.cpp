@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 
+#include <pagmo/bfe.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -61,6 +62,31 @@ void population::prob_ctor_impl(size_type pop_size)
 {
     for (size_type i = 0u; i < pop_size; ++i) {
         push_back(random_decision_vector());
+    }
+}
+
+// Implementation of the ctor from bfe. Distinguish the two cases
+// in which bfe or a udbfe were provided.
+void population::constructor_from_bfe_impl(const bfe &b, size_type pop_size, const std::true_type &)
+{
+    // Create a batch of random decision vectors.
+    const auto dvs = batch_random_decision_vector(m_prob, pop_size, m_e);
+
+    // Evaluate them in batch mode.
+    const auto fvs = b(m_prob, dvs);
+
+    // Sanity checks.
+    assert(pop_size == 0u || dvs.size() % pop_size == 0u);
+    assert(pop_size == 0u || fvs.size() % pop_size == 0u);
+
+    // Add the dvs/fvs to the population.
+    const auto nx = m_prob.get_nx();
+    const auto nf = m_prob.get_nf();
+    assert(dvs.size() % nx == 0u);
+    assert(fvs.size() % nf == 0u);
+    for (size_type i = 0; i < pop_size; ++i) {
+        push_back(vector_double(dvs.data() + i * nx, dvs.data() + (i + 1u) * nx),
+                  vector_double(fvs.data() + i * nf, fvs.data() + (i + 1u) * nf));
     }
 }
 

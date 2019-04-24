@@ -132,7 +132,10 @@ private:
     // in which bfe or a udbfe were provided.
     void constructor_from_bfe_impl(const bfe &, size_type, const std::true_type &);
     template <typename U>
-    void constructor_from_bfe_impl(U &&, size_type, const std::false_type &);
+    void constructor_from_bfe_impl(U &&b, size_type pop_size, const std::false_type &)
+    {
+        constructor_from_bfe_impl(bfe(std::forward<U>(b)), pop_size, std::true_type{});
+    }
 
 public:
     /// Constructor from a problem and a batch fitness evaluator.
