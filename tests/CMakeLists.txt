@@ -98,14 +98,14 @@ if(PAGMO_WITH_IPOPT)
 endif()
 
 # Here are problematic tests. See config.hpp for an explanation.
-if(NOT YACMA_COMPILER_IS_MSVC AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
     ADD_PAGMO_TESTCASE(cec2013)
     ADD_PAGMO_TESTCASE(cec2014)
 endif()
 
 if (PAGMO_WITH_FORK_ISLAND)
     ADD_PAGMO_TESTCASE(fork_island)
-    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    if(NOT APPLE)
         target_compile_definitions(fork_island PRIVATE _POSIX_C_SOURCE=200112L)
     endif()
 endif()
