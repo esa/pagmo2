@@ -31,9 +31,15 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
+#include <iterator>
 #include <stdexcept>
 #include <type_traits>
 
+#include <tbb/blocked_range.h>
+#include <tbb/parallel_for.h>
+
+#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -107,6 +113,66 @@ public:
     {
         vector_double x_deshifted = translate_back(x);
         return m_problem.fitness(x_deshifted);
+    }
+
+    /// Batch fitness.
+    /**
+     * The batch fitness computation is forwarded to the inner UDP, after the translation of \p xs.
+     *
+     * @param xs the input decision vectors.
+     *
+     * @return the fitnesses of \p xs.
+     *
+     * @throws unspecified any exception thrown by memory errors in standard containers,
+     * threading primitives, or by problem::batch_fitness().
+     */
+    vector_double batch_fitness(const vector_double &xs) const
+    {
+        const auto nx = m_problem.get_nx();
+        // Assume xs is sane.
+        assert(xs.size() % nx == 0u);
+        const auto n_dvs = xs.size() / nx;
+
+        // Prepare the deshifted dvs.
+        vector_double xs_deshifted(xs.size());
+
+        // Do the deshifting in parallel.
+        using range_t = tbb::blocked_range<decltype(xs.size())>;
+        tbb::parallel_for(range_t(0, n_dvs), [&xs, &xs_deshifted, nx, this](const range_t &range) {
+            for (auto i = range.begin(); i != range.end(); ++i) {
+#if defined(_MSC_VER)
+                std::transform(stdext::make_unchecked_array_iterator(xs.data() + i * nx),
+                               stdext::make_unchecked_array_iterator(xs.data() + (i + 1u) * nx),
+                               stdext::make_unchecked_array_iterator(m_translation.data()),
+                               stdext::make_unchecked_array_iterator(xs_deshifted.data() + i * nx),
+                               std::minus<double>{});
+#else
+                std::transform(xs.data() + i * nx, xs.data() + (i + 1u) * nx, m_translation.data(),
+                               xs_deshifted.data() + i * nx, std::minus<double>{});
+#endif
+            }
+        });
+
+        // Invoke batch_fitness() from m_problem.
+        // NOTE: in non-debug mode, use the helper that avoids calling the checks in m_problem.batch_fitness().
+        // The translate metaproblem does not change the dimensionality of the problem
+        // or of the fitness, thus all the checks run by m_problem.batch_fitness()
+        // are redundant.
+#if defined(NDEBUG)
+        return detail::prob_invoke_mem_batch_fitness(m_problem, xs_deshifted);
+#else
+        return m_problem.batch_fitness(xs_deshifted);
+#endif
+    }
+
+    /// Check if the inner problem can compute fitnesses in batch mode.
+    /**
+     * @return the output of the <tt>has_batch_fitness()</tt> member function invoked
+     * by the inner problem.
+     */
+    bool has_batch_fitness() const
+    {
+        return m_problem.has_batch_fitness();
     }
 
     /// Box-bounds.

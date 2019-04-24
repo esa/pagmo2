@@ -32,7 +32,7 @@ jobs:
     - checkout
     - run:
         name: Build and test
-        command: bash ./tools/bionic_clang6_release.sh
+        command: bash ./tools/circleci_bionic_clang6_release.sh
 
 workflows:
   version: 2

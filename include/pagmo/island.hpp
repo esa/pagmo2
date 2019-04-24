@@ -31,8 +31,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <array>
-#include <boost/any.hpp>
-#include <boost/iterator/indirect_iterator.hpp>
 #include <cassert>
 #include <chrono>
 #include <cstddef>
@@ -52,13 +50,19 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/any.hpp>
+#include <boost/iterator/indirect_iterator.hpp>
+#include <boost/numeric/conversion/cast.hpp>
+
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
@@ -199,7 +203,7 @@ struct isl_inner final : isl_inner_base {
     // The clone method, used in the copy constructor of island.
     virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
-        return make_unique<isl_inner>(m_value);
+        return detail::make_unique<isl_inner>(m_value);
     }
     // The mandatory run_evolve() method.
     virtual void run_evolve(island &isl) const override final
@@ -504,13 +508,13 @@ inline void default_island_factory(const algorithm &algo, const population &pop,
     (void)algo;
     (void)pop;
 #if defined(PAGMO_WITH_FORK_ISLAND)
-    if (static_cast<int>(algo.get_thread_safety()) < static_cast<int>(thread_safety::basic)
-        || static_cast<int>(pop.get_problem().get_thread_safety()) < static_cast<int>(thread_safety::basic)) {
-        ptr = make_unique<isl_inner<fork_island>>();
+    if (algo.get_thread_safety() < thread_safety::basic
+        || pop.get_problem().get_thread_safety() < thread_safety::basic) {
+        ptr = detail::make_unique<isl_inner<fork_island>>();
         return;
     }
 #endif
-    ptr = make_unique<isl_inner<thread_island>>();
+    ptr = detail::make_unique<isl_inner<thread_island>>();
 }
 
 // Static init.
@@ -524,7 +528,7 @@ struct island_data {
     // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
     // are both thread safe.
     island_data()
-        : isl_ptr(make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
+        : isl_ptr(detail::make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
           pop(std::make_shared<population>())
     {
     }
@@ -540,7 +544,7 @@ struct island_data {
     // As above, but the UDI is explicitly passed by the user.
     template <typename Isl, typename Algo, typename Pop>
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
-        : isl_ptr(make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+        : isl_ptr(detail::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
@@ -740,8 +744,8 @@ public:
      * - the copy constructors of pagmo::algorithm and pagmo::population.
      */
     island(const island &other)
-        : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(),
-                                             other.get_population()))
+        : m_ptr(
+            detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population()))
     {
         // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
         assert(m_ptr->archi_ptr == nullptr);
@@ -845,10 +849,8 @@ public:
 
 private:
     template <typename Algo, typename Prob>
-    using algo_prob_enabler
-        = enable_if_t<std::is_constructible<algorithm, Algo &&>::value
-                          && std::is_constructible<population, Prob &&, population::size_type, unsigned>::value,
-                      int>;
+    using algo_prob_enabler = enable_if_t<
+        std::is_constructible<algorithm, Algo &&>::value && std::is_constructible<problem, Prob &&>::value, int>;
 
 public:
     /// Constructor from algorithm, problem, size and seed.
@@ -857,8 +859,8 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
-     *    :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm`, and ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`.
      *
      * \endverbatim
      *
@@ -880,10 +882,42 @@ public:
     }
 
 private:
+    template <typename Algo, typename Prob, typename Bfe>
+    using algo_prob_bfe_enabler
+        = enable_if_t<std::is_constructible<algorithm, Algo &&>::value && std::is_constructible<problem, Prob &&>::value
+                          && std::is_constructible<bfe, Bfe &&>::value,
+                      int>;
+
+public:
+    /// Constructor from algorithm, problem, batch fitness evaluator, size and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * This constructor is equivalent to the previous one, the only difference being that
+     * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
+     * or UDBFE *b*.
+     * \endverbatim
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input (user-defined) batch fitness evaluator.
+     * @param size the population size.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
+     * island(Algo &&, Pop &&).
+     */
+    template <typename Algo, typename Prob, typename Bfe, algo_prob_bfe_enabler<Algo, Prob, Bfe> = 0>
+    explicit island(Algo &&a, Prob &&p, Bfe &&b, population::size_type size,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
+    {
+    }
+
+private:
     template <typename Isl, typename Algo, typename Prob>
     using isl_algo_prob_enabler
         = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
-                          && std::is_constructible<population, Prob &&, population::size_type, unsigned>::value,
+                          && std::is_constructible<problem, Prob &&>::value,
                       int>;
 
 public:
@@ -893,8 +927,8 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
-     *    construct a :cpp:class:`pagmo::algorithm`, and ``p``, ``size`` and ``seed`` can be used to construct a
-     *    :cpp:class:`pagmo::population`.
+     *    construct a :cpp:class:`pagmo::algorithm`, and ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`.
      *
      * \endverbatim
      *
@@ -916,6 +950,42 @@ public:
     explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed))
+    {
+    }
+
+private:
+    template <typename Isl, typename Algo, typename Prob, typename Bfe>
+    using isl_algo_prob_bfe_enabler
+        = enable_if_t<is_udi<uncvref_t<Isl>>::value && std::is_constructible<algorithm, Algo &&>::value
+                          && std::is_constructible<problem, Prob &&>::value
+                          && std::is_constructible<bfe, Bfe &&>::value,
+                      int>;
+
+public:
+    /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * This constructor is equivalent to the previous one, the only difference being that
+     * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
+     * or UDBFE *b*.
+     * \endverbatim
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input (user-defined) batch fitness evaluator.
+     * @param size the population size.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the invoked pagmo::population constructor or by
+     * island(Algo &&, Pop &&).
+     */
+    template <typename Isl, typename Algo, typename Prob, typename Bfe,
+              isl_algo_prob_bfe_enabler<Isl, Algo, Prob, Bfe> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, Bfe &&b, population::size_type size,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a),
+                 population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
     {
     }
     /// Destructor.
@@ -1418,12 +1488,12 @@ private:
 inline void thread_island::run_evolve(island &isl) const
 {
     const auto i_ts = isl.get_thread_safety();
-    if (static_cast<int>(i_ts[0]) < static_cast<int>(thread_safety::basic)) {
+    if (i_ts[0] < thread_safety::basic) {
         pagmo_throw(std::invalid_argument,
                     "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
                     "thread safety guarantee");
     }
-    if (static_cast<int>(i_ts[1]) < static_cast<int>(thread_safety::basic)) {
+    if (i_ts[1] < thread_safety::basic) {
         pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
                                            "thread safety guarantee");
     }
@@ -1732,46 +1802,87 @@ public:
 
 private:
 #if defined(_MSC_VER)
-    template <typename... Args>
+    template <typename...>
     using n_ctor_enabler = int;
 #else
     template <typename... Args>
-    using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args &&...>::value, int>;
+    using n_ctor_enabler = enable_if_t<std::is_constructible<island, Args...>::value, int>;
 #endif
     // The "default" constructor from n islands. Just forward
     // the input arguments to n calls to push_back().
     template <typename... Args>
-    void n_ctor(size_type n, Args &&... args)
+    void n_ctor(size_type n, const Args &... args)
     {
         for (size_type i = 0; i < n; ++i) {
-            // NOTE: don't forward, in order to avoid moving twice
+            // NOTE: we don't perfectly forward, in order to avoid moving twice
             // from the same objects. This also ensures that, when
             // using a ctor without seed, the seed is set to random
             // for each island.
             push_back(args...);
         }
     }
-    // These two implement the constructor which contains a seed argument.
+    // These implement the constructor which contains a seed argument.
     // We need to constrain with enable_if otherwise, due to the default
     // arguments in the island constructors, the wrong constructor would be called.
     template <typename Algo, typename Prob, typename S1, typename S2,
-              enable_if_t<std::is_constructible<algorithm, Algo &&>::value, int> = 0>
-    void n_ctor(size_type n, Algo &&a, Prob &&p, S1 size, S2 seed)
+              enable_if_t<std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Algo &a, const Prob &p, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
-            push_back(a, p, size, udist(eng));
+            push_back(a, p, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
-    template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
-              enable_if_t<is_udi<uncvref_t<Isl>>::value, int> = 0>
-    void n_ctor(size_type n, Isl &&isl, Algo &&a, Prob &&p, S1 size, S2 seed)
+    // Same as previous, with bfe argument.
+    // NOTE: performance wise, it would be better for these constructors from bfe
+    // to batch initialise *all* archi individuals
+    // (whereas now we batch init n times, one for each island). Keep this in mind
+    // for future developments.
+    template <typename Algo, typename Prob, typename Bfe, typename S1, typename S2,
+              enable_if_t<std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value
+                              && std::is_constructible<bfe, const Bfe &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Algo &a, const Prob &p, const Bfe &b, S1 size, S2 seed)
     {
         std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
         std::uniform_int_distribution<unsigned> udist;
         for (size_type i = 0; i < n; ++i) {
-            push_back(isl, a, p, size, udist(eng));
+            push_back(a, p, b, boost::numeric_cast<population::size_type>(size), udist(eng));
+        }
+    }
+    // Constructor with UDI argument.
+    template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
+              enable_if_t<is_udi<Isl>::value && std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, S1 size, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(isl, a, p, boost::numeric_cast<population::size_type>(size), udist(eng));
+        }
+    }
+    // Same as previous, with bfe argument.
+    template <typename Isl, typename Algo, typename Prob, typename Bfe, typename S1, typename S2,
+              enable_if_t<is_udi<Isl>::value && std::is_constructible<algorithm, const Algo &>::value
+                              && std::is_constructible<problem, const Prob &>::value
+                              && std::is_constructible<bfe, const Bfe &>::value && std::is_integral<S1>::value
+                              && std::is_integral<S2>::value,
+                          int> = 0>
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, const Bfe &b, S1 size, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(isl, a, p, b, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
 
@@ -1801,10 +1912,10 @@ public:
      * @throws unspecified any exception thrown by the invoked pagmo::island constructor
      * or by archipelago::push_back().
      */
-    template <typename... Args, n_ctor_enabler<Args...> = 0>
-    explicit archipelago(size_type n, Args &&... args)
+    template <typename... Args, n_ctor_enabler<const Args &...> = 0>
+    explicit archipelago(size_type n, const Args &... args)
     {
-        n_ctor(n, std::forward<Args>(args)...);
+        n_ctor(n, args...);
     }
     /// Copy assignment.
     /**
@@ -1922,8 +2033,13 @@ public:
     }
 
 private:
+#if defined(_MSC_VER)
+    template <typename...>
+    using push_back_enabler = int;
+#else
     template <typename... Args>
-    using push_back_enabler = n_ctor_enabler<Args...>;
+    using push_back_enabler = enable_if_t<std::is_constructible<island, Args...>::value, int>;
+#endif
 
 public:
     /// Add island.
@@ -1945,7 +2061,7 @@ public:
      * @throws unspecified any exception thrown by memory allocation errors or by the invoked constructor
      * of pagmo::island.
      */
-    template <typename... Args, push_back_enabler<Args...> = 0>
+    template <typename... Args, push_back_enabler<Args &&...> = 0>
     void push_back(Args &&... args)
     {
         m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));

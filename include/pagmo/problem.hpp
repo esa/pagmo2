@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_PROBLEM_HPP
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -41,8 +42,12 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include <boost/numeric/conversion/cast.hpp>
+
+#include <pagmo/detail/bfe_impl.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -511,6 +516,36 @@ public:
 template <typename T>
 const bool override_has_hessians_sparsity<T>::value;
 
+// Detect the batch_fitness() member function.
+template <typename T>
+class has_batch_fitness
+{
+    template <typename U>
+    using batch_fitness_t = decltype(std::declval<const U &>().batch_fitness(std::declval<const vector_double &>()));
+    static const bool implementation_defined = std::is_same<vector_double, detected_t<batch_fitness_t, T>>::value;
+
+public:
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_batch_fitness<T>::value;
+
+// Detect the has_batch_fitness() member function.
+template <typename T>
+class override_has_batch_fitness
+{
+    template <typename U>
+    using has_batch_fitness_t = decltype(std::declval<const U &>().has_batch_fitness());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_batch_fitness_t, T>>::value;
+
+public:
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool override_has_batch_fitness<T>::value;
+
 namespace detail
 {
 
@@ -571,6 +606,8 @@ struct prob_inner_base {
     virtual ~prob_inner_base() {}
     virtual std::unique_ptr<prob_inner_base> clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
+    virtual vector_double batch_fitness(const vector_double &) const = 0;
+    virtual bool has_batch_fitness() const = 0;
     virtual vector_double gradient(const vector_double &) const = 0;
     virtual bool has_gradient() const = 0;
     virtual sparsity_pattern gradient_sparsity() const = 0;
@@ -609,7 +646,7 @@ struct prob_inner final : prob_inner_base {
     // The clone method, used in the copy constructor of problem.
     virtual std::unique_ptr<prob_inner_base> clone() const override final
     {
-        return make_unique<prob_inner>(m_value);
+        return detail::make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
     virtual vector_double fitness(const vector_double &dv) const override final
@@ -621,6 +658,14 @@ struct prob_inner final : prob_inner_base {
         return m_value.get_bounds();
     }
     // optional methods
+    virtual vector_double batch_fitness(const vector_double &dv) const override final
+    {
+        return batch_fitness_impl(m_value, dv);
+    }
+    virtual bool has_batch_fitness() const override final
+    {
+        return has_batch_fitness_impl(m_value);
+    }
     virtual vector_double::size_type get_nobj() const override final
     {
         return get_nobj_impl(m_value);
@@ -690,6 +735,35 @@ struct prob_inner final : prob_inner_base {
         return get_thread_safety_impl(m_value);
     }
     // Implementation of the optional methods.
+    template <typename U, enable_if_t<pagmo::has_batch_fitness<U>::value, int> = 0>
+    static vector_double batch_fitness_impl(const U &value, const vector_double &dv)
+    {
+        return value.batch_fitness(dv);
+    }
+    template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
+    [[noreturn]] static vector_double batch_fitness_impl(const U &value, const vector_double &)
+    {
+        pagmo_throw(not_implemented_error,
+                    "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
+    }
+    template <typename U,
+              enable_if_t<pagmo::has_batch_fitness<U>::value && pagmo::override_has_batch_fitness<U>::value, int> = 0>
+    static bool has_batch_fitness_impl(const U &p)
+    {
+        return p.has_batch_fitness();
+    }
+    template <typename U,
+              enable_if_t<pagmo::has_batch_fitness<U>::value && !pagmo::override_has_batch_fitness<U>::value, int> = 0>
+    static bool has_batch_fitness_impl(const U &)
+    {
+        return true;
+    }
+    template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
+    static bool has_batch_fitness_impl(const U &)
+    {
+        return false;
+    }
     template <typename U, enable_if_t<has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &value)
     {
@@ -706,9 +780,11 @@ struct prob_inner final : prob_inner_base {
         return value.gradient(dv);
     }
     template <typename U, enable_if_t<!pagmo::has_gradient<U>::value, int> = 0>
-    static vector_double gradient_impl(const U &, const vector_double &)
+    [[noreturn]] static vector_double gradient_impl(const U &value, const vector_double &)
     {
-        pagmo_throw(not_implemented_error, "The gradient has been requested but it is not implemented in the UDP");
+        pagmo_throw(not_implemented_error,
+                    "The gradient has been requested, but it is not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
@@ -765,9 +841,11 @@ struct prob_inner final : prob_inner_base {
         return value.hessians(dv);
     }
     template <typename U, enable_if_t<!pagmo::has_hessians<U>::value, int> = 0>
-    static std::vector<vector_double> hessians_impl(const U &, const vector_double &)
+    [[noreturn]] static std::vector<vector_double> hessians_impl(const U &value, const vector_double &)
     {
-        pagmo_throw(not_implemented_error, "The hessians have been requested but they are not implemented in the UDP");
+        pagmo_throw(not_implemented_error,
+                    "The hessians have been requested, but they are not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
@@ -854,10 +932,11 @@ struct prob_inner final : prob_inner_base {
         value.set_seed(seed);
     }
     template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
-    static void set_seed_impl(U &, unsigned int)
+    [[noreturn]] static void set_seed_impl(U &value, unsigned int)
     {
         pagmo_throw(not_implemented_error,
-                    "The set_seed() method has been invoked but it is not implemented in the UDP");
+                    "The set_seed() method has been invoked, but it is not implemented in a UDP of type '"
+                        + get_name_impl(value) + "'");
     }
     template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
     static bool has_set_seed_impl(const U &p)
@@ -970,6 +1049,8 @@ struct prob_inner final : prob_inner_base {
  * vector_double::size_type get_nec() const;
  * vector_double::size_type get_nic() const;
  * vector_double::size_type get_nix() const;
+ * vector_double batch_fitness(const vector_double &) const;
+ * bool has_batch_fitness() const;
  * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
  * bool has_gradient_sparsity() const;
@@ -1062,9 +1143,11 @@ public:
      * - the copying of the internal UDP.
      */
     problem(const problem &other)
-        : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
-          m_lb(other.m_lb), m_ub(other.m_ub), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic),
-          m_nix(other.m_nix), m_c_tol(other.m_c_tol), m_has_gradient(other.m_has_gradient),
+        : m_ptr(other.ptr()->clone()), m_fevals(other.m_fevals.load(std::memory_order_relaxed)),
+          m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
+          m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(other.m_lb), m_ub(other.m_ub),
+          m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(other.m_c_tol),
+          m_has_batch_fitness(other.m_has_batch_fitness), m_has_gradient(other.m_has_gradient),
           m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
           m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
           m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
@@ -1077,9 +1160,11 @@ public:
      * @param other the problem from which \p this will be move-constructed.
      */
     problem(problem &&other) noexcept
-        : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals), m_gevals(other.m_gevals), m_hevals(other.m_hevals),
-          m_lb(std::move(other.m_lb)), m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec),
-          m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(std::move(other.m_c_tol)),
+        : m_ptr(std::move(other.m_ptr)), m_fevals(other.m_fevals.load(std::memory_order_relaxed)),
+          m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
+          m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(std::move(other.m_lb)),
+          m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix),
+          m_c_tol(std::move(other.m_c_tol)), m_has_batch_fitness(other.m_has_batch_fitness),
           m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
           m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
           m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
@@ -1097,9 +1182,9 @@ public:
     {
         if (this != &other) {
             m_ptr = std::move(other.m_ptr);
-            m_fevals = other.m_fevals;
-            m_gevals = other.m_gevals;
-            m_hevals = other.m_hevals;
+            m_fevals.store(other.m_fevals.load(std::memory_order_relaxed), std::memory_order_relaxed);
+            m_gevals.store(other.m_gevals.load(std::memory_order_relaxed), std::memory_order_relaxed);
+            m_hevals.store(other.m_hevals.load(std::memory_order_relaxed), std::memory_order_relaxed);
             m_lb = std::move(other.m_lb);
             m_ub = std::move(other.m_ub);
             m_nobj = other.m_nobj;
@@ -1107,6 +1192,7 @@ public:
             m_nic = other.m_nic;
             m_nix = other.m_nix;
             m_c_tol = std::move(other.m_c_tol);
+            m_has_batch_fitness = other.m_has_batch_fitness;
             m_has_gradient = other.m_has_gradient;
             m_has_gradient_sparsity = other.m_has_gradient_sparsity;
             m_has_hessians = other.m_has_hessians;
@@ -1193,7 +1279,7 @@ public:
 
     /// Check if the UDP used for construction is of type \p T.
     /**
-     * @return \p true if the UDP used in construction is of type \p T, \p false otherwise.
+     * @return \p true if the UDP used for construction is of type \p T, \p false otherwise.
      */
     template <typename T>
     bool is() const noexcept
@@ -1225,15 +1311,109 @@ public:
      */
     vector_double fitness(const vector_double &dv) const
     {
+        // NOTE: it is important that we can call this method on the same object from multiple threads,
+        // for parallel initialisation in populations/archis. Such thread safety must be maintained
+        // if we change the implementation of this method.
+
         // 1 - checks the decision vector
-        check_decision_vector(dv);
+        // NOTE: the check uses UDP properties cached on construction. This is const and thread-safe.
+        detail::prob_check_dv(*this, dv.data(), dv.size());
+
         // 2 - computes the fitness
+        // NOTE: the thread safety here depends on the thread safety of the UDP. We make sure in the
+        // parallel init methods that we never invoke this method concurrently if the UDP is not
+        // sufficiently thread-safe.
         vector_double retval(ptr()->fitness(dv));
+
         // 3 - checks the fitness vector
-        check_fitness_vector(retval);
+        // NOTE: as above, we are just making sure the fitness length is consistent with the fitness
+        // length stored in the problem. This is const and thread-safe.
+        detail::prob_check_fv(*this, retval.data(), retval.size());
+
         // 4 - increments fitness evaluation counter
-        ++m_fevals;
+        // NOTE: this is an atomic variable, thread-safe.
+        increment_fevals(1);
+
         return retval;
+    }
+
+private:
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+    // Make friends with the batch_fitness() invocation helper.
+    template <typename P>
+    friend vector_double detail::prob_invoke_mem_batch_fitness(const P &, const vector_double &);
+#endif
+
+public:
+    /// Batch fitness.
+    /**
+     * This method implements the evaluation of multiple decision vectors in batch mode
+     * by invoking the <tt>%batch_fitness()</tt> method of the UDP. The <tt>%batch_fitness()</tt>
+     * method of the UDP accepts in input a batch of decision vectors, \p dvs, stored contiguously:
+     * for a problem with dimension \f$ n \f$, the first decision vector in \p dvs occupies
+     * the index range \f$ \left[0, n\right) \f$, the second decision vector occupies the range
+     * \f$ \left[n, 2n\right) \f$, and so on. The return value is the batch of fitness vectors \p fvs
+     * resulting from computing the fitness of the input decision vectors.
+     * \p fvs is also stored contiguously: for a problem with fitness dimension \f$ f \f$, the first fitness
+     * vector will occupy the index range \f$ \left[0, f\right) \f$, the second fitness vector
+     * will occupy the range \f$ \left[f, 2f\right) \f$, and so on.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * If the UDP satisfies :cpp:class:`pagmo::has_batch_fitness`, this method will forward ``dvs``
+     * to the ``batch_fitness()`` method of the UDP after sanity checks. The output of the ``batch_fitness()``
+     * method of the UDP will also be checked before being returned. If the UDP does not satisfy
+     * :cpp:class:`pagmo::has_batch_fitness`, an error will be raised.
+     * \endverbatim
+     *
+     * A successful call of this method will increase the internal fitness evaluation counter (see
+     * problem::get_fevals()).
+     *
+     * @param dvs the input batch of decision vectors.
+     *
+     * @return the fitnesses of the decision vectors in \p dvs.
+     *
+     * @throws std::invalid_argument if either \p dvs or the return value are incompatible
+     * with the properties of this problem.
+     * @throws not_implemented_error if the UDP does not have a <tt>%batch_fitness()</tt> method.
+     * @throws unspecified any exception thrown by the <tt>%batch_fitness()</tt> method of the UDP.
+     */
+    vector_double batch_fitness(const vector_double &dvs) const
+    {
+        // Check the input dvs.
+        detail::bfe_check_input_dvs(*this, dvs);
+
+        // Invoke the batch fitness function of the UDP, and
+        // increase the fevals counter as well.
+        auto retval = detail::prob_invoke_mem_batch_fitness(*this, dvs);
+
+        // Check the produced vector of fitnesses.
+        detail::bfe_check_output_fvs(*this, dvs, retval);
+
+        return retval;
+    }
+
+    /// Check if the UDP is capable of fitness evaluation in batch mode.
+    /**
+     * This method will return \p true if the UDP is capable of fitness evaluation in batch mode, \p false otherwise.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * The batch fitness evaluation capability of the UDP is determined as follows:
+     *
+     * * if the UDP does not satisfy :cpp:class:`pagmo::has_batch_fitness`, then this method will always return
+     *   ``false``;
+     * * if the UDP satisfies :cpp:class:`pagmo::has_batch_fitness` but it does not satisfy
+     *   :cpp:class:`pagmo::override_has_batch_fitness`, then this method will always return ``true``;
+     * * if the UDP satisfies both :cpp:class:`pagmo::has_batch_fitness` and
+     *   :cpp:class:`pagmo::override_has_batch_fitness`, then this method will return the output of the
+     *   ``has_batch_fitness()`` method of the UDP.
+     *
+     * \endverbatim
+     *
+     * @return a flag signalling the availability of fitness evaluation in batch mode in the UDP.
+     */
+    bool has_batch_fitness() const
+    {
+        return m_has_batch_fitness;
     }
 
     /// Gradient.
@@ -1267,13 +1447,13 @@ public:
     vector_double gradient(const vector_double &dv) const
     {
         // 1 - checks the decision vector
-        check_decision_vector(dv);
+        detail::prob_check_dv(*this, dv.data(), dv.size());
         // 2 - compute the gradients
         vector_double retval(ptr()->gradient(dv));
         // 3 - checks the gradient vector
         check_gradient_vector(retval);
         // 4 - increments gradient evaluation counter
-        ++m_gevals;
+        m_gevals.fetch_add(1u, std::memory_order_relaxed);
         return retval;
     }
 
@@ -1395,13 +1575,13 @@ public:
     std::vector<vector_double> hessians(const vector_double &dv) const
     {
         // 1 - checks the decision vector
-        check_decision_vector(dv);
+        detail::prob_check_dv(*this, dv.data(), dv.size());
         // 2 - computes the hessians
         auto retval(ptr()->hessians(dv));
         // 3 - checks the hessians
         check_hessians_vector(retval);
         // 4 - increments hessians evaluation counter
-        ++m_hevals;
+        m_hevals.fetch_add(1u, std::memory_order_relaxed);
         return retval;
     }
 
@@ -1690,7 +1870,18 @@ public:
      */
     unsigned long long get_fevals() const
     {
-        return m_fevals;
+        return m_fevals.load(std::memory_order_relaxed);
+    }
+
+    /// Increment the number of fitness evaluations.
+    /**
+     * This method will increase the internal counter of fitness evaluations by \p n.
+     *
+     * @param n the amount by which the internal counter of fitness evaluations will be increased.
+     */
+    void increment_fevals(unsigned long long n) const
+    {
+        m_fevals.fetch_add(n, std::memory_order_relaxed);
     }
 
     /// Number of gradient evaluations.
@@ -1703,7 +1894,7 @@ public:
      */
     unsigned long long get_gevals() const
     {
-        return m_gevals;
+        return m_gevals.load(std::memory_order_relaxed);
     }
 
     /// Number of hessians evaluations.
@@ -1716,7 +1907,7 @@ public:
      */
     unsigned long long get_hevals() const
     {
-        return m_hevals;
+        return m_hevals.load(std::memory_order_relaxed);
     }
 
     /// Set the seed for the stochastic variables.
@@ -1884,6 +2075,7 @@ public:
         stream(os, p.get_bounds().first, '\n');
         os << "\tUpper bounds: ";
         stream(os, p.get_bounds().second, '\n');
+        stream(os, "\tHas batch fitness evaluation: ", p.m_has_batch_fitness, '\n');
         stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
         stream(os, "\tUser implemented gradient sparsity: ", p.m_has_gradient_sparsity, '\n');
         if (p.has_gradient()) {
@@ -1921,9 +2113,10 @@ public:
     template <typename Archive>
     void save(Archive &ar) const
     {
-        ar(m_ptr, m_fevals, m_gevals, m_hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol, m_has_gradient,
-           m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim,
-           m_thread_safety);
+        ar(m_ptr, m_fevals.load(std::memory_order_relaxed), m_gevals.load(std::memory_order_relaxed),
+           m_hevals.load(std::memory_order_relaxed), m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol,
+           m_has_batch_fitness, m_has_gradient, m_has_gradient_sparsity, m_has_hessians, m_has_hessians_sparsity,
+           m_has_set_seed, m_name, m_gs_dim, m_hs_dim, m_thread_safety);
     }
 
     /// Load from archive.
@@ -1939,10 +2132,14 @@ public:
     {
         // Deserialize in a separate object and move it in later, for exception safety.
         problem tmp_prob;
-        ar(tmp_prob.m_ptr, tmp_prob.m_fevals, tmp_prob.m_gevals, tmp_prob.m_hevals, tmp_prob.m_lb, tmp_prob.m_ub,
-           tmp_prob.m_nobj, tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_gradient,
+        unsigned long long fevals, gevals, hevals;
+        ar(tmp_prob.m_ptr, fevals, gevals, hevals, tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj, tmp_prob.m_nec,
+           tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol, tmp_prob.m_has_batch_fitness, tmp_prob.m_has_gradient,
            tmp_prob.m_has_gradient_sparsity, tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity,
            tmp_prob.m_has_set_seed, tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
+        tmp_prob.m_fevals.store(fevals, std::memory_order_relaxed);
+        tmp_prob.m_gevals.store(gevals, std::memory_order_relaxed);
+        tmp_prob.m_hevals.store(hevals, std::memory_order_relaxed);
         *this = std::move(tmp_prob);
     }
 
@@ -2029,26 +2226,6 @@ private:
             }
         }
     }
-    void check_decision_vector(const vector_double &dv) const
-    {
-        // 1 - check decision vector for length consistency
-        if (dv.size() != get_nx()) {
-            pagmo_throw(std::invalid_argument, "Length of decision vector is " + std::to_string(dv.size())
-                                                   + ", should be " + std::to_string(get_nx()));
-        }
-        // 2 - Here is where one could check if the decision vector
-        // is in the bounds. At the moment not implemented
-    }
-
-    void check_fitness_vector(const vector_double &f) const
-    {
-        auto nf = get_nf();
-        // Checks dimension of returned fitness
-        if (f.size() != nf) {
-            pagmo_throw(std::invalid_argument,
-                        "Fitness length is: " + std::to_string(f.size()) + ", should be " + std::to_string(nf));
-        }
-    }
 
     void check_gradient_vector(const vector_double &gr) const
     {
@@ -2083,14 +2260,15 @@ private:
     // Pointer to the inner base problem
     std::unique_ptr<detail::prob_inner_base> m_ptr;
     // Counter for calls to the fitness
-    mutable unsigned long long m_fevals;
+    mutable std::atomic<unsigned long long> m_fevals;
     // Counter for calls to the gradient
-    mutable unsigned long long m_gevals;
+    mutable std::atomic<unsigned long long> m_gevals;
     // Counter for calls to the hessians
-    mutable unsigned long long m_hevals;
+    mutable std::atomic<unsigned long long> m_hevals;
     // Various problem properties determined at construction time
     // from the concrete problem. These will be constant for the lifetime
-    // of problem, but we cannot mark them as such because of serialization.
+    // of problem, but we cannot mark them as such because we want to be
+    // able to assign and deserialise problems.
     vector_double m_lb;
     vector_double m_ub;
     vector_double::size_type m_nobj;
@@ -2098,6 +2276,7 @@ private:
     vector_double::size_type m_nic;
     vector_double::size_type m_nix;
     vector_double m_c_tol;
+    bool m_has_batch_fitness;
     bool m_has_gradient;
     bool m_has_gradient_sparsity;
     bool m_has_hessians;

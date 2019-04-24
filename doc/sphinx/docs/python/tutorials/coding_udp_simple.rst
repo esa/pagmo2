@@ -57,6 +57,7 @@ That's easy! To inspect what type of problem pygmo has detected from our UDP we 
     	Inequality constraints dimension:	0
     	Lower bounds: [-1, -1]
     	Upper bounds: [1, 1]
+        Has batch fitness evaluation: false
     <BLANKLINE>
     	Has gradient: false
     	User implemented gradient sparsity: false
@@ -106,6 +107,7 @@ and to have a human readable name.
     	Inequality constraints dimension:	0
     	Lower bounds: [-1, -1, -1]
     	Upper bounds: [1, 1, 1]
+        Has batch fitness evaluation: false
     <BLANKLINE>
     	Has gradient: false
     	User implemented gradient sparsity: false

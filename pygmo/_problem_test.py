@@ -1969,7 +1969,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
         self.assertTrue(problem(p()).get_thread_safety() == ts.none)
-        self.assertTrue(problem(rosenbrock()).get_thread_safety() == ts.basic)
+        self.assertTrue(problem(rosenbrock()).get_thread_safety() == ts.constant)
         self.assertTrue(
             problem(_tu_test_problem()).get_thread_safety() == ts.none)
         self.assertTrue(
@@ -1977,7 +1977,7 @@ class problem_test_case(_ut.TestCase):
         self.assertTrue(
             problem(translate(p(), [0, 1])).get_thread_safety() == ts.none)
         self.assertTrue(
-            problem(translate(rosenbrock(), [0, 1])).get_thread_safety() == ts.basic)
+            problem(translate(rosenbrock(), [0, 1])).get_thread_safety() == ts.constant)
 
     def run_pickle_test(self):
         from .core import problem, rosenbrock, translate

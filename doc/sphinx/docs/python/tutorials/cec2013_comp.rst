@@ -31,6 +31,7 @@ as usual, we can quickly inspect the :class:`~pygmo.problem` printing it to scre
     	Inequality constraints dimension:	0
     	Lower bounds: [-100, -100, -100, -100, -100, ... ]
     	Upper bounds: [100, 100, 100, 100, 100, ... ]
+        Has batch fitness evaluation: false
     <BLANKLINE>
     	Has gradient: false
     	User implemented gradient sparsity: false

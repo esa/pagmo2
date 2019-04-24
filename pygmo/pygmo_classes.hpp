@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/problem.hpp>
 
@@ -53,6 +54,9 @@ extern std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // pagmo::island.
 extern std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+
+// pagmo::bfe.
+extern std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
 
 // Getters for the objects above.
 inline bp::class_<pagmo::problem> &get_problem_class()
@@ -81,6 +85,16 @@ inline bp::class_<pagmo::island> &get_island_class()
     }
     return *island_ptr;
 }
+
+inline bp::class_<pagmo::bfe> &get_bfe_class()
+{
+    if (!bfe_ptr) {
+        std::cerr << "Null bfe class pointer." << std::endl;
+        std::abort();
+    }
+    return *bfe_ptr;
+}
+
 } // namespace pygmo
 
 #endif

@@ -43,7 +43,7 @@ namespace pygmo
 namespace bp = boost::python;
 
 // A common base class with methods useful in the implementation of
-// the pythonic problem and algorithm.
+// the pythonic problem, algorithm, etc.
 struct common_base {
     static void check_mandatory_method(const bp::object &o, const char *s, const char *target)
     {

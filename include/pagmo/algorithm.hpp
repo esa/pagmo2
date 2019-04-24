@@ -252,7 +252,7 @@ struct algo_inner final : algo_inner_base {
     // The clone method, used in the copy constructor of algorithm.
     virtual std::unique_ptr<algo_inner_base> clone() const override final
     {
-        return make_unique<algo_inner>(m_value);
+        return detail::make_unique<algo_inner>(m_value);
     }
     // Mandatory methods.
     virtual population evolve(const population &pop) const override final

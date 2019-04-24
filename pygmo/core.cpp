@@ -44,6 +44,14 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
+#include <limits>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <tuple>
+#include <unordered_set>
+#include <vector>
+
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
@@ -65,16 +73,10 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/self.hpp>
 #include <boost/python/tuple.hpp>
 #include <boost/shared_ptr.hpp>
-#include <cstdint>
-#include <limits>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <tuple>
-#include <unordered_set>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
@@ -83,6 +85,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/serialization.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 #include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
@@ -94,9 +97,11 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/multi_objective.hpp>
 
 #include <pygmo/algorithm.hpp>
+#include <pygmo/bfe.hpp>
 #include <pygmo/common_utils.hpp>
 #include <pygmo/docstrings.hpp>
 #include <pygmo/expose_algorithms.hpp>
+#include <pygmo/expose_bfes.hpp>
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
 #include <pygmo/island.hpp>
@@ -139,6 +144,9 @@ std::unique_ptr<bp::class_<pagmo::algorithm>> algorithm_ptr;
 
 // Exposed pagmo::island.
 std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
+
+// Exposed pagmo::bfe.
+std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
 } // namespace pygmo
 
 // The cleanup function.
@@ -155,6 +163,8 @@ static inline void cleanup()
     pygmo::algorithm_ptr.reset();
 
     pygmo::island_ptr.reset();
+
+    pygmo::bfe_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -290,8 +300,23 @@ static inline constexpr unsigned max_unsigned()
     return std::numeric_limits<unsigned>::max();
 }
 
+// Small helper to return the next random unsigned
+// from the global pagmo rng.
+static inline unsigned random_device_next()
+{
+    return pagmo::random_device::next();
+}
+
 // The set containing the list of registered APs.
 static std::unordered_set<std::string> ap_set;
+
+// Detect if pygmo can use the multiprocessing module.
+// NOTE: the mp machinery is supported since Python 3.4 or on Windows.
+#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
+
+#define PYGMO_CAN_USE_MP
+
+#endif
 
 BOOST_PYTHON_MODULE(core)
 {
@@ -326,30 +351,29 @@ BOOST_PYTHON_MODULE(core)
     }
 
     // Override the default implementation of the island factory.
-    detail::island_factory<>::s_func = [](const algorithm &algo, const population &pop,
-                                          std::unique_ptr<detail::isl_inner_base> &ptr) {
-        if (static_cast<int>(algo.get_thread_safety()) >= static_cast<int>(thread_safety::basic)
-            && static_cast<int>(pop.get_problem().get_thread_safety()) >= static_cast<int>(thread_safety::basic)) {
-            // Both algo and prob have at least the basic thread safety guarantee. Use the thread island.
-            ptr = detail::make_unique<detail::isl_inner<thread_island>>();
-        } else {
-            // NOTE: here we are re-implementing a piece of code that normally
-            // is pure C++. We are calling into the Python interpreter, so, in order to handle
-            // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
-            // in order to guard against concurrent access to the interpreter. The idea here is that this piece
-            // of code normally would provide a basic thread safety guarantee, and in order to continue providing
-            // it we use the ensurer.
-            pygmo::gil_thread_ensurer gte;
-            bp::object py_island = bp::import("pygmo")
-#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
-                                       // NOTE: the mp_island is supported since Python 3.4 or on Windows.
-                                       .attr("mp_island");
+    detail::island_factory<>::s_func
+        = [](const algorithm &algo, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
+              if (algo.get_thread_safety() >= thread_safety::basic
+                  && pop.get_problem().get_thread_safety() >= thread_safety::basic) {
+                  // Both algo and prob have at least the basic thread safety guarantee. Use the thread island.
+                  ptr = detail::make_unique<detail::isl_inner<thread_island>>();
+              } else {
+                  // NOTE: here we are re-implementing a piece of code that normally
+                  // is pure C++. We are calling into the Python interpreter, so, in order to handle
+                  // the case in which we are invoking this code from a separate C++ thread, we construct a GIL ensurer
+                  // in order to guard against concurrent access to the interpreter. The idea here is that this piece
+                  // of code normally would provide a basic thread safety guarantee, and in order to continue providing
+                  // it we use the ensurer.
+                  pygmo::gil_thread_ensurer gte;
+                  bp::object py_island = bp::import("pygmo")
+#if defined(PYGMO_CAN_USE_MP)
+                                             .attr("mp_island");
 #else
-                                       .attr("ipyparallel_island");
+                                             .attr("ipyparallel_island");
 #endif
-            ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
-        }
-    };
+                  ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
+              }
+          };
 
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
@@ -363,7 +387,10 @@ BOOST_PYTHON_MODULE(core)
     doc_options.disable_py_signatures();
 
     // The thread_safety enum.
-    bp::enum_<thread_safety>("_thread_safety").value("none", thread_safety::none).value("basic", thread_safety::basic);
+    bp::enum_<thread_safety>("_thread_safety")
+        .value("none", thread_safety::none)
+        .value("basic", thread_safety::basic)
+        .value("constant", thread_safety::constant);
 
     // The evolve_status enum.
     bp::enum_<evolve_status>("_evolve_status")
@@ -388,6 +415,9 @@ BOOST_PYTHON_MODULE(core)
 
     // The max_unsigned() helper.
     bp::def("_max_unsigned", &max_unsigned);
+
+    // The random_device_next() helper.
+    bp::def("_random_device_next", &random_device_next);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
@@ -416,10 +446,21 @@ BOOST_PYTHON_MODULE(core)
     auto islands_module = bp::object(bp::handle<>(bp::borrowed(islands_module_ptr)));
     bp::scope().attr("islands") = islands_module;
 
+    // Create the batch_evaluators submodule.
+    std::string batch_evaluators_module_name
+        = bp::extract<std::string>(bp::scope().attr("__name__") + ".batch_evaluators");
+    PyObject *batch_evaluators_module_ptr = PyImport_AddModule(batch_evaluators_module_name.c_str());
+    if (!batch_evaluators_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'batch_evaluators' submodule");
+    }
+    auto batch_evaluators_module = bp::object(bp::handle<>(bp::borrowed(batch_evaluators_module_ptr)));
+    bp::scope().attr("batch_evaluators") = batch_evaluators_module;
+
     // Store the pointers to the classes that can be extended by APs.
     bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
     bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
     bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
+    bp::scope().attr("_bfe_address") = reinterpret_cast<std::uintptr_t>(&pygmo::bfe_ptr);
 
     // Fetch and store addresses to the internal cereal global objects that contain the
     // info for the serialization of polymorphic types.
@@ -445,9 +486,10 @@ BOOST_PYTHON_MODULE(core)
     // Ctors from problem.
     // NOTE: we expose only the ctors from pagmo::problem, not from C++ or Python UDPs. An __init__ wrapper
     // on the Python side will take care of cting a pagmo::problem from the input UDP, and then invoke this ctor.
-    // This way we avoid having to expose a different ctor for every exposed C++ prob.
-    pop_class.def(bp::init<const problem &, population::size_type>())
-        .def(bp::init<const problem &, population::size_type, unsigned>())
+    // This way we avoid having to expose a different ctor for every exposed C++ prob. Same idea with
+    // the bfe argument.
+    pop_class.def(bp::init<const problem &, population::size_type, unsigned>())
+        .def(bp::init<const problem &, const bfe &, population::size_type, unsigned>())
         // Repr.
         .def(repr(bp::self))
         // Copy and deepcopy.
@@ -530,6 +572,11 @@ BOOST_PYTHON_MODULE(core)
              pygmo::problem_get_lb_docstring().c_str())
         .def("get_ub", lcast([](const pagmo::problem &p) { return pygmo::v_to_a(p.get_ub()); }),
              pygmo::problem_get_ub_docstring().c_str())
+        .def("batch_fitness", lcast([](const pagmo::problem &p, const bp::object &dvs) {
+                 return pygmo::v_to_a(p.batch_fitness(pygmo::to_vd(dvs)));
+             }),
+             pygmo::problem_batch_fitness_docstring().c_str(), (bp::arg("dvs")))
+        .def("has_batch_fitness", &problem::has_batch_fitness, pygmo::problem_has_batch_fitness_docstring().c_str())
         .def("gradient", lcast([](const pagmo::problem &p, const bp::object &dv) {
                  return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv)));
              }),
@@ -895,4 +942,27 @@ BOOST_PYTHON_MODULE(core)
              }),
              pygmo::archipelago_get_champions_x_docstring().c_str());
     pygmo::add_property(archi_class, "status", &archipelago::status, pygmo::archipelago_status_docstring().c_str());
+
+    // Bfe class.
+    pygmo::bfe_ptr = detail::make_unique<bp::class_<bfe>>("bfe", pygmo::bfe_docstring().c_str(), bp::init<>());
+    auto &bfe_class = pygmo::get_bfe_class();
+    bfe_class.def(bp::init<const bp::object &>((bp::arg("udbfe"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::bfe_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<bfe>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<bfe>)
+        // UDBFE extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<bfe>)
+        // Bfe methods.
+        .def("__call__", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
+                 return pygmo::v_to_a(b(prob, pygmo::to_vd(dvs)));
+             }),
+             pygmo::bfe_call_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+        .def("get_name", &bfe::get_name, pygmo::bfe_get_name_docstring().c_str())
+        .def("get_extra_info", &bfe::get_extra_info, pygmo::bfe_get_extra_info_docstring().c_str())
+        .def("get_thread_safety", &bfe::get_thread_safety, pygmo::bfe_get_thread_safety_docstring().c_str());
+
+    // Expose bfes.
+    pygmo::expose_bfes();
 }

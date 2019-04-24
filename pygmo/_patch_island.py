@@ -66,8 +66,8 @@ def _island_extract(self, t):
         >>> i1.extract(pg.mp_island) is None
         True
         >>> class isl:
-        ...:     def run_evolve(self, algo, pop):
-        ...:         return algo, pop
+        ...     def run_evolve(self, algo, pop):
+        ...         return algo, pop
         >>> i2 = pg.island(algo=pg.de(), prob=pg.rosenbrock(), size=20, udi=isl())
         >>> i2.extract(object) # doctest: +SKIP
         <__main__.isl at 0x7f8e478261d0>

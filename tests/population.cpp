@@ -36,6 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
@@ -385,4 +387,39 @@ BOOST_AUTO_TEST_CASE(population_cout_test)
     BOOST_CHECK_NO_THROW(std::cout << pop);
     BOOST_CHECK_NO_THROW(std::cout << pop_sto);
     BOOST_CHECK_NO_THROW(std::cout << pop_mo);
+}
+
+BOOST_AUTO_TEST_CASE(population_bfe_ctor_test)
+{
+    // Empty pop test. Use rosenbrock as we know
+    // it's fully thread-safe.
+    problem prob{rosenbrock{2u}};
+    population pop0{prob, bfe{}};
+    BOOST_CHECK(pop0.size() == 0u);
+    BOOST_CHECK(pop0.get_problem().get_fevals() == 0u);
+
+    // Population with 100 individuals, verify that
+    // the fitnesses are computed correctly.
+    population pop100{rosenbrock{2u}, bfe{}, 100};
+    BOOST_CHECK(pop100.size() == 100u);
+    BOOST_CHECK(pop100.get_problem().get_fevals() == 100u);
+    for (auto i = 0u; i < 100u; ++i) {
+        BOOST_CHECK(pop100.get_f()[i] == prob.fitness(pop100.get_x()[i]));
+    }
+
+    // Same with 1000 individuals.
+    population pop1000{rosenbrock{2u}, bfe{}, 1000};
+    BOOST_CHECK(pop1000.size() == 1000u);
+    BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+    }
+
+    // Do a test with a UDBFE.
+    pop1000 = population{rosenbrock{2u}, thread_bfe{}, 1000};
+    BOOST_CHECK(pop1000.size() == 1000u);
+    BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+    }
 }

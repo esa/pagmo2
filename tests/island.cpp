@@ -41,9 +41,12 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
+#include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -282,7 +285,7 @@ BOOST_AUTO_TEST_CASE(island_thread_safety)
     island isl{de{}, population{rosenbrock{}, 25}};
     auto ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::basic);
-    BOOST_CHECK(ts[1] == thread_safety::basic);
+    BOOST_CHECK(ts[1] == thread_safety::constant);
     isl.evolve();
     isl.wait_check();
     isl = island{de{}, population{prob_02{}, 25}};
@@ -295,7 +298,7 @@ BOOST_AUTO_TEST_CASE(island_thread_safety)
     isl = island{algo_01{}, population{rosenbrock{}, 25}};
     ts = isl.get_thread_safety();
     BOOST_CHECK(ts[0] == thread_safety::none);
-    BOOST_CHECK(ts[1] == thread_safety::basic);
+    BOOST_CHECK(ts[1] == thread_safety::constant);
     isl.evolve();
     isl.wait();
     BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
@@ -448,4 +451,50 @@ BOOST_AUTO_TEST_CASE(island_extract)
     BOOST_CHECK((std::is_same<udi_01 const *, decltype(static_cast<const island &>(isl).extract<udi_01>())>::value));
     BOOST_CHECK(isl.is<udi_01>());
     BOOST_CHECK(isl.extract<const udi_01>() == nullptr);
+}
+
+// Constructors with bfe arguments.
+BOOST_AUTO_TEST_CASE(island_bfe_ctors)
+{
+    island isl00{stateful_algo{}, rosenbrock{10}, bfe{}, 1000};
+    BOOST_CHECK(isl00.get_algorithm().is<stateful_algo>());
+    BOOST_CHECK(isl00.get_population().get_problem().is<rosenbrock>());
+    BOOST_CHECK(isl00.get_population().size() == 1000u);
+    auto pop = isl00.get_population();
+    BOOST_CHECK(pop.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+    }
+
+    // Try also with a udbfe.
+    isl00 = island{stateful_algo{}, rosenbrock{10}, thread_bfe{}, 1000};
+    BOOST_CHECK(isl00.get_algorithm().is<stateful_algo>());
+    BOOST_CHECK(isl00.get_population().get_problem().is<rosenbrock>());
+    BOOST_CHECK(isl00.get_population().size() == 1000u);
+    pop = isl00.get_population();
+    BOOST_CHECK(pop.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+    }
+
+    isl00 = island{thread_island{}, stateful_algo{}, rosenbrock{10}, bfe{}, 1000};
+    BOOST_CHECK(isl00.get_algorithm().is<stateful_algo>());
+    BOOST_CHECK(isl00.get_population().get_problem().is<rosenbrock>());
+    BOOST_CHECK(isl00.get_population().size() == 1000u);
+    pop = isl00.get_population();
+    BOOST_CHECK(pop.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+    }
+
+    // Try also with a udbfe.
+    isl00 = island{thread_island{}, stateful_algo{}, rosenbrock{10}, thread_bfe{}, 1000};
+    BOOST_CHECK(isl00.get_algorithm().is<stateful_algo>());
+    BOOST_CHECK(isl00.get_population().get_problem().is<rosenbrock>());
+    BOOST_CHECK(isl00.get_population().size() == 1000u);
+    pop = isl00.get_population();
+    BOOST_CHECK(pop.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+    }
 }
