@@ -46,7 +46,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/generic.hpp>         // uniform_real_from_range, some_bound_is_equal
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
 #include <pagmo/algorithms/nsga2.hpp>
-#include <pagmo/preference.hpp> 
+#include <pagmo/algorithms/preference.hpp> 
 //#include <mynsga2.hpp>
 namespace pagmo
 {
@@ -92,9 +92,13 @@ public:
 		m_log()
     {
         algorithm m_algo{ nsga2(gen1, cr, eta_c, m, eta_m, seed) };//M: AS THIS IS BCEMOA CLASS WE CAN USE THE ORIGINAL NSGA2
+
+        // MANUEL: The machine DM must be initialized here (the preferences)
+        
         // TODO other parameters of BCEMOA
 		}
 
+    // MANUEL: This code is not correctly indented (are you using tabs instead of spaces?)
     		/// Algorithm evolve method (juice implementation of the algorithm)
 		/**
 		 *
@@ -126,7 +130,8 @@ public:
                     //here I should add the other evolve guided by preference function
 
 		population evolvePref(population pop) const
-		{	
+		{
+                    // MANUEL: This 
 			// We store some useful variables
 			const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
 												  // allowed
