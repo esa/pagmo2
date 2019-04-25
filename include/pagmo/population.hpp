@@ -94,7 +94,8 @@ private:
     // const/reference qualifiers).
     template <typename T>
     using generic_ctor_enabler
-        = enable_if_t<!std::is_same<population, uncvref_t<T>>::value && std::is_constructible<problem, T &&>::value,
+        = enable_if_t<detail::conjunction<detail::negation<std::is_same<population, uncvref_t<T>>>,
+                                          std::is_constructible<problem, T &&>>::value,
                       int>;
 
 public:

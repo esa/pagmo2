@@ -546,10 +546,10 @@ template <typename T>
 class is_udp
 {
     static const bool implementation_defined
-        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-           && std::is_destructible<T>::value && has_fitness<T>::value && has_bounds<T>::value)
-          || detail::disable_udp_checks<T>::value;
+        = detail::disjunction<detail::conjunction<std::is_same<T, uncvref_t<T>>, std::is_default_constructible<T>,
+                                                  std::is_copy_constructible<T>, std::is_move_constructible<T>,
+                                                  std::is_destructible<T>, has_fitness<T>, has_bounds<T>>,
+                              detail::disable_udp_checks<T>>::value;
 
 public:
     /// Value of the type trait.
@@ -1069,8 +1069,8 @@ class PAGMO_PUBLIC problem
     // Enable the generic ctor only if T is not a problem (after removing
     // const/reference qualifiers), and if T is a udp.
     template <typename T>
-    using generic_ctor_enabler
-        = enable_if_t<!std::is_same<problem, uncvref_t<T>>::value && is_udp<uncvref_t<T>>::value, int>;
+    using generic_ctor_enabler = enable_if_t<
+        detail::conjunction<detail::negation<std::is_same<problem, uncvref_t<T>>>, is_udp<uncvref_t<T>>>::value, int>;
 
 public:
     // Default constructor.

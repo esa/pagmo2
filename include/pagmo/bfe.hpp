@@ -90,10 +90,10 @@ template <typename T>
 class is_udbfe
 {
     static const bool implementation_defined
-        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-           && std::is_destructible<T>::value && has_bfe_call_operator<T>::value)
-          || detail::disable_udbfe_checks<T>::value;
+        = detail::disjunction<detail::conjunction<std::is_same<T, uncvref_t<T>>, std::is_default_constructible<T>,
+                                                  std::is_copy_constructible<T>, std::is_move_constructible<T>,
+                                                  std::is_destructible<T>, has_bfe_call_operator<T>>,
+                              detail::disable_udbfe_checks<T>>::value;
 
 public:
     static const bool value = implementation_defined;
@@ -264,10 +264,11 @@ class PAGMO_PUBLIC bfe
     // will convert the function type to a function pointer in
     // the machinery below).
     template <typename T>
-    using generic_ctor_enabler
-        = enable_if_t<(!std::is_same<bfe, uncvref_t<T>>::value && is_udbfe<uncvref_t<T>>::value)
-                          || std::is_same<vector_double(const problem &, const vector_double &), uncvref_t<T>>::value,
-                      int>;
+    using generic_ctor_enabler = enable_if_t<
+        detail::disjunction<
+            detail::conjunction<detail::negation<std::is_same<bfe, uncvref_t<T>>>, is_udbfe<uncvref_t<T>>>,
+            std::is_same<vector_double(const problem &, const vector_double &), uncvref_t<T>>>::value,
+        int>;
     // Dispatching for the generic ctor. We have a special case if T is
     // a function type, in which case we will manually do the conversion to
     // function pointer and delegate to the other overload.

@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/types.hpp>
 
