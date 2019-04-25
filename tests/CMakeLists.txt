@@ -10,7 +10,7 @@ function(ADD_PAGMO_TESTCASE arg1)
         return()
     endif()
     add_executable(${arg1} ${arg1}.cpp)
-    target_link_libraries(${arg1} pagmo)
+    target_link_libraries(${arg1} pagmo Boost::unit_test_framework)
     target_compile_options(${arg1} PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
     if(NOT CMAKE_CXX_STANDARD)
