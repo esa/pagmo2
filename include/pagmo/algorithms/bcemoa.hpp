@@ -54,7 +54,8 @@ namespace pagmo
 class bcemoa//: nsga2
 {
 	algorithm m_algo;
-	unsigned int m_gen1;
+    linearPreference &m_pref;
+    unsigned int m_gen1;
 	unsigned int m_geni;
 	double m_cr;
 	double m_eta_c;
@@ -64,6 +65,7 @@ class bcemoa//: nsga2
 	unsigned int m_seed;
 	unsigned int m_verbosity;
     mutable log_type m_log;
+
     ;
 
 public:
@@ -88,13 +90,14 @@ public:
      * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
      * [1,100[ or \p eta_m is not in [1,100[.
      */
-    bcemoa(unsigned gen1 = 1u, unsigned geni = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
-          unsigned seed = pagmo::random_device::next())
+    bcemoa(linearPreference &pref, unsigned gen1 = 1u, unsigned geni = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
+           unsigned seed = pagmo::random_device::next())
         : m_gen1(gen1), m_geni(geni), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed), m_verbosity(0u),
-		m_log()
+          m_log(), m_pref(pref)
     {
         algorithm m_algo{ nsga2(gen1, cr, eta_c, m, eta_m, seed) };//M: AS THIS IS BCEMOA CLASS WE CAN USE THE ORIGINAL NSGA2
 
+       
         // MANUEL: The machine DM must be initialized here (the preferences)
         
         // TODO other parameters of BCEMOA
@@ -114,17 +117,9 @@ public:
 		 */
 		population evolve(population pop) const
 		{
-                    // We store some useful variables
-                    const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-												  // allowed
-                    auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
-                    auto NP = pop.size();
-
-                    auto fevals0 = prob.get_fevals(); // discount for the fevals already made
-
                     pop = m_algo.evolve(pop);
 
-                    // TODO: Implement the rest of bcemoa
+                    pop = evolvePref(pop);
 
                     return pop;
                 }
@@ -153,7 +148,7 @@ public:
 
 			std::iota(shuffle1.begin(), shuffle1.end(), 0u);
 			std::iota(shuffle2.begin(), shuffle2.end(), 0u);
-			linearPreference pref();
+
 			// Main NSGA-II loop
 			for (decltype(m_geni) gen = 1u; gen <= m_geni; gen++) {
 				// At each generation we make a copy of the population into popnew
@@ -168,8 +163,8 @@ public:
 				auto ndf = std::get<0>(fnds_res); // non dominated fronts [[0,3,2],[1,5,6],[4],...]
 				vector_double pop_pv(NP);         // defining an array for inputing prefrence values
 				auto ndr = std::get<3>(fnds_res); // non domination rank [0,1,0,0,2,1,1, ... ]
-				vector_double pop_pv = pref.utility(&pop);
-				vector_double rank = linearpreference.rank(&pop_pv);
+				vector_double pop_pv = m_pref.utility(&pop);
+				vector_double rank = m_pref.rank(&pop_pv);
 				//for (const auto &front_idxs : ndf) {
 				//			std::vector<vector_double> front;
 				//			for (auto idx : front_idxs) {

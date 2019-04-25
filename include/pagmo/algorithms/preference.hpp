@@ -13,6 +13,12 @@
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/utils/generic.hpp>         // uniform_real_from_range, some_bound_is_equal
+#include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
+#include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/rng.hpp>
+namespace pagmo
+{
 class preference
 {
 public:
@@ -42,7 +48,7 @@ public:
 	//	//ind = ind1;
 	//};
 	std::vector <double> utility(const std::vector<std::vector<double>> &pop) {
-		int n = pop[0].size;
+            int n = pop[0].size();
 		std::vector<double> utility(n);
 		for (auto idx : pop) {
 
@@ -54,12 +60,12 @@ public:
 		return utility;
 	};
 	std::vector <unsigned int> rank(const std::vector<double> &utility) {
-		int M = utility.size;
+            int M = utility.size();
 		std::vector<vector_double::size_type> indexes(M);
 		std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
 		std::sort(indexes.begin(), indexes.end(),
 			[&utility](vector_double::size_type idx1, vector_double::size_type idx2) {
-			return detail::less_than_f(utility[idx1][0], utility[idx2][0]);
+			return detail::less_than_f(utility[idx1], utility[idx2]);
 		});
 		//retval[indexes[0]] = std::numeric_limits<double>::infinity();
 		//retval[indexes[N - 1u]] = std::numeric_limits<double>::infinity();
@@ -76,3 +82,4 @@ private:
 };
 
 
+} // namespace pagmo
