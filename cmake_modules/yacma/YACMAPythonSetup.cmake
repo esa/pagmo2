@@ -64,7 +64,7 @@ set(_YACMA_PY_MODULE_EXTENSION "")
 
 # Platform-specific setup.
 if(UNIX)
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  if(APPLE)
     message(STATUS "OS X platform detected.")
     # Apparently on OS X Python expects the .so extension for compiled modules.
 	  message(STATUS "Output extension for compiled modules will be '.so'.")
@@ -135,7 +135,7 @@ function(YACMA_PYTHON_MODULE name)
             target_compile_options(${name} PRIVATE "-fno-strict-aliasing")
         endif()
     endif()
-    if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    if(APPLE AND ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
       # On OSX + Clang this link flag is apparently necessary in order to avoid
       # undefined references to symbols defined in the Python library. See also:
       # https://github.com/potassco/clingo/issues/79

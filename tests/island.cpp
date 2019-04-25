@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(island_constructors)
     BOOST_CHECK(isl9.get_population().size() == 28u);
     // Self assignment.
     BOOST_CHECK((std::is_same<island &, decltype(isl9 = isl9)>::value));
-    isl9 = isl9;
+    isl9 = *&isl9;
     BOOST_CHECK(isl9.get_algorithm().is<de>());
     BOOST_CHECK(isl9.get_population().get_problem().is<rosenbrock>());
     BOOST_CHECK(isl9.get_population().size() == 28u);

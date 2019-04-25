@@ -25,3 +25,6 @@ doc/doxygen/Doxyfile
 doc/sphinx/conf.py
 
 doc/sphinx/_build
+
+# VS files
+*.vcxproj*

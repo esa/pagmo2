@@ -35,7 +35,8 @@ endif()
 # This is an OS X specific setting that is suggested to be enabled. See:
 # https://blog.kitware.com/upcoming-in-cmake-2-8-12-osx-rpath-support/
 # http://stackoverflow.com/questions/31561309/cmake-warnings-under-os-x-macosx-rpath-is-not-specified-for-the-following-targe
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(APPLE)
+    message(STATUS "OSX detected, setting the 'CMAKE_MACOSX_RPATH' option to TRUE.")
     set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
@@ -106,7 +107,8 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wall)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnon-virtual-dtor)
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnoexcept)
+        # NOTE: this flag is a bit too chatty, let's disable it for the moment.
+        #_YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnoexcept)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wlogical-op)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wconversion)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdeprecated)
@@ -118,8 +120,6 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # _YACMA_CHECK_ENABLE_CXX_FLAG(-Wzero-as-null-pointer-constant)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-pedantic-errors)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdisabled-optimization)
-        _YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility-inlines-hidden)
-        _YACMA_CHECK_ENABLE_CXX_FLAG(-fvisibility=hidden)
         # This is useful when the compiler decides the template backtrace is too verbose.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
         if(YACMA_COMPILER_IS_HCC)
