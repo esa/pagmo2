@@ -83,6 +83,11 @@ struct null_algorithm {
     {
         return pop;
     };
+
+	population evolvePref(population &pop) const
+    {
+        return pop;
+    };
     /// Algorithm name.
     /**
      * @return <tt>"Null algorithm"</tt>.
@@ -224,6 +229,7 @@ struct algo_inner_base {
     virtual ~algo_inner_base() {}
     virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
+    //virtual population evolvePref(const population &pop) const = 0;
     virtual void set_seed(unsigned) = 0;
     virtual bool has_set_seed() const = 0;
     virtual void set_verbosity(unsigned) = 0;

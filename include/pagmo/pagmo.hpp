@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 #endif
 #include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/bcemoa.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>

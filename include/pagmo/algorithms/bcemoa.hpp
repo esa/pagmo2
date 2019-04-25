@@ -29,13 +29,13 @@ see https://www.gnu.org/licenses/. */
 
 #ifndef PAGMO_ALGORITHMS_BCEMOA_HPP
 #define PAGMO_ALGORITHMS_BCEMOA_HPP
-
 #include <algorithm> // std::shuffle, std::transform
 #include <iomanip>
 #include <numeric> // std::iota, std::inner_product
 #include <random>
 #include <string>
 #include <tuple>
+
 #include <pagmo/algorithm.hpp> // needed for the cereal macro
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -63,7 +63,9 @@ class bcemoa//: nsga2
 	mutable detail::random_engine_type m_e;
 	unsigned int m_seed;
 	unsigned int m_verbosity;
-	mutable log_type m_log;
+    mutable log_type m_log;
+    ;
+
 public:
     /// Single entry of the log (gen, fevals, ideal_point)
     typedef std::tuple<unsigned int, unsigned long long, vector_double> log_line_type;
