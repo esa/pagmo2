@@ -28,15 +28,20 @@ command:
    git clone https://github.com/esa/pagmo2.git
 
 Once you are in pagmo's source tree, you must configure your build using ``cmake``. This will allow
-you to enable support for optional dependencies, configure the install destination, etc. When done,
-you can install pagmo via the command
+you to enable support for optional dependencies, configure the install destination, etc. For example,
+
+.. code-block:: bash
+
+   cmake -DCMAKE_INSTALL_PREFIX=~/.local .
+
+The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory.
+When done, you can install pagmo via the command:
 
 .. code-block:: bash
 
    make install
 
-The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory. To check that all went well
-compile the :ref:`quick-start example <getting_started_c++>`.
+To check that all went well compile the :ref:`quick-start example <getting_started_c++>`.
 
 pagmo is also available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows.
 In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
