@@ -167,6 +167,9 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/population.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problem.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/bfe.cpp"
+        # UDP.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/rosenbrock.cpp"
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
     )
