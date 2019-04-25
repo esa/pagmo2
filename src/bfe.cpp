@@ -234,6 +234,8 @@ std::string bfe::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
 // Stream operator.
 std::ostream &operator<<(std::ostream &os, const bfe &b)
 {
@@ -245,6 +247,8 @@ std::ostream &operator<<(std::ostream &os, const bfe &b)
     }
     return os;
 }
+
+#endif
 
 } // namespace pagmo
 

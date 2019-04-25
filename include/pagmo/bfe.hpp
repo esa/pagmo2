@@ -377,8 +377,12 @@ private:
     thread_safety m_thread_safety;
 };
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
 // Stream operator.
 PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
+
+#endif
 
 } // namespace pagmo
 
