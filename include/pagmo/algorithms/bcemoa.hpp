@@ -29,13 +29,13 @@ see https://www.gnu.org/licenses/. */
 
 #ifndef PAGMO_ALGORITHMS_BCEMOA_HPP
 #define PAGMO_ALGORITHMS_BCEMOA_HPP
-
 #include <algorithm> // std::shuffle, std::transform
 #include <iomanip>
 #include <numeric> // std::iota, std::inner_product
 #include <random>
 #include <string>
 #include <tuple>
+
 #include <pagmo/algorithm.hpp> // needed for the cereal macro
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -46,7 +46,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/generic.hpp>         // uniform_real_from_range, some_bound_is_equal
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
 #include <pagmo/algorithms/nsga2.hpp>
-#include <pagmo/preference.hpp> 
+#include <pagmo/algorithms/preference.hpp> 
 //#include <mynsga2.hpp>
 namespace pagmo
 {
@@ -63,7 +63,9 @@ class bcemoa//: nsga2
 	mutable detail::random_engine_type m_e;
 	unsigned int m_seed;
 	unsigned int m_verbosity;
-	mutable log_type m_log;
+    mutable log_type m_log;
+    ;
+
 public:
     /// Single entry of the log (gen, fevals, ideal_point)
     typedef std::tuple<unsigned int, unsigned long long, vector_double> log_line_type;
@@ -125,7 +127,7 @@ public:
                     
                     //here I should add the other evolve guided by preference function
 
-		population evolvePref(population pop) const
+		population evolvePref(population &pop) const
 		{	
 			// We store some useful variables
 			const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
