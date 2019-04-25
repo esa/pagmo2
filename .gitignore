@@ -28,3 +28,8 @@ doc/sphinx/_build
 
 # VS files
 *.vcxproj*
+*.gpl3
+*.lgpl3
+*.yml
+*.in
+*.cmake
