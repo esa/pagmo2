@@ -320,11 +320,10 @@ void fork_island::run_evolve(island &isl) const
         try {
             // Close the write descriptor, we don't need to send anything to the child.
             p.close_w();
-            // Prepare a local buffer and a stringstream, then read the data from the child.
-            char buffer[100];
-            std::stringstream ss;
             {
-                boost::archive::binary_iarchive iarchive(ss);
+                // Prepare a local buffer and a stringstream, then read the data from the child.
+                char buffer[100];
+                std::stringstream ss;
                 while (true) {
                     const auto read_bytes = p.read(static_cast<void *>(buffer), sizeof(buffer));
                     if (!read_bytes) {
@@ -333,6 +332,7 @@ void fork_island::run_evolve(island &isl) const
                     }
                     ss.write(buffer, static_cast<std::streamsize>(read_bytes));
                 }
+                boost::archive::binary_iarchive iarchive(ss);
                 iarchive >> m;
             }
             // Close the read descriptor.
