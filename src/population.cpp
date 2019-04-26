@@ -617,4 +617,12 @@ void population::update_champion(vector_double x, vector_double f)
     }
 }
 
+// Small helper to erase all individuals from a population.
+void population::clear()
+{
+    m_ID.clear();
+    m_x.clear();
+    m_f.clear();
+}
+
 } // namespace pagmo

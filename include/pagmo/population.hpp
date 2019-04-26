@@ -332,11 +332,24 @@ public:
     void load(Archive &ar, unsigned)
     {
         population tmp;
-        detail::from_archive(ar, tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f, tmp.m_e,
-                             tmp.m_seed);
+        try {
+            detail::from_archive(ar, tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f,
+                                 tmp.m_e, tmp.m_seed);
+            // LCOV_EXCL_START
+        } catch (...) {
+            // NOTE: if anything goes wrong during deserialization, erase
+            // all individuals before re-throwing (otherwise, we would hit
+            // assertion errors in debug mode in tmp's dtor if the vectors containing
+            // the individuals have inconsistent lengths).
+            tmp.clear();
+            throw;
+        }
+        // LCOV_EXCL_STOP
         *this = std::move(tmp);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
+private:
+    void clear();
 
 private:
     // Problem.
