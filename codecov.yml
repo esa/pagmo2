@@ -2,7 +2,6 @@ coverage:
   ignore:
   - "tests/.*"
   - "tutorials/.*"
-  - "include/pagmo/external"
 
   notify:
     gitter:
