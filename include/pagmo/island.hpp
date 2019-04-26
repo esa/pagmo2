@@ -709,7 +709,7 @@ public:
     ~island();
     // Move assignment.
     island &operator=(island &&) noexcept;
-    island &operator=(const island &other);
+    island &operator=(const island &);
     /// Extract a const pointer to the UDI used for construction.
     /**
      * This method will extract a const pointer to the internal instance of the UDI. If \p T is not the same type
