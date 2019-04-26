@@ -37,7 +37,7 @@ see https://www.gnu.org/licenses/. */
 
 #else
 
-#error The fork_island.hpp header was included, but the fork island is not available on the current platform (this might mean that either the platform is not POSIX-compliant, or that the definition _POSIX_C_SOURCE is not active)
+#error The fork_island.hpp header was included, but the fork island is not available on the current platform
 
 #endif
 

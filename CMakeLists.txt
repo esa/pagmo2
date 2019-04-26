@@ -52,14 +52,10 @@ if(PAGMO_BUILD_PAGMO)
     # Detect if we can enable the fork_island UDI.
     include(CheckIncludeFileCXX)
     include(CheckCXXSymbolExists)
-    include(CMakePushCheckState)
     CHECK_INCLUDE_FILE_CXX("sys/types.h" PAGMO_HAVE_SYS_TYPES_H)
     CHECK_INCLUDE_FILE_CXX("sys/wait.h" PAGMO_HAVE_SYS_WAIT_H)
     CHECK_INCLUDE_FILE_CXX("unistd.h" PAGMO_HAVE_UNISTD_H)
-    cmake_push_check_state(RESET)
-    set(CMAKE_REQUIRED_DEFINITIONS -D_POSIX_C_SOURCE=1)
     CHECK_CXX_SYMBOL_EXISTS(fork "unistd.h;sys/types.h" PAGMO_HAVE_FORK_SYSCALL)
-    cmake_pop_check_state()
     if(PAGMO_HAVE_SYS_TYPES_H AND PAGMO_HAVE_SYS_WAIT_H AND PAGMO_HAVE_UNISTD_H AND PAGMO_HAVE_FORK_SYSCALL)
         message(STATUS "The fork_island UDI will be available.")
         set(PAGMO_WITH_FORK_ISLAND YES)
@@ -179,6 +175,8 @@ if(PAGMO_BUILD_PAGMO)
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/not_population_based.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/compass_search.cpp"
     )
     if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
         set(PAGMO_SRC_FILES
