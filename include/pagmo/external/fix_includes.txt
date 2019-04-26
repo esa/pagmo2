@@ -1,1 +1,0 @@
-find ./ -name '*.hpp' -exec sed -i "s/#include <cereal\(.*\)>/#include \"\.\.\1\"/" {} \;
