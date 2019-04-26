@@ -144,14 +144,14 @@ public:
         double r1, r2;                      // random coefficient between 0 and 1;
         std::vector<std::size_t> index_vec; // used to stored sorted index
         auto agents_position = pop.get_x();
-        auto fit = pop.get_f();
-        for (unsigned int i = 0; i != fit.size(); ++i)
+        auto init_fit = pop.get_f();
+        for (unsigned int i = 0; i != init_fit.size(); ++i)
             index_vec.push_back(i);
         std::sort(index_vec.begin(), index_vec.end(),
-                  [&](unsigned int a, unsigned int b) { return fit[a][0] > fit[b][0]; });
-        double alpha_score = fit[index_vec[0]][0];
-        double beta_score = fit[index_vec[1]][0];
-        double delta_score = fit[index_vec[2]][0];
+                  [&](unsigned int a, unsigned int b) { return init_fit[a][0] > init_fit[b][0]; });
+        double alpha_score = init_fit[index_vec[0]][0];
+        double beta_score = init_fit[index_vec[1]][0];
+        double delta_score = init_fit[index_vec[2]][0];
         vector_double alpha_pos = agents_position[index_vec[0]];
         vector_double beta_pos = agents_position[index_vec[1]];
         vector_double delta_pos = agents_position[index_vec[2]];
