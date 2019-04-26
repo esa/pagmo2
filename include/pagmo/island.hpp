@@ -1211,7 +1211,19 @@ public:
     void load(Archive &ar, unsigned)
     {
         archipelago tmp;
-        ar >> tmp.m_islands;
+        try {
+            ar >> tmp.m_islands;
+            // LCOV_EXCL_START
+        } catch (...) {
+            // Clear the islands vector before re-throwing if anything goes wrong.
+            // The islands in tmp will not have the archi ptr set correctly,
+            // and thus an assertion would fail in the archi dtor in debug mode.
+            tmp.m_islands.clear();
+            throw;
+        }
+        // LCOV_EXCL_STOP
+        // This will set the island archi pointers
+        // to the correct value.
         *this = std::move(tmp);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
