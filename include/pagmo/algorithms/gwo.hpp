@@ -29,9 +29,9 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_GWO_HPP
 #define PAGMO_ALGORITHMS_GWO_HPP
 
+#include <algorithm>
 #include <cmath>
 #include <iomanip>
-#include <limits>
 #include <random>
 #include <vector>
 
@@ -136,46 +136,33 @@ public:
         m_log.clear();
 
         // Some vectors used during evolution are declared.
-        vector_double alpha_pos(dim);
-        vector_double beta_pos(dim);
-        vector_double delta_pos(dim);
-        vector_double a_vector(3); // vector coefficient for encircling prey
-        vector_double c_vector(3); // vector coefficient for encircling prey
-        vector_double d_vector(3); // position vector for alpha, beta and delta
-        vector_double x_vector(3); // vector used to calculate position of an agent in a single dimension
-        double a;                  // coefficient which decrease linearly from 2 to 0 over generations
-        double r1, r2;             // random coefficient between 0 and 1;
-        double alpha_score = std::numeric_limits<double>::infinity();
-        double beta_score = std::numeric_limits<double>::infinity();
-        double delta_score = std::numeric_limits<double>::infinity();
-
-        // assume pop.get_x() return vector<vector_double>
+        vector_double a_vector(3);          // vector coefficient for encircling prey
+        vector_double c_vector(3);          // vector coefficient for encircling prey
+        vector_double d_vector(3);          // position vector for alpha, beta and delta
+        vector_double x_vector(3);          // vector used to calculate position of an agent in a single dimension
+        double a;                           // coefficient which decrease linearly from 2 to 0 over generations
+        double r1, r2;                      // random coefficient between 0 and 1;
+        std::vector<std::size_t> index_vec; // used to stored sorted index
         auto agents_position = pop.get_x();
+        auto fit = pop.get_f();
+        for (unsigned int i = 0; i != fit.size(); ++i)
+            index_vec.push_back(i);
+        std::sort(index_vec.begin(), index_vec.end(),
+                  [&](unsigned int a, unsigned int b) { return fit[a][0] > fit[b][0]; });
+        double alpha_score = fit[index_vec[0]][0];
+        double beta_score = fit[index_vec[1]][0];
+        double delta_score = fit[index_vec[2]][0];
+        vector_double alpha_pos = agents_position[index_vec[0]];
+        vector_double beta_pos = agents_position[index_vec[1]];
+        vector_double delta_pos = agents_position[index_vec[2]];
         std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
 
         // Main gwo iterations
         for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
 
-            auto fit = pop.get_f();
             a = 2.0 - static_cast<double>(gen) * (2.0 / static_cast<double>(m_gen));
             // for each agents
             for (decltype(NP) i = 0u; i < NP; ++i) {
-
-                // Update alpha, beta and delta
-                if (fit[i][0] < alpha_score) {
-                    alpha_score = fit[i][0];
-                    alpha_pos = agents_position[i];
-                }
-
-                if (fit[i][0] > alpha_score && fit[i][0] < beta_score) {
-                    beta_score = fit[i][0];
-                    beta_pos = agents_position[i];
-                }
-
-                if (fit[i][0] > alpha_score && fit[i][0] > beta_score && fit[i][0] < delta_score) {
-                    delta_score = fit[i][0];
-                    delta_pos = agents_position[i];
-                }
 
                 // Encircling prey and attack
                 for (decltype(dim) k = 0; k < dim; ++k) {
@@ -208,11 +195,27 @@ public:
 
                     agents_position[i][k] = (x_vector[0] + x_vector[1] + x_vector[2]) / 3.0; // Equation (3.7)
                 }
-
                 // clip position value that goes beyond search space
                 detail::force_bounds_stick(agents_position[i], lb, ub);
                 auto newfitness = prob.fitness(agents_position[i]);
                 pop.set_xf(i, agents_position[i], newfitness);
+                // get updated fitness
+                auto fit = pop.get_f()[i];
+                // Update alpha, beta and delta
+                if (fit[0] < alpha_score) {
+                    alpha_score = fit[0];
+                    alpha_pos = agents_position[i];
+                }
+
+                if (fit[0] > alpha_score && fit[0] < beta_score) {
+                    beta_score = fit[0];
+                    beta_pos = agents_position[i];
+                }
+
+                if (fit[0] > alpha_score && fit[0] > beta_score && fit[0] < delta_score) {
+                    delta_score = fit[0];
+                    delta_pos = agents_position[i];
+                }
 
             } // End of one agent iteration
 
@@ -266,12 +269,12 @@ public:
      *
      * Example (verbosity 1):
      * @code{.unparsed}
-     *  Gen:         Alpha:          Beta:         Delta:
-     * 1         5.7861        12.7206        19.6594
-     * 2       0.404838        4.60328        9.51591
-     * 3      0.0609075        3.83717        4.30162
-     * 4      0.0609075       0.830047        1.77049
-     * 5       0.040997        0.12541       0.196164
+     *  Gen:      Alpha:          Beta:         Delta:
+     *   1         5.7861        12.7206        19.6594
+     *   2       0.404838        4.60328        9.51591
+     *   3      0.0609075        3.83717        4.30162
+     *   4      0.0609075       0.830047        1.77049
+     *   5       0.040997        0.12541       0.196164
 
      * @endcode
      * Gen, is the generation number, Alpha is the fitness score for alpha, Beta is the fitness
