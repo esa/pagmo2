@@ -48,7 +48,20 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-#define PAGMO_S11N_PROBLEM_EXPORT_KEY(prob) BOOST_CLASS_EXPORT_KEY2(pagmo::detail::prob_inner<prob>, "udp " #prob)
+// NOTE: we disable address tracking for all user-defined classes. The reason is that even if the final
+// classes (e.g., problem) use value semantics, the internal implementation details use old-style
+// OO construct (i.e., base classes, pointers, etc.). By default, Boost serialization wants to track
+// the addresses of these internal implementation-detail classes, and this has some undesirable consequences
+// (for instance, when deserializing a problem object in a variable and then moving it into another
+// one, which is a pattern we sometimes use in order to provide increased exception safety).
+//
+// See also:
+// https://www.boost.org/doc/libs/1_70_0/libs/serialization/doc/special.html#objecttracking
+// https://www.boost.org/doc/libs/1_70_0/libs/serialization/doc/traits.html#level
+#define PAGMO_S11N_PROBLEM_EXPORT_KEY(prob)                                                                            \
+    BOOST_CLASS_EXPORT_KEY2(pagmo::detail::prob_inner<prob>, "udp " #prob)                                             \
+    BOOST_CLASS_TRACKING(pagmo::detail::prob_inner<prob>, boost::serialization::track_never)
+
 #define PAGMO_S11N_PROBLEM_IMPLEMENT(prob) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::prob_inner<prob>)
 
 #define PAGMO_S11N_PROBLEM_EXPORT(prob)                                                                                \

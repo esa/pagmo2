@@ -46,7 +46,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-#define PAGMO_S11N_BFE_EXPORT_KEY(b) BOOST_CLASS_EXPORT_KEY2(pagmo::detail::bfe_inner<b>, "udbfe " #b)
+#define PAGMO_S11N_BFE_EXPORT_KEY(b)                                                                                   \
+    BOOST_CLASS_EXPORT_KEY2(pagmo::detail::bfe_inner<b>, "udbfe " #b)                                                  \
+    BOOST_CLASS_TRACKING(pagmo::detail::bfe_inner<b>, boost::serialization::track_never)
+
 #define PAGMO_S11N_BFE_IMPLEMENT(b) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::bfe_inner<b>)
 
 #define PAGMO_S11N_BFE_EXPORT(b)                                                                                       \

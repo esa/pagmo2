@@ -42,7 +42,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
-#define PAGMO_S11N_ALGORITHM_EXPORT_KEY(algo) BOOST_CLASS_EXPORT_KEY2(pagmo::detail::algo_inner<algo>, "uda " #algo)
+#define PAGMO_S11N_ALGORITHM_EXPORT_KEY(algo)                                                                          \
+    BOOST_CLASS_EXPORT_KEY2(pagmo::detail::algo_inner<algo>, "uda " #algo)                                             \
+    BOOST_CLASS_TRACKING(pagmo::detail::algo_inner<algo>, boost::serialization::track_never)
+
 #define PAGMO_S11N_ALGORITHM_IMPLEMENT(algo) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::algo_inner<algo>)
 
 #define PAGMO_S11N_ALGORITHM_EXPORT(algo)                                                                              \

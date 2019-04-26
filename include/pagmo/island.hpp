@@ -62,7 +62,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
-#define PAGMO_S11N_ISLAND_EXPORT_KEY(isl) BOOST_CLASS_EXPORT_KEY2(pagmo::detail::isl_inner<isl>, "udi " #isl)
+#define PAGMO_S11N_ISLAND_EXPORT_KEY(isl)                                                                              \
+    BOOST_CLASS_EXPORT_KEY2(pagmo::detail::isl_inner<isl>, "udi " #isl)                                                \
+    BOOST_CLASS_TRACKING(pagmo::detail::isl_inner<isl>, boost::serialization::track_never)
+
 #define PAGMO_S11N_ISLAND_IMPLEMENT(isl) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::isl_inner<isl>)
 
 #define PAGMO_S11N_ISLAND_EXPORT(isl)                                                                                  \

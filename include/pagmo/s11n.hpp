@@ -39,6 +39,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/split_member.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/tracking.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
@@ -120,6 +122,8 @@ inline void load(Archive &ar, std::mersenne_twister_engine<UIntType, w, n, m, r,
     iss >> e;
 }
 
+// NOTE: there should be no need to disable tracking for the engine serialization,
+// as we never serialize engines through pointers.
 template <class Archive, class UIntType, std::size_t w, std::size_t n, std::size_t m, std::size_t r, UIntType a,
           std::size_t u, UIntType d, std::size_t s, UIntType b, std::size_t t, UIntType c, std::size_t l, UIntType f>
 inline void serialize(Archive &ar, std::mersenne_twister_engine<UIntType, w, n, m, r, a, u, d, s, b, t, c, l, f> &e,
