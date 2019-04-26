@@ -48,7 +48,6 @@ namespace
 
 // "Research code", ladies and gentlemen!
 constexpr double INF = 1.0e99;
-constexpr double EPS = 1.0e-14;
 constexpr double E = 2.7182818284590452353602874713526625;
 constexpr double PI = 3.1415926535897932384626433832795029;
 
