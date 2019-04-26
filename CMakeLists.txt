@@ -168,14 +168,17 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/population.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problem.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/bfe.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/island.cpp"
         # UDP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/schwefel.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/rosenbrock.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/hock_schittkowsky_71.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/inventory.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/zdt.cpp"
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
     )
     if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
         set(PAGMO_SRC_FILES
@@ -208,6 +211,12 @@ if(PAGMO_BUILD_PAGMO)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>)
+
+    # Threads.
+    target_link_libraries(pagmo PUBLIC Threads::Threads)
+
+    # Boost.
+    target_link_libraries(pagmo PUBLIC Boost::boost)
 
     # TBB.
     target_link_libraries(pagmo PUBLIC TBB::tbb)

@@ -33,11 +33,11 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #define BOOST_TEST_MODULE archipelago_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <algorithm>
 #include <atomic>
-#include <boost/lexical_cast.hpp>
 #include <initializer_list>
 #include <iterator>
 #include <sstream>
@@ -46,6 +46,8 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 #include <vector>
+
+#include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/pso.hpp>
@@ -59,7 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -345,13 +347,13 @@ BOOST_AUTO_TEST_CASE(archipelago_serialization)
     auto before = boost::lexical_cast<std::string>(a);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(a);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << a;
     }
     a = archipelago{10, de{}, population{rosenbrock{}, 25}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(a);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> a;
     }
     auto after = boost::lexical_cast<std::string>(a);
     BOOST_CHECK_EQUAL(before, after);

@@ -27,10 +27,10 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE island_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <atomic>
-#include <boost/lexical_cast.hpp>
 #include <initializer_list>
 #include <sstream>
 #include <stdexcept>
@@ -39,6 +39,8 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 #include <vector>
+
+#include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
@@ -50,7 +52,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -337,13 +339,13 @@ BOOST_AUTO_TEST_CASE(island_serialization)
     auto before = boost::lexical_cast<std::string>(isl);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(isl);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << isl;
     }
     isl = island{de{}, population{rosenbrock{}, 25}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(isl);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> isl;
     }
     auto after = boost::lexical_cast<std::string>(isl);
     BOOST_CHECK_EQUAL(before, after);
