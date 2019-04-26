@@ -854,7 +854,8 @@ RECURSIVE              = YES
 
 EXCLUDE                = ../../include/pagmo/external \
                          ../../include/pagmo/detail  \
-                         ../../src/problems/cec2014_data.cpp
+                         ../../src/problems/cec2014_data.cpp \
+                         ../../src/problems/cec2013_data.cpp
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

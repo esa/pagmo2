@@ -32,13 +32,15 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 #include <random>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include <boost/lexical_cast.hpp>
 
-#include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2014.hpp>
 #include <pagmo/s11n.hpp>

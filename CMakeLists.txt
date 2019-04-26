@@ -180,6 +180,8 @@ if(PAGMO_BUILD_PAGMO)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013_data.cpp"
             "${PAGMO_SRC_FILES}"
         )
     endif()
