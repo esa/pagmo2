@@ -67,14 +67,9 @@ struct PAGMO_PUBLIC null_algorithm {
     {
         return "Null algorithm";
     }
-    /// Serialization support.
-    /**
-     * This class is stateless, no data will be loaded or saved during serialization.
-     */
+    // Serialization support.
     template <typename Archive>
-    void serialize(Archive &, unsigned)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 
 } // namespace pagmo

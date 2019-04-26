@@ -207,9 +207,7 @@ public:
     }
     // Serialization support.
     template <typename Archive>
-    void serialize(Archive &, unsigned)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 
 // Bfe that uses problem's member function.
@@ -225,9 +223,7 @@ public:
     }
     // Serialization support.
     template <typename Archive>
-    void serialize(Archive &, unsigned)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 
 namespace detail
@@ -251,9 +247,7 @@ public:
     }
     // Serialization support.
     template <typename Archive>
-    void serialize(Archive &, unsigned)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 
 class PAGMO_PUBLIC bfe

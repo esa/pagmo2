@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -94,6 +95,20 @@ std::string inventory::get_extra_info() const
     ss << "\tSample size: " << std::to_string(m_sample_size) << "\n";
     ss << "\tSeed: " << std::to_string(m_seed) << "\n";
     return ss.str();
+}
+
+/// Object serialization
+/**
+ * This method will save/load \p this into the archive \p ar.
+ *
+ * @param ar target archive.
+ *
+ * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+ */
+template <typename Archive>
+void inventory::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_weeks, m_sample_size, m_e, m_seed);
 }
 
 } // namespace pagmo

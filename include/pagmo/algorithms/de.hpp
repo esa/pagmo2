@@ -38,7 +38,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -185,19 +184,9 @@ public:
     {
         return m_log;
     }
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar, unsigned)
-    {
-        detail::archive(ar, m_gen, m_F, m_CR, m_variant, m_Ftol, m_xtol, m_e, m_seed, m_verbosity, m_log);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
     unsigned m_gen;

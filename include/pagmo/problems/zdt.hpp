@@ -35,7 +35,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -185,19 +184,9 @@ public:
      */
     double p_distance(const vector_double &) const;
 
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar, unsigned)
-    {
-        detail::archive(ar, m_prob_id, m_param);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
     vector_double zdt1_fitness(const vector_double &) const;

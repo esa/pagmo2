@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/zdt.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -214,6 +215,20 @@ double zdt::p_distance(const vector_double &x) const
             break;
     }
     return retval;
+}
+
+/// Object serialization
+/**
+ * This method will save/load \p this into the archive \p ar.
+ *
+ * @param ar target archive.
+ *
+ * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+ */
+template <typename Archive>
+void zdt::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_prob_id, m_param);
 }
 
 vector_double zdt::zdt1_fitness(const vector_double &x) const

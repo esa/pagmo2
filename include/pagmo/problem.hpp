@@ -118,15 +118,9 @@ struct PAGMO_PUBLIC null_problem {
     {
         return "Null problem";
     }
-    /// Serialization
-    /**
-     * @param ar the target serialization archive.
-     */
+    // Serialization
     template <typename Archive>
-    void serialize(Archive &ar, unsigned)
-    {
-        detail::archive(ar, m_nobj, m_nec, m_nic, m_nix);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
     vector_double::size_type m_nobj;

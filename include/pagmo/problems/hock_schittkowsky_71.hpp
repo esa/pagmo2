@@ -119,11 +119,9 @@ struct PAGMO_PUBLIC hock_schittkowsky_71 {
     // Optimal solution
     vector_double best_known() const;
 
-    /// Object serialization
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &, unsigned)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 } // namespace pagmo
 

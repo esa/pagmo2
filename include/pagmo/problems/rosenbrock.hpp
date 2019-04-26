@@ -78,19 +78,9 @@ struct PAGMO_PUBLIC rosenbrock {
     vector_double gradient(const vector_double &) const;
     // Optimal solution.
     vector_double best_known() const;
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar, unsigned)
-    {
-        ar &m_dim;
-    }
+    void serialize(Archive &, unsigned);
     /// Thread safety level.
     /**
      * @return the ``constant`` thread safety level.

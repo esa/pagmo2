@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2013.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 #include "cec2013_data.hpp"
@@ -309,6 +310,20 @@ std::string cec2013::get_name() const
             break;
     }
     return retval;
+}
+
+/// Object serialization
+/**
+ * This method will save/load \p this into the archive \p ar.
+ *
+ * @param ar target archive.
+ *
+ * @throws unspecified any exception thrown by the serialization of primitive types.
+ */
+template <typename Archive>
+void cec2013::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_prob_id, m_rotation_matrix, m_origin_shift, m_y, m_z);
 }
 
 // For the coverage analysis we do not cover the code below as its derived from a third party source

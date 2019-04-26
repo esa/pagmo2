@@ -51,6 +51,15 @@ population null_algorithm::evolve(const population &pop) const
     return pop;
 }
 
+/// Serialization support.
+/**
+ * This class is stateless, no data will be loaded or saved during serialization.
+ */
+template <typename Archive>
+void null_algorithm::serialize(Archive &, unsigned)
+{
+}
+
 /// Default constructor.
 /**
  * The default constructor will initialize a pagmo::algorithm containing a pagmo::null_algorithm.

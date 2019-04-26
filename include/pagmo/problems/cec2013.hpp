@@ -43,7 +43,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -93,19 +92,9 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const;
     // Problem name
     std::string get_name() const;
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of primitive types.
-     */
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar, unsigned)
-    {
-        detail::archive(ar, m_prob_id, m_rotation_matrix, m_origin_shift, m_y, m_z);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
     void sphere_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,

@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
@@ -79,6 +80,16 @@ vector_double null_problem::fitness(const vector_double &) const
 std::pair<vector_double, vector_double> null_problem::get_bounds() const
 {
     return {{0.}, {1.}};
+}
+
+/// Serialization
+/**
+ * @param ar the target serialization archive.
+ */
+template <typename Archive>
+void null_problem::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_nobj, m_nec, m_nic, m_nix);
 }
 
 namespace detail

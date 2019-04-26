@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 
@@ -374,6 +375,20 @@ std::string de::get_extra_info() const
            + "\n\tParameter CR: " + std::to_string(m_CR) + "\n\tVariant: " + std::to_string(m_variant)
            + "\n\tStopping xtol: " + std::to_string(m_xtol) + "\n\tStopping ftol: " + std::to_string(m_Ftol)
            + "\n\tVerbosity: " + std::to_string(m_verbosity) + "\n\tSeed: " + std::to_string(m_seed);
+}
+
+/// Object serialization
+/**
+ * This method will save/load \p this into the archive \p ar.
+ *
+ * @param ar target archive.
+ *
+ * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+ */
+template <typename Archive>
+void de::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_gen, m_F, m_CR, m_variant, m_Ftol, m_xtol, m_e, m_seed, m_verbosity, m_log);
 }
 
 } // namespace pagmo

@@ -135,10 +135,22 @@ vector_double thread_bfe::operator()(const problem &p, const vector_double &dvs)
     return retval;
 }
 
+// Serialization support.
+template <typename Archive>
+void thread_bfe::serialize(Archive &, unsigned)
+{
+}
+
 // Call operator.
 vector_double member_bfe::operator()(const problem &p, const vector_double &dvs) const
 {
     return detail::prob_invoke_mem_batch_fitness(p, dvs);
+}
+
+// Serialization support.
+template <typename Archive>
+void member_bfe::serialize(Archive &, unsigned)
+{
 }
 
 namespace detail
@@ -176,6 +188,12 @@ std::function<vector_double(const problem &, const vector_double &)> default_bfe
 vector_double default_bfe::operator()(const problem &p, const vector_double &dvs) const
 {
     return detail::default_bfe_impl(p, dvs);
+}
+
+// Serialization support.
+template <typename Archive>
+void default_bfe::serialize(Archive &, unsigned)
+{
 }
 
 // Default ctor.

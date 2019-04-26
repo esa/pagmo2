@@ -102,19 +102,9 @@ public:
     vector_double best_known() const;
     // Problem name
     std::string get_name() const;
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of primitive types.
-     */
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar, unsigned)
-    {
-        ar &m_prob_id;
-    }
+    void serialize(Archive &, unsigned);
 
 private:
     // Pointers to member functions are used

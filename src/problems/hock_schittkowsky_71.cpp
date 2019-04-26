@@ -139,6 +139,12 @@ vector_double hock_schittkowsky_71::best_known() const
     return {1., 4.74299963, 3.82114998, 1.37940829};
 }
 
+/// Object serialization
+template <typename Archive>
+void hock_schittkowsky_71::serialize(Archive &, unsigned)
+{
+}
+
 } // namespace pagmo
 
 PAGMO_S11N_PROBLEM_IMPLEMENT(pagmo::hock_schittkowsky_71)

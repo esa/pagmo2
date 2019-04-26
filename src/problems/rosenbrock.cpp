@@ -99,6 +99,20 @@ vector_double rosenbrock::best_known() const
     return vector_double(m_dim, 1.);
 }
 
+/// Object serialization
+/**
+ * This method will save/load \p this into the archive \p ar.
+ *
+ * @param ar target archive.
+ *
+ * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+ */
+template <typename Archive>
+void rosenbrock::serialize(Archive &ar, unsigned)
+{
+    ar &m_dim;
+}
+
 } // namespace pagmo
 
 PAGMO_S11N_PROBLEM_IMPLEMENT(pagmo::rosenbrock)
