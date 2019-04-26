@@ -27,19 +27,23 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE cec2014_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <random>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 
-#include <pagmo/problem.hpp>
-#include <pagmo/problems/cec2014.hpp>
-#include <pagmo/types.hpp>
-#include <pagmo/utils/generic.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <pagmo/io.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/problems/cec2014.hpp>
+#include <pagmo/s11n.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/generic.hpp>
 
 using namespace pagmo;
 
@@ -112,7 +116,7 @@ BOOST_AUTO_TEST_CASE(cec2014_correctness_test)
         auto f_min = prob.fitness(x_min)[0];
 
         BOOST_CHECK_EQUAL(f_min, results[i].first);
-        BOOST_CHECK_CLOSE(f_origin, results[i].second, 1e-12); // Tolearnce EPS added to be safe
+        BOOST_CHECK_CLOSE(f_origin, results[i].second, 1e-12); // Tolerance EPS added to be safe
     }
 }
 
@@ -126,14 +130,14 @@ BOOST_AUTO_TEST_CASE(cec2014_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

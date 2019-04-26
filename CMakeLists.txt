@@ -176,6 +176,14 @@ if(PAGMO_BUILD_PAGMO)
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
     )
+    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
+        set(PAGMO_SRC_FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
+            "${PAGMO_SRC_FILES}"
+        )
+    endif()
+
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
     set_property(TARGET pagmo PROPERTY VERSION "${pagmo_VERSION_MAJOR}.${pagmo_VERSION_MINOR}")
