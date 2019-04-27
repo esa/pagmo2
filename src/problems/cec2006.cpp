@@ -39,12 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/types.hpp>
 
-// Let's disable a few compiler warnings emitted by the cec2006 code.
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif
-
 namespace pagmo
 {
 
@@ -279,6 +273,12 @@ vector_double cec2006::fitness_impl(detail::cec2006_data::func_ptr c, detail::ce
     retval.insert(retval.begin(), f.begin(), f.end());
     return retval;
 }
+
+// Let's disable a few compiler warnings emitted by the cec2006 code.
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 
 // For the coverage analysis we do not cover the code below as its derived from a third party source
 // LCOV_EXCL_START
@@ -1106,6 +1106,10 @@ void cec2006::g24_compute_constraints_impl(vector_double &c, const vector_double
 
 // LCOV_EXCL_STOP
 
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 const std::vector<detail::cec2006_data::func_ptr> cec2006::s_o_ptr
     = {&cec2006::g01_objfun_impl, &cec2006::g02_objfun_impl, &cec2006::g03_objfun_impl, &cec2006::g04_objfun_impl,
        &cec2006::g05_objfun_impl, &cec2006::g06_objfun_impl, &cec2006::g07_objfun_impl, &cec2006::g08_objfun_impl,
@@ -1129,9 +1133,5 @@ const std::vector<detail::cec2006_data::func_ptr> cec2006::s_c_ptr
        &cec2006::g23_compute_constraints_impl, &cec2006::g24_compute_constraints_impl};
 
 } // namespace pagmo
-
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 PAGMO_S11N_PROBLEM_IMPLEMENT(pagmo::cec2006)

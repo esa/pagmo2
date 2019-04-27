@@ -167,6 +167,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/island.cpp"
         # UDP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2009.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/schwefel.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/rosenbrock.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/hock_schittkowsky_71.cpp"
