@@ -148,7 +148,7 @@ public:
         auto init_fit = pop.get_f();
         std::vector<decltype(init_fit.size())> index_vec(init_fit.size()); // used to stored sorted index
         std::iota(index_vec.begin(), index_vec.end(), decltype(init_fit.size())(0));
-        std::sort(index_vec.begin(), index_vec.end(), [&](unsigned int j, unsigned int k) {
+        std::sort(index_vec.begin(), index_vec.end(), [&](decltype(init_fit.size()) j, decltype(init_fit.size()) k) {
             return detail::greater_than_f(init_fit[j][0], init_fit[k][0]);
         });
         double alpha_score = init_fit[index_vec[0]][0];
