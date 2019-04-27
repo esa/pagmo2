@@ -32,10 +32,12 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
+#include <numeric>
 #include <random>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/utils/generic.hpp>
 
 namespace pagmo
@@ -136,19 +138,19 @@ public:
         m_log.clear();
 
         // Some vectors used during evolution are declared.
-        vector_double a_vector(3);          // vector coefficient for encircling prey
-        vector_double c_vector(3);          // vector coefficient for encircling prey
-        vector_double d_vector(3);          // position vector for alpha, beta and delta
-        vector_double x_vector(3);          // vector used to calculate position of an agent in a single dimension
-        double a;                           // coefficient which decrease linearly from 2 to 0 over generations
-        double r1, r2;                      // random coefficient between 0 and 1;
-        std::vector<std::size_t> index_vec; // used to stored sorted index
+        vector_double a_vector(3); // vector coefficient for encircling prey
+        vector_double c_vector(3); // vector coefficient for encircling prey
+        vector_double d_vector(3); // position vector for alpha, beta and delta
+        vector_double x_vector(3); // vector used to calculate position of an agent in a single dimension
+        double a;                  // coefficient which decrease linearly from 2 to 0 over generations
+        double r1, r2;             // random coefficient between 0 and 1;
         auto agents_position = pop.get_x();
         auto init_fit = pop.get_f();
-        for (unsigned int i = 0; i != init_fit.size(); ++i)
-            index_vec.push_back(i);
-        std::sort(index_vec.begin(), index_vec.end(),
-                  [&](unsigned int a, unsigned int b) { return init_fit[a][0] > init_fit[b][0]; });
+        std::vector<unsigned int> index_vec(init_fit.size()); // used to stored sorted index
+        std::iota(index_vec.begin(), index_vec.end(), 0);
+        std::sort(index_vec.begin(), index_vec.end(), [&](unsigned int j, unsigned int k) {
+            return detail::greater_than_f(init_fit[j][0], init_fit[k][0]);
+        });
         double alpha_score = init_fit[index_vec[0]][0];
         double beta_score = init_fit[index_vec[1]][0];
         double delta_score = init_fit[index_vec[2]][0];
