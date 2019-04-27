@@ -30,7 +30,6 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_BFE_HPP
 
 #include <cassert>
-#include <functional>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -197,62 +196,6 @@ struct bfe_inner final : bfe_inner_base {
 
 } // namespace detail
 
-// Multi-threaded bfe.
-class PAGMO_PUBLIC thread_bfe
-{
-public:
-    // Call operator.
-    vector_double operator()(const problem &, const vector_double &) const;
-    // Name.
-    std::string get_name() const
-    {
-        return "Multi-threaded batch fitness evaluator";
-    }
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
-
-// Bfe that uses problem's member function.
-class PAGMO_PUBLIC member_bfe
-{
-public:
-    // Call operator.
-    vector_double operator()(const problem &, const vector_double &) const;
-    // Name.
-    std::string get_name() const
-    {
-        return "Member function batch fitness evaluator";
-    }
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
-
-namespace detail
-{
-
-// Helper for the selection of the default bfe implementation.
-PAGMO_PUBLIC extern std::function<vector_double(const problem &, const vector_double &)> default_bfe_impl;
-
-} // namespace detail
-
-// Default bfe implementation.
-class PAGMO_PUBLIC default_bfe
-{
-public:
-    // Call operator.
-    vector_double operator()(const problem &, const vector_double &) const;
-    // Name.
-    std::string get_name() const
-    {
-        return "Default batch fitness evaluator";
-    }
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
-
 class PAGMO_PUBLIC bfe
 {
     // Enable the generic ctor only if T is not a bfe (after removing
@@ -382,9 +325,5 @@ PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
 #endif
 
 } // namespace pagmo
-
-PAGMO_S11N_BFE_EXPORT_KEY(pagmo::thread_bfe)
-PAGMO_S11N_BFE_EXPORT_KEY(pagmo::member_bfe)
-PAGMO_S11N_BFE_EXPORT_KEY(pagmo::default_bfe)
 
 #endif

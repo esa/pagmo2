@@ -178,6 +178,10 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/not_population_based.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/compass_search.cpp"
+        # UDBFE.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/default_bfe.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/member_bfe.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/thread_bfe.cpp"
         # Other.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"

@@ -47,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>

@@ -29,8 +29,34 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_BATCH_EVALUATORS_MEMBER_BFE_HPP
 #define PAGMO_BATCH_EVALUATORS_MEMBER_BFE_HPP
 
-// NOTE: the member_bfe is defined in bfe.hpp
-// because it is part of the heuristic for choosing the default_bfe.
+#include <string>
+
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/visibility.hpp>
+#include <pagmo/problem.hpp>
+#include <pagmo/types.hpp>
+
+namespace pagmo
+{
+
+// Bfe that uses problem's member function.
+class PAGMO_PUBLIC member_bfe
+{
+public:
+    // Call operator.
+    vector_double operator()(const problem &, const vector_double &) const;
+    // Name.
+    std::string get_name() const
+    {
+        return "Member function batch fitness evaluator";
+    }
+    // Serialization support.
+    template <typename Archive>
+    void serialize(Archive &, unsigned);
+};
+
+} // namespace pagmo
+
+PAGMO_S11N_BFE_EXPORT_KEY(pagmo::member_bfe)
 
 #endif

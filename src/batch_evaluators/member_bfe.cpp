@@ -26,37 +26,27 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_BATCH_EVALUATORS_THREAD_BFE_HPP
-#define PAGMO_BATCH_EVALUATORS_THREAD_BFE_HPP
-
-#include <string>
-
+#include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/bfe.hpp>
-#include <pagmo/detail/visibility.hpp>
+#include <pagmo/detail/bfe_impl.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
 {
 
-// Multi-threaded bfe.
-class PAGMO_PUBLIC thread_bfe
+// Call operator.
+vector_double member_bfe::operator()(const problem &p, const vector_double &dvs) const
 {
-public:
-    // Call operator.
-    vector_double operator()(const problem &, const vector_double &) const;
-    // Name.
-    std::string get_name() const
-    {
-        return "Multi-threaded batch fitness evaluator";
-    }
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
+    return detail::prob_invoke_mem_batch_fitness(p, dvs);
+}
+
+// Serialization support.
+template <typename Archive>
+void member_bfe::serialize(Archive &, unsigned)
+{
+}
 
 } // namespace pagmo
 
-PAGMO_S11N_BFE_EXPORT_KEY(pagmo::thread_bfe)
-
-#endif
+PAGMO_S11N_BFE_IMPLEMENT(pagmo::member_bfe)

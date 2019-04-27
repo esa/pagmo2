@@ -27,7 +27,8 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE thread_bfe_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <initializer_list>
 #include <random>
@@ -44,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
@@ -130,15 +131,15 @@ BOOST_AUTO_TEST_CASE(s11n)
     auto before = boost::lexical_cast<std::string>(bfe0);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(bfe0);
+        boost::archive::text_oarchive oarchive(ss);
+        oarchive << bfe0;
     }
     // Change the content of p before deserializing.
     bfe0 = bfe{};
     BOOST_CHECK(!bfe0.is<thread_bfe>());
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(bfe0);
+        boost::archive::text_iarchive iarchive(ss);
+        iarchive >> bfe0;
     }
     auto after = boost::lexical_cast<std::string>(bfe0);
     BOOST_CHECK_EQUAL(before, after);
