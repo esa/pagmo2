@@ -29,13 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_MULTI_OBJECTIVE_HPP
 #define PAGMO_MULTI_OBJECTIVE_HPP
 
-/** \file multi_objective.hpp
- * \brief Multi objective optimization utilities.
- *
- * This header contains utilities used to compute non dominated fronts and other
- * quantities useful for multi objective optimization
- */
-
 #include <algorithm>
 #include <boost/numeric/conversion/cast.hpp>
 #include <limits>

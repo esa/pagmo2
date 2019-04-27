@@ -29,12 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_EXCEPTIONS_HPP
 #define PAGMO_EXCEPTIONS_HPP
 
-/** \file exceptions.hpp
- * \brief Exceptions.
- *
- * This header contains exception-related utils used within pagmo.
- */
-
 #include <stdexcept>
 #include <string>
 #include <type_traits>

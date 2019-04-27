@@ -29,12 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DISCREPANCY_HPP
 #define PAGMO_DISCREPANCY_HPP
 
-/** \file discrepancy.hpp
- * \brief Low-discrepancy sequences
- *
- * This header contains utilities to generate low discrepancy sequences
- */
-
 #include <algorithm>
 #include <stdexcept>
 #include <string>
