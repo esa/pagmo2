@@ -178,6 +178,8 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/not_population_based.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/compass_search.cpp"
+        # Other.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
     )
     if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
         set(PAGMO_SRC_FILES

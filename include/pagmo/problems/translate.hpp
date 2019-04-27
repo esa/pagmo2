@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 
-#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>

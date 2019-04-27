@@ -40,7 +40,6 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/detail/make_unique.hpp>
-#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
@@ -978,11 +977,23 @@ struct prob_inner final : prob_inner_base {
 
 } // namespace detail
 
-// Fwd declare for the streaming operator below.
+// Fwd declare for the declarations below.
 class problem;
 
 // Streaming operator
 PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
+
+namespace detail
+{
+
+// These are internal private helpers which are used both in problem
+// and elsewhere. Hence, decouple them from the problem class and provide
+// them as free functions.
+PAGMO_PUBLIC void prob_check_dv(const problem &, const double *, vector_double::size_type);
+PAGMO_PUBLIC void prob_check_fv(const problem &, const double *, vector_double::size_type);
+PAGMO_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+
+} // namespace detail
 
 /// Problem class.
 /**
@@ -1206,8 +1217,7 @@ public:
 private:
 #if !defined(PAGMO_DOXYGEN_INVOKED)
     // Make friends with the batch_fitness() invocation helper.
-    template <typename P>
-    friend vector_double detail::prob_invoke_mem_batch_fitness(const P &, const vector_double &);
+    friend vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
 #endif
 
 public:

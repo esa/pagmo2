@@ -41,7 +41,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/detail/bfe_impl.hpp>
-#include <pagmo/detail/prob_impl.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -924,6 +923,59 @@ void problem::check_hessians_vector(const std::vector<vector_double> &hs) const
         }
     }
 }
+
+namespace detail
+{
+
+// Check that the decision vector starting at dv and with
+// size s is compatible with the input problem p.
+void prob_check_dv(const problem &p, const double *dv, vector_double::size_type s)
+{
+    (void)dv;
+    // 1 - check decision vector for length consistency
+    if (s != p.get_nx()) {
+        pagmo_throw(std::invalid_argument, "A decision vector is incompatible with a problem of type '" + p.get_name()
+                                               + "': the number of dimensions of the problem is "
+                                               + std::to_string(p.get_nx())
+                                               + ", while the decision vector has a size of " + std::to_string(s)
+                                               + " (the two values should be equal)");
+    }
+    // 2 - Here is where one could check if the decision vector
+    // is in the bounds. At the moment not implemented
+}
+
+// Check that the fitness vector starting at fv and with size s
+// is compatible with the input problem p.
+void prob_check_fv(const problem &p, const double *fv, vector_double::size_type s)
+{
+    (void)fv;
+    // Checks dimension of returned fitness
+    if (s != p.get_nf()) {
+        pagmo_throw(std::invalid_argument, "A fitness vector is incompatible with a problem of type '" + p.get_name()
+                                               + "': the dimension of the fitness of the problem is "
+                                               + std::to_string(p.get_nf())
+                                               + ", while the fitness vector has a size of " + std::to_string(s)
+                                               + " (the two values should be equal)");
+    }
+}
+
+// Small helper for the invocation of the UDP's batch_fitness() *without* checks.
+// This is useful for avoiding doing double checks on the input/output values
+// of batch_fitness() when we are sure that the checks have been performed elsewhere already.
+// This helper will also take care of increasing the fevals counter in the
+// input problem.
+vector_double prob_invoke_mem_batch_fitness(const problem &p, const vector_double &dvs)
+{
+    // Invoke the batch fitness from the UDP.
+    auto retval(p.ptr()->batch_fitness(dvs));
+
+    // Increment the number of fitness evaluations.
+    p.increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / p.get_nx()));
+
+    return retval;
+}
+
+} // namespace detail
 
 } // namespace pagmo
 
