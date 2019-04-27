@@ -146,8 +146,8 @@ public:
         double r1, r2;             // random coefficient between 0 and 1;
         auto agents_position = pop.get_x();
         auto init_fit = pop.get_f();
-        std::vector<unsigned int> index_vec(init_fit.size()); // used to stored sorted index
-        std::iota(index_vec.begin(), index_vec.end(), 0);
+        std::vector<decltype(init_fit.size())> index_vec(init_fit.size()); // used to stored sorted index
+        std::iota(index_vec.begin(), index_vec.end(), decltype(init_fit.size())(0));
         std::sort(index_vec.begin(), index_vec.end(), [&](unsigned int j, unsigned int k) {
             return detail::greater_than_f(init_fit[j][0], init_fit[k][0]);
         });
