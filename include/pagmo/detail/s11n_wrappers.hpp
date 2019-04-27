@@ -37,6 +37,8 @@ namespace pagmo
 namespace detail
 {
 
+// A few helpers to give a cereal-like syntax
+// to Boost.serialization.
 template <typename Archive>
 inline void archive(Archive &)
 {
