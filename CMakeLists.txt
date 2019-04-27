@@ -178,11 +178,13 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/not_population_based.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/compass_search.cpp"
+        # UDI.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/thread_island.cpp"
         # UDBFE.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/default_bfe.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/member_bfe.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/thread_bfe.cpp"
-        # Other.
+        # Detail.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
@@ -193,6 +195,13 @@ if(PAGMO_BUILD_PAGMO)
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013_data.cpp"
+            "${PAGMO_SRC_FILES}"
+        )
+    endif()
+
+    if(PAGMO_WITH_FORK_ISLAND)
+        set(PAGMO_SRC_FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/fork_island.cpp"
             "${PAGMO_SRC_FILES}"
         )
     endif()

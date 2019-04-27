@@ -33,7 +33,49 @@ see https://www.gnu.org/licenses/. */
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
 
+#include <atomic>
+#include <string>
+
+#include <unistd.h>
+
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/island.hpp>
+
+namespace pagmo
+{
+
+// Fork island: will offload the evolution to a child process created with the fork() system call.
+class PAGMO_PUBLIC fork_island
+{
+public:
+    // NOTE: we need to implement these because of the m_pid member,
+    // which has a trivial def ctor and which is missing the copy/move ctors.
+    // m_pid is only informational and it is relevant only while the evolution
+    // is undergoing, we will not copy it or serialize it.
+    fork_island() : m_pid(0) {}
+    fork_island(const fork_island &) : fork_island() {}
+    fork_island(fork_island &&) : fork_island() {}
+    void run_evolve(island &) const;
+    std::string get_name() const
+    {
+        return "Fork island";
+    }
+    std::string get_extra_info() const;
+    // Get the PID of the child.
+    pid_t get_child_pid() const
+    {
+        return m_pid.load();
+    }
+    template <typename Archive>
+    void serialize(Archive &, unsigned);
+
+private:
+    mutable std::atomic<pid_t> m_pid;
+};
+
+} // namespace pagmo
+
+PAGMO_S11N_ISLAND_EXPORT_KEY(pagmo::fork_island)
 
 #else
 

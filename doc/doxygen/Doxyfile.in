@@ -853,6 +853,7 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = ../../include/pagmo/detail  \
+                         ../../src/detail  \
                          ../../src/problems/cec2014_data.cpp \
                          ../../src/problems/cec2013_data.cpp
 
@@ -2065,6 +2066,7 @@ PREDEFINED             = PAGMO_DOXYGEN_INVOKED \
                          PAGMO_WITH_EIGEN3 \
                          PAGMO_WITH_NLOPT \
                          PAGMO_WITH_IPOPT \
+                         PAGMO_WITH_FORK_ISLAND \
                          PAGMO_PUBLIC=
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this

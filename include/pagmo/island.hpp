@@ -30,7 +30,6 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ISLAND_HPP
 
 #include <array>
-#include <atomic>
 #include <cstddef>
 #include <functional>
 #include <future>
@@ -51,7 +50,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
-#include <pagmo/config.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/detail/visibility.hpp>
@@ -220,65 +218,6 @@ PAGMO_PUBLIC bool future_has_exception(std::future<void> &) noexcept;
 PAGMO_PUBLIC bool future_running(const std::future<void> &);
 
 } // namespace detail
-
-/// Thread island.
-/**
- * This class is a user-defined island (UDI) that will run evolutions directly inside
- * the separate thread of execution within pagmo::island.
- *
- * thread_island is the UDI type automatically selected by the constructors of pagmo::island
- * on non-POSIX platforms or when both the island's problem and algorithm provide at least the
- * pagmo::thread_safety::basic thread safety guarantee.
- */
-class PAGMO_PUBLIC thread_island
-{
-public:
-    /// Island's name.
-    /**
-     * @return <tt>"Thread island"</tt>.
-     */
-    std::string get_name() const
-    {
-        return "Thread island";
-    }
-    void run_evolve(island &) const;
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
-
-#if defined(PAGMO_WITH_FORK_ISLAND)
-
-// Fork island: will offload the evolution to a child process created with the fork() system call.
-class PAGMO_PUBLIC fork_island
-{
-public:
-    // NOTE: we need to implement these because of the m_pid member,
-    // which has a trivial def ctor and which is missing the copy/move ctors.
-    // m_pid is only informational and it is relevant only while the evolution
-    // is undergoing, we will not copy it or serialize it.
-    fork_island() : m_pid(0) {}
-    fork_island(const fork_island &) : fork_island() {}
-    fork_island(fork_island &&) : fork_island() {}
-    void run_evolve(island &) const;
-    std::string get_name() const
-    {
-        return "Fork island";
-    }
-    std::string get_extra_info() const;
-    // Get the PID of the child.
-    pid_t get_child_pid() const
-    {
-        return m_pid.load();
-    }
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-
-private:
-    mutable std::atomic<pid_t> m_pid;
-};
-
-#endif
 
 class archipelago;
 
@@ -1236,13 +1175,5 @@ private:
 PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const archipelago &);
 
 } // namespace pagmo
-
-PAGMO_S11N_ISLAND_EXPORT_KEY(pagmo::thread_island)
-
-#if defined(PAGMO_WITH_FORK_ISLAND)
-
-PAGMO_S11N_ISLAND_EXPORT_KEY(pagmo::fork_island)
-
-#endif
 
 #endif
