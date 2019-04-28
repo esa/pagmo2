@@ -20,16 +20,6 @@ else()
     endif()
 endif()
 
-# Boost.Python version 1.64 (and possibly later?) has issues with default hidden visibility.
-if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 63))
-    list(FIND PAGMO_CXX_FLAGS_DEBUG "-fvisibility=hidden" _PYGMO_HAS_VHIDDEN)
-    if (NOT ${_PYGMO_HAS_VHIDDEN} EQUAL -1)
-        message(STATUS "Removing the '-fvisibility=hidden' flag for Boost.Python > 1.63.")
-        list(REMOVE_ITEM PAGMO_CXX_FLAGS_DEBUG "-fvisibility=hidden")
-        list(REMOVE_ITEM PAGMO_CXX_FLAGS_RELEASE "-fvisibility=hidden")
-    endif()
-endif()
-
 # Setup of the config.hpp file for pygmo.
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" @ONLY)
 
@@ -66,11 +56,13 @@ YACMA_PYTHON_MODULE(core
 target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
-if(NOT CMAKE_CXX_STANDARD)
-    set_property(TARGET core PROPERTY CXX_STANDARD 11)
+if(NOT (YACMA_COMPILER_IS_MSVC AND YACMA_COMPILER_IS_CLANGXX))
+    if(NOT CMAKE_CXX_STANDARD)
+        set_property(TARGET core PROPERTY CXX_STANDARD 11)
+    endif()
+    set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET core PROPERTY CXX_EXTENSIONS NO)
 endif()
-set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)
-set_property(TARGET core PROPERTY CXX_EXTENSIONS NO)
 
 # Helper file with version number.
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/_version.py.in" "${CMAKE_CURRENT_BINARY_DIR}/_version.py" @ONLY)
