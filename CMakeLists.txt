@@ -195,6 +195,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     )
+
     if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
@@ -312,8 +313,17 @@ endif()
 
 # Library installation.
 if(PAGMO_BUILD_PAGMO)
-    # Setup of the export.
-    install(TARGETS pagmo EXPORT pagmo_export)
+    # Installation of the header files.
+    install(DIRECTORY include/ DESTINATION include)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION include/pagmo)
+
+    # Installation of the library.
+    install(TARGETS pagmo
+        EXPORT pagmo_export
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+    )
 
     # Setup of the optional deps.
     set(_PAGMO_CONFIG_OPTIONAL_DEPS)
@@ -338,8 +348,4 @@ if(PAGMO_BUILD_PAGMO)
     write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
         COMPATIBILITY ExactVersion)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "lib/cmake/pagmo")
-
-    # Do the actual library installation.
-    install(DIRECTORY include/ DESTINATION include)
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION include/pagmo)
 endif()
