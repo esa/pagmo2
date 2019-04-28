@@ -188,6 +188,7 @@ if(PAGMO_BUILD_PAGMO)
         # Utils.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/generic.cpp"
         # Detail.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
