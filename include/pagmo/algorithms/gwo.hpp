@@ -49,7 +49,16 @@ namespace pagmo
  * Grey Wolf Optimizer is an optimization algorithm based on the leadership hierarchy and hunting mechanism of
  * greywolves, proposed by Seyedali Mirjalilia, Seyed Mohammad Mirjalilib, Andrew Lewis in 2014.
  *
- * The implementation provided for PaGMO is based on the pseudo-code provided in Seyedali and Andrew (2014) - Fig. 6.
+ * This algorithm is a classic example of a highly criticizable line of search that led in the first decades of
+ * our millenia to the development of an entire zoo of metaphors inspiring optimzation heuristics. In our opinion they, 
+ * as is the case for the grey wolf optimizer, are often but small variations of already existing heuristics rebranded with unnecessray and convoluted
+ * biological metaphors. In the case of GWO this is particularly evident as the position update rule is shokingly
+ * trivial and can also be easily seen as a product of an evolutionary metaphor or a particle swarm one. Such an update rule
+ * is also not particulary effective and results in a rather poor performance most of times. Reading the original
+ * peer-reviewed paper, where the poor algoritmic perfromance is hidden by the methodological flaws of the benchmark presented,
+ * one is left with a bitter opinion of the whole peer-review system.
+ *
+ * The implementation provided for PaGMO is based on the pseudo-code provided in the original Seyedali and Andrew (2014) paper.
  * pagmo::gwo is suitable for box-constrained single-objective continuous optimization.
  *
  * \verbatim embed:rst:leading-asterisk
