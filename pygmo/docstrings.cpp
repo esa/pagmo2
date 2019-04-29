@@ -2488,13 +2488,17 @@ std::string gwo_docstring()
 
 Grey Wolf Optimizer (gwo).
 
-Grey wolf optimizer is a class of optimization algorithms modeled on the hunting actions
-and social hierarchy of a grey wolf pack. Artificial 'wolf' (e.g. simulation agents) locate optimal solutions by
-moving through a parameter space around alpha, beta and delta wolf. In nature,
-alpha wolf is most experienced in hunting and gwo assume that optimal solutions are
-most likely to located around the alpha wolf.
-The simulated 'wolves' will randomly search area around alpha, beta and delta.
-In each iteration, alpha, beta and delta wolf are updated according to new fitness.
+Grey Wolf Optimizer is an optimization algorithm based on the leadership hierarchy and hunting mechanism of
+greywolves, proposed by Seyedali Mirjalilia, Seyed Mohammad Mirjalilib, Andrew Lewis in 2014.
+
+This algorithm is a classic example of a highly criticizable line of search that led in the first decades of
+our millenia to the development of an entire zoo of metaphors inspiring optimzation heuristics. In our opinion they, 
+as is the case for the grey wolf optimizer, are often but small variations of already existing heuristics rebranded with unnecessray and convoluted
+biological metaphors. In the case of GWO this is particularly evident as the position update rule is shokingly
+trivial and can also be easily seen as a product of an evolutionary metaphor or a particle swarm one. Such an update rule
+is also not particulary effective and results in a rather poor performance most of times. Reading the original
+peer-reviewed paper, where the poor algoritmic perfromance is hidden by the methodological flaws of the benchmark presented,
+one is left with a bitter opinion of the whole peer-review system.
 
 This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
 optimization, with continuous value.
