@@ -47,13 +47,13 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/tuple.hpp>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 
+#include <pygmo/algorithm.hpp>
 #include <pygmo/common_utils.hpp>
-
-#include "algorithm.hpp"
 
 namespace bp = boost::python;
 
@@ -166,6 +166,7 @@ bool algo_inner<bp::object>::has_set_verbosity() const
 }
 
 } // namespace detail
+
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_IMPLEMENT(boost::python::object)

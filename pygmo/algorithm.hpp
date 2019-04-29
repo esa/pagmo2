@@ -84,13 +84,14 @@ struct algo_inner<bp::object> final : algo_inner_base, pygmo::common_base {
     template <typename Archive>
     void serialize(Archive &ar, unsigned version)
     {
-        // detail::archive(ar, boost::serialization::base_object<algo_inner_base>(*this), m_value);
         ar &boost::serialization::base_object<algo_inner_base>(*this);
         boost::serialization::serialize(ar, m_value, version);
     }
     bp::object m_value;
 };
+
 } // namespace detail
+
 } // namespace pagmo
 
 // Register the algo_inner specialisation for bp::object.
@@ -106,6 +107,7 @@ struct algorithm_pickle_suite : bp::pickle_suite {
     static bp::tuple getstate(const pagmo::algorithm &);
     static void setstate(pagmo::algorithm &, const bp::tuple &);
 };
+
 } // namespace pygmo
 
 #endif

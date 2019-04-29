@@ -33,6 +33,18 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <array>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <stdexcept>
+#include <string>
+#include <tuple>
+#include <type_traits>
+#include <typeinfo>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/dict.hpp>
@@ -46,20 +58,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/object.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
-#include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <stdexcept>
-#include <string>
-#include <tuple>
-#include <type_traits>
-#include <typeinfo>
-#include <unordered_set>
-#include <utility>
-#include <vector>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/serialization.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -773,30 +773,6 @@ inline void add_property(bp::class_<T> &c, const char *name, G getter, const bp:
     add_property(c, name, bp::make_function(getter), setter, doc);
 }
 
-// This helper is intended for use in the exposition suites for APs. Its job is to take
-// the polymorphic serialization info registered from the AP and merge it into pygmo's
-// serialization machinery. This is necessary because cereal's mechanism for the registration
-// of polymorphic types will end up creating distinct "global" objects in the APs, and pygmo
-// needs the info in these objects in order to be able to correctly serialize/deserialize
-// the algos/probs/etc. implemented in the APs. See also the explanation in core.cpp.
-inline void merge_s11n_data_for_ap()
-{
-    auto cur_in_ptr = &cereal::detail::StaticObject<
-                           cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::getInstance()
-                           .map;
-    auto pygmo_in_ptr = reinterpret_cast<decltype(cur_in_ptr)>(
-        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_s11n_in_address"))());
-
-    auto cur_out_ptr = &cereal::detail::StaticObject<
-                            cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::getInstance()
-                            .map;
-    auto pygmo_out_ptr = reinterpret_cast<decltype(cur_out_ptr)>(
-        bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_s11n_out_address"))());
-
-    pygmo_in_ptr->insert(cur_in_ptr->begin(), cur_in_ptr->end());
-    pygmo_out_ptr->insert(cur_out_ptr->begin(), cur_out_ptr->end());
-}
-
 // A small helper to get the list of currently-registered APs.
 inline bp::list get_ap_list()
 {
@@ -828,6 +804,7 @@ inline void import_aps(const bp::list &l)
         }
     }
 }
+
 } // namespace pygmo
 
 #endif
