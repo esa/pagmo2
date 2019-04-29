@@ -44,6 +44,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION
 
 # Setup of the pygmo core module.
 YACMA_PYTHON_MODULE(core
+    algorithm.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp

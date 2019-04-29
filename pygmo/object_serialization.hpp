@@ -36,21 +36,19 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/object.hpp>
 #include <vector>
 
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 
 #include <pygmo/common_utils.hpp>
 
-namespace cereal
+namespace boost
+{
+
+namespace serialization
 {
 
 template <typename Archive>
-inline void save(Archive &archive, const boost::python::object &o)
+inline void save(Archive &ar, const boost::python::object &o, unsigned)
 {
-    // NOTE: these functions can be improved by using cereal's binary data
-    // construct, at least for binary archives. This would allow to avoid the
-    // extra copy. That would require to save the length of the bytes
-    // object as well.
-    // http://stackoverflow.com/questions/27518554/c-cereal-serialize-c-style-array
     using namespace boost::python;
     // This will dump to a bytes object.
     object tmp = import("pygmo").attr("get_serialization_backend")().attr("dumps")(o);
@@ -65,19 +63,28 @@ inline void save(Archive &archive, const boost::python::object &o)
     // NOTE: we store as char here because that's what is returned by the CPython function.
     // From Python it seems like these are unsigned chars, but this should not concern us.
     std::vector<char> v(ptr, ptr + size);
-    archive(v);
+    ar << v;
 }
 
 template <typename Archive>
-inline void load(Archive &archive, boost::python::object &o)
+inline void load(Archive &ar, boost::python::object &o, unsigned)
 {
     using namespace boost::python;
     // Extract the char vector.
     std::vector<char> v;
-    archive(v);
+    ar >> v;
     auto b = pygmo::make_bytes(v.data(), boost::numeric_cast<Py_ssize_t>(v.size()));
     o = import("pygmo").attr("get_serialization_backend")().attr("loads")(b);
 }
-} // namespace cereal
+
+template <class Archive>
+inline void serialize(Archive &ar, boost::python::object &o, unsigned version)
+{
+    split_free(ar, o, version);
+}
+
+} // namespace serialization
+
+} // namespace boost
 
 #endif
