@@ -30,6 +30,7 @@ Implemented algorithms
   algorithms/de
   algorithms/de1220
   algorithms/gaco
+  algorithms/gwo
   algorithms/ihs
   algorithms/ipopt
   algorithms/moead
