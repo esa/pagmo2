@@ -133,7 +133,7 @@ bp::tuple bfe_pickle_suite::getstate(const pagmo::bfe &b)
         oarchive << b;
     }
     auto s = oss.str();
-    // Store the cerealized bfe plus the list of currently-loaded APs.
+    // Store the serialized bfe plus the list of currently-loaded APs.
     return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())), get_ap_list());
 }
 
@@ -141,7 +141,7 @@ void bfe_pickle_suite::setstate(pagmo::bfe &b, const bp::tuple &state)
 {
     // Similarly, first we extract a bytes object from the Python state,
     // and then we build a C++ string from it. The string is then used
-    // to decerealise the object.
+    // to deserialize the object.
     if (len(state) != 2) {
         pygmo_throw(PyExc_ValueError, ("the state tuple passed for bfe deserialization "
                                        "must have 2 elements, but instead it has "
