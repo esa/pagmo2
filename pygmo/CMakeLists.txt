@@ -47,6 +47,7 @@ YACMA_PYTHON_MODULE(core
     algorithm.cpp
     bfe.cpp
     island.cpp
+    problem.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp
