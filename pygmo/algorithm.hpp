@@ -45,7 +45,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/threading.hpp>
 
 #include <pygmo/common_base.hpp>
-#include <pygmo/common_utils.hpp>
 #include <pygmo/object_serialization.hpp>
 
 namespace pagmo

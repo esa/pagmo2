@@ -46,6 +46,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION
 YACMA_PYTHON_MODULE(core
     algorithm.cpp
     bfe.cpp
+    island.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp
