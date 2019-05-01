@@ -58,7 +58,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/config.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-// #include <pagmo/problems/ackley.hpp>
+#include <pagmo/problems/ackley.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
 #if defined(PAGMO_ENABLE_CEC2014)
@@ -148,12 +148,14 @@ void expose_problems_0()
                                                            "See :cpp:class:`pagmo::hock_schittkowsky_71`.\n\n");
     hs71.def("best_known", &best_known_wrapper<hock_schittkowsky_71>,
              problem_get_best_docstring("Hock-Schittkowsky 71").c_str());
-#if 0
+
     // Ackley.
     auto ack = expose_problem_pygmo<ackley>("ackley", "__init__(dim = 1)\n\nThe Ackley problem.\n\n"
                                                       "See :cpp:class:`pagmo::ackley`.\n\n");
     ack.def(bp::init<unsigned>((bp::arg("dim"))));
     ack.def("best_known", &best_known_wrapper<ackley>, problem_get_best_docstring("Ackley").c_str());
+
+#if 0
     // Griewank.
     auto griew = expose_problem_pygmo<griewank>("griewank", "__init__(dim = 1)\n\nThe Griewank problem.\n\n"
                                                             "See :cpp:class:`pagmo::griewank`.\n\n");
