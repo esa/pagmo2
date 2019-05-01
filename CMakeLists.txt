@@ -179,6 +179,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/translate.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/decompose.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/golomb_ruler.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/lennard_jones.cpp"
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
