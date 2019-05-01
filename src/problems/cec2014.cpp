@@ -32,10 +32,10 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <pagmo/detail/s11n_wrappers.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2014.hpp>
-#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 #include "cec2014_data.hpp"

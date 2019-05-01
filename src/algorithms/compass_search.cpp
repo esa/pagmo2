@@ -36,10 +36,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
+#include <pagmo/detail/s11n_wrappers.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/s11n.hpp>
 #include <pagmo/utils/constrained.hpp>
 
 namespace pagmo

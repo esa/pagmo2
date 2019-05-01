@@ -65,7 +65,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2014.hpp>
 #endif
 // #include <pagmo/problems/decompose.hpp>
-// #include <pagmo/problems/dtlz.hpp>
+#include <pagmo/problems/dtlz.hpp>
 // #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
@@ -164,6 +164,7 @@ void expose_problems_0()
                                                   "__init__(atoms = 3)\n\nThe Lennard Jones Cluster problem.\n\n"
                                                   "See :cpp:class:`pagmo::lennard_jones`.\n\n");
     lj.def(bp::init<unsigned>((bp::arg("atoms") = 3u)));
+#endif
     // DTLZ.
     auto dtlz_p = expose_problem_pygmo<dtlz>("dtlz", dtlz_docstring().c_str());
     dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
@@ -171,7 +172,6 @@ void expose_problems_0()
     dtlz_p.def("p_distance", lcast([](const dtlz &z, const bp::object &x) { return z.p_distance(to_vd(x)); }));
     dtlz_p.def("p_distance", lcast([](const dtlz &z, const population &pop) { return z.p_distance(pop); }),
                dtlz_p_distance_docstring().c_str());
-#endif
     // Inventory.
     auto inv = expose_problem_pygmo<inventory>(
         "inventory", "__init__(weeks = 4,sample_size = 10,seed = random)\n\nThe inventory problem.\n\n"
