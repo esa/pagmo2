@@ -66,7 +66,7 @@ see https://www.gnu.org/licenses/. */
 // #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
-// #include <pagmo/problems/translate.hpp>
+#include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/unconstrain.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
@@ -129,6 +129,7 @@ void expose_problems_1()
     auto lv_ = expose_problem_pygmo<luksan_vlcek1>("luksan_vlcek1", luksan_vlcek1_docstring().c_str());
     lv_.def(bp::init<unsigned>(bp::arg("dim")));
 
+#endif
     // Translate meta-problem
     auto translate_ = expose_problem_pygmo<translate>("translate", translate_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
@@ -143,7 +144,6 @@ void expose_problems_1()
                  bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
                                    bp::return_internal_reference<>()),
                  generic_udp_inner_problem_docstring().c_str());
-#endif
     // Unconstrain meta-problem.
     auto unconstrain_ = expose_problem_pygmo<unconstrain>("unconstrain", unconstrain_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
