@@ -78,7 +78,7 @@ see https://www.gnu.org/licenses/. */
 // #include <IpTNLP.hpp>
 // #include <pagmo/algorithms/ipopt.hpp>
 // #endif
-// #include <pagmo/algorithms/mbh.hpp>
+#include <pagmo/algorithms/mbh.hpp>
 // #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -127,7 +127,6 @@ struct tu_test_algorithm {
 
 void expose_algorithms_0()
 {
-#if 0
     // MBH meta-algo.
     auto mbh_ = expose_algorithm_pygmo<mbh>("mbh", mbh_docstring().c_str());
     mbh_.def("__init__",
@@ -150,6 +149,7 @@ void expose_algorithms_0()
                  bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                                    bp::return_internal_reference<>()),
                  generic_uda_inner_algorithm_docstring().c_str());
+#if 0
     // cstrs_self_adaptive meta-algo.
     auto cstrs_sa
         = expose_algorithm_pygmo<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
