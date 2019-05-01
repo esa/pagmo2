@@ -44,12 +44,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
-// MINGW-specific warnings.
-#if defined(__GNUC__) && defined(__MINGW32__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
-#endif
-
 namespace pagmo
 {
 /// Population class.
@@ -374,9 +368,5 @@ private:
 PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 } // namespace pagmo
-
-#if defined(__GNUC__) && defined(__MINGW32__)
-#pragma GCC diagnostic pop
-#endif
 
 #endif

@@ -40,11 +40,11 @@ see https://www.gnu.org/licenses/. */
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 
-#include <pagmo/detail/s11n_wrappers.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/translate.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 

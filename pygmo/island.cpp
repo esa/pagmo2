@@ -55,6 +55,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/s11n.hpp>
 
 #include <pygmo/common_utils.hpp>
 #include <pygmo/island.hpp>

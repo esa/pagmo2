@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/bfe.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 

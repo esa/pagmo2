@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 
 namespace pagmo

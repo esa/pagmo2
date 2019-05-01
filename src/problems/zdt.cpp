@@ -36,11 +36,11 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/detail/constants.hpp>
-#include <pagmo/detail/s11n_wrappers.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/zdt.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo

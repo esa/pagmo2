@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/bfe_impl.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo

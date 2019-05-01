@@ -31,8 +31,8 @@ see https://www.gnu.org/licenses/. */
 
 #include <vector>
 
-#include <pagmo/detail/s11n_wrappers.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
