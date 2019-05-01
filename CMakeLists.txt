@@ -177,6 +177,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/dtlz.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/unconstrain.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/translate.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/decompose.cpp"
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"

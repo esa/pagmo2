@@ -81,7 +81,7 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``T`` can be used to construct a :cpp:class:`pagmo::problem`
-     *    and if ``T``, after the removal of reference and cv qualifiers, is not :cpp:class:`pagmo::uncostrain`.
+     *    and if ``T``, after the removal of reference and cv qualifiers, is not :cpp:class:`pagmo::unconstrain`.
      *
      * \endverbatim
      *

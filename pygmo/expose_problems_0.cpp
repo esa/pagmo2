@@ -64,7 +64,7 @@ see https://www.gnu.org/licenses/. */
 #if defined(PAGMO_ENABLE_CEC2014)
 #include <pagmo/problems/cec2014.hpp>
 #endif
-// #include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
 // #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
@@ -195,7 +195,6 @@ void expose_problems_0()
     cec2009_.def(bp::init<unsigned, bool, unsigned>(
         (bp::arg("prob_id") = 1u, bp::arg("is_constrained") = false, bp::arg("dim") = 30u)));
 
-#if 0
     // Decompose meta-problem.
     auto decompose_ = expose_problem_pygmo<decompose>("decompose", decompose_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
@@ -215,6 +214,5 @@ void expose_problems_0()
                  bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),
                                    bp::return_internal_reference<>()),
                  generic_udp_inner_problem_docstring().c_str());
-#endif
 }
 } // namespace pygmo
