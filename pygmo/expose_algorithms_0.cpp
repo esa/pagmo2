@@ -71,7 +71,7 @@ see https://www.gnu.org/licenses/. */
 // #endif
 // #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
-// #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
+#include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
 // #include <pagmo/algorithms/de1220.hpp>
 // #if defined(PAGMO_WITH_IPOPT)
@@ -149,7 +149,7 @@ void expose_algorithms_0()
                  bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                                    bp::return_internal_reference<>()),
                  generic_uda_inner_algorithm_docstring().c_str());
-#if 0
+
     // cstrs_self_adaptive meta-algo.
     auto cstrs_sa
         = expose_algorithm_pygmo<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
@@ -168,7 +168,6 @@ void expose_algorithms_0()
         bp::make_function(lcast([](cstrs_self_adaptive &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                           bp::return_internal_reference<>()),
         generic_uda_inner_algorithm_docstring().c_str());
-#endif
 
     // Test algo.
     auto test_a = expose_algorithm_pygmo<test_algorithm>("_test_algorithm", "A test algorithm.");

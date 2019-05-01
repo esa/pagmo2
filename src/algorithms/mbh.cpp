@@ -224,7 +224,7 @@ void mbh::set_perturb(const vector_double &perturb)
 /// Algorithm's thread safety level.
 /**
  * The thread safety of this meta-algorithm is the minimum between the thread safety
- * of the interal pagmo::algorithm and the basic thread safety level. I.e., this algorithm
+ * of the internal pagmo::algorithm and the basic thread safety level. I.e., this algorithm
  * never provides more than the basic thread safety level.
  *
  * @return the thread safety level of this algorithm.
