@@ -62,7 +62,7 @@ see https://www.gnu.org/licenses/. */
 // #include <pagmo/algorithms/nlopt.hpp>
 // #endif
 // #include <pagmo/algorithms/gaco.hpp>
-// #include <pagmo/algorithms/ihs.hpp>
+#include <pagmo/algorithms/ihs.hpp>
 // #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
@@ -119,6 +119,8 @@ void expose_algorithms_1()
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
+#endif
+
     // IHS
     auto ihs_ = expose_algorithm_pygmo<ihs>("ihs", ihs_docstring().c_str());
     ihs_.def(bp::init<unsigned, double, double, double, double, double>(
@@ -139,6 +141,8 @@ void expose_algorithms_1()
              }),
              ihs_get_log_docstring().c_str());
     ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if 0
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
     sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(
