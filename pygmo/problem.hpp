@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 #include <boost/python/object.hpp>
 #include <boost/python/object/pickle_support.hpp>
@@ -107,11 +108,20 @@ struct prob_inner<bp::object> final : prob_inner_base, pygmo::common_base {
     // Hard code no thread safety for python problems.
     virtual pagmo::thread_safety get_thread_safety() const override final;
     template <typename Archive>
-    void serialize(Archive &ar, unsigned version)
+    void save(Archive &ar, unsigned) const
     {
-        ar &boost::serialization::base_object<prob_inner_base>(*this);
-        boost::serialization::serialize(ar, m_value, version);
+        ar << boost::serialization::base_object<prob_inner_base>(*this);
+        ar << pygmo::object_to_vchar(m_value);
     }
+    template <typename Archive>
+    void load(Archive &ar, unsigned)
+    {
+        ar >> boost::serialization::base_object<prob_inner_base>(*this);
+        std::vector<char> v;
+        ar >> v;
+        m_value = pygmo::vchar_to_object(v);
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
     bp::object m_value;
 };
 } // namespace detail

@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <vector>
 
 #include <boost/python/object.hpp>
 #include <boost/python/object/pickle_support.hpp>
@@ -75,11 +76,20 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     virtual std::string get_name() const override final;
     virtual std::string get_extra_info() const override final;
     template <typename Archive>
-    void serialize(Archive &ar, unsigned version)
+    void save(Archive &ar, unsigned) const
     {
-        ar &boost::serialization::base_object<isl_inner_base>(*this);
-        boost::serialization::serialize(ar, m_value, version);
+        ar << boost::serialization::base_object<isl_inner_base>(*this);
+        ar << pygmo::object_to_vchar(m_value);
     }
+    template <typename Archive>
+    void load(Archive &ar, unsigned)
+    {
+        ar >> boost::serialization::base_object<isl_inner_base>(*this);
+        std::vector<char> v;
+        ar >> v;
+        m_value = pygmo::vchar_to_object(v);
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
     bp::object m_value;
 };
 

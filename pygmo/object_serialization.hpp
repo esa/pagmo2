@@ -36,22 +36,17 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/object.hpp>
 #include <vector>
 
-#include <pagmo/s11n.hpp>
-
 #include <pygmo/common_utils.hpp>
 
-namespace boost
+namespace pygmo
 {
 
-namespace serialization
-{
+namespace bp = boost::python;
 
-template <typename Archive>
-inline void save(Archive &ar, const boost::python::object &o, unsigned)
+inline std::vector<char> object_to_vchar(const bp::object &o)
 {
-    using namespace boost::python;
     // This will dump to a bytes object.
-    object tmp = import("pygmo").attr("get_serialization_backend")().attr("dumps")(o);
+    bp::object tmp = bp::import("pygmo").attr("get_serialization_backend")().attr("dumps")(o);
     // This gives a null-terminated char * to the internal
     // content of the bytes object.
     auto ptr = PyBytes_AsString(tmp.ptr());
@@ -62,29 +57,15 @@ inline void save(Archive &ar, const boost::python::object &o, unsigned)
     const auto size = len(tmp);
     // NOTE: we store as char here because that's what is returned by the CPython function.
     // From Python it seems like these are unsigned chars, but this should not concern us.
-    std::vector<char> v(ptr, ptr + size);
-    ar << v;
+    return std::vector<char>(ptr, ptr + size);
 }
 
-template <typename Archive>
-inline void load(Archive &ar, boost::python::object &o, unsigned)
+inline bp::object vchar_to_object(const std::vector<char> &v)
 {
-    using namespace boost::python;
-    // Extract the char vector.
-    std::vector<char> v;
-    ar >> v;
-    auto b = pygmo::make_bytes(v.data(), boost::numeric_cast<Py_ssize_t>(v.size()));
-    o = import("pygmo").attr("get_serialization_backend")().attr("loads")(b);
+    auto b = make_bytes(v.data(), boost::numeric_cast<Py_ssize_t>(v.size()));
+    return bp::import("pygmo").attr("get_serialization_backend")().attr("loads")(b);
 }
 
-template <class Archive>
-inline void serialize(Archive &ar, boost::python::object &o, unsigned version)
-{
-    split_free(ar, o, version);
-}
-
-} // namespace serialization
-
-} // namespace boost
+} // namespace pygmo
 
 #endif
