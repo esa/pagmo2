@@ -187,6 +187,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/compass_search.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/mbh.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/cstrs_self_adaptive.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso_gen.cpp"
         # UDI.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/thread_island.cpp"
         # UDBFE.

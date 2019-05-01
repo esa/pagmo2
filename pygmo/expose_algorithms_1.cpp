@@ -65,7 +65,7 @@ see https://www.gnu.org/licenses/. */
 // #include <pagmo/algorithms/ihs.hpp>
 // #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
-// #include <pagmo/algorithms/pso_gen.hpp>
+#include <pagmo/algorithms/pso_gen.hpp>
 // #include <pagmo/algorithms/sade.hpp>
 // #include <pagmo/algorithms/sea.hpp>
 // #include <pagmo/algorithms/sga.hpp>
@@ -98,7 +98,7 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(pso_, pso_get_log_docstring().c_str());
     pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
-#if 0
+
     // PSO (generational)
     auto pso_gen_ = expose_algorithm_pygmo<pso_gen>("pso_gen", pso_gen_docstring().c_str());
     pso_gen_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
@@ -111,6 +111,8 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(pso_gen_, pso_gen_get_log_docstring().c_str());
     pso_gen_.def("get_seed", &pso_gen::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if 0
     // SEA
     auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));

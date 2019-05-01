@@ -29,7 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_DE_HPP
 #define PAGMO_ALGORITHMS_DE_HPP
 
-#include <random>
 #include <string>
 #include <tuple>
 #include <vector>
