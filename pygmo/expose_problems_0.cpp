@@ -66,7 +66,7 @@ see https://www.gnu.org/licenses/. */
 #endif
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
-// #include <pagmo/problems/griewank.hpp>
+#include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/lennard_jones.hpp>
@@ -155,13 +155,12 @@ void expose_problems_0()
     ack.def(bp::init<unsigned>((bp::arg("dim"))));
     ack.def("best_known", &best_known_wrapper<ackley>, problem_get_best_docstring("Ackley").c_str());
 
-#if 0
     // Griewank.
     auto griew = expose_problem_pygmo<griewank>("griewank", "__init__(dim = 1)\n\nThe Griewank problem.\n\n"
                                                             "See :cpp:class:`pagmo::griewank`.\n\n");
     griew.def(bp::init<unsigned>((bp::arg("dim"))));
     griew.def("best_known", &best_known_wrapper<griewank>, problem_get_best_docstring("Griewank").c_str());
-#endif
+
     // Lennard Jones
     auto lj = expose_problem_pygmo<lennard_jones>("lennard_jones",
                                                   "__init__(atoms = 3)\n\nThe Lennard Jones Cluster problem.\n\n"
