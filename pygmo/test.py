@@ -1027,7 +1027,7 @@ class rastrigin_test_case(_ut.TestCase):
         prob = problem(udp)
         self.assertTrue(prob.get_nx() == 5)
         self.assertTrue(prob.get_nix() == 0)
-        self.assertTrue(prob.get_ncx() == 0)
+        self.assertTrue(prob.get_ncx() == 5)
         pop = population(udp, 1)
         self.assertEqual(str(pop), str(loads(dumps(pop))))
 
