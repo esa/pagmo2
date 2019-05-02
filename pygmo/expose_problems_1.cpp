@@ -63,7 +63,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/golomb_ruler.hpp>
 // #include <pagmo/problems/luksan_vlcek1.hpp>
 // #include <pagmo/problems/minlp_rastrigin.hpp>
-// #include <pagmo/problems/rastrigin.hpp>
+#include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/translate.hpp>
@@ -93,12 +93,13 @@ void expose_problems_1()
     // MINLP-Rastrigin.
     auto minlp_rastr = expose_problem_pygmo<minlp_rastrigin>("minlp_rastrigin", minlp_rastrigin_docstring().c_str());
     minlp_rastr.def(bp::init<unsigned, unsigned>((bp::arg("dim_c") = 1u, bp::arg("dim_i") = 1u)));
+#endif
+
     // Rastrigin.
     auto rastr = expose_problem_pygmo<rastrigin>("rastrigin", "__init__(dim = 1)\n\nThe Rastrigin problem.\n\n"
                                                               "See :cpp:class:`pagmo::rastrigin`.\n\n");
     rastr.def(bp::init<unsigned>((bp::arg("dim") = 1)));
     rastr.def("best_known", &best_known_wrapper<rastrigin>, problem_get_best_docstring("Rastrigin").c_str());
-#endif
     // Schwefel.
     auto sch = expose_problem_pygmo<schwefel>("schwefel", "__init__(dim = 1)\n\nThe Schwefel problem.\n\n"
                                                           "See :cpp:class:`pagmo::schwefel`.\n\n");

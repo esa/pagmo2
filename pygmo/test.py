@@ -1015,6 +1015,22 @@ class minlp_rastrigin_test_case(_ut.TestCase):
         self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
         self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
 
+class rastrigin_test_case(_ut.TestCase):
+    """Test case for the Rastrigin function
+
+    """
+
+    def runTest(self):
+        from .core import rastrigin, problem, population
+        from pickle import loads, dumps
+        udp = rastrigin(dim=5)
+        prob = problem(udp)
+        self.assertTrue(prob.get_nx() == 5)
+        self.assertTrue(prob.get_nix() == 0)
+        self.assertTrue(prob.get_ncx() == 0)
+        pop = population(udp, 1)
+        self.assertEqual(str(pop), str(loads(dumps(pop))))
+
 
 class random_decision_vector_test_case(_ut.TestCase):
     """Test case for random_decision_vector().
@@ -2013,6 +2029,7 @@ def run_test_suite(level=0):
     suite.addTest(cec2014_test_case())
     suite.addTest(luksan_vlcek1_test_case())
     suite.addTest(minlp_rastrigin_test_case())
+    suite.addTest(rastrigin_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())
