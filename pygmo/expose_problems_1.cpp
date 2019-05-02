@@ -62,7 +62,7 @@ see https://www.gnu.org/licenses/. */
 #endif
 #include <pagmo/problems/golomb_ruler.hpp>
 // #include <pagmo/problems/luksan_vlcek1.hpp>
-// #include <pagmo/problems/minlp_rastrigin.hpp>
+#include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
@@ -89,11 +89,10 @@ void expose_problems_1()
     auto rb = expose_problem_pygmo<rosenbrock>("rosenbrock", rosenbrock_docstring().c_str());
     rb.def(bp::init<vector_double::size_type>((bp::arg("dim"))));
     rb.def("best_known", &best_known_wrapper<rosenbrock>, problem_get_best_docstring("Rosenbrock").c_str());
-#if 0
+
     // MINLP-Rastrigin.
     auto minlp_rastr = expose_problem_pygmo<minlp_rastrigin>("minlp_rastrigin", minlp_rastrigin_docstring().c_str());
     minlp_rastr.def(bp::init<unsigned, unsigned>((bp::arg("dim_c") = 1u, bp::arg("dim_i") = 1u)));
-#endif
 
     // Rastrigin.
     auto rastr = expose_problem_pygmo<rastrigin>("rastrigin", "__init__(dim = 1)\n\nThe Rastrigin problem.\n\n"

@@ -183,6 +183,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/ackley.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/griewank.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/rastrigin.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/minlp_rastrigin.cpp"
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
