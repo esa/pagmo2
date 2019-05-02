@@ -69,7 +69,7 @@ see https://www.gnu.org/licenses/. */
 // #include <pagmo/algorithms/cmaes.hpp>
 // #include <pagmo/algorithms/xnes.hpp>
 // #endif
-// #include <pagmo/algorithms/bee_colony.hpp>
+#include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
@@ -175,7 +175,7 @@ void expose_algorithms_0()
     test_a.def("set_n", &test_algorithm::set_n);
     // Thread unsafe test algo.
     expose_algorithm_pygmo<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
-#if 0
+
     // ARTIFICIAL BEE COLONY
     auto bee_colony_ = expose_algorithm_pygmo<bee_colony>("bee_colony", bee_colony_docstring().c_str());
     bee_colony_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
@@ -183,7 +183,7 @@ void expose_algorithms_0()
         bp::init<unsigned, unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 20u, bp::arg("seed"))));
     expose_algo_log(bee_colony_, bee_colony_get_log_docstring().c_str());
     bee_colony_.def("get_seed", &bee_colony::get_seed, generic_uda_get_seed_docstring().c_str());
-#endif
+
     // DE
     auto de_ = expose_algorithm_pygmo<de>("de", de_docstring().c_str());
     de_.def(bp::init<unsigned, double, double, unsigned, double, double>(
