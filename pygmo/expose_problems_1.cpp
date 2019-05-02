@@ -61,7 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2013.hpp>
 #endif
 #include <pagmo/problems/golomb_ruler.hpp>
-// #include <pagmo/problems/luksan_vlcek1.hpp>
+#include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -123,12 +123,11 @@ void expose_problems_1()
     auto cec2013_ = expose_problem_pygmo<cec2013>("cec2013", cec2013_docstring().c_str());
     cec2013_.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1, bp::arg("dim") = 2)));
 #endif
-#if 0
+
     // Luksan Vlcek 1
     auto lv_ = expose_problem_pygmo<luksan_vlcek1>("luksan_vlcek1", luksan_vlcek1_docstring().c_str());
     lv_.def(bp::init<unsigned>(bp::arg("dim")));
 
-#endif
     // Translate meta-problem
     auto translate_ = expose_problem_pygmo<translate>("translate", translate_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
