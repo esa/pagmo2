@@ -66,7 +66,7 @@ see https://www.gnu.org/licenses/. */
 // #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
-// #include <pagmo/algorithms/sade.hpp>
+#include <pagmo/algorithms/sade.hpp>
 // #include <pagmo/algorithms/sea.hpp>
 // #include <pagmo/algorithms/sga.hpp>
 // #include <pagmo/algorithms/simulated_annealing.hpp>
@@ -168,6 +168,8 @@ void expose_algorithms_1()
     expose_algo_log(simulated_annealing_, simulated_annealing_get_log_docstring().c_str());
     simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
     expose_not_population_based(simulated_annealing_, "simulated_annealing");
+#endif
+
     // SADE
     auto sade_ = expose_algorithm_pygmo<sade>("sade", sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
@@ -178,6 +180,8 @@ void expose_algorithms_1()
          bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(sade_, sade_get_log_docstring().c_str());
     sade_.def("get_seed", &sade::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if 0
     // NSGA2
     auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
