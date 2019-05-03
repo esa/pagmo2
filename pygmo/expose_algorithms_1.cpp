@@ -69,7 +69,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/sga.hpp>
-// #include <pagmo/algorithms/simulated_annealing.hpp>
+#include <pagmo/algorithms/simulated_annealing.hpp>
 
 #include <pygmo/algorithm_exposition_suite.hpp>
 #include <pygmo/common_utils.hpp>
@@ -154,7 +154,6 @@ void expose_algorithms_1()
     expose_algo_log(sga_, sga_get_log_docstring().c_str());
     sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
     // SIMULATED ANNEALING
     auto simulated_annealing_
         = expose_algorithm_pygmo<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());
@@ -167,7 +166,6 @@ void expose_algorithms_1()
     expose_algo_log(simulated_annealing_, simulated_annealing_get_log_docstring().c_str());
     simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
     expose_not_population_based(simulated_annealing_, "simulated_annealing");
-#endif
 
     // SADE
     auto sade_ = expose_algorithm_pygmo<sade>("sade", sade_docstring().c_str());
