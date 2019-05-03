@@ -124,7 +124,7 @@ static inline bp::object test_object_serialization(const bp::object &o)
 {
     std::ostringstream oss;
     {
-        boost::archive::text_oarchive oarchive(oss);
+        boost::archive::binary_oarchive oarchive(oss);
         oarchive << pygmo::object_to_vchar(o);
     }
     const std::string tmp = oss.str();
@@ -132,7 +132,7 @@ static inline bp::object test_object_serialization(const bp::object &o)
     iss.str(tmp);
     bp::object retval;
     {
-        boost::archive::text_iarchive iarchive(iss);
+        boost::archive::binary_iarchive iarchive(iss);
         std::vector<char> tmp;
         iarchive >> tmp;
         retval = pygmo::vchar_to_object(tmp);
@@ -180,7 +180,7 @@ struct population_pickle_suite : bp::pickle_suite {
     {
         std::ostringstream oss;
         {
-            boost::archive::text_oarchive oarchive(oss);
+            boost::archive::binary_oarchive oarchive(oss);
             oarchive << pop;
         }
         auto s = oss.str();
@@ -208,7 +208,7 @@ struct population_pickle_suite : bp::pickle_suite {
         std::istringstream iss;
         iss.str(s);
         {
-            boost::archive::text_iarchive iarchive(iss);
+            boost::archive::binary_iarchive iarchive(iss);
             iarchive >> pop;
         }
     }
@@ -220,7 +220,7 @@ struct archipelago_pickle_suite : bp::pickle_suite {
     {
         std::ostringstream oss;
         {
-            boost::archive::text_oarchive oarchive(oss);
+            boost::archive::binary_oarchive oarchive(oss);
             oarchive << archi;
         }
         auto s = oss.str();
@@ -248,7 +248,7 @@ struct archipelago_pickle_suite : bp::pickle_suite {
         std::istringstream iss;
         iss.str(s);
         {
-            boost::archive::text_iarchive iarchive(iss);
+            boost::archive::binary_iarchive iarchive(iss);
             iarchive >> archi;
         }
     }

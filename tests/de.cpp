@@ -151,13 +151,13 @@ BOOST_AUTO_TEST_CASE(de_serialization_test)
     auto before_log = algo.extract<de>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);

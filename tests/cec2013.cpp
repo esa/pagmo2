@@ -77,13 +77,13 @@ BOOST_AUTO_TEST_CASE(cec2013_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);

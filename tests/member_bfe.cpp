@@ -124,14 +124,14 @@ BOOST_AUTO_TEST_CASE(s11n)
     auto before = boost::lexical_cast<std::string>(bfe0);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << bfe0;
     }
     // Change the content of p before deserializing.
     bfe0 = bfe{};
     BOOST_CHECK(!bfe0.is<member_bfe>());
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> bfe0;
     }
     auto after = boost::lexical_cast<std::string>(bfe0);

@@ -339,12 +339,12 @@ BOOST_AUTO_TEST_CASE(island_serialization)
     auto before = boost::lexical_cast<std::string>(isl);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << isl;
     }
     isl = island{de{}, population{rosenbrock{}, 25}};
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> isl;
     }
     auto after = boost::lexical_cast<std::string>(isl);

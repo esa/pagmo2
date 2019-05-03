@@ -129,7 +129,7 @@ bp::tuple bfe_pickle_suite::getstate(const pagmo::bfe &b)
     // this object into a Python bytes object and return that.
     std::ostringstream oss;
     {
-        boost::archive::text_oarchive oarchive(oss);
+        boost::archive::binary_oarchive oarchive(oss);
         oarchive << b;
     }
     auto s = oss.str();
@@ -161,7 +161,7 @@ void bfe_pickle_suite::setstate(pagmo::bfe &b, const bp::tuple &state)
     std::istringstream iss;
     iss.str(s);
     {
-        boost::archive::text_iarchive iarchive(iss);
+        boost::archive::binary_iarchive iarchive(iss);
         iarchive >> b;
     }
 }

@@ -183,7 +183,7 @@ bp::tuple algorithm_pickle_suite::getstate(const pagmo::algorithm &a)
     // this object into a Python bytes object and return that.
     std::ostringstream oss;
     {
-        boost::archive::text_oarchive oarchive(oss);
+        boost::archive::binary_oarchive oarchive(oss);
         oarchive << a;
     }
     auto s = oss.str();
@@ -215,7 +215,7 @@ void algorithm_pickle_suite::setstate(pagmo::algorithm &a, const bp::tuple &stat
     std::istringstream iss;
     iss.str(s);
     {
-        boost::archive::text_iarchive iarchive(iss);
+        boost::archive::binary_iarchive iarchive(iss);
         iarchive >> a;
     }
 }

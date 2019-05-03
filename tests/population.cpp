@@ -336,13 +336,13 @@ BOOST_AUTO_TEST_CASE(population_serialization_test)
     auto before = boost::lexical_cast<std::string>(pop);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << pop;
     }
     // Change the content of p before deserializing.
     pop = population{problem{zdt{5, 20u}}, 30};
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> pop;
     }
     auto after = boost::lexical_cast<std::string>(pop);

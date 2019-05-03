@@ -730,13 +730,13 @@ BOOST_AUTO_TEST_CASE(problem_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{grad_p{}};
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
@@ -1045,14 +1045,14 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     BOOST_CHECK_EQUAL(p.get_nobj(), 1u);
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
@@ -1551,14 +1551,14 @@ BOOST_AUTO_TEST_CASE(batch_fitness)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        boost::archive::text_oarchive oarchive(ss);
+        boost::archive::binary_oarchive oarchive(ss);
         oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{};
     BOOST_CHECK(!p.has_batch_fitness());
     {
-        boost::archive::text_iarchive iarchive(ss);
+        boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
