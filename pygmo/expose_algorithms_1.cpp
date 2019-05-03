@@ -68,7 +68,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
-// #include <pagmo/algorithms/sga.hpp>
+#include <pagmo/algorithms/sga.hpp>
 // #include <pagmo/algorithms/simulated_annealing.hpp>
 
 #include <pygmo/algorithm_exposition_suite.hpp>
@@ -140,7 +140,6 @@ void expose_algorithms_1()
              ihs_get_log_docstring().c_str());
     ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
     sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(
@@ -154,6 +153,8 @@ void expose_algorithms_1()
              bp::arg("mutation") = "polynomial", bp::arg("selection") = "tournament", bp::arg("seed"))));
     expose_algo_log(sga_, sga_get_log_docstring().c_str());
     sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if 0
     // SIMULATED ANNEALING
     auto simulated_annealing_
         = expose_algorithm_pygmo<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());
