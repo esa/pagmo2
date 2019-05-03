@@ -453,6 +453,21 @@ class gaco_test_case(_ut.TestCase):
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
 
+class de1220_test_case(_ut.TestCase):
+    """Test case for the UDA de1220
+
+    """
+
+    def runTest(self):
+        from .core import de1220, algorithm
+        from pickle import loads, dumps
+        uda = de1220()
+        uda = de1220(gen=1000, seed=5)
+        self.assertEqual(uda.get_seed(), 5)
+        a = algorithm(uda)
+        self.assertEqual(str(a), str(loads(dumps(a))))
+        log = uda.get_log()
+
 class sea_test_case(_ut.TestCase):
     """Test case for the UDA sea
 
@@ -2023,6 +2038,7 @@ def run_test_suite(level=0):
     suite.addTest(de_test_case())
     suite.addTest(nsga2_test_case())
     suite.addTest(gaco_test_case())
+    suite.addTest(de1220_test_case())
     suite.addTest(sea_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(pso_gen_test_case())
