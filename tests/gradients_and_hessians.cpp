@@ -26,8 +26,9 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE generic_utilities_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE gradients_and_hessians_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <limits>
 #include <stdexcept>

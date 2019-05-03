@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_UTIL_HV3D_H
 
 #include <cmath>
+#include <deque>
 #include <iostream>
 #include <stdexcept>
 #include <string>

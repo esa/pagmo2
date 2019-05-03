@@ -26,8 +26,10 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE hypervolume_utilities_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE hypervolume_utils_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 #include <stdexcept>
 #include <tuple>
 
@@ -701,15 +703,15 @@ BOOST_AUTO_TEST_CASE(hypervolume_serialization_test)
     // Now serialize, deserialize and compare the result.
     std::stringstream ss;
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(hv);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << hv;
     }
     // Change the content of p before deserializing.
     hv = hypervolume({{23., 11.}, {-12., -23}}, true);
     hv.set_copy_points(true);
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(hv);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> hv;
     }
     auto after = hv.compute({4., 4.});
     BOOST_CHECK_EQUAL(before, after);

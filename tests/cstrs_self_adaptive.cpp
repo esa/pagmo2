@@ -26,8 +26,9 @@
  GNU Lesser General Public License along with the PaGMO library.  If not,
  see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE cstrs_self_adaptive_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE cstrs_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -46,7 +47,7 @@
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -172,14 +173,14 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_serialization)
     auto before_log = algo.extract<cstrs_self_adaptive>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<cstrs_self_adaptive>()->get_log();
