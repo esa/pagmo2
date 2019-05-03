@@ -58,9 +58,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/config.hpp>
 
 #include <pagmo/algorithm.hpp>
-// #if defined(PAGMO_WITH_NLOPT)
-// #include <pagmo/algorithms/nlopt.hpp>
-// #endif
+#if defined(PAGMO_WITH_NLOPT)
+#include <pagmo/algorithms/nlopt.hpp>
+#endif
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
@@ -215,7 +215,6 @@ void expose_algorithms_1()
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
     gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
     auto nlopt_ = expose_algorithm_pygmo<nlopt>("nlopt", nlopt_docstring().c_str());
@@ -244,7 +243,6 @@ void expose_algorithms_1()
             }
         }),
         nlopt_local_optimizer_docstring().c_str());
-#endif
 #endif
 }
 } // namespace pygmo

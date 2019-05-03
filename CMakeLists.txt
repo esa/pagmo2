@@ -247,6 +247,13 @@ if(PAGMO_BUILD_PAGMO)
         )
     endif()
 
+    if(PAGMO_WITH_NLOPT)
+        set(PAGMO_SRC_FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/nlopt.cpp"
+            "${PAGMO_SRC_FILES}"
+        )
+    endif()
+
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
     set_property(TARGET pagmo PROPERTY VERSION "${pagmo_VERSION_MAJOR}.${pagmo_VERSION_MINOR}")

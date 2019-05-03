@@ -36,7 +36,8 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #define BOOST_TEST_MODULE nlopt_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <boost/any.hpp>
 #include <boost/lexical_cast.hpp>
@@ -58,7 +59,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 
 using namespace pagmo;
 
@@ -293,14 +294,14 @@ BOOST_AUTO_TEST_CASE(nlopt_serialization)
             auto before_text = boost::lexical_cast<std::string>(algo);
             // Now serialize, deserialize and compare the result.
             {
-                cereal::JSONOutputArchive oarchive(ss);
-                oarchive(algo);
+                boost::archive::binary_oarchive oarchive(ss);
+                oarchive << algo;
             }
             // Change the content of p before deserializing.
             algo = algorithm{null_algorithm{}};
             {
-                cereal::JSONInputArchive iarchive(ss);
-                iarchive(algo);
+                boost::archive::binary_iarchive iarchive(ss);
+                iarchive >> algo;
             }
             auto after_text = boost::lexical_cast<std::string>(algo);
             BOOST_CHECK_EQUAL(before_text, after_text);
@@ -322,14 +323,14 @@ BOOST_AUTO_TEST_CASE(nlopt_serialization)
             auto before_text = boost::lexical_cast<std::string>(algo);
             // Now serialize, deserialize and compare the result.
             {
-                cereal::JSONOutputArchive oarchive(ss);
-                oarchive(algo);
+                boost::archive::binary_oarchive oarchive(ss);
+                oarchive << algo;
             }
             // Change the content of p before deserializing.
             algo = algorithm{null_algorithm{}};
             {
-                cereal::JSONInputArchive iarchive(ss);
-                iarchive(algo);
+                boost::archive::binary_iarchive iarchive(ss);
+                iarchive >> algo;
             }
             auto after_text = boost::lexical_cast<std::string>(algo);
             BOOST_CHECK_EQUAL(before_text, after_text);
@@ -351,14 +352,14 @@ BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
         auto before_text = boost::lexical_cast<std::string>(algo);
         // Now serialize, deserialize and compare the result.
         {
-            cereal::JSONOutputArchive oarchive(ss);
-            oarchive(algo);
+            boost::archive::binary_oarchive oarchive(ss);
+            oarchive << algo;
         }
         // Change the content of p before deserializing.
         algo = algorithm{null_algorithm{}};
         {
-            cereal::JSONInputArchive iarchive(ss);
-            iarchive(algo);
+            boost::archive::binary_iarchive iarchive(ss);
+            iarchive >> algo;
         }
         auto after_text = boost::lexical_cast<std::string>(algo);
         BOOST_CHECK_EQUAL(before_text, after_text);
