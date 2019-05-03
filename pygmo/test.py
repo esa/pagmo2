@@ -429,7 +429,7 @@ class sea_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        from .core import se
+        from .core import sea
         uda = sea()
         uda = sea(gen=10000)
         uda = sea(gen=10000, seed=32)
