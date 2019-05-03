@@ -113,6 +113,9 @@ namespace pagmo
 // - investigate the use of a fitness cache, after we have good perf testing in place.
 // - investigate replacing the internal m_loc_opt unique ptr with an optional. This may
 //   also allow to avoid the s11n tracking specialisation.
+// - it looks like those lower_bound calls in the C objfun/constr computations related
+//   to the gradient sparsity pattern can be done once on construction, instead of
+//   repeatedly at every objfun.
 class PAGMO_PUBLIC nlopt : public not_population_based
 {
 public:
