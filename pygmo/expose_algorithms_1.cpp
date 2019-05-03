@@ -67,7 +67,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
-// #include <pagmo/algorithms/sea.hpp>
+#include <pagmo/algorithms/sea.hpp>
 // #include <pagmo/algorithms/sga.hpp>
 // #include <pagmo/algorithms/simulated_annealing.hpp>
 
@@ -112,14 +112,12 @@ void expose_algorithms_1()
     expose_algo_log(pso_gen_, pso_gen_get_log_docstring().c_str());
     pso_gen_.def("get_seed", &pso_gen::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
     // SEA
     auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
-#endif
 
     // IHS
     auto ihs_ = expose_algorithm_pygmo<ihs>("ihs", ihs_docstring().c_str());
