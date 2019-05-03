@@ -74,10 +74,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
-// #if defined(PAGMO_WITH_IPOPT)
-// #include <IpTNLP.hpp>
-// #include <pagmo/algorithms/ipopt.hpp>
-// #endif
+#if defined(PAGMO_WITH_IPOPT)
+#include <IpTypes.hpp>
+#include <pagmo/algorithms/ipopt.hpp>
+#endif
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/population.hpp>
@@ -290,7 +290,6 @@ void expose_algorithms_0()
                moead_get_log_docstring().c_str());
     moead_.def("get_seed", &moead::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
 #if defined(PAGMO_WITH_IPOPT)
     // Ipopt.
     auto ipopt_ = expose_algorithm_pygmo<ipopt>("ipopt", ipopt_docstring().c_str());
@@ -365,7 +364,6 @@ void expose_algorithms_0()
                }),
                ipopt_get_numeric_options_docstring().c_str());
     ipopt_.def("reset_numeric_options", &ipopt::reset_numeric_options, ipopt_reset_numeric_options_docstring().c_str());
-#endif
 #endif
 }
 } // namespace pygmo
