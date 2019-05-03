@@ -423,6 +423,21 @@ class de_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
 
+class nsga2_test_case(_ut.TestCase):
+    """Test case for the UDA nsga2
+
+    """
+
+    def runTest(self):
+        from .core import nsga2, algorithm
+        from pickle import loads, dumps
+        uda = nsga2()
+        uda = nsga2(gen=10, cr=0.94, eta_c=9., m=0.05, eta_m=10., seed=0)
+        self.assertEqual(uda.get_seed(), 0)
+        a = algorithm(uda)
+        self.assertEqual(str(a), str(loads(dumps(a))))
+        log = uda.get_log()
+
 class sea_test_case(_ut.TestCase):
     """Test case for the UDA sea
 
@@ -573,21 +588,6 @@ class sga_test_case(_ut.TestCase):
                   mutation="polynomial", selection="tournament")
         uda = sga(gen=1, cr=.90, eta_c=1., m=0.02, param_m=1., param_s=2, crossover="exponential",
                   mutation="polynomial", selection="tournament", seed=32)
-        self.assertEqual(uda.get_seed(), 32)
-        seed = uda.get_seed()
-
-
-class nsga2_test_case(_ut.TestCase):
-    """Test case for the UDA nsga2
-
-    """
-
-    def runTest(self):
-        from .core import nsga2
-        uda = nsga2()
-        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01, eta_m=10)
-        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01,
-                    eta_m=10, int_dim=0, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
@@ -2006,6 +2006,7 @@ def run_test_suite(level=0):
     suite.addTest(golomb_ruler_test_case())
     suite.addTest(lennard_jones_test_case())
     suite.addTest(de_test_case())
+    suite.addTest(nsga2_test_case())
     suite.addTest(sea_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(pso_gen_test_case())

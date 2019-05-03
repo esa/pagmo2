@@ -63,7 +63,7 @@ see https://www.gnu.org/licenses/. */
 // #endif
 // #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/ihs.hpp>
-// #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
@@ -178,7 +178,6 @@ void expose_algorithms_1()
     expose_algo_log(sade_, sade_get_log_docstring().c_str());
     sade_.def("get_seed", &sade::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
     // NSGA2
     auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
@@ -198,6 +197,8 @@ void expose_algorithms_1()
                nsga2_get_log_docstring().c_str());
 
     nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if 0
     // GACO
     auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());
     gaco_.def(
