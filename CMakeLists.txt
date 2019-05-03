@@ -199,6 +199,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/sea.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/sga.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/simulated_annealing.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/moead.cpp"
         # UDI.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/thread_island.cpp"
         # UDBFE.

@@ -79,7 +79,7 @@ see https://www.gnu.org/licenses/. */
 // #include <pagmo/algorithms/ipopt.hpp>
 // #endif
 #include <pagmo/algorithms/mbh.hpp>
-// #include <pagmo/algorithms/moead.hpp>
+#include <pagmo/algorithms/moead.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/threading.hpp>
@@ -265,6 +265,8 @@ void expose_algorithms_0()
     expose_algo_log(xnes_, xnes_get_log_docstring().c_str());
     xnes_.def("get_seed", &xnes::get_seed, generic_uda_get_seed_docstring().c_str());
 #endif
+#endif
+
     // MOEA/D - DE
     auto moead_ = expose_algorithm_pygmo<moead>("moead", moead_docstring().c_str());
     moead_.def(bp::init<unsigned, std::string, std::string, unsigned, double, double, double, double, unsigned, bool>(
@@ -288,6 +290,7 @@ void expose_algorithms_0()
                moead_get_log_docstring().c_str());
     moead_.def("get_seed", &moead::get_seed, generic_uda_get_seed_docstring().c_str());
 
+#if 0
 #if defined(PAGMO_WITH_IPOPT)
     // Ipopt.
     auto ipopt_ = expose_algorithm_pygmo<ipopt>("ipopt", ipopt_docstring().c_str());
