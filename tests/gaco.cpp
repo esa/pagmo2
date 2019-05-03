@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<gaco>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    BOOST_CHECK(before_log == after_log);
     // so we implement a close check
     BOOST_CHECK(before_log.size() > 0u);
     for (auto i = 0u; i < before_log.size(); ++i) {
