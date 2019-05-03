@@ -65,10 +65,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/config.hpp>
 
 #include <pagmo/algorithm.hpp>
-// #if defined(PAGMO_WITH_EIGEN3)
-// #include <pagmo/algorithms/cmaes.hpp>
+#if defined(PAGMO_WITH_EIGEN3)
+#include <pagmo/algorithms/cmaes.hpp>
 // #include <pagmo/algorithms/xnes.hpp>
-// #endif
+#endif
 #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
@@ -239,7 +239,6 @@ void expose_algorithms_0()
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
 #if defined(PAGMO_WITH_EIGEN3)
     // CMA-ES
     auto cmaes_ = expose_algorithm_pygmo<cmaes>("cmaes", cmaes_docstring().c_str());
@@ -253,6 +252,8 @@ void expose_algorithms_0()
          bp::arg("force_bounds") = false, bp::arg("seed"))));
     expose_algo_log(cmaes_, cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
+
+#if 0
     // xNES
     auto xnes_ = expose_algorithm_pygmo<xnes>("xnes", xnes_docstring().c_str());
     xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool>(
