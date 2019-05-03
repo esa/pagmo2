@@ -423,6 +423,19 @@ class de_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
 
+class sea_test_case(_ut.TestCase):
+    """Test case for the UDA sea
+
+    """
+
+    def runTest(self):
+        from .core import se
+        uda = sea()
+        uda = sea(gen=10000)
+        uda = sea(gen=10000, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
 
 class pso_gen_test_case(_ut.TestCase):
     """Test case for the UDA pso_gen
@@ -1993,6 +2006,7 @@ def run_test_suite(level=0):
     suite.addTest(golomb_ruler_test_case())
     suite.addTest(lennard_jones_test_case())
     suite.addTest(de_test_case())
+    suite.addTest(sea_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(pso_gen_test_case())
     suite.addTest(bee_colony_test_case())
