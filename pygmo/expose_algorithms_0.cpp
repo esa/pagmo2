@@ -67,7 +67,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
-// #include <pagmo/algorithms/xnes.hpp>
+#include <pagmo/algorithms/xnes.hpp>
 #endif
 #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
@@ -253,7 +253,6 @@ void expose_algorithms_0()
     expose_algo_log(cmaes_, cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
 
-#if 0
     // xNES
     auto xnes_ = expose_algorithm_pygmo<xnes>("xnes", xnes_docstring().c_str());
     xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool>(
@@ -266,7 +265,6 @@ void expose_algorithms_0()
          bp::arg("force_bounds") = false, bp::arg("seed"))));
     expose_algo_log(xnes_, xnes_get_log_docstring().c_str());
     xnes_.def("get_seed", &xnes::get_seed, generic_uda_get_seed_docstring().c_str());
-#endif
 #endif
 
     // MOEA/D - DE

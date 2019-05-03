@@ -242,6 +242,7 @@ if(PAGMO_BUILD_PAGMO)
     if(PAGMO_WITH_EIGEN3)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/cmaes.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/xnes.cpp"
             "${PAGMO_SRC_FILES}"
         )
     endif()
