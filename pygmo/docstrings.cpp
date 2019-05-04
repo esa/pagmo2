@@ -2551,6 +2551,80 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
 )";
 }
 
+std::string gwo_docstring()
+{
+    return R"(__init__(gen = 1, seed = random)
+
+Grey Wolf Optimizer (gwo).
+
+Grey Wolf Optimizer is an optimization algorithm based on the leadership hierarchy and hunting mechanism of
+greywolves, proposed by Seyedali Mirjalilia, Seyed Mohammad Mirjalilib, Andrew Lewis in 2014.
+
+This algorithm is a classic example of a highly criticizable line of search that led in the first decades of
+our millenia to the development of an entire zoo of metaphors inspiring optimzation heuristics. In our opinion they, 
+as is the case for the grey wolf optimizer, are often but small variations of already existing heuristics rebranded with unnecessray and convoluted
+biological metaphors. In the case of GWO this is particularly evident as the position update rule is shokingly
+trivial and can also be easily seen as a product of an evolutionary metaphor or a particle swarm one. Such an update rule
+is also not particulary effective and results in a rather poor performance most of times. Reading the original
+peer-reviewed paper, where the poor algoritmic perfromance is hidden by the methodological flaws of the benchmark presented,
+one is left with a bitter opinion of the whole peer-review system.
+
+This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
+optimization, with continuous value.
+
+Args:
+    gen (``int``): number of generations
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either:
+
+        * *gen* is not >=3.
+    
+See also the docs of the C++ class :cpp:class:`pagmo::gwo`.
+
+)";
+}
+
+std::string gwo_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.gwo`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``alpha`` (``float``), fitness function value of alpha
+    * ``beta`` (``float``), fitness function value of beta
+    * ``delta`` (``float``), fitness function value of delta
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(gwo(gen=10))
+    >>> algo.set_verbosity(2)
+    >>> prob = problem(rosenbrock(dim=2))
+    >>> pop = population(prob, size=13, seed=23)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:         Alpha:          Beta:         Delta:
+      1        179.464        3502.82        3964.75
+      3        6.82024        30.2149        61.1906
+      5       0.321879        2.39373        3.46188
+      7       0.134441       0.342357       0.439651
+      9       0.100281       0.211849       0.297448
+    >>> uda = algo.extract(gwo)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 179.46420983829944, 3502.8158822203472, 3964.7542658046486), ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::gwo::get_log`.
+
+)";
+}
+
 std::string moead_docstring()
 {
     return R"(__init__(gen = 1, weight_generation = "grid", decomposition = "tchebycheff", neighbours = 20, CR = 1, F = 0.5, eta_m = 20, realb = 0.9, limit = 2, preserve_diversity = true, seed = random)
@@ -3682,7 +3756,7 @@ Args:
 Raises:
     OverflowError: if *nec* is negative or greater than an implementation-defined value
     ValueError: if *f1* and *f2* do not have equal size :math:`n`, if *f1* does not have at least size 1, 
-    if *neq* is larger than :math:`n-1` (too many constraints) or if the size of *tol* is not :math:`n - 1`
+      if *neq* is larger than :math:`n-1` (too many constraints) or if the size of *tol* is not :math:`n - 1`
     TypeError: if *f1*, *f2* or *tol* cannot be converted to a vector of floats
 
 Returns:
@@ -3692,6 +3766,7 @@ Examples:
     >>> import pygmo as pg
     >>> pg.compare_fc(f1 = [1,1,1], f2 = [1,2.1,-1.2], nec = 1, tol = [0]*2)
     False
+
 )";
 }
 
@@ -3723,7 +3798,7 @@ Args:
 Raises:
     OverflowError: if *nec* is negative or greater than an implementation-defined value
     ValueError: if the input fitness vectors do not have all the same size :math:`n >=1`, or if *neq* is larger than :math:`n-1` (too many constraints)
-    or if the size of *tol* is not equal to :math:`n-1`
+      or if the size of *tol* is not equal to :math:`n-1`
     TypeError: if *input_f* cannot be converted to a vector of vector of floats or *tol* cannot be converted to a vector of floats.
 
 Returns:
@@ -3734,6 +3809,7 @@ Examples:
     >>> idxs = pg.sort_population_con(input_f = [[1.2,0.1,-1],[0.2,1.1,1.1],[2,-0.5,-2]], nec = 1, tol = [1e-8]*2)
     >>> print(idxs)
     [0 2 1]
+
 )";
 }
 
