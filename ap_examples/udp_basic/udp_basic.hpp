@@ -16,11 +16,11 @@ struct udp_basic {
         return {{-1}, {1}};
     }
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
 
-PAGMO_REGISTER_PROBLEM(udp_basic)
+PAGMO_S11N_PROBLEM_EXPORT(udp_basic)
 
 #endif
