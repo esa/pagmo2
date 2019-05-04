@@ -125,6 +125,12 @@ if(PAGMO_BUILD_PAGMO)
         message(STATUS "Ipopt include directory: ${IPOPT_INCLUDE_DIR}")
         message(STATUS "Ipopt library: ${IPOPT_LIBRARY}")
     endif()
+
+    if(PAGMO_BUILD_TESTS)
+        # Internal variable that will be used to tell PagmoFindBoost to locate the
+        # Boost unit test framework, if tests are required.
+        set(_PAGMO_FIND_BOOST_UNIT_TEST_FRAMEWORK TRUE)
+    endif()
 endif()
 
 if(PAGMO_BUILD_PYGMO)
@@ -215,6 +221,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     )
 
+    # Optional bits.
     if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
@@ -261,16 +268,16 @@ if(PAGMO_BUILD_PAGMO)
     target_compile_options(pagmo PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
     set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
-    # NOTE: for clang-cl, cmake tries to set -std=c++11 here, which makes
-    # it error out. Disable it as MSVC 2015 is implicitly C++14 anyway.
-    if(NOT (YACMA_COMPILER_IS_MSVC AND YACMA_COMPILER_IS_CLANGXX))
-        # Let's setup the target C++ standard, but only if the user did not provide it manually.
-        if(NOT CMAKE_CXX_STANDARD)
-            set_property(TARGET pagmo PROPERTY CXX_STANDARD 11)
-        endif()
-        set_property(TARGET pagmo PROPERTY CXX_STANDARD_REQUIRED YES)
-        set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
+    # Let's setup the target C++ standard, but only if the user did not provide it manually.
+    if(NOT CMAKE_CXX_STANDARD)
+        set_property(TARGET pagmo PROPERTY CXX_STANDARD 11)
     endif()
+    set_property(TARGET pagmo PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
+    # NOTE: make sure the include directories from the current build
+    # are included first, so that if there is already a pagmo installation
+    # in the prefix path we don't risk including the headers from that
+    # one instead.
     target_include_directories(pagmo PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
@@ -280,13 +287,10 @@ if(PAGMO_BUILD_PAGMO)
     target_link_libraries(pagmo PUBLIC Threads::Threads)
 
     # Boost.
-    target_link_libraries(pagmo PUBLIC Boost::boost)
+    target_link_libraries(pagmo PUBLIC Boost::boost Boost::serialization)
 
     # TBB.
     target_link_libraries(pagmo PUBLIC TBB::tbb)
-
-    # Boost serialization.
-    target_link_libraries(pagmo PUBLIC Boost::serialization)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.

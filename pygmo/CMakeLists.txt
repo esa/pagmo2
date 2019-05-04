@@ -25,7 +25,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINA
 
 # Setup of the header-only pygmo library.
 add_library(pygmo INTERFACE)
-target_link_libraries(pygmo INTERFACE ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy Pagmo::pagmo)
+target_link_libraries(pygmo INTERFACE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy)
 target_include_directories(pygmo INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/pygmo> $<INSTALL_INTERFACE:include>)
 # Setup of the export.
@@ -57,7 +57,7 @@ YACMA_PYTHON_MODULE(core
     expose_islands.cpp
     expose_bfes.cpp
 )
-target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy pygmo)
+target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
 if(NOT (YACMA_COMPILER_IS_MSVC AND YACMA_COMPILER_IS_CLANGXX))
