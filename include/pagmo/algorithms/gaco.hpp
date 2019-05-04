@@ -40,19 +40,23 @@
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/constrained.hpp>
-#include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/generic.hpp> // uniform_real_from_range
 
 namespace pagmo
 {
-/// Extended ACO
+/// Extended Ant Colony Opitmization
 /**
  * \image html gaco.png "Ant Colony Optimization Illustration" width=0.5cm
  *
- * ACO is inspired by the natural mechanism through which real ant colonies forage food.
+ * Ant colony optimization is a class of optimization algorithms modeled on the actions
+ * of an ant colony. Artificial 'ants' (e.g. simulation agents) locate optimal solutions by
+ * moving through a parameter space representing all possible solutions. Real ants lay down
+ * pheromones directing each other to resources while exploring their environment.
+ * The simulated 'ants' similarly record their positions and the quality of their solutions,
+ * so that in later simulation iterations more ants locate better solutions.
  *
- * This algorithm has shown promising results in many trajectory optimization problems.
- * The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
+ * In pagmo we propose a version of this algorithm called extended ACO and originally described
+ * by Schlueter et al.
  * Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution
  * based on three parameters (i.e., pheromone values) which are computed depending on the quality
  * of each previous solution. The solutions are ranked through an oracle penalty method.
@@ -69,9 +73,8 @@ namespace pagmo
  *
  * .. note::
  *
- *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed extended ACO algorithm and it is
- *    being developed by Giacomo Acciarini in collaboration with the PaGMO development team, during his Aerospace
- *    Engineering MSc degree in TU Delft. The main difference between the implemented version  and the original one lies in
+ *    The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed extended ACO algorithm.
+ *    The main difference between the implemented version  and the original one lies in
  *    how two of the three pheromone values are computed (in particular, the weights and the standard deviations).
  *
  *    Image credit: https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg
@@ -112,6 +115,7 @@ public:
      * new solution in the Pareto front.
      * @param[in] memory Memory parameter: if true, memory is activated in the algorithm for multiple calls
      * @param seed seed used by the internal random number generator (default is random).
+     *
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$,
      * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p

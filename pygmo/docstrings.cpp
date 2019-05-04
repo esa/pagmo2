@@ -2444,25 +2444,35 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::nsga2::get_log`.
 
 std::string gaco_docstring()
 {
-    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u,
-n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0.,
-paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
+    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0., paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
 
 Extended Ant Colony Optimization algorithm (gaco).
 
-ACO is inspired by the natural mechanism with which real ant colonies forage food.
-This algorithm has shown promising results in many trajectory optimization problems.
-The first appearance of the algorithm happened in Dr. Marco Dorigo's thesis, in 1992.
+Ant colony optimization is a class of optimization algorithms modeled on the actions
+of an ant colony. Artificial 'ants' (e.g. simulation agents) locate optimal solutions by
+moving through a parameter space representing all possible solutions. Real ants lay down
+pheromones directing each other to resources while exploring their environment.
+The simulated 'ants' similarly record their positions and the quality of their solutions,
+so that in later simulation iterations more ants locate better solutions.
+
+In pygmo we propose a version of this algorithm called extended ACO and originally described
+by Schlueter et al.
 Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution
 based on three parameters (i.e., pheromone values) which are computed depending on the quality
 of each previous solution. The solutions are ranked through an oracle penalty method.
 
+This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
+optimization, with both continuous and integer variables.
 
-The version implemented in pagmo can be applied to box-bounded multiple-objective optimization and its implementation is an extension of Schlueter's originally proposed extended ACO algorithm.
-In particular, the main difference lies in how two of the three pheromone values (i.e., weights and standard deviations) are computed.
+.. note::
 
-See:  M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex
-mixed integer non-linear programming. Computers & Operations Research.
+   The ACO version implemented in PaGMO is an extension of Schlueter's originally proposed extended ACO algorithm.
+   The main difference between the implemented version  and the original one lies in
+   how two of the three pheromone values are computed (in particular, the weights and the standard deviations).
+
+.. seealso::
+
+   M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex mixed integer non-linear programming. Computers & Operations Research.
 
 Args:
     gen (``int``): number of generations
@@ -2537,6 +2547,80 @@ Examples:
     [(1, 0, 179.464, 13, 1e+09, 13.1007, 649155), (2, 15, 166.317, 13, 179.464, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
+
+)";
+}
+
+std::string gwo_docstring()
+{
+    return R"(__init__(gen = 1, seed = random)
+
+Grey Wolf Optimizer (gwo).
+
+Grey Wolf Optimizer is an optimization algorithm based on the leadership hierarchy and hunting mechanism of
+greywolves, proposed by Seyedali Mirjalilia, Seyed Mohammad Mirjalilib, Andrew Lewis in 2014.
+
+This algorithm is a classic example of a highly criticizable line of search that led in the first decades of
+our millenia to the development of an entire zoo of metaphors inspiring optimzation heuristics. In our opinion they, 
+as is the case for the grey wolf optimizer, are often but small variations of already existing heuristics rebranded with unnecessray and convoluted
+biological metaphors. In the case of GWO this is particularly evident as the position update rule is shokingly
+trivial and can also be easily seen as a product of an evolutionary metaphor or a particle swarm one. Such an update rule
+is also not particulary effective and results in a rather poor performance most of times. Reading the original
+peer-reviewed paper, where the poor algoritmic perfromance is hidden by the methodological flaws of the benchmark presented,
+one is left with a bitter opinion of the whole peer-review system.
+
+This algorithm can be applied to box-bounded single-objective, constrained and unconstrained
+optimization, with continuous value.
+
+Args:
+    gen (``int``): number of generations
+    seed (``int``): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either:
+
+        * *gen* is not >=3.
+    
+See also the docs of the C++ class :cpp:class:`pagmo::gwo`.
+
+)";
+}
+
+std::string gwo_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.gwo`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``alpha`` (``float``), fitness function value of alpha
+    * ``beta`` (``float``), fitness function value of beta
+    * ``delta`` (``float``), fitness function value of delta
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(gwo(gen=10))
+    >>> algo.set_verbosity(2)
+    >>> prob = problem(rosenbrock(dim=2))
+    >>> pop = population(prob, 13, 23)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:         Alpha:          Beta:         Delta:
+      1        179.464        3502.82        3964.75
+      3        6.82024        30.2149        61.1906
+      5       0.321879        2.39373        3.46188
+      7       0.134441       0.342357       0.439651
+      9       0.100281       0.211849       0.297448
+    >>> uda = algo.extract(gwo)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 179.46420983829944, 3502.8158822203472, 3964.7542658046486), ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::gwo::get_log`.
 
 )";
 }
