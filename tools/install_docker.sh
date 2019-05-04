@@ -43,6 +43,23 @@ cd
 mkdir install
 cd install
 
+# TBB
+curl -L https://github.com/01org/tbb/archive/${TBB_VERSION}.tar.gz > tbb.tar.gz
+tar xvf tbb.tar.gz > /dev/null 2>&1
+cd tbb-${TBB_VERSION}
+make > /dev/null 2>&1
+cd build
+mv *_release release
+mv *_debug debug
+cd release
+cp libtbb* /usr/lib64/
+cd ../debug
+cp libtbb* /usr/lib64/
+ldconfig
+cd ../../include/
+cp -r tbb /usr/local/include/
+cd ../../
+
 # Install CMake
 curl -L https://github.com/Kitware/CMake/archive/v${CMAKE_VERSION}.tar.gz > v${CMAKE_VERSION}
 tar xzf v${CMAKE_VERSION} > /dev/null 2>&1
@@ -79,23 +96,6 @@ cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
 make -j2 install > /dev/null
 cd ..
-
-# TBB
-curl -L https://github.com/01org/tbb/archive/${TBB_VERSION}.tar.gz > tbb.tar.gz
-tar xvf tbb.tar.gz > /dev/null 2>&1
-cd ${TBB_VERSION}
-make > /dev/null 2>&1
-cd build
-mv *_release release
-mv *_debug debug
-cd release
-cp libtbb* /usr/lib64/
-cd ../debug
-cp libtbb* /usr/lib64/
-ldconfig
-cd ../../include/
-cp -r tbb /usr/local/include/
-cd ../../
 
 # Python mandatory deps.
 /opt/python/${PYTHON_DIR}/bin/pip install cloudpickle numpy
