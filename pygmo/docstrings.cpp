@@ -3756,7 +3756,7 @@ Args:
 Raises:
     OverflowError: if *nec* is negative or greater than an implementation-defined value
     ValueError: if *f1* and *f2* do not have equal size :math:`n`, if *f1* does not have at least size 1, 
-    if *neq* is larger than :math:`n-1` (too many constraints) or if the size of *tol* is not :math:`n - 1`
+      if *neq* is larger than :math:`n-1` (too many constraints) or if the size of *tol* is not :math:`n - 1`
     TypeError: if *f1*, *f2* or *tol* cannot be converted to a vector of floats
 
 Returns:
@@ -3766,6 +3766,7 @@ Examples:
     >>> import pygmo as pg
     >>> pg.compare_fc(f1 = [1,1,1], f2 = [1,2.1,-1.2], nec = 1, tol = [0]*2)
     False
+
 )";
 }
 
@@ -3797,7 +3798,7 @@ Args:
 Raises:
     OverflowError: if *nec* is negative or greater than an implementation-defined value
     ValueError: if the input fitness vectors do not have all the same size :math:`n >=1`, or if *neq* is larger than :math:`n-1` (too many constraints)
-    or if the size of *tol* is not equal to :math:`n-1`
+      or if the size of *tol* is not equal to :math:`n-1`
     TypeError: if *input_f* cannot be converted to a vector of vector of floats or *tol* cannot be converted to a vector of floats.
 
 Returns:
@@ -3808,6 +3809,7 @@ Examples:
     >>> idxs = pg.sort_population_con(input_f = [[1.2,0.1,-1],[0.2,1.1,1.1],[2,-0.5,-2]], nec = 1, tol = [1e-8]*2)
     >>> print(idxs)
     [0 2 1]
+
 )";
 }
 
