@@ -96,7 +96,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/unconstrain.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
