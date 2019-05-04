@@ -219,7 +219,7 @@ void expose_algorithms_1()
     // GWO
     auto gwo_ = expose_algorithm_pygmo<gwo>("gwo", gwo_docstring().c_str());
     gwo_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
-    gwo_.def(bp::init<unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
+    gwo_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(gwo_, gwo_get_log_docstring().c_str());
     gwo_.def("get_seed", &gwo::get_seed, generic_uda_get_seed_docstring().c_str());
 
