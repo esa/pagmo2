@@ -423,6 +423,7 @@ class de_test_case(_ut.TestCase):
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
 
+
 class nsga2_test_case(_ut.TestCase):
     """Test case for the UDA nsga2
 
@@ -437,6 +438,7 @@ class nsga2_test_case(_ut.TestCase):
         a = algorithm(uda)
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
+
 
 class gaco_test_case(_ut.TestCase):
     """Test case for the UDA gaco
@@ -453,6 +455,7 @@ class gaco_test_case(_ut.TestCase):
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
 
+
 class gwo_test_case(_ut.TestCase):
     """Test case for the UDA gwo
 
@@ -468,6 +471,7 @@ class gwo_test_case(_ut.TestCase):
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
 
+
 class de1220_test_case(_ut.TestCase):
     """Test case for the UDA de1220
 
@@ -482,6 +486,7 @@ class de1220_test_case(_ut.TestCase):
         a = algorithm(uda)
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
+
 
 class sea_test_case(_ut.TestCase):
     """Test case for the UDA sea
@@ -1072,6 +1077,7 @@ class minlp_rastrigin_test_case(_ut.TestCase):
         self.assertTrue(int(pop.get_x()[0][-3]) == pop.get_x()[0][-3])
         self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
         self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
+
 
 class rastrigin_test_case(_ut.TestCase):
     """Test case for the Rastrigin function
