@@ -166,6 +166,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/archipelago.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/io.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/rng.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/threading.cpp"
         # UDP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2009.cpp"

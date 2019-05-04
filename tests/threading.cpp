@@ -66,4 +66,6 @@ BOOST_AUTO_TEST_CASE(threading_test)
     oss << thread_safety::constant;
     BOOST_CHECK_EQUAL("constant", oss.str());
     oss.str("");
+    oss << static_cast<thread_safety>(100);
+    BOOST_CHECK_EQUAL("unknown value", oss.str());
 }

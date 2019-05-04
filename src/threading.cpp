@@ -26,25 +26,34 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_THREADING_HPP
-#define PAGMO_THREADING_HPP
-
 #include <iostream>
 
-#include <pagmo/detail/visibility.hpp>
+#include <pagmo/threading.hpp>
 
 namespace pagmo
 {
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
-// Thread safety levels.
-enum class thread_safety { none, basic, constant };
-
-// Stream operator for the thread_safety enum.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, thread_safety);
+std::ostream &operator<<(std::ostream &os, thread_safety ts)
+{
+    switch (ts) {
+        case thread_safety::none:
+            os << "none";
+            break;
+        case thread_safety::basic:
+            os << "basic";
+            break;
+        case thread_safety::constant:
+            os << "constant";
+            break;
+        default:
+            os << "unknown value";
+            break;
+    }
+    return os;
+}
 
 #endif
+
 } // namespace pagmo
-
-#endif
