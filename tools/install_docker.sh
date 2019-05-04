@@ -10,6 +10,7 @@ CMAKE_VERSION="3.12.0"
 EIGEN3_VERSION="3.3.4"
 BOOST_VERSION="1.67.0"
 NLOPT_VERSION="2.4.2"
+TBB_VERSION="2019_U5"
 
 if [[ ${PAGMO_BUILD} == *37 ]]; then
 	PYTHON_DIR="cp37-cp37m"
@@ -78,6 +79,23 @@ cd nlopt-${NLOPT_VERSION}
 ./configure --enable-shared --disable-static > /dev/null
 make -j2 install > /dev/null
 cd ..
+
+# TBB
+curl -L https://github.com/01org/tbb/archive/${TBB_VERSION}.tar.gz > tbb.tar.gz
+tar xvf tbb.tar.gz > /dev/null 2>&1
+cd ${TBB_VERSION}
+make > /dev/null 2>&1
+cd build
+mv *_release release
+mv *_debug debug
+cd release
+cp libtbb* /usr/lib64/
+cd ../debug
+cp libtbb* /usr/lib64/
+ldconfig
+cd ../../include/
+cp -r tbb /usr/local/include/
+cd ../../
 
 # Python mandatory deps.
 /opt/python/${PYTHON_DIR}/bin/pip install cloudpickle numpy
