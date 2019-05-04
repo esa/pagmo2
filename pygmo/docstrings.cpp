@@ -2608,7 +2608,7 @@ Examples:
     >>> algo = algorithm(gwo(gen=10))
     >>> algo.set_verbosity(2)
     >>> prob = problem(rosenbrock(dim=2))
-    >>> pop = population(prob, 13, 23)
+    >>> pop = population(prob, size=13, seed=23)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:         Alpha:          Beta:         Delta:
       1        179.464        3502.82        3964.75
