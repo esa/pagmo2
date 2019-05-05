@@ -43,8 +43,8 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
-#include <wait.h>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/exceptions.hpp>
