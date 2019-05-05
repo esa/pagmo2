@@ -74,7 +74,7 @@ namespace pagmo
 {
 
 // Fwd declaration.
-class island;
+class PAGMO_PUBLIC island;
 
 /// Detect \p run_evolve() method.
 /**
@@ -419,7 +419,7 @@ class PAGMO_PUBLIC island
     // Handy shortcut.
     using idata_t = detail::island_data;
     // archi needs access to the internal of island.
-    friend class archipelago;
+    friend class PAGMO_PUBLIC archipelago;
     // NOTE: the idea in the move members and the dtor is that
     // we want to wait *and* erase any future in the island, before doing
     // the move/destruction. Thus we use this small wrapper.

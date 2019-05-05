@@ -29,10 +29,12 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_ARCHIPELAGO_FWD_HPP
 #define PAGMO_DETAIL_ARCHIPELAGO_FWD_HPP
 
+#include <pagmo/detail/visibility.hpp>
+
 namespace pagmo
 {
 
-class archipelago;
+class PAGMO_PUBLIC archipelago;
 
 }
 

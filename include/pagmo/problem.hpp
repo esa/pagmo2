@@ -1003,7 +1003,7 @@ namespace pagmo
 {
 
 // Fwd declare for the declarations below.
-class problem;
+class PAGMO_PUBLIC problem;
 
 // Streaming operator
 PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
@@ -1107,7 +1107,7 @@ class PAGMO_PUBLIC problem
 {
     // Make friend with the streaming operator, which needs access
     // to the internals.
-    friend std::ostream &operator<<(std::ostream &, const problem &);
+    friend PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
 
     // Enable the generic ctor only if T is not a problem (after removing
     // const/reference qualifiers), and if T is a udp.
@@ -1242,7 +1242,7 @@ public:
 private:
 #if !defined(PAGMO_DOXYGEN_INVOKED)
     // Make friends with the batch_fitness() invocation helper.
-    friend vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+    friend PAGMO_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
 #endif
 
 public:

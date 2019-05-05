@@ -41,7 +41,7 @@ namespace pagmo
 {
 
 // Fwd declare for the type definition below.
-class cec2009;
+class PAGMO_PUBLIC cec2009;
 
 namespace detail
 {
