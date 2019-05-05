@@ -8,7 +8,7 @@ Installation guide
 C++
 ---
 
-pagmo is a header-only library which has the following third-party dependencies:
+pagmo has the following third-party dependencies:
 
 * `Boost <https://www.boost.org/>`__, **mandatory**, header-only
 * `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__, optional, header-only
