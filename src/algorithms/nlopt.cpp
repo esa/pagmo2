@@ -26,6 +26,14 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+// Disable the checked iterators feature in MSVC. There are some warnings
+// triggered by Boost algos instantiations which we cannot do much about.
+#define _SCL_SECURE_NO_WARNINGS
+
+#endif
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -174,14 +182,7 @@ struct nlopt_obj {
     template <typename Int, typename T>
     static void unchecked_copy(Int size, const T *begin, T *dest)
     {
-        std::copy(
-#if defined(_MSC_VER)
-            stdext::make_checked_array_iterator(begin, size), stdext::make_checked_array_iterator(begin, size, size),
-            stdext::make_checked_array_iterator(dest, size)
-#else
-            begin, begin + size, dest
-#endif
-        );
+        std::copy(begin, begin + size, dest);
     }
     explicit nlopt_obj(::nlopt_algorithm algo, problem &prob, double stopval, double ftol_rel, double ftol_abs,
                        double xtol_rel, double xtol_abs, int maxeval, int maxtime, unsigned verbosity)

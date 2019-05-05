@@ -26,15 +26,6 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#if defined(_MSC_VER)
-
-// Disable the checked iterators feature in MSVC. We want it for the source code
-// (so it should not be disabled in the headers), but dealing with it in the tests is
-// not as useful and quite painful.
-#define _SCL_SECURE_NO_WARNINGS
-
-#endif
-
 #define BOOST_TEST_MODULE nlopt_test
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
