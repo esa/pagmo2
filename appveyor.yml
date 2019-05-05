@@ -60,7 +60,7 @@ install:
 build_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] mkdir build
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cd build
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DCMAKE_CXX_FLAGS="/W4 /WX" ..
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake --build . --config Release --target install
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python37] mkdir build_pagmo

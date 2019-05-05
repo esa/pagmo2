@@ -495,6 +495,7 @@ void nlopt_ineq_c_wrapper(unsigned m, double *result, unsigned dim, const double
         assert(dim == p.get_nx());
         assert(dv.size() == dim);
         assert(m == p.get_nic());
+        (void)m;
 
         if (grad && !p.has_gradient()) {
             // If grad is not null, it means we are in an algorithm
