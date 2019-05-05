@@ -111,8 +111,6 @@ namespace pagmo
  */
 // NOTE:
 // - investigate the use of a fitness cache, after we have good perf testing in place.
-// - investigate replacing the internal m_loc_opt unique ptr with an optional. This may
-//   also allow to avoid the s11n tracking specialisation.
 // - it looks like those lower_bound calls in the C objfun/constr computations related
 //   to the gradient sparsity pattern can be done once on construction, instead of
 //   repeatedly at every objfun.
@@ -425,16 +423,6 @@ private:
     std::unique_ptr<nlopt> m_loc_opt;
 };
 } // namespace pagmo
-
-// NOTE: disable address tracking when serializing nlopt. The reason we do this
-// is because, in the nlopt serialization, we are serializing another internal nlopt
-// instance via a (unique) pointer. This is semantically just an optional value
-// (indeed, we should probably replace it with a boot/std optional), and there's
-// no risk of having multiple pointers referring to the same object. Thus, address
-// tracking accomplishes nothing and it comes with its own set of caveats
-// (see discussion about disabling tracking in the implementation of user-defined
-// classes), and it is thus better to disable it altogether.
-BOOST_CLASS_TRACKING(pagmo::nlopt, boost::serialization::track_never)
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::nlopt)
 
