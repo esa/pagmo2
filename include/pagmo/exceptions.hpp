@@ -119,17 +119,7 @@ namespace pagmo
  * optional methods in user-defined classes are not implemented.
  * This class inherits the constructors from \p std::runtime_error.
  */
-struct
-#if !defined(_WIN32)
-    // NOTE: on Windows, it seems like trying to export an exception deriving
-    // from std::runtime creates troubles:
-    // https://stackoverflow.com/questions/24511376/how-to-dllexport-a-class-derived-from-stdruntime-error
-    // And moreover, it *seems* like it is not needed, at least for a class that is fully
-    // inline like this one. However, the visibility attribute is apparently harmless on Linux
-    // and *necessary* on OSX. Let's keep an eye on this...
-    PAGMO_PUBLIC
-#endif
-        not_implemented_error final : std::runtime_error {
+struct PAGMO_PUBLIC_INLINE not_implemented_error final : std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 } // namespace pagmo

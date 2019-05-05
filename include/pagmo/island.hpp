@@ -140,7 +140,7 @@ const bool is_udi<T>::value;
 namespace detail
 {
 
-struct PAGMO_PUBLIC isl_inner_base {
+struct PAGMO_PUBLIC_INLINE isl_inner_base {
     virtual ~isl_inner_base() {}
     virtual std::unique_ptr<isl_inner_base> clone() const = 0;
     virtual void run_evolve(island &) const = 0;
@@ -153,7 +153,7 @@ struct PAGMO_PUBLIC isl_inner_base {
 };
 
 template <typename T>
-struct PAGMO_PUBLIC isl_inner final : isl_inner_base {
+struct PAGMO_PUBLIC_INLINE isl_inner final : isl_inner_base {
     // We just need the def ctor, delete everything else.
     isl_inner() = default;
     isl_inner(const isl_inner &) = delete;
