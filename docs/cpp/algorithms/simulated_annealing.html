@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Simulated Annealing (Corana’s version) &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Exponential Natural Evolution Strategies (xNES)" href="xnes.html" />
     <link rel="prev" title="Simple Genetic Algorithm" href="sga.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,49 +175,49 @@
   <div class="section" id="simulated-annealing-corana-s-version">
 <h1>Simulated Annealing (Corana’s version)<a class="headerlink" href="#simulated-annealing-corana-s-version" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo19simulated_annealingE">
-<span id="pagmo::simulated_annealing"></span><span class="target" id="classpagmo_1_1simulated__annealing"></span><em class="property">class </em><code class="descname">simulated_annealing</code> : <em class="property">public</em> pagmo::<a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv2N5pagmo20not_population_basedE" title="pagmo::not_population_based">not_population_based</a><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealingE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo19simulated_annealingE">
+<span id="_CPPv3N5pagmo19simulated_annealingE"></span><span id="_CPPv2N5pagmo19simulated_annealingE"></span><span id="pagmo::simulated_annealing"></span><span class="target" id="classpagmo_1_1simulated__annealing"></span><em class="property">class </em><code class="descname">simulated_annealing</code> : <em class="property">public</em> pagmo::<a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based">not_population_based</a><a class="headerlink" href="#_CPPv4N5pagmo19simulated_annealingE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Simulated Annealing, Corana’s version with adaptive neighbourhood. </p>
 <p><img alt="../../../_images/Hill_Climbing_with_Simulated_Annealing.gif" src="../../../_images/Hill_Climbing_with_Simulated_Annealing.gif" /></p>
 <p>This version of the simulated annealing algorithm is, essentially, an iterative random search procedure with adaptive moves along the coordinate directions. It permits uphill moves under the control of metropolis criterion, in the hope to avoid the first local minima encountered.</p>
 <p>The implementation provided here allows to obtain a reannealing procedure via subsequent calls to the <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1af57d3963ed09cc45e8c539310365ba4d"><span class="std std-ref">pagmo::simulated_annealing::evolve()</span></a> method.</p>
 <p><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The algorithm is not suitable for multi-objective problems, nor for
+<p class="admonition-title">Warning</p>
+<p>The algorithm is not suitable for multi-objective problems, nor for
 constrained or stochastic optimization</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When selecting the starting and final temperature values it helps to think about the tempertaure
+<p class="admonition-title">Note</p>
+<p>When selecting the starting and final temperature values it helps to think about the tempertaure
 as the deterioration in the objective function value that still has a 37% chance of being accepted.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">At each call of the evolve method the number of fitness evaluations will be
+<p class="admonition-title">Note</p>
+<p>At each call of the evolve method the number of fitness evaluations will be
 <cite>n_T_adj</cite> * <cite>n_range_adj</cite> * <cite>bin_size</cite> times the problem dimension</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">Corana, A., Marchesi, M., Martini, C., &amp; Ridella, S. (1987). Minimizing multimodal
+<p class="admonition-title">See also</p>
+<p>Corana, A., Marchesi, M., Martini, C., &amp; Ridella, S. (1987). Minimizing multimodal
 functions of continuous variables with the “simulated annealing” algorithm Corrigenda
 for this article is available here. ACM Transactions on Mathematical Software (TOMS), 13(3), 262-280.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="http://people.sc.fsu.edu/~inavon/5420a/corana.pdf">http://people.sc.fsu.edu/~inavon/5420a/corana.pdf</a></p>
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://people.sc.fsu.edu/~inavon/5420a/corana.pdf">http://people.sc.fsu.edu/~inavon/5420a/corana.pdf</a></p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
-<dt id="_CPPv2N5pagmo19simulated_annealing13log_line_typeE">
-<span id="pagmo::simulated_annealing::log_line_type"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo19simulated_annealing13log_line_typeE">
+<span id="_CPPv3N5pagmo19simulated_annealing13log_line_typeE"></span><span id="_CPPv2N5pagmo19simulated_annealing13log_line_typeE"></span><span id="pagmo::simulated_annealing::log_line_type"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo19simulated_annealing13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (fevals, best, current, avg_range, temperature) </p>
 </dd></dl>
 
 <dl class="type">
-<dt id="_CPPv2N5pagmo19simulated_annealing8log_typeE">
-<span id="pagmo::simulated_annealing::log_type"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a3491236b982d8453b77b153987312acc"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo19simulated_annealing13log_line_typeE" title="pagmo::simulated_annealing::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo19simulated_annealing8log_typeE">
+<span id="_CPPv3N5pagmo19simulated_annealing8log_typeE"></span><span id="_CPPv2N5pagmo19simulated_annealing8log_typeE"></span><span id="pagmo::simulated_annealing::log_type"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a3491236b982d8453b77b153987312acc"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo19simulated_annealing13log_line_typeE" title="pagmo::simulated_annealing::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo19simulated_annealing8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -233,26 +225,24 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo19simulated_annealing19simulated_annealingEddjjjdj">
-<span id="pagmo::simulated_annealing::simulated_annealing__double.double.unsigned-i.unsigned-i.unsigned-i.double.unsigned-i"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af7144768c6c4c4ba06242a6fd903c2c5"></span><code class="descname">simulated_annealing</code><span class="sig-paren">(</span>double <em>Ts</em> = 10., double <em>Tf</em> = .1, unsigned int <em>n_T_adj</em> = 10u, unsigned int <em>n_range_adj</em> = 1u, unsigned int <em>bin_size</em> = 20u, double <em>start_range</em> = 1., unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing19simulated_annealingEddjjjdj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo19simulated_annealing19simulated_annealingEddjjjdj">
+<span id="_CPPv3N5pagmo19simulated_annealing19simulated_annealingEddjjjdj"></span><span id="_CPPv2N5pagmo19simulated_annealing19simulated_annealingEddjjjdj"></span><span id="pagmo::simulated_annealing::simulated_annealing__double.double.unsigned-i.unsigned-i.unsigned-i.double.unsigned-i"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af7144768c6c4c4ba06242a6fd903c2c5"></span><code class="descname">simulated_annealing</code><span class="sig-paren">(</span>double <em>Ts</em> = 10., double <em>Tf</em> = .1, unsigned int <em>n_T_adj</em> = 10u, unsigned int <em>n_range_adj</em> = 1u, unsigned int <em>bin_size</em> = 20u, double <em>start_range</em> = 1., unsigned int <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19simulated_annealing19simulated_annealingEddjjjdj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs <a class="reference internal" href="#classpagmo_1_1simulated__annealing"><span class="std std-ref">simulated_annealing</span></a></p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">Ts</span></code>: starting temperature </li>
-<li><code class="docutils literal"><span class="pre">Tf</span></code>: final temperature </li>
-<li><code class="docutils literal"><span class="pre">n_T_adj</span></code>: number of temperature adjustments in the annealing schedule </li>
-<li><code class="docutils literal"><span class="pre">n_range_adj</span></code>: number of adjustments of the search range performed at a constant temperature </li>
-<li><code class="docutils literal"><span class="pre">bin_size</span></code>: number of mutations that are used to compute the acceptance rate </li>
-<li><code class="docutils literal"><span class="pre">start_range</span></code>: starting range for mutating the decision vector </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Ts</span></code>: starting temperature </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tf</span></code>: final temperature </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_T_adj</span></code>: number of temperature adjustments in the annealing schedule </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_range_adj</span></code>: number of adjustments of the search range performed at a constant temperature </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bin_size</span></code>: number of mutations that are used to compute the acceptance rate </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_range</span></code>: starting range for mutating the decision vector </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">Ts</span></code> or <code class="docutils literal"><span class="pre">Tf</span></code> are not finite and positive, <code class="docutils literal"><span class="pre">start_range</span></code> is not in (0,1], <code class="docutils literal"><span class="pre">n_T_adj</span></code> or n_range_adj <code class="docutils literal"><span class="pre">are</span></code> not strictly positive </li>
-<li><code class="docutils literal"><span class="pre">if</span></code>: <code class="docutils literal"><span class="pre">Tf</span></code> &gt; <code class="docutils literal"><span class="pre">Ts</span></code> </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">Ts</span></code> or <code class="docutils literal notranslate"><span class="pre">Tf</span></code> are not finite and positive, <code class="docutils literal notranslate"><span class="pre">start_range</span></code> is not in (0,1], <code class="docutils literal notranslate"><span class="pre">n_T_adj</span></code> or n_range_adj <code class="docutils literal notranslate"><span class="pre">are</span></code> not strictly positive </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">if</span></code>: <code class="docutils literal notranslate"><span class="pre">Tf</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Ts</span></code> </p></li>
 </ul>
 </dd>
 </dl>
@@ -260,21 +250,19 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo19simulated_annealing6evolveE10population">
-<span id="pagmo::simulated_annealing::evolve__populationC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af57d3963ed09cc45e8c539310365ba4d"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo19simulated_annealing6evolveE10population">
+<span id="_CPPv3NK5pagmo19simulated_annealing6evolveE10population"></span><span id="_CPPv2NK5pagmo19simulated_annealing6evolveE10population"></span><span id="pagmo::simulated_annealing::evolve__populationC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af57d3963ed09cc45e8c539310365ba4d"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo19simulated_annealing6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective, constrained or stochastic </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the population size is &lt; 1u </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective, constrained or stochastic </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the population size is &lt; 1u </p></li>
 </ul>
 </dd>
 </dl>
@@ -282,15 +270,15 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo19simulated_annealing13set_verbosityEj">
-<span id="pagmo::simulated_annealing::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a1fdff96a5aaff167046207e6bb11faec"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo19simulated_annealing13set_verbosityEj">
+<span id="_CPPv3N5pagmo19simulated_annealing13set_verbosityEj"></span><span id="_CPPv2N5pagmo19simulated_annealing13set_verbosityEj"></span><span id="pagmo::simulated_annealing::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a1fdff96a5aaff167046207e6bb11faec"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19simulated_annealing13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
-<li>0: no verbosity</li>
-<li>&gt;=1: will print and log one line at minimum every <code class="docutils literal"><span class="pre">level</span></code> fitness evaluations.</li>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<li><p>0: no verbosity</p></li>
+<li><p>&gt;=1: will print and log one line at minimum every <code class="docutils literal notranslate"><span class="pre">level</span></code> fitness evaluations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 5000): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>       <span class="n">Current</span><span class="p">:</span>    <span class="n">Mean</span> <span class="nb">range</span><span class="p">:</span>   <span class="n">Temperature</span><span class="p">:</span>
+<p>Example (verbosity 5000): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>       <span class="n">Current</span><span class="p">:</span>    <span class="n">Mean</span> <span class="nb">range</span><span class="p">:</span>   <span class="n">Temperature</span><span class="p">:</span>
  <span class="o">...</span>
  <span class="mi">45035</span>      <span class="mf">0.0700823</span>       <span class="mf">0.135928</span>     <span class="mf">0.00116657</span>      <span class="mf">0.0199526</span>
  <span class="mi">50035</span>      <span class="mf">0.0215442</span>      <span class="mf">0.0261641</span>    <span class="mf">0.000770297</span>           <span class="mf">0.01</span>
@@ -307,10 +295,9 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </div>
 </p>
 <p>Fevals is the number of function evaluation used, Best is the best fitness function found, Current is the last fitness sampled, Mean range is the Mean search range across the decision vector components, Temperature is the current temperature.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
 </ul>
 </dd>
 </dl>
@@ -318,24 +305,23 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo19simulated_annealing13get_verbosityEv">
-<span id="pagmo::simulated_annealing::get_verbosityC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1aec7642038221d2ec79a1f4eb5eaf1917"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo19simulated_annealing13get_verbosityEv">
+<span id="_CPPv3NK5pagmo19simulated_annealing13get_verbosityEv"></span><span id="_CPPv2NK5pagmo19simulated_annealing13get_verbosityEv"></span><span id="pagmo::simulated_annealing::get_verbosityC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1aec7642038221d2ec79a1f4eb5eaf1917"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo19simulated_annealing13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the verbosity level </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo19simulated_annealing8set_seedEj">
-<span id="pagmo::simulated_annealing::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a22fbcd9a77bf60a7b7714ad894e4616d"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo19simulated_annealing8set_seedEj">
+<span id="_CPPv3N5pagmo19simulated_annealing8set_seedEj"></span><span id="_CPPv2N5pagmo19simulated_annealing8set_seedEj"></span><span id="pagmo::simulated_annealing::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a22fbcd9a77bf60a7b7714ad894e4616d"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19simulated_annealing8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
 </ul>
 </dd>
 </dl>
@@ -343,79 +329,63 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo19simulated_annealing8get_seedEv">
-<span id="pagmo::simulated_annealing::get_seedC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a9b9dbdfdc95176c20988aafd0d1d587c"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo19simulated_annealing8get_seedEv">
+<span id="_CPPv3NK5pagmo19simulated_annealing8get_seedEv"></span><span id="_CPPv2NK5pagmo19simulated_annealing8get_seedEv"></span><span id="pagmo::simulated_annealing::get_seedC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a9b9dbdfdc95176c20988aafd0d1d587c"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo19simulated_annealing8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the seed controlling the algorithm stochastic behaviour </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo19simulated_annealing8get_nameEv">
-<span id="pagmo::simulated_annealing::get_nameC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a521951a68839500cbcf30496fb49b96a"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo19simulated_annealing8get_nameEv">
+<span id="_CPPv3NK5pagmo19simulated_annealing8get_nameEv"></span><span id="_CPPv2NK5pagmo19simulated_annealing8get_nameEv"></span><span id="pagmo::simulated_annealing::get_nameC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1a521951a68839500cbcf30496fb49b96a"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo19simulated_annealing8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the algorithm name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo19simulated_annealing14get_extra_infoEv">
-<span id="pagmo::simulated_annealing::get_extra_infoC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af0c42c26791fe5d5d0261e96d36ede4c"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo19simulated_annealing14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo19simulated_annealing14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo19simulated_annealing14get_extra_infoEv"></span><span id="pagmo::simulated_annealing::get_extra_infoC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1af0c42c26791fe5d5d0261e96d36ede4c"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo19simulated_annealing14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing extra informations on the algorithm </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo19simulated_annealing7get_logEv">
-<span id="pagmo::simulated_annealing::get_logC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo19simulated_annealing8log_typeE" title="pagmo::simulated_annealing::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo19simulated_annealing7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo19simulated_annealing7get_logEv">
+<span id="_CPPv3NK5pagmo19simulated_annealing7get_logEv"></span><span id="_CPPv2NK5pagmo19simulated_annealing7get_logEv"></span><span id="pagmo::simulated_annealing::get_logC"></span><span class="target" id="classpagmo_1_1simulated__annealing_1ab9549e3397579562592ab5dea2361d2e"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo19simulated_annealing8log_typeE" title="pagmo::simulated_annealing::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo19simulated_annealing7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"><span class="std std-ref">simulated_annealing::log_line_type</span></a> containing: Fevals, Best, Current, Mean range Temperature as described in <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1a1fdff96a5aaff167046207e6bb11faec"><span class="std std-ref">simulated_annealing::set_verbosity</span></a> <dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"><span class="std std-ref">simulated_annealing::log_line_type</span></a> containing the logged values Gen, Fevals, Best, Improvement, Mutations </dd>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"><span class="std std-ref">simulated_annealing::log_line_type</span></a> containing: Fevals, Best, Current, Mean range Temperature as described in <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1a1fdff96a5aaff167046207e6bb11faec"><span class="std std-ref">simulated_annealing::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1af2fdc0250647cd0d68c671db26237b73"><span class="std std-ref">simulated_annealing::log_line_type</span></a> containing the logged values Gen, Fevals, Best, Improvement, Mutations </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo19simulated_annealing9serializeER7Archive">
-<span id="pagmo::simulated_annealing::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1simulated__annealing_1afac19cf14ba7a0358200facff0eaa4f6"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo19simulated_annealing9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo19simulated_annealing9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo19simulated_annealing9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo19simulated_annealing9serializeER7Archive"></span><span class="target" id="classpagmo_1_1simulated__annealing_1afac19cf14ba7a0358200facff0eaa4f6"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo19simulated_annealing9serializeEvR7Archive" title="pagmo::simulated_annealing::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo19simulated_annealing9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj">
-<span id="pagmo::not_population_based::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -423,27 +393,38 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE">
-<span id="pagmo::not_population_based::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based18set_random_sr_seedEj">
+<span id="_CPPv3N5pagmo20not_population_based18set_random_sr_seedEj"></span><span id="_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj"></span><span id="pagmo::not_population_based::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><br /></dt>
+<dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo20not_population_based13set_selectionERKNSt6stringE">
+<span id="_CPPv3N5pagmo20not_population_based13set_selectionERKNSt6stringE"></span><span id="_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE"></span><span id="pagmo::not_population_based::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><br /></dt>
 <dd><p>Set the individual selection policy. </p>
-<p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
-<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+<p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</p></li>
 </ul>
 </p>
-<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">select</span></code>: the selection policy.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">select</span></code>: the selection policy.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">select</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">select</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -451,14 +432,13 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE">
-<span id="pagmo::not_population_based::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based13set_selectionEN10population9size_typeE">
+<span id="_CPPv3N5pagmo20not_population_based13set_selectionEN10population9size_typeE"></span><span id="_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE"></span><span id="pagmo::not_population_based::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><br /></dt>
 <dd><p>Set the individual selection index. </p>
-<p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </li>
+<p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </p></li>
 </ul>
 </dd>
 </dl>
@@ -466,39 +446,37 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo20not_population_based13get_selectionEv">
-<span id="pagmo::not_population_based::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo20not_population_based13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo20not_population_based13get_selectionEv">
+<span id="_CPPv3NK5pagmo20not_population_based13get_selectionEv"></span><span id="_CPPv2NK5pagmo20not_population_based13get_selectionEv"></span><span id="pagmo::not_population_based::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><br /></dt>
 <dd><p>Get the individual selection policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the individual selection policy or index. </dd>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the individual selection policy or index. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE">
-<span id="pagmo::not_population_based::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based15set_replacementERKNSt6stringE">
+<span id="_CPPv3N5pagmo20not_population_based15set_replacementERKNSt6stringE"></span><span id="_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE"></span><span id="pagmo::not_population_based::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><br /></dt>
 <dd><p>Set the individual replacement policy. </p>
-<p>This method will set the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
-<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+<p>This method will set the policy that is used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
+<p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</p></li>
 </ul>
 </p>
-<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">replace</span></code>: the replacement policy.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">replace</span></code>: the replacement policy.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">replace</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">replace</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -506,14 +484,13 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE">
-<span id="pagmo::not_population_based::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based15set_replacementEN10population9size_typeE">
+<span id="_CPPv3N5pagmo20not_population_based15set_replacementEN10population9size_typeE"></span><span id="_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE"></span><span id="pagmo::not_population_based::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><br /></dt>
 <dd><p>Set the individual replacement index. </p>
-<p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </li>
+<p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </p></li>
 </ul>
 </dd>
 </dl>
@@ -521,13 +498,13 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo20not_population_based15get_replacementEv">
-<span id="pagmo::not_population_based::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo20not_population_based15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo20not_population_based15get_replacementEv">
+<span id="_CPPv3NK5pagmo20not_population_based15get_replacementEv"></span><span id="_CPPv2NK5pagmo20not_population_based15get_replacementEv"></span><span id="pagmo::not_population_based::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><br /></dt>
 <dd><p>Get the individual replacement policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the individual replacement policy or index. </dd>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the individual replacement policy or index. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
@@ -550,7 +527,7 @@ for this article is available here. ACM Transactions on Mathematical Software (T
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

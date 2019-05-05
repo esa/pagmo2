@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Use of the class population &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Use of the class island" href="using_island.html" />
     <link rel="prev" title="Use of the class algorithm" href="using_algorithm.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -150,7 +142,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Use of the class <code class="docutils literal"><span class="pre">population</span></code></a></li>
+<li><a class="reference internal" href="#">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></li>
 </ul>
 </ul>
 </li>
@@ -181,26 +173,26 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="use-of-the-class-population">
-<span id="py-tutorial-using-population"></span><h1>Use of the class <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a><a class="headerlink" href="#use-of-the-class-population" title="Permalink to this headline">¶</a></h1>
+<span id="py-tutorial-using-population"></span><h1>Use of the class <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a><a class="headerlink" href="#use-of-the-class-population" title="Permalink to this headline">¶</a></h1>
 <img alt="../../../_images/pop_no_text2.png" src="../../../_images/pop_no_text2.png" />
-<p>In pygmo, a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is a storage for candidate solutions
-to some <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> (sometimes called individuals).
-It thus contains a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> and a number of decision
+<p>In pygmo, a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> is a storage for candidate solutions
+to some <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> (sometimes called individuals).
+It thus contains a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> and a number of decision
 vectors (chromosomes) and fitness vectors, each associated to a unique ID as
 to allow some degree of tracking.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">4</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop2</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span> <span class="mi">723782378</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In the code above, after the trivial import of the pygmo package, we first define a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
-from <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">rosenbrock</span></code></a>, and then we construct two populations (i.e. two sets of candidate solutions).
-The first population, <code class="docutils literal"><span class="pre">pop1</span></code>, is empty, while the second population is initialized with
+<p>In the code above, after the trivial import of the pygmo package, we first define a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
+from <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal notranslate"><span class="pre">rosenbrock</span></code></a>, and then we construct two populations (i.e. two sets of candidate solutions).
+The first population, <code class="docutils literal notranslate"><span class="pre">pop1</span></code>, is empty, while the second population is initialized with
 five candidate solutions, hence also causing five fitness evaluations. The candidate solutions in
-<code class="docutils literal"><span class="pre">pop2</span></code> are randomly created within the box-bounds of the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> using
+<code class="docutils literal notranslate"><span class="pre">pop2</span></code> are randomly created within the box-bounds of the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> using
 the random seed passed as kwarg.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">))</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">))</span>
 <span class="go">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">())</span>
 <span class="go">0</span>
@@ -210,9 +202,9 @@ the random seed passed as kwarg.</p>
 <span class="go">5</span>
 </pre></div>
 </div>
-<p>The full inspection of a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> is possible, as usual,
+<p>The full inspection of a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> is possible, as usual,
 via its methods or glancing to the screen print of the entire class:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop2</span><span class="p">)</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop2</span><span class="p">)</span> 
 <span class="gp">...</span>
 
 <span class="go">List of individuals:</span>
@@ -239,8 +231,8 @@ via its methods or glancing to the screen print of the entire class:</p>
 </pre></div>
 </div>
 <p>Individuals, i.e. new candidate solutions can be put into a population calling
-its <a class="reference internal" href="../py_population.html#pygmo.population.push_back" title="pygmo.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a> method:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">])</span> <span class="c1"># correct size</span>
+its <a class="reference internal" href="../py_population.html#pygmo.population.push_back" title="pygmo.population.push_back"><code class="xref py py-func docutils literal notranslate"><span class="pre">push_back()</span></code></a> method:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">])</span> <span class="c1"># correct size</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
@@ -257,17 +249,17 @@ its <a class="reference internal" href="../py_population.html#pygmo.population.p
 <span class="go">what: Length of decision vector is 3, should be 4</span>
 </pre></div>
 </div>
-<p>Some consistency checks are done by <a class="reference internal" href="../py_population.html#pygmo.population.push_back" title="pygmo.population.push_back"><code class="xref py py-func docutils literal"><span class="pre">push_back()</span></code></a>, e.g. on the decision vector
+<p>Some consistency checks are done by <a class="reference internal" href="../py_population.html#pygmo.population.push_back" title="pygmo.population.push_back"><code class="xref py py-func docutils literal notranslate"><span class="pre">push_back()</span></code></a>, e.g. on the decision vector
 length.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Decision vectors that are outside of the box bounds are allowed to be
+<p class="admonition-title">Note</p>
+<p>Decision vectors that are outside of the box bounds are allowed to be
 pushed back into a population</p>
 </div>
 <p>The snippet above will trigger fitness function evaluations as the decision vector is always associated to a
-fitness vector in a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>. If the fitness vector associated to a chromosome is known,
+fitness vector in a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>. If the fitness vector associated to a chromosome is known,
 you may still push it back in a population and avoid triggering a fitness re-evaluation by typing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">1.3</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mf">11.2</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">1.3</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mf">11.2</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pop1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
@@ -276,7 +268,7 @@ you may still push it back in a population and avoid triggering a fitness re-eva
 </div>
 <p>When designing user-defined algorithms (UDAs) it is often important to be able to change
 some individual decision vector:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop1</span><span class="o">.</span><span class="n">get_x</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> 
 <span class="go">[0.1  0.2  0.3  0.4]</span>
@@ -293,14 +285,14 @@ some individual decision vector:</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Using the method <a class="reference internal" href="../py_population.html#pygmo.population.set_xf" title="pygmo.population.set_xf"><code class="xref py py-func docutils literal"><span class="pre">set_xf()</span></code></a> or:func:<cite>~pygmo.population.push_back()</cite> it is possible to avoid
+<p class="admonition-title">Note</p>
+<p>Using the method <a class="reference internal" href="../py_population.html#pygmo.population.set_xf" title="pygmo.population.set_xf"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_xf()</span></code></a> or:func:<cite>~pygmo.population.push_back()</cite> it is possible to avoid
 triggering fitness function evaluations, but it is also possible to inject
 spurious information into the population (i.e. breaking the relation between
 decision vectors and fitness vectors imposed by the problem)</p>
 </div>
 <p>The best individual in a population can be extracted as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The decision vector</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The decision vector</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">get_x</span><span class="p">()[</span><span class="n">pop1</span><span class="o">.</span><span class="n">best_idx</span><span class="p">()]</span> 
 <span class="go">array([1.,  2.,  3.,  4.])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The fitness vector</span>
@@ -309,7 +301,7 @@ decision vectors and fitness vectors imposed by the problem)</p>
 </pre></div>
 </div>
 <p>The best individual that ever lived in a population, i.e. the <em>champion</em> can also be extracted as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The decision vector</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The decision vector</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop1</span><span class="o">.</span><span class="n">champion_x</span> 
 <span class="go">array([1.,  2.,  3.,  4.])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The fitness vector</span>
@@ -318,8 +310,8 @@ decision vectors and fitness vectors imposed by the problem)</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The <em>champion</em> is not necessarily identical to the best individual in the current population
+<p class="admonition-title">Note</p>
+<p>The <em>champion</em> is not necessarily identical to the best individual in the current population
 as it actually keeps the memory of all past individuals that were at some point in the population</p>
 </div>
 </div>
@@ -337,7 +329,7 @@ as it actually keeps the memory of all past individuals that were at some point 
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

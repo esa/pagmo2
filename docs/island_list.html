@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>List of islands (UDIs) available in pagmo/pygmo &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="C++ Documentation" href="cpp/cpp_docs.html" />
     <link rel="prev" title="List of problems (UDPs) available in pagmo/pygmo" href="problem_list.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,36 +175,36 @@
   <div class="section" id="list-of-islands-udis-available-in-pagmo-pygmo">
 <span id="islands"></span><h1>List of islands (UDIs) available in pagmo/pygmo<a class="headerlink" href="#list-of-islands-udis-available-in-pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
 <p>This is the list of user defined islands (UDIs) currently provided with pagmo/pygmo. These are classes that
-can be used to construct a <a class="reference internal" href="cpp/island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::island</span></code></a> (C++), or a <a class="reference internal" href="python/py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.island</span></code></a> (Python), which will then
+can be used to construct a <a class="reference internal" href="cpp/island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a> (C++), or a <a class="reference internal" href="python/py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.island</span></code></a> (Python), which will then
 provide a unified interface to access the island’s functionalities.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="41%" />
-<col width="29%" />
-<col width="29%" />
+<col style="width: 41%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Common Name</th>
-<th class="head">Docs of the C++ class</th>
-<th class="head">Docs of the python class</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Docs of the python class</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>Thread island</td>
-<td><a class="reference internal" href="cpp/islands/thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::thread_island</span></code></a></td>
-<td><a class="reference internal" href="python/islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_island</span></code></a></td>
+<tbody>
+<tr class="row-even"><td><p>Thread island</p></td>
+<td><p><a class="reference internal" href="cpp/islands/thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::thread_island</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.thread_island</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td>Fork island</td>
-<td><a class="reference internal" href="cpp/islands/fork_island.html#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::fork_island</span></code></a></td>
-<td>N/A</td>
+<tr class="row-odd"><td><p>Fork island</p></td>
+<td><p><a class="reference internal" href="cpp/islands/fork_island.html#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::fork_island</span></code></a></p></td>
+<td><p>N/A</p></td>
 </tr>
-<tr class="row-even"><td>Multiprocessing island</td>
-<td>N/A</td>
-<td><a class="reference internal" href="python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.mp_island</span></code></a></td>
+<tr class="row-even"><td><p>Multiprocessing island</p></td>
+<td><p>N/A</p></td>
+<td><p><a class="reference internal" href="python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.mp_island</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td>Ipyparallel island</td>
-<td>N/A</td>
-<td><a class="reference internal" href="python/islands/py_islands.html#pygmo.ipyparallel_island" title="pygmo.ipyparallel_island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ipyparallel_island</span></code></a></td>
+<tr class="row-odd"><td><p>Ipyparallel island</p></td>
+<td><p>N/A</p></td>
+<td><p><a class="reference internal" href="python/islands/py_islands.html#pygmo.ipyparallel_island" title="pygmo.ipyparallel_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.ipyparallel_island</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -231,7 +223,7 @@ provide a unified interface to access the island’s functionalities.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

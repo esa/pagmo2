@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Thread island &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Fork island" href="fork_island.html" />
     <link rel="prev" title="Unconstrain" href="../problems/unconstrain.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -184,44 +176,42 @@
 <h1>Thread island<a class="headerlink" href="#thread-island" title="Permalink to this headline">¶</a></h1>
 <p><em>#include &lt;pagmo/islands/thread_island.hpp&gt;</em></p>
 <dl class="class">
-<dt id="_CPPv2N5pagmo13thread_islandE">
-<span id="pagmo::thread_island"></span><span class="target" id="classpagmo_1_1thread__island"></span><em class="property">class </em><code class="descname">thread_island</code><a class="headerlink" href="#_CPPv2N5pagmo13thread_islandE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo13thread_islandE">
+<span id="_CPPv3N5pagmo13thread_islandE"></span><span id="_CPPv2N5pagmo13thread_islandE"></span><span id="pagmo::thread_island"></span><span class="target" id="classpagmo_1_1thread__island"></span><em class="property">class </em><code class="descname">thread_island</code><a class="headerlink" href="#_CPPv4N5pagmo13thread_islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread island. </p>
 <p>This class is a user-defined island (UDI) that will run evolutions directly inside the separate thread of execution within <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>.</p>
-<p><a class="reference internal" href="#classpagmo_1_1thread__island"><span class="std std-ref">thread_island</span></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> on non-POSIX platforms or when both the island’s problem and algorithm provide at least the <a class="reference internal" href="../miscellanea/type_traits.html#namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"><span class="std std-ref">pagmo::thread_safety::basic</span></a> thread safety guarantee. </p>
+<p><a class="reference internal" href="#classpagmo_1_1thread__island"><span class="std std-ref">thread_island</span></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> on non-POSIX platforms or when both the island’s problem and algorithm provide at least the pagmo::thread_safety::basic thread safety guarantee. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2NK5pagmo13thread_island8get_nameEv">
-<span id="pagmo::thread_island::get_nameC"></span><span class="target" id="classpagmo_1_1thread__island_1aa5ae51b773adc2c56bfda49a9d72d3d3"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo13thread_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo13thread_island8get_nameEv">
+<span id="_CPPv3NK5pagmo13thread_island8get_nameEv"></span><span id="_CPPv2NK5pagmo13thread_island8get_nameEv"></span><span id="pagmo::thread_island::get_nameC"></span><span class="target" id="classpagmo_1_1thread__island_1aa5ae51b773adc2c56bfda49a9d72d3d3"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Island’s name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd><code class="docutils literal"><span class="pre">&quot;Thread</span> <span class="pre">island&quot;</span></code>. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">&quot;Thread</span> <span class="pre">island&quot;</span></code>. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo13thread_island10run_evolveER6island">
-<span id="pagmo::thread_island::run_evolve__islandRC"></span><span class="target" id="classpagmo_1_1thread__island_1a312e3fc12d157498113e6745966962d6"></span>void <code class="descname">run_evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo13thread_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo13thread_island10run_evolveER6island">
+<span id="_CPPv3NK5pagmo13thread_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo13thread_island10run_evolveER6island"></span><span id="pagmo::thread_island::run_evolve__islandRC"></span><span class="target" id="classpagmo_1_1thread__island_1a312e3fc12d157498113e6745966962d6"></span>void <code class="descname">run_evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Run evolve. </p>
-<p>This method will use copies of <code class="docutils literal"><span class="pre">isl</span></code>’s algorithm and population, obtained via <a class="reference internal" href="../island.html#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">island::get_algorithm()</span></a> and <a class="reference internal" href="../island.html#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">island::get_population()</span></a>, to evolve the input island’s population. The evolved population will be assigned to <code class="docutils literal"><span class="pre">isl</span></code> using <a class="reference internal" href="../island.html#classpagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"><span class="std std-ref">island::set_population()</span></a>, and the algorithm used for the evolution will be assigned to <code class="docutils literal"><span class="pre">isl</span></code> using <a class="reference internal" href="../island.html#classpagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"><span class="std std-ref">island::set_algorithm()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">isl</span></code>: the <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> that will undergo evolution.</li>
+<p>This method will use copies of <code class="docutils literal notranslate"><span class="pre">isl</span></code>’s algorithm and population, obtained via <a class="reference internal" href="../island.html#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">island::get_algorithm()</span></a> and <a class="reference internal" href="../island.html#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">island::get_population()</span></a>, to evolve the input island’s population. The evolved population will be assigned to <code class="docutils literal notranslate"><span class="pre">isl</span></code> using <a class="reference internal" href="../island.html#classpagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"><span class="std std-ref">island::set_population()</span></a>, and the algorithm used for the evolution will be assigned to <code class="docutils literal notranslate"><span class="pre">isl</span></code> using <a class="reference internal" href="../island.html#classpagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"><span class="std std-ref">island::set_algorithm()</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isl</span></code>: the <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> that will undergo evolution.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">isl</span></code>’s algorithm or problem do not provide at least the <a class="reference internal" href="../miscellanea/type_traits.html#namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"><span class="std std-ref">pagmo::thread_safety::basic</span></a> thread safety guarantee. </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li><a class="reference internal" href="../island.html#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">island::get_algorithm()</span></a>, <a class="reference internal" href="../island.html#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">island::get_population()</span></a>,</li>
-<li><a class="reference internal" href="../island.html#classpagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"><span class="std std-ref">island::set_algorithm()</span></a>, <a class="reference internal" href="../island.html#classpagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"><span class="std std-ref">island::set_population()</span></a>,</li>
-<li><a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a>. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">isl</span></code>’s algorithm or problem do not provide at least the pagmo::thread_safety::basic thread safety guarantee. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
+<li><p><a class="reference internal" href="../island.html#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">island::get_algorithm()</span></a>, <a class="reference internal" href="../island.html#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">island::get_population()</span></a>,</p></li>
+<li><p><a class="reference internal" href="../island.html#classpagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"><span class="std std-ref">island::set_algorithm()</span></a>, <a class="reference internal" href="../island.html#classpagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"><span class="std std-ref">island::set_population()</span></a>,</p></li>
+<li><p><a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a>. </p></li>
 </ul>
-</li>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -229,8 +219,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo13thread_island9serializeER7Archive">
-<span id="pagmo::thread_island::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1thread__island_1ab664e6b4f2423426c0089610a66e07c2"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo13thread_island9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo13thread_island9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo13thread_island9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo13thread_island9serializeER7Archive"></span><span class="target" id="classpagmo_1_1thread__island_1ab664e6b4f2423426c0089610a66e07c2"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo13thread_island9serializeEvR7Archive" title="pagmo::thread_island::serialize::Archive">Archive</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo13thread_island9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialization support. </p>
 <p>This class is stateless, no data will be saved to or loaded from the archive. </p>
 </dd></dl>
@@ -253,7 +243,7 @@
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

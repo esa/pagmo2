@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Coding a User Defined Island &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="A first tutorial on the use of NLopt solvers" href="nlopt_basics.html" />
     <link rel="prev" title="Using the decorator meta-problem" href="udp_meta_decorator.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -184,13 +176,13 @@
 <span id="py-tutorial-coding-udi-simple"></span><h1>Coding a User Defined Island<a class="headerlink" href="#coding-a-user-defined-island" title="Permalink to this headline">¶</a></h1>
 <p>While pagmo provides a number of UDIs (see <a class="reference internal" href="../../island_list.html#islands"><span class="std std-ref">List of islands (UDIs) available in pagmo/pygmo</span></a>) to provide access to a number of parallelization technologies, the expert user
 can code his own expanding pygmo functionalities. In this tutorial we will show how to code a UDI. Remember that UDIs are classes that can be used
-to construct a <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> which, in turn, is what a <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> can use to distribute / parallelize optimization
+to construct a <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> which, in turn, is what a <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a> can use to distribute / parallelize optimization
 tasks and have solutions migrate improving the overall optimization quality via the generalized island model.</p>
-<p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> to have a detailed list of methods that can be, or have to be,
+<p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> to have a detailed list of methods that can be, or have to be,
 implemented in a UDI. Also the tutorial <a class="reference internal" href="using_island.html#py-tutorial-using-island"><span class="std std-ref">Use of the class island</span></a> is a good starting point to understand the overall use.</p>
-<p>A UDI is a python class which, in its simplest form, contains the method <code class="docutils literal"><span class="pre">run_evolve(self,</span> <span class="pre">algo,</span> <span class="pre">pop)</span></code> which uses the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> <code class="docutils literal"><span class="pre">algo</span></code> to evolve
-the <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> <code class="docutils literal"><span class="pre">pop</span></code>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<p>A UDI is a python class which, in its simplest form, contains the method <code class="docutils literal notranslate"><span class="pre">run_evolve(self,</span> <span class="pre">algo,</span> <span class="pre">pop)</span></code> which uses the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> <code class="docutils literal notranslate"><span class="pre">algo</span></code> to evolve
+the <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> <code class="docutils literal notranslate"><span class="pre">pop</span></code>.</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">my_isl</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">run_evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="n">new_pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
@@ -199,9 +191,9 @@ the <a class="reference internal" href="../py_population.html#pygmo.population" 
 <span class="gp">... </span>        <span class="k">return</span> <span class="s2">&quot;It&#39;s my island!&quot;</span>
 </pre></div>
 </div>
-<p>We have also included above the optional method <code class="docutils literal"><span class="pre">get_name(self)</span></code> that will be used by various <code class="docutils literal"><span class="pre">__repr__(self)</span></code> to provide humar readable information
-on some pygmo classes. The above UDI can then be used to construct a <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> (similarly to how UDP can be used to construct <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>, etc..).</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">udi</span> <span class="o">=</span> <span class="n">my_isl</span><span class="p">(),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<p>We have also included above the optional method <code class="docutils literal notranslate"><span class="pre">get_name(self)</span></code> that will be used by various <code class="docutils literal notranslate"><span class="pre">__repr__(self)</span></code> to provide humar readable information
+on some pygmo classes. The above UDI can then be used to construct a <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> (similarly to how UDP can be used to construct <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>, etc..).</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">udi</span> <span class="o">=</span> <span class="n">my_isl</span><span class="p">(),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> 
 <span class="go">Island name: It&#39;s my island!</span>
 <span class="go">    Status: idle</span>
@@ -215,22 +207,22 @@ on some pygmo classes. The above UDI can then be used to construct a <a class="r
 <span class="go">    Champion fitness: [...</span>
 </pre></div>
 </div>
-<p>That was easy! Lets now understand what we actually did. The object <code class="docutils literal"><span class="pre">isl</span></code> now contains our UDI and, upon construction will open a thread and delegate the execution of
-<code class="docutils literal"><span class="pre">run_evolve(self,</span> <span class="pre">algo,</span> <span class="pre">pop)</span></code> to it upon call to <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>. The <code class="docutils literal"><span class="pre">run_evolve()</span></code> method must return the algorithm object used for
+<p>That was easy! Lets now understand what we actually did. The object <code class="docutils literal notranslate"><span class="pre">isl</span></code> now contains our UDI and, upon construction will open a thread and delegate the execution of
+<code class="docutils literal notranslate"><span class="pre">run_evolve(self,</span> <span class="pre">algo,</span> <span class="pre">pop)</span></code> to it upon call to <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method must return the algorithm object used for
 the evolution and the evolved population.</p>
 <p>But there is a catch. We are in CPython! CPython, generally speaking, serialises the execution of Python code due to the presence
 of the global interpreter lock (GIL). So, while the code above is perfectly fine and will
-work with pygmo, a set of <code class="docutils literal"><span class="pre">my_isl</span></code> running evolutions will not run in parallel as each <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, when executing its <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>
-method, acquires the GIL and holds it during the <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> execution.</p>
+work with pygmo, a set of <code class="docutils literal notranslate"><span class="pre">my_isl</span></code> running evolutions will not run in parallel as each <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>, when executing its <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a>
+method, acquires the GIL and holds it during the <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a> execution.</p>
 <p>As a consequence, the following code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">udi</span> <span class="o">=</span> <span class="n">my_isl</span><span class="p">())</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">udi</span> <span class="o">=</span> <span class="n">my_isl</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>will not run evolution in parallel (only using different threads).</p>
-<p>To code properly an UDI one need to code the <code class="docutils literal"><span class="pre">def</span> <span class="pre">run_evolve(self,</span> <span class="pre">algo,</span> <span class="pre">pop)</span></code> so that the GIL is released during the offload of the evolution task to a separate process.
-An example on how this can be achieved using, for example the multiprocessing module of python. Let us have a look at some code snippets from the  <a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">_evolve_func</span><span class="p">(</span><span class="n">algo</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span> <span class="c1"># doctest : +SKIP</span>
+<p>To code properly an UDI one need to code the <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">run_evolve(self,</span> <span class="pre">algo,</span> <span class="pre">pop)</span></code> so that the GIL is released during the offload of the evolution task to a separate process.
+An example on how this can be achieved using, for example the multiprocessing module of python. Let us have a look at some code snippets from the  <a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code></a></p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">_evolve_func</span><span class="p">(</span><span class="n">algo</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span> <span class="c1"># doctest : +SKIP</span>
 <span class="gp">... </span>    <span class="n">new_pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">algo</span><span class="p">,</span> <span class="n">new_pop</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">mp_island</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> <span class="c1"># doctest : +SKIP</span>
@@ -244,8 +236,8 @@ An example on how this can be achieved using, for example the multiprocessing mo
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The full details are here not reported and can be read in the <a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">mp_island</span></code></a> code. In a nutshell, what happens is that the <code class="docutils literal"><span class="pre">algo.evolve(pop)</span></code> gets offloaded to
-a process (in a shared pool inited upon construction calling the <a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal"><span class="pre">init_pool()</span></code></a> static method). The instruction <code class="docutils literal"><span class="pre">res.get()</span></code>, makes the thread where <code class="docutils literal"><span class="pre">run_evolve</span></code>
+<p>The full details are here not reported and can be read in the <a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code></a> code. In a nutshell, what happens is that the <code class="docutils literal notranslate"><span class="pre">algo.evolve(pop)</span></code> gets offloaded to
+a process (in a shared pool inited upon construction calling the <a class="reference internal" href="../islands/py_islands.html#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a> static method). The instruction <code class="docutils literal notranslate"><span class="pre">res.get()</span></code>, makes the thread where <code class="docutils literal notranslate"><span class="pre">run_evolve</span></code>
 remain waiting for the process execution and while doing so it releases the GIL, making parallelization effective.</p>
 </div>
 
@@ -262,7 +254,7 @@ remain waiting for the process execution and while doing so it releases the GIL,
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

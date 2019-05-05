@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Constrained optimization utilities &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Gradient and Hessians utilities" href="py_gh_utils.html" />
     <link rel="prev" title="Multi-objective optimization utilities" href="py_mo_utils.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -188,48 +180,44 @@
 <dd><p>Compares two fitness vectors in a single-objective, constrained, case.</p>
 <p>The following strict ordering is used:</p>
 <ul class="simple">
-<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is feasible and <span class="math">\(f_2\)</span> is not.</li>
-<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is they are both infeasible, but <span class="math">\(f_1\)</span>
-violates less constraints than <span class="math">\(f_2\)</span>, or in case they both violate the same
-number of constraints, if the <span class="math">\(L_2\)</span> norm of the overall constraint violation
-is smaller.</li>
-<li><span class="math">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value
-in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span class="math">\(f_2\)</span></li>
+<li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is feasible and <span class="math notranslate nohighlight">\(f_2\)</span> is not.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is they are both infeasible, but <span class="math notranslate nohighlight">\(f_1\)</span>
+violates less constraints than <span class="math notranslate nohighlight">\(f_2\)</span>, or in case they both violate the same
+number of constraints, if the <span class="math notranslate nohighlight">\(L_2\)</span> norm of the overall constraint violation
+is smaller.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value
+in <span class="math notranslate nohighlight">\(f_1\)</span> is smaller than the objectve value in <span class="math notranslate nohighlight">\(f_2\)</span></p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">the fitness vectors are assumed to contain exactly one objective, p neq equality constraints and the rest (if any) inequality constraints.</p>
+<p class="admonition-title">Note</p>
+<p>the fitness vectors are assumed to contain exactly one objective, p neq equality constraints and the rest (if any) inequality constraints.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>f1</strong> (<em>array-like object</em>) – the first fitness vector</li>
-<li><strong>f2</strong> (<em>array-like object</em>) – the second fitness vector</li>
-<li><strong>nec</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of equality consraints in the fitness vectors</li>
-<li><strong>tol</strong> (<em>array-like object</em>) – tolerances to be accounted for in the constraints</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f1</strong> (<em>array-like object</em>) – the first fitness vector</p></li>
+<li><p><strong>f2</strong> (<em>array-like object</em>) – the second fitness vector</p></li>
+<li><p><strong>nec</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of equality consraints in the fitness vectors</p></li>
+<li><p><strong>tol</strong> (<em>array-like object</em>) – tolerances to be accounted for in the constraints</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – if <em>nec</em> is negative or greater than an implementation-defined value</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if <em>f1</em> and <em>f2</em> do not have equal size <span class="math">\(n\)</span>, if <em>f1</em> does not have at least size 1,</li>
-<li>if <em>neq</em> is larger than <span class="math">\(n-1\)</span> (too many constraints) or if the size of <em>tol</em> is not <span class="math">\(n - 1\)</span></li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>f1</em>, <em>f2</em> or <em>tol</em> cannot be converted to a vector of floats</li>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>nec</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>f1</em> and <em>f2</em> do not have equal size <span class="math notranslate nohighlight">\(n\)</span>, if <em>f1</em> does not have at least size 1,
+    if <em>neq</em> is larger than <span class="math notranslate nohighlight">\(n-1\)</span> (too many constraints) or if the size of <em>tol</em> is not <span class="math notranslate nohighlight">\(n - 1\)</span></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>f1</em>, <em>f2</em> or <em>tol</em> cannot be converted to a vector of floats</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">True</span></code> if <em>f1</em> is better than <em>f2</em>, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">bool</span></code></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>f1</em> is better than <em>f2</em>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">compare_fc</span><span class="p">(</span><span class="n">f1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">f2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.1</span><span class="p">,</span><span class="o">-</span><span class="mf">1.2</span><span class="p">],</span> <span class="n">nec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">False</span>
 </pre></div>
@@ -242,49 +230,45 @@ in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span
 <code class="descclassname">pygmo.</code><code class="descname">sort_population_con</code><span class="sig-paren">(</span><em>input_f</em>, <em>nec</em>, <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sort_population_con" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sorts a population (intended here as a 2D array-like
 containing fitness vectors) assuming a single-objective, constrained case.</p>
-<p>The following strict ordering is used (same as the one used in <a class="reference internal" href="#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal"><span class="pre">pygmo.compare_fc()</span></code></a>):</p>
+<p>The following strict ordering is used (same as the one used in <a class="reference internal" href="#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.compare_fc()</span></code></a>):</p>
 <ul class="simple">
-<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is feasible and <span class="math">\(f_2\)</span> is not.</li>
-<li><span class="math">\(f_1 \prec f_2\)</span> if <span class="math">\(f_1\)</span> is they are both infeasible, but <span class="math">\(f_1\)</span>
-violates less constraints than <span class="math">\(f_2\)</span>, or in case they both violate the same
-number of constraints, if the <span class="math">\(L_2\)</span> norm of the overall constraint violation
-is smaller.</li>
-<li><span class="math">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value
-in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span class="math">\(f_2\)</span></li>
+<li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is feasible and <span class="math notranslate nohighlight">\(f_2\)</span> is not.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is they are both infeasible, but <span class="math notranslate nohighlight">\(f_1\)</span>
+violates less constraints than <span class="math notranslate nohighlight">\(f_2\)</span>, or in case they both violate the same
+number of constraints, if the <span class="math notranslate nohighlight">\(L_2\)</span> norm of the overall constraint violation
+is smaller.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value
+in <span class="math notranslate nohighlight">\(f_1\)</span> is smaller than the objectve value in <span class="math notranslate nohighlight">\(f_2\)</span></p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">the fitness vectors are assumed to contain exactly one objective, p neq equality constraints and the rest (if any) inequality constraints.</p>
+<p class="admonition-title">Note</p>
+<p>the fitness vectors are assumed to contain exactly one objective, p neq equality constraints and the rest (if any) inequality constraints.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>input_f</strong> (<em>2-D array-like object</em>) – the fitness vectors</li>
-<li><strong>nec</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of equality constraints in the fitness vectors</li>
-<li><strong>tol</strong> (<em>array-like object</em>) – tolerances to be accounted for in the constraints</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_f</strong> (<em>2-D array-like object</em>) – the fitness vectors</p></li>
+<li><p><strong>nec</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of equality constraints in the fitness vectors</p></li>
+<li><p><strong>tol</strong> (<em>array-like object</em>) – tolerances to be accounted for in the constraints</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – if <em>nec</em> is negative or greater than an implementation-defined value</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the input fitness vectors do not have all the same size <span class="math">\(n &gt;=1\)</span>, or if <em>neq</em> is larger than <span class="math">\(n-1\)</span> (too many constraints)</li>
-<li>or if the size of <em>tol</em> is not equal to <span class="math">\(n-1\)</span></li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>input_f</em> cannot be converted to a vector of vector of floats or <em>tol</em> cannot be converted to a vector of floats.</li>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>nec</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the input fitness vectors do not have all the same size <span class="math notranslate nohighlight">\(n &gt;=1\)</span>, or if <em>neq</em> is larger than <span class="math notranslate nohighlight">\(n-1\)</span> (too many constraints)
+    or if the size of <em>tol</em> is not equal to <span class="math notranslate nohighlight">\(n-1\)</span></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>input_f</em> cannot be converted to a vector of vector of floats or <em>tol</em> cannot be converted to a vector of floats.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the indexes of the sorted fitnesses vectors.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy int array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the indexes of the sorted fitnesses vectors.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">idxs</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">sort_population_con</span><span class="p">(</span><span class="n">input_f</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">]],</span> <span class="n">nec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-8</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
 <span class="go">[0 2 1]</span>
@@ -307,7 +291,7 @@ in <span class="math">\(f_1\)</span> is smaller than the objectve value in <span
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

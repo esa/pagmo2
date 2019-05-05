@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Python tutorials &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Use of the class problem" href="using_problem.html" />
     <link rel="prev" title="Plotting utilities" href="../utils/py_plotting.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -193,41 +185,41 @@
   <div class="section" id="python-tutorials">
 <span id="id1"></span><h1>Python tutorials<a class="headerlink" href="#python-tutorials" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>Although pygmo is available both on Python 2.7 and Python 3, the tutorials
 (and pygmo’s documentation in general) use the syntax of Python 3. Although many code snippets,
 examples, etc. will also run on Python 2.7 without modifications, in some cases they will have
 to be adapted in order to be run successfully on Python 2.7.</p>
 <p>A prominent example is the definition of new user-defined classes (such as optimisation problems, algorithms,
 etc.). Whereas, in Python 3, when defining of a user-defined problem (UDP) we can simply write</p>
-<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">my_problem</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">my_problem</span><span class="p">:</span>
     <span class="o">...</span>
 </pre></div>
 </div>
 <p>in Python 2.7 we must write instead</p>
-<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">my_problem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">my_problem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="o">...</span>
 </pre></div>
 </div>
-<p>(that is, the UDP must derive from <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a>). Failure to do so will result in runtime errors when using
-the API of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>. In this specific case, the problem lies in the dichotomy between
+<p>(that is, the UDP must derive from <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>). Failure to do so will result in runtime errors when using
+the API of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>. In this specific case, the problem lies in the dichotomy between
 <em>old</em> and <em>new</em> style classes in Python 2.x (see <a class="reference external" href="https://wiki.python.org/moin/NewClassVsClassicClass">here</a>
 for an in-depth explanation). pygmo will assume that, like in Python 3, all classes are new-style classes.</p>
-<p class="last">Our general recommendation is, if possible, to use Python 3 (or, at least, to use Python 2 styles and idioms
+<p>Our general recommendation is, if possible, to use Python 3 (or, at least, to use Python 2 styles and idioms
 that are forward-compatible with Python 3).</p>
 </div>
 <div class="section" id="basics">
 <h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="using_problem.html">Use of the class <code class="docutils literal"><span class="pre">problem</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_algorithm.html">Use of the class <code class="docutils literal"><span class="pre">algorithm</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_population.html">Use of the class <code class="docutils literal"><span class="pre">population</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_island.html">Use of the class <code class="docutils literal"><span class="pre">island</span></code></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="using_problem.html">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_algorithm.html">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_population.html">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_island.html">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="using_island.html#managing-exceptions">Managing exceptions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_archipelago.html">Use of the class <code class="docutils literal"><span class="pre">archipelago</span></code></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="using_archipelago.html">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="using_archipelago.html#managing-exceptions">Managing exceptions</a></li>
 </ul>
 </li>
@@ -295,7 +287,7 @@ that are forward-compatible with Python 3).</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="moo.html">Basic Multi-Objective Functionalities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="moo_moead.html">Using pygmo’s <code class="docutils literal"><span class="pre">moead</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="moo_moead.html">Using pygmo’s <code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a></li>
 </ul>
 </div>
 </div>
@@ -335,7 +327,7 @@ that are forward-compatible with Python 3).</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

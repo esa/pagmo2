@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Coding a simple User Defined Problem &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Coding a User Defined Problem with constraints (NLP)" href="coding_udp_constrained.html" />
     <link rel="prev" title="Evolving a population" href="evolving_a_population.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -188,20 +180,20 @@
 <span id="py-tutorial-coding-udp-simple"></span><h1>Coding a simple User Defined Problem<a class="headerlink" href="#coding-a-simple-user-defined-problem" title="Permalink to this headline">¶</a></h1>
 <p>While pagmo provides a number of UDPs (see <a class="reference internal" href="../../problem_list.html#problems"><span class="std std-ref">List of problems (UDPs) available in pagmo/pygmo</span></a>) to help you test your own optimization strategy or user defined algorithm, the possibility
 to write your own UDP is at the core of pygmo’s use. In this tutorial we will show how to code a UDP. Remember that UDPs are classes that can be used
-to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> can solve. See <a class="reference internal" href="using_algorithm.html#py-tutorial-using-algorithm"><span class="std std-ref">Use of the class algorithm</span></a> and
+to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> which, in turn, is what an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> can solve. See <a class="reference internal" href="using_algorithm.html#py-tutorial-using-algorithm"><span class="std std-ref">Use of the class algorithm</span></a> and
 <a class="reference internal" href="using_problem.html#py-tutorial-using-problem"><span class="std std-ref">Use of the class problem</span></a> to learn the use of these core classes.</p>
-<p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to have a detailed list of methods that can be, or have to be,
+<p>We encourage the user to read the documentation of the class <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> to have a detailed list of methods that can be, or have to be,
 implemented in a UDP. To start simple we consider the simple problem of minimizing the two dimensional sphere function.</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}{ll}
   \mbox{minimize: } &amp; x_1^2+x_2^2 \\
   \mbox{subject to:} &amp; -1 \le x_i \le 1, i = 1..2
 \end{array}\end{split}\]</div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In pagmo minimization is always assumed and should you need to maximize some objective function, just put a minus sign in front of that objective.</p>
+<p class="admonition-title">Note</p>
+<p>In pagmo minimization is always assumed and should you need to maximize some objective function, just put a minus sign in front of that objective.</p>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)]</span>
 <span class="gp">...</span>
@@ -209,19 +201,19 @@ implemented in a UDP. To start simple we consider the simple problem of minimizi
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>The two mandatory methods you must implement in your class are <code class="docutils literal"><span class="pre">fitness(self,</span> <span class="pre">x)</span></code> and <code class="docutils literal"><span class="pre">get_bounds(self)</span></code>. The problem dimension
+<p>The two mandatory methods you must implement in your class are <code class="docutils literal notranslate"><span class="pre">fitness(self,</span> <span class="pre">x)</span></code> and <code class="docutils literal notranslate"><span class="pre">get_bounds(self)</span></code>. The problem dimension
 will be inferred by the return value of the second, while the actual fitness of decision vectors will be computed calling the first method
-and passing as argument <code class="docutils literal"><span class="pre">x</span></code> as a NumPy array. It is important to remember that <code class="docutils literal"><span class="pre">x</span></code> is a NumPy array, so that the NumPy
-array arithmetic applies in the body of <code class="docutils literal"><span class="pre">fitness()</span></code>. Note also how to define a UDP we do not need to inherit from some other
+and passing as argument <code class="docutils literal notranslate"><span class="pre">x</span></code> as a NumPy array. It is important to remember that <code class="docutils literal notranslate"><span class="pre">x</span></code> is a NumPy array, so that the NumPy
+array arithmetic applies in the body of <code class="docutils literal notranslate"><span class="pre">fitness()</span></code>. Note also how to define a UDP we do not need to inherit from some other
 pygmo related class.  Since we do not define, in this case, any other method pygmo will assume a single objective, no constraints,
 no gradients etc…</p>
-<p>Let’s now build a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> from our new UDP.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<p>Let’s now build a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> from our new UDP.</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">sphere_function</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>That’s easy! To inspect what type of problem pygmo has detected from our UDP we may print on screen:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
 <span class="go">Problem name: &lt;class &#39;sphere_function&#39;&gt;</span>
 <span class="go">    Global dimension:                       2</span>
 <span class="go">    Integer dimension:                      0</span>
@@ -231,6 +223,7 @@ no gradients etc…</p>
 <span class="go">    Inequality constraints dimension:       0</span>
 <span class="go">    Lower bounds: [-1, -1]</span>
 <span class="go">    Upper bounds: [1, 1]</span>
+<span class="go">    Has batch fitness evaluation: false</span>
 
 <span class="go">    Has gradient: false</span>
 <span class="go">    User implemented gradient sparsity: false</span>
@@ -243,13 +236,13 @@ no gradients etc…</p>
 </pre></div>
 </div>
 <p>Let’s now add some (mild) complexity. We want our UDP to be scalable:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}{ll}
   \mbox{minimize: } &amp; \sum_i x_i^2 \\
   \mbox{subject to:} &amp; -1 \le x_i \le 1, i = 1..n
 \end{array}\end{split}\]</div>
 <p>and to have a human readable name.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
 <span class="gp">...</span>
@@ -275,6 +268,7 @@ no gradients etc…</p>
 <span class="go">    Inequality constraints dimension:       0</span>
 <span class="go">    Lower bounds: [-1, -1, -1]</span>
 <span class="go">    Upper bounds: [1, 1, 1]</span>
+<span class="go">    Has batch fitness evaluation: false</span>
 
 <span class="go">    Has gradient: false</span>
 <span class="go">    User implemented gradient sparsity: false</span>
@@ -289,11 +283,11 @@ no gradients etc…</p>
 <span class="go">    Dimensions: 3</span>
 </pre></div>
 </div>
-<p>Well that was easy, but now have a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> to solve …</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">bee_colony</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
+<p>Well that was easy, but now have a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> to solve …</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">bee_colony</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)</span> <span class="c1">#doctest: +SKIP</span>
 <span class="go">[  3.75822114e-06]</span>
 </pre></div>
 </div>
@@ -302,7 +296,7 @@ no gradients etc…</p>
 <h2>Possible pitfalls<a class="headerlink" href="#possible-pitfalls" title="Permalink to this headline">¶</a></h2>
 <p>Well that was nice as it worked like a charm. But the UDP can also be a rather complex class and the chances
 that it is somehow malformed are high. Let’s see some common mistakes.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)]</span>
 <span class="gp">...</span>
@@ -313,11 +307,11 @@ that it is somehow malformed are high. Let’s see some common mistakes.</p>
 <span class="go">&#39;&lt;sphere_function object at 0x1108cad68&gt;&#39; of type &#39;&lt;class &#39;sphere_function&#39;&gt;&#39;: the method is either not present or not callable</span>
 </pre></div>
 </div>
-<p>Oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>
+<p>Oops, I forgot to implement one of the two mandatory methods. In this case it is not possible to construct a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
 and, when we try, we then get a rather helpful error message.</p>
-<p>In other cases while the UDP is still malformed, the construction of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> will succeed and the issue will
+<p>In other cases while the UDP is still malformed, the construction of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> will succeed and the issue will
 be revealed only when calling the malformed method:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">sphere_function</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -330,9 +324,9 @@ be revealed only when calling the malformed method:</p>
 <span class="go">AttributeError: &#39;numpy.float64&#39; object has no attribute &#39;__iter__&#39;</span>
 </pre></div>
 </div>
-<p>In this case, the issue is that the <code class="docutils literal"><span class="pre">fitness()</span></code> method returns a scalar instead of an array-like object (remember that pygmo is also
+<p>In this case, the issue is that the <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method returns a scalar instead of an array-like object (remember that pygmo is also
 able to solve multi-objective and constrained problems, thus the fitness value must be, in general, a vector). pygmo will complain
-about the wrong return type the first time the <code class="docutils literal"><span class="pre">fitness()</span></code> method is invoked.</p>
+about the wrong return type the first time the <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method is invoked.</p>
 </div>
 <div class="section" id="notes-on-computational-speed">
 <h2>Notes on computational speed<a class="headerlink" href="#notes-on-computational-speed" title="Permalink to this headline">¶</a></h2>
@@ -340,13 +334,13 @@ about the wrong return type the first time the <code class="docutils literal"><s
 are included in pygmo (see <a class="reference internal" href="../problems/py_problems.html#py-problems"><span class="std std-ref">List of problems available in pygmo</span></a>) are like that. When writing your own UDP, though, it is often quicker and less
 painful to code, as shown in this tutorial, directly in python. What effect does this have w.r.t. the ideal
 situation? Well, Let’s see, on a test machine, a simple example: the scalable Rosenbrock function:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}{ll}
   \mbox{minimize: } &amp; \sum_{i=1}^{N-1} 100 (x_{i+1} - x_i^2 )^2 + (1-x_i)^2 \\
   \mbox{subject to:} &amp; -5 \le x_i \le 10, i = 1..N
 \end{array}\end{split}\]</div>
 <p>which in pygmo can be quickly written as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">py_rosenbrock</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dim</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
@@ -360,7 +354,7 @@ situation? Well, Let’s see, on a test machine, a simple example: the scalable 
 </pre></div>
 </div>
 <p>We now make a quick and dirty profiling instantiating a high dimensional instance of Rosenbrock: 2000 variables!!</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob_python</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">py_rosenbrock</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prob_python</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">py_rosenbrock</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob_cpp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">2000</span><span class="p">,),</span> <span class="mf">1.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">time</span>
@@ -373,7 +367,7 @@ situation? Well, Let’s see, on a test machine, a simple example: the scalable 
 <p>wait a minute … really? Python is two orders of magnitude slower than cpp? Do not panic. This is a very large problem and that for loop is not going to be
 super optimized in python. Let’s see if we can do better in these cases …. Let us use the jit decorator from numba to compile
 our fitness method into C code.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">jit</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">jit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">jit_rosenbrock</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dim</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
@@ -391,7 +385,7 @@ our fitness method into C code.</p>
 </pre></div>
 </div>
 <p>With a bit more elbow grease, we can further improve performance:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">float64</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">float64</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">jit_rosenbrock2</span><span class="p">:</span>
 <span class="gp">... </span>     <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>         <span class="k">return</span> <span class="n">jit_rosenbrock2</span><span class="o">.</span><span class="n">_fitness</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -414,8 +408,8 @@ our fitness method into C code.</p>
 </div>
 <p>Much better, right?</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">For more information on using Numba to speed up your python code see the <a class="reference external" href="http://numba.pydata.org/">Numba documentation pages</a>.
+<p class="admonition-title">Note</p>
+<p>For more information on using Numba to speed up your python code see the <a class="reference external" href="http://numba.pydata.org/">Numba documentation pages</a>.
 In particular, note that only a limited part of NumPy and the python language in general is supported by this use.</p>
 </div>
 </div>
@@ -434,7 +428,7 @@ In particular, note that only a limited part of NumPy and the python language in
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

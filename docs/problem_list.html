@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>List of problems (UDPs) available in pagmo/pygmo &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="List of islands (UDIs) available in pagmo/pygmo" href="island_list.html" />
     <link rel="prev" title="List of algorithms (UDAs) available in pagmo/pygmo" href="algorithm_list.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -188,138 +180,138 @@
   <div class="section" id="list-of-problems-udps-available-in-pagmo-pygmo">
 <span id="problems"></span><h1>List of problems (UDPs) available in pagmo/pygmo<a class="headerlink" href="#list-of-problems-udps-available-in-pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
 <p>This is the list of user defined problems (UDPs) currently provided with pagmo/pygmo. These are classes that
-can be used to construct a <a class="reference internal" href="cpp/problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::problem</span></code></a> (C++), or a <a class="reference internal" href="python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a> (Python), which will
+can be used to construct a <a class="reference internal" href="cpp/problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> (C++), or a <a class="reference internal" href="python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a> (Python), which will
 then provide a unified interface to access the problem’s functionalities.</p>
 <p>In the tables below, we classify optimisation problems according to the following flags:</p>
 <ul class="simple">
-<li>S = Single-objective</li>
-<li>M = Multi-objective</li>
-<li>C = Constrained</li>
-<li>U = Unconstrained</li>
-<li>I = Integer programming</li>
-<li>sto = Stochastic</li>
+<li><p>S = Single-objective</p></li>
+<li><p>M = Multi-objective</p></li>
+<li><p>C = Constrained</p></li>
+<li><p>U = Unconstrained</p></li>
+<li><p>I = Integer programming</p></li>
+<li><p>sto = Stochastic</p></li>
 </ul>
 <div class="section" id="scalable-problems">
 <h2>Scalable problems<a class="headerlink" href="#scalable-problems" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="37%" />
-<col width="26%" />
-<col width="26%" />
-<col width="10%" />
+<col style="width: 37%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+<col style="width: 10%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Common Name</th>
-<th class="head">Docs of the C++ class</th>
-<th class="head">Docs of the python class</th>
-<th class="head">Type</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Docs of the python class</p></th>
+<th class="head"><p>Type</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>Ackley</td>
-<td><a class="reference internal" href="cpp/problems/ackley.html#_CPPv2N5pagmo6ackleyE" title="pagmo::ackley"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::ackley</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.ackley" title="pygmo.ackley"><code class="xref py py-class docutils literal"><span class="pre">pygmo.ackley</span></code></a></td>
-<td>S-U</td>
+<tbody>
+<tr class="row-even"><td><p>Ackley</p></td>
+<td><p><a class="reference internal" href="cpp/problems/ackley.html#_CPPv4N5pagmo6ackleyE" title="pagmo::ackley"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ackley</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.ackley" title="pygmo.ackley"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.ackley</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-odd"><td>Golomb Ruler</td>
-<td><a class="reference internal" href="cpp/problems/golomb_ruler.html#_CPPv2N5pagmo12golomb_rulerE" title="pagmo::golomb_ruler"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::golomb_ruler</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.golomb_ruler" title="pygmo.golomb_ruler"><code class="xref py py-class docutils literal"><span class="pre">pygmo.golomb_ruler</span></code></a></td>
-<td>S-C-I</td>
+<tr class="row-odd"><td><p>Golomb Ruler</p></td>
+<td><p><a class="reference internal" href="cpp/problems/golomb_ruler.html#_CPPv4N5pagmo12golomb_rulerE" title="pagmo::golomb_ruler"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::golomb_ruler</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.golomb_ruler" title="pygmo.golomb_ruler"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.golomb_ruler</span></code></a></p></td>
+<td><p>S-C-I</p></td>
 </tr>
-<tr class="row-even"><td>Griewank</td>
-<td><a class="reference internal" href="cpp/problems/griewank.html#_CPPv2N5pagmo8griewankE" title="pagmo::griewank"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::griewank</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.griewank" title="pygmo.griewank"><code class="xref py py-class docutils literal"><span class="pre">pygmo.griewank</span></code></a></td>
-<td>S-U</td>
+<tr class="row-even"><td><p>Griewank</p></td>
+<td><p><a class="reference internal" href="cpp/problems/griewank.html#_CPPv4N5pagmo8griewankE" title="pagmo::griewank"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::griewank</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.griewank" title="pygmo.griewank"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.griewank</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-odd"><td>Hock Schittkowsky 71</td>
-<td><a class="reference internal" href="cpp/problems/hock_schittkowsky_71.html#_CPPv2N5pagmo20hock_schittkowsky_71E" title="pagmo::hock_schittkowsky_71"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::hock_schittkowsky_71</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.hock_schittkowsky_71" title="pygmo.hock_schittkowsky_71"><code class="xref py py-class docutils literal"><span class="pre">pygmo.hock_schittkowsky_71</span></code></a></td>
-<td>S-C</td>
+<tr class="row-odd"><td><p>Hock Schittkowsky 71</p></td>
+<td><p><a class="reference internal" href="cpp/problems/hock_schittkowsky_71.html#_CPPv4N5pagmo20hock_schittkowsky_71E" title="pagmo::hock_schittkowsky_71"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::hock_schittkowsky_71</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.hock_schittkowsky_71" title="pygmo.hock_schittkowsky_71"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.hock_schittkowsky_71</span></code></a></p></td>
+<td><p>S-C</p></td>
 </tr>
-<tr class="row-even"><td>Inventory</td>
-<td><a class="reference internal" href="cpp/problems/inventory.html#_CPPv2N5pagmo9inventoryE" title="pagmo::inventory"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::inventory</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.inventory" title="pygmo.inventory"><code class="xref py py-class docutils literal"><span class="pre">pygmo.inventory</span></code></a></td>
-<td>S-U-sto</td>
+<tr class="row-even"><td><p>Inventory</p></td>
+<td><p><a class="reference internal" href="cpp/problems/inventory.html#_CPPv4N5pagmo9inventoryE" title="pagmo::inventory"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::inventory</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.inventory" title="pygmo.inventory"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.inventory</span></code></a></p></td>
+<td><p>S-U-sto</p></td>
 </tr>
-<tr class="row-odd"><td>Lennard Jones</td>
-<td><a class="reference internal" href="cpp/problems/lennard_jones.html#_CPPv2N5pagmo13lennard_jonesE" title="pagmo::lennard_jones"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::lennard_jones</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.lennard_jones" title="pygmo.lennard_jones"><code class="xref py py-class docutils literal"><span class="pre">pygmo.lennard_jones</span></code></a></td>
-<td>S-U</td>
+<tr class="row-odd"><td><p>Lennard Jones</p></td>
+<td><p><a class="reference internal" href="cpp/problems/lennard_jones.html#_CPPv4N5pagmo13lennard_jonesE" title="pagmo::lennard_jones"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::lennard_jones</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.lennard_jones" title="pygmo.lennard_jones"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.lennard_jones</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td>Luksan Vlcek 1</td>
-<td><a class="reference internal" href="cpp/problems/luksan_vlcek1.html#_CPPv2N5pagmo13luksan_vlcek1E" title="pagmo::luksan_vlcek1"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::luksan_vlcek1</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal"><span class="pre">pygmo.luksan_vlcek1</span></code></a></td>
-<td>S-C</td>
+<tr class="row-even"><td><p>Luksan Vlcek 1</p></td>
+<td><p><a class="reference internal" href="cpp/problems/luksan_vlcek1.html#_CPPv4N5pagmo13luksan_vlcek1E" title="pagmo::luksan_vlcek1"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::luksan_vlcek1</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.luksan_vlcek1</span></code></a></p></td>
+<td><p>S-C</p></td>
 </tr>
-<tr class="row-odd"><td>Rastrigin</td>
-<td><a class="reference internal" href="cpp/problems/rastrigin.html#_CPPv2N5pagmo9rastriginE" title="pagmo::rastrigin"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::rastrigin</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.rastrigin" title="pygmo.rastrigin"><code class="xref py py-class docutils literal"><span class="pre">pygmo.rastrigin</span></code></a></td>
-<td>S-U</td>
+<tr class="row-odd"><td><p>Rastrigin</p></td>
+<td><p><a class="reference internal" href="cpp/problems/rastrigin.html#_CPPv4N5pagmo9rastriginE" title="pagmo::rastrigin"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::rastrigin</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.rastrigin" title="pygmo.rastrigin"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.rastrigin</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td>MINLP Rastrigin</td>
-<td><a class="reference internal" href="cpp/problems/minlp_rastrigin.html#_CPPv2N5pagmo15minlp_rastriginE" title="pagmo::minlp_rastrigin"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::minlp_rastrigin</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.minlp_rastrigin" title="pygmo.minlp_rastrigin"><code class="xref py py-class docutils literal"><span class="pre">pygmo.minlp_rastrigin</span></code></a></td>
-<td>S-U-I</td>
+<tr class="row-even"><td><p>MINLP Rastrigin</p></td>
+<td><p><a class="reference internal" href="cpp/problems/minlp_rastrigin.html#_CPPv4N5pagmo15minlp_rastriginE" title="pagmo::minlp_rastrigin"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::minlp_rastrigin</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.minlp_rastrigin" title="pygmo.minlp_rastrigin"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.minlp_rastrigin</span></code></a></p></td>
+<td><p>S-U-I</p></td>
 </tr>
-<tr class="row-odd"><td>Rosenbrock</td>
-<td><a class="reference internal" href="cpp/problems/rosenbrock.html#_CPPv2N5pagmo10rosenbrockE" title="pagmo::rosenbrock"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::rosenbrock</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">pygmo.rosenbrock</span></code></a></td>
-<td>S-U</td>
+<tr class="row-odd"><td><p>Rosenbrock</p></td>
+<td><p><a class="reference internal" href="cpp/problems/rosenbrock.html#_CPPv4N5pagmo10rosenbrockE" title="pagmo::rosenbrock"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::rosenbrock</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.rosenbrock</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td>Schwefel</td>
-<td><a class="reference internal" href="cpp/problems/schwefel.html#_CPPv2N5pagmo8schwefelE" title="pagmo::schwefel"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::schwefel</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.schwefel" title="pygmo.schwefel"><code class="xref py py-class docutils literal"><span class="pre">pygmo.schwefel</span></code></a></td>
-<td>S-U</td>
+<tr class="row-even"><td><p>Schwefel</p></td>
+<td><p><a class="reference internal" href="cpp/problems/schwefel.html#_CPPv4N5pagmo8schwefelE" title="pagmo::schwefel"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::schwefel</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.schwefel" title="pygmo.schwefel"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.schwefel</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="problem-suites">
 <h2>Problem suites<a class="headerlink" href="#problem-suites" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="25%" />
-<col width="32%" />
-<col width="32%" />
-<col width="11%" />
+<col style="width: 25%" />
+<col style="width: 32%" />
+<col style="width: 32%" />
+<col style="width: 11%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Common Name</th>
-<th class="head">Docs of the C++ class</th>
-<th class="head">Docs of the python class</th>
-<th class="head">Type</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Docs of the python class</p></th>
+<th class="head"><p>Type</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>CEC2006</td>
-<td><a class="reference internal" href="cpp/problems/cec2006.html#_CPPv2N5pagmo7cec2006E" title="pagmo::cec2006"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cec2006</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2006" title="pygmo.cec2006"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cec2006</span></code></a></td>
-<td>S-C</td>
+<tbody>
+<tr class="row-even"><td><p>CEC2006</p></td>
+<td><p><a class="reference internal" href="cpp/problems/cec2006.html#_CPPv4N5pagmo7cec2006E" title="pagmo::cec2006"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2006</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2006" title="pygmo.cec2006"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.cec2006</span></code></a></p></td>
+<td><p>S-C</p></td>
 </tr>
-<tr class="row-odd"><td>CEC2009</td>
-<td><a class="reference internal" href="cpp/problems/cec2009.html#_CPPv2N5pagmo7cec2009E" title="pagmo::cec2009"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cec2009</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2009" title="pygmo.cec2009"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cec2009</span></code></a></td>
-<td>S-C</td>
+<tr class="row-odd"><td><p>CEC2009</p></td>
+<td><p><a class="reference internal" href="cpp/problems/cec2009.html#_CPPv4N5pagmo7cec2009E" title="pagmo::cec2009"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2009</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2009" title="pygmo.cec2009"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.cec2009</span></code></a></p></td>
+<td><p>S-C</p></td>
 </tr>
-<tr class="row-even"><td>CEC2013</td>
-<td><a class="reference internal" href="cpp/problems/cec2013.html#_CPPv2N5pagmo7cec2013E" title="pagmo::cec2013"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cec2013</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cec2013</span></code></a></td>
-<td>S-U</td>
+<tr class="row-even"><td><p>CEC2013</p></td>
+<td><p><a class="reference internal" href="cpp/problems/cec2013.html#_CPPv4N5pagmo7cec2013E" title="pagmo::cec2013"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2013</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.cec2013</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-odd"><td>CEC2014</td>
-<td><a class="reference internal" href="cpp/problems/cec2014.html#_CPPv2N5pagmo7cec2014E" title="pagmo::cec2014"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::cec2014</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2014" title="pygmo.cec2014"><code class="xref py py-class docutils literal"><span class="pre">pygmo.cec2014</span></code></a></td>
-<td>S-U</td>
+<tr class="row-odd"><td><p>CEC2014</p></td>
+<td><p><a class="reference internal" href="cpp/problems/cec2014.html#_CPPv4N5pagmo7cec2014E" title="pagmo::cec2014"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2014</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.cec2014" title="pygmo.cec2014"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.cec2014</span></code></a></p></td>
+<td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td>ZDT</td>
-<td><a class="reference internal" href="cpp/problems/zdt.html#_CPPv2N5pagmo3zdtE" title="pagmo::zdt"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::zdt</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.zdt" title="pygmo.zdt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.zdt</span></code></a></td>
-<td>M-U</td>
+<tr class="row-even"><td><p>ZDT</p></td>
+<td><p><a class="reference internal" href="cpp/problems/zdt.html#_CPPv4N5pagmo3zdtE" title="pagmo::zdt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::zdt</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.zdt" title="pygmo.zdt"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.zdt</span></code></a></p></td>
+<td><p>M-U</p></td>
 </tr>
-<tr class="row-odd"><td>DTLZ</td>
-<td><a class="reference internal" href="cpp/problems/dtlz.html#_CPPv2N5pagmo4dtlzE" title="pagmo::dtlz"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::dtlz</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal"><span class="pre">pygmo.dtlz</span></code></a></td>
-<td>M-U</td>
+<tr class="row-odd"><td><p>DTLZ</p></td>
+<td><p><a class="reference internal" href="cpp/problems/dtlz.html#_CPPv4N5pagmo4dtlzE" title="pagmo::dtlz"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::dtlz</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.dtlz</span></code></a></p></td>
+<td><p>M-U</p></td>
 </tr>
 </tbody>
 </table>
@@ -328,34 +320,34 @@ then provide a unified interface to access the problem’s functionalities.</p>
 <span id="id1"></span><h2>Meta-problems<a class="headerlink" href="#meta-problems" title="Permalink to this headline">¶</a></h2>
 <p>Meta-problems are UDPs that take another UDP as input, yielding a new UDP which modifies the behaviour and/or the properties of the original
 problem in a variety of ways.</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="41%" />
-<col width="29%" />
-<col width="29%" />
+<col style="width: 41%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Common Name</th>
-<th class="head">Docs of the C++ class</th>
-<th class="head">Docs of the python class</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Docs of the python class</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>Decompose</td>
-<td><a class="reference internal" href="cpp/problems/decompose.html#_CPPv2N5pagmo9decomposeE" title="pagmo::decompose"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::decompose</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">pygmo.decompose</span></code></a></td>
+<tbody>
+<tr class="row-even"><td><p>Decompose</p></td>
+<td><p><a class="reference internal" href="cpp/problems/decompose.html#_CPPv4N5pagmo9decomposeE" title="pagmo::decompose"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::decompose</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.decompose</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td>Translate</td>
-<td><a class="reference internal" href="cpp/problems/translate.html#_CPPv2N5pagmo9translateE" title="pagmo::translate"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::translate</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.translate" title="pygmo.translate"><code class="xref py py-class docutils literal"><span class="pre">pygmo.translate</span></code></a></td>
+<tr class="row-odd"><td><p>Translate</p></td>
+<td><p><a class="reference internal" href="cpp/problems/translate.html#_CPPv4N5pagmo9translateE" title="pagmo::translate"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::translate</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.translate" title="pygmo.translate"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.translate</span></code></a></p></td>
 </tr>
-<tr class="row-even"><td>Unconstrain</td>
-<td><a class="reference internal" href="cpp/problems/unconstrain.html#_CPPv2N5pagmo11unconstrainE" title="pagmo::unconstrain"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::unconstrain</span></code></a></td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.unconstrain" title="pygmo.unconstrain"><code class="xref py py-class docutils literal"><span class="pre">pygmo.unconstrain</span></code></a></td>
+<tr class="row-even"><td><p>Unconstrain</p></td>
+<td><p><a class="reference internal" href="cpp/problems/unconstrain.html#_CPPv4N5pagmo11unconstrainE" title="pagmo::unconstrain"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::unconstrain</span></code></a></p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.unconstrain" title="pygmo.unconstrain"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.unconstrain</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td>Decorator</td>
-<td>N/A</td>
-<td><a class="reference internal" href="python/problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.decorator_problem</span></code></a></td>
+<tr class="row-odd"><td><p>Decorator</p></td>
+<td><p>N/A</p></td>
+<td><p><a class="reference internal" href="python/problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.decorator_problem</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -375,7 +367,7 @@ problem in a variety of ways.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

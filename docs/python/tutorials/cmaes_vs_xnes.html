@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Comparing algorithms: the case of xNES and CMA-ES &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Credits" href="../../../credits.html" />
     <link rel="prev" title="Solving the 20 dimensional Schwefel problem" href="solving_schwefel_20.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -185,14 +177,14 @@
 <p>In this tutorial we will show how to use pygmo to comapre the performances of two UDAs. We lay down a standard
 procedure which is to be considered the best practice to perfrom comaprisons and should be used when possible, that
 is when algorithms have well defined exit conditions.</p>
-<p>We take the case of the two UDAs <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.xnes" title="pygmo.xnes"><code class="xref py py-class docutils literal"><span class="pre">xnes</span></code></a>.</p>
+<p>We take the case of the two UDAs <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.xnes" title="pygmo.xnes"><code class="xref py py-class docutils literal notranslate"><span class="pre">xnes</span></code></a>.</p>
 <p>Both algorithms are based on the idea of updating a gaussian distribution that regulates the generation
 of new samples, but they differ from the update rules, the ones of xNES being arguably more elegant
 and surely more compact.</p>
 <p>In order to compare the algorithms we use the experimental cumulative distribution function (ECDF) describing
-the probability of finding a solution with an objective function smaller than some <code class="docutils literal"><span class="pre">target</span></code>
+the probability of finding a solution with an objective function smaller than some <code class="docutils literal notranslate"><span class="pre">target</span></code>
 within a certain budget of function evaluations. Estimating such a ECDF can be done using the results from
-calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm a number of times (<code class="docutils literal"><span class="pre">trials</span></code>) and assembling the results in single runs
+calling the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm a number of times (<code class="docutils literal notranslate"><span class="pre">trials</span></code>) and assembling the results in single runs
 containing multiple restarts.</p>
 <a class="reference internal image-reference" href="../../../_images/cmaes_vs_xnes1.png"><img alt="../../../_images/cmaes_vs_xnes1.png" src="../../../_images/cmaes_vs_xnes1.png" style="width: 320.0px; height: 240.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cmaes_vs_xnes2.png"><img alt="../../../_images/cmaes_vs_xnes2.png" src="../../../_images/cmaes_vs_xnes2.png" style="width: 320.0px; height: 240.0px;" /></a>
@@ -202,7 +194,7 @@ containing multiple restarts.</p>
 <a class="reference internal image-reference" href="../../../_images/cmaes_vs_xnes6.png"><img alt="../../../_images/cmaes_vs_xnes6.png" src="../../../_images/cmaes_vs_xnes6.png" style="width: 320.0px; height: 240.0px;" /></a>
 <p>The results clearly show how CMA-ES is, on these three problems considered, outperforming consistently xNES.</p>
 <p>The plots can be obtained by running the script below, where the population size and the udp are properly defined.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># 1  We import what is needed</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># 1  We import what is needed</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
@@ -274,7 +266,7 @@ containing multiple restarts.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

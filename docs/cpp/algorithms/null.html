@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Null algorithm &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Artificial Bee Colony" href="bee_colony.html" />
-    <link rel="prev" title="Archipelago" href="../archipelago.html" />
+    <link rel="prev" title="Batch fitness evaluator" href="../bfe.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,23 +175,22 @@
   <div class="section" id="null-algorithm">
 <h1>Null algorithm<a class="headerlink" href="#null-algorithm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo14null_algorithmE">
-<span id="pagmo::null_algorithm"></span><span class="target" id="structpagmo_1_1null__algorithm"></span><em class="property">struct </em><code class="descname">null_algorithm</code><a class="headerlink" href="#_CPPv2N5pagmo14null_algorithmE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo14null_algorithmE">
+<span id="_CPPv3N5pagmo14null_algorithmE"></span><span id="_CPPv2N5pagmo14null_algorithmE"></span><span id="pagmo::null_algorithm"></span><span class="target" id="structpagmo_1_1null__algorithm"></span><em class="property">struct </em><code class="descname">null_algorithm</code><a class="headerlink" href="#_CPPv4N5pagmo14null_algorithmE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Null algorithm. </p>
 <p>This algorithm is used to implement the default constructors of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and of the meta-algorithms. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14null_algorithm6evolveERK10population">
-<span id="pagmo::null_algorithm::evolve__populationCRC"></span><span class="target" id="structpagmo_1_1null__algorithm_1a1f01412ae58feca586bf4932d3028ba3"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14null_algorithm6evolveERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14null_algorithm6evolveERK10population">
+<span id="_CPPv3NK5pagmo14null_algorithm6evolveERK10population"></span><span id="_CPPv2NK5pagmo14null_algorithm6evolveERK10population"></span><span id="pagmo::null_algorithm::evolve__populationCRC"></span><span class="target" id="structpagmo_1_1null__algorithm_1a1f01412ae58feca586bf4932d3028ba3"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14null_algorithm6evolveERK10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve method. </p>
 <p>In the null algorithm, the evolve method just returns the input population.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a copy of the input population. </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: input population.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a copy of the input population. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: input population.</p></li>
 </ul>
 </dd>
 </dl>
@@ -207,19 +198,19 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14null_algorithm8get_nameEv">
-<span id="pagmo::null_algorithm::get_nameC"></span><span class="target" id="structpagmo_1_1null__algorithm_1a7f438765b0597ee2f0cf259a92b7cf63"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14null_algorithm8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14null_algorithm8get_nameEv">
+<span id="_CPPv3NK5pagmo14null_algorithm8get_nameEv"></span><span id="_CPPv2NK5pagmo14null_algorithm8get_nameEv"></span><span id="pagmo::null_algorithm::get_nameC"></span><span class="target" id="structpagmo_1_1null__algorithm_1a7f438765b0597ee2f0cf259a92b7cf63"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14null_algorithm8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd><code class="docutils literal"><span class="pre">&quot;Null</span> <span class="pre">algorithm&quot;</span></code>. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">&quot;Null</span> <span class="pre">algorithm&quot;</span></code>. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo14null_algorithm9serializeER7Archive">
-<span id="pagmo::null_algorithm::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="structpagmo_1_1null__algorithm_1a6fe97157f8a861a605c93b56d1fa6c94"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14null_algorithm9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo14null_algorithm9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo14null_algorithm9serializeER7Archive"></span><span class="target" id="structpagmo_1_1null__algorithm_1a6fe97157f8a861a605c93b56d1fa6c94"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archive" title="pagmo::null_algorithm::serialize::Archive">Archive</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialization support. </p>
 <p>This class is stateless, no data will be loaded or saved during serialization. </p>
 </dd></dl>
@@ -242,7 +233,7 @@
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

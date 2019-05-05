@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Archipelago class &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Miscellanea" href="py_misc.html" />
+    <link rel="next" title="Bfe class" href="py_bfe.html" />
     <link rel="prev" title="Island class" href="py_island.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -187,63 +179,59 @@
 <dt id="pygmo.archipelago">
 <em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">archipelago</code><span class="sig-paren">(</span><em>n=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago" title="Permalink to this definition">¶</a></dt>
 <dd><p>Archipelago.</p>
-<p>An archipelago is a collection of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> objects which provides a convenient way to perform
+<p>An archipelago is a collection of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> objects which provides a convenient way to perform
 multiple optimisations in parallel.</p>
-<p>The interface of <a class="reference internal" href="#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> mirrors partially the interface of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>: the
-evolution is initiated by a call to <a class="reference internal" href="#pygmo.archipelago.evolve" title="pygmo.archipelago.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>, and at any time the user can query the
+<p>The interface of <a class="reference internal" href="#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a> mirrors partially the interface of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>: the
+evolution is initiated by a call to <a class="reference internal" href="#pygmo.archipelago.evolve" title="pygmo.archipelago.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a>, and at any time the user can query the
 state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
-to conclude by calling the <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> and <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> methods.
-The status of ongoing evolutions in the archipelago can be queried via the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute.</p>
+to conclude by calling the <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait()</span></code></a> and <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a> methods.
+The status of ongoing evolutions in the archipelago can be queried via the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a> attribute.</p>
 <p>The constructor will initialise an archipelago with <em>n</em> islands built from <em>kwargs</em>.
 The keyword arguments accept the same format as explained in the constructor of
-<a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, with the following differences:</p>
+<a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>, with the following differences:</p>
 <ul class="simple">
-<li><em>size</em> is replaced by <em>pop_size</em>, for clarity,</li>
-<li>the <em>seed</em> argument, if present, is used to initialise a random number generator
+<li><p><em>size</em> is replaced by <em>pop_size</em>, for clarity,</p></li>
+<li><p>the <em>seed</em> argument, if present, is used to initialise a random number generator
 that, in turn, is used to generate random seeds for each island population. In other
 words, the <em>seed</em> argument allows to generate randomly (but deterministically)
 the seeds of the populations in the archipelago. If <em>seed</em> is not provided, the seeds
-of the populations will be random and non-deterministic.</li>
+of the populations will be random and non-deterministic.</p></li>
 </ul>
-<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/archipelago.html#_CPPv2N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::archipelago</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of islands in the archipelago</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
-<li><strong>udi</strong> – a user-defined island, either Python or C++</li>
-<li><strong>algo</strong> – a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a></li>
-<li><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) – a population</li>
-<li><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a></li>
-<li><strong>pop_size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of individuals for each island</li>
-<li><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed</li>
+<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::archipelago</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of islands in the archipelago</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>udi</strong> – a user-defined island, either Python or C++</p></li>
+<li><p><strong>algo</strong> – a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p></li>
+<li><p><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – a population</p></li>
+<li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p></li>
+<li><p><strong>pop_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of individuals for each island</p></li>
+<li><p><strong>b</strong> – a user-defined batch fitness evaluator (either Python or C++), or an instance of <a class="reference internal" href="py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a></p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the random seed</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>n</em> is not an integral type</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if <em>n</em> is negative</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>
-or by the underlying C++ constructor</li>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>n</em> is not an integral type</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>n</em> is negative</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>
+    or by the underlying C++ constructor</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">de</span><span class="p">(),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="c1">#doctest: +SKIP</span>
 <span class="go">Number of islands: 16</span>
 <span class="go">Status: busy</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">Islands summaries:</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">        #   Type           Algo                    Prob                                  Size  Status</span>
 <span class="go">        -----------------------------------------------------------------------------------------------</span>
 <span class="go">        0   Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
@@ -262,10 +250,10 @@ or by the underlying C++ constructor</li>
 <span class="go">        13  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
 <span class="go">        14  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    busy</span>
 <span class="go">        15  Thread island  Differential Evolution  Multidimensional Rosenbrock Function  20    idle</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="c1">#doctest: +SKIP</span>
 <span class="go">[array([ 125441.77328885]),</span>
 <span class="go">array([ 144025.63904164]),</span>
 <span class="go">array([ 25387.38989711]),</span>
@@ -288,58 +276,54 @@ or by the underlying C++ constructor</li>
 <dt id="pygmo.archipelago.evolve">
 <code class="descname">evolve</code><span class="sig-paren">(</span><em>n = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve archipelago.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a> on all the islands of the archipelago.
-The input parameter <em>n</em> will be passed to the invocations of <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a> for each island.
-The <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute can be used to query the status of the asynchronous operations in the
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.evolve()</span></code></a> on all the islands of the archipelago.
+The input parameter <em>n</em> will be passed to the invocations of <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.evolve()</span></code></a> for each island.
+The <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a> attribute can be used to query the status of the asynchronous operations in the
 archipelago.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.evolve()</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the parameter that will be passed to <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.evolve()</span></code></a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.evolve()</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.archipelago.get_champions_f">
 <code class="descname">get_champions_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get_champions_f" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the fitness vectors of the islands’ champions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the fitness vectors of the islands’ champions</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float arrays</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
-mismatched function signatures, etc.)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the fitness vectors of the islands’ champions</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy float arrays</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+    mismatched function signatures, etc.)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.archipelago.get_champions_x">
 <code class="descname">get_champions_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.get_champions_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the decision vectors of the islands’ champions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the decision vectors of the islands’ champions</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">list</span></code> of 1D NumPy float arrays</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
-mismatched function signatures, etc.)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the decision vectors of the islands’ champions</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy float arrays</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+    mismatched function signatures, etc.)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -350,80 +334,72 @@ mismatched function signatures, etc.)</td>
 Islands are added at the end of the archipelago (that is, the new island will have an index
 equal to the size of the archipelago before the call to this method).</p>
 <p>The keyword arguments accept the same format as explained in the constructor of
-<a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> or by
-the underlying C++ method</td>
-</tr>
-</tbody>
-</table>
+<a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> or by
+    the underlying C++ method</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pygmo.archipelago.status">
 <code class="descname">status</code><a class="headerlink" href="#pygmo.archipelago.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Status of the archipelago.</p>
-<p>This read-only property will return an <a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a> flag indicating the current status of
+<p>This read-only property will return an <a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal notranslate"><span class="pre">evolve_status</span></code></a> flag indicating the current status of
 asynchronous operations in the archipelago. The flag will be:</p>
 <ul class="simple">
-<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> if, for all the islands in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>
-returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a>;</li>
-<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal"><span class="pre">busy</span></code></a> if, for at least one island in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>
-returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal"><span class="pre">busy</span></code></a>, and for no island <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a> returns an error status;</li>
-<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a> if no island in the archipelago is busy and for at least one island
-<a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a> returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a>;</li>
-<li><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy_error" title="pygmo.evolve_status.busy_error"><code class="xref py py-attr docutils literal"><span class="pre">busy_error</span></code></a> if, for at least one island in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.island.status</span></code></a>
-returns an error status and at least one island is busy.</li>
+<li><p><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle</span></code></a> if, for all the islands in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.island.status</span></code></a>
+returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle</span></code></a>;</p></li>
+<li><p><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">busy</span></code></a> if, for at least one island in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.island.status</span></code></a>
+returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy" title="pygmo.evolve_status.busy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">busy</span></code></a>, and for no island <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.island.status</span></code></a> returns an error status;</p></li>
+<li><p><a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle_error</span></code></a> if no island in the archipelago is busy and for at least one island
+<a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.island.status</span></code></a> returns <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle_error</span></code></a>;</p></li>
+<li><p><a class="reference internal" href="py_misc.html#pygmo.evolve_status.busy_error" title="pygmo.evolve_status.busy_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">busy_error</span></code></a> if, for at least one island in the archipelago, <a class="reference internal" href="py_island.html#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.island.status</span></code></a>
+returns an error status and at least one island is busy.</p></li>
 </ul>
-<p>Note that after a call to <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.archipelago.status</span></code></a> will always return
-<a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a>, and after a call to <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>, <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.archipelago.status</span></code></a>
-will always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">idle_error</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag indicating the current status of asynchronous operations in the archipelago</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal"><span class="pre">evolve_status</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<p>Note that after a call to <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>, <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.archipelago.status</span></code></a> will always return
+<a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle</span></code></a>, and after a call to <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait()</span></code></a>, <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.archipelago.status</span></code></a>
+will always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">idle_error</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a flag indicating the current status of asynchronous operations in the archipelago</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal notranslate"><span class="pre">evolve_status</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.archipelago.wait">
 <code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Block until all evolutions have finished.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait()</span></code></a> on all the islands of the archipelago. Exceptions thrown by island
-evolutions can be re-raised via <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>: they will <strong>not</strong> be re-thrown by this method.
-Also, contrary to <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, this method will <strong>not</strong> reset the status of the archipelago:
-after a call to <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a>, the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute will
-always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle_error</span></code></a>.</p>
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.wait()</span></code></a> on all the islands of the archipelago. Exceptions thrown by island
+evolutions can be re-raised via <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>: they will <strong>not</strong> be re-thrown by this method.
+Also, contrary to <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>, this method will <strong>not</strong> reset the status of the archipelago:
+after a call to <a class="reference internal" href="#pygmo.archipelago.wait" title="pygmo.archipelago.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait()</span></code></a>, the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a> attribute will
+always return either <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.evolve_status.idle</span></code></a> or <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle_error" title="pygmo.evolve_status.idle_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.evolve_status.idle_error</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.archipelago.wait_check">
 <code class="descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.archipelago.wait_check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Block until all evolutions have finished and raise the first exception that was encountered.</p>
-<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait_check()</span></code></a> on all the islands of the archipelago (following
+<p>This method will call <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.wait_check()</span></code></a> on all the islands of the archipelago (following
 the order in which the islands were inserted into the archipelago).
-The first exception raised by <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait_check()</span></code></a> will be re-raised by this method,
-and all the exceptions thrown by the other calls to <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">pygmo.island.wait_check()</span></code></a> will be ignored.</p>
-<p>Note that <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a> resets the status of the archipelago: after a call to
-<a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>, the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal"><span class="pre">status</span></code></a> attribute will
-always return <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.evolve_status.idle</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by any evolution task queued in the archipelago’s
-islands</td>
-</tr>
-</tbody>
-</table>
+The first exception raised by <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.wait_check()</span></code></a> will be re-raised by this method,
+and all the exceptions thrown by the other calls to <a class="reference internal" href="py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.island.wait_check()</span></code></a> will be ignored.</p>
+<p>Note that <a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a> resets the status of the archipelago: after a call to
+<a class="reference internal" href="#pygmo.archipelago.wait_check" title="pygmo.archipelago.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>, the <a class="reference internal" href="#pygmo.archipelago.status" title="pygmo.archipelago.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a> attribute will
+always return <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.evolve_status.idle</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by any evolution task queued in the archipelago’s
+    islands</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -443,7 +419,7 @@ islands</td>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

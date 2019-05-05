@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Benchmarking Extended Ant Colony Optimization on CEC2006 problems &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Participating to the CEC2013 Competition" href="cec2013_comp.html" />
     <link rel="prev" title="Approximating the hypervolume" href="hypervolume_approx.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -182,19 +174,19 @@
       
   <div class="section" id="benchmarking-extended-ant-colony-optimization-on-cec2006-problems">
 <span id="py-tutorial-cec2006-gaco-benchmark-comp"></span><h1>Benchmarking Extended Ant Colony Optimization on CEC2006 problems<a class="headerlink" href="#benchmarking-extended-ant-colony-optimization-on-cec2006-problems" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial we will show how to use pygmo to run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal"><span class="pre">gaco</span></code></a> algorithm and benchmark it with the test problem suite used in the
+<p>In this tutorial we will show how to use pygmo to run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal notranslate"><span class="pre">gaco</span></code></a> algorithm and benchmark it with the test problem suite used in the
 Special Session on Constrained Real-Parameter Optimization, CEC-06, Vancouver, Canada, 17-21 July.</p>
 <p>All of the CEC 2006 problems are box-bounded, continuous, single objective constrained problems and are provided as UDP
-(user-defined problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2006" title="pygmo.cec2006"><code class="xref py py-class docutils literal"><span class="pre">cec2006</span></code></a>.
+(user-defined problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2006" title="pygmo.cec2006"><code class="xref py py-class docutils literal notranslate"><span class="pre">cec2006</span></code></a>.
 We now want to benchmark three user-defined algorithms. Since this is a constrained probelm, we need a UDA (user-defined
-algorithm) which can handle constraints. In this respect, we can make use of the pygmo meta-algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a>
-to allow the use of any UDA for constrained problems. Hence, we will benchmark the extended ant colony optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal"><span class="pre">gaco</span></code></a>,
-with this same algorithm and with the self-adaptive differential evolution algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>, both coupled with a self-adaptive constraints handling technique.</p>
+algorithm) which can handle constraints. In this respect, we can make use of the pygmo meta-algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal notranslate"><span class="pre">cstrs_self_adaptive</span></code></a>
+to allow the use of any UDA for constrained problems. Hence, we will benchmark the extended ant colony optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal notranslate"><span class="pre">gaco</span></code></a>,
+with this same algorithm and with the self-adaptive differential evolution algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal notranslate"><span class="pre">sade</span></code></a>, both coupled with a self-adaptive constraints handling technique.</p>
 <p>In particular, we will make use of the three aforesaid UDAs on 6 of the 24 CEC2006 problems (namely, problems: 13, 14, 15,
 16, 17, 18). The best known fitness for these problems can be found in the technical report: “Problem Definitions and Evaluation Criteria for the CEC 2006 Special Session on Constrained
 Real-Parameter Optimization”, by J. J. Liang, et al., 2006.
 In order to run the UDAs on these problems we can write the following piece of code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#we first save the best known solutions in a vector:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">real_minima</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0539415140</span><span class="p">,</span> <span class="o">-</span><span class="mf">47.7648884595</span><span class="p">,</span> <span class="mf">961.7150222899</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.9051552586</span><span class="p">,</span> <span class="mf">8853.5396748064</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8660254038</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#we instantiate the problems</span>
@@ -215,9 +207,9 @@ In order to run the UDAs on these problems we can write the following piece of c
 <span class="gp">... </span>      <span class="n">algo_cstrs_sade</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="mi">23</span><span class="p">)</span>
 <span class="gp">... </span>      <span class="n">algo_cstrs_gaco</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="mi">23</span><span class="p">)</span>
 <span class="gp">... </span>      <span class="c1">#Instantiate populations:</span>
-<span class="gp">... </span>      <span class="n">pop_gaco</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
-<span class="gp">... </span>      <span class="n">pop_cstrs_sade</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
-<span class="gp">... </span>      <span class="n">pop_cstrs_gaco</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+<span class="gp">... </span>      <span class="n">pop_gaco</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>
+<span class="gp">... </span>      <span class="n">pop_cstrs_sade</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>
+<span class="gp">... </span>      <span class="n">pop_cstrs_gaco</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>
 <span class="gp">... </span>      <span class="c1">#Set verbosity:</span>
 <span class="gp">... </span>      <span class="n">algo_gaco</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">... </span>      <span class="n">algo_cstrs_sade</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -257,12 +249,12 @@ In order to run the UDAs on these problems we can write the following piece of c
 <span class="gp">... </span>          <span class="n">log_sa_gaco_P18</span><span class="o">=</span><span class="n">uda_sa_gaco</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>In this case, we run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal"><span class="pre">gaco</span></code></a> using a population of 100 individuals and 550 generations, whereas we run
-<a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal"><span class="pre">gaco</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> with <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal"><span class="pre">cstrs_self_adaptive</span></code></a> for 40 iterations with 10 generations
+<p>In this case, we run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal notranslate"><span class="pre">gaco</span></code></a> using a population of 100 individuals and 550 generations, whereas we run
+<a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal notranslate"><span class="pre">gaco</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal notranslate"><span class="pre">sade</span></code></a> with <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal notranslate"><span class="pre">cstrs_self_adaptive</span></code></a> for 40 iterations with 10 generations
 and 125 individuals in the population.
 We can now plot the results in a semilog graph with the absolute value of the  best fitness minus the
 known best fitness in the y-axis and the function evaluations in the x-axis. For doing this, we write the following piece of code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mlp</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mlp</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="s1">&#39;col&#39;</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="s1">&#39;row&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span> 
 
@@ -324,7 +316,7 @@ known best fitness in the y-axis and the function evaluations in the x-axis. For
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

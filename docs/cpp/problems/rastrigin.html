@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Rastrigin &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Schwefel" href="schwefel.html" />
     <link rel="prev" title="Rosenbrock" href="rosenbrock.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,34 +175,32 @@
   <div class="section" id="rastrigin">
 <h1>Rastrigin<a class="headerlink" href="#rastrigin" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo9rastriginE">
-<span id="pagmo::rastrigin"></span><span class="target" id="structpagmo_1_1rastrigin"></span><em class="property">struct </em><code class="descname">rastrigin</code><a class="headerlink" href="#_CPPv2N5pagmo9rastriginE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9rastriginE">
+<span id="_CPPv3N5pagmo9rastriginE"></span><span id="_CPPv2N5pagmo9rastriginE"></span><span id="pagmo::rastrigin"></span><span class="target" id="structpagmo_1_1rastrigin"></span><em class="property">struct </em><code class="descname">rastrigin</code><a class="headerlink" href="#_CPPv4N5pagmo9rastriginE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Rastrigin problem. </p>
 <p><img alt="../../../_images/rastrigin.png" src="../../../_images/rastrigin.png" /></p>
-<p>This is a scalable box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Rastrigin function: <div class="math">
+<p>This is a scalable box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Rastrigin function: <div class="math notranslate nohighlight">
 \[ F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right), \quad x_i \in \left[ -5.12,5.12 \right]. \]</div>
 </p>
-<p>Gradients (dense) are also provided as: <div class="math">
+<p>Gradients (dense) are also provided as: <div class="math notranslate nohighlight">
 \[ G_i\left(x_1,\ldots,x_n\right) = 2 x_i + 10 \cdot 2\pi \cdot\sin\left( 2\pi \cdot x_i \right) \]</div>
- And Hessians (sparse as only the diagonal is non-zero) are: <div class="math">
+ And Hessians (sparse as only the diagonal is non-zero) are: <div class="math notranslate nohighlight">
 \[ H_{ii}\left(x_1,\ldots,x_n\right) = 2 + 10 \cdot 4\pi^2 \cdot\cos\left( 2\pi \cdot x_i \right) \]</div>
- The global minimum is in the origin, where <span class="math">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
+ The global minimum is in the origin, where <span class="math notranslate nohighlight">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo9rastrigin9rastriginEj">
-<span id="pagmo::rastrigin::rastrigin__unsigned-i"></span><span class="target" id="structpagmo_1_1rastrigin_1ae84a15e07bad21532c123588d91da628"></span><code class="descname">rastrigin</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9rastrigin9rastriginEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9rastrigin9rastriginEj">
+<span id="_CPPv3N5pagmo9rastrigin9rastriginEj"></span><span id="_CPPv2N5pagmo9rastrigin9rastriginEj"></span><span id="pagmo::rastrigin::rastrigin__unsigned-i"></span><span class="target" id="structpagmo_1_1rastrigin_1ae84a15e07bad21532c123588d91da628"></span><code class="descname">rastrigin</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9rastrigin9rastriginEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension. </p>
 <p>Constructs a Rastrigin problem</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">dim</span></code>: the problem dimensions.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: the problem dimensions.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">dim</span></code> is &lt; 1 </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">dim</span></code> is &lt; 1 </p></li>
 </ul>
 </dd>
 </dl>
@@ -218,16 +208,15 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin7fitnessERK13vector_double">
-<span id="pagmo::rastrigin::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rastrigin_1aa4af35ae34ce19d7ddd0c21b65660a79"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin7fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo9rastrigin7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9rastrigin7fitnessERK13vector_double"></span><span id="pagmo::rastrigin::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rastrigin_1aa4af35ae34ce19d7ddd0c21b65660a79"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
 </ul>
 </dd>
 </dl>
@@ -235,29 +224,28 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin10get_boundsEv">
-<span id="pagmo::rastrigin::get_boundsC"></span><span class="target" id="structpagmo_1_1rastrigin_1ad50c82f4fb8ffdbdc7af75cf7e2a9508"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin10get_boundsEv">
+<span id="_CPPv3NK5pagmo9rastrigin10get_boundsEv"></span><span id="_CPPv2NK5pagmo9rastrigin10get_boundsEv"></span><span id="pagmo::rastrigin::get_boundsC"></span><span class="target" id="structpagmo_1_1rastrigin_1ad50c82f4fb8ffdbdc7af75cf7e2a9508"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the lower and upper bounds for each of the decision vector components </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin8gradientERK13vector_double">
-<span id="pagmo::rastrigin::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rastrigin_1a14ee769c9a33bf031f7e94fbaf2795d3"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin8gradientERK13vector_double">
+<span id="_CPPv3NK5pagmo9rastrigin8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo9rastrigin8gradientERK13vector_double"></span><span id="pagmo::rastrigin::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rastrigin_1a14ee769c9a33bf031f7e94fbaf2795d3"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradients. </p>
 <p>It returns the fitness gradient for this UDP.</p>
 <p>The gradient is represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a3fb8d8bb7b34477509eb9df3cd7b6e2e"><span class="std std-ref">problem::gradient()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the gradient of the fitness function </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the gradient of the fitness function </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
 </ul>
 </dd>
 </dl>
@@ -265,17 +253,16 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin8hessiansERK13vector_double">
-<span id="pagmo::rastrigin::hessians__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rastrigin_1a5afa12eef70e68963a22e9205ad43c4a"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin8hessiansERK13vector_double">
+<span id="_CPPv3NK5pagmo9rastrigin8hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo9rastrigin8hessiansERK13vector_double"></span><span id="pagmo::rastrigin::hessians__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rastrigin_1a5afa12eef70e68963a22e9205ad43c4a"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians. </p>
 <p>It returns the hessians for this UDP.</p>
 <p>The hessians are represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a5ccf5719ef8d91d53599fba84cdb1674"><span class="std std-ref">problem::hessians()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the hessians of the fitness function </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the hessians of the fitness function </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
 </ul>
 </dd>
 </dl>
@@ -283,54 +270,52 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin17hessians_sparsityEv">
-<span id="pagmo::rastrigin::hessians_sparsityC"></span><span class="target" id="structpagmo_1_1rastrigin_1a9a72db1fcd1ce060782418563d7655d1"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin17hessians_sparsityEv">
+<span id="_CPPv3NK5pagmo9rastrigin17hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9rastrigin17hessians_sparsityEv"></span><span id="pagmo::rastrigin::hessians_sparsityC"></span><span class="target" id="structpagmo_1_1rastrigin_1a9a72db1fcd1ce060782418563d7655d1"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians sparsity (only the diagonal elements are non zero) </p>
 <p>It returns the hessian sparisty structure for this UDP.</p>
 <p>The hessian sparisty is represented in the form required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a3d09e4d003514ed3626d85df3d02616e"><span class="std std-ref">problem::hessians_sparsity()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the hessians of the fitness function </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the hessians of the fitness function </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin8get_nameEv">
-<span id="pagmo::rastrigin::get_nameC"></span><span class="target" id="structpagmo_1_1rastrigin_1ac861550ff84128655df189705ed864ed"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin8get_nameEv">
+<span id="_CPPv3NK5pagmo9rastrigin8get_nameEv"></span><span id="_CPPv2NK5pagmo9rastrigin8get_nameEv"></span><span id="pagmo::rastrigin::get_nameC"></span><span class="target" id="structpagmo_1_1rastrigin_1ac861550ff84128655df189705ed864ed"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the problem name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the problem name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9rastrigin10best_knownEv">
-<span id="pagmo::rastrigin::best_knownC"></span><span class="target" id="structpagmo_1_1rastrigin_1a7954a8d7c8bcb94fc35b572366455141"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9rastrigin10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9rastrigin10best_knownEv">
+<span id="_CPPv3NK5pagmo9rastrigin10best_knownEv"></span><span id="_CPPv2NK5pagmo9rastrigin10best_knownEv"></span><span id="pagmo::rastrigin::best_knownC"></span><span class="target" id="structpagmo_1_1rastrigin_1a7954a8d7c8bcb94fc35b572366455141"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9rastrigin10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the decision vector corresponding to the best solution for this problem. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the decision vector corresponding to the best solution for this problem. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9rastrigin9serializeER7Archive">
-<span id="pagmo::rastrigin::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="structpagmo_1_1rastrigin_1aa17c613b1b336d0182801d105d408a6e"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9rastrigin9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo9rastrigin9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo9rastrigin9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo9rastrigin9serializeER7Archive"></span><span class="target" id="structpagmo_1_1rastrigin_1aa17c613b1b336d0182801d105d408a6e"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9rastrigin9serializeEvR7Archive" title="pagmo::rastrigin::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9rastrigin9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -341,8 +326,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="member">
-<dt id="_CPPv2N5pagmo9rastrigin5m_dimE">
-<span id="pagmo::rastrigin::m_dim__unsigned-i"></span><span class="target" id="structpagmo_1_1rastrigin_1a554e17d40b8b50aea01c5e7505b4b436"></span>unsigned int <code class="descname">m_dim</code><a class="headerlink" href="#_CPPv2N5pagmo9rastrigin5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9rastrigin5m_dimE">
+<span id="_CPPv3N5pagmo9rastrigin5m_dimE"></span><span id="_CPPv2N5pagmo9rastrigin5m_dimE"></span><span id="pagmo::rastrigin::m_dim__unsigned-i"></span><span class="target" id="structpagmo_1_1rastrigin_1a554e17d40b8b50aea01c5e7505b4b436"></span>unsigned int <code class="descname">m_dim</code><a class="headerlink" href="#_CPPv4N5pagmo9rastrigin5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>
 </dd></dl>
 
@@ -364,7 +349,7 @@
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

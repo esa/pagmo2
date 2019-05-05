@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Installation guide &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quick start" href="quickstart.html" />
     <link rel="prev" title="Pagmo &amp; Pygmo" href="index.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -196,36 +188,36 @@
 <span id="cpp-install"></span><h2>C++<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
 <p>pagmo is a header-only library which has the following third-party dependencies:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://www.boost.org/">Boost</a>, <strong>mandatory</strong>, header-only</li>
-<li><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, optional, header-only
-(enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_EIGEN3</span></code> CMake option)</li>
-<li><a class="reference external" href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>, optional, requires linking
-(enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_NLOPT</span></code> CMake option)</li>
-<li><a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a>, optional, requires linking
-(enabled via the <code class="docutils literal"><span class="pre">PAGMO_WITH_IPOPT</span></code> CMake option)</li>
+<li><p><a class="reference external" href="https://www.boost.org/">Boost</a>, <strong>mandatory</strong>, header-only</p></li>
+<li><p><a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>, optional, header-only
+(enabled via the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_EIGEN3</span></code> CMake option)</p></li>
+<li><p><a class="reference external" href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>, optional, requires linking
+(enabled via the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_NLOPT</span></code> CMake option)</p></li>
+<li><p><a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a>, optional, requires linking
+(enabled via the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_IPOPT</span></code> CMake option)</p></li>
 </ul>
 <p>After making sure the dependencies above are installed in your system, you can download the
 pagmo source code from the <a class="reference external" href="https://github.com/esa/pagmo2/releases">GitHub release page</a>. Alternatively,
-and if you like living on the bleeding edge, you can get the very latest version of pagmo via the <code class="docutils literal"><span class="pre">git</span></code>
+and if you like living on the bleeding edge, you can get the very latest version of pagmo via the <code class="docutils literal notranslate"><span class="pre">git</span></code>
 command:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/esa/pagmo2.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/esa/pagmo2.git
 </pre></div>
 </div>
-<p>Once you are in pagmo’s source tree, you must configure your build using <code class="docutils literal"><span class="pre">cmake</span></code>. This will allow
+<p>Once you are in pagmo’s source tree, you must configure your build using <code class="docutils literal notranslate"><span class="pre">cmake</span></code>. This will allow
 you to enable support for optional dependencies, configure the install destination, etc. For example,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>~/.local .
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -DCMAKE_INSTALL_PREFIX<span class="o">=</span>~/.local .
 </pre></div>
 </div>
-<p>The headers will be installed in the <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX/include</span></code> directory.
+<p>The headers will be installed in the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX/include</span></code> directory.
 When done, you can install pagmo via the command:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>make install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install
 </pre></div>
 </div>
 <p>To check that all went well compile the <a class="reference internal" href="quickstart.html#getting-started-c"><span class="std std-ref">quick-start example</span></a>.</p>
 <p>pagmo is also available via the <a class="reference external" href="https://conda.io/docs/">conda</a> package manager for Linux, OSX and Windows.
-In order to install pagmo via conda, you just need to add <code class="docutils literal"><span class="pre">conda-forge</span></code> to the channels,
+In order to install pagmo via conda, you just need to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> to the channels,
 and then we can immediately install pagmo:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
 conda install pagmo
 </pre></div>
 </div>
@@ -236,61 +228,61 @@ your conda installation.</p>
 <span id="py-install"></span><h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
 <p>The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.numpy.org/">NumPy</a>, the standard Python array library</li>
-<li><a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>, a package that extends Python’s serialization
-capabilities.</li>
+<li><p><a class="reference external" href="http://www.numpy.org/">NumPy</a>, the standard Python array library</p></li>
+<li><p><a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>, a package that extends Python’s serialization
+capabilities.</p></li>
 </ul>
 <p>There are various options for the installation of pygmo:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://conda.io/docs/">conda</a></li>
-<li><a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a></li>
-<li>installation from source.</li>
+<li><p><a class="reference external" href="https://conda.io/docs/">conda</a></p></li>
+<li><p><a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a></p></li>
+<li><p>installation from source.</p></li>
 </ul>
 <p>The following table summarizes the pros and cons of the various installation methods:</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="11%" />
-<col width="15%" />
-<col width="15%" />
-<col width="12%" />
-<col width="12%" />
-<col width="20%" />
-<col width="16%" />
+<col style="width: 11%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 16%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">Linux Py 2.7</th>
-<th class="head">Linux Py 3.x</th>
-<th class="head">OSX Py 2.7</th>
-<th class="head">OSX Py 3.x</th>
-<th class="head">Win Py 2.7</th>
-<th class="head">Win Py 3.x</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Linux Py 2.7</p></th>
+<th class="head"><p>Linux Py 3.x</p></th>
+<th class="head"><p>OSX Py 2.7</p></th>
+<th class="head"><p>OSX Py 3.x</p></th>
+<th class="head"><p>Win Py 2.7</p></th>
+<th class="head"><p>Win Py 3.x</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>conda</td>
-<td>64bit</td>
-<td>64bit</td>
-<td>64bit</td>
-<td>64bit</td>
-<td>✘</td>
-<td>64bit</td>
+<tbody>
+<tr class="row-even"><td><p>conda</p></td>
+<td><p>64bit</p></td>
+<td><p>64bit</p></td>
+<td><p>64bit</p></td>
+<td><p>64bit</p></td>
+<td><p>✘</p></td>
+<td><p>64bit</p></td>
 </tr>
-<tr class="row-odd"><td>pip</td>
-<td>64bit</td>
-<td>64bit</td>
-<td>✘</td>
-<td>✘</td>
-<td>64bit (MinGW)</td>
-<td>64bit (MinGW)</td>
+<tr class="row-odd"><td><p>pip</p></td>
+<td><p>64bit</p></td>
+<td><p>64bit</p></td>
+<td><p>✘</p></td>
+<td><p>✘</p></td>
+<td><p>64bit (MinGW)</p></td>
+<td><p>64bit (MinGW)</p></td>
 </tr>
-<tr class="row-even"><td>source</td>
-<td>32/64bit</td>
-<td>32/64bit</td>
-<td>32/64bit</td>
-<td>32/64bit</td>
-<td>32/64bit (MinGW)</td>
-<td>32/64bit</td>
+<tr class="row-even"><td><p>source</p></td>
+<td><p>32/64bit</p></td>
+<td><p>32/64bit</p></td>
+<td><p>32/64bit</p></td>
+<td><p>32/64bit</p></td>
+<td><p>32/64bit (MinGW)</p></td>
+<td><p>32/64bit</p></td>
 </tr>
 </tbody>
 </table>
@@ -305,19 +297,19 @@ Thus, the pygmo packages for conda on Windows might lack some Fortran-based feat
 (e.g., the wrapper for the Ipopt solver).</p>
 <p>Thus, in order to provide a better experience to our Windows users, we publish <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a>
 packages for pygmo built with <a class="reference external" href="http://mingw-w64.org/doku.php">MinGW</a>. These packages allow us both to support Python 2.7
-and to provide a full-featured pygmo on Windows, thanks to the <code class="docutils literal"><span class="pre">gfortran</span></code> compiler. The pip packages are also available on
+and to provide a full-featured pygmo on Windows, thanks to the <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> compiler. The pip packages are also available on
 Linux for those users who might prefer pip to conda, but they are <strong>not</strong> available on OSX.</p>
 <p>Finally, it is always possible to compile pygmo from source. This is the most flexible and powerful option, but of course
 also the least user-friendly.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.</p>
+<p class="admonition-title">Note</p>
+<p>As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.</p>
 </div>
 <div class="section" id="installation-with-conda">
 <h3>Installation with conda<a class="headerlink" href="#installation-with-conda" title="Permalink to this headline">¶</a></h3>
-<p>The installation of pygmo with conda is straightforward. We just need to add <code class="docutils literal"><span class="pre">conda-forge</span></code> to the channels,
+<p>The installation of pygmo with conda is straightforward. We just need to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> to the channels,
 and then we can immediately install pygmo:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
 conda install pygmo
 </pre></div>
 </div>
@@ -328,19 +320,19 @@ for instructions on how to setup and manage your conda installation.</p>
 <h3>Installation with homebrew<a class="headerlink" href="#installation-with-homebrew" title="Permalink to this headline">¶</a></h3>
 <p>A <a class="reference external" href="https://brew.sh/">Homebrew</a> recipe for pagmo has been generously contributed by the community. In order to install
 pagmo on OSX with Homebrew, it is sufficient to execute the following command:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>brew install pagmo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install pagmo
 </pre></div>
 </div>
 </div>
 <div class="section" id="installation-with-pip">
 <h3>Installation with pip<a class="headerlink" href="#installation-with-pip" title="Permalink to this headline">¶</a></h3>
 <p>The installation of pygmo with pip is also straightforward:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install pygmo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pygmo
 </pre></div>
 </div>
 <p>Like conda, also pip will automatically install all of pygmo’s dependencies for you. If you want to install pygmo for a single user instead of
 system-wide, which is in general a good idea, you can do:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install --user pygmo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --user pygmo
 </pre></div>
 </div>
 </div>
@@ -348,20 +340,20 @@ system-wide, which is in general a good idea, you can do:</p>
 <h3>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
 <p>For an installation from source, pygmo has the following dependencies:</p>
 <ul class="simple">
-<li>pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
-to compile pygmo),</li>
-<li><a class="reference external" href="https://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html">Boost.Python</a></li>
-<li><a class="reference external" href="http://www.numpy.org/">NumPy</a> (note that NumPy’s development headers must be installed as well).</li>
+<li><p>pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
+to compile pygmo),</p></li>
+<li><p><a class="reference external" href="https://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html">Boost.Python</a></p></li>
+<li><p><a class="reference external" href="http://www.numpy.org/">NumPy</a> (note that NumPy’s development headers must be installed as well).</p></li>
 </ul>
 <p>Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
 to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
 make sure to install the new pagmo version before compiling the new pygmo version.</p>
-<p>To build the module from source you need to <strong>activate</strong> the <code class="docutils literal"><span class="pre">PAGMO_BUILD_PYGMO</span></code> cmake option and <strong>deactivate</strong> the <code class="docutils literal"><span class="pre">PAGMO_BUILD_PAGMO</span></code> option.
+<p>To build the module from source you need to <strong>activate</strong> the <code class="docutils literal notranslate"><span class="pre">PAGMO_BUILD_PYGMO</span></code> cmake option and <strong>deactivate</strong> the <code class="docutils literal notranslate"><span class="pre">PAGMO_BUILD_PAGMO</span></code> option.
 Check carefully what Python version and what libraries/include paths are detected (in particular, on systems with multiple Python versions
 it can happen that CMake detects the headers from a Python version and the Python library from another version).
-The <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> variable will be used to construct the final location of headers and Python module after install.</p>
+The <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> variable will be used to construct the final location of headers and Python module after install.</p>
 <p>When done, type (in your build directory):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>make install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install
 </pre></div>
 </div>
 <p>To check that all went well fire-up your Python console and try the example in <a class="reference internal" href="quickstart.html#getting-started-py"><span class="std std-ref">quick-start example</span></a>.</p>
@@ -382,7 +374,7 @@ The <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

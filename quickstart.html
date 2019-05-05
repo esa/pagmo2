@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Quick start &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="List of algorithms (UDAs) available in pagmo/pygmo" href="docs/algorithm_list.html" />
     <link rel="prev" title="Installation guide" href="install.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -189,9 +181,10 @@
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#quick-start" id="id1">Quick start</a><ul>
-<li><a class="reference internal" href="#c" id="id2">C++</a></li>
-<li><a class="reference internal" href="#python" id="id3">Python</a></li>
+<li><p><a class="reference internal" href="#quick-start" id="id1">Quick start</a></p>
+<ul>
+<li><p><a class="reference internal" href="#c" id="id2">C++</a></p></li>
+<li><p><a class="reference internal" href="#python" id="id3">Python</a></p></li>
 </ul>
 </li>
 </ul>
@@ -199,7 +192,7 @@
 <div class="section" id="c">
 <h2><a class="toc-backref" href="#id2">C++</a><a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
 <p>After following the <a class="reference internal" href="install.html#install"><span class="std std-ref">Installation guide</span></a> you will be able to compile and run your first C++ pagmo program:</p>
-<div class="highlight-c++" id="getting-started-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-c++ notranslate" id="getting-started-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -266,15 +259,15 @@
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
-<p>Place it into a <code class="docutils literal"><span class="pre">getting_started.cpp</span></code> text file and compile it (for example) with:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread
+<p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> text file and compile it (for example) with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread
 </pre></div>
 </div>
 <p>If you installed pagmo with support for optional 3rd party libraries, you might need to
 add additional switches to the command-line invocation of the compiler. For instance,
 if you enabled the optional NLopt support, you will have to link your executable to the
-<code class="docutils literal"><span class="pre">nlopt</span></code> library:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lnlopt
+<code class="docutils literal notranslate"><span class="pre">nlopt</span></code> library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lnlopt
 </pre></div>
 </div>
 </div>
@@ -282,7 +275,7 @@ if you enabled the optional NLopt support, you will have to link your executable
 <div class="section" id="python">
 <h2><a class="toc-backref" href="#id3">Python</a><a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
 <p>If you have successfully installed pygmo following the <a class="reference internal" href="install.html#install"><span class="std std-ref">Installation guide</span></a> you can try the following script:</p>
-<div class="highlight-python" id="getting-started-py"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python notranslate" id="getting-started-py"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -325,8 +318,8 @@ if you enabled the optional NLopt support, you will have to link your executable
 <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>Place it into a <code class="docutils literal"><span class="pre">getting_started.py</span></code> text file and run it with:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>python getting_started.py
+<p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.py</span></code> text file and run it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python getting_started.py
 </pre></div>
 </div>
 <p>We recommend the use of Jupyter or Ipython to enjoy pygmo the most.</p>
@@ -346,7 +339,7 @@ if you enabled the optional NLopt support, you will have to link your executable
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

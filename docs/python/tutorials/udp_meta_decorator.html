@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Using the decorator meta-problem &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Coding a User Defined Island" href="coding_udi.html" />
     <link rel="prev" title="Coding a User Defined Problem with multiple objectives" href="coding_udp_multi_objective.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -187,45 +179,45 @@
       
   <div class="section" id="using-the-decorator-meta-problem">
 <span id="py-tutorial-udp-meta-decorator"></span><h1>Using the decorator meta-problem<a class="headerlink" href="#using-the-decorator-meta-problem" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator</span></code></a> class is a Python meta-problem
+<p>The <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator</span></code></a> class is a Python meta-problem
 that can be used to modify and customise on-the-fly any method belonging to the public API of a user-defined
 problem (UDP).</p>
 <p>Recall that, in PyGMO’s jargon, <em>meta-problems</em> are UDPs that take another UDP as input, modifying
-its behaviour in a variety of (hopefully) useful ways. The <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> meta-problem, for instance,
+its behaviour in a variety of (hopefully) useful ways. The <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal notranslate"><span class="pre">decompose</span></code></a> meta-problem, for instance,
 transforms a multi-objective optimisation problem into a single-objective problem. This effect is achieved
-in the fitness function of <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a>, which first invokes the fitness function
+in the fitness function of <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal notranslate"><span class="pre">decompose</span></code></a>, which first invokes the fitness function
 of the UDP used during construction (the <em>inner problem</em> of the meta-problem), and then transforms
 the resulting multi-dimensional fitness vector into a scalar fitness. From a pythonic point of view,
-we could say that <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> <a class="reference external" href="https://en.wikipedia.org/wiki/Decorator_pattern">decorates</a>
+we could say that <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal notranslate"><span class="pre">decompose</span></code></a> <a class="reference external" href="https://en.wikipedia.org/wiki/Decorator_pattern">decorates</a>
 the fitness function of the inner problem according to a specific prescription that turns a
-multi-objective fitness into a scalar one. The <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator</span></code></a> problem
+multi-objective fitness into a scalar one. The <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator</span></code></a> problem
 generalises this idea by allowing the user to arbitrarily decorate not only the fitness function,
 but also any other method from the public API of a UDP.</p>
-<p>The <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator</span></code></a> problem is meant to be used in those situations
+<p>The <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator</span></code></a> problem is meant to be used in those situations
 where it is desirable to quickly, temporarily and <em>non-intrusively</em> alter the behaviour of a UDP, and it should not
 be used as a replacement for other meta-problems (e.g., if you need to decompose a multi-objective
-UDP you should definitely use the <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal"><span class="pre">decompose</span></code></a> problem, which will perform better
+UDP you should definitely use the <a class="reference internal" href="../problems/py_problems.html#pygmo.decompose" title="pygmo.decompose"><code class="xref py py-class docutils literal notranslate"><span class="pre">decompose</span></code></a> problem, which will perform better
 and provide more features without having to write any additional code). Users should also keep in mind
 that Python provides many other ways of modifying the behaviour of a class, which, depending
-on the situation, may be more appropriate than the <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator</span></code></a> problem
+on the situation, may be more appropriate than the <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator</span></code></a> problem
 (e.g., subclassing, monkey patching, etc.).</p>
 <div class="section" id="hello-decorated-world">
 <h2>Hello, decorated world!<a class="headerlink" href="#hello-decorated-world" title="Permalink to this headline">¶</a></h2>
-<p>Like all meta-problems, <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a> accepts a UDP as a construction parameter.
-In this example, we will use a <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal"><span class="pre">Rosenbrock</span></code></a> problem for illustration
-purposes (and to show that <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a> works also with exposed C++ problems):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<p>Like all meta-problems, <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a> accepts a UDP as a construction parameter.
+In this example, we will use a <a class="reference internal" href="../problems/py_problems.html#pygmo.rosenbrock" title="pygmo.rosenbrock"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rosenbrock</span></code></a> problem for illustration
+purposes (and to show that <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a> works also with exposed C++ problems):</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We can now proceed to the construction of a decorated Rosenbrock problem:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">))</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>In this case, we did not pass any decorator to the constructor of <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>, so
+<p>In this case, we did not pass any decorator to the constructor of <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a>, so
 <em>drb</em> will be functionally equivalent to an undecorated Rosenbrock problem. The only difference will
-be that printing <em>drb</em> to screen will tell us that <em>rb</em> has been wrapped by a <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> 
+be that printing <em>drb</em> to screen will tell us that <em>rb</em> has been wrapped by a <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a>:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> 
 <span class="go">Problem name: Multidimensional Rosenbrock Function [decorated]</span>
 <span class="go">        Global dimension:                       2</span>
 <span class="go">        Integer dimension:                      0</span>
@@ -235,6 +227,7 @@ be that printing <em>drb</em> to screen will tell us that <em>rb</em> has been w
 <span class="go">        Inequality constraints dimension:       0</span>
 <span class="go">        Lower bounds: [-5, -5]</span>
 <span class="go">        Upper bounds: [10, 10]</span>
+<span class="go">        Has batch fitness evaluation: false</span>
 
 <span class="go">        Has gradient: true</span>
 <span class="go">        User implemented gradient sparsity: false</span>
@@ -255,7 +248,7 @@ be that printing <em>drb</em> to screen will tell us that <em>rb</em> has been w
 <p>Let us now write our first decorator. This decorator is meant to be applied to the fitness
 function of the Rosenbrock problem. In addition to returning the original fitness,
 it will also print on screen the time needed to compute it. The code is as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="kn">import</span> <span class="nn">time</span>
 <span class="gp">... </span>        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
@@ -265,21 +258,21 @@ it will also print on screen the time needed to compute it. The code is as follo
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">new_fitness_function</span>
 </pre></div>
 </div>
-<p>The decorator <code class="docutils literal"><span class="pre">f_decor()</span></code> takes as input the original fitness function, and internally defines
-a new fitness function. <code class="docutils literal"><span class="pre">new_fitness_function()</span></code> has exactly the same prototype as prescribed
-by the UDP interface: it takes as input parameters the calling <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a> object (<code class="docutils literal"><span class="pre">self</span></code>) and the
-decision vector (<code class="docutils literal"><span class="pre">dv</span></code>), and returns a fitness vector computed via <code class="docutils literal"><span class="pre">orig_fitness_function()</span></code>.
+<p>The decorator <code class="docutils literal notranslate"><span class="pre">f_decor()</span></code> takes as input the original fitness function, and internally defines
+a new fitness function. <code class="docutils literal notranslate"><span class="pre">new_fitness_function()</span></code> has exactly the same prototype as prescribed
+by the UDP interface: it takes as input parameters the calling <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a> object (<code class="docutils literal notranslate"><span class="pre">self</span></code>) and the
+decision vector (<code class="docutils literal notranslate"><span class="pre">dv</span></code>), and returns a fitness vector computed via <code class="docutils literal notranslate"><span class="pre">orig_fitness_function()</span></code>.
 The call to the original fitness function is bracketed between a couple of lines of code that measure
-the elapsed runtime via Python’s <a class="reference external" href="https://docs.python.org/3/library/time.html#time.monotonic" title="(in Python v3.7)"><code class="xref py py-func docutils literal"><span class="pre">time.monotonic()</span></code></a> function.</p>
+the elapsed runtime via Python’s <a class="reference external" href="https://docs.python.org/3/library/time.html#time.monotonic" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.monotonic()</span></code></a> function.</p>
 <p>We can now construct a decorated Rosenbrock problem:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">))</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>As you can see, we have passed our decorator, <code class="docutils literal"><span class="pre">f_decor</span></code>, as a keyword argument named <code class="docutils literal"><span class="pre">fitness_decorator</span></code>
-to the constructor of <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a>. All decorators must be passed as keyword arguments
-whose name ends in <code class="docutils literal"><span class="pre">_decorator</span></code> and starts with the UDP method to be decorated (in this case, <code class="docutils literal"><span class="pre">fitness</span></code>).
+<p>As you can see, we have passed our decorator, <code class="docutils literal notranslate"><span class="pre">f_decor</span></code>, as a keyword argument named <code class="docutils literal notranslate"><span class="pre">fitness_decorator</span></code>
+to the constructor of <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a>. All decorators must be passed as keyword arguments
+whose name ends in <code class="docutils literal notranslate"><span class="pre">_decorator</span></code> and starts with the UDP method to be decorated (in this case, <code class="docutils literal notranslate"><span class="pre">fitness</span></code>).
 The string representation of <em>drb</em> will now reflect that the fitness function has been decorated:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> 
 <span class="go">Problem name: Multidimensional Rosenbrock Function [decorated]</span>
 <span class="go">        Global dimension:                       2</span>
 <span class="go">        Integer dimension:                      0</span>
@@ -289,6 +282,7 @@ The string representation of <em>drb</em> will now reflect that the fitness func
 <span class="go">        Inequality constraints dimension:       0</span>
 <span class="go">        Lower bounds: [-5, -5]</span>
 <span class="go">        Upper bounds: [10, 10]</span>
+<span class="go">        Has batch fitness evaluation: false</span>
 
 <span class="go">        Has gradient: true</span>
 <span class="go">        User implemented gradient sparsity: false</span>
@@ -307,7 +301,7 @@ The string representation of <em>drb</em> will now reflect that the fitness func
 </pre></div>
 </div>
 <p>Let’s now verify that the fitness function has been decorated as expected:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fv</span> <span class="o">=</span> <span class="n">drb</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fv</span> <span class="o">=</span> <span class="n">drb</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> 
 <span class="go">Elapsed time: ... seconds</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
 <span class="go">[100.]</span>
@@ -324,7 +318,7 @@ that alter the state of the problem itself. As a concrete example, we will now
 write a fitness function decorator that logs in the calling problem all the
 decision vectors passed to the fitness function.</p>
 <p>The fitness logging decorator is rather simple:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_log_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_log_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;dv_log&quot;</span><span class="p">):</span>
 <span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">dv_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dv</span><span class="p">)</span>
@@ -336,25 +330,25 @@ decision vectors passed to the fitness function.</p>
 </div>
 <p>The logic is straightforward:</p>
 <ul class="simple">
-<li>the first time the fitness function of the decorated problem is called, the
-condition <code class="docutils literal"><span class="pre">hasattr(self,</span> <span class="pre">&quot;dv_log&quot;)</span></code> will be <code class="docutils literal"><span class="pre">False</span></code> because, initially,
+<li><p>the first time the fitness function of the decorated problem is called, the
+condition <code class="docutils literal notranslate"><span class="pre">hasattr(self,</span> <span class="pre">&quot;dv_log&quot;)</span></code> will be <code class="docutils literal notranslate"><span class="pre">False</span></code> because, initially,
 the decorated problem does not contain any logging structure. The decorated
 fitness function will then proceed to add to the problem a 1-element
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> called <code class="docutils literal"><span class="pre">dv_log</span></code> containing the current decision vector <code class="docutils literal"><span class="pre">dv</span></code>;</li>
-<li>on subsequent calls of the decorated fitness function, the current decision vector
-<code class="docutils literal"><span class="pre">dv</span></code> will be appended to the <code class="docutils literal"><span class="pre">dv_log</span></code> list.</li>
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> called <code class="docutils literal notranslate"><span class="pre">dv_log</span></code> containing the current decision vector <code class="docutils literal notranslate"><span class="pre">dv</span></code>;</p></li>
+<li><p>on subsequent calls of the decorated fitness function, the current decision vector
+<code class="docutils literal notranslate"><span class="pre">dv</span></code> will be appended to the <code class="docutils literal notranslate"><span class="pre">dv_log</span></code> list.</p></li>
 </ul>
 <p>Let’s see the logging decorator in action. First, we create a decorated problem:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_log_decor</span><span class="p">))</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_log_decor</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Second, we verify that the UDP inside <em>drb</em> does not yet contain a <code class="docutils literal"><span class="pre">dv_log</span></code> logging structure:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">drb</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">),</span> <span class="s2">&quot;dv_log&quot;</span><span class="p">)</span>
+<p>Second, we verify that the UDP inside <em>drb</em> does not yet contain a <code class="docutils literal notranslate"><span class="pre">dv_log</span></code> logging structure:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">drb</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">),</span> <span class="s2">&quot;dv_log&quot;</span><span class="p">)</span>
 <span class="go">False</span>
 </pre></div>
 </div>
 <p>Next, we call the fitness function a few times:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 <span class="go">array([100.])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 <span class="go">array([2504.])</span>
@@ -363,23 +357,23 @@ fitness function will then proceed to add to the problem a 1-element
 </pre></div>
 </div>
 <p>We can now verify that all the decision vectors passed so far to the fitness function
-have been logged in the internal <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a> object:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">)</span><span class="o">.</span><span class="n">dv_log</span>
+have been logged in the internal <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a> object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">)</span><span class="o">.</span><span class="n">dv_log</span>
 <span class="go">[array([1., 2.]), array([3., 4.]), array([5., 6.])]</span>
 </pre></div>
 </div>
 <p>All according to plan!</p>
 <p>Of course, the logging presented here is rather simplistic. In a real application, one may want to rely
-on Python’s <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> module rather than use an ad-hoc logging structure, and perhaps one may want
+on Python’s <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module rather than use an ad-hoc logging structure, and perhaps one may want
 to log other information as well (e.g., the fitness vector).</p>
 </div>
 <div class="section" id="what-else-can-be-decorated">
 <h2>What else can be decorated?<a class="headerlink" href="#what-else-can-be-decorated" title="Permalink to this headline">¶</a></h2>
 <p>In the examples above, we have focused on the decoration of the fitness function, which, arguably, is
-the most important function in a UDP. <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal"><span class="pre">decorator_problem</span></code></a> however can be used to decorate
+the most important function in a UDP. <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a> however can be used to decorate
 any method belonging to the public API of a UDP, including gradient and hessians computations,
 sparsity-related methods, the stochastic seed setter and a getter, etc. The exhaustive list of methods
-that can be implemented (and decorated) in a UDP is reported in the documentation of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">pygmo.problem</span></code></a>.</p>
+that can be implemented (and decorated) in a UDP is reported in the documentation of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a>.</p>
 </div>
 </div>
 
@@ -396,7 +390,7 @@ that can be implemented (and decorated) in a UDP is reported in the documentatio
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

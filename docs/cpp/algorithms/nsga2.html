@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Non dominated sorting genetic algorithm (NSGA-II) &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Particle Swarm Optimization (PSO)" href="pso.html" />
     <link rel="prev" title="NLopt solvers" href="nlopt.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,24 +175,24 @@
   <div class="section" id="non-dominated-sorting-genetic-algorithm-nsga-ii">
 <h1>Non dominated sorting genetic algorithm (NSGA-II)<a class="headerlink" href="#non-dominated-sorting-genetic-algorithm-nsga-ii" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo5nsga2E">
-<span id="pagmo::nsga2"></span><span class="target" id="classpagmo_1_1nsga2"></span><em class="property">class </em><code class="descname">nsga2</code><a class="headerlink" href="#_CPPv2N5pagmo5nsga2E" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5nsga2E">
+<span id="_CPPv3N5pagmo5nsga2E"></span><span id="_CPPv2N5pagmo5nsga2E"></span><span id="pagmo::nsga2"></span><span class="target" id="classpagmo_1_1nsga2"></span><em class="property">class </em><code class="descname">nsga2</code><a class="headerlink" href="#_CPPv4N5pagmo5nsga2E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Nondominated Sorting genetic algorithm II (NSGA-II) </p>
 <p><img alt="../../../_images/nsga2.jpg" src="../../../_images/nsga2.jpg" /></p>
 <p>NSGA-II is a solid multi-objective algorithm, widely used in many real-world applications. While today it can be considered as an outdated approach, <a class="reference internal" href="#classpagmo_1_1nsga2"><span class="std std-ref">nsga2</span></a> has still a great value, if not as a solid benchmark to test against. NSGA-II genererates offsprings using a specific type of crossover and mutation and then selects the next generation according to nondominated-sorting and crowding distance comparison.</p>
-<p>The version implemented in pagmo can be applied to box-bounded multiple-objective optimization. It also deals with integer chromosomes treating the last <code class="docutils literal"><span class="pre">int_dim</span></code> entries in the decision vector as integers.</p>
+<p>The version implemented in pagmo can be applied to box-bounded multiple-objective optimization. It also deals with integer chromosomes treating the last <code class="docutils literal notranslate"><span class="pre">int_dim</span></code> entries in the decision vector as integers.</p>
 <p>See: Deb, K., Pratap, A., Agarwal, S., &amp; Meyarivan, T. A. M. T. (2002). A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE transactions on evolutionary computation, 6(2), 182-197. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
-<dt id="_CPPv2N5pagmo5nsga213log_line_typeE">
-<span id="pagmo::nsga2::log_line_type"></span><span class="target" id="classpagmo_1_1nsga2_1add962328bf3003cf141533fc6d24808f"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo5nsga213log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5nsga213log_line_typeE">
+<span id="_CPPv3N5pagmo5nsga213log_line_typeE"></span><span id="_CPPv2N5pagmo5nsga213log_line_typeE"></span><span id="pagmo::nsga2::log_line_type"></span><span class="target" id="classpagmo_1_1nsga2_1add962328bf3003cf141533fc6d24808f"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo5nsga213log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, ideal_point) </p>
 </dd></dl>
 
 <dl class="type">
-<dt id="_CPPv2N5pagmo5nsga28log_typeE">
-<span id="pagmo::nsga2::log_type"></span><span class="target" id="classpagmo_1_1nsga2_1ad8b3b7faa7e508a12fd3ba268d6b1be0"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo5nsga213log_line_typeE" title="pagmo::nsga2::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo5nsga28log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5nsga28log_typeE">
+<span id="_CPPv3N5pagmo5nsga28log_typeE"></span><span id="_CPPv2N5pagmo5nsga28log_typeE"></span><span id="pagmo::nsga2::log_type"></span><span class="target" id="classpagmo_1_1nsga2_1ad8b3b7faa7e508a12fd3ba268d6b1be0"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo5nsga213log_line_typeE" title="pagmo::nsga2::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo5nsga28log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -208,24 +200,22 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo5nsga25nsga2Ejddddj">
-<span id="pagmo::nsga2::nsga2__unsigned.double.double.double.double.unsigned"></span><span class="target" id="classpagmo_1_1nsga2_1adfd8a0865748e20528dc9140ec9eb44e"></span><code class="descname">nsga2</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>cr</em> = 0.95, double <em>eta_c</em> = 10., double <em>m</em> = 0.01, double <em>eta_m</em> = 50., unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nsga25nsga2Ejddddj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5nsga25nsga2Ejddddj">
+<span id="_CPPv3N5pagmo5nsga25nsga2Ejddddj"></span><span id="_CPPv2N5pagmo5nsga25nsga2Ejddddj"></span><span id="pagmo::nsga2::nsga2__unsigned.double.double.double.double.unsigned"></span><span class="target" id="classpagmo_1_1nsga2_1adfd8a0865748e20528dc9140ec9eb44e"></span><code class="descname">nsga2</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>cr</em> = 0.95, double <em>eta_c</em> = 10., double <em>m</em> = 0.01, double <em>eta_m</em> = 50., unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nsga25nsga2Ejddddj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs the NSGA II user defined algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">gen</span></code>: Number of generations to evolve. </li>
-<li><code class="docutils literal"><span class="pre">cr</span></code>: Crossover probability. </li>
-<li><code class="docutils literal"><span class="pre">eta_c</span></code>: Distribution index for crossover. </li>
-<li><code class="docutils literal"><span class="pre">m</span></code>: Mutation probability. </li>
-<li><code class="docutils literal"><span class="pre">eta_m</span></code>: Distribution index for mutation. </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random) </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">gen</span></code>: Number of generations to evolve. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">cr</span></code>: Crossover probability. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">eta_c</span></code>: Distribution index for crossover. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">m</span></code>: Mutation probability. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">eta_m</span></code>: Distribution index for mutation. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random) </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">cr</span></code> is not <span class="math">\( \in [0,1[\)</span>, <code class="docutils literal"><span class="pre">m</span></code> is not <span class="math">\( \in [0,1]\)</span>, <code class="docutils literal"><span class="pre">eta_c</span></code> is not in [1,100[ or <code class="docutils literal"><span class="pre">eta_m</span></code> is not in [1,100[. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">cr</span></code> is not <span class="math notranslate nohighlight">\( \in [0,1[\)</span>, <code class="docutils literal notranslate"><span class="pre">m</span></code> is not <span class="math notranslate nohighlight">\( \in [0,1]\)</span>, <code class="docutils literal notranslate"><span class="pre">eta_c</span></code> is not in [1,100[ or <code class="docutils literal notranslate"><span class="pre">eta_m</span></code> is not in [1,100[. </p></li>
 </ul>
 </dd>
 </dl>
@@ -233,21 +223,19 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5nsga26evolveE10population">
-<span id="pagmo::nsga2::evolve__populationC"></span><span class="target" id="classpagmo_1_1nsga2_1a294368e275c91a589d28d73e40cc5a2b"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nsga26evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5nsga26evolveE10population">
+<span id="_CPPv3NK5pagmo5nsga26evolveE10population"></span><span id="_CPPv2NK5pagmo5nsga26evolveE10population"></span><span id="pagmo::nsga2::evolve__populationC"></span><span class="target" id="classpagmo_1_1nsga2_1a294368e275c91a589d28d73e40cc5a2b"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nsga26evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
 <p>Evolves the population for the requested number of generations.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if pop.get_problem() is stochastic, single objective or has non linear constraints. If <code class="docutils literal"><span class="pre">int_dim</span></code> is larger than the problem dimension. If the population size is smaller than 5 or not a multiple of 4. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if pop.get_problem() is stochastic, single objective or has non linear constraints. If <code class="docutils literal notranslate"><span class="pre">int_dim</span></code> is larger than the problem dimension. If the population size is smaller than 5 or not a multiple of 4. </p></li>
 </ul>
 </dd>
 </dl>
@@ -255,13 +243,12 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5nsga28set_seedEj">
-<span id="pagmo::nsga2::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1nsga2_1a1ca5ecc5c7ec140f9fe8606cc93728bc"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nsga28set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5nsga28set_seedEj">
+<span id="_CPPv3N5pagmo5nsga28set_seedEj"></span><span id="_CPPv2N5pagmo5nsga28set_seedEj"></span><span id="pagmo::nsga2::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1nsga2_1a1ca5ecc5c7ec140f9fe8606cc93728bc"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nsga28set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
 </ul>
 </dd>
 </dl>
@@ -269,26 +256,26 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5nsga28get_seedEv">
-<span id="pagmo::nsga2::get_seedC"></span><span class="target" id="classpagmo_1_1nsga2_1aeaa7026eb1c6855b513723ba3123aa48"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nsga28get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5nsga28get_seedEv">
+<span id="_CPPv3NK5pagmo5nsga28get_seedEv"></span><span id="_CPPv2NK5pagmo5nsga28get_seedEv"></span><span id="pagmo::nsga2::get_seedC"></span><span class="target" id="classpagmo_1_1nsga2_1aeaa7026eb1c6855b513723ba3123aa48"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nsga28get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the seed controlling the algorithm stochastic behaviour </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5nsga213set_verbosityEj">
-<span id="pagmo::nsga2::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1nsga2_1a049d4057f626338b3c715e681ec4c2d1"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nsga213set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5nsga213set_verbosityEj">
+<span id="_CPPv3N5pagmo5nsga213set_verbosityEj"></span><span id="_CPPv2N5pagmo5nsga213set_verbosityEj"></span><span id="pagmo::nsga2::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1nsga2_1a049d4057f626338b3c715e681ec4c2d1"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nsga213set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1nsga2_1a158d1fe7c108e10d2222692e3af79d02"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
-<li>0: no verbosity</li>
-<li>&gt;0: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1nsga2_1a158d1fe7c108e10d2222692e3af79d02"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<li><p>0: no verbosity</p></li>
+<li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>        <span class="n">ideal2</span><span class="p">:</span>        <span class="n">ideal3</span><span class="p">:</span>
+<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>        <span class="n">ideal2</span><span class="p">:</span>        <span class="n">ideal3</span><span class="p">:</span>
   <span class="mi">1</span>              <span class="mi">0</span>      <span class="mf">0.0257554</span>       <span class="mf">0.267768</span>       <span class="mf">0.974592</span>
   <span class="mi">2</span>             <span class="mi">52</span>      <span class="mf">0.0257554</span>       <span class="mf">0.267768</span>       <span class="mf">0.908174</span>
   <span class="mi">3</span>            <span class="mi">104</span>      <span class="mf">0.0257554</span>       <span class="mf">0.124483</span>       <span class="mf">0.822804</span>
@@ -302,10 +289,9 @@
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used. The ideal point of the current population follows cropped to its 5th component.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
 </ul>
 </dd>
 </dl>
@@ -313,65 +299,63 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5nsga213get_verbosityEv">
-<span id="pagmo::nsga2::get_verbosityC"></span><span class="target" id="classpagmo_1_1nsga2_1abeb1b20a7bce0e2c50b5f627cb4362fe"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nsga213get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5nsga213get_verbosityEv">
+<span id="_CPPv3NK5pagmo5nsga213get_verbosityEv"></span><span id="_CPPv2NK5pagmo5nsga213get_verbosityEv"></span><span id="pagmo::nsga2::get_verbosityC"></span><span class="target" id="classpagmo_1_1nsga2_1abeb1b20a7bce0e2c50b5f627cb4362fe"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nsga213get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the verbosity level </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5nsga28get_nameEv">
-<span id="pagmo::nsga2::get_nameC"></span><span class="target" id="classpagmo_1_1nsga2_1a4633e3b5f40fe06a028032beeb727bb8"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nsga28get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5nsga28get_nameEv">
+<span id="_CPPv3NK5pagmo5nsga28get_nameEv"></span><span id="_CPPv2NK5pagmo5nsga28get_nameEv"></span><span id="pagmo::nsga2::get_nameC"></span><span class="target" id="classpagmo_1_1nsga2_1a4633e3b5f40fe06a028032beeb727bb8"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nsga28get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>Returns the name of the algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd><code class="docutils literal"> <span class="pre">std::string</span> </code> containing the algorithm name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"> <span class="pre">std::string</span> </code> containing the algorithm name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5nsga214get_extra_infoEv">
-<span id="pagmo::nsga2::get_extra_infoC"></span><span class="target" id="classpagmo_1_1nsga2_1a2199a0e7d42a80560a0dc518345e760f"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nsga214get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5nsga214get_extra_infoEv">
+<span id="_CPPv3NK5pagmo5nsga214get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5nsga214get_extra_infoEv"></span><span id="pagmo::nsga2::get_extra_infoC"></span><span class="target" id="classpagmo_1_1nsga2_1a2199a0e7d42a80560a0dc518345e760f"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nsga214get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p>Returns extra information on the algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"> <span class="pre">std::string</span> </code> containing extra informations on the algorithm </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"> <span class="pre">std::string</span> </code> containing extra informations on the algorithm </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5nsga27get_logEv">
-<span id="pagmo::nsga2::get_logC"></span><span class="target" id="classpagmo_1_1nsga2_1a158d1fe7c108e10d2222692e3af79d02"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5nsga28log_typeE" title="pagmo::nsga2::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5nsga27get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5nsga27get_logEv">
+<span id="_CPPv3NK5pagmo5nsga27get_logEv"></span><span id="_CPPv2NK5pagmo5nsga27get_logEv"></span><span id="pagmo::nsga2::get_logC"></span><span class="target" id="classpagmo_1_1nsga2_1a158d1fe7c108e10d2222692e3af79d02"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo5nsga28log_typeE" title="pagmo::nsga2::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nsga27get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1nsga2_1add962328bf3003cf141533fc6d24808f"><span class="std std-ref">nsga2::log_line_type</span></a> containing: Gen, Fevals, ideal_point as described in <a class="reference internal" href="#classpagmo_1_1nsga2_1a049d4057f626338b3c715e681ec4c2d1"><span class="std std-ref">nsga2::set_verbosity</span></a> <dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1nsga2_1add962328bf3003cf141533fc6d24808f"><span class="std std-ref">nsga2::log_line_type</span></a> containing the logged values Gen, Fevals, ideal_point </dd>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1nsga2_1add962328bf3003cf141533fc6d24808f"><span class="std std-ref">nsga2::log_line_type</span></a> containing: Gen, Fevals, ideal_point as described in <a class="reference internal" href="#classpagmo_1_1nsga2_1a049d4057f626338b3c715e681ec4c2d1"><span class="std std-ref">nsga2::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1nsga2_1add962328bf3003cf141533fc6d24808f"><span class="std std-ref">nsga2::log_line_type</span></a> containing the logged values Gen, Fevals, ideal_point </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5nsga29serializeER7Archive">
-<span id="pagmo::nsga2::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1nsga2_1a283b834ef02dde454636210bcd6ae503"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5nsga29serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo5nsga29serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo5nsga29serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo5nsga29serializeER7Archive"></span><span class="target" id="classpagmo_1_1nsga2_1a283b834ef02dde454636210bcd6ae503"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5nsga29serializeEvR7Archive" title="pagmo::nsga2::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5nsga29serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -396,7 +380,7 @@
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

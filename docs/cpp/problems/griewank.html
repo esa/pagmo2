@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Griewank &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Lennard Jones Cluster" href="lennard_jones.html" />
     <link rel="prev" title="Optimal Golomb Ruler" href="golomb_ruler.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,29 +175,27 @@
   <div class="section" id="griewank">
 <h1>Griewank<a class="headerlink" href="#griewank" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo8griewankE">
-<span id="pagmo::griewank"></span><span class="target" id="structpagmo_1_1griewank"></span><em class="property">struct </em><code class="descname">griewank</code><a class="headerlink" href="#_CPPv2N5pagmo8griewankE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo8griewankE">
+<span id="_CPPv3N5pagmo8griewankE"></span><span id="_CPPv2N5pagmo8griewankE"></span><span id="pagmo::griewank"></span><span class="target" id="structpagmo_1_1griewank"></span><em class="property">struct </em><code class="descname">griewank</code><a class="headerlink" href="#_CPPv4N5pagmo8griewankE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Griewank problem. </p>
 <p><img alt="../../../_images/griewank.png" src="../../../_images/griewank.png" /></p>
-<p>This is a scalabale box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Griewank function: <div class="math">
+<p>This is a scalabale box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Griewank function: <div class="math notranslate nohighlight">
 \[ F\left(x_1,\ldots,x_n\right) = \sum_{i=1}^n x_i^2 / 4000 - \prod_{i=1}^n\cos\frac{x_i}{\sqrt{i}}, \quad x_i \in \left[ -600,600 \right]. \]</div>
- The global minimum is in <span class="math">\(x_i=0\)</span>, where <span class="math">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
+ The global minimum is in <span class="math notranslate nohighlight">\(x_i=0\)</span>, where <span class="math notranslate nohighlight">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo8griewank8griewankEj">
-<span id="pagmo::griewank::griewank__unsigned-i"></span><span class="target" id="structpagmo_1_1griewank_1a9bebd0fce3b933bd28841f5b82534656"></span><code class="descname">griewank</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo8griewank8griewankEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo8griewank8griewankEj">
+<span id="_CPPv3N5pagmo8griewank8griewankEj"></span><span id="_CPPv2N5pagmo8griewank8griewankEj"></span><span id="pagmo::griewank::griewank__unsigned-i"></span><span class="target" id="structpagmo_1_1griewank_1a9bebd0fce3b933bd28841f5b82534656"></span><code class="descname">griewank</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8griewank8griewankEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension. </p>
 <p>Constructs a Griewank problem</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">dim</span></code>: the problem dimensions.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: the problem dimensions.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">dim</span></code> is &lt; 1 </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">dim</span></code> is &lt; 1 </p></li>
 </ul>
 </dd>
 </dl>
@@ -213,16 +203,15 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo8griewank7fitnessERK13vector_double">
-<span id="pagmo::griewank::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1griewank_1aa63a63ec516f90f43a185a54ba5f67dc"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo8griewank7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo8griewank7fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo8griewank7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo8griewank7fitnessERK13vector_double"></span><span id="pagmo::griewank::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1griewank_1aa63a63ec516f90f43a185a54ba5f67dc"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo8griewank7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
 </ul>
 </dd>
 </dl>
@@ -230,53 +219,51 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo8griewank10get_boundsEv">
-<span id="pagmo::griewank::get_boundsC"></span><span class="target" id="structpagmo_1_1griewank_1af2be911de79e4a203fc0df50773314bd"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo8griewank10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo8griewank10get_boundsEv">
+<span id="_CPPv3NK5pagmo8griewank10get_boundsEv"></span><span id="_CPPv2NK5pagmo8griewank10get_boundsEv"></span><span id="pagmo::griewank::get_boundsC"></span><span class="target" id="structpagmo_1_1griewank_1af2be911de79e4a203fc0df50773314bd"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo8griewank10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the lower and upper bounds for each of the decision vector components </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo8griewank8get_nameEv">
-<span id="pagmo::griewank::get_nameC"></span><span class="target" id="structpagmo_1_1griewank_1a24d0dff158f5e06c1d00ca5f79728982"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo8griewank8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo8griewank8get_nameEv">
+<span id="_CPPv3NK5pagmo8griewank8get_nameEv"></span><span id="_CPPv2NK5pagmo8griewank8get_nameEv"></span><span id="pagmo::griewank::get_nameC"></span><span class="target" id="structpagmo_1_1griewank_1a24d0dff158f5e06c1d00ca5f79728982"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo8griewank8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the problem name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the problem name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo8griewank10best_knownEv">
-<span id="pagmo::griewank::best_knownC"></span><span class="target" id="structpagmo_1_1griewank_1a138b6a6f1d6d021dc2fc68245ed99331"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo8griewank10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo8griewank10best_knownEv">
+<span id="_CPPv3NK5pagmo8griewank10best_knownEv"></span><span id="_CPPv2NK5pagmo8griewank10best_knownEv"></span><span id="pagmo::griewank::best_knownC"></span><span class="target" id="structpagmo_1_1griewank_1a138b6a6f1d6d021dc2fc68245ed99331"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo8griewank10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the decision vector corresponding to the best solution for this problem. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the decision vector corresponding to the best solution for this problem. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo8griewank9serializeER7Archive">
-<span id="pagmo::griewank::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="structpagmo_1_1griewank_1a958e1bf9e156e92894186c995d2ec8a7"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo8griewank9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo8griewank9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo8griewank9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo8griewank9serializeER7Archive"></span><span class="target" id="structpagmo_1_1griewank_1a958e1bf9e156e92894186c995d2ec8a7"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo8griewank9serializeEvR7Archive" title="pagmo::griewank::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo8griewank9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -287,8 +274,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="member">
-<dt id="_CPPv2N5pagmo8griewank5m_dimE">
-<span id="pagmo::griewank::m_dim__unsigned-i"></span><span class="target" id="structpagmo_1_1griewank_1ab483fa2667d4e58a9cd8a74278353c8a"></span>unsigned int <code class="descname">m_dim</code><a class="headerlink" href="#_CPPv2N5pagmo8griewank5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo8griewank5m_dimE">
+<span id="_CPPv3N5pagmo8griewank5m_dimE"></span><span id="_CPPv2N5pagmo8griewank5m_dimE"></span><span id="pagmo::griewank::m_dim__unsigned-i"></span><span class="target" id="structpagmo_1_1griewank_1ab483fa2667d4e58a9cd8a74278353c8a"></span>unsigned int <code class="descname">m_dim</code><a class="headerlink" href="#_CPPv4N5pagmo8griewank5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>
 </dd></dl>
 
@@ -310,7 +297,7 @@
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>(N+1)-ES Simple Evolutionary Algorithm &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Simple Genetic Algorithm" href="sga.html" />
     <link rel="prev" title="Self-adaptive Differential Evolution (jDE and iDE)" href="sade.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,44 +175,44 @@
   <div class="section" id="n-1-es-simple-evolutionary-algorithm">
 <h1>(N+1)-ES Simple Evolutionary Algorithm<a class="headerlink" href="#n-1-es-simple-evolutionary-algorithm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo3seaE">
-<span id="pagmo::sea"></span><span class="target" id="classpagmo_1_1sea"></span><em class="property">class </em><code class="descname">sea</code><a class="headerlink" href="#_CPPv2N5pagmo3seaE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3seaE">
+<span id="_CPPv3N5pagmo3seaE"></span><span id="_CPPv2N5pagmo3seaE"></span><span id="pagmo::sea"></span><span class="target" id="classpagmo_1_1sea"></span><em class="property">class </em><code class="descname">sea</code><a class="headerlink" href="#_CPPv4N5pagmo3seaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>(N+1)-ES Simple Evolutionary Algorithm </p>
 <p><img alt="../../../_images/sea.png" src="../../../_images/sea.png" /></p>
 <p>Evolutionary strategies date back to the mid 1960s when P. Bienert, I. Rechenberg, and H.-P. Schwefel at the Technical University of Berlin, Germany, developed the first bionics-inspired schemes for evolving optimal shapes of minimal drag bodies in a wind tunnel using Darwin’s evolution principle.</p>
-<p>This c++ class represents the simplest evolutionary strategy, where a population of <span class="math">\( \lambda \)</span> individuals at each generation produces one offspring by mutating its best individual uniformly at random within the bounds. Should the offspring be better than the worst individual in the population it will substitute it.</p>
+<p>This c++ class represents the simplest evolutionary strategy, where a population of <span class="math notranslate nohighlight">\( \lambda \)</span> individuals at each generation produces one offspring by mutating its best individual uniformly at random within the bounds. Should the offspring be better than the worst individual in the population it will substitute it.</p>
 <p><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The algorithm is not suitable for multi-objective problems, nor for
+<p class="admonition-title">Warning</p>
+<p>The algorithm is not suitable for multi-objective problems, nor for
 constrained or stochastic optimization</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The mutation is uniform within box-bounds. Hence, unbounded problems will produce undefined
+<p class="admonition-title">Note</p>
+<p>The mutation is uniform within box-bounds. Hence, unbounded problems will produce undefined
 behaviours.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">Oliveto, Pietro S., Jun He, and Xin Yao. “Time complexity of evolutionary algorithms for
+<p class="admonition-title">See also</p>
+<p>Oliveto, Pietro S., Jun He, and Xin Yao. “Time complexity of evolutionary algorithms for
 combinatorial optimization: A decade of results.” International Journal of Automation and Computing
 4.3 (2007): 281-293.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="http://www.scholarpedia.org/article/Evolution_strategies">http://www.scholarpedia.org/article/Evolution_strategies</a></p>
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="http://www.scholarpedia.org/article/Evolution_strategies">http://www.scholarpedia.org/article/Evolution_strategies</a></p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
-<dt id="_CPPv2N5pagmo3sea13log_line_typeE">
-<span id="pagmo::sea::log_line_type"></span><span class="target" id="classpagmo_1_1sea_1aa714db0ea00e914572d35638fb7d3142"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo3sea13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3sea13log_line_typeE">
+<span id="_CPPv3N5pagmo3sea13log_line_typeE"></span><span id="_CPPv2N5pagmo3sea13log_line_typeE"></span><span id="pagmo::sea::log_line_type"></span><span class="target" id="classpagmo_1_1sea_1aa714db0ea00e914572d35638fb7d3142"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, improvement, mutations) </p>
 </dd></dl>
 
 <dl class="type">
-<dt id="_CPPv2N5pagmo3sea8log_typeE">
-<span id="pagmo::sea::log_type"></span><span class="target" id="classpagmo_1_1sea_1a65a18f8ef53a2338d1b0015c6e43c785"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo3sea13log_line_typeE" title="pagmo::sea::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo3sea8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3sea8log_typeE">
+<span id="_CPPv3N5pagmo3sea8log_typeE"></span><span id="_CPPv2N5pagmo3sea8log_typeE"></span><span id="pagmo::sea::log_type"></span><span class="target" id="classpagmo_1_1sea_1a65a18f8ef53a2338d1b0015c6e43c785"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="pagmo::sea::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sea8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -228,15 +220,14 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo3sea3seaEjj">
-<span id="pagmo::sea::sea__unsigned-i.unsigned-i"></span><span class="target" id="classpagmo_1_1sea_1a8067b90e694da85aa728a5e82bdbcced"></span><code class="descname">sea</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1u, unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sea3seaEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3sea3seaEjj">
+<span id="_CPPv3N5pagmo3sea3seaEjj"></span><span id="_CPPv2N5pagmo3sea3seaEjj"></span><span id="pagmo::sea::sea__unsigned-i.unsigned-i"></span><span class="target" id="classpagmo_1_1sea_1a8067b90e694da85aa728a5e82bdbcced"></span><code class="descname">sea</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1u, unsigned int <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea3seaEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs sea</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">gen</span></code>: Number of generations to consider. Each generation will compute the objective function once </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gen</span></code>: Number of generations to consider. Each generation will compute the objective function once </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator </p></li>
 </ul>
 </dd>
 </dl>
@@ -244,20 +235,18 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3sea6evolveE10population">
-<span id="pagmo::sea::evolve__populationC"></span><span class="target" id="classpagmo_1_1sea_1a18e7d6c1ca29fe90a9d7056c069d08f1"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sea6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3sea6evolveE10population">
+<span id="_CPPv3NK5pagmo3sea6evolveE10population"></span><span id="_CPPv2NK5pagmo3sea6evolveE10population"></span><span id="pagmo::sea::evolve__populationC"></span><span class="target" id="classpagmo_1_1sea_1a18e7d6c1ca29fe90a9d7056c069d08f1"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained </p></li>
 </ul>
 </dd>
 </dl>
@@ -265,16 +254,16 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3sea13set_verbosityEj">
-<span id="pagmo::sea::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1sea_1afce55be45fa2292eb461b62ee9fb73c0"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sea13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3sea13set_verbosityEj">
+<span id="_CPPv3N5pagmo3sea13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sea13set_verbosityEj"></span><span id="pagmo::sea::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1sea_1afce55be45fa2292eb461b62ee9fb73c0"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
-<li>0: no verbosity</li>
-<li>1: will only print and log when the population is improved</li>
-<li>&gt;1: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<li><p>0: no verbosity</p></li>
+<li><p>1: will only print and log when the population is improved</p></li>
+<li><p>&gt;1: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>   <span class="n">Improvement</span><span class="p">:</span>     <span class="n">Mutations</span><span class="p">:</span>
+<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>   <span class="n">Improvement</span><span class="p">:</span>     <span class="n">Mutations</span><span class="p">:</span>
 <span class="mi">632</span>           <span class="mi">3797</span>        <span class="mf">1464.31</span>        <span class="mf">51.0203</span>              <span class="mi">1</span>
 <span class="mi">633</span>           <span class="mi">3803</span>        <span class="mf">1463.23</span>        <span class="mf">13.4503</span>              <span class="mi">1</span>
 <span class="mi">635</span>           <span class="mi">3815</span>        <span class="mf">1562.02</span>        <span class="mf">31.0434</span>              <span class="mi">3</span>
@@ -283,10 +272,9 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function currently in the population, Improvement is the improvement made by the last mutation and Mutations is the number of mutated components of the decision vector</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
 </ul>
 </dd>
 </dl>
@@ -294,24 +282,23 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3sea13get_verbosityEv">
-<span id="pagmo::sea::get_verbosityC"></span><span class="target" id="classpagmo_1_1sea_1a51a3db69092aa791c7cde0fab7a6bdc4"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sea13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3sea13get_verbosityEv">
+<span id="_CPPv3NK5pagmo3sea13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sea13get_verbosityEv"></span><span id="pagmo::sea::get_verbosityC"></span><span class="target" id="classpagmo_1_1sea_1a51a3db69092aa791c7cde0fab7a6bdc4"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the verbosity level </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3sea8set_seedEj">
-<span id="pagmo::sea::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1sea_1a83d5ec258dd49e784fcf1937636a181c"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sea8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3sea8set_seedEj">
+<span id="_CPPv3N5pagmo3sea8set_seedEj"></span><span id="_CPPv2N5pagmo3sea8set_seedEj"></span><span id="pagmo::sea::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1sea_1a83d5ec258dd49e784fcf1937636a181c"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
 </ul>
 </dd>
 </dl>
@@ -319,65 +306,63 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3sea8get_seedEv">
-<span id="pagmo::sea::get_seedC"></span><span class="target" id="classpagmo_1_1sea_1acbe33f1a86f26af9368e8cc0dbfae357"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sea8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3sea8get_seedEv">
+<span id="_CPPv3NK5pagmo3sea8get_seedEv"></span><span id="_CPPv2NK5pagmo3sea8get_seedEv"></span><span id="pagmo::sea::get_seedC"></span><span class="target" id="classpagmo_1_1sea_1acbe33f1a86f26af9368e8cc0dbfae357"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the seed controlling the algorithm stochastic behaviour </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3sea8get_nameEv">
-<span id="pagmo::sea::get_nameC"></span><span class="target" id="classpagmo_1_1sea_1ae776b2b673a432eec781ec91836f2a25"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sea8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3sea8get_nameEv">
+<span id="_CPPv3NK5pagmo3sea8get_nameEv"></span><span id="_CPPv2NK5pagmo3sea8get_nameEv"></span><span id="pagmo::sea::get_nameC"></span><span class="target" id="classpagmo_1_1sea_1ae776b2b673a432eec781ec91836f2a25"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the algorithm name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3sea14get_extra_infoEv">
-<span id="pagmo::sea::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sea_1a9eb697445b8f79b06725add45c780f06"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sea14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3sea14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo3sea14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sea14get_extra_infoEv"></span><span id="pagmo::sea::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sea_1a9eb697445b8f79b06725add45c780f06"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing extra informations on the algorithm </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3sea7get_logEv">
-<span id="pagmo::sea::get_logC"></span><span class="target" id="classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo3sea8log_typeE" title="pagmo::sea::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3sea7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3sea7get_logEv">
+<span id="_CPPv3NK5pagmo3sea7get_logEv"></span><span id="_CPPv2NK5pagmo3sea7get_logEv"></span><span id="pagmo::sea::get_logC"></span><span class="target" id="classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3sea8log_typeE" title="pagmo::sea::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1sea_1aa714db0ea00e914572d35638fb7d3142"><span class="std std-ref">sea::log_line_type</span></a> containing: Gen, Fevals, Best, Improvement, Mutations as described in <a class="reference internal" href="#classpagmo_1_1sea_1afce55be45fa2292eb461b62ee9fb73c0"><span class="std std-ref">sea::set_verbosity</span></a> <dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1sea_1aa714db0ea00e914572d35638fb7d3142"><span class="std std-ref">sea::log_line_type</span></a> containing the logged values Gen, Fevals, Best, Improvement, Mutations </dd>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1sea_1aa714db0ea00e914572d35638fb7d3142"><span class="std std-ref">sea::log_line_type</span></a> containing: Gen, Fevals, Best, Improvement, Mutations as described in <a class="reference internal" href="#classpagmo_1_1sea_1afce55be45fa2292eb461b62ee9fb73c0"><span class="std std-ref">sea::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1sea_1aa714db0ea00e914572d35638fb7d3142"><span class="std std-ref">sea::log_line_type</span></a> containing the logged values Gen, Fevals, Best, Improvement, Mutations </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3sea9serializeER7Archive">
-<span id="pagmo::sea::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1sea_1a9282eb44c802b7d0479d45497fde38ec"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3sea9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo3sea9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo3sea9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo3sea9serializeER7Archive"></span><span class="target" id="classpagmo_1_1sea_1a9282eb44c802b7d0479d45497fde38ec"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3sea9serializeEvR7Archive" title="pagmo::sea::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3sea9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -402,7 +387,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

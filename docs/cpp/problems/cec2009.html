@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>CEC 2009 Problem Suite (multi-objective, constrained and unconstrained) &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="CEC 2013 Problem Suite (box-bound, single objective)" href="cec2013.html" />
     <link rel="prev" title="CEC 2006 Problem Suite (single-objective, constrained)" href="cec2006.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,38 +175,37 @@
   <div class="section" id="cec-2009-problem-suite-multi-objective-constrained-and-unconstrained">
 <h1>CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)<a class="headerlink" href="#cec-2009-problem-suite-multi-objective-constrained-and-unconstrained" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo7cec2009E">
-<span id="pagmo::cec2009"></span><span class="target" id="classpagmo_1_1cec2009"></span><em class="property">class </em><code class="descname">cec2009</code> : pagmo::detail::cec2009_statics&lt;&gt;<a class="headerlink" href="#_CPPv2N5pagmo7cec2009E" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo7cec2009E">
+<span id="_CPPv3N5pagmo7cec2009E"></span><span id="_CPPv2N5pagmo7cec2009E"></span><span id="pagmo::cec2009"></span><span class="target" id="classpagmo_1_1cec2009"></span><em class="property">class </em><code class="descname">cec2009</code> : <em class="property">private</em> pagmo::detail::cec2009_statics&lt;&gt;<a class="headerlink" href="#_CPPv4N5pagmo7cec2009E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><p>The CEC 2009 problems: Competition on “Performance Assessment of Constrained / Bound</p>
 <p> Constrained Multi-Objective Optimization Algorithms” </p>
 <p> This class instantiates any of the problems from CEC2009’s competition on multi-objective optimization algorithms, commonly referred to by the literature as UF1-UF10 (unconstrained) and CF1-CF10 (constrained).</p>
 </p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The three problems constructed by some transformation on DTLZ2, DTLZ3
+<p class="admonition-title">Note</p>
+<p>The three problems constructed by some transformation on DTLZ2, DTLZ3
 and WFG1 problems as described in the technical report are not included in
 this implementation.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">All problems are continuous, multi objective problems.</p>
+<p class="admonition-title">Note</p>
+<p>All problems are continuous, multi objective problems.</p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo7cec20097cec2009Ejbj">
-<span id="pagmo::cec2009::cec2009__unsigned.b.unsigned"></span><span class="target" id="classpagmo_1_1cec2009_1adcf648f4247d0bdd6c458f72842c3b3a"></span><code class="descname">cec2009</code><span class="sig-paren">(</span>unsigned <em>prob_id</em> = 1u, bool <em>is_constrained</em> = false, unsigned <em>dim</em> = 30u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7cec20097cec2009Ejbj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo7cec20097cec2009Ejbj">
+<span id="_CPPv3N5pagmo7cec20097cec2009Ejbj"></span><span id="_CPPv2N5pagmo7cec20097cec2009Ejbj"></span><span id="pagmo::cec2009::cec2009__unsigned.b.unsigned"></span><span class="target" id="classpagmo_1_1cec2009_1adcf648f4247d0bdd6c458f72842c3b3a"></span><code class="descname">cec2009</code><span class="sig-paren">(</span>unsigned <em>prob_id</em> = 1u, bool <em>is_constrained</em> = false, unsigned <em>dim</em> = 30u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7cec20097cec2009Ejbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Will construct one of the 20 multi-objective optimization problems from the CEC2009 competition. There are two sets of problems, namely the set with unconstrained problems (UF) and the set with constrained problems (CF).</p>
-<p><dl class="docutils">
-<dt><strong>See</strong></dt>
-<dd><a class="reference external" href="http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm">http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm</a> </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">prob_id</span></code>: The problem id. One of [1,2,…10] </li>
-<li><code class="docutils literal"><span class="pre">is_constrained</span></code>: Specify whether the problem is constrained. False will yield the UF problems, True will yield the CF problems. </li>
-<li><code class="docutils literal"><span class="pre">dim</span></code>: problem dimension. Default is 30, which is the setting used by the competition. But all the problems are scalable in terms of decision variable’s dimension.</li>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p><a class="reference external" href="http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm">http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm</a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prob_id</span></code>: The problem id. One of [1,2,…10] </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_constrained</span></code>: Specify whether the problem is constrained. False will yield the UF problems, True will yield the CF problems. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: problem dimension. Default is 30, which is the setting used by the competition. But all the problems are scalable in terms of decision variable’s dimension.</p></li>
 </ul>
 </dd>
 </dl>
@@ -222,52 +213,51 @@ this implementation.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo7cec20097get_nicEv">
-<span id="pagmo::cec2009::get_nicC"></span><span class="target" id="classpagmo_1_1cec2009_1a310677b1ebc572791ba66227b231b7b0"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7cec20097get_nicEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo7cec20097get_nicEv">
+<span id="_CPPv3NK5pagmo7cec20097get_nicEv"></span><span id="_CPPv2NK5pagmo7cec20097get_nicEv"></span><span id="pagmo::cec2009::get_nicC"></span><span class="target" id="classpagmo_1_1cec2009_1a310677b1ebc572791ba66227b231b7b0"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20097get_nicEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inequality constraint dimension. </p>
 <p>Returns the number of inequality constraints</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the number of inequality constraints </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the number of inequality constraints </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo7cec20098get_nobjEv">
-<span id="pagmo::cec2009::get_nobjC"></span><span class="target" id="classpagmo_1_1cec2009_1adf7416f34522762aa987f903ee32cdde"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7cec20098get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo7cec20098get_nobjEv">
+<span id="_CPPv3NK5pagmo7cec20098get_nobjEv"></span><span id="_CPPv2NK5pagmo7cec20098get_nobjEv"></span><span id="pagmo::cec2009::get_nobjC"></span><span class="target" id="classpagmo_1_1cec2009_1adf7416f34522762aa987f903ee32cdde"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20098get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Number of objectives. </p>
 <p>Returns the number of objectives</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the number of objectives </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the number of objectives </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo7cec200910get_boundsEv">
-<span id="pagmo::cec2009::get_boundsC"></span><span class="target" id="classpagmo_1_1cec2009_1af4fccc98f354f9e25f190c9525b6d726"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7cec200910get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo7cec200910get_boundsEv">
+<span id="_CPPv3NK5pagmo7cec200910get_boundsEv"></span><span id="_CPPv2NK5pagmo7cec200910get_boundsEv"></span><span id="pagmo::cec2009::get_boundsC"></span><span class="target" id="classpagmo_1_1cec2009_1af4fccc98f354f9e25f190c9525b6d726"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec200910get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the lower and upper bounds for each of the decision vector components </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo7cec20097fitnessERK13vector_double">
-<span id="pagmo::cec2009::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1cec2009_1a9833c9e987aec6a3c622fc0165af1e22"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7cec20097fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo7cec20097fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo7cec20097fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo7cec20097fitnessERK13vector_double"></span><span id="pagmo::cec2009::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1cec2009_1a9833c9e987aec6a3c622fc0165af1e22"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20097fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the fitness of <code class="docutils literal"><span class="pre">x</span></code>. </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the decision vector.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
 </ul>
 </dd>
 </dl>
@@ -275,30 +265,28 @@ this implementation.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo7cec20098get_nameEv">
-<span id="pagmo::cec2009::get_nameC"></span><span class="target" id="classpagmo_1_1cec2009_1af36ae5865553f65d289b0bc10c53d7f6"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo7cec20098get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo7cec20098get_nameEv">
+<span id="_CPPv3NK5pagmo7cec20098get_nameEv"></span><span id="_CPPv2NK5pagmo7cec20098get_nameEv"></span><span id="pagmo::cec2009::get_nameC"></span><span class="target" id="classpagmo_1_1cec2009_1af36ae5865553f65d289b0bc10c53d7f6"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20098get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the problem name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the problem name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo7cec20099serializeER7Archive">
-<span id="pagmo::cec2009::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1cec2009_1a37701d78c5c103196ab4ecbea34730a9"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo7cec20099serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo7cec20099serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo7cec20099serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo7cec20099serializeER7Archive"></span><span class="target" id="classpagmo_1_1cec2009_1a37701d78c5c103196ab4ecbea34730a9"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo7cec20099serializeEvR7Archive" title="pagmo::cec2009::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo7cec20099serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -323,7 +311,7 @@ this implementation.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

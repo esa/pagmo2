@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Gradient and Hessians utilities &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Hypervolume utilities" href="py_hv_utils.html" />
     <link rel="prev" title="Constrained optimization utilities" href="py_con_utils.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -191,33 +183,29 @@ computing it around the input point <em>x</em> and detecting the components that
 <p>Note that estimate_sparsity may fail to detect the real sparsity as it only considers one variation around the input
 point. It is of use, though, in tests or cases where its not possible to write the sparsity or where the user is
 confident the estimate will be correct.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</li>
-<li><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</li>
-<li><strong>dx</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math">\(\max(|x_i|,1) dx\)</span>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</p></li>
+<li><p><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</p></li>
+<li><p><strong>dx</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</li>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>unspecified</strong> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the sparsity_pattern of <em>callable</em> detected around <em>x</em></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">2D NumPy float array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the sparsity_pattern of <em>callable</em> detected around <em>x</em></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>2D NumPy float array</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_sparsity</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">)</span>
@@ -236,41 +224,37 @@ confident the estimate will be correct.</p>
 <dd><p>Performs a numerical estimation of the sparsity pattern of same callable object by numerically
 computing it around the input point <em>x</em> and detecting the components that are changed.</p>
 <p>The <em>callable</em> must accept an iterable as input and return an array-like object. The gradient returned will be dense
-and contain, in the lexicographic order requested by <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code></a>, <span class="math">\(\frac{df_i}{dx_j}\)</span>.</p>
+and contain, in the lexicographic order requested by <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">gradient()</span></code></a>, <span class="math notranslate nohighlight">\(\frac{df_i}{dx_j}\)</span>.</p>
 <p>The numerical approximation of each derivative is made by central difference, according to the formula:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\frac{df}{dx} \approx \frac{f(x+dx) - f(x-dx)}{2dx} + O(dx^2)\]</div>
-<p>The overall cost, in terms of calls to <em>callable</em> will thus be <span class="math">\(n\)</span> where <span class="math">\(n\)</span> is the size of <em>x</em>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</li>
-<li><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</li>
-<li><strong>dx</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math">\(\max(|x_i|,1) dx\)</span>.</li>
+<p>The overall cost, in terms of calls to <em>callable</em> will thus be <span class="math notranslate nohighlight">\(n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the size of <em>x</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</p></li>
+<li><p><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</p></li>
+<li><p><strong>dx</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</li>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>unspecified</strong> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the dense gradient of <em>callable</em> detected around <em>x</em></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">2D NumPy float array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the dense gradient of <em>callable</em> detected around <em>x</em></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>2D NumPy float array</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">)</span> <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
 <span class="go">array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])</span>
 </pre></div>
 </div>
@@ -283,44 +267,40 @@ and contain, in the lexicographic order requested by <a class="reference interna
 <dd><p>Performs a numerical estimation of the sparsity pattern of same callable object by numerically
 computing it around the input point <em>x</em> and detecting the components that are changed.</p>
 <p>The <em>callable</em> must accept an iterable as input and return an array-like object. The gradient returned will be dense
-and contain, in the lexicographic order requested by <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">gradient()</span></code></a>, <span class="math">\(\frac{df_i}{dx_j}\)</span>.</p>
+and contain, in the lexicographic order requested by <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">gradient()</span></code></a>, <span class="math notranslate nohighlight">\(\frac{df_i}{dx_j}\)</span>.</p>
 <p>The numerical approximation of each derivative is made by central difference, according to the formula:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\frac{df}{dx} \approx \frac 32 m_1 - \frac 35 m_2 +\frac 1{10} m_3 + O(dx^6)\]</div>
 <p>where:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[m_i = \frac{f(x + i dx) - f(x-i dx)}{2i dx}\]</div>
-<p>The overall cost, in terms of calls to <em>callable</em> will thus be 6:math:<cite>n</cite> where <span class="math">\(n\)</span> is the size of <em>x</em>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</li>
-<li><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</li>
-<li><strong>dx</strong> (<code class="docutils literal"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math">\(\max(|x_i|,1) dx\)</span>.</li>
+<p>The overall cost, in terms of calls to <em>callable</em> will thus be 6:math:<cite>n</cite> where <span class="math notranslate nohighlight">\(n\)</span> is the size of <em>x</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</p></li>
+<li><p><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</p></li>
+<li><p><strong>dx</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</li>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>unspecified</strong> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the dense gradient of <em>callable</em> detected around <em>x</em></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">2D NumPy float array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the dense gradient of <em>callable</em> detected around <em>x</em></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>2D NumPy float array</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_fun</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">callable</span> <span class="o">=</span> <span class="n">my_fun</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span> <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
 <span class="go">array([1., 0., 0., 1., 0., 0., 1., 0., 0., 1., 0., 0.])</span>
 </pre></div>
 </div>
@@ -341,7 +321,7 @@ and contain, in the lexicographic order requested by <a class="reference interna
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Monotonic Basin Hopping (MBH) - Generalized &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Self-adaptive constraints handling" href="cstrs_self_adaptive.html" />
     <link rel="prev" title="Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)" href="moead.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,12 +175,12 @@
   <div class="section" id="monotonic-basin-hopping-mbh-generalized">
 <h1>Monotonic Basin Hopping (MBH) - Generalized<a class="headerlink" href="#monotonic-basin-hopping-mbh-generalized" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo3mbhE">
-<span id="pagmo::mbh"></span><span class="target" id="classpagmo_1_1mbh"></span><em class="property">class </em><code class="descname">mbh</code><a class="headerlink" href="#_CPPv2N5pagmo3mbhE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbhE">
+<span id="_CPPv3N5pagmo3mbhE"></span><span id="_CPPv2N5pagmo3mbhE"></span><span id="pagmo::mbh"></span><span class="target" id="classpagmo_1_1mbh"></span><em class="property">class </em><code class="descname">mbh</code><a class="headerlink" href="#_CPPv4N5pagmo3mbhE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Monotonic Basin Hopping (generalized). </p>
 <p><img alt="../../../_images/mbh.png" src="../../../_images/mbh.png" /></p>
-<p>Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping the objective function <span class="math">\(f(\mathbf x_0)\)</span> into the local minima found starting from <span class="math">\(\mathbf x_0\)</span>. This simple idea allows a substantial increase of efficiency in solving problems, such as the Lennard-Jones cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured to have a so-called funnel structure.</p>
-<p>In pagmo we provide an original generalization of this concept resulting in a meta-algorithm that operates on any <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using any suitable user-defined algorithm (UDA). When a population containing a single individual is used and coupled with a local optimizer, the original method is recovered. The pseudo code of our generalized version is: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span>
+<p>Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping the objective function <span class="math notranslate nohighlight">\(f(\mathbf x_0)\)</span> into the local minima found starting from <span class="math notranslate nohighlight">\(\mathbf x_0\)</span>. This simple idea allows a substantial increase of efficiency in solving problems, such as the Lennard-Jones cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured to have a so-called funnel structure.</p>
+<p>In pagmo we provide an original generalization of this concept resulting in a meta-algorithm that operates on any <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using any suitable user-defined algorithm (UDA). When a population containing a single individual is used and coupled with a local optimizer, the original method is recovered. The pseudo code of our generalized version is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span>
 <span class="o">&gt;</span> <span class="n">Select</span> <span class="n">a</span> <span class="n">UDA</span>
 <span class="o">&gt;</span> <span class="n">Store</span> <span class="n">best</span> <span class="n">individual</span>
 <span class="o">&gt;</span> <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">stop_criteria</span>
@@ -207,14 +199,14 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
-<dt id="_CPPv2N5pagmo3mbh13log_line_typeE">
-<span id="pagmo::mbh::log_line_type"></span><span class="target" id="classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, unsigned&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo3mbh13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh13log_line_typeE">
+<span id="_CPPv3N5pagmo3mbh13log_line_typeE"></span><span id="_CPPv2N5pagmo3mbh13log_line_typeE"></span><span id="pagmo::mbh::log_line_type"></span><span class="target" id="classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, unsigned&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3mbh13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial). </p>
 </dd></dl>
 
 <dl class="type">
-<dt id="_CPPv2N5pagmo3mbh8log_typeE">
-<span id="pagmo::mbh::log_type"></span><span class="target" id="classpagmo_1_1mbh_1a23f54ace28fdd689d6c8c2b156055085"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo3mbh13log_line_typeE" title="pagmo::mbh::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo3mbh8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh8log_typeE">
+<span id="_CPPv3N5pagmo3mbh8log_typeE"></span><span id="_CPPv2N5pagmo3mbh8log_typeE"></span><span id="pagmo::mbh::log_type"></span><span class="target" id="classpagmo_1_1mbh_1a23f54ace28fdd689d6c8c2b156055085"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo3mbh13log_line_typeE" title="pagmo::mbh::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo3mbh8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -222,20 +214,19 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh3mbhEv">
-<span id="pagmo::mbh::mbh"></span><span class="target" id="classpagmo_1_1mbh_1a0a8b66ed93565dd4ac43a7af95435b8a"></span><code class="descname">mbh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh3mbhEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh3mbhEv">
+<span id="_CPPv3N5pagmo3mbh3mbhEv"></span><span id="_CPPv2N5pagmo3mbh3mbhEv"></span><span id="pagmo::mbh::mbh"></span><span class="target" id="classpagmo_1_1mbh_1a0a8b66ed93565dd4ac43a7af95435b8a"></span><code class="descname">mbh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh3mbhEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor will initialize the algorithm with the following parameters:<ul class="simple">
-<li>inner algorithm: <a class="reference internal" href="compass_search.html#classpagmo_1_1compass__search"><span class="std std-ref">pagmo::compass_search</span></a>;</li>
-<li>consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#classpagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop: 5;</li>
-<li>scalar perturbation: 1E-2;</li>
-<li>seed: random.</li>
+<li><p>inner algorithm: <a class="reference internal" href="compass_search.html#classpagmo_1_1compass__search"><span class="std std-ref">pagmo::compass_search</span></a>;</p></li>
+<li><p>consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#classpagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop: 5;</p></li>
+<li><p>scalar perturbation: 1E-2;</p></li>
+<li><p>seed: random.</p></li>
 </ul>
 </p>
-<p><dl class="docutils">
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the constructor of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </li>
+<p><dl class="simple">
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the constructor of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -243,28 +234,26 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh3mbhERR1Tjdj">
-<span id="pagmo::mbh::mbh__TRR.unsigned.double.unsigned"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1mbh_1a5227dda59c04e756e209206b557390ce"></span><code class="descname">mbh</code><span class="sig-paren">(</span>T &amp;&amp;<em>a</em>, unsigned <em>stop</em>, double <em>perturb</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh3mbhERR1Tjdj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj">
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj"></span><span class="target" id="classpagmo_1_1mbh_1a5227dda59c04e756e209206b557390ce"></span>template&lt;typename <code class="descname">T</code>, ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T">T</a>&gt; = 0&gt;<br /><code class="descname">mbh</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T">T</a> &amp;&amp;<em>a</em>, unsigned <em>stop</em>, double <em>perturb</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor (scalar perturbation). </p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>.</p>
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>.</p>
 </div>
 </p>
 <p>This constructor will construct a monotonic basin hopping algorithm using a scalar perturbation.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">a</span></code>: a user-defined algorithm (UDA) or a <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> that will be used to construct the inner algorithm. </li>
-<li><code class="docutils literal"><span class="pre">stop</span></code>: consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#classpagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop. </li>
-<li><code class="docutils literal"><span class="pre">perturb</span></code>: the perturbation to be applied to each component of the decision vector of the best population found when generating a new starting point. These are defined relative to the corresponding bounds. </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: a user-defined algorithm (UDA) or a <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> that will be used to construct the inner algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stop</span></code>: consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#classpagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perturb</span></code>: the perturbation to be applied to each component of the decision vector of the best population found when generating a new starting point. These are defined relative to the corresponding bounds. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the constructor of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">perturb</span></code> is not in the (0,1] range. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the constructor of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">perturb</span></code> is not in the (0,1] range. </p></li>
 </ul>
 </dd>
 </dl>
@@ -272,29 +261,27 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh3mbhERR1Tj13vector_doublej">
-<span id="pagmo::mbh::mbh__TRR.unsigned.vector_double.unsigned"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1mbh_1aeb2658773a9d8dac44792eeb8097f29a"></span><code class="descname">mbh</code><span class="sig-paren">(</span>T &amp;&amp;<em>a</em>, unsigned <em>stop</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <em>perturb</em>, unsigned <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh3mbhERR1Tj13vector_doublej" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej">
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej"></span><span class="target" id="classpagmo_1_1mbh_1aeb2658773a9d8dac44792eeb8097f29a"></span>template&lt;typename <code class="descname">T</code>, ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T">T</a>&gt; = 0&gt;<br /><code class="descname">mbh</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T">T</a> &amp;&amp;<em>a</em>, unsigned <em>stop</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <em>perturb</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor (vector perturbation). </p>
 <p><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This constructor is enabled only if <code class="docutils literal"><span class="pre">T</span></code>, after the removal of cv/reference qualifiers,
-is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>.</p>
+<p class="admonition-title">Warning</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of cv/reference qualifiers,
+is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>.</p>
 </div>
 </p>
 <p>This constructor will construct a monotonic basin hopping algorithm using a vector perturbation.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">a</span></code>: a user-defined algorithm (UDA) or a <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> that will be used to construct the inner algorithm. </li>
-<li><code class="docutils literal"><span class="pre">stop</span></code>: consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#classpagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop. </li>
-<li><code class="docutils literal"><span class="pre">perturb</span></code>: a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> with the perturbations to be applied to each component of the decision vector of the best population found when generating a new starting point. These are defined relative to the corresponding bounds. </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: a user-defined algorithm (UDA) or a <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> that will be used to construct the inner algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stop</span></code>: consecutive runs of the inner algorithm that need to result in no improvement for <a class="reference internal" href="#classpagmo_1_1mbh"><span class="std std-ref">pagmo::mbh</span></a> to stop. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perturb</span></code>: a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> with the perturbations to be applied to each component of the decision vector of the best population found when generating a new starting point. These are defined relative to the corresponding bounds. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the constructor of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if not all the elements of <code class="docutils literal"><span class="pre">perturb</span></code> are in the (0,1] range. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the constructor of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if not all the elements of <code class="docutils literal notranslate"><span class="pre">perturb</span></code> are in the (0,1] range. </p></li>
 </ul>
 </dd>
 </dl>
@@ -302,21 +289,19 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh6evolveE10population">
-<span id="pagmo::mbh::evolve__populationC"></span><span class="target" id="classpagmo_1_1mbh_1a4a85e962d905987ef18beb13f2fc33c7"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh6evolveE10population">
+<span id="_CPPv3NK5pagmo3mbh6evolveE10population"></span><span id="_CPPv2NK5pagmo3mbh6evolveE10population"></span><span id="pagmo::mbh::evolve__populationC"></span><span class="target" id="classpagmo_1_1mbh_1a4a85e962d905987ef18beb13f2fc33c7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve method. </p>
-<p>This method will evolve the input population up to when <code class="docutils literal"><span class="pre">stop</span></code> consecutve runs of the internal algorithm do not improve the solution.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population.</dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved.</li>
+<p>This method will evolve the input population up to when <code class="docutils literal notranslate"><span class="pre">stop</span></code> consecutve runs of the internal algorithm do not improve the solution.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or stochastic, or if the perturbation vector size does not equal the problem size. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or stochastic, or if the perturbation vector size does not equal the problem size. </p></li>
 </ul>
 </dd>
 </dl>
@@ -324,13 +309,12 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh8set_seedEj">
-<span id="pagmo::mbh::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1adf326333c9dfb42796ae19545477bef7"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh8set_seedEj">
+<span id="_CPPv3N5pagmo3mbh8set_seedEj"></span><span id="_CPPv2N5pagmo3mbh8set_seedEj"></span><span id="pagmo::mbh::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1adf326333c9dfb42796ae19545477bef7"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm’s stochastic behaviour. </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm’s stochastic behaviour. </p></li>
 </ul>
 </dd>
 </dl>
@@ -338,26 +322,26 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh8get_seedEv">
-<span id="pagmo::mbh::get_seedC"></span><span class="target" id="classpagmo_1_1mbh_1ace711238e5814980421a05c7052300f4"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh8get_seedEv">
+<span id="_CPPv3NK5pagmo3mbh8get_seedEv"></span><span id="_CPPv2NK5pagmo3mbh8get_seedEv"></span><span id="pagmo::mbh::get_seedC"></span><span class="target" id="classpagmo_1_1mbh_1ace711238e5814980421a05c7052300f4"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the seed controlling the algorithm’s stochastic behaviour. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm’s stochastic behaviour. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh13set_verbosityEj">
-<span id="pagmo::mbh::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh13set_verbosityEj">
+<span id="_CPPv3N5pagmo3mbh13set_verbosityEj"></span><span id="_CPPv2N5pagmo3mbh13set_verbosityEj"></span><span id="pagmo::mbh::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the algorithm verbosity. </p>
-<p>This method will sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1mbh_1a3c3c6a719660aea4990413aa04675e7f"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
-<li>0: no verbosity,</li>
-<li>&gt;0: will print and log one line at the end of each call to the inner algorithm.</li>
+<p>This method will sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1mbh_1a3c3c6a719660aea4990413aa04675e7f"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<li><p>0: no verbosity,</p></li>
+<li><p>&gt;0: will print and log one line at the end of each call to the inner algorithm.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 100): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>         <span class="n">Trial</span><span class="p">:</span>
+<p>Example (verbosity 100): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>         <span class="n">Trial</span><span class="p">:</span>
     <span class="mi">105</span>        <span class="mf">110.395</span>              <span class="mi">1</span>      <span class="mf">0.0259512</span>              <span class="mi">0</span> <span class="n">i</span>
     <span class="mi">211</span>        <span class="mf">110.395</span>              <span class="mi">1</span>      <span class="mf">0.0259512</span>              <span class="mi">1</span> <span class="n">i</span>
     <span class="mi">319</span>        <span class="mf">110.395</span>              <span class="mi">1</span>      <span class="mf">0.0259512</span>              <span class="mi">2</span> <span class="n">i</span>
@@ -370,11 +354,10 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
    <span class="mi">1045</span>         <span class="mf">111.33</span>              <span class="mi">1</span>      <span class="mf">0.0149418</span>              <span class="mi">5</span> <span class="n">i</span>
 </pre></div>
 </div>
- <code class="docutils literal"><span class="pre">Fevals</span></code> is the number of fitness evaluations, <code class="docutils literal"><span class="pre">Best</span></code> is the objective function of the best fitness currently in the population, <code class="docutils literal"><span class="pre">Violated</span></code> is the number of constraints currently violated by the best solution, <code class="docutils literal"><span class="pre">Viol.</span> <span class="pre">Norm</span></code> is the norm of the violation (discounted already by the constraints tolerance) and <code class="docutils literal"><span class="pre">Trial</span></code> is the trial number (which will determine the algorithm stop). The small <code class="docutils literal"><span class="pre">i</span></code> appearing at the end of the line stands for “infeasible” and will disappear only once <code class="docutils literal"><span class="pre">Violated</span></code> is 0.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level. </li>
+ <code class="docutils literal notranslate"><span class="pre">Fevals</span></code> is the number of fitness evaluations, <code class="docutils literal notranslate"><span class="pre">Best</span></code> is the objective function of the best fitness currently in the population, <code class="docutils literal notranslate"><span class="pre">Violated</span></code> is the number of constraints currently violated by the best solution, <code class="docutils literal notranslate"><span class="pre">Viol.</span> <span class="pre">Norm</span></code> is the norm of the violation (discounted already by the constraints tolerance) and <code class="docutils literal notranslate"><span class="pre">Trial</span></code> is the trial number (which will determine the algorithm stop). The small <code class="docutils literal notranslate"><span class="pre">i</span></code> appearing at the end of the line stands for “infeasible” and will disappear only once <code class="docutils literal notranslate"><span class="pre">Violated</span></code> is 0.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level. </p></li>
 </ul>
 </dd>
 </dl>
@@ -382,40 +365,38 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh13get_verbosityEv">
-<span id="pagmo::mbh::get_verbosityC"></span><span class="target" id="classpagmo_1_1mbh_1a1b7a1982c5b3e657d92aa6be59cafe15"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh13get_verbosityEv">
+<span id="_CPPv3NK5pagmo3mbh13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3mbh13get_verbosityEv"></span><span id="pagmo::mbh::get_verbosityC"></span><span class="target" id="classpagmo_1_1mbh_1a1b7a1982c5b3e657d92aa6be59cafe15"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the verbosity level. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the verbosity level. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the verbosity level. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh11get_perturbEv">
-<span id="pagmo::mbh::get_perturbC"></span><span class="target" id="classpagmo_1_1mbh_1a55e96fa2c541b35ca6515c752dbc0819"></span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<code class="descname">get_perturb</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh11get_perturbEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh11get_perturbEv">
+<span id="_CPPv3NK5pagmo3mbh11get_perturbEv"></span><span id="_CPPv2NK5pagmo3mbh11get_perturbEv"></span><span id="pagmo::mbh::get_perturbC"></span><span class="target" id="classpagmo_1_1mbh_1a55e96fa2c541b35ca6515c752dbc0819"></span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<code class="descname">get_perturb</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh11get_perturbEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the perturbation vector. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a const reference to the perturbation vector. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a const reference to the perturbation vector. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh11set_perturbERK13vector_double">
-<span id="pagmo::mbh::set_perturb__vector_doubleCR"></span><span class="target" id="classpagmo_1_1mbh_1adb7bfdb7daf59b5a746863bd084bf5dc"></span>void <code class="descname">set_perturb</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>perturb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh11set_perturbERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh11set_perturbERK13vector_double">
+<span id="_CPPv3N5pagmo3mbh11set_perturbERK13vector_double"></span><span id="_CPPv2N5pagmo3mbh11set_perturbERK13vector_double"></span><span id="pagmo::mbh::set_perturb__vector_doubleCR"></span><span class="target" id="classpagmo_1_1mbh_1adb7bfdb7daf59b5a746863bd084bf5dc"></span>void <code class="descname">set_perturb</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>perturb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh11set_perturbERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the perturbation vector. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">perturb</span></code>: the perturbation vector.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">perturb</span></code>: the perturbation vector.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if not all the components of the perturbation vector are in the (0,1] range. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if not all the components of the perturbation vector are in the (0,1] range. </p></li>
 </ul>
 </dd>
 </dl>
@@ -423,96 +404,94 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algor
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh17get_thread_safetyEv">
-<span id="pagmo::mbh::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1mbh_1a19788fb8a6a14e74e1ce380f69445ecf"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh17get_thread_safetyEv">
+<span id="_CPPv3NK5pagmo3mbh17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo3mbh17get_thread_safetyEv"></span><span id="pagmo::mbh::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1mbh_1a19788fb8a6a14e74e1ce380f69445ecf"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm’s thread safety level. </p>
 <p>The thread safety of a meta-algorithm is defined by the thread safety of the interal <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the thread safety level of the interal <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the thread safety level of the interal <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh19get_inner_algorithmEv">
-<span id="pagmo::mbh::get_inner_algorithmC"></span><span class="target" id="classpagmo_1_1mbh_1af13925a0a1e3e1482d0e47e7dfea9c37"></span><em class="property">const</em> <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">get_inner_algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh19get_inner_algorithmEv">
+<span id="_CPPv3NK5pagmo3mbh19get_inner_algorithmEv"></span><span id="_CPPv2NK5pagmo3mbh19get_inner_algorithmEv"></span><span id="pagmo::mbh::get_inner_algorithmC"></span><span class="target" id="classpagmo_1_1mbh_1af13925a0a1e3e1482d0e47e7dfea9c37"></span><em class="property">const</em> <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">get_inner_algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner algorithm. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a const reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a const reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh19get_inner_algorithmEv">
-<span id="pagmo::mbh::get_inner_algorithm"></span><span class="target" id="classpagmo_1_1mbh_1a647ba2906efbb0607b339979d67ab421"></span><a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">get_inner_algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3mbh19get_inner_algorithmEv">
+<span id="_CPPv3N5pagmo3mbh19get_inner_algorithmEv"></span><span id="_CPPv2N5pagmo3mbh19get_inner_algorithmEv"></span><span id="pagmo::mbh::get_inner_algorithm"></span><span class="target" id="classpagmo_1_1mbh_1a647ba2906efbb0607b339979d67ab421"></span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">get_inner_algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner algorithm. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <p><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">The ability to extract a non const reference is provided only in order to allow to call
-non-const methods on the internal <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a> instance. Assigning a new
-<a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a> via this reference is undefined behaviour.</p>
+<p class="admonition-title">Warning</p>
+<p>The ability to extract a non const reference is provided only in order to allow to call
+non-const methods on the internal <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> instance. Assigning a new
+<a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> via this reference is undefined behaviour.</p>
 </div>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh7get_logEv">
-<span id="pagmo::mbh::get_logC"></span><span class="target" id="classpagmo_1_1mbh_1a3c3c6a719660aea4990413aa04675e7f"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo3mbh8log_typeE" title="pagmo::mbh::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh7get_logEv">
+<span id="_CPPv3NK5pagmo3mbh7get_logEv"></span><span id="_CPPv2NK5pagmo3mbh7get_logEv"></span><span id="pagmo::mbh::get_logC"></span><span class="target" id="classpagmo_1_1mbh_1a3c3c6a719660aea4990413aa04675e7f"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3mbh8log_typeE" title="pagmo::mbh::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to <a class="reference internal" href="#classpagmo_1_1mbh_1a4a85e962d905987ef18beb13f2fc33c7"><span class="std std-ref">mbh::evolve()</span></a>. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"><span class="std std-ref">mbh::log_line_type</span></a> containing: <code class="docutils literal"><span class="pre">Fevals</span></code>, <code class="docutils literal"><span class="pre">Best</span></code>, <code class="docutils literal"><span class="pre">Violated</span></code>, <code class="docutils literal"><span class="pre">Viol.Norm</span></code> and <code class="docutils literal"><span class="pre">Trial</span></code> as described in <a class="reference internal" href="#classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"><span class="std std-ref">mbh::set_verbosity()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"><span class="std std-ref">mbh::log_line_type</span></a> containing the logged values Fevals, Best, Violated, Viol.Norm and Trial. </dd>
+<p>A log containing relevant quantities monitoring the last call to <a class="reference internal" href="#classpagmo_1_1mbh_1a4a85e962d905987ef18beb13f2fc33c7"><span class="std std-ref">mbh::evolve()</span></a>. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"><span class="std std-ref">mbh::log_line_type</span></a> containing: <code class="docutils literal notranslate"><span class="pre">Fevals</span></code>, <code class="docutils literal notranslate"><span class="pre">Best</span></code>, <code class="docutils literal notranslate"><span class="pre">Violated</span></code>, <code class="docutils literal notranslate"><span class="pre">Viol.Norm</span></code> and <code class="docutils literal notranslate"><span class="pre">Trial</span></code> as described in <a class="reference internal" href="#classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"><span class="std std-ref">mbh::set_verbosity()</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"><span class="std std-ref">mbh::log_line_type</span></a> containing the logged values Fevals, Best, Violated, Viol.Norm and Trial. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh8get_nameEv">
-<span id="pagmo::mbh::get_nameC"></span><span class="target" id="classpagmo_1_1mbh_1a489df1c8ccc1cd7c6084aa34235294bf"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh8get_nameEv">
+<span id="_CPPv3NK5pagmo3mbh8get_nameEv"></span><span id="_CPPv2NK5pagmo3mbh8get_nameEv"></span><span id="pagmo::mbh::get_nameC"></span><span class="target" id="classpagmo_1_1mbh_1a489df1c8ccc1cd7c6084aa34235294bf"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the algorithm name. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo3mbh14get_extra_infoEv">
-<span id="pagmo::mbh::get_extra_infoC"></span><span class="target" id="classpagmo_1_1mbh_1a18900ca752fc8a85819e52c38ff4c240"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo3mbh14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo3mbh14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo3mbh14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3mbh14get_extra_infoEv"></span><span id="pagmo::mbh::get_extra_infoC"></span><span class="target" id="classpagmo_1_1mbh_1a18900ca752fc8a85819e52c38ff4c240"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3mbh14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing extra informations on the algorithm. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo3mbh9serializeER7Archive">
-<span id="pagmo::mbh::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1mbh_1a20aa10bdd53b4792f3c93810e806858e"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3mbh9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo3mbh9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo3mbh9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo3mbh9serializeER7Archive"></span><span class="target" id="classpagmo_1_1mbh_1a20aa10bdd53b4792f3c93810e806858e"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3mbh9serializeEvR7Archive" title="pagmo::mbh::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3mbh9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the inner algorithm and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the inner algorithm and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -537,7 +516,7 @@ non-const methods on the internal <a class="reference internal" href="../algorit
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

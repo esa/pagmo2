@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Compass Search &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Differential Evolution" href="de.html" />
     <link rel="prev" title="Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)" href="cmaes.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,44 +175,44 @@
   <div class="section" id="compass-search">
 <h1>Compass Search<a class="headerlink" href="#compass-search" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo14compass_searchE">
-<span id="pagmo::compass_search"></span><span class="target" id="classpagmo_1_1compass__search"></span><em class="property">class </em><code class="descname">compass_search</code> : <em class="property">public</em> pagmo::<a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv2N5pagmo20not_population_basedE" title="pagmo::not_population_based">not_population_based</a><a class="headerlink" href="#_CPPv2N5pagmo14compass_searchE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo14compass_searchE">
+<span id="_CPPv3N5pagmo14compass_searchE"></span><span id="_CPPv2N5pagmo14compass_searchE"></span><span id="pagmo::compass_search"></span><span class="target" id="classpagmo_1_1compass__search"></span><em class="property">class </em><code class="descname">compass_search</code> : <em class="property">public</em> pagmo::<a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based">not_population_based</a><a class="headerlink" href="#_CPPv4N5pagmo14compass_searchE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Compass Search Solver (CS) </p>
 <p><img alt="../../../_images/compass_search.png" src="../../../_images/compass_search.png" /></p>
 <p>In the review paper by Kolda, Lewis, Torczon: ‘Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods’ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003), the following description of the compass search algorithm is given:</p>
 <p>‘Davidon describes what is one of the earliest examples of a direct search method used on a digital computer to solve an optimization problem: Enrico Fermi and Nicholas Metropolis used one of the first digital computers, the Los Alamos Maniac, to determine which values of certain theoretical parameters (phase shifts) best fit experimental data (scattering cross sections). They varied one theoretical parameter at a time by steps of the same magnitude, and when no such increase or decrease in any one parameter further improved the fit to the experimental data, they halved the step size and repeated the process until the steps were deemed sufficiently small. Their simple procedure was slow but sure, and several of us used it on the Avidac computer at the Argonne National Laboratory for adjusting six theoretical parameters to fit the pion-proton scattering data we had gathered using the University of Chicago synchrocyclotron. While this basic algorithm undoubtedly predates Fermi and Metropolis, it has remained a standard in the scientific computing community for exactly the reason observed by Davidon: it is slow but sure’.</p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This algorithm does not work for multi-objective problems, nor for stochastic problems.</p>
+<p class="admonition-title">Note</p>
+<p>This algorithm does not work for multi-objective problems, nor for stochastic problems.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The search range is defined relative to the box-bounds. Hence, unbounded problems
+<p class="admonition-title">Note</p>
+<p>The search range is defined relative to the box-bounds. Hence, unbounded problems
 will produce an error.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
+<p class="admonition-title">Note</p>
+<p>Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
 called from two identical populations.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
+<p class="admonition-title">See also</p>
 <p>Kolda, Lewis, Torczon: ‘Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods’
 published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
-<p class="last"><a class="reference external" href="http://www.cs.wm.edu/~va/research/sirev.pdf">http://www.cs.wm.edu/~va/research/sirev.pdf</a></p>
+<p><a class="reference external" href="http://www.cs.wm.edu/~va/research/sirev.pdf">http://www.cs.wm.edu/~va/research/sirev.pdf</a></p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
-<dt id="_CPPv2N5pagmo14compass_search13log_line_typeE">
-<span id="pagmo::compass_search::log_line_type"></span><span class="target" id="classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo14compass_search13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo14compass_search13log_line_typeE">
+<span id="_CPPv3N5pagmo14compass_search13log_line_typeE"></span><span id="_CPPv2N5pagmo14compass_search13log_line_typeE"></span><span id="pagmo::compass_search::log_line_type"></span><span class="target" id="classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"></span><em class="property">typedef </em>std::tuple&lt;unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range) </p>
 </dd></dl>
 
 <dl class="type">
-<dt id="_CPPv2N5pagmo14compass_search8log_typeE">
-<span id="pagmo::compass_search::log_type"></span><span class="target" id="classpagmo_1_1compass__search_1a1af2f04182eff8f9009e7b9006ab2a63"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo14compass_search13log_line_typeE" title="pagmo::compass_search::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo14compass_search8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo14compass_search8log_typeE">
+<span id="_CPPv3N5pagmo14compass_search8log_typeE"></span><span id="_CPPv2N5pagmo14compass_search8log_typeE"></span><span id="pagmo::compass_search::log_type"></span><span class="target" id="classpagmo_1_1compass__search_1a1af2f04182eff8f9009e7b9006ab2a63"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo14compass_search13log_line_typeE" title="pagmo::compass_search::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo14compass_search8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -228,24 +220,22 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo14compass_search14compass_searchEjddd">
-<span id="pagmo::compass_search::compass_search__unsigned-i.double.double.double"></span><span class="target" id="classpagmo_1_1compass__search_1a1a717542139d405e16ccd1d44d52f9ef"></span><code class="descname">compass_search</code><span class="sig-paren">(</span>unsigned int <em>max_fevals</em> = 1, double <em>start_range</em> = .1, double <em>stop_range</em> = .01, double <em>reduction_coeff</em> = .5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14compass_search14compass_searchEjddd" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo14compass_search14compass_searchEjddd">
+<span id="_CPPv3N5pagmo14compass_search14compass_searchEjddd"></span><span id="_CPPv2N5pagmo14compass_search14compass_searchEjddd"></span><span id="pagmo::compass_search::compass_search__unsigned-i.double.double.double"></span><span class="target" id="classpagmo_1_1compass__search_1a1a717542139d405e16ccd1d44d52f9ef"></span><code class="descname">compass_search</code><span class="sig-paren">(</span>unsigned int <em>max_fevals</em> = 1, double <em>start_range</em> = .1, double <em>stop_range</em> = .01, double <em>reduction_coeff</em> = .5<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search14compass_searchEjddd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs <a class="reference internal" href="#classpagmo_1_1compass__search"><span class="std std-ref">compass_search</span></a></p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">max_fevals</span></code>: maximum number of fitness evaluations </li>
-<li><code class="docutils literal"><span class="pre">start_range</span></code>: start range </li>
-<li><code class="docutils literal"><span class="pre">stop_range</span></code>: stop range </li>
-<li><code class="docutils literal"><span class="pre">reduction_coeff</span></code>: range reduction coefficient </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">max_fevals</span></code>: maximum number of fitness evaluations </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_range</span></code>: start range </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stop_range</span></code>: stop range </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reduction_coeff</span></code>: range reduction coefficient </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">start_range</span></code> is not in (0,1] </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">stop_range</span></code> is not in (start_range,1] </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">reduction_coeff</span></code> is not in (0,1) </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">start_range</span></code> is not in (0,1] </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">stop_range</span></code> is not in (start_range,1] </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">reduction_coeff</span></code> is not in (0,1) </p></li>
 </ul>
 </dd>
 </dl>
@@ -253,22 +243,20 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search6evolveE10population">
-<span id="pagmo::compass_search::evolve__populationC"></span><span class="target" id="classpagmo_1_1compass__search_1ae7a243492ead4ea06863ad0174440628"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search6evolveE10population">
+<span id="_CPPv3NK5pagmo14compass_search6evolveE10population"></span><span id="_CPPv2NK5pagmo14compass_search6evolveE10population"></span><span id="pagmo::compass_search::evolve__populationC"></span><span class="target" id="classpagmo_1_1compass__search_1ae7a243492ead4ea06863ad0174440628"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
 <p>Evolves the population up to when the search range becomes smaller than the defined stop_range</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or stochastic </li>
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if the population is empty </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or stochastic </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the population is empty </p></li>
 </ul>
 </dd>
 </dl>
@@ -276,15 +264,15 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo14compass_search13set_verbosityEj">
-<span id="pagmo::compass_search::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1compass__search_1a72289653c5808ccee3e25dd90456da61"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14compass_search13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo14compass_search13set_verbosityEj">
+<span id="_CPPv3N5pagmo14compass_search13set_verbosityEj"></span><span id="_CPPv2N5pagmo14compass_search13set_verbosityEj"></span><span id="pagmo::compass_search::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1compass__search_1a72289653c5808ccee3e25dd90456da61"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1compass__search_1ae92a8540540a98cd937326d1fe14bad0"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
-<li>0: no verbosity</li>
-<li>&gt;0: will print and log one line each objective function improvement, or range reduction</li>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1compass__search_1ae92a8540540a98cd937326d1fe14bad0"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<li><p>0: no verbosity</p></li>
+<li><p>&gt;0: will print and log one line each objective function improvement, or range reduction</p></li>
 </ul>
 </p>
-<p>Example (verbosity &gt; 0u): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>         <span class="n">Range</span><span class="p">:</span>
+<p>Example (verbosity &gt; 0u): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>         <span class="n">Range</span><span class="p">:</span>
       <span class="mi">4</span>        <span class="mf">110.785</span>              <span class="mi">1</span>        <span class="mf">2.40583</span>            <span class="mf">0.5</span>
      <span class="mi">12</span>        <span class="mf">110.785</span>              <span class="mi">1</span>        <span class="mf">2.40583</span>           <span class="mf">0.25</span>
      <span class="mi">20</span>        <span class="mf">110.785</span>              <span class="mi">1</span>        <span class="mf">2.40583</span>          <span class="mf">0.125</span>
@@ -305,10 +293,9 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </pre></div>
 </div>
  Fevals, is the number of fitness evaluations made, Best is the best fitness Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for the tolerances returned by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">problem::get_c_tol</span></a>, and Range is the range used at that point of the search</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
 </ul>
 </dd>
 </dl>
@@ -316,123 +303,107 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search13get_verbosityEv">
-<span id="pagmo::compass_search::get_verbosityC"></span><span class="target" id="classpagmo_1_1compass__search_1aff6f23a05909a5e85a5d3dd9b923f462"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search13get_verbosityEv">
+<span id="_CPPv3NK5pagmo14compass_search13get_verbosityEv"></span><span id="_CPPv2NK5pagmo14compass_search13get_verbosityEv"></span><span id="pagmo::compass_search::get_verbosityC"></span><span class="target" id="classpagmo_1_1compass__search_1aff6f23a05909a5e85a5d3dd9b923f462"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the verbosity level </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search14get_max_fevalsEv">
-<span id="pagmo::compass_search::get_max_fevalsC"></span><span class="target" id="classpagmo_1_1compass__search_1a7d18492b40166364270b3fee451f2ed7"></span>double <code class="descname">get_max_fevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search14get_max_fevalsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search14get_max_fevalsEv">
+<span id="_CPPv3NK5pagmo14compass_search14get_max_fevalsEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_max_fevalsEv"></span><span id="pagmo::compass_search::get_max_fevalsC"></span><span class="target" id="classpagmo_1_1compass__search_1a7d18492b40166364270b3fee451f2ed7"></span>double <code class="descname">get_max_fevals</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_max_fevalsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the maximum number of iterations allowed. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the maximum number of iterations allowed </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the maximum number of iterations allowed </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search14get_stop_rangeEv">
-<span id="pagmo::compass_search::get_stop_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1acd0ee1e0b85d07ff303900cc88d1c7ec"></span>double <code class="descname">get_stop_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search14get_stop_rangeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search14get_stop_rangeEv">
+<span id="_CPPv3NK5pagmo14compass_search14get_stop_rangeEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_stop_rangeEv"></span><span id="pagmo::compass_search::get_stop_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1acd0ee1e0b85d07ff303900cc88d1c7ec"></span>double <code class="descname">get_stop_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_stop_rangeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the stop_range. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the stop range </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the stop range </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search15get_start_rangeEv">
-<span id="pagmo::compass_search::get_start_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1a82a9cd24f46ffbcf17b1d56413010e37"></span>double <code class="descname">get_start_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search15get_start_rangeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search15get_start_rangeEv">
+<span id="_CPPv3NK5pagmo14compass_search15get_start_rangeEv"></span><span id="_CPPv2NK5pagmo14compass_search15get_start_rangeEv"></span><span id="pagmo::compass_search::get_start_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1a82a9cd24f46ffbcf17b1d56413010e37"></span>double <code class="descname">get_start_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search15get_start_rangeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the start range. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the start range </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the start range </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search19get_reduction_coeffEv">
-<span id="pagmo::compass_search::get_reduction_coeffC"></span><span class="target" id="classpagmo_1_1compass__search_1a32451a1b28248f1c60796b8cf07d23a5"></span>double <code class="descname">get_reduction_coeff</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search19get_reduction_coeffEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv">
+<span id="_CPPv3NK5pagmo14compass_search19get_reduction_coeffEv"></span><span id="_CPPv2NK5pagmo14compass_search19get_reduction_coeffEv"></span><span id="pagmo::compass_search::get_reduction_coeffC"></span><span class="target" id="classpagmo_1_1compass__search_1a32451a1b28248f1c60796b8cf07d23a5"></span>double <code class="descname">get_reduction_coeff</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the reduction_coeff. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the reduction coefficient </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the reduction coefficient </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search8get_nameEv">
-<span id="pagmo::compass_search::get_nameC"></span><span class="target" id="classpagmo_1_1compass__search_1af1e4add7c64d6c5da8b704d58006132a"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search8get_nameEv">
+<span id="_CPPv3NK5pagmo14compass_search8get_nameEv"></span><span id="_CPPv2NK5pagmo14compass_search8get_nameEv"></span><span id="pagmo::compass_search::get_nameC"></span><span class="target" id="classpagmo_1_1compass__search_1af1e4add7c64d6c5da8b704d58006132a"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the algorithm name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search14get_extra_infoEv">
-<span id="pagmo::compass_search::get_extra_infoC"></span><span class="target" id="classpagmo_1_1compass__search_1a575d0d8e7161c4ed4caab973753b69cb"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo14compass_search14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_extra_infoEv"></span><span id="pagmo::compass_search::get_extra_infoC"></span><span class="target" id="classpagmo_1_1compass__search_1a575d0d8e7161c4ed4caab973753b69cb"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing extra informations on the algorithm </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo14compass_search7get_logEv">
-<span id="pagmo::compass_search::get_logC"></span><span class="target" id="classpagmo_1_1compass__search_1ae92a8540540a98cd937326d1fe14bad0"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo14compass_search8log_typeE" title="pagmo::compass_search::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo14compass_search7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo14compass_search7get_logEv">
+<span id="_CPPv3NK5pagmo14compass_search7get_logEv"></span><span id="_CPPv2NK5pagmo14compass_search7get_logEv"></span><span id="pagmo::compass_search::get_logC"></span><span class="target" id="classpagmo_1_1compass__search_1ae92a8540540a98cd937326d1fe14bad0"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo14compass_search8log_typeE" title="pagmo::compass_search::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"><span class="std std-ref">compass_search::log_line_type</span></a> containing: Fevals, Best, Violated and Viol.Norm, Range as described in <a class="reference internal" href="#classpagmo_1_1compass__search_1a72289653c5808ccee3e25dd90456da61"><span class="std std-ref">compass_search::set_verbosity</span></a> <dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"><span class="std std-ref">compass_search::log_line_type</span></a> containing the logged values Fevals, Best, Range </dd>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"><span class="std std-ref">compass_search::log_line_type</span></a> containing: Fevals, Best, Violated and Viol.Norm, Range as described in <a class="reference internal" href="#classpagmo_1_1compass__search_1a72289653c5808ccee3e25dd90456da61"><span class="std std-ref">compass_search::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"><span class="std std-ref">compass_search::log_line_type</span></a> containing the logged values Fevals, Best, Range </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo14compass_search9serializeER7Archive">
-<span id="pagmo::compass_search::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1compass__search_1ad99665be2f430170482d02d4ba3ff21d"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo14compass_search9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo14compass_search9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo14compass_search9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo14compass_search9serializeER7Archive"></span><span class="target" id="classpagmo_1_1compass__search_1ad99665be2f430170482d02d4ba3ff21d"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14compass_search9serializeEvR7Archive" title="pagmo::compass_search::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14compass_search9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj">
-<span id="pagmo::not_population_based::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Set the seed for the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -440,27 +411,38 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE">
-<span id="pagmo::not_population_based::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based18set_random_sr_seedEj">
+<span id="_CPPv3N5pagmo20not_population_based18set_random_sr_seedEj"></span><span id="_CPPv2N5pagmo20not_population_based18set_random_sr_seedEj"></span><span id="pagmo::not_population_based::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"></span>void <code class="descname">set_random_sr_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20not_population_based18set_random_sr_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo20not_population_based13set_selectionERKNSt6stringE">
+<span id="_CPPv3N5pagmo20not_population_based13set_selectionERKNSt6stringE"></span><span id="_CPPv2N5pagmo20not_population_based13set_selectionERKNSt6stringE"></span><span id="pagmo::not_population_based::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>select</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20not_population_based13set_selectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual selection policy. </p>
-<p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
-<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+<p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</p></li>
 </ul>
 </p>
-<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">select</span></code>: the selection policy.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">select</span></code>: the selection policy.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">select</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">select</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -468,14 +450,13 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE">
-<span id="pagmo::not_population_based::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based13set_selectionEN10population9size_typeE">
+<span id="_CPPv3N5pagmo20not_population_based13set_selectionEN10population9size_typeE"></span><span id="_CPPv2N5pagmo20not_population_based13set_selectionEN10population9size_typeE"></span><span id="pagmo::not_population_based::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span>void <code class="descname">set_selection</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20not_population_based13set_selectionEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual selection index. </p>
-<p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </li>
+<p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: the index in the population of the individual to be selected for optimisation. </p></li>
 </ul>
 </dd>
 </dl>
@@ -483,39 +464,37 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo20not_population_based13get_selectionEv">
-<span id="pagmo::not_population_based::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo20not_population_based13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo20not_population_based13get_selectionEv">
+<span id="_CPPv3NK5pagmo20not_population_based13get_selectionEv"></span><span id="_CPPv2NK5pagmo20not_population_based13get_selectionEv"></span><span id="pagmo::not_population_based::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span>boost::any <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20not_population_based13get_selectionEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the individual selection policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the individual selection policy or index. </dd>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ad049600ad72f5aaf61dab52ea95cd6d9"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the individual selection policy or index. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE">
-<span id="pagmo::not_population_based::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based15set_replacementERKNSt6stringE">
+<span id="_CPPv3N5pagmo20not_population_based15set_replacementERKNSt6stringE"></span><span id="_CPPv2N5pagmo20not_population_based15set_replacementERKNSt6stringE"></span><span id="pagmo::not_population_based::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>replace</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20not_population_based15set_replacementERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual replacement policy. </p>
-<p>This method will set the policy that is used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
-<p>The input string must be one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</li>
-<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</li>
+<p>This method will set the policy that is used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
+<p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code> will select the best individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> will select the worst individual in the population,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> will randomly choose one individual in the population.</p></li>
 </ul>
 </p>
-<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code> policy.</p>
+<p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a43c196b3254e6d0ecb49a200d8e5cc17"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">replace</span></code>: the replacement policy.</li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">replace</span></code>: the replacement policy.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal"><span class="pre">replace</span></code> is not one of <code class="docutils literal"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">replace</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -523,14 +502,13 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE">
-<span id="pagmo::not_population_based::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20not_population_based15set_replacementEN10population9size_typeE">
+<span id="_CPPv3N5pagmo20not_population_based15set_replacementEN10population9size_typeE"></span><span id="_CPPv2N5pagmo20not_population_based15set_replacementEN10population9size_typeE"></span><span id="pagmo::not_population_based::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span>void <code class="descname">set_replacement</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20not_population_based15set_replacementEN10population9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the individual replacement index. </p>
-<p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the algorithm.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </li>
+<p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: the index in the population of the individual to be replaced after the optimisation. </p></li>
 </ul>
 </dd>
 </dl>
@@ -538,13 +516,13 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo20not_population_based15get_replacementEv">
-<span id="pagmo::not_population_based::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo20not_population_based15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo20not_population_based15get_replacementEv">
+<span id="_CPPv3NK5pagmo20not_population_based15get_replacementEv"></span><span id="_CPPv2NK5pagmo20not_population_based15get_replacementEv"></span><span id="pagmo::not_population_based::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span>boost::any <code class="descname">get_replacement</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20not_population_based15get_replacementEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the individual replacement policy or index. </p>
-<p>This method will return a <code class="docutils literal"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the individual replacement policy or index. </dd>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a78bf280404ba0555cd7320e8431a587e"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1acb03d2e2a6b68982eeb340f8cdd4eef7"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the individual replacement policy or index. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
@@ -567,7 +545,7 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

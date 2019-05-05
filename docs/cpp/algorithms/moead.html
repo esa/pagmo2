@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE) &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Monotonic Basin Hopping (MBH) - Generalized" href="mbh.html" />
     <link rel="prev" title="Ipopt" href="ipopt.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,39 +175,39 @@
   <div class="section" id="multi-objective-evolutionary-algorithm-by-decomposition-moea-d-de">
 <h1>Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)<a class="headerlink" href="#multi-objective-evolutionary-algorithm-by-decomposition-moea-d-de" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo5moeadE">
-<span id="pagmo::moead"></span><span class="target" id="classpagmo_1_1moead"></span><em class="property">class </em><code class="descname">moead</code><a class="headerlink" href="#_CPPv2N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5moeadE">
+<span id="_CPPv3N5pagmo5moeadE"></span><span id="_CPPv2N5pagmo5moeadE"></span><span id="pagmo::moead"></span><span class="target" id="classpagmo_1_1moead"></span><em class="property">class </em><code class="descname">moead</code><a class="headerlink" href="#_CPPv4N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Multi Objective Evolutionary Algorithms by Decomposition (the DE variant) </p>
 <p><img alt="../../../_images/moead.png" src="../../../_images/moead.png" /></p>
 <p>MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of problem decomposition, it leverages evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particular algorithm implemented in pagmo with the name <a class="reference internal" href="#classpagmo_1_1moead"><span class="std std-ref">pagmo::moead</span></a> uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the Tchebycheff, weighted or boundary intersection decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is also implemented.</p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
+<p class="admonition-title">Note</p>
+<p>The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
 allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
 non-dominated front.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">Zhang, Qingfu, and Hui Li. “MOEA/D: A multiobjective evolutionary algorithm based on decomposition.”
+<p class="admonition-title">See also</p>
+<p>Zhang, Qingfu, and Hui Li. “MOEA/D: A multiobjective evolutionary algorithm based on decomposition.”
 Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">Li, Hui, and Qingfu Zhang. “Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
+<p class="admonition-title">See also</p>
+<p>Li, Hui, and Qingfu Zhang. “Multiobjective optimization problems with complicated Pareto sets, MOEA/D and
 NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.</p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
-<dt id="_CPPv2N5pagmo5moead13log_line_typeE">
-<span id="pagmo::moead::log_line_type"></span><span class="target" id="classpagmo_1_1moead_1a2368520f8b991d509aff9ea183bc2f1b"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv2N5pagmo5moead13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5moead13log_line_typeE">
+<span id="_CPPv3N5pagmo5moead13log_line_typeE"></span><span id="_CPPv2N5pagmo5moead13log_line_typeE"></span><span id="pagmo::moead::log_line_type"></span><span class="target" id="classpagmo_1_1moead_1a2368520f8b991d509aff9ea183bc2f1b"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo5moead13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, adf, ideal_point) </p>
 </dd></dl>
 
 <dl class="type">
-<dt id="_CPPv2N5pagmo5moead8log_typeE">
-<span id="pagmo::moead::log_type"></span><span class="target" id="classpagmo_1_1moead_1aa853a22b62807391fe984b5dc1878072"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv2N5pagmo5moead13log_line_typeE" title="pagmo::moead::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv2N5pagmo5moead8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5moead8log_typeE">
+<span id="_CPPv3N5pagmo5moead8log_typeE"></span><span id="_CPPv2N5pagmo5moead8log_typeE"></span><span id="pagmo::moead::log_type"></span><span class="target" id="classpagmo_1_1moead_1aa853a22b62807391fe984b5dc1878072"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo5moead13log_line_typeE" title="pagmo::moead::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo5moead8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -223,29 +215,27 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj">
-<span id="pagmo::moead::moead__unsigned-i.ss.ss.population::size_type.double.double.double.double.unsigned-i.b.unsigned-i"></span><span class="target" id="classpagmo_1_1moead_1adbd79547713084bd5a52ef47b3a7e676"></span><code class="descname">moead</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1u, std::string <em>weight_generation</em> = &quot;grid&quot;, std::string <em>decomposition</em> = &quot;tchebycheff&quot;, <a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv2N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>neighbours</em> = 20u, double <em>CR</em> = 1.0, double <em>F</em> = 0.5, double <em>eta_m</em> = 20., double <em>realb</em> = 0.9, unsigned int <em>limit</em> = 2u, bool <em>preserve_diversity</em> = true, unsigned int <em>seed</em> = pagmo::random_device::next ()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj">
+<span id="_CPPv3N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj"></span><span id="_CPPv2N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj"></span><span id="pagmo::moead::moead__unsigned-i.ss.ss.population::size_type.double.double.double.double.unsigned-i.b.unsigned-i"></span><span class="target" id="classpagmo_1_1moead_1adbd79547713084bd5a52ef47b3a7e676"></span><code class="descname">moead</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1u, std::string <em>weight_generation</em> = &quot;grid&quot;, std::string <em>decomposition</em> = &quot;tchebycheff&quot;, <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>neighbours</em> = 20u, double <em>CR</em> = 1.0, double <em>F</em> = 0.5, double <em>eta_m</em> = 20., double <em>realb</em> = 0.9, unsigned int <em>limit</em> = 2u, bool <em>preserve_diversity</em> = true, unsigned int <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs MOEA/D-DE</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">gen</span></code>: number of generations </li>
-<li><code class="docutils literal"><span class="pre">weight_generation</span></code>: method used to generate the weights, one of “grid”, “low discrepancy” or “random” </li>
-<li><code class="docutils literal"><span class="pre">decomposition</span></code>: decomposition method: one of “weighted”, “tchebycheff” or “bi” </li>
-<li><code class="docutils literal"><span class="pre">neighbours</span></code>: size of the weight’s neighborhood </li>
-<li><code class="docutils literal"><span class="pre">CR</span></code>: crossover parameter in the Differential Evolution operator </li>
-<li><code class="docutils literal"><span class="pre">F</span></code>: parameter for the Differential Evolution operator </li>
-<li><code class="docutils literal"><span class="pre">eta_m</span></code>: distribution index used by the polynomial mutation </li>
-<li><code class="docutils literal"><span class="pre">realb</span></code>: chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true) </li>
-<li><code class="docutils literal"><span class="pre">limit</span></code>: maximum number of copies reinserted in the population (only if m_preserve_diversity is true) </li>
-<li><code class="docutils literal"><span class="pre">preserve_diversity</span></code>: when true activates the two diversity preservation mechanisms described in Li, Hui, and Qingfu Zhang paper </li>
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random) </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gen</span></code>: number of generations </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight_generation</span></code>: method used to generate the weights, one of “grid”, “low discrepancy” or “random” </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">decomposition</span></code>: decomposition method: one of “weighted”, “tchebycheff” or “bi” </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">neighbours</span></code>: size of the weight’s neighborhood </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CR</span></code>: crossover parameter in the Differential Evolution operator </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">F</span></code>: parameter for the Differential Evolution operator </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">eta_m</span></code>: distribution index used by the polynomial mutation </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">realb</span></code>: chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">limit</span></code>: maximum number of copies reinserted in the population (only if m_preserve_diversity is true) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preserve_diversity</span></code>: when true activates the two diversity preservation mechanisms described in Li, Hui, and Qingfu Zhang paper </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random) </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">value_error</span></code>: if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not in [1.0] or m_eta is &lt; 0 </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value_error</span></code>: if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not in [1.0] or m_eta is &lt; 0 </p></li>
 </ul>
 </dd>
 </dl>
@@ -253,16 +243,15 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead6evolveE10population">
-<span id="pagmo::moead::evolve__populationC"></span><span class="target" id="classpagmo_1_1moead_1a4bb888cfde48590be1df4ef48560c986"></span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead6evolveE10population">
+<span id="_CPPv3NK5pagmo5moead6evolveE10population"></span><span id="_CPPv2NK5pagmo5moead6evolveE10population"></span><span id="pagmo::moead::evolve__populationC"></span><span class="target" id="classpagmo_1_1moead_1a4bb888cfde48590be1df4ef48560c986"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
 <p>Evolves the population for the requested number of generations.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: population to be evolved </li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
 </ul>
 </dd>
 </dl>
@@ -270,13 +259,12 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5moead8set_seedEj">
-<span id="pagmo::moead::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1moead_1a1270e8007b5e40a5b94519d8d761d714"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5moead8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5moead8set_seedEj">
+<span id="_CPPv3N5pagmo5moead8set_seedEj"></span><span id="_CPPv2N5pagmo5moead8set_seedEj"></span><span id="pagmo::moead::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1moead_1a1270e8007b5e40a5b94519d8d761d714"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
 </ul>
 </dd>
 </dl>
@@ -284,26 +272,26 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead8get_seedEv">
-<span id="pagmo::moead::get_seedC"></span><span class="target" id="classpagmo_1_1moead_1a967d1ca7fe46befabd551979e4af5cf4"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead8get_seedEv">
+<span id="_CPPv3NK5pagmo5moead8get_seedEv"></span><span id="_CPPv2NK5pagmo5moead8get_seedEv"></span><span id="pagmo::moead::get_seedC"></span><span class="target" id="classpagmo_1_1moead_1a967d1ca7fe46befabd551979e4af5cf4"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the seed controlling the algorithm stochastic behaviour </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5moead13set_verbosityEj">
-<span id="pagmo::moead::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1moead_1a87f98301d7073e1a56f3d527f2561b37"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5moead13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo5moead13set_verbosityEj">
+<span id="_CPPv3N5pagmo5moead13set_verbosityEj"></span><span id="_CPPv2N5pagmo5moead13set_verbosityEj"></span><span id="pagmo::moead::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1moead_1a87f98301d7073e1a56f3d527f2561b37"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal"><span class="pre">level</span></code> can be:<ul class="simple">
-<li>0: no verbosity</li>
-<li>&gt;0: will print and log one line each <code class="docutils literal"><span class="pre">level</span></code> generations.</li>
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<li><p>0: no verbosity</p></li>
+<li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>           <span class="n">ADF</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>        <span class="n">ideal2</span><span class="p">:</span>
+<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>           <span class="n">ADF</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>        <span class="n">ideal2</span><span class="p">:</span>
   <span class="mi">1</span>              <span class="mi">0</span>        <span class="mf">24.9576</span>       <span class="mf">0.117748</span>        <span class="mf">2.77748</span>
   <span class="mi">2</span>             <span class="mi">40</span>        <span class="mf">19.2461</span>      <span class="mf">0.0238826</span>        <span class="mf">2.51403</span>
   <span class="mi">3</span>             <span class="mi">80</span>        <span class="mf">12.4375</span>      <span class="mf">0.0238826</span>        <span class="mf">2.51403</span>
@@ -317,10 +305,9 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used. ADF is the Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction. The ideal point of the current population follows cropped to its 5th component.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: verbosity level </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
 </ul>
 </dd>
 </dl>
@@ -328,76 +315,74 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead13get_verbosityEv">
-<span id="pagmo::moead::get_verbosityC"></span><span class="target" id="classpagmo_1_1moead_1ab9e77ae2c2e5a602c4816f67379e8354"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead13get_verbosityEv">
+<span id="_CPPv3NK5pagmo5moead13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5moead13get_verbosityEv"></span><span id="pagmo::moead::get_verbosityC"></span><span class="target" id="classpagmo_1_1moead_1ab9e77ae2c2e5a602c4816f67379e8354"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the verbosity level </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead7get_genEv">
-<span id="pagmo::moead::get_genC"></span><span class="target" id="classpagmo_1_1moead_1a674fc224cc080f11ad2421fcb798da51"></span>unsigned int <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead7get_genEv">
+<span id="_CPPv3NK5pagmo5moead7get_genEv"></span><span id="_CPPv2NK5pagmo5moead7get_genEv"></span><span id="pagmo::moead::get_genC"></span><span class="target" id="classpagmo_1_1moead_1a674fc224cc080f11ad2421fcb798da51"></span>unsigned int <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the number of generations to evolve for </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead8get_nameEv">
-<span id="pagmo::moead::get_nameC"></span><span class="target" id="classpagmo_1_1moead_1a3c2887bcb50fbc9b4292daf64b4b8e44"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead8get_nameEv">
+<span id="_CPPv3NK5pagmo5moead8get_nameEv"></span><span id="_CPPv2NK5pagmo5moead8get_nameEv"></span><span id="pagmo::moead::get_nameC"></span><span class="target" id="classpagmo_1_1moead_1a3c2887bcb50fbc9b4292daf64b4b8e44"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing the algorithm name </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead14get_extra_infoEv">
-<span id="pagmo::moead::get_extra_infoC"></span><span class="target" id="classpagmo_1_1moead_1af2127817557417be55974f4a98da8436"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo5moead14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5moead14get_extra_infoEv"></span><span id="pagmo::moead::get_extra_infoC"></span><span class="target" id="classpagmo_1_1moead_1af2127817557417be55974f4a98da8436"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra informations. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a string containing extra informations on the algorithm </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo5moead7get_logEv">
-<span id="pagmo::moead::get_logC"></span><span class="target" id="classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo5moead8log_typeE" title="pagmo::moead::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo5moead7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo5moead7get_logEv">
+<span id="_CPPv3NK5pagmo5moead7get_logEv"></span><span id="_CPPv2NK5pagmo5moead7get_logEv"></span><span id="pagmo::moead::get_logC"></span><span class="target" id="classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo5moead8log_typeE" title="pagmo::moead::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1moead_1a2368520f8b991d509aff9ea183bc2f1b"><span class="std std-ref">moead::log_line_type</span></a> containing: Gen, Fevals, ADR, ideal_point as described in <a class="reference internal" href="#classpagmo_1_1moead_1a87f98301d7073e1a56f3d527f2561b37"><span class="std std-ref">moead::set_verbosity</span></a> <dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>an <code class="docutils literal"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1moead_1a2368520f8b991d509aff9ea183bc2f1b"><span class="std std-ref">moead::log_line_type</span></a> containing the logged values Gen, Fevals, ADR, ideal_point </dd>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1moead_1a2368520f8b991d509aff9ea183bc2f1b"><span class="std std-ref">moead::log_line_type</span></a> containing: Gen, Fevals, ADR, ideal_point as described in <a class="reference internal" href="#classpagmo_1_1moead_1a87f98301d7073e1a56f3d527f2561b37"><span class="std std-ref">moead::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1moead_1a2368520f8b991d509aff9ea183bc2f1b"><span class="std std-ref">moead::log_line_type</span></a> containing the logged values Gen, Fevals, ADR, ideal_point </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo5moead9serializeER7Archive">
-<span id="pagmo::moead::serialize__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1moead_1a6c3256cd1e30ac4e5c046c5149d4ce71"></span>void <code class="descname">serialize</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo5moead9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo5moead9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo5moead9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo5moead9serializeER7Archive"></span><span class="target" id="classpagmo_1_1moead_1a6c3256cd1e30ac4e5c046c5149d4ce71"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5moead9serializeEvR7Archive" title="pagmo::moead::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5moead9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
-<p>This method will save/load <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -422,7 +407,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

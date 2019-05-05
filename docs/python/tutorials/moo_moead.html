@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Using pygmo’s moead &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Getting started with hypervolumes" href="hypervolume.html" />
     <link rel="prev" title="Basic Multi-Objective Functionalities" href="moo.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -150,7 +142,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Using pygmo’s <code class="docutils literal"><span class="pre">moead</span></code></a></li>
+<li><a class="reference internal" href="#">Using pygmo’s <code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a></li>
 </ul>
 </ul>
 </li>
@@ -181,15 +173,15 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="using-pygmo-s-moead">
-<span id="py-tutorial-moo-moead"></span><h1>Using pygmo’s <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a><a class="headerlink" href="#using-pygmo-s-moead" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial we will see how to use the user-defined algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>
+<span id="py-tutorial-moo-moead"></span><h1>Using pygmo’s <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a><a class="headerlink" href="#using-pygmo-s-moead" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we will see how to use the user-defined algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a>
 provided by pygmo. In particular we will take as test cases problems from the DTLZ suite implemented
-in pygmo as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a>.</p>
-<p>The first, quick idea would be to instantiate the problem (say DTLZ1) and run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a>
+in pygmo as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal notranslate"><span class="pre">dtlz</span></code></a>.</p>
+<p>The first, quick idea would be to instantiate the problem (say DTLZ1) and run <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a>
 with the default settings. We can monitor the convergence of the whole population to the Pareto front
-using the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> metric.</p>
+using the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">p_distance()</span></code></a> metric.</p>
 <a class="reference internal image-reference" href="../../../_images/mo_dtlz_moead_grid_tch.png"><img alt="dtlz1 moead grid tchebycheff" class="align-right" src="../../../_images/mo_dtlz_moead_grid_tch.png" style="width: 480.0px; height: 360.0px;" /></a>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">udp</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">105</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">moead</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">100</span><span class="p">))</span>
@@ -208,23 +200,23 @@ using the <a class="reference internal" href="../problems/py_problems.html#pygmo
 <span class="go">0.6759127264898211</span>
 </pre></div>
 </div>
-<p>Since the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal"><span class="pre">p_distance()</span></code></a> does not capture the information on the spread of the solutions we
-also compute the hypervolume indicator using the pygmo class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal"><span class="pre">hypervolume</span></code></a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<p>Since the <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz.p_distance" title="pygmo.dtlz.p_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">p_distance()</span></code></a> does not capture the information on the spread of the solutions we
+also compute the hypervolume indicator using the pygmo class <a class="reference internal" href="../utils/py_hv_utils.html#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">hypervolume</span></code></a>:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ref_point</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">])</span> 
 </pre></div>
 </div>
 <p>In this case, the reference point can be set manually as the dtlz1 problem is well known. We can also visualize the
-whole population as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal"><span class="pre">dtlz</span></code></a> implements a plot functionality:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
+whole population as the user-defined problem <a class="reference internal" href="../problems/py_problems.html#pygmo.dtlz" title="pygmo.dtlz"><code class="xref py py-class docutils literal notranslate"><span class="pre">dtlz</span></code></a> implements a plot functionality:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;DTLZ1 - MOEAD - GRID - TCHEBYCHEFF&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
-<p>We have used the default parameters of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> in obtaining the results above. In
+<p>We have used the default parameters of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a> in obtaining the results above. In
 particular the <strong>weight_generation</strong> kwarg was set to <strong>grid</strong> and the <strong>decomposition</strong> kwarg was set to
 <strong>tchebycheff</strong>, as can be easily seen inspecting as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> 
 <span class="go">Algorithm name: MOEAD: MOEA/D - DE [stochastic]</span>
 <span class="go">    Thread safety: basic</span>
 
@@ -243,12 +235,12 @@ particular the <strong>weight_generation</strong> kwarg was set to <strong>grid<
 </div>
 <p>The <strong>weight_generation</strong> method <strong>grid</strong> offers a uniform distribution of the decomposed weights, but is
 limiting the population size as it only allows for certaing sizes according to the number of objectives. This
-can reveal to be limiting when using <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> in comparisons or in other advanced setups. In these
+can reveal to be limiting when using <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a> in comparisons or in other advanced setups. In these
 cases pygmo provides alternative methods for weight generation. In particular, the original <strong>low discrepancy</strong> method
 makes sure that any number of weights can be generated while ensuring a low discrepancy spread over the objective space.</p>
 <p>The <strong>decomposition</strong> method <strong>tchebycheff</strong> can also be changed as pygmo implements the boundary intersection method too
 which, when applicable, results in a better spread of the final population over the Pareto front. Repeating the optimization above
-with different instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal"><span class="pre">moead</span></code></a> results in the plots below.</p>
+with different instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">moead</span></code></a> results in the plots below.</p>
 <img alt="../../../_images/mo_dtlz_moead_array.png" class="align-center" src="../../../_images/mo_dtlz_moead_array.png" />
 </div>
 
@@ -265,7 +257,7 @@ with different instances of <a class="reference internal" href="../algorithms/py
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

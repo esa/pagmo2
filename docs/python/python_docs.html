@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Python Documentation &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Algorithm class" href="py_algorithm.html" />
     <link rel="prev" title="Evolving a population" href="../cpp/tutorials/evolving_a_population.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -152,7 +144,7 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Python Documentation</a><ul>
 <li><a class="reference internal" href="#core-classes">Core classes</a></li>
-<li><a class="reference internal" href="#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li><a class="reference internal" href="#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li><a class="reference internal" href="#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -198,18 +190,21 @@
 <li class="toctree-l1"><a class="reference internal" href="py_population.html">Population class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="py_island.html">Island class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="py_archipelago.html">Archipelago class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py_bfe.html">Bfe class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="py_misc.html">Miscellanea</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="implemented-problems-algorithms-and-islands">
-<h2>Implemented problems, algorithms and islands<a class="headerlink" href="#implemented-problems-algorithms-and-islands" title="Permalink to this headline">¶</a></h2>
-<p>These are the user-defined problems, algorithms and islands implemented in PyGMO.</p>
+<div class="section" id="implemented-problems-algorithms-islands-and-bfes">
+<h2>Implemented problems, algorithms, islands and bfes<a class="headerlink" href="#implemented-problems-algorithms-islands-and-bfes" title="Permalink to this headline">¶</a></h2>
+<p>These are the user-defined problems, algorithms, islands and
+bfes implemented in PyGMO.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="problems/py_problems.html">List of problems available in pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms/py_algorithms.html">List of algorithms available in pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="islands/py_islands.html">List of islands available in pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bfes/py_bfes.html">List of bfes available in pygmo</a></li>
 </ul>
 </div>
 </div>
@@ -242,7 +237,7 @@
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

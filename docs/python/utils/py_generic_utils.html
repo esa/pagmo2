@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Generic optimization utilities &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Multi-objective optimization utilities" href="py_mo_utils.html" />
-    <link rel="prev" title="List of islands available in pygmo" href="../islands/py_islands.html" />
+    <link rel="prev" title="List of bfes available in pygmo" href="../bfes/py_bfes.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -186,34 +178,30 @@
 <dt id="pygmo.random_decision_vector">
 <code class="descclassname">pygmo.</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em>prob</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.random_decision_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will generate a decision vector whose values are randomly chosen with uniform probability within
-the lower and upper bounds <span class="math">\(lb\)</span> and <span class="math">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> <em>prob</em>.</p>
-<p>For the continuous part of the decision vector, the <span class="math">\(i\)</span>-th component of the randomly generated decision
-vector will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>.</p>
-<p>For the discrete part of the decision vector, the <span class="math">\(i\)</span>-th component of the randomly generated decision vector
-is guaranteed to be an integral value such that <span class="math">\(lb_i \le x_i \le ub_i\)</span>.</p>
-<p>For both the continuous and discrete parts of the decision vector, if <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>) – the input problem</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a random decision vector within the problem’s bounds</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
-type conversion errors, mismatched function signatures, etc.)</li>
+the lower and upper bounds <span class="math notranslate nohighlight">\(lb\)</span> and <span class="math notranslate nohighlight">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> <em>prob</em>.</p>
+<p>For the continuous part of the decision vector, the <span class="math notranslate nohighlight">\(i\)</span>-th component of the randomly generated decision
+vector will be such that <span class="math notranslate nohighlight">\(lb_i \le x_i &lt; ub_i\)</span>.</p>
+<p>For the discrete part of the decision vector, the <span class="math notranslate nohighlight">\(i\)</span>-th component of the randomly generated decision vector
+is guaranteed to be an integral value such that <span class="math notranslate nohighlight">\(lb_i \le x_i \le ub_i\)</span>.</p>
+<p>For both the continuous and discrete parts of the decision vector, if <span class="math notranslate nohighlight">\(lb_i == ub_i\)</span> then <span class="math notranslate nohighlight">\(lb_i\)</span> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>) – the input problem</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a random decision vector within the problem’s bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <hr class="docutils" />
@@ -221,41 +209,37 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <dt id="pygmo.batch_random_decision_vector">
 <code class="descclassname">pygmo.</code><code class="descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em>prob</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.batch_random_decision_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will generate a batch of <em>n</em> decision vectors whose values are randomly chosen with uniform probability within
-the lower and upper bounds <span class="math">\(lb\)</span> and <span class="math">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> <em>prob</em>.
-The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math">\(x\)</span>,
-the first decision vector in the return value occupies the index range <span class="math">\(\left[0, x\right)\)</span>, the second decision vector
-occupies the range <span class="math">\(\left[x, 2x\right)\)</span>, and so on.</p>
-<p>For the continuous parts of the decision vectors, the <span class="math">\(i\)</span>-th components of the randomly generated decision
-vectors will be such that <span class="math">\(lb_i \le x_i &lt; ub_i\)</span>.</p>
-<p>For the discrete parts of the decision vectors, the <span class="math">\(i\)</span>-th components of the randomly generated decision vectors
-are guaranteed to be integral values such that <span class="math">\(lb_i \le x_i \le ub_i\)</span>.</p>
-<p>For both the continuous and discrete parts of the decision vectors, if <span class="math">\(lb_i == ub_i\)</span> then <span class="math">\(lb_i\)</span> is returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a>) – the input problem</li>
-<li><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of decision vectors that will be generated</li>
+the lower and upper bounds <span class="math notranslate nohighlight">\(lb\)</span> and <span class="math notranslate nohighlight">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> <em>prob</em>.
+The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math notranslate nohighlight">\(x\)</span>,
+the first decision vector in the return value occupies the index range <span class="math notranslate nohighlight">\(\left[0, x\right)\)</span>, the second decision vector
+occupies the range <span class="math notranslate nohighlight">\(\left[x, 2x\right)\)</span>, and so on.</p>
+<p>For the continuous parts of the decision vectors, the <span class="math notranslate nohighlight">\(i\)</span>-th components of the randomly generated decision
+vectors will be such that <span class="math notranslate nohighlight">\(lb_i \le x_i &lt; ub_i\)</span>.</p>
+<p>For the discrete parts of the decision vectors, the <span class="math notranslate nohighlight">\(i\)</span>-th components of the randomly generated decision vectors
+are guaranteed to be integral values such that <span class="math notranslate nohighlight">\(lb_i \le x_i \le ub_i\)</span>.</p>
+<p>For both the continuous and discrete parts of the decision vectors, if <span class="math notranslate nohighlight">\(lb_i == ub_i\)</span> then <span class="math notranslate nohighlight">\(lb_i\)</span> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>) – the input problem</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of decision vectors that will be generated</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a random decision vector within the problem’s bounds</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> – in case of (unlikely) overflows</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
-type conversion errors, mismatched function signatures, etc.)</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a random decision vector within the problem’s bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – in case of (unlikely) overflows</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <hr class="docutils" />
@@ -265,22 +249,19 @@ type conversion errors, mismatched function signatures, etc.)</li>
 <dd><p>In pygmo it is, in general, possible to control the seed of all random generators by a dedicated <em>seed</em> kwarg passed on via various
 constructors. If no <em>seed</em> is passed pygmo randomly creates a seed for you using its global random number generator.</p>
 <p>This function allows to be able to reset the seed of such a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the new global seed for random number generation</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the new global seed for random number generation</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In complex parallel evolutions obtaining a deterministic behaviour is not possible even setting the global seed as
+<p class="admonition-title">Note</p>
+<p>In complex parallel evolutions obtaining a deterministic behaviour is not possible even setting the global seed as
 pygmo implements an asynchronous model for parallel execution and the exact interplay between threads and processes cannot
 be reproduced deterministically.</p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">set_global_rng_seed</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)</span>
@@ -308,7 +289,7 @@ be reproduced deterministically.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

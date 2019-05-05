@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Fork island &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Multi-objective optimization utilities" href="../utils/multi_objective.html" />
+    <link rel="next" title="Default BFE" href="../batch_evaluators/default_bfe.html" />
     <link rel="prev" title="Thread island" href="thread_island.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,141 +175,128 @@
   <div class="section" id="fork-island">
 <h1>Fork island<a class="headerlink" href="#fork-island" title="Permalink to this headline">¶</a></h1>
 <div class="versionadded">
-<p><span class="versionmodified">New in version 2.9.</span></p>
+<p><span class="versionmodified added">New in version 2.9.</span></p>
 </div>
 <p><em>#include &lt;pagmo/islands/fork_island.hpp&gt;</em></p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The <a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> class is available only on POSIX platforms (e.g., Linux, OSX,
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> class is available only on POSIX platforms (e.g., Linux, OSX,
 the BSDs, but <em>not</em> Microsoft Windows, unless some POSIX compatibility layer has been installed
 on the system).</p>
 </div>
 <dl class="class">
-<dt id="_CPPv2N5pagmo11fork_islandE">
-<span id="pagmo::fork_island"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">fork_island</code><a class="headerlink" href="#_CPPv2N5pagmo11fork_islandE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>This user-defined island (UDI) will use the POSIX <code class="docutils literal"><span class="pre">fork()</span></code> system call to offload the evolution
+<dt id="_CPPv4N5pagmo11fork_islandE">
+<span id="_CPPv3N5pagmo11fork_islandE"></span><span id="_CPPv2N5pagmo11fork_islandE"></span><span id="pagmo::fork_island"></span><em class="property">class </em><code class="descname">fork_island</code><a class="headerlink" href="#_CPPv4N5pagmo11fork_islandE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This user-defined island (UDI) will use the POSIX <code class="docutils literal notranslate"><span class="pre">fork()</span></code> system call to offload the evolution
 of a population to a child process.</p>
-<p>Generally speaking, users are encouraged to use <a class="reference internal" href="thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">thread_island</span></code></a> rather than
-<a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a>: <a class="reference internal" href="thread_island.html#_CPPv2N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">thread_island</span></code></a> performs better,
+<p>Generally speaking, users are encouraged to use <a class="reference internal" href="thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> rather than
+<a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a>: <a class="reference internal" href="thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> performs better,
 it works also with problems and algorithms which are not serialisable, and it is available on all
 platforms.</p>
-<p><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> should however be preferred when dealing with problems and algorithms
-which do not offer the basic <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal"><span class="pre">thread_safety</span></code></a> guarantee. By offloading the optimisation
-to a separate process (rather than a separate thread), <a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> can ensure
+<p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> should however be preferred when dealing with problems and algorithms
+which do not offer the basic <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">thread_safety</span></code></a> guarantee. By offloading the optimisation
+to a separate process (rather than a separate thread), <a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> can ensure
 that thread-unsafe problems and algorithms are always run in only one thread at a time.
 This capability is particularly useful when wrapping in pagmo third-party code which does not support execution
-in multithreaded contexts (a notable example is the <a class="reference internal" href="../algorithms/ipopt.html#_CPPv2N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal"><span class="pre">ipopt</span></code></a> algorithm,
+in multithreaded contexts (a notable example is the <a class="reference internal" href="../algorithms/ipopt.html#_CPPv4N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ipopt</span></code></a> algorithm,
 which uses the thread-unsafe Ipopt optimiser).</p>
-<p><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">island</span></code></a>
-on POSIX platforms when the island’s problem and/or algorithm do not provide the basic <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal"><span class="pre">thread_safety</span></code></a>
+<p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a>
+on POSIX platforms when the island’s problem and/or algorithm do not provide the basic <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">thread_safety</span></code></a>
 guarantee.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is not exposed in the Python bindings. Instead, pygmo provides a
-<a class="reference internal" href="../../python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal"><span class="pre">process-based</span> <span class="pre">island</span></code></a> via Python’s <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></code></a> module.</p>
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is not exposed in the Python bindings. Instead, pygmo provides a
+<a class="reference internal" href="../../python/islands/py_islands.html#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">process-based</span> <span class="pre">island</span></code></a> via Python’s <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code></a> module.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When using memory checking tools such as valgrind, or the address/memory sanitizers from GCC/clang, be aware
+<p class="admonition-title">Note</p>
+<p>When using memory checking tools such as valgrind, or the address/memory sanitizers from GCC/clang, be aware
 that memory leaks in the child process may be flagged by such tools. These are spurious warnings due to the
-fact that the child process is exited via <code class="docutils literal"><span class="pre">std::exit()</span></code> (which does not invoke the destructors
+fact that the child process is exited via <code class="docutils literal notranslate"><span class="pre">std::exit()</span></code> (which does not invoke the destructors
 of objects with automatic storage duration). Thus, such warnings can be safely ignored.</p>
 </div>
 <dl class="function">
-<dt id="_CPPv2N5pagmo11fork_island11fork_islandEv">
-<span id="pagmo::fork_island::fork_island"></span><code class="descclassname"></code><code class="descname">fork_island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11fork_island11fork_islandEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo11fork_island11fork_islandEv">
+<span id="_CPPv3N5pagmo11fork_island11fork_islandEv"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandEv"></span><span id="pagmo::fork_island::fork_island"></span><code class="descname">fork_island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo11fork_island11fork_islandERK11fork_island">
-<span id="pagmo::fork_island::fork_island__fork_islandCR"></span><code class="descclassname"></code><code class="descname">fork_island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo11fork_island11fork_islandEv" title="pagmo::fork_island::fork_island">fork_island</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo11fork_island11fork_islandERK11fork_island" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island">
+<span id="_CPPv3N5pagmo11fork_island11fork_islandERK11fork_island"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandERK11fork_island"></span><span id="pagmo::fork_island::fork_island__fork_islandCR"></span><code class="descname">fork_island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo11fork_island11fork_islandEv" title="pagmo::fork_island::fork_island">fork_island</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island">
-<span id="pagmo::fork_island::fork_island__fork_islandRR"></span><code class="descclassname"></code><code class="descname">fork_island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo11fork_island11fork_islandEv" title="pagmo::fork_island::fork_island">fork_island</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is default, copy and move-constructible. The copy and move constructor are equivalent
+<dt id="_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island">
+<span id="_CPPv3N5pagmo11fork_island11fork_islandERR11fork_island"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island"></span><span id="pagmo::fork_island::fork_island__fork_islandRR"></span><code class="descname">fork_island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11fork_island11fork_islandEv" title="pagmo::fork_island::fork_island">fork_island</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is default, copy and move-constructible. The copy and move constructor are equivalent
 to the default constructor.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo11fork_island10run_evolveER6island">
-<span id="pagmo::fork_island::run_evolve__islandRC"></span>void <code class="descclassname"></code><code class="descname">run_evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv2N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>This method will fork the calling process, and, in the child process, the <a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">population</span></code></a> of <em>isl</em> will be
-evolved using the <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">algorithm</span></code></a> of <em>isl</em>. At the end of the evolution, the evolved population and the
+<dt id="_CPPv4NK5pagmo11fork_island10run_evolveER6island">
+<span id="_CPPv3NK5pagmo11fork_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo11fork_island10run_evolveER6island"></span><span id="pagmo::fork_island::run_evolve__islandRC"></span>void <code class="descname">run_evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This method will fork the calling process, and, in the child process, the <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a> of <em>isl</em> will be
+evolved using the <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> of <em>isl</em>. At the end of the evolution, the evolved population and the
 algorithm used for the evolution will be sent back to the parent process, where they will replace, in <em>isl</em>, the original
-population and algorithm. The child process will then terminate via <code class="docutils literal"><span class="pre">std::exit(0)</span></code>.</p>
+population and algorithm. The child process will then terminate via <code class="docutils literal notranslate"><span class="pre">std::exit(0)</span></code>.</p>
 <p>If any exception is raised during the evolution, the error message from the exception will be transferred back to the parent
-process, where a <code class="docutils literal"><span class="pre">std::runtime_error</span></code> containing the error message from the child will be raised.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>isl</strong> – the <a class="reference internal" href="../island.html#_CPPv2N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal"><span class="pre">island</span></code></a> that will be evolved.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Throws:</th><td class="field-body"><ul class="first last simple">
-<li><strong>std::runtime_error</strong> – if any error arises from the use of POSIX primitives (<code class="docutils literal"><span class="pre">fork()</span></code>, pipes, etc.), or if any
-error is generated in the child process.</li>
-<li><strong>unspecified</strong> – <p>any exception raised by:</p>
+process, where a <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> containing the error message from the child will be raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>isl</strong> – the <a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a> that will be evolved.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::runtime_error</strong> – if any error arises from the use of POSIX primitives (<code class="docutils literal notranslate"><span class="pre">fork()</span></code>, pipes, etc.), or if any
+error is generated in the child process.</p></li>
+<li><p><strong>unspecified</strong> – <p>any exception raised by:</p>
 <ul>
-<li>the serialisation of <a class="reference internal" href="../population.html#_CPPv2N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal"><span class="pre">population</span></code></a> or <a class="reference internal" href="../algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">algorithm</span></code></a>,</li>
-<li><a class="reference internal" href="../island.html#_CPPv2N5pagmo6island14set_populationE10population" title="pagmo::island::set_population"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::island::set_population()</span></code></a> or <a class="reference internal" href="../island.html#_CPPv2N5pagmo6island13set_algorithmE9algorithm" title="pagmo::island::set_algorithm"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::island::set_algorithm()</span></code></a>.</li>
+<li><p>the serialisation of <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a> or <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>,</p></li>
+<li><p><a class="reference internal" href="../island.html#_CPPv4N5pagmo6island14set_populationE10population" title="pagmo::island::set_population"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::island::set_population()</span></code></a> or <a class="reference internal" href="../island.html#_CPPv4N5pagmo6island13set_algorithmE9algorithm" title="pagmo::island::set_algorithm"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::island::set_algorithm()</span></code></a>.</p></li>
 </ul>
-</li>
+</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo11fork_island8get_nameEv">
-<span id="pagmo::fork_island::get_nameC"></span>std::string <code class="descclassname"></code><code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the string <code class="docutils literal"><span class="pre">&quot;Fork</span> <span class="pre">island&quot;</span></code>.</td>
-</tr>
-</tbody>
-</table>
+<dt id="_CPPv4NK5pagmo11fork_island8get_nameEv">
+<span id="_CPPv3NK5pagmo11fork_island8get_nameEv"></span><span id="_CPPv2NK5pagmo11fork_island8get_nameEv"></span><span id="pagmo::fork_island::get_nameC"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the string <code class="docutils literal notranslate"><span class="pre">&quot;Fork</span> <span class="pre">island&quot;</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo11fork_island14get_extra_infoEv">
-<span id="pagmo::fork_island::get_extra_infoC"></span>std::string <code class="descclassname"></code><code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">if an evolution is ongoing, this method will return a string
-representation of the ID of the child process. Otherwise, the <code class="docutils literal"><span class="pre">&quot;No</span> <span class="pre">active</span> <span class="pre">child&quot;</span></code> string will be returned.</td>
-</tr>
-</tbody>
-</table>
+<dt id="_CPPv4NK5pagmo11fork_island14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo11fork_island14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11fork_island14get_extra_infoEv"></span><span id="pagmo::fork_island::get_extra_infoC"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if an evolution is ongoing, this method will return a string
+representation of the ID of the child process. Otherwise, the <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <span class="pre">active</span> <span class="pre">child&quot;</span></code> string will be returned.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo11fork_island13get_child_pidEv">
-<span id="pagmo::fork_island::get_child_pidC"></span>pid_t <code class="descclassname"></code><code class="descname">get_child_pid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo11fork_island13get_child_pidEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a signed integral value representing the process ID of the child process, if an evolution is ongoing. Otherwise,
-<code class="docutils literal"><span class="pre">0</span></code> will be returned.</td>
-</tr>
-</tbody>
-</table>
+<dt id="_CPPv4NK5pagmo11fork_island13get_child_pidEv">
+<span id="_CPPv3NK5pagmo11fork_island13get_child_pidEv"></span><span id="_CPPv2NK5pagmo11fork_island13get_child_pidEv"></span><span id="pagmo::fork_island::get_child_pidC"></span>pid_t <code class="descname">get_child_pid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island13get_child_pidEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a signed integral value representing the process ID of the child process, if an evolution is ongoing. Otherwise,
+<code class="docutils literal notranslate"><span class="pre">0</span></code> will be returned.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2I0EN5pagmo11fork_island9serializeER7Archive">
-template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descclassname"></code><code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2I0EN5pagmo11fork_island9serializeER7Archive" title="pagmo::fork_island::serialize::Archive">Archive</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2I0EN5pagmo11fork_island9serializeER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo11fork_island9serializeEvR7Archive">
+<span id="_CPPv3I0EN5pagmo11fork_island9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo11fork_island9serializeER7Archive"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11fork_island9serializeEvR7Archive" title="pagmo::fork_island::serialize::Archive">Archive</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11fork_island9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialisation support.</p>
-<p>Note that <a class="reference internal" href="#_CPPv2N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal"><span class="pre">fork_island</span></code></a> is stateless, and thus this (de)serialisation function is empty and performs no work.</p>
+<p>Note that <a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is stateless, and thus this (de)serialisation function is empty and performs no work.</p>
 </dd></dl>
 
 </dd></dl>
@@ -337,7 +316,7 @@ template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code c
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Use of the class island &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Use of the class archipelago" href="using_archipelago.html" />
     <link rel="prev" title="Use of the class population" href="using_population.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -150,7 +142,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Use of the class <code class="docutils literal"><span class="pre">island</span></code></a><ul>
+<li><a class="reference internal" href="#">Use of the class <code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a><ul>
 <li><a class="reference internal" href="#managing-exceptions">Managing exceptions</a></li>
 </ul>
 </li>
@@ -184,62 +176,62 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="use-of-the-class-island">
-<span id="py-tutorial-using-island"></span><h1>Use of the class <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a><a class="headerlink" href="#use-of-the-class-island" title="Permalink to this headline">¶</a></h1>
+<span id="py-tutorial-using-island"></span><h1>Use of the class <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a><a class="headerlink" href="#use-of-the-class-island" title="Permalink to this headline">¶</a></h1>
 <img alt="../../../_images/island_no_text2.png" src="../../../_images/island_no_text2.png" />
-<p>The <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> class is the unit parallelization block of pagmo. The idea is that, in pygmo, an <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> is a computational
-unit that can be physically located anywhere and that can thus be used to outsource calls to <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a>
+<p>The <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> class is the unit parallelization block of pagmo. The idea is that, in pygmo, an <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> is a computational
+unit that can be physically located anywhere and that can thus be used to outsource calls to <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a>
 unloading the main computational unit from the task. As such it is able to run evolutions on a separate thread, process or remote machine,
-according to the implementation details of the UDI (User Defined Island) whose type it erases. Similarly to how an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>
-evolves a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a> according to the UDA, and a problem computes its fitness according to the UDP.</p>
+according to the implementation details of the UDI (User Defined Island) whose type it erases. Similarly to how an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>
+evolves a <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> according to the UDA, and a problem computes its fitness according to the UDP.</p>
 <p>The non-advanced user does not have to implement his own UDI as we provide the most popular parallel task execution paradigms already
 coded in UDIs provided with pygmo, a list of which can be found at <a class="reference internal" href="../../island_list.html#islands"><span class="std std-ref">List of islands (UDIs) available in pagmo/pygmo</span></a>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A collection of <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">pygmo.island</span></code></a> form an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a>, you can skip this tutorial and follow directly the tutorial “<a class="reference internal" href="using_archipelago.html#py-tutorial-using-archipelago"><span class="std std-ref">Use of the class archipelago</span></a>”
-in case you are happy with the default choices pygmo will do for you to parallelize your tasks via the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a>.</p>
+<p class="admonition-title">Note</p>
+<p>A collection of <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.island</span></code></a> form an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>, you can skip this tutorial and follow directly the tutorial “<a class="reference internal" href="using_archipelago.html#py-tutorial-using-archipelago"><span class="std std-ref">Use of the class archipelago</span></a>”
+in case you are happy with the default choices pygmo will do for you to parallelize your tasks via the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>.</p>
 </div>
 <p>We start by instantiating an island.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ackley</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">udi</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">thread_island</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>Regardless of the <em>udi</em> kwarg, should the construction be successfull, a new thread will be opened and delegated
-to run the <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal"><span class="pre">evolve()</span></code></a> method. Since, in this case, we constructed the island specifying an
-<em>udi</em>, and in particular we chose the <a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a>, the population evolution will happen directly
+to run the <a class="reference internal" href="../py_island.html#pygmo.island.evolve" title="pygmo.island.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a> method. Since, in this case, we constructed the island specifying an
+<em>udi</em>, and in particular we chose the <a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_island</span></code></a>, the population evolution will happen directly
 on the opened thread.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Since an evolution (optimization task) requires both evaluations of the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> fitness function and
-the execution of the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> logic, both these must be marked as thread safe in order for a
-<a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a> to be able to run an evolution.</p>
+<p class="admonition-title">Note</p>
+<p>Since an evolution (optimization task) requires both evaluations of the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> fitness function and
+the execution of the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> logic, both these must be marked as thread safe in order for a
+<a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> to be able to run an evolution.</p>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>With this simple command, we run the evolution, and since the task is offloaded to a different thread our current python session or script
 is not affected so that we can run other things in the meantime.</p>
 <p>Consider the following script, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">islands</span> <span class="o">=</span> <span class="p">[</span><span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">effe</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="n">cross</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">effe</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]</span> <span class="k">for</span> <span class="n">cross</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">islands</span> <span class="o">=</span> <span class="p">[</span><span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">effe</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="n">cross</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">effe</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]</span> <span class="k">for</span> <span class="n">cross</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span> <span class="c1">#doctest: +SKIP</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../../_images/ros_10_on_16_isl.png"><img alt="../../../_images/ros_10_on_16_isl.png" class="align-right" src="../../../_images/ros_10_on_16_isl.png" style="width: 480.0px; height: 330.0px;" /></a>
-<p>In the above three lines of code we run, in parallel threads, the same optimization tasks using 16 Differential Evolution algorithm (<a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal"><span class="pre">de</span></code></a>) with different values for
+<p>In the above three lines of code we run, in parallel threads, the same optimization tasks using 16 Differential Evolution algorithm (<a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal notranslate"><span class="pre">de</span></code></a>) with different values for
 its crossover and <em>F</em> parameter. Thanks to the <em>seed</em> being specified in the island constructor the same population will be fed to the different algorithmic instances.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Since no <em>udi</em> argument is specified, the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> constructor will choose the island type for us using its own internal heuristics (see the documentation). In this
-case since both the problem and the algorithm are thread safe, a <a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal"><span class="pre">thread_island</span></code></a> will be chosen (as can be verified calling the <code class="docutils literal"><span class="pre">__repr__()</span></code> method).</p>
+<p class="admonition-title">Note</p>
+<p>Since no <em>udi</em> argument is specified, the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> constructor will choose the island type for us using its own internal heuristics (see the documentation). In this
+case since both the problem and the algorithm are thread safe, a <a class="reference internal" href="../islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> will be chosen (as can be verified calling the <code class="docutils literal notranslate"><span class="pre">__repr__()</span></code> method).</p>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This use of the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> is, essentially, replicating some of the functionalities of the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a>. While interesting to get acquainted with pygmo
-machinery, and thus great in the context of this tutorial, we discourage this type of scripting and encourage the use of an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal"><span class="pre">archipelago</span></code></a> (with no migration) instead.</p>
+<p class="admonition-title">Warning</p>
+<p>This use of the <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> is, essentially, replicating some of the functionalities of the <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>. While interesting to get acquainted with pygmo
+machinery, and thus great in the context of this tutorial, we discourage this type of scripting and encourage the use of an <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a> (with no migration) instead.</p>
 </div>
 <p>Repeating the same computation a hundreds times we can obtain the boxplot on the right, where the best parameters for the algorithm and this task are found. id0: <em>F</em> = 0.3, <em>CR</em> = 0.3, id11:
 <em>F</em> = 0.7, <em>CR</em> = 0.9, id15: <em>F</em> = 0.9, <em>CR</em> = 0.9. The script that generates the plot on the right is reported for convenience.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
 <span class="gp">... </span>     <span class="n">islands</span> <span class="o">=</span> <span class="p">[</span><span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">effe</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="n">cross</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">effe</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]</span> <span class="k">for</span> <span class="n">cross</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]]</span>
 <span class="gp">... </span>     <span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span> 
@@ -256,11 +248,11 @@ machinery, and thus great in the context of this tutorial, we discourage this ty
 </div>
 <div class="section" id="managing-exceptions">
 <h2>Managing exceptions<a class="headerlink" href="#managing-exceptions" title="Permalink to this headline">¶</a></h2>
-<p>What happens if, during the optimization task sent to an <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a>, an exception happens? The <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal"><span class="pre">island</span></code></a> has the
-possibility to rethrow the first encountered exception, in the main thread, via a call to its method <a class="reference internal" href="../py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal"><span class="pre">wait_check()</span></code></a>.
+<p>What happens if, during the optimization task sent to an <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>, an exception happens? The <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> has the
+possibility to rethrow the first encountered exception, in the main thread, via a call to its method <a class="reference internal" href="../py_island.html#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>.
 Assume, for example that your problem or algorithm is somehow throwing (I know, what are the chances right?). To illustrate this case, we are going to use the
 following UDP:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">raise_exception</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">raise_exception</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dv</span><span class="p">):</span>
@@ -275,27 +267,27 @@ following UDP:</p>
 </pre></div>
 </div>
 <p>We construct an island:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">udi</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">ipyparallel_island</span><span class="p">())</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">udi</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">ipyparallel_island</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">We have explicitly passed the <em>udi</em> argument to the island constructor and selected an ipyparallel island.
-This requires that a cluster is started typing, for example, the command <code class="docutils literal"><span class="pre">ipcluster</span> <span class="pre">start</span></code>.</p>
+<p class="admonition-title">Note</p>
+<p>We have explicitly passed the <em>udi</em> argument to the island constructor and selected an ipyparallel island.
+This requires that a cluster is started typing, for example, the command <code class="docutils literal notranslate"><span class="pre">ipcluster</span> <span class="pre">start</span></code>.</p>
 </div>
-<p>This construction will trigger <span class="math">\(20\)</span> function evaluations and thus will not throw. Let us now run an evolution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+<p>This construction will trigger <span class="math notranslate nohighlight">\(20\)</span> function evaluations and thus will not throw. Let us now run an evolution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Everything looks fine: in our thread nothing really happened nor threw. But if we, for example inspect the island we get:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
 <span class="go">Island name: Ipyparallel island</span>
 <span class="go">    Status: idle - **error occurred**</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">Extra info:</span>
 <span class="go">    Queue status:</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">    (unassigned, 0)</span>
 <span class="go">    (0, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 <span class="go">    (1, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
@@ -305,18 +297,19 @@ This requires that a cluster is started typing, for example, the command <code c
 <span class="go">    (5, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 <span class="go">    (6, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 <span class="go">    (7, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">Algorithm: Differential Evolution</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">Problem: A throwing UDP</span>
-
+<span class="go">&lt;BLANKLINE&gt;</span>
 <span class="go">Population size: 20</span>
 <span class="go">    Champion decision vector: ...</span>
 <span class="go">    Champion fitness: ...</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
 </pre></div>
 </div>
 <p>What has happened? I need to retrieve that message!</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">wait_check</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isl</span><span class="o">.</span><span class="n">wait_check</span><span class="p">()</span>
 <span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;/Users/darioizzo/miniconda3/envs/pagmo/lib/python3.6/doctest.py&quot;</span>, line <span class="m">1330</span>, in <span class="n">__run</span>
     <span class="n">compileflags</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">test</span><span class="o">.</span><span class="n">globs</span><span class="p">)</span>
@@ -349,7 +342,7 @@ This requires that a cluster is started typing, for example, the command <code c
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

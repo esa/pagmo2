@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Generic utilities &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Type traits and enums" href="type_traits.html" />
     <link rel="prev" title="Utilities for gradient and hessians" href="../utils/gradient_and_hessians.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -185,35 +177,33 @@
 <p>A number of utilities to compute quantities that are of general relevance.</p>
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo23uniform_real_from_rangeEddR3Rng">
-<span id="pagmo::uniform_real_from_range__double.double.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo23uniform_real_from_rangeEddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng">
+<span id="_CPPv3I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span>template&lt;typename <code class="descname">Rng</code>&gt;<br />double <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">uniform_real_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, <a class="reference internal" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="pagmo::uniform_real_from_range::Rng">Rng</a> &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generate a random real number within some lower and upper bounds. </p>
-<p>This function will create a random real number within a half-open range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x &lt; ub\)</span>. If <span class="math">\(lb = ub\)</span>, then <span class="math">\(lb\)</span> is returned.</p>
+<p>This function will create a random real number within a half-open range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math notranslate nohighlight">\( x \)</span> will be such that <span class="math notranslate nohighlight">\(lb \le x &lt; ub\)</span>. If <span class="math notranslate nohighlight">\(lb = ub\)</span>, then <span class="math notranslate nohighlight">\(lb\)</span> is returned.</p>
 <p>Example:</p>
-<p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_real_from_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">a</span> <span class="n">random</span> <span class="n">real</span> <span class="ow">in</span> <span class="n">the</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="nb">range</span><span class="o">.</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_real_from_range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">value</span> <span class="mf">2.</span>
 </pre></div>
 </div>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a random floating-point value </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">lb</span></code>: lower bound </li>
-<li><code class="docutils literal"><span class="pre">ub</span></code>: upper bound </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a random floating-point value </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lb</span></code>: lower bound </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ub</span></code>: upper bound </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r_engine</span></code>: a C++ random engine</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if:<ul>
-<li>the bounds are not finite,</li>
-<li><span class="math">\( lb &gt; ub \)</span>,</li>
-<li><span class="math">\( ub - lb \)</span> is larger than an implementation-defined value.</li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if:<ul>
+<li><p>the bounds are not finite,</p></li>
+<li><p><span class="math notranslate nohighlight">\( lb &gt; ub \)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\( ub - lb \)</span> is larger than an implementation-defined value.</p></li>
 </ul>
-</li>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -222,51 +212,49 @@
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo27uniform_integral_from_rangeEddR3Rng">
-<span id="pagmo::uniform_integral_from_range__double.double.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span>double <code class="descclassname">pagmo::</code><code class="descname">uniform_integral_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo27uniform_integral_from_rangeEddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng">
+<span id="_CPPv3I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span>template&lt;typename <code class="descname">Rng</code>&gt;<br />double <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">uniform_integral_from_range</code><span class="sig-paren">(</span>double <em>lb</em>, double <em>ub</em>, <a class="reference internal" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="pagmo::uniform_integral_from_range::Rng">Rng</a> &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generate a random integral number within some lower and upper bounds. </p>
-<p>This function will create a random integral number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math">\( x \)</span> will be such that <span class="math">\(lb \le x \le ub\)</span>.</p>
+<p>This function will create a random integral number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math notranslate nohighlight">\( x \)</span> will be such that <span class="math notranslate nohighlight">\(lb \le x \le ub\)</span>.</p>
 <p>Example:</p>
-<p><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">(</span><span class="mi">32</span><span class="n">u</span><span class="p">);</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_integral_from_range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">one</span> <span class="n">of</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span><span class="o">.</span>
 <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">uniform_integral_from_range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">r_engine</span><span class="p">);</span> <span class="o">//</span> <span class="n">the</span> <span class="n">value</span> <span class="mf">2.</span>
 </pre></div>
 </div>
 </p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>The return value is created internally via an integral random number
-generator based on the <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> type, and then cast back to <code class="docutils literal"><span class="pre">double</span></code>.
+generator based on the <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code> type, and then cast back to <code class="docutils literal notranslate"><span class="pre">double</span></code>.
 Thus, if the absolute values of the lower/upper bounds are large enough, any of
 the following may happen:</p>
 <ul class="simple">
-<li>the conversion of the lower/upper bounds to <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> may produce an overflow error,</li>
-<li>the conversion of the randomly-generated <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> integer back to <code class="docutils literal"><span class="pre">double</span></code> may yield an
-inexact result.</li>
+<li><p>the conversion of the lower/upper bounds to <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code> may produce an overflow error,</p></li>
+<li><p>the conversion of the randomly-generated <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code> integer back to <code class="docutils literal notranslate"><span class="pre">double</span></code> may yield an
+inexact result.</p></li>
 </ul>
-<p class="last">In pratice, on modern mainstream computer architectures, this function will produce uniformly-distributed
-integral values as long as the absolute values of the bounds do not exceed <span class="math">\(2^{53}\)</span>.</p>
+<p>In pratice, on modern mainstream computer architectures, this function will produce uniformly-distributed
+integral values as long as the absolute values of the bounds do not exceed <span class="math notranslate nohighlight">\(2^{53}\)</span>.</p>
 </div>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a random integral value </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">lb</span></code>: lower bound </li>
-<li><code class="docutils literal"><span class="pre">ub</span></code>: upper bound </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a random integral value </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lb</span></code>: lower bound </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ub</span></code>: upper bound </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r_engine</span></code>: a C++ random engine</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: if:<ul>
-<li>the bounds are not finite,</li>
-<li><span class="math">\( lb &gt; ub \)</span>,</li>
-<li><span class="math">\( lb \)</span> and/or <span class="math">\( ub \)</span> are not integral values,</li>
-<li><span class="math">\( lb \)</span> and/or <span class="math">\( ub \)</span> are not within the bounds of the <code class="docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> type.</li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if:<ul>
+<li><p>the bounds are not finite,</p></li>
+<li><p><span class="math notranslate nohighlight">\( lb &gt; ub \)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\( lb \)</span> and/or <span class="math notranslate nohighlight">\( ub \)</span> are not integral values,</p></li>
+<li><p><span class="math notranslate nohighlight">\( lb \)</span> and/or <span class="math notranslate nohighlight">\( ub \)</span> are not within the bounds of the <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code> type.</p></li>
 </ul>
-</li>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -275,24 +263,22 @@ integral values as long as the absolute values of the bounds do not exceed <span
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo22random_decision_vectorERK7problemR3Rng">
-<span id="pagmo::random_decision_vector__problemCR.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>prob</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo22random_decision_vectorERK7problemR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng">
+<span id="_CPPv3I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span id="_CPPv2I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span>template&lt;typename <code class="descname">Rng</code>&gt;<br /><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>prob</em>, <a class="reference internal" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="pagmo::random_decision_vector::Rng">Rng</a> &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generate a random decision vector compatible with a problem. </p>
 <p>This function will generate a decision vector whose values are randomly chosen with uniform probability within the input problem’s bounds.</p>
 <p>For the continuous part of the decision vector, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
 <p>For the discrete part of the decision vector, the values will be generated via <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">prob</span></code>: the input <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prob</span></code>: the input <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r_engine</span></code>: a C++ random engine</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -301,26 +287,24 @@ integral values as long as the absolute values of the bounds do not exceed <span
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng">
-<span id="pagmo::batch_random_decision_vector__problemCR.vector_double::size_type.RngR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Rng&gt;<br /><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo::</code><code class="descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv2N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>prob</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, Rng &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng">
+<span id="_CPPv3I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span id="_CPPv2I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span>template&lt;typename <code class="descname">Rng</code>&gt;<br /><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>prob</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="pagmo::batch_random_decision_vector::Rng">Rng</a> &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Generate a batch of random decision vectors compatible with a problem. </p>
-<p>This function will generate <code class="docutils literal"><span class="pre">n</span></code> decision vectors whose values are randomly chosen with uniform probability within the input problem’s bounds. The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math">\( d \)</span>, the first decision vector in the return value occupies the index range <span class="math">\( \left[0, d\right) \)</span>, the second decision vector occupies the range <span class="math">\( \left[d, 2d\right) \)</span>, and so on.</p>
+<p>This function will generate <code class="docutils literal notranslate"><span class="pre">n</span></code> decision vectors whose values are randomly chosen with uniform probability within the input problem’s bounds. The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math notranslate nohighlight">\( d \)</span>, the first decision vector in the return value occupies the index range <span class="math notranslate nohighlight">\( \left[0, d\right) \)</span>, the second decision vector occupies the range <span class="math notranslate nohighlight">\( \left[d, 2d\right) \)</span>, and so on.</p>
 <p>For the continuous parts of the decision vectors, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
 <p>For the discrete parts of the decision vectors, the values will be generated via <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing <code class="docutils literal"><span class="pre">n</span></code> random decision vectors </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">prob</span></code>: the input <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> </li>
-<li><code class="docutils literal"><span class="pre">n</span></code>: how many decision vectors will be generated </li>
-<li><code class="docutils literal"><span class="pre">r_engine</span></code>: a C++ random engine</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing <code class="docutils literal notranslate"><span class="pre">n</span></code> random decision vectors </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prob</span></code>: the input <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: how many decision vectors will be generated </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r_engine</span></code>: a C++ random engine</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::overflow_error</span></code>: in case of (unlikely) overflow errors. </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::overflow_error</span></code>: in case of (unlikely) overflow errors. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -329,16 +313,15 @@ integral values as long as the absolute values of the bounds do not exceed <span
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
-<span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span>double <code class="descclassname">pagmo::</code><code class="descname">binomial_coefficient</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
+<span id="_CPPv3N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span>double <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">binomial_coefficient</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Binomial coefficient. </p>
-<p>An implementation of the binomial coefficient using gamma functions <dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the binomial coefficient <span class="math">\( n \choose k \)</span> </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">n</span></code>: first parameter <span class="math">\(n\)</span> </li>
-<li><code class="docutils literal"><span class="pre">k</span></code>: second paramater <span class="math">\(k\)</span> </li>
+<p>An implementation of the binomial coefficient using gamma functions <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the binomial coefficient <span class="math notranslate nohighlight">\( n \choose k \)</span> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: first parameter <span class="math notranslate nohighlight">\(n\)</span> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">k</span></code>: second paramater <span class="math notranslate nohighlight">\(k\)</span> </p></li>
 </ul>
 </dd>
 </dl>
@@ -347,26 +330,24 @@ integral values as long as the absolute values of the bounds do not exceed <span
 
 <hr class="docutils" />
 <dl class="function">
-<dt id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE">
-<span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1af2b07dbd57d21c3286796a46d9f19391"></span>std::vector&lt;std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt;&gt; <code class="descclassname">pagmo::</code><code class="descname">kNN</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em>, std::vector&lt;<a class="reference internal" href="../types.html#_CPPv2N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt;::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE">
+<span id="_CPPv3N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1af2b07dbd57d21c3286796a46d9f19391"></span>std::vector&lt;std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt;&gt; <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">kNN</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>points</em>, std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt;::size_type <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>K-Nearest Neighbours. </p>
-<p>Computes the indexes of the k nearest neighbours (euclidean distance) to each of the input points. The algorithm complexity (naive implementation) is <span class="math">\( O(MN^2)\)</span> where <span class="math">\(N\)</span> is the number of points and <span class="math">\(M\)</span> their dimensionality</p>
-<p>Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="n">res</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mf">3.1</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">},</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">}},</span> <span class="mi">2</span><span class="n">u</span><span class="p">);</span>
+<p>Computes the indexes of the k nearest neighbours (euclidean distance) to each of the input points. The algorithm complexity (naive implementation) is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(N\)</span> is the number of points and <span class="math notranslate nohighlight">\(M\)</span> their dimensionality</p>
+<p>Example: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="n">res</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mf">3.1</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">},</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">}},</span> <span class="mi">2</span><span class="n">u</span><span class="p">);</span>
 </pre></div>
 </div>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>An <code class="docutils literal"><span class="pre">std::vector&lt;std::vector&lt;population::size_type&gt;</span> <span class="pre">&gt;</span> </code> containing the indexes of the k nearest neighbours sorted by distance </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">points</span></code>: the <span class="math">\(N\)</span> points having dimension <span class="math">\(M\)</span> </li>
-<li><code class="docutils literal"><span class="pre">k</span></code>: number of neighbours to detect </li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>An <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::vector&lt;population::size_type&gt;</span> <span class="pre">&gt;</span> </code> containing the indexes of the k nearest neighbours sorted by distance </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code>: the <span class="math notranslate nohighlight">\(N\)</span> points having dimension <span class="math notranslate nohighlight">\(M\)</span> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">k</span></code>: number of neighbours to detect </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">std::invalid_argument</span></code>: If the points do not all have the same dimension. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: If the points do not all have the same dimension. </p></li>
 </ul>
 </dd>
 </dl>
@@ -388,7 +369,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

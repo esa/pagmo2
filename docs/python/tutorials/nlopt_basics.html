@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>A first tutorial on the use of NLopt solvers &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Basic Multi-Objective Functionalities" href="moo.html" />
     <link rel="prev" title="Coding a User Defined Island" href="coding_udi.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -186,12 +178,12 @@
       
   <div class="section" id="a-first-tutorial-on-the-use-of-nlopt-solvers">
 <span id="py-tutorial-nlopt-basics"></span><h1>A first tutorial on the use of NLopt solvers<a class="headerlink" href="#a-first-tutorial-on-the-use-of-nlopt-solvers" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial we show the basic usage pattern of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">pygmo.nlopt</span></code></a>. This user defined
+<p>In this tutorial we show the basic usage pattern of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.nlopt</span></code></a>. This user defined
 algorithm (UDA) wraps the NLopt library making it easily accessible via the pygmo common
-<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> interface. Let us see how this miracle occurs.</p>
+<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a> interface. Let us see how this miracle occurs.</p>
 <div class="section" id="i-have-the-gradient">
 <h2>I have the gradient<a class="headerlink" href="#i-have-the-gradient" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s2">&quot;slsqp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> 
@@ -215,35 +207,35 @@ algorithm (UDA) wraps the NLopt library making it easily accessible via the pygm
 <span class="go">        maxtime:  disabled</span>
 </pre></div>
 </div>
-<p>In a few lines we have constructed a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">pygmo.algorithm</span></code></a> containing the <code class="docutils literal"><span class="pre">&quot;slsqp&quot;</span></code> solver from
-NLopt. For a list of solvers availbale via the NLopt library check the docs of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal"><span class="pre">nlopt</span></code></a>.
-In this tutorial we will make use of <code class="docutils literal"><span class="pre">&quot;slsqp&quot;</span></code>, a Sequential Quadratic Programming algorithm suited for
+<p>In a few lines we have constructed a <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a> containing the <code class="docutils literal notranslate"><span class="pre">&quot;slsqp&quot;</span></code> solver from
+NLopt. For a list of solvers availbale via the NLopt library check the docs of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal notranslate"><span class="pre">nlopt</span></code></a>.
+In this tutorial we will make use of <code class="docutils literal notranslate"><span class="pre">&quot;slsqp&quot;</span></code>, a Sequential Quadratic Programming algorithm suited for
 generic Non Linear Programming problems (i.e. non linearly constrained single objective problems).</p>
 <p>All the stopping criteria used by the NLopt library are available via dedicated attributes, so that we may, for
-example, set the <code class="docutils literal"><span class="pre">ftol_rel</span></code> by writing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">ftol_rel</span> <span class="o">=</span> <span class="mf">1e-8</span>
+example, set the <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> by writing:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">ftol_rel</span> <span class="o">=</span> <span class="mf">1e-8</span>
 </pre></div>
 </div>
 <p>Let us algo activate some verbosity as to store a log and have a screen output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We now need a problem to solve. Let us start with one of the UDPs provided in pygmo. The
-<a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal"><span class="pre">pygmo.luksan_vlcek1</span></code></a> problem is a classic, scalable, equality-constrained problem. It
+<a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.luksan_vlcek1</span></code></a> problem is a classic, scalable, equality-constrained problem. It
 also has its gradient implemented so that we do not have to worry about that for the moment.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_nc</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The lines above can be shortened and are equivalent to:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_nc</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We now solve this problem by writing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">objevals:       objval:      violated:    viol. norm:</span>
 <span class="go">        1        250153             18        2619.51 i</span>
 <span class="go">        2        132280             18        931.767 i</span>
@@ -274,7 +266,7 @@ also has its gradient implemented so that we do not have to worry about that for
 </div>
 <p>As usual we can access the values in the log to analyze the algorithm performance and, for example, produce a plot such as that
 shown here.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">)</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;obj&quot;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">log</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;con&quot;</span><span class="p">)</span> 
@@ -287,10 +279,10 @@ shown here.</p>
 </div>
 <div class="section" id="i-do-not-have-the-gradient">
 <h2>I do not have the gradient<a class="headerlink" href="#i-do-not-have-the-gradient" title="Permalink to this headline">¶</a></h2>
-<p>The example above made use of an UDP, <a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal"><span class="pre">pygmo.luksan_vlcek1</span></code></a>, that provides also explicit gradients for both the objective and the constraints.
+<p>The example above made use of an UDP, <a class="reference internal" href="../problems/py_problems.html#pygmo.luksan_vlcek1" title="pygmo.luksan_vlcek1"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.luksan_vlcek1</span></code></a>, that provides also explicit gradients for both the objective and the constraints.
 In many cases this is not the case for UDPs the user may code in a hurry or that are just too complex to allow explicit gradient computations. Let’s see
 an example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">my_udp</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">my_udp</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -314,10 +306,10 @@ an example:</p>
 </pre></div>
 </div>
 <p>Bummer! How can I possibly provide a gradient for such a difficult expression of the fitness? Clearly making the derivatives here is not an option :)
-Fortunately pygmo provides some utilities to perform numerical differentiation. In particular <a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient" title="pygmo.estimate_gradient"><code class="xref py py-func docutils literal"><span class="pre">pygmo.estimate_gradient()</span></code></a> and <a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient_h" title="pygmo.estimate_gradient_h"><code class="xref py py-func docutils literal"><span class="pre">pygmo.estimate_gradient_h()</span></code></a>
-can be used quite straight forwardly. The difference between the two is in the finite difference formula used to estimate numerically the gradient, the little <code class="docutils literal"><span class="pre">_h</span></code>
+Fortunately pygmo provides some utilities to perform numerical differentiation. In particular <a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient" title="pygmo.estimate_gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.estimate_gradient()</span></code></a> and <a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient_h" title="pygmo.estimate_gradient_h"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.estimate_gradient_h()</span></code></a>
+can be used quite straight forwardly. The difference between the two is in the finite difference formula used to estimate numerically the gradient, the little <code class="docutils literal notranslate"><span class="pre">_h</span></code>
 standing for high-fidelity (a formula accurate to the sixth order is used: see the docs). So all we need to do, then, is to provide the gradients in our UDP:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">my_udp</span><span class="p">:</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">my_udp</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -341,15 +333,15 @@ standing for high-fidelity (a formula accurate to the sixth order is used: see t
 </pre></div>
 </div>
 <p>Let’s assess the cost of this optimization in terms of calls to the various functions:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> 
 <span class="go">23</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> 
 <span class="go">21</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="../py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.fitness()</span></code></a> was called a total of 23 times, while <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.gradient()</span></code></a> a total of 21 times. Since we are using
-<a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient_h" title="pygmo.estimate_gradient_h"><code class="xref py py-func docutils literal"><span class="pre">pygmo.estimate_gradient_h()</span></code></a> to provide the gradient numerically, each call to the <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal"><span class="pre">pygmo.problem.gradient()</span></code></a>
-causes 6 evaluations of <code class="docutils literal"><span class="pre">my_udp.fitness()</span></code>. So, at the end a total of 23 + 6 * 21 calls to <code class="docutils literal"><span class="pre">my_udp.fitness()</span></code> have been made.</p>
+<p>The <a class="reference internal" href="../py_problem.html#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.problem.fitness()</span></code></a> was called a total of 23 times, while <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.problem.gradient()</span></code></a> a total of 21 times. Since we are using
+<a class="reference internal" href="../utils/py_gh_utils.html#pygmo.estimate_gradient_h" title="pygmo.estimate_gradient_h"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.estimate_gradient_h()</span></code></a> to provide the gradient numerically, each call to the <a class="reference internal" href="../py_problem.html#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.problem.gradient()</span></code></a>
+causes 6 evaluations of <code class="docutils literal notranslate"><span class="pre">my_udp.fitness()</span></code>. So, at the end a total of 23 + 6 * 21 calls to <code class="docutils literal notranslate"><span class="pre">my_udp.fitness()</span></code> have been made.</p>
 </div>
 </div>
 
@@ -366,7 +358,7 @@ causes 6 evaluations of <code class="docutils literal"><span class="pre">my_udp.
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

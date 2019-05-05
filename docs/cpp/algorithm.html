@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Algorithm &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Population" href="population.html" />
     <link rel="prev" title="Problem" href="problem.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,18 +175,18 @@
   <div class="section" id="algorithm">
 <h1>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="_CPPv2N5pagmo9algorithmE">
-<span id="pagmo::algorithm"></span><span class="target" id="classpagmo_1_1algorithm"></span><em class="property">class </em><code class="descname">algorithm</code><a class="headerlink" href="#_CPPv2N5pagmo9algorithmE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithmE">
+<span id="_CPPv3N5pagmo9algorithmE"></span><span id="_CPPv2N5pagmo9algorithmE"></span><span id="pagmo::algorithm"></span><span class="target" id="classpagmo_1_1algorithm"></span><em class="property">class </em><code class="descname">algorithm</code><a class="headerlink" href="#_CPPv4N5pagmo9algorithmE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm class. </p>
 <p><img alt="../../_images/algo_no_text.png" src="../../_images/algo_no_text.png" /></p>
 <p>This class represents an optimization algorithm. An algorithm can be stochastic, deterministic, population based, derivative-free, using hessians, using gradients, a meta-heuristic, evolutionary, etc.. Via this class pagmo offers a common interface to all types of algorithms that can be applied to find solution to a generic matematical programming problem as represented by the <a class="reference internal" href="problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> class.</p>
 <p>In order to define an optimizaztion algorithm in pagmo, the user must first define a class (or a struct) whose methods describe the properties of the algorithm and implement its logic. In pagmo, we refer to such a class as a <strong>user-defined algorithm</strong>, or UDA for short. Once defined and instantiated, a UDA can then be used to construct an instance of this class, <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, which provides a generic interface to optimization algorithms.</p>
-<p>Every UDA must implement at least the following method: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">population</span> <span class="n">evolve</span><span class="p">(</span><span class="n">const</span> <span class="n">population</span><span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
+<p>Every UDA must implement at least the following method: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">population</span> <span class="n">evolve</span><span class="p">(</span><span class="n">const</span> <span class="n">population</span><span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
 </div>
 </p>
-<p>The <code class="docutils literal"><span class="pre">evolve()</span></code> method takes as input a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>, and it is expected to return a new population generated by the <em>evolution</em> (or <em>optimisation</em>) of the original population. In addition to providing the above method, a UDA must also be default, copy and move constructible.</p>
-<p>Additional optional methods can be implemented in a UDA: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">set_seed</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method takes as input a <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>, and it is expected to return a new population generated by the <em>evolution</em> (or <em>optimisation</em>) of the original population. In addition to providing the above method, a UDA must also be default, copy and move constructible.</p>
+<p>Additional optional methods can be implemented in a UDA: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">set_seed</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
 <span class="nb">bool</span> <span class="n">has_set_seed</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 <span class="n">void</span> <span class="n">set_verbosity</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
 <span class="nb">bool</span> <span class="n">has_set_verbosity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
@@ -206,22 +198,21 @@
 </p>
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDA are used by <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
+<p class="admonition-title">Note</p>
+<p>A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
 in undefined behaviour.</p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm9algorithmEv">
-<span id="pagmo::algorithm::algorithm"></span><span class="target" id="classpagmo_1_1algorithm_1ac04a85b33f6b2be8fdd387cbf71a14fe"></span><code class="descname">algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm9algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithm9algorithmEv">
+<span id="_CPPv3N5pagmo9algorithm9algorithmEv"></span><span id="_CPPv2N5pagmo9algorithm9algorithmEv"></span><span id="pagmo::algorithm::algorithm"></span><span class="target" id="classpagmo_1_1algorithm_1ac04a85b33f6b2be8fdd387cbf71a14fe"></span><code class="descname">algorithm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor will initialize a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> containing a <a class="reference internal" href="algorithms/null.html#structpagmo_1_1null__algorithm"><span class="std std-ref">pagmo::null_algorithm</span></a>.</p>
-<p><dl class="docutils">
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the constructor from UDA. </li>
+<p><dl class="simple">
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the constructor from UDA. </p></li>
 </ul>
 </dd>
 </dl>
@@ -229,26 +220,24 @@ in undefined behaviour.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm9algorithmERR1T">
-<span id="pagmo::algorithm::algorithm__TRR"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, generic_ctor_enabler&lt; T &gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1a9c5c7fbd2ed43b09c7fea65222c2cd7a"></span><code class="descname">algorithm</code><span class="sig-paren">(</span>T &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm9algorithmERR1T" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Constructor from a user-defined algorithm of type <code class="docutils literal"><span class="pre">T</span></code>. </p>
+<dt id="_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T">
+<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"></span><span class="target" id="classpagmo_1_1algorithm_1a9c5c7fbd2ed43b09c7fea65222c2cd7a"></span>template&lt;typename <code class="descname">T</code>, generic_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="pagmo::algorithm::algorithm::T">T</a>&gt; = 0&gt;<br /><code class="descname">algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="pagmo::algorithm::algorithm::T">T</a> &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from a user-defined algorithm of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This constructor is not enabled if, after the removal of cv and reference qualifiers,
-<code class="docutils literal"><span class="pre">T</span></code> is of type <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a> (that is, this constructor does not compete with the copy/move
-constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>), or if  <code class="docutils literal"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo6is_udaE" title="pagmo::is_uda"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::is_uda</span></code></a>.</p>
+<p class="admonition-title">Note</p>
+<p>This constructor is not enabled if, after the removal of cv and reference qualifiers,
+<code class="docutils literal notranslate"><span class="pre">T</span></code> is of type <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> (that is, this constructor does not compete with the copy/move
+constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>), or if  <code class="docutils literal notranslate"><span class="pre">T</span></code> does not satisfy <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_uda</span></code>.</p>
 </div>
 </p>
-<p>This constructor will construct a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from the UDA (user-defined algorithm) <code class="docutils literal"><span class="pre">x</span></code> of type <code class="docutils literal"><span class="pre">T</span></code>. In order for the construction to be successful, the UDA must implement a minimal set of methods, as described in the documentation of <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The constructor will examine the properties of <code class="docutils literal"><span class="pre">x</span></code> and store them as data members of <code class="docutils literal"><span class="pre">this</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">x</span></code>: the UDA.</li>
+<p>This constructor will construct a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from the UDA (user-defined algorithm) <code class="docutils literal notranslate"><span class="pre">x</span></code> of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. In order for the construction to be successful, the UDA must implement a minimal set of methods, as described in the documentation of <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The constructor will examine the properties of <code class="docutils literal notranslate"><span class="pre">x</span></code> and store them as data members of <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the UDA.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by methods of the UDA invoked during construction or by memory errors in strings and standard containers. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by methods of the UDA invoked during construction or by memory errors in strings and standard containers. </p></li>
 </ul>
 </dd>
 </dl>
@@ -256,23 +245,21 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm9algorithmERK9algorithm">
-<span id="pagmo::algorithm::algorithm__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a41d7539890f6dc1015d3a8ea6219ba0f"></span><code class="descname">algorithm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo9algorithm9algorithmEv" title="pagmo::algorithm::algorithm">algorithm</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm9algorithmERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithm9algorithmERK9algorithm">
+<span id="_CPPv3N5pagmo9algorithm9algorithmERK9algorithm"></span><span id="_CPPv2N5pagmo9algorithm9algorithmERK9algorithm"></span><span id="pagmo::algorithm::algorithm__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a41d7539890f6dc1015d3a8ea6219ba0f"></span><code class="descname">algorithm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo9algorithm9algorithmEv" title="pagmo::algorithm::algorithm">algorithm</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy constructor. </p>
-<p>The copy constructor will deep copy the input algorithm <code class="docutils literal"><span class="pre">other</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">other</span></code>: the algorithm to be copied.</li>
+<p>The copy constructor will deep copy the input algorithm <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: the algorithm to be copied.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li>memory allocation errors in standard containers,</li>
-<li>the copying of the internal UDA. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
+<li><p>memory allocation errors in standard containers,</p></li>
+<li><p>the copying of the internal UDA. </p></li>
 </ul>
-</li>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -280,13 +267,12 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm9algorithmERR9algorithm">
-<span id="pagmo::algorithm::algorithm__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1ab2747af055f54b5b3c93065f81944bf9"></span><code class="descname">algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo9algorithm9algorithmEv" title="pagmo::algorithm::algorithm">algorithm</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm9algorithmERR9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithm9algorithmERR9algorithm">
+<span id="_CPPv3N5pagmo9algorithm9algorithmERR9algorithm"></span><span id="_CPPv2N5pagmo9algorithm9algorithmERR9algorithm"></span><span id="pagmo::algorithm::algorithm__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1ab2747af055f54b5b3c93065f81944bf9"></span><code class="descname">algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9algorithm9algorithmEv" title="pagmo::algorithm::algorithm">algorithm</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move constructor. </p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">other</span></code>: the algorithm from which <code class="docutils literal"><span class="pre">this</span></code> will be move-constructed. </li>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: the algorithm from which <code class="docutils literal notranslate"><span class="pre">this</span></code> will be move-constructed. </p></li>
 </ul>
 </dd>
 </dl>
@@ -294,15 +280,14 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithmaSERR9algorithm">
-<span id="pagmo::algorithm::assign-operator__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1a1e6bea0c9fc034ea6949ba83e75c5fd0"></span><a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithmaSERR9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithmaSERR9algorithm">
+<span id="_CPPv3N5pagmo9algorithmaSERR9algorithm"></span><span id="_CPPv2N5pagmo9algorithmaSERR9algorithm"></span><span id="pagmo::algorithm::assign-operator__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1a1e6bea0c9fc034ea6949ba83e75c5fd0"></span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmaSERR9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move assignment operator. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>. </dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">other</span></code>: the assignment target.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: the assignment target.</p></li>
 </ul>
 </dd>
 </dl>
@@ -310,21 +295,19 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithmaSERK9algorithm">
-<span id="pagmo::algorithm::assign-operator__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1aec00737591e37c0ca2017d3d0cf59044"></span><a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithmaSERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithmaSERK9algorithm">
+<span id="_CPPv3N5pagmo9algorithmaSERK9algorithm"></span><span id="_CPPv2N5pagmo9algorithmaSERK9algorithm"></span><span id="pagmo::algorithm::assign-operator__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1aec00737591e37c0ca2017d3d0cf59044"></span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmaSERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy assignment operator. </p>
 <p>Copy assignment is implemented as a copy constructor followed by a move assignment.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a reference to <code class="docutils literal"><span class="pre">this</span></code>.</dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">other</span></code>: the assignment target.</li>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: the assignment target.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor. </p></li>
 </ul>
 </dd>
 </dl>
@@ -332,74 +315,72 @@ constructors of <a class="reference internal" href="#_CPPv2N5pagmo9algorithmE" t
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm7extractEv">
-<span id="pagmo::algorithm::extractC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1a4e25781dbf954f24e6292f2aa97b605f"></span><em class="property">const</em> T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv">
+<span id="_CPPv3I0ENK5pagmo9algorithm7extractEv"></span><span id="_CPPv2I0ENK5pagmo9algorithm7extractEv"></span><span class="target" id="classpagmo_1_1algorithm_1a4e25781dbf954f24e6292f2aa97b605f"></span>template&lt;typename <code class="descname">T</code>&gt;<br /><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract::T">T</a> *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a const pointer to the UDA. </p>
-<p>This method will extract a const pointer to the internal instance of the UDA. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
+<p>This method will extract a const pointer to the internal instance of the UDA. If <code class="docutils literal notranslate"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of
-<code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime of
+<code class="docutils literal notranslate"><span class="pre">this</span></code> and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
 </div>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a const pointer to the internal UDA, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a const pointer to the internal UDA, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm7extractEv">
-<span id="pagmo::algorithm::extract"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1aa4d55918c2e9ef19782c6a254b00b42d"></span>T *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm7extractEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo9algorithm7extractEP1Tv">
+<span id="_CPPv3I0EN5pagmo9algorithm7extractEv"></span><span id="_CPPv2I0EN5pagmo9algorithm7extractEv"></span><span class="target" id="classpagmo_1_1algorithm_1aa4d55918c2e9ef19782c6a254b00b42d"></span>template&lt;typename <code class="descname">T</code>&gt;<br /><a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract::T">T</a> *<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract a pointer to the UDA. </p>
-<p>This method will extract a pointer to the internal instance of the UDA. If <code class="docutils literal"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal"><span class="pre">nullptr</span></code>.</p>
+<p>This method will extract a pointer to the internal instance of the UDA. If <code class="docutils literal notranslate"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-of <code class="docutils literal"><span class="pre">this</span></code> and <code class="docutils literal"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal notranslate"><span class="pre">this</span></code> and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
 </div>
 </p>
 <p><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The ability to extract a mutable pointer is provided only in order to allow to call non-const
+<p class="admonition-title">Note</p>
+<p>The ability to extract a mutable pointer is provided only in order to allow to call non-const
 methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.</p>
 </div>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a pointer to the internal UDA, or <code class="docutils literal"><span class="pre">nullptr</span></code> if <code class="docutils literal"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a pointer to the internal UDA, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm2isEv">
-<span id="pagmo::algorithm::isC"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1ac6e4006999c2fee8a1fc0921443cfdb1"></span>bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm2isEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0ENK5pagmo9algorithm2isEbv">
+<span id="_CPPv3I0ENK5pagmo9algorithm2isEv"></span><span id="_CPPv2I0ENK5pagmo9algorithm2isEv"></span><span class="target" id="classpagmo_1_1algorithm_1ac6e4006999c2fee8a1fc0921443cfdb1"></span>template&lt;typename <code class="descname">T</code>&gt;<br />bool <code class="descname">is</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm2isEbv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks the user-defined algorithm type at run-time. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd><code class="docutils literal"><span class="pre">true</span></code> if the user-defined algorithm is <code class="docutils literal"><span class="pre">T</span></code>, <code class="docutils literal"><span class="pre">false</span></code> otherwise. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the user-defined algorithm is <code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm6evolveERK10population">
-<span id="pagmo::algorithm::evolve__populationCRC"></span><span class="target" id="classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"></span><a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="population.html#_CPPv2N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm6evolveERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9algorithm6evolveERK10population">
+<span id="_CPPv3NK5pagmo9algorithm6evolveERK10population"></span><span id="_CPPv2NK5pagmo9algorithm6evolveERK10population"></span><span id="pagmo::algorithm::evolve__populationCRC"></span><span class="target" id="classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"></span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm6evolveERK10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve method. </p>
-<p>This method will invoke the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA. This is where the core of the optimization (<em>evolution</em>) is made.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>evolved population</dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">pop</span></code>: starting population</li>
+<p>This method will invoke the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA. This is where the core of the optimization (<em>evolution</em>) is made.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>evolved population</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: starting population</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA. </p></li>
 </ul>
 </dd>
 </dl>
@@ -407,20 +388,18 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm8set_seedEj">
-<span id="pagmo::algorithm::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a545031e04e697bb3076c9b2c8808d82e"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithm8set_seedEj">
+<span id="_CPPv3N5pagmo9algorithm8set_seedEj"></span><span id="_CPPv2N5pagmo9algorithm8set_seedEj"></span><span id="pagmo::algorithm::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a545031e04e697bb3076c9b2c8808d82e"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the seed for the stochastic evolution. </p>
-<p>Sets the seed to be used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA for all stochastic variables. If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then its <code class="docutils literal"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">seed</span></code>: seed.</li>
+<p>Sets the seed to be used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA for all stochastic variables. If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then its <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#structpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>. </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="miscellanea/exceptions.html#structpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDA. </p></li>
 </ul>
 </dd>
 </dl>
@@ -428,50 +407,48 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm12has_set_seedEv">
-<span id="pagmo::algorithm::has_set_seedC"></span><span class="target" id="classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"></span>bool <code class="descname">has_set_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if a <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDA. </p>
-<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if a <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDA, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
-<p>The availability of the a <code class="docutils literal"><span class="pre">set_seed()</span></code> method is determined as follows:<ul class="simple">
-<li>if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
-<li>if the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__seed"><span class="std std-ref">pagmo::override_has_set_seed</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
-<li>if the UDA satisfies both <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__seed"><span class="std std-ref">pagmo::override_has_set_seed</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method of the UDA.</li>
+<dt id="_CPPv4NK5pagmo9algorithm12has_set_seedEv">
+<span id="_CPPv3NK5pagmo9algorithm12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9algorithm12has_set_seedEv"></span><span id="pagmo::algorithm::has_set_seedC"></span><span class="target" id="classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"></span>bool <code class="descname">has_set_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is available in the UDA. </p>
+<p>This method will return <code class="docutils literal notranslate"><span class="pre">true</span></code> if a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is available in the UDA, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is determined as follows:<ul class="simple">
+<li><p>if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then this method will always return <code class="docutils literal notranslate"><span class="pre">false</span></code>;</p></li>
+<li><p>if the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__seed"><span class="std std-ref">pagmo::override_has_set_seed</span></a>, then this method will always return <code class="docutils literal notranslate"><span class="pre">true</span></code>;</p></li>
+<li><p>if the UDA satisfies both <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__seed"><span class="std std-ref">pagmo::override_has_set_seed</span></a>, then this method will return the output of the <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method of the UDA.</p></li>
 </ul>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a flag signalling the availability of the <code class="docutils literal"><span class="pre">set_seed()</span></code> method in the UDA. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method in the UDA. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm13is_stochasticEv">
-<span id="pagmo::algorithm::is_stochasticC"></span><span class="target" id="classpagmo_1_1algorithm_1a2cc53a8adf1a5f59fcb0ad177420c96f"></span>bool <code class="descname">is_stochastic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm13is_stochasticEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9algorithm13is_stochasticEv">
+<span id="_CPPv3NK5pagmo9algorithm13is_stochasticEv"></span><span id="_CPPv2NK5pagmo9algorithm13is_stochasticEv"></span><span id="pagmo::algorithm::is_stochasticC"></span><span class="target" id="classpagmo_1_1algorithm_1a2cc53a8adf1a5f59fcb0ad177420c96f"></span>bool <code class="descname">is_stochastic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm13is_stochasticEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Alias for <a class="reference internal" href="#classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"><span class="std std-ref">algorithm::has_set_seed()</span></a>. </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the output of <a class="reference internal" href="#classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"><span class="std std-ref">algorithm::has_set_seed()</span></a>. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the output of <a class="reference internal" href="#classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"><span class="std std-ref">algorithm::has_set_seed()</span></a>. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm13set_verbosityEj">
-<span id="pagmo::algorithm::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a383337ab837d23fc47374b7d0d65de73"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo9algorithm13set_verbosityEj">
+<span id="_CPPv3N5pagmo9algorithm13set_verbosityEj"></span><span id="_CPPv2N5pagmo9algorithm13set_verbosityEj"></span><span id="pagmo::algorithm::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a383337ab837d23fc47374b7d0d65de73"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the verbosity of logs and screen output. </p>
-<p>This method will set the level of verbosity for the algorithm. If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>, then its <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
-<p>The exact meaning of the input parameter <code class="docutils literal"><span class="pre">level</span></code> is dependent on the UDA.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">level</span></code>: the desired verbosity level.</li>
+<p>This method will set the level of verbosity for the algorithm. If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>, then its <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
+<p>The exact meaning of the input parameter <code class="docutils literal notranslate"><span class="pre">level</span></code> is dependent on the UDA.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: the desired verbosity level.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><a class="reference internal" href="miscellanea/exceptions.html#structpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>. </li>
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="miscellanea/exceptions.html#structpagmo_1_1not__implemented__error"><span class="std std-ref"><span class="pre">not_implemented_error</span></span></a></code>: if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method of the UDA. </p></li>
 </ul>
 </dd>
 </dl>
@@ -479,34 +456,33 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm17has_set_verbosityEv">
-<span id="pagmo::algorithm::has_set_verbosityC"></span><span class="target" id="classpagmo_1_1algorithm_1aaa5c39118c4357bc7e26dbdd68b5305c"></span>bool <code class="descname">has_set_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm17has_set_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is available in the UDA. </p>
-<p>This method will return <code class="docutils literal"><span class="pre">true</span></code> if a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is available in the UDA, <code class="docutils literal"><span class="pre">false</span></code> otherwise.</p>
-<p>The availability of the a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is determined as follows:<ul class="simple">
-<li>if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>, then this method will always return <code class="docutils literal"><span class="pre">false</span></code>;</li>
-<li>if the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__verbosity"><span class="std std-ref">pagmo::override_has_set_verbosity</span></a>, then this method will always return <code class="docutils literal"><span class="pre">true</span></code>;</li>
-<li>if the UDA satisfies both <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__verbosity"><span class="std std-ref">pagmo::override_has_set_verbosity</span></a>, then this method will return the output of the <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method of the UDA.</li>
+<dt id="_CPPv4NK5pagmo9algorithm17has_set_verbosityEv">
+<span id="_CPPv3NK5pagmo9algorithm17has_set_verbosityEv"></span><span id="_CPPv2NK5pagmo9algorithm17has_set_verbosityEv"></span><span id="pagmo::algorithm::has_set_verbosityC"></span><span class="target" id="classpagmo_1_1algorithm_1aaa5c39118c4357bc7e26dbdd68b5305c"></span>bool <code class="descname">has_set_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm17has_set_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is available in the UDA. </p>
+<p>This method will return <code class="docutils literal notranslate"><span class="pre">true</span></code> if a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is available in the UDA, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+<p>The availability of the a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is determined as follows:<ul class="simple">
+<li><p>if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>, then this method will always return <code class="docutils literal notranslate"><span class="pre">false</span></code>;</p></li>
+<li><p>if the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a> but it does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__verbosity"><span class="std std-ref">pagmo::override_has_set_verbosity</span></a>, then this method will always return <code class="docutils literal notranslate"><span class="pre">true</span></code>;</p></li>
+<li><p>if the UDA satisfies both <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a> and <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1override__has__set__verbosity"><span class="std std-ref">pagmo::override_has_set_verbosity</span></a>, then this method will return the output of the <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method of the UDA.</p></li>
 </ul>
 </p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a flag signalling the availability of the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method in the UDA. </dd>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method in the UDA. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm8get_nameEv">
-<span id="pagmo::algorithm::get_nameC"></span><span class="target" id="classpagmo_1_1algorithm_1ac787878e086fc4b3e305693471988e2d"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9algorithm8get_nameEv">
+<span id="_CPPv3NK5pagmo9algorithm8get_nameEv"></span><span id="_CPPv2NK5pagmo9algorithm8get_nameEv"></span><span id="pagmo::algorithm::get_nameC"></span><span class="target" id="classpagmo_1_1algorithm_1ac787878e086fc4b3e305693471988e2d"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm’s name. </p>
-<p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__name"><span class="std std-ref">pagmo::has_name</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method. Otherwise, an implementation-defined name based on the type of the UDA will be returned.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the algorithm’s name.</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by copying an <code class="docutils literal"><span class="pre">std::string</span></code> object. </li>
+<p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__name"><span class="std std-ref">pagmo::has_name</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method. Otherwise, an implementation-defined name based on the type of the UDA will be returned.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the algorithm’s name.</p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by copying an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> object. </p></li>
 </ul>
 </dd>
 </dl>
@@ -514,16 +490,15 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm14get_extra_infoEv">
-<span id="pagmo::algorithm::get_extra_infoC"></span><span class="target" id="classpagmo_1_1algorithm_1a57fe662e89ffad42c9f43c3a45f3a8eb"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9algorithm14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo9algorithm14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9algorithm14get_extra_infoEv"></span><span id="pagmo::algorithm::get_extra_infoC"></span><span class="target" id="classpagmo_1_1algorithm_1a57fe662e89ffad42c9f43c3a45f3a8eb"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm’s extra info. </p>
-<p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__extra__info"><span class="std std-ref">pagmo::has_extra_info</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method. Otherwise, an empty string will be returned.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>extra info about the UDA.</dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDA. </li>
+<p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__extra__info"><span class="std std-ref">pagmo::has_extra_info</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method. Otherwise, an empty string will be returned.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>extra info about the UDA.</p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDA. </p></li>
 </ul>
 </dd>
 </dl>
@@ -531,31 +506,29 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm17get_thread_safetyEv">
-<span id="pagmo::algorithm::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"></span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv2N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK5pagmo9algorithm17get_thread_safetyEv">
+<span id="_CPPv3NK5pagmo9algorithm17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9algorithm17get_thread_safetyEv"></span><span id="pagmo::algorithm::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"></span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm’s thread safety level. </p>
-<p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__get__thread__safety"><span class="std std-ref">pagmo::has_get_thread_safety</span></a>, then this method will return the output of its <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method. Otherwise, <a class="reference internal" href="miscellanea/type_traits.html#namespacepagmo_1a35bc6a268c3da8a63a8a293ee2061af1af17aaabc20bfe045075927934fed52d2"><span class="std std-ref">thread_safety::basic</span></a> will be returned. That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>the thread safety level of the UDA. </dd>
+<p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__get__thread__safety"><span class="std std-ref">pagmo::has_get_thread_safety</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method. Otherwise, thread_safety::basic will be returned. That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the thread safety level of the UDA. </p>
+</dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2NK5pagmo9algorithm4saveER7Archive">
-<span id="pagmo::algorithm::save__ArchiveRC"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1ab8001e7c4768d1804ca025019ff585fa"></span>void <code class="descname">save</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5pagmo9algorithm4saveER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0ENK5pagmo9algorithm4saveEvR7Archive">
+<span id="_CPPv3I0ENK5pagmo9algorithm4saveER7Archive"></span><span id="_CPPv2I0ENK5pagmo9algorithm4saveER7Archive"></span><span class="target" id="classpagmo_1_1algorithm_1ab8001e7c4768d1804ca025019ff585fa"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm4saveEvR7Archive" title="pagmo::algorithm::save::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm4saveEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
-<p>This method will save <code class="docutils literal"><span class="pre">this</span></code> into the archive <code class="docutils literal"><span class="pre">ar</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: target archive.</li>
+<p>This method will save <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -563,19 +536,17 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv2N5pagmo9algorithm4loadER7Archive">
-<span id="pagmo::algorithm::load__ArchiveR"></span><em class="property">template </em>&lt;<em class="property">typename</em> Archive&gt;<br /><span class="target" id="classpagmo_1_1algorithm_1a741896e290ba058815eb565b989308db"></span>void <code class="descname">load</code><span class="sig-paren">(</span>Archive &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5pagmo9algorithm4loadER7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo9algorithm4loadEvR7Archive">
+<span id="_CPPv3I0EN5pagmo9algorithm4loadER7Archive"></span><span id="_CPPv2I0EN5pagmo9algorithm4loadER7Archive"></span><span class="target" id="classpagmo_1_1algorithm_1a741896e290ba058815eb565b989308db"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9algorithm4loadEvR7Archive" title="pagmo::algorithm::load::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9algorithm4loadEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
-<p>This method will load a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from <code class="docutils literal"><span class="pre">ar</span></code> into <code class="docutils literal"><span class="pre">this</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">ar</span></code>: source archive.</li>
+<p>This method will load a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from <code class="docutils literal notranslate"><span class="pre">ar</span></code> into <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: source archive.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of the UDA and of primitive types. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of the UDA and of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -586,22 +557,20 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Friends</p>
 <dl class="function">
-<dt id="_CPPv2lsRNSt7ostreamERK9algorithm">
-<span id="lshift-operator__osR.algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a5f3326a31eb0b3b4629a71616c5139e3"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> algorithm &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2lsRNSt7ostreamERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4lsRNSt7ostreamERK9algorithm">
+<span id="_CPPv3lsRNSt7ostreamERK9algorithm"></span><span id="_CPPv2lsRNSt7ostreamERK9algorithm"></span><span id="lshift-operator__osR.algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a5f3326a31eb0b3b4629a71616c5139e3"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> algorithm &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Streaming operator. </p>
-<p>This function will stream to <code class="docutils literal"><span class="pre">os</span></code> a human-readable representation of the input algorithm <code class="docutils literal"><span class="pre">a</span></code>.</p>
-<p><dl class="docutils">
-<dt><strong>Return</strong></dt>
-<dd>a reference to <code class="docutils literal"><span class="pre">os</span></code>.</dd>
-<dt><strong>Parameters</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">os</span></code>: input <code class="docutils literal"><span class="pre">std::ostream</span></code>. </li>
-<li><code class="docutils literal"><span class="pre">a</span></code>: <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> object to be streamed.</li>
+<p>This function will stream to <code class="docutils literal notranslate"><span class="pre">os</span></code> a human-readable representation of the input algorithm <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a reference to <code class="docutils literal notranslate"><span class="pre">os</span></code>.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: input <code class="docutils literal notranslate"><span class="pre">std::ostream</span></code>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> object to be streamed.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt>
-<dd><ul class="breatheparameterlist first last simple">
-<li><code class="docutils literal"><span class="pre">unspecified</span></code>: any exception thrown by querying various algorithm properties and streaming them into <code class="docutils literal"><span class="pre">os</span></code>. </li>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by querying various algorithm properties and streaming them into <code class="docutils literal notranslate"><span class="pre">os</span></code>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -626,7 +595,7 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Participating to the CEC2013 Competition &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Solving the 20 dimensional Schwefel problem" href="solving_schwefel_20.html" />
     <link rel="prev" title="Benchmarking Extended Ant Colony Optimization on CEC2006 problems" href="cec2006_gaco_benchmark.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -185,16 +177,16 @@
 <p>In this tutorial we will show how to use pygmo to run algorithms on the test problem suite used in the
 Special Session &amp; Competition on Real-Parameter Single Objective Optimization at CEC-2013, Cancun, Mexico 21-23 June 2013.</p>
 <p>All of the CEC 2013 problems are box-bounded, continuous, single objective problems and are provided as UDP (user-defined
-problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a>. Instantiating one of these problems is easy:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+problems) by pygmo in the class <a class="reference internal" href="../problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal notranslate"><span class="pre">cec2013</span></code></a>. Instantiating one of these problems is easy:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The user-defined problem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">cec2013</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The pygmo problem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>as usual, we can quickly inspect the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> printing it to screen:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
+<p>as usual, we can quickly inspect the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> printing it to screen:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span> 
 <span class="go">Problem name: CEC2013 - f24(cf04)</span>
 <span class="go">    Global dimension:                       10</span>
 <span class="go">    Integer dimension:                      0</span>
@@ -204,6 +196,7 @@ problems) by pygmo in the class <a class="reference internal" href="../problems/
 <span class="go">    Inequality constraints dimension:       0</span>
 <span class="go">    Lower bounds: [-100, -100, -100, -100, -100, ... ]</span>
 <span class="go">    Upper bounds: [100, 100, 100, 100, 100, ... ]</span>
+<span class="go">    Has batch fitness evaluation: false</span>
 
 <span class="go">    Has gradient: false</span>
 <span class="go">    User implemented gradient sparsity: false</span>
@@ -215,15 +208,15 @@ problems) by pygmo in the class <a class="reference internal" href="../problems/
 <span class="go">    Thread safety: basic</span>
 </pre></div>
 </div>
-<p>Let us assume we want to assess the performance of (say) the optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> (which
+<p>Let us assume we want to assess the performance of (say) the optimization algorithm <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmaes</span></code></a> (which
 implements as user-defined algorithm the Covariance Matrix Adaptation Evolutionary Strategy) on the whole
-<a class="reference internal" href="../problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal"><span class="pre">cec2013</span></code></a> problem suite at dimension D=2. Since the competition rules allowed D * 10000
+<a class="reference internal" href="../problems/py_problems.html#pygmo.cec2013" title="pygmo.cec2013"><code class="xref py py-class docutils literal notranslate"><span class="pre">cec2013</span></code></a> problem suite at dimension D=2. Since the competition rules allowed D * 10000
 fitness evaluations, we choose a population of 50 and 400 generations:</p>
 <a class="reference internal image-reference" href="../../../_images/cec2013_2_jde.png"><img alt="CEC2013-JDE-2D" class="align-right" src="../../../_images/cec2013_2_jde.png" style="width: 500.0px; height: 150.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cec2013_2_cmaes.png"><img alt="CEC2013-CMAES-2D" class="align-right" src="../../../_images/cec2013_2_cmaes.png" style="width: 500.0px; height: 150.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cec2013_2_sa.png"><img alt="CEC2013-SIMANNEAL-2D" class="align-right" src="../../../_images/cec2013_2_sa.png" style="width: 500.0px; height: 150.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cec2013_2_pso.png"><img alt="CEC2013-PSO-2D" class="align-right" src="../../../_images/cec2013_2_pso.png" style="width: 500.0px; height: 150.0px;" /></a>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The cmaes pygmo algorithm</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The cmaes pygmo algorithm</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">cmaes</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Defining all 28 problems dimension</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
@@ -240,7 +233,7 @@ fitness evaluations, we choose a population of 50 and 400 generations:</p>
 </div>
 <p>At the end of the script, a matplotlib boxplot can be easily produced reporting the results for each of the 28
 problem instances:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">([</span><span class="n">error</span><span class="p">[</span><span class="n">s</span><span class="p">::</span><span class="mi">28</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">28</span><span class="p">)])</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">algo</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span> 
@@ -252,13 +245,13 @@ problem instances:</p>
 </div>
 <p>The same can be done for different user-defined algorithms. In the various figures on the right
 we have reported only a few available from pygmo’s core. At this low dimension it can be seen how
-the particular instances choosen for <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a> (jDE) are
-performing particularly well. It has to be noted here that <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> results, in general,
+the particular instances choosen for <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal notranslate"><span class="pre">sade</span></code></a> (jDE) are
+performing particularly well. It has to be noted here that <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmaes</span></code></a> results, in general,
 to spend less than the available budget of fitness evaluations so that a proper comparison at these low
 dimensionality should allow for restarts as to properly make use of the allowed budget.</p>
 <p>The script above can be run again for higher problem dimensions, so that, for example, at D = 10 and using a larger
 population size as to allow for the larger available budget of fitness evaluations, the following plots are obtained for
-the chosen instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal"><span class="pre">sade</span></code></a>:</p>
+the chosen instances of <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmaes</span></code></a> and <a class="reference internal" href="../algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal notranslate"><span class="pre">sade</span></code></a>:</p>
 <a class="reference internal image-reference" href="../../../_images/cec2013_10_cmaes.png"><img alt="CEC2013-CMAES-10D" class="align-center" src="../../../_images/cec2013_10_cmaes.png" style="width: 1000.0px; height: 300.0px;" /></a>
 <a class="reference internal image-reference" href="../../../_images/cec2013_10_jde.png"><img alt="CEC2013-JDE-10D" class="align-center" src="../../../_images/cec2013_10_jde.png" style="width: 1000.0px; height: 300.0px;" /></a>
 </div>
@@ -276,7 +269,7 @@ the chosen instances of <a class="reference internal" href="../algorithms/py_alg
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -2,33 +2,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Algorithm class &#8212; pagmo 2.11 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pagmo.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '2.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Problem class" href="py_problem.html" />
     <link rel="prev" title="Python Documentation" href="python_docs.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -93,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -103,7 +95,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-and-islands">Implemented problems, algorithms and islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -192,21 +184,21 @@ stochastic, deterministic, population based, derivative-free, using hessians,
 using gradients, a meta-heuristic, evolutionary, etc.. Via this class pygmo offers
 a common interface to all types of algorithms that can be applied to find solution
 to a generic matematical programming problem as represented by the
-<a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal"><span class="pre">problem</span></code></a> class.</p>
+<a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> class.</p>
 <p>In order to define an optimizaztion algorithm in pygmo, the user must first define a class
 whose methods describe the properties of the algorithm and implement its logic.
 In pygmo, we refer to such a class as a <strong>user-defined algorithm</strong>, or UDA for short. Once
 defined and instantiated, a UDA can then be used to construct an instance of this class,
-<a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>, which provides a generic interface to optimization algorithms.</p>
+<a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>, which provides a generic interface to optimization algorithms.</p>
 <p>Every UDA must implement at least the following method:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
   <span class="o">...</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">evolve()</span></code> method takes as input a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>, and it is expected to return
+<p>The <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method takes as input a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>, and it is expected to return
 a new population generated by the <em>evolution</em> (or <em>optimisation</em>) of the original population.</p>
 <p>Additional optional methods can be implemented in a UDA:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">has_set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">has_set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
   <span class="o">...</span>
 <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
   <span class="o">...</span>
@@ -221,53 +213,48 @@ a new population generated by the <em>evolution</em> (or <em>optimisation</em>) 
 </pre></div>
 </div>
 <p>See the documentation of the corresponding methods in this class for details on how the optional
-methods in the UDA should be implemented and on how they are used by <a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a>.
+methods in the UDA should be implemented and on how they are used by <a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>.
 Note that the exposed C++ algorithms can also be used as UDAs, even if they do not expose any of the
 mandatory or optional methods listed above (see <a class="reference internal" href="algorithms/py_algorithms.html#py-algorithms"><span class="std std-ref">here</span></a> for the
 full list of UDAs already coded in pygmo).</p>
-<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/algorithm.html#_CPPv2N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal"><span class="pre">pagmo::algorithm</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uda</strong> – a user-defined algorithm, either C++ or Python</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> – if <em>uda</em> does not implement the mandatory method detailed above</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by:<ul>
-<li>methods of the UDA invoked during construction,</li>
-<li>the deep copy of the UDA,</li>
-<li>the constructor of the underlying C++ class,</li>
-<li>failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-signatures, etc.)</li>
+<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>uda</strong> – a user-defined algorithm, either C++ or Python</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>uda</em> does not implement the mandatory method detailed above</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by:
+    
+    * methods of the UDA invoked during construction,
+    * the deep copy of the UDA,
+    * the constructor of the underlying C++ class,
+    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)</p></li>
 </ul>
-</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="pygmo.algorithm.evolve">
 <code class="descname">evolve</code><span class="sig-paren">(</span><em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.evolve" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method will invoke the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA. This is where the core of the optimization
+<dd><p>This method will invoke the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA. This is where the core of the optimization
 (<em>evolution</em>) is made.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a>) – starting population</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">evolved population</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal"><span class="pre">population</span></code></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA or by failures at the
-intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – starting population</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>evolved population</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA or by failures at the
+    intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -275,43 +262,42 @@ intersection between C++ and Python (e.g., type conversion errors, mismatched fu
 <code class="descname">extract</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the user-defined algorithm.</p>
 <p>This method allows to extract a reference to the user-defined algorithm (UDA) stored within this
-<a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal"><span class="pre">algorithm</span></code></a> instance. The behaviour of this function depends on the value
-of <em>t</em> (which must be a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>) and on the type of the internal UDA:</p>
+<a class="reference internal" href="#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> instance. The behaviour of this function depends on the value
+of <em>t</em> (which must be a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) and on the type of the internal UDA:</p>
 <ul class="simple">
-<li>if the type of the UDA is <em>t</em>, then a reference to the UDA will be returned
+<li><p>if the type of the UDA is <em>t</em>, then a reference to the UDA will be returned
 (this mirrors the behaviour of the corresponding C++ method
-<a class="reference internal" href="../cpp/algorithm.html#_CPPv2NK5pagmo9algorithm7extractEv" title="pagmo::algorithm::extract"><code class="xref cpp cpp-func docutils literal"><span class="pre">pagmo::algorithm::extract()</span></code></a>),</li>
-<li>if <em>t</em> is <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> and the UDA is a Python object (as opposed to an
+<a class="reference internal" href="../cpp/algorithm.html#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::algorithm::extract()</span></code></a>),</p></li>
+<li><p>if <em>t</em> is <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a> and the UDA is a Python object (as opposed to an
 <a class="reference internal" href="algorithms/py_algorithms.html#py-algorithms-cpp"><span class="std std-ref">exposed C++ algorithm</span></a>), then a reference to the
-UDA will be returned (this allows to extract a Python UDA without knowing its type),</li>
-<li>otherwise, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> will be returned.</li>
+UDA will be returned (this allows to extract a Python UDA without knowing its type),</p></li>
+<li><p>otherwise, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> will be returned.</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>) – the type of the user-defined algorithm to extract</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a reference to the internal user-defined algorithm, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a> if the extraction fails</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type of the user-defined algorithm to extract</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to the internal user-defined algorithm, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">compass_search</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">compass_search</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">compass_search</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
 <span class="go">&lt;pygmo.core.compass_search at 0x7f8e4792b670&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">algo</span><span class="p">:</span>
-<span class="go">...:     def evolve(self, pop):</span>
-<span class="go">...:         return pop</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">pop</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">algo</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
 <span class="go">&lt;__main__.algo at 0x7f8e478c04e0&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
 <span class="go">&lt;__main__.algo at 0x7f8e478c04e0&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
 <span class="go">True</span>
@@ -323,194 +309,177 @@ UDA will be returned (this allows to extract a Python UDA without knowing its ty
 <dt id="pygmo.algorithm.get_extra_info">
 <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Algorithm’s extra info.</p>
-<p>If the UDA provides a <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_extra_info()</span></code>
+<p>If the UDA provides a <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code>
 method. Otherwise, an empty string will be returned.</p>
-<p>The <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDA must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extra info about the UDA</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by the <code class="docutils literal"><span class="pre">get_extra_info()</span></code> method of the UDA</td>
-</tr>
-</tbody>
-</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDA must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>extra info about the UDA</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDA</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Algorithm’s name.</p>
-<p>If the UDA provides a <code class="docutils literal"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal"><span class="pre">get_name()</span></code> method.
+<p>If the UDA provides a <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method.
 Otherwise, an implementation-defined name based on the type of the UDA will be returned.</p>
-<p>The <code class="docutils literal"><span class="pre">get_name()</span></code> method of the UDA must return a <code class="docutils literal"><span class="pre">str</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the algorithm’s name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">str</span></code></td>
-</tr>
-</tbody>
-</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method of the UDA must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the algorithm’s name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.get_thread_safety">
 <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.get_thread_safety" title="Permalink to this definition">¶</a></dt>
 <dd><p>Algorithm’s thread safety level.</p>
-<p>This method will return a value of the enum <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a> which indicates the thread safety level
+<p>This method will return a value of the enum <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.thread_safety</span></code></a> which indicates the thread safety level
 of the UDA. Unlike in C++, in Python it is not possible to re-implement this method in the UDA. That is, for C++
-UDAs, the returned value will be the value returned by the <code class="docutils literal"><span class="pre">get_thread_safety()</span></code> method of the UDA. For Python
-UDAs, the returned value will be unconditionally <a class="reference internal" href="py_misc.html#pygmo.thread_safety.none" title="pygmo.thread_safety.none"><code class="xref py py-attr docutils literal"><span class="pre">pygmo.thread_safety.none</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the thread safety level of the UDA</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a value of <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal"><span class="pre">pygmo.thread_safety</span></code></a></td>
-</tr>
-</tbody>
-</table>
+UDAs, the returned value will be the value returned by the <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method of the UDA. For Python
+UDAs, the returned value will be unconditionally <a class="reference internal" href="py_misc.html#pygmo.thread_safety.none" title="pygmo.thread_safety.none"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.thread_safety.none</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the thread safety level of the UDA</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>a value of <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.thread_safety</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.has_set_seed">
 <code class="descname">has_set_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.has_set_seed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDA.</p>
-<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the <code class="docutils literal"><span class="pre">set_seed()</span></code> method is available in the UDA, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
-<p>The availability of the <code class="docutils literal"><span class="pre">set_seed()</span></code> method is determined as follows:</p>
+<dd><p>Check if the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is available in the UDA.</p>
+<p>This method will return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is available in the UDA, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is determined as follows:</p>
 <ul class="simple">
-<li>if the UDA does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
-<li>if the UDA provides a <code class="docutils literal"><span class="pre">set_seed()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method,
-then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
-<li>if the UDA provides both a <code class="docutils literal"><span class="pre">set_seed()</span></code> and a <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method, then this method will return
-the output of the <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method of the UDA.</li>
+<li><p>if the UDA does not provide a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method, then this method will always return <code class="docutils literal notranslate"><span class="pre">False</span></code>;</p></li>
+<li><p>if the UDA provides a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method but it does not provide a <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method,
+then this method will always return <code class="docutils literal notranslate"><span class="pre">True</span></code>;</p></li>
+<li><p>if the UDA provides both a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> and a <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method, then this method will return
+the output of the <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method of the UDA.</p></li>
 </ul>
-<p>The optional <code class="docutils literal"><span class="pre">has_set_seed()</span></code> method of the UDA must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
-implement the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA, see <a class="reference internal" href="#pygmo.algorithm.set_seed" title="pygmo.algorithm.set_seed"><code class="xref py py-func docutils literal"><span class="pre">set_seed()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the <code class="docutils literal"><span class="pre">set_seed()</span></code> method in the UDA</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
-</tr>
-</tbody>
-</table>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method of the UDA must return a <code class="docutils literal notranslate"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDA, see <a class="reference internal" href="#pygmo.algorithm.set_seed" title="pygmo.algorithm.set_seed"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_seed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method in the UDA</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.has_set_verbosity">
 <code class="descname">has_set_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.has_set_verbosity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is available in the UDA.</p>
-<p>This method will return <code class="docutils literal"><span class="pre">True</span></code> if the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is available in the UDA, <code class="docutils literal"><span class="pre">False</span></code> otherwise.</p>
-<p>The availability of the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method is determined as follows:</p>
+<dd><p>Check if the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is available in the UDA.</p>
+<p>This method will return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is available in the UDA, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<p>The availability of the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is determined as follows:</p>
 <ul class="simple">
-<li>if the UDA does not provide a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method, then this method will always return <code class="docutils literal"><span class="pre">False</span></code>;</li>
-<li>if the UDA provides a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method but it does not provide a <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method,
-then this method will always return <code class="docutils literal"><span class="pre">True</span></code>;</li>
-<li>if the UDA provides both a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> and a <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method, then this method will return
-the output of the <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method of the UDA.</li>
+<li><p>if the UDA does not provide a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method, then this method will always return <code class="docutils literal notranslate"><span class="pre">False</span></code>;</p></li>
+<li><p>if the UDA provides a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method but it does not provide a <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method,
+then this method will always return <code class="docutils literal notranslate"><span class="pre">True</span></code>;</p></li>
+<li><p>if the UDA provides both a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> and a <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method, then this method will return
+the output of the <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method of the UDA.</p></li>
 </ul>
-<p>The optional <code class="docutils literal"><span class="pre">has_set_verbosity()</span></code> method of the UDA must return a <code class="docutils literal"><span class="pre">bool</span></code>. For information on how to
-implement the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA, see <a class="reference internal" href="#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal"><span class="pre">set_verbosity()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a flag signalling the availability of the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method in the UDA</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
-</tr>
-</tbody>
-</table>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method of the UDA must return a <code class="docutils literal notranslate"><span class="pre">bool</span></code>. For information on how to
+implement the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method of the UDA, see <a class="reference internal" href="#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method in the UDA</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.is_">
 <code class="descname">is_</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.is_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the type of the user-defined algorithm.</p>
-<p>This method returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">False</span></code></a> if <a class="reference internal" href="#pygmo.algorithm.extract" title="pygmo.algorithm.extract"><code class="xref py py-func docutils literal"><span class="pre">extract(t)</span></code></a> returns
-<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a> otherwise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDA</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">whether the UDA is of type <em>t</em> or not</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception thrown by <a class="reference internal" href="#pygmo.algorithm.extract" title="pygmo.algorithm.extract"><code class="xref py py-func docutils literal"><span class="pre">extract()</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<p>This method returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a> if <a class="reference internal" href="#pygmo.algorithm.extract" title="pygmo.algorithm.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract(t)</span></code></a> returns
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDA</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the UDA is of type <em>t</em> or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.algorithm.extract" title="pygmo.algorithm.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.is_stochastic">
 <code class="descname">is_stochastic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.is_stochastic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for <a class="reference internal" href="#pygmo.algorithm.has_set_seed" title="pygmo.algorithm.has_set_seed"><code class="xref py py-func docutils literal"><span class="pre">has_set_seed()</span></code></a>.</p>
+<dd><p>Alias for <a class="reference internal" href="#pygmo.algorithm.has_set_seed" title="pygmo.algorithm.has_set_seed"><code class="xref py py-func docutils literal notranslate"><span class="pre">has_set_seed()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.set_seed">
 <code class="descname">set_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.set_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the seed for the stochastic evolution.</p>
-<p>This method will set the seed to be used in the <code class="docutils literal"><span class="pre">evolve()</span></code> method of the UDA for all stochastic variables. If the UDA
-provides a <code class="docutils literal"><span class="pre">set_seed()</span></code> method, then its <code class="docutils literal"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be
+<p>This method will set the seed to be used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA for all stochastic variables. If the UDA
+provides a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method, then its <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be
 raised. The <em>seed</em> parameter must be non-negative.</p>
-<p>The <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA must be able to take an <code class="docutils literal"><span class="pre">int</span></code> as input parameter.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seed</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the random seed</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_seed()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_seed()</span></code> method of the UDA or failures at the intersection
-between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+<p>The <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDA must be able to take an <code class="docutils literal notranslate"><span class="pre">int</span></code> as input parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the random seed</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if the UDA does not provide a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method</p></li>
+<li><p><strong>unspecified</strong> – any exception raised by the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDA or failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.algorithm.set_verbosity">
 <code class="descname">set_verbosity</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.algorithm.set_verbosity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the verbosity of logs and screen output.</p>
-<p>This method will set the level of verbosity for the algorithm. If the UDA provides a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method,
-then its <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
+<p>This method will set the level of verbosity for the algorithm. If the UDA provides a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method,
+then its <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
 <p>The exact meaning of the input parameter <em>level</em> is dependent on the UDA.</p>
-<p>The <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA must be able to take an <code class="docutils literal"><span class="pre">int</span></code> as input parameter.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the desired verbosity level</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> – if the UDA does not provide a <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">unspecified</span></code> – any exception raised by the <code class="docutils literal"><span class="pre">set_verbosity()</span></code> method of the UDA or failures at the intersection
-between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</li>
+<p>The <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method of the UDA must be able to take an <code class="docutils literal notranslate"><span class="pre">int</span></code> as input parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>level</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the desired verbosity level</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if the UDA does not provide a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method</p></li>
+<li><p><strong>unspecified</strong> – any exception raised by the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method of the UDA or failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -530,7 +499,7 @@ between C++ and Python (e.g., type conversion errors, mismatched function signat
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
     </p>
   </div>
 </footer>
