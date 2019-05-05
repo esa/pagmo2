@@ -34,6 +34,9 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include <boost/type_traits/integral_constant.hpp>
+#include <boost/type_traits/is_virtual_base_of.hpp>
+
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
@@ -356,7 +359,21 @@ struct algo_inner final : algo_inner_base {
     T m_value;
 };
 
-} // end of namespace detail
+} // namespace detail
+
+} // namespace pagmo
+
+namespace boost
+{
+
+template <typename T>
+struct is_virtual_base_of<pagmo::detail::algo_inner_base, pagmo::detail::algo_inner<T>> : false_type {
+};
+
+} // namespace boost
+
+namespace pagmo
+{
 
 /// Algorithm class.
 /**

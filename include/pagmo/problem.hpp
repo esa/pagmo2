@@ -39,6 +39,9 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/type_traits/integral_constant.hpp>
+#include <boost/type_traits/is_virtual_base_of.hpp>
+
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
@@ -976,6 +979,28 @@ struct prob_inner final : prob_inner_base {
 };
 
 } // namespace detail
+
+} // namespace pagmo
+
+namespace boost
+{
+
+// NOTE: in some earlier versions of Boost (i.e., at least up to 1.67)
+// the is_virtual_base_of type trait, used by the Boost serialization library, fails
+// with a compile time error
+// if a class is declared final. Thus, we provide a specialised implementation of
+// this type trait to work around the issue. See:
+// https://www.boost.org/doc/libs/1_52_0/libs/type_traits/doc/html/boost_typetraits/reference/is_virtual_base_of.html
+// https://stackoverflow.com/questions/18982064/boost-serialization-of-base-class-of-final-subclass-error
+// We never use virtual inheritance, thus the specialisation is always false.
+template <typename T>
+struct is_virtual_base_of<pagmo::detail::prob_inner_base, pagmo::detail::prob_inner<T>> : false_type {
+};
+
+} // namespace boost
+
+namespace pagmo
+{
 
 // Fwd declare for the declarations below.
 class problem;

@@ -37,6 +37,9 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include <boost/type_traits/integral_constant.hpp>
+#include <boost/type_traits/is_virtual_base_of.hpp>
+
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
@@ -195,6 +198,20 @@ struct bfe_inner final : bfe_inner_base {
 };
 
 } // namespace detail
+
+} // namespace pagmo
+
+namespace boost
+{
+
+template <typename T>
+struct is_virtual_base_of<pagmo::detail::bfe_inner_base, pagmo::detail::bfe_inner<T>> : false_type {
+};
+
+} // namespace boost
+
+namespace pagmo
+{
 
 class PAGMO_PUBLIC bfe
 {

@@ -44,6 +44,8 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/any.hpp>
+#include <boost/type_traits/integral_constant.hpp>
+#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
@@ -216,6 +218,20 @@ PAGMO_PUBLIC bool future_has_exception(std::future<void> &) noexcept;
 PAGMO_PUBLIC bool future_running(const std::future<void> &);
 
 } // namespace detail
+
+} // namespace pagmo
+
+namespace boost
+{
+
+template <typename T>
+struct is_virtual_base_of<pagmo::detail::isl_inner_base, pagmo::detail::isl_inner<T>> : false_type {
+};
+
+} // namespace boost
+
+namespace pagmo
+{
 
 namespace detail
 {
