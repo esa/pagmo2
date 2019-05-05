@@ -127,9 +127,9 @@ static inline bp::object test_object_serialization(const bp::object &o)
         boost::archive::binary_oarchive oarchive(oss);
         oarchive << pygmo::object_to_vchar(o);
     }
-    const std::string tmp = oss.str();
+    const std::string tmp_str = oss.str();
     std::istringstream iss;
-    iss.str(tmp);
+    iss.str(tmp_str);
     bp::object retval;
     {
         boost::archive::binary_iarchive iarchive(iss);
