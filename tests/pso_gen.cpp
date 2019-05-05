@@ -30,11 +30,13 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
 #include <limits> //  std::numeric_limits<double>::infinity();
+#include <numeric>
 #include <string>
+
+#include <boost/lexical_cast.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>

@@ -30,10 +30,12 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+#include <numeric>
+#include <string>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <iostream>
-#include <string>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de1220.hpp>
