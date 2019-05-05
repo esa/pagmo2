@@ -52,6 +52,7 @@ see https://www.gnu.org/licenses/. */
 #if defined(__GNUC__) && defined(__MINGW32__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=const"
 #endif
 
 namespace pagmo
