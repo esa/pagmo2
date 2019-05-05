@@ -588,7 +588,7 @@ PAGMO_PUBLIC std::vector<sparsity_pattern> dense_hessians(vector_double::size_ty
 
 PAGMO_PUBLIC sparsity_pattern dense_gradient(vector_double::size_type, vector_double::size_type);
 
-struct prob_inner_base {
+struct PAGMO_PUBLIC prob_inner_base {
     virtual ~prob_inner_base() {}
     virtual std::unique_ptr<prob_inner_base> clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
@@ -619,7 +619,7 @@ struct prob_inner_base {
 };
 
 template <typename T>
-struct prob_inner final : prob_inner_base {
+struct PAGMO_PUBLIC prob_inner final : prob_inner_base {
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;

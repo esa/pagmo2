@@ -110,7 +110,7 @@ const bool is_udbfe<T>::value;
 namespace detail
 {
 
-struct bfe_inner_base {
+struct PAGMO_PUBLIC bfe_inner_base {
     virtual ~bfe_inner_base() {}
     virtual std::unique_ptr<bfe_inner_base> clone() const = 0;
     virtual vector_double operator()(const problem &, const vector_double &) const = 0;
@@ -124,7 +124,7 @@ struct bfe_inner_base {
 };
 
 template <typename T>
-struct bfe_inner final : bfe_inner_base {
+struct PAGMO_PUBLIC bfe_inner final : bfe_inner_base {
     // We just need the def ctor, delete everything else.
     bfe_inner() = default;
     bfe_inner(const bfe_inner &) = delete;
