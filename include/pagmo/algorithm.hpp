@@ -197,7 +197,7 @@ const bool is_uda<T>::value;
 namespace detail
 {
 
-struct algo_inner_base {
+struct PAGMO_PUBLIC algo_inner_base {
     virtual ~algo_inner_base() {}
     virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
@@ -215,7 +215,7 @@ struct algo_inner_base {
 };
 
 template <typename T>
-struct algo_inner final : algo_inner_base {
+struct PAGMO_PUBLIC algo_inner final : algo_inner_base {
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;

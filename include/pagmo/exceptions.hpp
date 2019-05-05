@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 #include <utility>
 
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/type_traits.hpp>
 
 namespace pagmo
@@ -118,7 +119,7 @@ namespace pagmo
  * optional methods in user-defined classes are not implemented.
  * This class inherits the constructors from \p std::runtime_error.
  */
-struct not_implemented_error final : std::runtime_error {
+struct PAGMO_PUBLIC not_implemented_error final : std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 } // namespace pagmo
