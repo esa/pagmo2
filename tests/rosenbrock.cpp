@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -72,6 +73,8 @@ BOOST_AUTO_TEST_CASE(rosenbrock_test)
     BOOST_CHECK(std::abs(g5[2] - 13.4) < 1E-8);
     BOOST_CHECK(std::abs(g5[3] - 6.4) < 1E-8);
     BOOST_CHECK(std::abs(g5[4] - 68.) < 1E-8);
+    // Thread safety level.
+    BOOST_CHECK(problem{rosenbrock{}}.get_thread_safety() == thread_safety::constant);
 }
 
 BOOST_AUTO_TEST_CASE(rosenbrock_serialization_test)

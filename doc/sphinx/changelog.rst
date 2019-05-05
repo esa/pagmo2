@@ -7,7 +7,11 @@ Changelog
 New
 ~~~
 
+- Implement the Grey Wolf Optimizer algorithm (`#268 <https://github.com/esa/pagmo2/pull/268>`__).
+
 - Add CircleCI to the continuous integration pipeline (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
+
+- Implement the Extended Ant Colony Optimization algorithm (`#249 <https://github.com/esa/pagmo2/pull/249>`__).
 
 - Implement the Lennard-Jones and Golomb ruler problems (`#247 <https://github.com/esa/pagmo2/pull/247>`__).
 

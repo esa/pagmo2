@@ -34,21 +34,6 @@ from __future__ import absolute_import as _ai
 from threading import Lock as _Lock
 
 
-class _temp_disable_sigint(object):
-    # A small helper context class to disable CTRL+C temporarily.
-
-    def __enter__(self):
-        import signal
-        # Store the previous sigint handler and assign the new sig handler
-        # (i.e., ignore SIGINT).
-        self._prev_signal = signal.signal(signal.SIGINT, signal.SIG_IGN)
-
-    def __exit__(self, type, value, traceback):
-        import signal
-        # Restore the previous sighandler.
-        signal.signal(signal.SIGINT, self._prev_signal)
-
-
 def _evolve_func_mp_pool(ser_algo_pop):
     # The evolve function that is actually run from the separate processes
     # in mp_island (when using the pool).
@@ -62,6 +47,8 @@ def _evolve_func_mp_pipe(conn, ser_algo_pop):
     # The evolve function that is actually run from the separate processes
     # in mp_island (when *not* using the pool). Communication with the
     # parent process happens through the conn pipe.
+    from ._mp_utils import _temp_disable_sigint
+
     # NOTE: disable SIGINT with the goal of preventing the user from accidentally
     # interrupting the evolution via hitting Ctrl+C in an interactive session
     # in the parent process. Note that this disables the signal only during
@@ -147,15 +134,6 @@ class mp_island(object):
     _pool = None
     _pool_size = None
 
-    @staticmethod
-    def _platform_checks():
-        # Platform-specific checks: the mp island requires either Windows or at least Python 3.4.
-        import sys
-        import os
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            raise RuntimeError(
-                "The multiprocessing island is supported only on Windows or on Python >= 3.4.")
-
     def __init__(self, use_pool=True):
         """
         Args:
@@ -183,9 +161,6 @@ class mp_island(object):
             # Init the process pool, if necessary.
             mp_island.init_pool()
         else:
-            # Run the platform checks (when using the pool,
-            # they are run inside init_pool()).
-            mp_island._platform_checks()
             # Init the pid member and associated lock.
             self._pid_lock = _Lock()
             self._pid = None
@@ -274,22 +249,11 @@ class mp_island(object):
             # Just keep it in mind.
             return pickle.loads(res.get())
         else:
-            import multiprocessing as mp
-            import sys
-            import os
-            # The context functionality in the mp module is available since
-            # Python 3.4. It is used to force the process creation with the
-            # "spawn" method.
-            has_context = sys.version_info[0] > 3 or (
-                sys.version_info[0] == 3 and sys.version_info[1] >= 4)
-            if has_context:
-                mp_ctx = mp.get_context('spawn')
-            else:
-                # NOTE: for Python < 3.4, only Windows is supported and we
-                # should never end up here (the island will throw on construction
-                # when we do platform checks).
-                assert(os.name == 'nt')
-                mp_ctx = mp
+            from ._mp_utils import _get_spawn_context
+
+            # Get the context for spawning the process.
+            mp_ctx = _get_spawn_context()
+
             parent_conn, child_conn = mp_ctx.Pipe(duplex=False)
             p = mp_ctx.Process(target=_evolve_func_mp_pipe,
                                args=(child_conn, ser_algo_pop))
@@ -373,39 +337,6 @@ class mp_island(object):
         return retval
 
     @staticmethod
-    def _make_pool(processes):
-        # A small private factory function to create a process pool.
-        # It accomplishes the tasks of selecting the correct method for
-        # starting the processes ("spawn") and making sure that the
-        # created processes will ignore the SIGINT signal (this prevents
-        # troubles when the user issues an interruption with ctrl+c from
-        # the main process).
-        import sys
-        import os
-        import multiprocessing as mp
-        # The context functionality in the mp module is available since
-        # Python 3.4. It is used to force the process creation with the
-        # "spawn" method.
-        has_context = sys.version_info[0] > 3 or (
-            sys.version_info[0] == 3 and sys.version_info[1] >= 4)
-        with _temp_disable_sigint():
-            # NOTE: we temporarily disable sigint while creating the pool.
-            # This ensures that the processes created in the pool will ignore
-            # interruptions issued via ctrl+c (only the main process will
-            # be affected by them).
-            if has_context:
-                ctx = mp.get_context("spawn")
-                pool = ctx.Pool(processes=processes)
-            else:
-                # NOTE: for Python < 3.4, only Windows is supported and we
-                # should never end up here.
-                assert(os.name == 'nt')
-                pool = mp.Pool(processes=processes)
-        pool_size = mp.cpu_count() if processes is None else processes
-        # Return the created pool and its size.
-        return pool, pool_size
-
-    @staticmethod
     def init_pool(processes=None):
         """Initialise the process pool.
 
@@ -426,19 +357,11 @@ class mp_island(object):
            TypeError: if *processes* is not :data:`None` and not an :class:`int`
 
         """
-        # Helper to create a new pool. It will do something
-        # only if the pool has never been created before.
-        # Run the platform checks.
-        mp_island._platform_checks()
-        if processes is not None and not isinstance(processes, int):
-            raise TypeError("The 'processes' argument must be None or an int")
-        if processes is not None and processes <= 0:
-            raise ValueError(
-                "The 'processes' argument, if not None, must be strictly positive")
+        from ._mp_utils import _make_pool
+
         with mp_island._pool_lock:
             if mp_island._pool is None:
-                mp_island._pool, mp_island._pool_size = mp_island._make_pool(
-                    processes)
+                mp_island._pool, mp_island._pool_size = _make_pool(processes)
 
     @staticmethod
     def get_pool_size():
@@ -480,12 +403,14 @@ class mp_island(object):
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
-        import multiprocessing as mp
+        from ._mp_utils import _make_pool
+
         if not isinstance(processes, int):
             raise TypeError("The 'processes' argument must be an int")
         if processes <= 0:
             raise ValueError(
                 "The 'processes' argument must be strictly positive")
+
         mp_island.init_pool()
         with mp_island._pool_lock:
             if processes == mp_island._pool_size:
@@ -493,7 +418,7 @@ class mp_island(object):
                 # the size of the pool.
                 return
             # Create new pool.
-            new_pool, new_size = mp_island._make_pool(processes)
+            new_pool, new_size = _make_pool(processes)
             # Stop the current pool.
             mp_island._pool.close()
             mp_island._pool.join()

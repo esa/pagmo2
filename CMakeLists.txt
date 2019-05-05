@@ -85,7 +85,7 @@ include(YACMAThreadingSetup)
 # Assemble the flags.
 set(PAGMO_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
 set(PAGMO_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND YACMA_COMPILER_IS_CLANGXX)
+if(APPLE AND YACMA_COMPILER_IS_CLANGXX)
   message(STATUS "Clang compiler on OSX detected, setting the standard library to 'libc++'.")
   list(APPEND PAGMO_CXX_FLAGS_DEBUG "-stdlib=libc++")
   list(APPEND PAGMO_CXX_FLAGS_RELEASE "-stdlib=libc++")
@@ -113,6 +113,9 @@ endif()
 
 if(PAGMO_BUILD_PAGMO)
     # pagmo dependencies.
+
+    # TBB.
+    find_package(TBB REQUIRED)
 
     # Eigen3
     if(PAGMO_WITH_EIGEN3)
@@ -165,6 +168,9 @@ if(PAGMO_BUILD_PAGMO)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>)
+
+    # TBB.
+    target_link_libraries(pagmo INTERFACE TBB::tbb)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.
@@ -251,7 +257,7 @@ if(PAGMO_BUILD_PAGMO)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindEigen3.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
-        DESTINATION "lib/cmake/pagmo")
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindTBB.cmake" DESTINATION "lib/cmake/pagmo")
     install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)

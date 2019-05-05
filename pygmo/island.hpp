@@ -91,7 +91,7 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     virtual std::unique_ptr<isl_inner_base> clone() const override final
     {
         // This will make a deep copy using the ctor above.
-        return make_unique<isl_inner>(m_value);
+        return detail::make_unique<isl_inner>(m_value);
     }
     // If Python raises any exception in a separate thread (as signalled by a bp::error_already_set exception),
     // the following will happen: the Python error indicator has been set for the *current* thread, but the

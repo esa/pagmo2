@@ -234,7 +234,7 @@ class island_test_case(_ut.TestCase):
         from .core import island, de, rosenbrock
         from . import thread_safety as ts
         isl = island(algo=de(), prob=rosenbrock(), size=25)
-        self.assertEqual(isl.get_thread_safety(), (ts.basic, ts.basic))
+        self.assertEqual(isl.get_thread_safety(), (ts.basic, ts.constant))
 
         class prob(object):
 
@@ -253,7 +253,7 @@ class island_test_case(_ut.TestCase):
                 return pop
 
         isl = island(algo=algo(), prob=rosenbrock(), size=25)
-        self.assertEqual(isl.get_thread_safety(), (ts.none, ts.basic))
+        self.assertEqual(isl.get_thread_safety(), (ts.none, ts.constant))
         isl = island(algo=algo(), prob=prob(), size=25)
         self.assertEqual(isl.get_thread_safety(), (ts.none, ts.none))
         isl.evolve(20)
@@ -397,9 +397,11 @@ class mp_island_test_case(_ut.TestCase):
         mp_island.init_pool()
         mp_island.init_pool()
         mp_island.init_pool()
+        mp_island.shutdown_pool()
         self.assertRaises(TypeError, lambda: mp_island.init_pool("dasda"))
         self.assertRaises(ValueError, lambda: mp_island.init_pool(0))
         self.assertRaises(ValueError, lambda: mp_island.init_pool(-1))
+        mp_island.init_pool()
         mp_island.resize_pool(6)
         isl.evolve(20)
         isl.evolve(20)

@@ -66,8 +66,8 @@ def _algorithm_extract(self, t):
         >>> a1.extract(pg.de) is None
         True
         >>> class algo:
-        ...:     def evolve(self, pop):
-        ...:         return pop
+        ...     def evolve(self, pop):
+        ...         return pop
         >>> a2 = pg.algorithm(algo())
         >>> a2.extract(object) # doctest: +SKIP
         <__main__.algo at 0x7f8e478c04e0>

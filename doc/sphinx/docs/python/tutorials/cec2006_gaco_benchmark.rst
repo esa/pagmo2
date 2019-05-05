@@ -41,9 +41,9 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...       algo_cstrs_sade.set_seed(23)
     ...       algo_cstrs_gaco.set_seed(23)
     ...       #Instantiate populations:
-    ...       pop_gaco = pg.population(prob, 100, 23)
-    ...       pop_cstrs_sade = pg.population(prob, 125, 23)
-    ...       pop_cstrs_gaco = pg.population(prob, 125, 23)
+    ...       pop_gaco = pg.population(prob, size=100, seed=23)
+    ...       pop_cstrs_sade = pg.population(prob, size=125, seed=23)
+    ...       pop_cstrs_gaco = pg.population(prob, size=125, seed=23)
     ...       #Set verbosity:
     ...       algo_gaco.set_verbosity(5)
     ...       algo_cstrs_sade.set_verbosity(1)
