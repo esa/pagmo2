@@ -18,6 +18,9 @@ pagmo is a header-only library which has the following third-party dependencies:
 * `Ipopt <https://projects.coin-or.org/Ipopt>`__, optional, requires linking
   (enabled via the ``PAGMO_WITH_IPOPT`` CMake option)
 
+
+Installation from source
+^^^^^^^^^^^^^^^^^^^^^^^^
 After making sure the dependencies above are installed in your system, you can download the
 pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`__. Alternatively,
 and if you like living on the bleeding edge, you can get the very latest version of pagmo via the ``git``
@@ -43,6 +46,9 @@ When done, you can install pagmo via the command:
 
 To check that all went well compile the :ref:`quick-start example <getting_started_c++>`.
 
+
+Installation with conda
+^^^^^^^^^^^^^^^^^^^^^^^
 pagmo is also available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows.
 In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
 and then we can immediately install pagmo:
@@ -54,6 +60,55 @@ and then we can immediately install pagmo:
 
 Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
+
+
+Installation on Arch Linux
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Pagmo is also available on the `Arch User Repository
+<https://aur.archlinux.org>`__ (AUR) in Arch Linux. It is
+recommended to use an AUR helper like
+`yay <https://aur.archlinux.org/packages/yay/`__ or
+`pikaur <https://aur.archlinux.org/packages/pikaur/`__ for ease of installation.
+See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers` page on
+the Arch Linux wiki for more info.
+
+Note: To install pagmo with optional dependency support like `nlopt` or `eigen`,
+make sure to install the optional dependencies before installing the pagmo
+package.
+
+Install optional dependencies:
+
+.. code-block:: bash
+
+    yay -S coin-or-ipopt eigen nlopt
+
+Install `pagmo`:
+
+.. code-block:: bash
+
+    yay -S pagmo
+
+
+Installation on FreeBSD
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+A FreeBSD port via `pkg
+<https://www.freebsd.org/doc/handbook/pkgng-intro.html>`__ has been created for
+pagmo. In order to install pagmo using pkg, execute the following command:
+
+.. code-block:: bash
+
+   pkg install pagmo2
+
+
+Installation with homebrew
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+A `Homebrew <https://brew.sh/>`__ recipe for pagmo has been generously contributed by the community. In order to install
+pagmo on OSX with Homebrew, it is sufficient to execute the following command:
+
+.. code-block:: bash
+
+   brew install pagmo
+
 
 .. _py_install:
 
@@ -117,16 +172,6 @@ and then we can immediately install pygmo:
 
 conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`__
 for instructions on how to setup and manage your conda installation.
-
-
-Installation with homebrew
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-A `Homebrew <https://brew.sh/>`__ recipe for pagmo has been generously contributed by the community. In order to install
-pagmo on OSX with Homebrew, it is sufficient to execute the following command:
-
-.. code-block:: bash
-
-   brew install pagmo
 
 
 Installation with pip
