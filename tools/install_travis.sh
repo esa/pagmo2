@@ -68,7 +68,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     cd ../../;
     python test2.py
     if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
-        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python36 build.
+        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python37 build.
         exit 0;
     fi
 
