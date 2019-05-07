@@ -58,7 +58,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/sga.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
+#if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/xnes.hpp>
+#endif
 #include <pagmo/archipelago.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
