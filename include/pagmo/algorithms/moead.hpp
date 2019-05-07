@@ -75,7 +75,7 @@ class PAGMO_DLL_PUBLIC moead
 {
 public:
     /// Single entry of the log (gen, fevals, adf, ideal_point)
-    typedef std::tuple<unsigned int, unsigned long long, double, vector_double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, vector_double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -99,22 +99,22 @@ public:
      * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
      * in [1.0] or m_eta is < 0
      */
-    moead(unsigned int gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
+    moead(unsigned gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
-          double realb = 0.9, unsigned int limit = 2u, bool preserve_diversity = true,
-          unsigned int seed = pagmo::random_device::next());
+          double realb = 0.9, unsigned limit = 2u, bool preserve_diversity = true,
+          unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -147,7 +147,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -156,7 +156,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -165,7 +165,7 @@ public:
     /**
      * @return the number of generations to evolve for
      */
-    unsigned int get_gen() const
+    unsigned get_gen() const
     {
         return m_gen;
     }
@@ -208,7 +208,7 @@ private:
     select_parents(population::size_type n, const std::vector<std::vector<population::size_type>> &neigh_idx,
                    bool whole_population) const;
 
-    unsigned int m_gen;
+    unsigned m_gen;
     std::string m_weight_generation;
     std::string m_decomposition;
     population::size_type m_neighbours;
@@ -216,11 +216,11 @@ private:
     double m_F;
     double m_eta_m;
     double m_realb;
-    unsigned int m_limit;
+    unsigned m_limit;
     bool m_preserve_diversity;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

@@ -101,8 +101,8 @@ public:
      * are larger than an implementation defiend value
      *
      */
-    dtlz(unsigned int prob_id = 1u, vector_double::size_type dim = 5u, vector_double::size_type fdim = 3u,
-         unsigned int alpha = 100u);
+    dtlz(unsigned prob_id = 1u, vector_double::size_type dim = 5u, vector_double::size_type fdim = 3u,
+         unsigned alpha = 100u);
     // Fitness computation
     vector_double fitness(const vector_double &) const;
     /// Number of objectives
@@ -155,9 +155,9 @@ private:
     PAGMO_DLL_LOCAL double convergence_metric(const vector_double &) const;
 
     // Problem dimensions
-    unsigned int m_prob_id;
+    unsigned m_prob_id;
     // used only for DTLZ4
-    unsigned int m_alpha;
+    unsigned m_alpha;
     // dimension parameter
     vector_double::size_type m_dim;
     // number of objectives

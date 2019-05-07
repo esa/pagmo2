@@ -61,7 +61,7 @@ public:
     /**
      * @param stop_dimension The stop dimension
      */
-    hvwfg(unsigned int stop_dimension = 2u) : hv_algorithm(), m_current_slice(0), m_stop_dimension(stop_dimension)
+    hvwfg(unsigned stop_dimension = 2u) : hv_algorithm(), m_current_slice(0), m_stop_dimension(stop_dimension)
     {
         if (stop_dimension < 2u) {
             pagmo_throw(std::invalid_argument, "Stop dimension for WFG must be greater than or equal to 2");
@@ -115,14 +115,14 @@ public:
 
         // Prepare the memory for first front
         double **fr = new double *[m_max_points];
-        for (unsigned int i = 0; i < m_max_points; ++i) {
+        for (unsigned i = 0; i < m_max_points; ++i) {
             fr[i] = new double[m_current_slice];
         }
         m_frames[m_n_frames] = fr;
         m_frames_size[m_n_frames] = 0;
         ++m_n_frames;
 
-        for (unsigned int p_idx = 0u; p_idx < m_max_points; ++p_idx) {
+        for (unsigned p_idx = 0u; p_idx < m_max_points; ++p_idx) {
             limitset(0, p_idx, 1);
             c.push_back(exclusive_hv(p_idx, 1));
         }
@@ -167,7 +167,7 @@ public:
 
 private:
     /// Limit the set of points to point at p_idx
-    void limitset(unsigned int begin_idx, unsigned int p_idx, unsigned int rec_level) const
+    void limitset(unsigned begin_idx, unsigned p_idx, unsigned rec_level) const
     {
         double **points = m_frames[rec_level - 1];
         auto n_points = m_frames_size[rec_level - 1];
@@ -231,7 +231,7 @@ private:
     }
 
     /// Compute the exclusive hypervolume of point at p_idx
-    double exclusive_hv(unsigned int p_idx, unsigned int rec_level) const
+    double exclusive_hv(unsigned p_idx, unsigned rec_level) const
     {
         // double H = hv_algorithm::volume_between(points[p_idx], m_refpoint, m_current_slice);
         double H = hv_algorithm::volume_between(m_frames[rec_level - 1][p_idx], m_refpoint, m_current_slice);
@@ -246,7 +246,7 @@ private:
     }
 
     /// Compute the hypervolume recursively
-    double compute_hv(unsigned int rec_level) const
+    double compute_hv(unsigned rec_level) const
     {
         double **points = m_frames[rec_level - 1];
         auto n_points = m_frames_size[rec_level - 1];
@@ -304,7 +304,7 @@ private:
             ++m_n_frames;
         }
 
-        for (unsigned int p_idx = 0u; p_idx < n_points; ++p_idx) {
+        for (unsigned p_idx = 0u; p_idx < n_points; ++p_idx) {
             limitset(p_idx + 1u, p_idx, rec_level);
 
             H += std::abs((points[p_idx][m_current_slice] - m_refpoint[m_current_slice])
@@ -396,7 +396,7 @@ private:
     mutable vector_double::size_type *m_frames_size;
 
     // Keeps track of currently allocated number of frames.
-    mutable unsigned int m_n_frames;
+    mutable unsigned m_n_frames;
 
     // Copy of the reference point
     mutable double *m_refpoint;
@@ -411,7 +411,7 @@ private:
      */
 
     // Dimension at which WFG stops the slicing
-    const unsigned int m_stop_dimension;
+    const unsigned m_stop_dimension;
 };
 } // namespace pagmo
 #endif

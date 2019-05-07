@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
     unsigned seed{0u}, seed2{1u};
 
     // Length of the pseudo-random sequence tested
-    unsigned int N = 10000u;
+    unsigned N = 10000u;
 
     // We generate three pseudo random sequences, two with the same seed
     random_device::set_seed(seed);
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(set_seed_and_next)
 // in random_device is correct.
 BOOST_AUTO_TEST_CASE(data_races_test)
 {
-    unsigned int N = 10000u;
+    unsigned N = 10000u;
     std::vector<detail::random_engine_type::result_type> prs4, prs5;
     std::thread t1([&]() { std::generate_n(std::back_inserter(prs4), N, random_device::next); });
     std::thread t2([&]() { std::generate_n(std::back_inserter(prs5), N, random_device::next); });

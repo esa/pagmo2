@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         population pop1{prob, 10u, 23u};
         population pop2{prob, 10u, 23u};
         population pop3{prob, 10u, 23u};
-        for (unsigned int i = 1u; i < 3u; ++i) {
+        for (unsigned i = 1u; i < 3u; ++i) {
             gaco user_algo1{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
@@ -263,7 +263,7 @@ struct udp_inf {
         return {{0., 0.}, {1., 1.}};
     }
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 struct udp_nan {
@@ -285,7 +285,7 @@ struct udp_nan {
         return {{0., 0.}, {1., 1.}};
     }
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 BOOST_AUTO_TEST_CASE(test_for_inf_and_nan)

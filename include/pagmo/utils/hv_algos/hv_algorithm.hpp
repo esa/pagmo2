@@ -179,7 +179,7 @@ public:
      *
      * @return exlusive hypervolume contributed by the individual at index p_idx
      */
-    virtual double exclusive(unsigned int p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
+    virtual double exclusive(unsigned p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
     {
         if (points.size() == 1) {
             return compute(points, r_point);
@@ -259,7 +259,7 @@ public:
         c.push_back(hv_total - compute(points_cpy, r_point));
 
         // Check the remaining ones using the provided comparison function
-        for (unsigned int idx = 1u; idx < points.size(); ++idx) {
+        for (unsigned idx = 1u; idx < points.size(); ++idx) {
             std::vector<vector_double> points_less;
             points_less.reserve(points.size() - 1);
             copy(points.begin(), points.begin() + idx, back_inserter(points_less));
@@ -436,8 +436,8 @@ private:
      * Computes the index of the individual that contributes the most or the least to the
      * hypervolume (depending on the  prodivded comparison function)
      */
-    unsigned int extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
-                                     bool (*cmp_func)(double, double)) const
+    unsigned extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
+                                 bool (*cmp_func)(double, double)) const
     {
         // Trivial case
         if (points.size() == 1u) {
@@ -446,10 +446,10 @@ private:
 
         std::vector<double> c = contributions(points, r_point);
 
-        unsigned int idx_extreme = 0u;
+        unsigned idx_extreme = 0u;
 
         // Check the remaining ones using the provided comparison function
-        for (unsigned int idx = 1u; idx < c.size(); ++idx) {
+        for (unsigned idx = 1u; idx < c.size(); ++idx) {
             if (cmp_func(c[idx], c[idx_extreme])) {
                 idx_extreme = idx;
             }

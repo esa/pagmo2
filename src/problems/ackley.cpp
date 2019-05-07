@@ -42,7 +42,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-ackley::ackley(unsigned int dim) : m_dim(dim)
+ackley::ackley(unsigned dim) : m_dim(dim)
 {
     if (dim < 1u) {
         pagmo_throw(std::invalid_argument,

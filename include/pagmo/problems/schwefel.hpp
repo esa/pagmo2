@@ -60,7 +60,7 @@ struct PAGMO_DLL_PUBLIC schwefel {
      *
      * @throw std::invalid_argument if \p dim is < 1
      */
-    schwefel(unsigned int dim = 1u);
+    schwefel(unsigned dim = 1u);
     // Fitness computation
     vector_double fitness(const vector_double &) const;
     // Box-bounds
@@ -79,7 +79,7 @@ struct PAGMO_DLL_PUBLIC schwefel {
     template <typename Archive>
     void serialize(Archive &, unsigned);
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 } // namespace pagmo

@@ -49,8 +49,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-de1220::de1220(unsigned int gen, std::vector<unsigned int> allowed_variants, unsigned int variant_adptv, double ftol,
-               double xtol, bool memory, unsigned int seed)
+de1220::de1220(unsigned gen, std::vector<unsigned> allowed_variants, unsigned variant_adptv, double ftol, double xtol,
+               bool memory, unsigned seed)
     : m_gen(gen), m_F(), m_CR(), m_variant(), m_allowed_variants(allowed_variants), m_variant_adptv(variant_adptv),
       m_ftol(ftol), m_xtol(xtol), m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u)
 {
@@ -89,7 +89,7 @@ population de1220::evolve(population pop) const
     auto NP = pop.size();
     auto prob_f_dimension = prob.get_nf();
     auto fevals0 = prob.get_fevals(); // disount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -166,10 +166,10 @@ population de1220::evolve(population pop) const
     // Initialize the global and iteration bests for F and CR
     double gbF = m_F[0];   // initialization to the 0 ind, will soon be forgotten
     double gbCR = m_CR[0]; // initialization to the 0 ind, will soon be forgotten
-    unsigned int gbVariant = m_variant[0];
+    unsigned gbVariant = m_variant[0];
     double gbIterF = gbF;
     double gbIterCR = gbCR;
-    unsigned int gbIterVariant;
+    unsigned gbIterVariant;
 
     // We initialize the global best for F and CR as the first individual (this will soon be forgotten)
 
@@ -188,7 +188,7 @@ population de1220::evolve(population pop) const
 
             // Adapt amplification factor, crossover probability and mutation variant for DE 1220
             double F = 0., CR = 0.;
-            unsigned int VARIANT = 0u;
+            unsigned VARIANT = 0u;
             VARIANT = (drng(m_e) < 0.9) ? m_variant[i] : m_allowed_variants[v_idx(m_e)];
             if (m_variant_adptv == 1u) {
                 F = (drng(m_e) < 0.9) ? m_F[i] : drng(m_e) * 0.9 + 0.1;
@@ -605,7 +605,7 @@ population de1220::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void de1220::set_seed(unsigned int seed)
+void de1220::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

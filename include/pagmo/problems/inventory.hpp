@@ -80,7 +80,7 @@ public:
      * @param seed starting random seed to build the pseudorandom sequences used to
      * generate the sample
      */
-    inventory(unsigned int weeks = 4u, unsigned int sample_size = 10u, unsigned int seed = pagmo::random_device::next())
+    inventory(unsigned weeks = 4u, unsigned sample_size = 10u, unsigned seed = pagmo::random_device::next())
         : m_weeks(weeks), m_sample_size(sample_size), m_e(seed), m_seed(seed)
     {
     }
@@ -92,7 +92,7 @@ public:
     /**
      * @param seed the random number generator seed
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
@@ -113,13 +113,13 @@ public:
 
 private:
     // Number of weeks to plan for
-    unsigned int m_weeks;
+    unsigned m_weeks;
     // Sample size
-    unsigned int m_sample_size;
+    unsigned m_sample_size;
     // Random engine
     mutable detail::random_engine_type m_e;
     // Seed
-    unsigned int m_seed;
+    unsigned m_seed;
 };
 
 } // namespace pagmo

@@ -110,7 +110,7 @@ class PAGMO_DLL_PUBLIC pso
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -140,9 +140,9 @@ public:
      * @throws std::invalid_argument if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,4] interval,
      * vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero
      */
-    pso(unsigned int gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
-        unsigned int variant = 5u, unsigned int neighb_type = 2u, unsigned int neighb_param = 4u, bool memory = false,
-        unsigned int seed = pagmo::random_device::next());
+    pso(unsigned gen = 1u, double omega = 0.7298, double eta1 = 2.05, double eta2 = 2.05, double max_vel = 0.5,
+        unsigned variant = 5u, unsigned neighb_type = 2u, unsigned neighb_param = 4u, bool memory = false,
+        unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -175,7 +175,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -183,17 +183,17 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -236,7 +236,7 @@ private:
     initialize_topology__adaptive_random(std::vector<std::vector<vector_double::size_type>> &neighb) const;
 
     // Generations
-    unsigned int m_max_gen;
+    unsigned m_max_gen;
     // Inertia (or constriction) coefficient
     double m_omega;
     double m_eta1;
@@ -244,19 +244,19 @@ private:
     // Maximum particle velocity
     double m_max_vel;
     // Algoritmic variant
-    unsigned int m_variant;
+    unsigned m_variant;
     // Particle topology (only relevant for some variants)
-    unsigned int m_neighb_type;
+    unsigned m_neighb_type;
     // Neighbourhood parameter (only relevant for some variants)
-    unsigned int m_neighb_param;
+    unsigned m_neighb_param;
     // memory
     bool m_memory;
     // paricles' velocities
     mutable std::vector<vector_double> m_V;
 
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

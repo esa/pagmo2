@@ -71,8 +71,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         population pop2{prob, 15u, 23u};
         population pop3{prob, 15u, 23u};
 
-        for (unsigned int j = 1u; j <= 2u; ++j) {
-            for (unsigned int i = 1u; i <= 18u; ++i) {
+        for (unsigned j = 1u; j <= 2u; ++j) {
+            for (unsigned i = 1u; i <= 18u; ++i) {
                 sade user_algo1{10u, i, j, 1e-6, 1e-6, false, 23u};
                 user_algo1.set_verbosity(1u);
                 pop1 = user_algo1.evolve(pop1);

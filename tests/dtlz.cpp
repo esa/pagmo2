@@ -76,10 +76,10 @@ BOOST_AUTO_TEST_CASE(dtlz1_fitness_test)
     dtlz udp{1u, 5u, 3u};
     f1 = {0.125, 0.125, 0.25};
     f2 = {0.059999999999999824, 0.2399999999999993, 2.699999999999992};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -93,10 +93,10 @@ BOOST_AUTO_TEST_CASE(dtlz2_fitness_test)
     dtlz udp{2u, 5u, 3u};
     f1 = {0.5000000000000001, 0.5, 0.7071067811865475};
     f2 = {0.9863148040113404, 0.3204731065093832, 0.16425618829224242};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -110,10 +110,10 @@ BOOST_AUTO_TEST_CASE(dtlz3_fitness_test)
     dtlz udp{3u, 5u, 3u};
     f1 = {0.5000000000000001, 0.5, 0.7071067811865475};
     f2 = {5.6360845943505, 1.8312748943393273, 0.9386067902413824};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -127,10 +127,10 @@ BOOST_AUTO_TEST_CASE(dtlz4_fitness_test)
     dtlz udp{4u, 5u, 3u};
     f1 = {1.0, 1.2391398122732624e-30, 1.2391398122732624e-30};
     f2 = {1.05, 2.090781951822753e-70, 1.6493361431346507e-100};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -144,10 +144,10 @@ BOOST_AUTO_TEST_CASE(dtlz5_fitness_test)
     dtlz udp{5u, 5u, 3u};
     f1 = {0.5000000000000001, 0.5, 0.7071067811865475};
     f2 = {0.7495908626265831, 0.7166822470763723, 0.16425618829224242};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -161,10 +161,10 @@ BOOST_AUTO_TEST_CASE(dtlz6_fitness_test)
     dtlz udp{6u, 5u, 3u};
     f1 = {1.8995494873052114, 1.8995494873052112, 2.6863686473458888};
     f2 = {3.3343308165801333, 1.5714799440921394, 0.5838204128120267};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -178,10 +178,10 @@ BOOST_AUTO_TEST_CASE(dtlz7_fitness_test)
     dtlz udp{7u, 5u, 3u};
     f1 = {0.5, 0.5, 19.5};
     f2 = {0.1, 0.2, 16.228886997303473};
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv1)[i], f1[i], 1e-12);
     }
-    for (unsigned int i = 0u; i < 3u; ++i) {
+    for (unsigned i = 0u; i < 3u; ++i) {
         BOOST_CHECK_CLOSE(udp.fitness(dv2)[i], f2[i], 1e-12);
     }
 }
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(dtlz7_fitness_test)
 BOOST_AUTO_TEST_CASE(dtlz_get_bounds_test)
 {
     std::pair<vector_double, vector_double> bounds({vector_double(4, 0.), vector_double(4, 1.)});
-    for (unsigned int i = 1u; i <= 7u; ++i) {
+    for (unsigned i = 1u; i <= 7u; ++i) {
         dtlz udp{i, 4u};
         BOOST_CHECK(udp.get_bounds() == bounds);
     }
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(dtlz_p_distance_test)
     // The following numbers were computed in PyGMO legacy
     vector_double res = {288.09711053693565,  0.14472200000000002, 288.09711053693565, 0.14472200000000002,
                          0.14472200000000002, 1.7273931523406256,  2.0790000000000002};
-    for (unsigned int i = 1u; i <= 7u; ++i) {
+    for (unsigned i = 1u; i <= 7u; ++i) {
         dtlz udp{i, 4u};
         BOOST_CHECK_CLOSE(udp.p_distance(x), res[i - 1u], 1e-12);
     }

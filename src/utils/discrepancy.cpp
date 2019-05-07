@@ -86,7 +86,7 @@ std::vector<double> sample_from_simplex(std::vector<double> in)
     }
 }
 
-van_der_corput::van_der_corput(unsigned int b, unsigned int n) : m_base(b), m_counter(n)
+van_der_corput::van_der_corput(unsigned b, unsigned n) : m_base(b), m_counter(n)
 {
     if (b < 2u) {
         pagmo_throw(std::invalid_argument, "The base of the van der Corput sequence must be at least 2: "
@@ -102,7 +102,7 @@ double van_der_corput::operator()()
 {
     double retval = 0.;
     double f = 1.0 / m_base;
-    unsigned int i = m_counter;
+    unsigned i = m_counter;
     while (i > 0u) {
         retval += f * (i % m_base);
         i = i / m_base;
@@ -112,7 +112,7 @@ double van_der_corput::operator()()
     return retval;
 }
 
-halton::halton(unsigned int dim, unsigned int n) : m_dim(dim)
+halton::halton(unsigned dim, unsigned n) : m_dim(dim)
 {
     for (auto i = 0u; i < m_dim; ++i) {
         m_vdc.push_back(van_der_corput(detail::prime(i + 1), n));

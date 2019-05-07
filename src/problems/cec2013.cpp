@@ -52,7 +52,7 @@ constexpr double E = 2.7182818284590452353602874713526625;
 
 }
 
-cec2013::cec2013(unsigned int prob_id, unsigned int dim)
+cec2013::cec2013(unsigned prob_id, unsigned dim)
     : m_prob_id(prob_id), m_rotation_matrix(), m_origin_shift(), m_y(dim), m_z(dim)
 {
     if (!(dim == 2u || dim == 5u || dim == 10u || dim == 20u || dim == 30u || dim == 40u || dim == 50u || dim == 60u
@@ -82,7 +82,7 @@ cec2013::cec2013(unsigned int prob_id, unsigned int dim)
  */
 vector_double cec2013::fitness(const vector_double &x) const
 {
-    unsigned int nx = static_cast<unsigned int>(m_z.size()); // maximum is 100
+    unsigned nx = static_cast<unsigned>(m_z.size()); // maximum is 100
     vector_double f(1);
     switch (m_prob_id) {
         case 1:
@@ -328,25 +328,25 @@ void cec2013::serialize(Archive &ar, unsigned)
 
 // For the coverage analysis we do not cover the code below as its derived from a third party source
 // LCOV_EXCL_START
-void cec2013::sphere_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::sphere_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                           int r_flag) const /* Sphere */
 {
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
         rotatefunc(&m_y[0], &m_z[0], nx, Mr);
     else
-        for (unsigned int i = 0u; i < nx; ++i)
+        for (unsigned i = 0u; i < nx; ++i)
             m_z[i] = m_y[i];
     f[0] = 0.0;
-    for (unsigned int i = 0u; i < nx; ++i) {
+    for (unsigned i = 0u; i < nx; ++i) {
         f[0] += m_z[i] * m_z[i];
     }
 }
 
-void cec2013::ellips_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::ellips_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                           int r_flag) const /* Ellipsoidal */
 {
-    unsigned int i;
+    unsigned i;
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
         rotatefunc(&m_y[0], &m_z[0], nx, Mr);
@@ -360,10 +360,10 @@ void cec2013::ellips_func(const double *x, double *f, const unsigned int nx, con
     }
 }
 
-void cec2013::bent_cigar_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::bent_cigar_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const /* Bent_Cigar */
 {
-    unsigned int i;
+    unsigned i;
     double beta = 0.5;
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
@@ -384,10 +384,10 @@ void cec2013::bent_cigar_func(const double *x, double *f, const unsigned int nx,
     }
 }
 
-void cec2013::discus_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::discus_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                           int r_flag) const /* Discus */
 {
-    unsigned int i;
+    unsigned i;
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
         rotatefunc(&m_y[0], &m_z[0], nx, Mr);
@@ -402,10 +402,10 @@ void cec2013::discus_func(const double *x, double *f, const unsigned int nx, con
     }
 }
 
-void cec2013::dif_powers_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::dif_powers_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const /* Different Powers */
 {
-    unsigned int i;
+    unsigned i;
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
         rotatefunc(&m_y[0], &m_z[0], nx, Mr);
@@ -419,10 +419,10 @@ void cec2013::dif_powers_func(const double *x, double *f, const unsigned int nx,
     f[0] = std::pow(f[0], 0.5);
 }
 
-void cec2013::rosenbrock_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::rosenbrock_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const /* Rosenbrock's */
 {
-    unsigned int i;
+    unsigned i;
     double tmp1, tmp2;
     shiftfunc(x, &m_y[0], nx, Os); // shift
     for (i = 0u; i < nx; ++i)      // shrink to the orginal search range
@@ -447,10 +447,10 @@ void cec2013::rosenbrock_func(const double *x, double *f, const unsigned int nx,
     }
 }
 
-void cec2013::schaffer_F7_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::schaffer_F7_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                                int r_flag) const /* Schwefel's 1.2  */
 {
-    unsigned int i;
+    unsigned i;
     double tmp;
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
@@ -477,10 +477,10 @@ void cec2013::schaffer_F7_func(const double *x, double *f, const unsigned int nx
     f[0] = f[0] * f[0] / (nx - 1) / (nx - 1);
 }
 
-void cec2013::ackley_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::ackley_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                           int r_flag) const /* Ackley's  */
 {
-    unsigned int i;
+    unsigned i;
     double sum1, sum2;
 
     shiftfunc(x, &m_y[0], nx, Os);
@@ -510,10 +510,10 @@ void cec2013::ackley_func(const double *x, double *f, const unsigned int nx, con
     f[0] = E - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
 }
 
-void cec2013::weierstrass_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::weierstrass_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                                int r_flag) const /* Weierstrass's  */
 {
-    unsigned int i, j, k_max;
+    unsigned i, j, k_max;
     double sum = 0, sum2 = 0, a, b;
 
     shiftfunc(x, &m_y[0], nx, Os);
@@ -552,10 +552,10 @@ void cec2013::weierstrass_func(const double *x, double *f, const unsigned int nx
     f[0] -= nx * sum2;
 }
 
-void cec2013::griewank_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::griewank_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                             int r_flag) const /* Griewank's  */
 {
-    unsigned int i;
+    unsigned i;
     double s, p;
 
     shiftfunc(x, &m_y[0], nx, Os);
@@ -581,10 +581,10 @@ void cec2013::griewank_func(const double *x, double *f, const unsigned int nx, c
     f[0] = 1.0 + s / 4000.0 - p;
 }
 
-void cec2013::rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                              int r_flag) const /* Rastrigin's  */
 {
-    unsigned int i;
+    unsigned i;
     double alpha = 10.0, beta = 0.2;
     shiftfunc(x, &m_y[0], nx, Os);
     for (i = 0u; i < nx; ++i) // shrink to the orginal search range
@@ -623,10 +623,10 @@ void cec2013::rastrigin_func(const double *x, double *f, const unsigned int nx, 
     }
 }
 
-void cec2013::step_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::step_rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                                   int r_flag) const /* Noncontinuous Rastrigin's  */
 {
-    unsigned int i;
+    unsigned i;
     double alpha = 10.0, beta = 0.2;
     shiftfunc(x, &m_y[0], nx, Os);
     for (i = 0u; i < nx; ++i) // shrink to the orginal search range
@@ -669,10 +669,10 @@ void cec2013::step_rastrigin_func(const double *x, double *f, const unsigned int
     }
 }
 
-void cec2013::schwefel_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::schwefel_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                             int r_flag) const /* Schwefel's  */
 {
-    unsigned int i;
+    unsigned i;
     double tmp;
     shiftfunc(x, &m_y[0], nx, Os);
     for (i = 0u; i < nx; ++i) // shrink to the orginal search range
@@ -708,10 +708,10 @@ void cec2013::schwefel_func(const double *x, double *f, const unsigned int nx, c
     f[0] = 4.189828872724338e+002 * nx + f[0];
 }
 
-void cec2013::katsuura_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::katsuura_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                             int r_flag) const /* Katsuura  */
 {
-    unsigned int i, j;
+    unsigned i, j;
     double temp, tmp1, tmp2, tmp3;
     tmp3 = std::pow(1.0 * nx, 1.2);
     shiftfunc(x, &m_y[0], nx, Os);
@@ -748,10 +748,10 @@ void cec2013::katsuura_func(const double *x, double *f, const unsigned int nx, c
     f[0] = f[0] * tmp1 - tmp1;
 }
 
-void cec2013::bi_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::bi_rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                                 int r_flag) const /* Lunacek Bi_rastrigin Function */
 {
-    unsigned int i;
+    unsigned i;
     double mu0 = 2.5, d = 1.0, s, mu1, tmp, tmp1, tmp2;
     double *tmpx;
     tmpx = static_cast<double *>(std::malloc(sizeof(double) * nx));
@@ -810,10 +810,10 @@ void cec2013::bi_rastrigin_func(const double *x, double *f, const unsigned int n
     std::free(tmpx);
 }
 
-void cec2013::grie_rosen_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::grie_rosen_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const /* Griewank-Rosenbrock  */
 {
-    unsigned int i;
+    unsigned i;
     double temp, tmp1, tmp2;
 
     shiftfunc(x, &m_y[0], nx, Os);
@@ -846,10 +846,10 @@ void cec2013::grie_rosen_func(const double *x, double *f, const unsigned int nx,
     f[0] += (temp * temp) / 4000.0 - std::cos(temp) + 1.0;
 }
 
-void cec2013::escaffer6_func(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::escaffer6_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                              int r_flag) const /* Expanded Scaffer¡¯s F6  */
 {
-    unsigned int i;
+    unsigned i;
     double temp1, temp2;
     shiftfunc(x, &m_y[0], nx, Os);
     if (r_flag == 1)
@@ -878,10 +878,10 @@ void cec2013::escaffer6_func(const double *x, double *f, const unsigned int nx, 
     f[0] += 0.5 + (temp1 - 0.5) / (temp2 * temp2);
 }
 
-void cec2013::cf01(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf01(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 1 */
 {
-    unsigned int i, cf_num = 5;
+    unsigned i, cf_num = 5;
     double fit[5];
     double delta[5] = {10, 20, 30, 40, 50};
     double bias[5] = {0, 100, 200, 300, 400};
@@ -904,10 +904,10 @@ void cec2013::cf01(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf02(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf02(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 2 */
 {
-    unsigned int i, cf_num = 3u;
+    unsigned i, cf_num = 3u;
     double fit[3];
     double delta[3] = {20, 20, 20};
     double bias[3] = {0, 100, 200};
@@ -917,10 +917,10 @@ void cec2013::cf02(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf03(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf03(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 3 */
 {
-    unsigned int i, cf_num = 3u;
+    unsigned i, cf_num = 3u;
     double fit[3];
     double delta[3] = {20, 20, 20};
     double bias[3] = {0, 100, 200};
@@ -930,10 +930,10 @@ void cec2013::cf03(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf04(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf04(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 4 */
 {
-    unsigned int i, cf_num = 3u;
+    unsigned i, cf_num = 3u;
     double fit[3];
     double delta[3] = {20, 20, 20};
     double bias[3] = {0, 100, 200};
@@ -949,10 +949,10 @@ void cec2013::cf04(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf05(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf05(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 4 */
 {
-    unsigned int i, cf_num = 3u;
+    unsigned i, cf_num = 3u;
     double fit[3];
     double delta[3] = {10, 30, 50};
     double bias[3] = {0, 100, 200};
@@ -968,10 +968,10 @@ void cec2013::cf05(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf06(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf06(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 6 */
 {
-    unsigned int i, cf_num = 5u;
+    unsigned i, cf_num = 5u;
     double fit[5];
     double delta[5] = {10, 10, 10, 10, 10};
     double bias[5] = {0, 100, 200, 300, 400};
@@ -993,10 +993,10 @@ void cec2013::cf06(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf07(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf07(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 7 */
 {
-    unsigned int i, cf_num = 5u;
+    unsigned i, cf_num = 5u;
     double fit[5];
     double delta[5] = {10, 10, 10, 20, 20};
     double bias[5] = {0, 100, 200, 300, 400};
@@ -1018,10 +1018,10 @@ void cec2013::cf07(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::cf08(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+void cec2013::cf08(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                    int r_flag) const /* Composition Function 8 */
 {
-    unsigned int i, cf_num = 5u;
+    unsigned i, cf_num = 5u;
     double fit[5];
     double delta[5] = {10, 20, 30, 40, 50};
     double bias[5] = {0, 100, 200, 300, 400};
@@ -1043,17 +1043,17 @@ void cec2013::cf08(const double *x, double *f, const unsigned int nx, const doub
     cf_cal(x, f, nx, Os, delta, bias, fit, cf_num);
 }
 
-void cec2013::shiftfunc(const double *x, double *xshift, const unsigned int nx, const double *Os) const
+void cec2013::shiftfunc(const double *x, double *xshift, const unsigned nx, const double *Os) const
 {
-    unsigned int i;
+    unsigned i;
     for (i = 0u; i < nx; ++i) {
         xshift[i] = x[i] - Os[i];
     }
 }
 
-void cec2013::rotatefunc(const double *x, double *xrot, const unsigned int nx, const double *Mr) const
+void cec2013::rotatefunc(const double *x, double *xrot, const unsigned nx, const double *Mr) const
 {
-    unsigned int i, j;
+    unsigned i, j;
     for (i = 0u; i < nx; ++i) {
         xrot[i] = 0;
         for (j = 0u; j < nx; ++j) {
@@ -1062,17 +1062,17 @@ void cec2013::rotatefunc(const double *x, double *xrot, const unsigned int nx, c
     }
 }
 
-void cec2013::asyfunc(const double *x, double *xasy, const unsigned int nx, double beta) const
+void cec2013::asyfunc(const double *x, double *xasy, const unsigned nx, double beta) const
 {
-    unsigned int i;
+    unsigned i;
     for (i = 0u; i < nx; ++i) {
         if (x[i] > 0) xasy[i] = std::pow(x[i], 1.0 + (beta * i) / (nx - 1u) * std::pow(x[i], 0.5));
     }
 }
 
-void cec2013::oszfunc(const double *x, double *xosz, const unsigned int nx) const
+void cec2013::oszfunc(const double *x, double *xosz, const unsigned nx) const
 {
-    unsigned int i;
+    unsigned i;
     int sx;
     double c1, c2, xx = 0;
     for (i = 0u; i < nx; ++i) {
@@ -1097,10 +1097,10 @@ void cec2013::oszfunc(const double *x, double *xosz, const unsigned int nx) cons
     }
 }
 
-void cec2013::cf_cal(const double *x, double *f, const unsigned int nx, const double *Os, double *delta, double *bias,
-                     double *fit, unsigned int cf_num) const
+void cec2013::cf_cal(const double *x, double *f, const unsigned nx, const double *Os, double *delta, double *bias,
+                     double *fit, unsigned cf_num) const
 {
-    unsigned int i, j;
+    unsigned i, j;
     double *w;
     double w_max = 0, w_sum = 0;
     w = static_cast<double *>(std::malloc(cf_num * sizeof(double)));

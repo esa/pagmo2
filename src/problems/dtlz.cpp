@@ -50,7 +50,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-dtlz::dtlz(unsigned int prob_id, vector_double::size_type dim, vector_double::size_type fdim, unsigned int alpha)
+dtlz::dtlz(unsigned prob_id, vector_double::size_type dim, vector_double::size_type fdim, unsigned alpha)
     : m_prob_id(prob_id), m_alpha(alpha), m_dim(dim), m_fdim(fdim)
 {
     if (prob_id == 0u || prob_id > 7u) {

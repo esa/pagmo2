@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-rastrigin::rastrigin(unsigned int dim) : m_dim(dim)
+rastrigin::rastrigin(unsigned dim) : m_dim(dim)
 {
     if (dim < 1u) {
         pagmo_throw(std::invalid_argument,

@@ -60,7 +60,7 @@ static inline std::string pop_to_string(const population &pop)
 
 BOOST_AUTO_TEST_CASE(population_construction_test)
 {
-    unsigned int seed = 123;
+    unsigned seed = 123;
     population pop1{};
     population pop2{problem{zdt{1, 5}}, 2, seed};
     population pop3{problem{zdt{2, 5}}, 2, seed};
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
     // Create an empty population
     population pop{problem{zdt{1u, 30u}}};
     // We fill it with a few individuals and check the size growth
-    for (unsigned int i = 0u; i < 5u; ++i) {
+    for (unsigned i = 0u; i < 5u; ++i) {
         BOOST_CHECK(pop.size() == i);
         BOOST_CHECK(pop.get_f().size() == i);
         BOOST_CHECK(pop.get_x().size() == i);

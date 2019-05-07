@@ -49,9 +49,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-moead::moead(unsigned int gen, std::string weight_generation, std::string decomposition,
-             population::size_type neighbours, double CR, double F, double eta_m, double realb, unsigned int limit,
-             bool preserve_diversity, unsigned int seed)
+moead::moead(unsigned gen, std::string weight_generation, std::string decomposition, population::size_type neighbours,
+             double CR, double F, double eta_m, double realb, unsigned limit, bool preserve_diversity, unsigned seed)
     : m_gen(gen), m_weight_generation(weight_generation), m_decomposition(decomposition), m_neighbours(neighbours),
       m_CR(CR), m_F(F), m_eta_m(eta_m), m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity),
       m_e(seed), m_seed(seed), m_verbosity(0u)
@@ -108,7 +107,7 @@ population moead::evolve(population pop) const
     auto NP = pop.size();
 
     auto fevals0 = prob.get_fevals(); // discount for the fevals already made
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -290,7 +289,7 @@ population moead::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void moead::set_seed(unsigned int seed)
+void moead::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

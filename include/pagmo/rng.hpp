@@ -56,8 +56,8 @@ using random_engine_type = std::mt19937;
  * once at run-time using std::random_device.
  */
 struct PAGMO_DLL_PUBLIC random_device {
-    static unsigned int next();
-    static void set_seed(unsigned int);
+    static unsigned next();
+    static void set_seed(unsigned);
 };
 
 } // namespace pagmo

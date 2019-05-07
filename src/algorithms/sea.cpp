@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-sea::sea(unsigned int gen, unsigned int seed) : m_gen(gen), m_e(seed), m_seed(seed), m_verbosity(0u), m_log() {}
+sea::sea(unsigned gen, unsigned seed) : m_gen(gen), m_e(seed), m_seed(seed), m_verbosity(0u), m_log() {}
 
 /// Algorithm evolve method
 /**
@@ -61,7 +61,7 @@ population sea::evolve(population pop) const
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
     auto fevals0 = prob.get_fevals(); // disount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -92,9 +92,9 @@ population sea::evolve(population pop) const
     auto worst_idx = pop.worst_idx();
     std::uniform_real_distribution<double> drng(0., 1.); // [0,1]
 
-    for (unsigned int i = 1u; i <= m_gen; ++i) {
+    for (unsigned i = 1u; i <= m_gen; ++i) {
         if (prob.is_stochastic()) {
-            pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+            pop.get_problem().set_seed(std::uniform_int_distribution<unsigned>()(m_e));
             // re-evaluate the whole population w.r.t. the new seed
             for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
                 pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
@@ -160,7 +160,7 @@ population sea::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void sea::set_seed(unsigned int seed)
+void sea::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

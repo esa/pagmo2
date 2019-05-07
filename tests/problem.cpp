@@ -832,11 +832,11 @@ struct s_02 {
     {
         return {{0}, {1}};
     }
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
-    unsigned int m_seed = 0u;
+    unsigned m_seed = 0u;
 };
 
 struct s_03 {
@@ -856,7 +856,7 @@ struct s_03 {
     {
         return {{0}, {1}};
     }
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
@@ -864,7 +864,7 @@ struct s_03 {
     {
         return false;
     }
-    unsigned int m_seed = 0u;
+    unsigned m_seed = 0u;
 };
 
 BOOST_AUTO_TEST_CASE(problem_stochastic_test)
@@ -895,7 +895,7 @@ struct extra_info_case {
     {
         return {{0}, {1}};
     }
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
@@ -907,7 +907,7 @@ struct extra_info_case {
     {
         return std::to_string(m_seed);
     }
-    unsigned int m_seed = 0u;
+    unsigned m_seed = 0u;
 };
 
 BOOST_AUTO_TEST_CASE(problem_extra_info_test)

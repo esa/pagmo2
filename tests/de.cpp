@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(de_evolve_test)
         population pop2{prob, 5u, 23u};
         population pop3{prob, 5u, 23u};
 
-        for (unsigned int i = 1u; i <= 10u; ++i) {
+        for (unsigned i = 1u; i <= 10u; ++i) {
             de user_algo1{10u, 0.7, 0.5, i, 1e-6, 1e-6, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);

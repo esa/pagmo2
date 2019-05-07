@@ -70,8 +70,8 @@ constexpr int pso_vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 
 
 } // namespace detail
 
-pso::pso(unsigned int gen, double omega, double eta1, double eta2, double max_vel, unsigned int variant,
-         unsigned int neighb_type, unsigned int neighb_param, bool memory, unsigned int seed)
+pso::pso(unsigned gen, double omega, double eta1, double eta2, double max_vel, unsigned variant, unsigned neighb_type,
+         unsigned neighb_param, bool memory, unsigned seed)
     : m_max_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
       m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
       m_verbosity(0u), m_log()
@@ -122,7 +122,7 @@ population pso::evolve(population pop) const
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this particular algorithm.
@@ -446,7 +446,7 @@ population pso::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void pso::set_seed(unsigned int seed)
+void pso::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;
@@ -642,13 +642,13 @@ void pso::initialize_topology__von(std::vector<std::vector<vector_double::size_t
         p_x = pidx % cols;
         p_y = pidx / cols;
 
-        for (unsigned int nidx = 0u; nidx < 4u; nidx++) {
+        for (unsigned nidx = 0u; nidx < 4u; nidx++) {
             n_x = (p_x + detail::pso_vonNeumann_neighb_diff[nidx][0]) % cols;
             if (n_x < 0) n_x = cols + n_x;
             n_y = (p_y + detail::pso_vonNeumann_neighb_diff[nidx][1]) % rows;
             if (n_y < 0) n_y = rows + n_y;
 
-            neighb[static_cast<unsigned int>(pidx)].push_back(static_cast<unsigned int>(n_y * cols + n_x));
+            neighb[static_cast<unsigned>(pidx)].push_back(static_cast<unsigned>(n_y * cols + n_x));
         }
     }
 }

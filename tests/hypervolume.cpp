@@ -62,12 +62,12 @@ void assertContribs(const std::vector<vector_double> &points, std::vector<double
 {
     hypervolume hv = hypervolume(points, true);
     BOOST_CHECK((hv.contributions(ref) == answers));
-    for (unsigned int i = 0u; i < answers.size(); i++) {
+    for (unsigned i = 0u; i < answers.size(); i++) {
         BOOST_CHECK((hv.exclusive(i, ref) == answers[i]));
     }
     hv = hypervolume(points, false);
     BOOST_CHECK((hv.contributions(ref) == answers));
-    for (unsigned int i = 0u; i < answers.size(); i++) {
+    for (unsigned i = 0u; i < answers.size(); i++) {
         BOOST_CHECK((hv.exclusive(i, ref) == answers[i]));
     }
     hv.set_copy_points(false);
@@ -100,7 +100,7 @@ public:
         m_input >> m_num_tests;
 
         // int OK_counter = 0;
-        for (unsigned int t = 0u; t < m_num_tests; ++t) {
+        for (unsigned t = 0u; t < m_num_tests; ++t) {
             load_common();
             hypervolume hv_obj = hypervolume(m_points, true);
 
@@ -135,12 +135,12 @@ private:
         m_points = std::vector<vector_double>(m_num_points, vector_double(m_f_dim, 0.0));
         m_ref_point = vector_double(m_f_dim, 0.0);
 
-        for (unsigned int d = 0u; d < m_f_dim; ++d) {
+        for (unsigned d = 0u; d < m_f_dim; ++d) {
             m_input >> m_ref_point[d];
         }
 
-        for (unsigned int i = 0u; i < m_num_points; ++i) {
-            for (unsigned int d = 0u; d < m_f_dim; ++d) {
+        for (unsigned i = 0u; i < m_num_points; ++i) {
+            for (unsigned d = 0u; d < m_f_dim; ++d) {
                 m_input >> m_points[i][d];
             }
         }
@@ -162,8 +162,8 @@ private:
         m_input >> m_idx_ans;
     }
 
-    unsigned int m_num_tests, m_f_dim, m_num_points, m_p_idx;
-    unsigned int m_idx_ans;
+    unsigned m_num_tests, m_f_dim, m_num_points, m_p_idx;
+    unsigned m_idx_ans;
     double m_hv_ans;
     vector_double m_ref_point;
     std::vector<vector_double> m_points;
@@ -568,7 +568,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_approximation_test)
     // parameters for approx algorithm
     double epsilon = 1e-2;
     double delta = 1e-2;
-    unsigned int seed = 42u;
+    unsigned seed = 42u;
 
     /* bf_fpras is a random algorithm which will not always produce a result within the given quality range.
        This means that there is very small probability (delta), that a run of this test will fail.
@@ -603,7 +603,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_contributor_approximation_test)
     std::vector<double> ref = {4, 4};
     double epsilon = 1e-2;
     double delta = 1e-6;
-    unsigned int seed = 42u;
+    unsigned seed = 42u;
 
     /* bf_approx is a random algorithm which will not always produce a result within the given quality range.
     This means that there is very small probability (delta), that a run of this test will fail.

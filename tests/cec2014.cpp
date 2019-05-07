@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(cec2014_test)
     std::mt19937 r_engine(32u);
     // We check that all problems can be constructed at all dimensions and that the name returned makes sense
     // (only for dim =2 for speed). We also perform a fitness test (we only check no throws, not correctness)
-    std::vector<unsigned int> allowed_dims = {2u, 10u, 20u, 30u, 50u, 100u};
-    for (unsigned int i = 1u; i <= 30u; ++i) {
+    std::vector<unsigned> allowed_dims = {2u, 10u, 20u, 30u, 50u, 100u};
+    for (unsigned i = 1u; i <= 30u; ++i) {
         for (auto dim : allowed_dims) {
             if (dim == 2
                 && ((i >= 17u && i <= 22u) || (i >= 29u && i <= 30u))) { // Not all functions are defined for dim = 2

@@ -84,7 +84,7 @@ public:
      *
      * @throws std::invalid_argument if the base is 0u or 1u
      */
-    van_der_corput(unsigned int b = 2u, unsigned int n = 0u);
+    van_der_corput(unsigned b = 2u, unsigned n = 0u);
     // Returns the next number in the sequence
     double operator()();
     /// Object serialization
@@ -103,9 +103,9 @@ public:
 
 private:
     // Base of the sequence
-    unsigned int m_base;
+    unsigned m_base;
     // Element of the sequence to compute
-    unsigned int m_counter;
+    unsigned m_counter;
 };
 
 /// Halton sequence
@@ -141,7 +141,7 @@ public:
      *
      * @throws unspecified all exceptions thrown by pagmo::van_der_corput
      */
-    halton(unsigned int dim = 2u, unsigned int n = 0u);
+    halton(unsigned dim = 2u, unsigned n = 0u);
     // Returns the next number in the sequence
     std::vector<double> operator()();
     /// Object serialization
@@ -160,7 +160,7 @@ public:
 
 private:
     // Dimension of the sequence
-    unsigned int m_dim;
+    unsigned m_dim;
     // van der Corput sequences used for each dimension
     std::vector<van_der_corput> m_vdc;
 };

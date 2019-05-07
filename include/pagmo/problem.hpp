@@ -607,7 +607,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner_base {
     virtual vector_double::size_type get_nec() const = 0;
     virtual vector_double::size_type get_nic() const = 0;
     virtual vector_double::size_type get_nix() const = 0;
-    virtual void set_seed(unsigned int) = 0;
+    virtual void set_seed(unsigned) = 0;
     virtual bool has_set_seed() const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
@@ -700,7 +700,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     {
         return get_nix_impl(m_value);
     }
-    virtual void set_seed(unsigned int seed) override final
+    virtual void set_seed(unsigned seed) override final
     {
         set_seed_impl(m_value, seed);
     }
@@ -913,12 +913,12 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         return 0u;
     }
     template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
-    static void set_seed_impl(U &value, unsigned int seed)
+    static void set_seed_impl(U &value, unsigned seed)
     {
         value.set_seed(seed);
     }
     template <typename U, enable_if_t<!pagmo::has_set_seed<U>::value, int> = 0>
-    [[noreturn]] static void set_seed_impl(U &value, unsigned int)
+    [[noreturn]] static void set_seed_impl(U &value, unsigned)
     {
         pagmo_throw(not_implemented_error,
                     "The set_seed() method has been invoked, but it is not implemented in a UDP of type '"

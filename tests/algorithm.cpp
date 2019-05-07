@@ -65,11 +65,11 @@ struct al_01 {
     {
         return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);
     };
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     };
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
@@ -78,8 +78,8 @@ struct al_01 {
     {
         detail::archive(ar, m_seed, m_verbosity);
     }
-    unsigned int m_seed = 0u;
-    unsigned int m_verbosity = 0u;
+    unsigned m_seed = 0u;
+    unsigned m_verbosity = 0u;
 };
 PAGMO_S11N_ALGORITHM_EXPORT(al_01)
 
@@ -222,16 +222,16 @@ struct al_03 {
     {
         return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);
     };
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     };
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
-    unsigned int m_seed = 0u;
-    unsigned int m_verbosity = 0u;
+    unsigned m_seed = 0u;
+    unsigned m_verbosity = 0u;
     bool has_set_seed() const
     {
         return false;

@@ -50,8 +50,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned int n_T_adj, unsigned int n_range_adj,
-                                         unsigned int bin_size, double start_range, unsigned int seed)
+simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned n_T_adj, unsigned n_range_adj,
+                                         unsigned bin_size, double start_range, unsigned seed)
     : m_Ts(Ts), m_Tf(Tf), m_n_T_adj(n_T_adj), m_n_range_adj(n_range_adj), m_bin_size(bin_size),
       m_start_range(start_range), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
 {
@@ -101,7 +101,7 @@ population simulated_annealing::evolve(population pop) const
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
     auto fevals0 = prob.get_fevals(); // disount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this particular algorithm.
@@ -238,7 +238,7 @@ population simulated_annealing::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void simulated_annealing::set_seed(unsigned int seed)
+void simulated_annealing::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

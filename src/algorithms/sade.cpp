@@ -49,8 +49,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-sade::sade(unsigned int gen, unsigned int variant, unsigned int variant_adptv, double ftol, double xtol, bool memory,
-           unsigned int seed)
+sade::sade(unsigned gen, unsigned variant, unsigned variant_adptv, double ftol, double xtol, bool memory, unsigned seed)
     : m_gen(gen), m_F(), m_CR(), m_variant(variant), m_variant_adptv(variant_adptv), m_Ftol(ftol), m_xtol(xtol),
       m_memory(memory), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
 {
@@ -88,7 +87,7 @@ population sade::evolve(population pop) const
     auto NP = pop.size();
     auto prob_f_dimension = prob.get_nf();
     auto fevals0 = prob.get_fevals(); // disount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -591,7 +590,7 @@ population sade::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void sade::set_seed(unsigned int seed)
+void sade::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

@@ -92,7 +92,7 @@ class PAGMO_DLL_PUBLIC sade
 {
 public:
     /// Single entry of the log (gen, fevals, best, F, CR, dx, df)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -134,20 +134,20 @@ public:
      * @throws std::invalid_argument if \p variant_adptv is not one of 0,1
      * @throws std::invalid_argument if variant is not one of 1, .., 18
      */
-    sade(unsigned int gen = 1u, unsigned int variant = 2u, unsigned int variant_adptv = 1u, double ftol = 1e-6,
-         double xtol = 1e-6, bool memory = false, unsigned int seed = pagmo::random_device::next());
+    sade(unsigned gen = 1u, unsigned variant = 2u, unsigned variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6,
+         bool memory = false, unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -179,7 +179,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -188,7 +188,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -197,7 +197,7 @@ public:
     /**
      * @return the number of generations to evolve for
      */
-    unsigned int get_gen() const
+    unsigned get_gen() const
     {
         return m_gen;
     }
@@ -234,17 +234,17 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    unsigned int m_gen;
+    unsigned m_gen;
     mutable vector_double m_F;
     mutable vector_double m_CR;
-    unsigned int m_variant;
-    unsigned int m_variant_adptv;
+    unsigned m_variant;
+    unsigned m_variant_adptv;
     double m_Ftol;
     double m_xtol;
     bool m_memory;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

@@ -55,10 +55,10 @@ std::mutex global_rng_mutex;
  *
  * @returns the next element of the PRS
  */
-unsigned int random_device::next()
+unsigned random_device::next()
 {
     std::lock_guard<std::mutex> lock(detail::global_rng_mutex);
-    return static_cast<unsigned int>(detail::global_rng());
+    return static_cast<unsigned>(detail::global_rng());
 }
 
 /// Sets the seed for the PRS
@@ -69,7 +69,7 @@ unsigned int random_device::next()
  *
  * @param seed The new seed to be used
  */
-void random_device::set_seed(unsigned int seed)
+void random_device::set_seed(unsigned seed)
 {
     std::lock_guard<std::mutex> lock(detail::global_rng_mutex);
     detail::global_rng.seed(static_cast<detail::random_engine_type::result_type>(seed));

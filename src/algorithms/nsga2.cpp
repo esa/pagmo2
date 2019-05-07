@@ -92,7 +92,7 @@ population nsga2::evolve(population pop) const
     auto NP = pop.size();
 
     auto fevals0 = prob.get_fevals(); // discount for the fevals already made
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -244,7 +244,7 @@ population nsga2::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void nsga2::set_seed(unsigned int seed)
+void nsga2::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

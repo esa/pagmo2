@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-compass_search::compass_search(unsigned int max_fevals, double start_range, double stop_range, double reduction_coeff)
+compass_search::compass_search(unsigned max_fevals, double start_range, double stop_range, double reduction_coeff)
     : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
       m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
 {
@@ -85,7 +85,7 @@ population compass_search::evolve(population pop) const
     auto neq = prob.get_nec();
 
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -116,7 +116,7 @@ population compass_search::evolve(population pop) const
 
     // We need some auxiliary variables
     bool flag = false;
-    unsigned int fevals = 0u;
+    unsigned fevals = 0u;
 
     double newrange = m_start_range;
 

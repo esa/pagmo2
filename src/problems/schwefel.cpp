@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-schwefel::schwefel(unsigned int dim) : m_dim(dim)
+schwefel::schwefel(unsigned dim) : m_dim(dim)
 {
     if (dim < 1u) {
         pagmo_throw(std::invalid_argument,

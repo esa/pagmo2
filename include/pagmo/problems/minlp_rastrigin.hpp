@@ -125,8 +125,8 @@ struct PAGMO_DLL_PUBLIC minlp_rastrigin {
 
 private:
     // Problem dimensions
-    unsigned int m_dim_c;
-    unsigned int m_dim_i;
+    unsigned m_dim_c;
+    unsigned m_dim_i;
 };
 
 } // namespace pagmo

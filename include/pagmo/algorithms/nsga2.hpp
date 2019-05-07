@@ -60,7 +60,7 @@ class PAGMO_DLL_PUBLIC nsga2
 {
 public:
     /// Single entry of the log (gen, fevals, ideal_point)
-    typedef std::tuple<unsigned int, unsigned long long, vector_double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, vector_double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -84,13 +84,13 @@ public:
     population evolve(population) const;
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -120,7 +120,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -129,7 +129,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -174,14 +174,14 @@ private:
                                    vector_double::size_type parent2_idx, const pagmo::population &pop) const;
     PAGMO_DLL_LOCAL void mutate(vector_double &child, const pagmo::population &pop) const;
 
-    unsigned int m_gen;
+    unsigned m_gen;
     double m_cr;
     double m_eta_c;
     double m_m;
     double m_eta_m;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

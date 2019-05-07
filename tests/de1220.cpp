@@ -52,7 +52,7 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(construction_test)
 {
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     de1220 user_algo(53u, mutation_variants, 1u, 1e-6, 1e-6, false, 23u);
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(construction_test)
 BOOST_AUTO_TEST_CASE(evolve_test)
 {
     // We consider all variants
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     // Here we only test that evolution is deterministic if the
     // seed is controlled for all variants
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         population pop2{prob, 15u, 23u};
         population pop3{prob, 15u, 23u};
 
-        for (unsigned int i = 1u; i <= 2u; ++i) {
+        for (unsigned i = 1u; i <= 2u; ++i) {
             de1220 user_algo1(10u, mutation_variants, i, 1e-6, 1e-6, false, 41u);
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 BOOST_AUTO_TEST_CASE(setters_getters_test)
 {
     // We consider all variants
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     de1220 user_algo(10000u, mutation_variants, 1, 1e-6, 1e-6, false, 41u);
     user_algo.set_verbosity(23u);
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     // Make one evolution
     problem prob{rosenbrock{2u}};
     population pop{prob, 15u, 23u};
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     algorithm algo(de1220{10000u, mutation_variants, 1, 1e-6, 1e-6, false, 41u});
     algo.set_verbosity(1u);

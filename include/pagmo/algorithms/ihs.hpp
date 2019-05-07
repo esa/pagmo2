@@ -131,7 +131,7 @@ public:
      * interval, min/max quantities are less than/greater than max/min quantities, bw_min is negative.
      */
     ihs(unsigned gen = 1u, double phmcr = 0.85, double ppar_min = 0.35, double ppar_max = 0.99, double bw_min = 1E-5,
-        double bw_max = 1., unsigned int seed = pagmo::random_device::next());
+        double bw_max = 1., unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -163,7 +163,7 @@ public:
      *
      * @param n the desired verbosity level.
      */
-    void set_verbosity(unsigned int n)
+    void set_verbosity(unsigned n)
     {
         m_verbosity = n;
     }
@@ -171,18 +171,18 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -227,8 +227,8 @@ private:
     double m_bw_min;
     double m_bw_max;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

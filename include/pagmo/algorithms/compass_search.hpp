@@ -112,7 +112,7 @@ public:
      * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
      * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
      */
-    compass_search(unsigned int max_fevals = 1, double start_range = .1, double stop_range = .01,
+    compass_search(unsigned max_fevals = 1, double start_range = .1, double stop_range = .01,
                    double reduction_coeff = .5);
 
     // Algorithm evolve method (juice implementation of the algorithm)
@@ -153,7 +153,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
@@ -161,7 +161,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -228,11 +228,11 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    unsigned int m_max_fevals;
+    unsigned m_max_fevals;
     double m_start_range;
     double m_stop_range;
     double m_reduction_coeff;
-    unsigned int m_verbosity;
+    unsigned m_verbosity;
     mutable log_type m_log;
     // Deleting the methods load save public in base as to avoid conflict with serialize
     template <typename Archive>

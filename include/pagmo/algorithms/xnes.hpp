@@ -101,7 +101,7 @@ public:
      *   individual,
      * - the population flatness evaluated as the distance between the fitness of the best and of the worst individual.
      */
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double, double, double> log_line_type;
 
     /// Log type.
     /**
@@ -129,21 +129,21 @@ public:
 
      * @throws std::invalid_argument if eta_mu, eta_sigma, eta_b and sigma0 are not in ]0, 1] or -1
      */
-    xnes(unsigned int gen = 1, double eta_mu = -1, double eta_sigma = -1, double eta_b = -1, double sigma0 = -1,
+    xnes(unsigned gen = 1, double eta_mu = -1, double eta_sigma = -1, double eta_b = -1, double sigma0 = -1,
          double ftol = 1e-6, double xtol = 1e-6, bool memory = false, bool force_bounds = false,
-         unsigned int seed = pagmo::random_device::next());
+         unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -175,7 +175,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -184,7 +184,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -193,7 +193,7 @@ public:
     /**
      * @return the number of generations to evolve for
      */
-    unsigned int get_gen() const
+    unsigned get_gen() const
     {
         return m_gen;
     }
@@ -242,7 +242,7 @@ private:
     }
 
     // "Real" data members
-    unsigned int m_gen;
+    unsigned m_gen;
     double m_eta_mu;
     double m_eta_sigma;
     double m_eta_b;
@@ -259,8 +259,8 @@ private:
 
     // "Common" data members
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

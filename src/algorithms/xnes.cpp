@@ -50,8 +50,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-xnes::xnes(unsigned int gen, double eta_mu, double eta_sigma, double eta_b, double sigma0, double ftol, double xtol,
-           bool memory, bool force_bounds, unsigned int seed)
+xnes::xnes(unsigned gen, double eta_mu, double eta_sigma, double eta_b, double sigma0, double ftol, double xtol,
+           bool memory, bool force_bounds, unsigned seed)
     : m_gen(gen), m_eta_mu(eta_mu), m_eta_sigma(eta_sigma), m_eta_b(eta_b), m_sigma0(sigma0), m_ftol(ftol),
       m_xtol(xtol), m_memory(memory), m_force_bounds(force_bounds), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
 {
@@ -216,7 +216,7 @@ population xnes::evolve(population pop) const
         if (prob.is_stochastic()) {
             // change the problem seed. This is done via the population_set_seed method as prob.set_seed
             // is forbidden being prob a const ref.
-            pop.get_problem().set_seed(std::uniform_int_distribution<unsigned int>()(m_e));
+            pop.get_problem().set_seed(std::uniform_int_distribution<unsigned>()(m_e));
         }
         // 1 - We generate lam new individuals using the current probability distribution
         for (decltype(lam) i = 0u; i < lam; ++i) {
@@ -320,7 +320,7 @@ population xnes::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void xnes::set_seed(unsigned int seed)
+void xnes::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

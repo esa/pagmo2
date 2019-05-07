@@ -48,7 +48,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw_min, double bw_max, unsigned int seed)
+ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw_min, double bw_max, unsigned seed)
     : m_gen(gen), m_phmcr(phmcr), m_ppar_min(ppar_min), m_ppar_max(ppar_max), m_bw_min(bw_min), m_bw_max(bw_max),
       m_e(seed), m_seed(seed), m_verbosity(0u)
 {
@@ -83,7 +83,7 @@ population ihs::evolve(population pop) const
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-    unsigned int count = 1u;          // regulates the screen output
+    unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // Get out if there is nothing to do.
@@ -211,7 +211,7 @@ population ihs::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void ihs::set_seed(unsigned int seed)
+void ihs::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

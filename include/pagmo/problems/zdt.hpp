@@ -142,7 +142,7 @@ public:
      * @throws std::invalid_argument if \p id is not in [1,..,6]
      * @throws std::invalid_argument if \p param is not at least 2.
      */
-    zdt(unsigned int prob_id = 1u, unsigned int param = 30u);
+    zdt(unsigned prob_id = 1u, unsigned param = 30u);
     // Fitness computation
     vector_double fitness(const vector_double &) const;
     /// Number of objectives
@@ -202,8 +202,8 @@ private:
 
 private:
     // Problem dimensions
-    unsigned int m_prob_id;
-    unsigned int m_param;
+    unsigned m_prob_id;
+    unsigned m_param;
 };
 } // namespace pagmo
 

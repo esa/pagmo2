@@ -45,11 +45,11 @@ namespace pagmo
 template <typename T>
 struct de1220_statics {
     /// Allowed mutation variants considered by default: {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u}
-    static const std::vector<unsigned int> allowed_variants;
+    static const std::vector<unsigned> allowed_variants;
 };
 
 template <typename T>
-const std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u, 13u, 14u, 15u, 16u};
+const std::vector<unsigned> de1220_statics<T>::allowed_variants = {2u, 3u, 7u, 10u, 13u, 14u, 15u, 16u};
 
 /// A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!)
 /**
@@ -100,8 +100,7 @@ class PAGMO_DLL_PUBLIC de1220
 {
 public:
     /// Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, double, unsigned int, double, double>
-        log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double, double, unsigned, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -152,21 +151,21 @@ public:
      strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
      IEEE Congress on (pp. 1041-1048). IEEE.
      */
-    de1220(unsigned int gen = 1u, std::vector<unsigned int> allowed_variants = de1220_statics<void>::allowed_variants,
-           unsigned int variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false,
-           unsigned int seed = pagmo::random_device::next());
+    de1220(unsigned gen = 1u, std::vector<unsigned> allowed_variants = de1220_statics<void>::allowed_variants,
+           unsigned variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false,
+           unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -202,7 +201,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -211,7 +210,7 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
@@ -220,7 +219,7 @@ public:
     /**
      * @return the number of generations to evolve for
      */
-    unsigned int get_gen() const
+    unsigned get_gen() const
     {
         return m_gen;
     }
@@ -258,18 +257,18 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    unsigned int m_gen;
+    unsigned m_gen;
     mutable vector_double m_F;
     mutable vector_double m_CR;
-    mutable std::vector<unsigned int> m_variant;
-    std::vector<unsigned int> m_allowed_variants;
-    unsigned int m_variant_adptv;
+    mutable std::vector<unsigned> m_variant;
+    std::vector<unsigned> m_allowed_variants;
+    unsigned m_variant_adptv;
     double m_ftol;
     double m_xtol;
     bool m_memory;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

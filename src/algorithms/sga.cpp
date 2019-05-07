@@ -216,7 +216,7 @@ population sga::evolve(population pop) const
     m_log.clear();
 
     double improvement; // stores the difference in fitness between parents and offsprings
-    std::uniform_int_distribution<unsigned int> urng;
+    std::uniform_int_distribution<unsigned> urng;
     for (decltype(m_gen) i = 1u; i <= m_gen; ++i) {
         // 1 - if the problem is stochastic we change seed and re-evaluate the entire population
         if (prob.is_stochastic()) {

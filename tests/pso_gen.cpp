@@ -59,7 +59,7 @@ struct my_sto_prob {
     /**
      * @param seed the random number generator seed
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
@@ -151,8 +151,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     // We check that evolution is deterministic if the
     // seed is controlled and for all algoritmic variants
     // 1) for deterministic optimization
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{rosenbrock{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
@@ -172,8 +172,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
     // And with active memory
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{rosenbrock{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
@@ -195,8 +195,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
     // 2) for stochastic optimization
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{my_sto_prob{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
@@ -216,8 +216,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
     // And with active memory
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{my_sto_prob{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};

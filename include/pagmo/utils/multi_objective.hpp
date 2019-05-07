@@ -189,7 +189,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
             retval[i][i] = 1.;
         }
         // Then we add points on the simplex randomly genrated using Halton low discrepancy sequence
-        halton ld_seq{boost::numeric_cast<unsigned int>(n_f - 1u), boost::numeric_cast<unsigned int>(n_f)};
+        halton ld_seq{boost::numeric_cast<unsigned>(n_f - 1u), boost::numeric_cast<unsigned>(n_f)};
         for (decltype(n_w) i = n_f; i < n_w; ++i) {
             retval.push_back(sample_from_simplex(ld_seq()));
         }

@@ -52,7 +52,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-zdt::zdt(unsigned int prob_id, unsigned int param) : m_prob_id(prob_id), m_param(param)
+zdt::zdt(unsigned prob_id, unsigned param) : m_prob_id(prob_id), m_param(param)
 {
     if (param < 2u) {
         pagmo_throw(std::invalid_argument, "ZDT test problems must have a minimum value of 2 for the constructing "
@@ -309,7 +309,7 @@ vector_double zdt::zdt5_fitness(const vector_double &x_double) const
     auto size_x = x_double.size();
     auto n_vectors = ((size_x - 30u) / 5u) + 1u;
 
-    unsigned int k = 30;
+    unsigned k = 30;
     std::vector<vector_double::size_type> u(n_vectors, 0u);
     std::vector<vector_double::size_type> v(n_vectors);
 
@@ -396,7 +396,7 @@ double zdt::zdt5_p_distance(const vector_double &x_double) const
                    [](double item) { return std::floor(item); });
     double c = 0.;
     double g = 0.;
-    unsigned int k = 30;
+    unsigned k = 30;
     auto N = x.size();
 
     auto n_vectors = (N - 30u) / 5u + 1u;

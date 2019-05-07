@@ -135,7 +135,7 @@ class PAGMO_DLL_PUBLIC sga
 {
 public:
     /// Single entry of the log (gen, fevals, best, improvement)
-    typedef std::tuple<unsigned int, unsigned long long, double, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -281,8 +281,8 @@ private:
     detail::sga_selection m_selection;
     detail::sga_crossover m_crossover;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

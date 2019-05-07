@@ -83,7 +83,7 @@ class PAGMO_DLL_PUBLIC sea
 {
 public:
     /// Single entry of the log (gen, fevals, best, improvement, mutations)
-    typedef std::tuple<unsigned int, unsigned long long, double, double, vector_double::size_type> log_line_type;
+    typedef std::tuple<unsigned, unsigned long long, double, double, vector_double::size_type> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
@@ -94,7 +94,7 @@ public:
      * @param gen Number of generations to consider. Each generation will compute the objective function once
      * @param seed seed used by the internal random number generator
      */
-    sea(unsigned int gen = 1u, unsigned int seed = pagmo::random_device::next());
+    sea(unsigned gen = 1u, unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -122,7 +122,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -131,19 +131,19 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -179,10 +179,10 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    unsigned int m_gen;
+    unsigned m_gen;
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
 };
 

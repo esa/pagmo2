@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(gwo_evolve_test)
         population pop2{prob, 5u, 23u};
         population pop3{prob, 5u, 23u};
 
-        for (unsigned int i = 1u; i <= 10u; ++i) {
+        for (unsigned i = 1u; i <= 10u; ++i) {
             gwo user_algo1{10u, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);

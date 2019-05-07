@@ -266,7 +266,7 @@ public:
     // Choose the best algorithm to compute the hypervolume the actual implementation is given
     // in another headers as to not create a circular dependency problem
     std::shared_ptr<hv_algorithm> get_best_compute(const vector_double &r_point) const;
-    std::shared_ptr<hv_algorithm> get_best_exclusive(const unsigned int p_idx, const vector_double &r_point) const;
+    std::shared_ptr<hv_algorithm> get_best_exclusive(const unsigned p_idx, const vector_double &r_point) const;
     std::shared_ptr<hv_algorithm> get_best_contributions(const vector_double &r_point) const;
 
     /// Compute hypervolume
@@ -316,7 +316,7 @@ public:
      *
      * @return the exclusive contribution to the hypervolume
      */
-    double exclusive(unsigned int p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
+    double exclusive(unsigned p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -345,7 +345,7 @@ public:
      *
      * @return the exclusive contribution to the hypervolume
      */
-    double exclusive(unsigned int p_idx, const vector_double &r_point) const
+    double exclusive(unsigned p_idx, const vector_double &r_point) const
     {
         return exclusive(p_idx, r_point, *get_best_exclusive(p_idx, r_point));
     }

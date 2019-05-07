@@ -85,7 +85,7 @@ public:
      * @throws invalid_argument if \p prob_id is not in [1,18] or if \p dim is not one of
      * [2,5,10,20,30,40,50,60,70,80,90,100]
      */
-    cec2013(unsigned int prob_id = 1u, unsigned int dim = 2u);
+    cec2013(unsigned prob_id = 1u, unsigned dim = 2u);
     // Fitness computation
     vector_double fitness(const vector_double &) const;
     // Box-bounds
@@ -97,65 +97,65 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    PAGMO_DLL_LOCAL void sphere_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                                     const double *Mr, int r_flag) const; /* Sphere */
-    PAGMO_DLL_LOCAL void ellips_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                                     const double *Mr, int r_flag) const; /* Ellipsoidal */
-    PAGMO_DLL_LOCAL void bent_cigar_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void sphere_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
+                                     int r_flag) const; /* Sphere */
+    PAGMO_DLL_LOCAL void ellips_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
+                                     int r_flag) const; /* Ellipsoidal */
+    PAGMO_DLL_LOCAL void bent_cigar_func(const double *x, double *f, const unsigned nx, const double *Os,
                                          const double *Mr, int r_flag) const; /* Bent_Cigar */
-    PAGMO_DLL_LOCAL void discus_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                                     const double *Mr, int r_flag) const; /* Discus */
-    PAGMO_DLL_LOCAL void dif_powers_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void discus_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
+                                     int r_flag) const; /* Discus */
+    PAGMO_DLL_LOCAL void dif_powers_func(const double *x, double *f, const unsigned nx, const double *Os,
                                          const double *Mr, int r_flag) const; /* Different Powers */
-    PAGMO_DLL_LOCAL void rosenbrock_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void rosenbrock_func(const double *x, double *f, const unsigned nx, const double *Os,
                                          const double *Mr, int r_flag) const; /* Rosenbrock's */
-    PAGMO_DLL_LOCAL void schaffer_F7_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void schaffer_F7_func(const double *x, double *f, const unsigned nx, const double *Os,
                                           const double *Mr, int r_flag) const; /* Schwefel's 1.2  */
-    PAGMO_DLL_LOCAL void ackley_func(const double *x, double *f, const unsigned int nx, const double *Os,
-                                     const double *Mr, int r_flag) const; /* Ackley's  */
-    PAGMO_DLL_LOCAL void weierstrass_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void ackley_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
+                                     int r_flag) const; /* Ackley's  */
+    PAGMO_DLL_LOCAL void weierstrass_func(const double *x, double *f, const unsigned nx, const double *Os,
                                           const double *Mr, int r_flag) const; /* Weierstrass's  */
-    PAGMO_DLL_LOCAL void griewank_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void griewank_func(const double *x, double *f, const unsigned nx, const double *Os,
                                        const double *Mr, int r_flag) const; /* Griewank's  */
-    PAGMO_DLL_LOCAL void rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os,
                                         const double *Mr, int r_flag) const; /* Rastrigin's  */
-    PAGMO_DLL_LOCAL void step_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void step_rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os,
                                              const double *Mr, int r_flag) const; /* Noncontinuous Rastrigin's  */
-    PAGMO_DLL_LOCAL void schwefel_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void schwefel_func(const double *x, double *f, const unsigned nx, const double *Os,
                                        const double *Mr, int r_flag) const; /* Schwefel's  */
-    PAGMO_DLL_LOCAL void katsuura_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void katsuura_func(const double *x, double *f, const unsigned nx, const double *Os,
                                        const double *Mr, int r_flag) const; /* Katsuura  */
-    PAGMO_DLL_LOCAL void bi_rastrigin_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void bi_rastrigin_func(const double *x, double *f, const unsigned nx, const double *Os,
                                            const double *Mr, int r_flag) const; /* Lunacek Bi_rastrigin Function */
-    PAGMO_DLL_LOCAL void grie_rosen_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void grie_rosen_func(const double *x, double *f, const unsigned nx, const double *Os,
                                          const double *Mr, int r_flag) const; /* Griewank-Rosenbrock  */
-    PAGMO_DLL_LOCAL void escaffer6_func(const double *x, double *f, const unsigned int nx, const double *Os,
+    PAGMO_DLL_LOCAL void escaffer6_func(const double *x, double *f, const unsigned nx, const double *Os,
                                         const double *Mr, int r_flag) const; /* Expanded Scaffer¡¯s F6  */
-    PAGMO_DLL_LOCAL void cf01(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf01(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 1 */
-    PAGMO_DLL_LOCAL void cf02(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf02(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 2 */
-    PAGMO_DLL_LOCAL void cf03(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf03(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 3 */
-    PAGMO_DLL_LOCAL void cf04(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf04(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 4 */
-    PAGMO_DLL_LOCAL void cf05(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf05(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 4 */
-    PAGMO_DLL_LOCAL void cf06(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf06(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 6 */
-    PAGMO_DLL_LOCAL void cf07(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf07(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 7 */
-    PAGMO_DLL_LOCAL void cf08(const double *x, double *f, const unsigned int nx, const double *Os, const double *Mr,
+    PAGMO_DLL_LOCAL void cf08(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                               int r_flag) const; /* Composition Function 8 */
-    PAGMO_DLL_LOCAL void shiftfunc(const double *x, double *xshift, const unsigned int nx, const double *Os) const;
-    PAGMO_DLL_LOCAL void rotatefunc(const double *x, double *xrot, const unsigned int nx, const double *Mr) const;
-    PAGMO_DLL_LOCAL void asyfunc(const double *x, double *xasy, const unsigned int nx, double beta) const;
-    PAGMO_DLL_LOCAL void oszfunc(const double *x, double *xosz, const unsigned int nx) const;
-    PAGMO_DLL_LOCAL void cf_cal(const double *x, double *f, const unsigned int nx, const double *Os, double *delta,
-                                double *bias, double *fit, unsigned int cf_num) const;
+    PAGMO_DLL_LOCAL void shiftfunc(const double *x, double *xshift, const unsigned nx, const double *Os) const;
+    PAGMO_DLL_LOCAL void rotatefunc(const double *x, double *xrot, const unsigned nx, const double *Mr) const;
+    PAGMO_DLL_LOCAL void asyfunc(const double *x, double *xasy, const unsigned nx, double beta) const;
+    PAGMO_DLL_LOCAL void oszfunc(const double *x, double *xosz, const unsigned nx) const;
+    PAGMO_DLL_LOCAL void cf_cal(const double *x, double *f, const unsigned nx, const double *Os, double *delta,
+                                double *bias, double *fit, unsigned cf_num) const;
 
     // problem id
-    unsigned int m_prob_id;
+    unsigned m_prob_id;
     // problem data
     std::vector<double> m_rotation_matrix;
     std::vector<double> m_origin_shift;

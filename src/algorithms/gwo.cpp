@@ -47,7 +47,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-gwo::gwo(unsigned int gen, unsigned int seed) : m_gen(gen), m_seed(seed), m_e(seed), m_verbosity(0u) {}
+gwo::gwo(unsigned gen, unsigned seed) : m_gen(gen), m_seed(seed), m_e(seed), m_verbosity(0u) {}
 
 /// Algorithm evolve method
 /**
@@ -210,7 +210,7 @@ population gwo::evolve(population pop) const
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
  */
-void gwo::set_seed(unsigned int seed)
+void gwo::set_seed(unsigned seed)
 {
     m_e.seed(seed);
     m_seed = seed;

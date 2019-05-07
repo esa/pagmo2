@@ -106,9 +106,8 @@ public:
      * \p n_T_adj or n_range_adj \p are not strictly positive
      * @throws if \p Tf > \p Ts
      */
-    simulated_annealing(double Ts = 10., double Tf = .1, unsigned int n_T_adj = 10u, unsigned int n_range_adj = 1u,
-                        unsigned int bin_size = 20u, double start_range = 1.,
-                        unsigned int seed = pagmo::random_device::next());
+    simulated_annealing(double Ts = 10., double Tf = .1, unsigned n_T_adj = 10u, unsigned n_range_adj = 1u,
+                        unsigned bin_size = 20u, double start_range = 1., unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -143,7 +142,7 @@ public:
      *
      * @param level verbosity level
      */
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     }
@@ -152,19 +151,19 @@ public:
     /**
      * @return the verbosity level
      */
-    unsigned int get_verbosity() const
+    unsigned get_verbosity() const
     {
         return m_verbosity;
     }
 
     // Sets the seed
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
      */
-    unsigned int get_seed() const
+    unsigned get_seed() const
     {
         return m_seed;
     }
@@ -206,17 +205,17 @@ private:
     // Final temperature
     double m_Tf;
     // Number of temperature adjustments during the annealing procedure
-    unsigned int m_n_T_adj;
+    unsigned m_n_T_adj;
     // Number of range adjustments performed at each temperature
-    unsigned int m_n_range_adj;
+    unsigned m_n_range_adj;
     // Number of mutation trials to evaluate the acceptance rate
-    unsigned int m_bin_size;
+    unsigned m_bin_size;
     // Starting neighbourhood size
     double m_start_range;
 
     mutable detail::random_engine_type m_e;
-    unsigned int m_seed;
-    unsigned int m_verbosity;
+    unsigned m_seed;
+    unsigned m_verbosity;
     mutable log_type m_log;
     // Deleting the methods load save public in base as to avoid conflict with serialize
     template <typename Archive>

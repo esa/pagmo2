@@ -61,7 +61,7 @@ struct PAGMO_DLL_PUBLIC griewank {
      *
      * @throw std::invalid_argument if \p dim is < 1
      */
-    griewank(unsigned int dim = 1u);
+    griewank(unsigned dim = 1u);
 
     // Fitness computation
     vector_double fitness(const vector_double &) const;
@@ -86,7 +86,7 @@ struct PAGMO_DLL_PUBLIC griewank {
     void serialize(Archive &, unsigned);
 
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 } // namespace pagmo

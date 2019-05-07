@@ -114,7 +114,7 @@ struct mo_sto {
     {
         return {{0., 0.}, {1., 1.}};
     }
-    void set_seed(unsigned int) {}
+    void set_seed(unsigned) {}
 };
 
 struct mo_many {

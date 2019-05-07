@@ -475,11 +475,11 @@ struct hss_00 {
 
 // The good one.
 struct hss_01 {
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 };
 
 struct hss_02 {
-    void set_seed(unsigned int) const;
+    void set_seed(unsigned) const;
 };
 
 struct hss_03 {
@@ -487,7 +487,7 @@ struct hss_03 {
 };
 
 struct hss_04 {
-    double set_seed(unsigned int);
+    double set_seed(unsigned);
 };
 
 BOOST_AUTO_TEST_CASE(has_set_seed_test)

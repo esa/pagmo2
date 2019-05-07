@@ -108,7 +108,7 @@ struct PAGMO_DLL_PUBLIC luksan_vlcek1 {
     void serialize(Archive &, unsigned);
 
     /// Problem dimensions.
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 } // namespace pagmo
