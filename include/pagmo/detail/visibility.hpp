@@ -48,13 +48,17 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
+#define PAGMO_DLL_LOCAL
+
 #elif defined(__clang__) || defined(__GNUC__) || defined(__INTEL_COMPILER)
 
 #define PAGMO_DLL_PUBLIC __attribute__((visibility("default")))
+#define PAGMO_DLL_LOCAL __attribute__((visibility("hidden")))
 
 #else
 
 #define PAGMO_DLL_PUBLIC
+#define PAGMO_DLL_LOCAL
 
 #endif
 
@@ -65,13 +69,13 @@ see https://www.gnu.org/licenses/. */
 // https://devblogs.microsoft.com/oldnewthing/20140109-00/?p=2123
 // Setting the visibility attribute on GCC-like compilers for inline classes, however, seems to be ok.
 // Thus, we use a specialised definition for marking "public"ly visible inline classes.
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__CYGWIN__)
 
-#define PAGMO_DLL_PUBLIC_INLINE
+#define PAGMO_DLL_PUBLIC_INLINE_CLASS
 
 #else
 
-#define PAGMO_DLL_PUBLIC_INLINE PAGMO_DLL_PUBLIC
+#define PAGMO_DLL_PUBLIC_INLINE_CLASS PAGMO_DLL_PUBLIC
 
 #endif
 

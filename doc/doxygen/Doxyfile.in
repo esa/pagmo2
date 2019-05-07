@@ -2068,7 +2068,8 @@ PREDEFINED             = PAGMO_DOXYGEN_INVOKED \
                          PAGMO_WITH_IPOPT \
                          PAGMO_WITH_FORK_ISLAND \
                          PAGMO_DLL_PUBLIC= \
-                         PAGMO_DLL_PUBLIC_INLINE= \
+                         PAGMO_DLL_LOCAL= \
+                         PAGMO_DLL_PUBLIC_INLINE_CLASS= \
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

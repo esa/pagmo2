@@ -119,7 +119,7 @@ namespace pagmo
  * optional methods in user-defined classes are not implemented.
  * This class inherits the constructors from \p std::runtime_error.
  */
-struct PAGMO_DLL_PUBLIC_INLINE not_implemented_error final : std::runtime_error {
+struct PAGMO_DLL_PUBLIC_INLINE_CLASS not_implemented_error final : std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 } // namespace pagmo
