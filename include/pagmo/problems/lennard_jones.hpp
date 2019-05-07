@@ -78,7 +78,7 @@ public:
 
 private:
     // Helper function that transforms the decision vector x in atoms positions r
-    double _r(unsigned, unsigned, const vector_double &) const;
+    PAGMO_DLL_LOCAL double _r(unsigned, unsigned, const vector_double &) const;
 
     // Number of atoms
     unsigned m_atoms;

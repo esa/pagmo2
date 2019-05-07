@@ -103,14 +103,14 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
     // updating the necessary information. It also builds the hash map used to avoid unecessary fitness
     // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
     // and test for correctness
-    void update();
+    PAGMO_DLL_LOCAL void update();
 
     // Computes c_max holding the maximum value of the violation of each constraint in the whole ref population
-    void compute_c_max();
+    PAGMO_DLL_LOCAL void compute_c_max();
 
     // Assuming the various data member contain useful information, this computes the
     // infeasibility measure of a certain fitness
-    double compute_infeasibility(const vector_double &) const;
+    PAGMO_DLL_LOCAL double compute_infeasibility(const vector_double &) const;
 
     // According to the population, the first penalty may or may not be applied
     bool m_apply_penalty_1;

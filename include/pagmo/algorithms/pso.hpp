@@ -225,15 +225,15 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    vector_double particle__get_best_neighbor(population::size_type pidx,
-                                              std::vector<std::vector<vector_double::size_type>> &neighb,
-                                              const std::vector<vector_double> &lbX,
-                                              const std::vector<vector_double> &lbfit) const;
-    void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
-                                    std::vector<std::vector<vector_double::size_type>> &neighb) const;
-    void initialize_topology__lbest(std::vector<std::vector<vector_double::size_type>> &neighb) const;
-    void initialize_topology__von(std::vector<std::vector<vector_double::size_type>> &neighb) const;
-    void initialize_topology__adaptive_random(std::vector<std::vector<vector_double::size_type>> &neighb) const;
+    PAGMO_DLL_LOCAL vector_double
+    particle__get_best_neighbor(population::size_type pidx, std::vector<std::vector<vector_double::size_type>> &neighb,
+                                const std::vector<vector_double> &lbX, const std::vector<vector_double> &lbfit) const;
+    PAGMO_DLL_LOCAL void initialize_topology__gbest(const population &pop, vector_double &gbX, vector_double &gbfit,
+                                                    std::vector<std::vector<vector_double::size_type>> &neighb) const;
+    PAGMO_DLL_LOCAL void initialize_topology__lbest(std::vector<std::vector<vector_double::size_type>> &neighb) const;
+    PAGMO_DLL_LOCAL void initialize_topology__von(std::vector<std::vector<vector_double::size_type>> &neighb) const;
+    PAGMO_DLL_LOCAL void
+    initialize_topology__adaptive_random(std::vector<std::vector<vector_double::size_type>> &neighb) const;
 
     // Generations
     unsigned int m_max_gen;

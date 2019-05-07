@@ -166,12 +166,13 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    vector_double::size_type tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
-                                                  const std::vector<vector_double::size_type> &non_domination_rank,
-                                                  std::vector<double> &crowding_d) const;
-    void crossover(vector_double &child1, vector_double &child2, vector_double::size_type parent1_idx,
-                   vector_double::size_type parent2_idx, const pagmo::population &pop) const;
-    void mutate(vector_double &child, const pagmo::population &pop) const;
+    PAGMO_DLL_LOCAL vector_double::size_type
+    tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
+                         const std::vector<vector_double::size_type> &non_domination_rank,
+                         std::vector<double> &crowding_d) const;
+    PAGMO_DLL_LOCAL void crossover(vector_double &child1, vector_double &child2, vector_double::size_type parent1_idx,
+                                   vector_double::size_type parent2_idx, const pagmo::population &pop) const;
+    PAGMO_DLL_LOCAL void mutate(vector_double &child, const pagmo::population &pop) const;
 
     unsigned int m_gen;
     double m_cr;

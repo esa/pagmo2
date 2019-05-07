@@ -165,8 +165,8 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    vector_double translate_back(const vector_double &) const;
-    vector_double apply_translation(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double translate_back(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double apply_translation(const vector_double &) const;
 
     // Inner problem
     problem m_problem;

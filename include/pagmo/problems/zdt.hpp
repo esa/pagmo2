@@ -189,16 +189,16 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    vector_double zdt1_fitness(const vector_double &) const;
-    vector_double zdt2_fitness(const vector_double &) const;
-    vector_double zdt3_fitness(const vector_double &) const;
-    vector_double zdt4_fitness(const vector_double &) const;
-    vector_double zdt5_fitness(const vector_double &) const;
-    vector_double zdt6_fitness(const vector_double &) const;
-    double zdt123_p_distance(const vector_double &) const;
-    double zdt4_p_distance(const vector_double &) const;
-    double zdt5_p_distance(const vector_double &) const;
-    double zdt6_p_distance(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double zdt1_fitness(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double zdt2_fitness(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double zdt3_fitness(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double zdt4_fitness(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double zdt5_fitness(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double zdt6_fitness(const vector_double &) const;
+    PAGMO_DLL_LOCAL double zdt123_p_distance(const vector_double &) const;
+    PAGMO_DLL_LOCAL double zdt4_p_distance(const vector_double &) const;
+    PAGMO_DLL_LOCAL double zdt5_p_distance(const vector_double &) const;
+    PAGMO_DLL_LOCAL double zdt6_p_distance(const vector_double &) const;
 
 private:
     // Problem dimensions

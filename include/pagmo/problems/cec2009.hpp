@@ -117,36 +117,36 @@ public:
 
 private:
     // Pointers to member functions are used
-    vector_double fitness_impl(detail::cec2009_data::func_ptr, const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double fitness_impl(detail::cec2009_data::func_ptr, const vector_double &) const;
 
     // For the coverage analysis we do not cover the code below as its derived from a third party source
     // LCOV_EXCL_START
 
     // -------------------------------------------
-    void UF1(vector_double &f, const vector_double &x) const;
-    void UF2(vector_double &f, const vector_double &x) const;
-    void UF3(vector_double &f, const vector_double &x) const;
-    void UF4(vector_double &f, const vector_double &x) const;
-    void UF5(vector_double &f, const vector_double &x) const;
-    void UF6(vector_double &f, const vector_double &x) const;
-    void UF7(vector_double &f, const vector_double &x) const;
-    void UF8(vector_double &f, const vector_double &x) const;
-    void UF9(vector_double &f, const vector_double &x) const;
-    void UF10(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF1(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF2(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF3(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF4(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF5(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF6(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF7(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF8(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF9(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void UF10(vector_double &f, const vector_double &x) const;
 
     /****************************************************************************/
     // constraint test instances
     /****************************************************************************/
-    void CF1(vector_double &f, const vector_double &x) const;
-    void CF2(vector_double &f, const vector_double &x) const;
-    void CF3(vector_double &f, const vector_double &x) const;
-    void CF4(vector_double &f, const vector_double &x) const;
-    void CF5(vector_double &f, const vector_double &x) const;
-    void CF6(vector_double &f, const vector_double &x) const;
-    void CF7(vector_double &f, const vector_double &x) const;
-    void CF8(vector_double &f, const vector_double &x) const;
-    void CF9(vector_double &f, const vector_double &x) const;
-    void CF10(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF1(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF2(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF3(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF4(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF5(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF6(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF7(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF8(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF9(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void CF10(vector_double &f, const vector_double &x) const;
     // -------------------------------------------
     // LCOV_EXCL_STOP
 

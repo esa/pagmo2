@@ -108,8 +108,8 @@ public:
 
 private:
     // Pointers to member functions are used
-    vector_double fitness_impl(detail::cec2006_data::func_ptr, detail::cec2006_data::func_ptr,
-                               const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double fitness_impl(detail::cec2006_data::func_ptr, detail::cec2006_data::func_ptr,
+                                               const vector_double &) const;
 
     // For the coverage analysis we do not cover the code below as its derived from a third party source
     // LCOV_EXCL_START
@@ -117,100 +117,100 @@ private:
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g01_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g01_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g01_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g01_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g02_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g02_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g02_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g02_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g03_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g03_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g03_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g03_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g04_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g04_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g04_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g04_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g05_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g05_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g05_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g05_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g06_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g06_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g06_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g06_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g07_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g07_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g07_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g07_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g08_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g08_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g08_compute_constraints_impl(vector_double &c, const vector_double &x) const;
-    vector_double g08_fitness_impl(const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g08_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL vector_double g08_fitness_impl(const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g09_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g09_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g09_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g09_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g10_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g10_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g10_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g10_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g11_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g11_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g11_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g11_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g12_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g12_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g12_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g12_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g13_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g13_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g13_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g13_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g14_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g14_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g14_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g14_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g15_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g15_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g15_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g15_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.
-    void g16_objfun_impl(vector_double &f, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g16_objfun_impl(vector_double &f, const vector_double &x) const;
     // Implementation of the constraint function.
-    void g16_compute_constraints_impl(vector_double &c, const vector_double &x) const;
+    PAGMO_DLL_LOCAL void g16_compute_constraints_impl(vector_double &c, const vector_double &x) const;
     // -------------------------------------------
 
     // Implementation of the objective function.

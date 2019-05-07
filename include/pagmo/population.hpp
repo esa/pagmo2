@@ -185,7 +185,7 @@ private:
     template <typename T, typename U>
     void push_back_impl(T &&, U &&);
     // Short routine to update the champion. Does nothing if the problem is MO
-    void update_champion(vector_double, vector_double);
+    PAGMO_DLL_LOCAL void update_champion(vector_double, vector_double);
 
 public:
     // Adds one decision vector (chromosome) to the population.

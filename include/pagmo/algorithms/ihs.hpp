@@ -218,7 +218,7 @@ public:
 
 private:
     // logging is complex fir ihs as the algorithm is an "any-problem" wannabe
-    void log_a_line(const population &, unsigned &, unsigned long long, double, double) const;
+    PAGMO_DLL_LOCAL void log_a_line(const population &, unsigned &, unsigned long long, double, double) const;
 
     unsigned m_gen;
     double m_phmcr;

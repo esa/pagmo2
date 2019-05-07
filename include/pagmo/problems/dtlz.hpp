@@ -130,29 +130,29 @@ public:
 
 private:
     // Convergence metric for a dv (0 = converged to the optimal front)
-    double g_func(const vector_double &) const;
+    PAGMO_DLL_LOCAL double g_func(const vector_double &) const;
 
     // Implementations of the different g-functions used
-    double g13_func(const vector_double &) const;
-    double g245_func(const vector_double &) const;
-    double g6_func(const vector_double &) const;
-    double g7_func(const vector_double &) const;
+    PAGMO_DLL_LOCAL double g13_func(const vector_double &) const;
+    PAGMO_DLL_LOCAL double g245_func(const vector_double &) const;
+    PAGMO_DLL_LOCAL double g6_func(const vector_double &) const;
+    PAGMO_DLL_LOCAL double g7_func(const vector_double &) const;
 
     // Implementation of the distribution function h
-    double h7_func(const vector_double &, double) const;
+    PAGMO_DLL_LOCAL double h7_func(const vector_double &, double) const;
 
     // Implementation of the objective functions.
     /* The chomosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k
      *											 [------- Vector x_M -------]
      *               x[0], x[1], ... ,x[fdim-2], x[fdim-1], ... , x[fdim+k-1] */
-    vector_double f1_objfun_impl(const vector_double &) const;
-    vector_double f23_objfun_impl(const vector_double &) const;
-    vector_double f4_objfun_impl(const vector_double &) const;
-    vector_double f56_objfun_impl(const vector_double &) const;
-    vector_double f7_objfun_impl(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double f1_objfun_impl(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double f23_objfun_impl(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double f4_objfun_impl(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double f56_objfun_impl(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double f7_objfun_impl(const vector_double &) const;
 
     // Gives a convergence metric for the population (0 = converged to the optimal front)
-    double convergence_metric(const vector_double &) const;
+    PAGMO_DLL_LOCAL double convergence_metric(const vector_double &) const;
 
     // Problem dimensions
     unsigned int m_prob_id;

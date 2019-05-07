@@ -222,18 +222,19 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    double penalty_computation(const vector_double &f, const population &pop, const unsigned long long nobj,
-                               const unsigned long long nec, const unsigned long long nic) const;
-    void update_sol_archive(const population &pop, vector_double &sorted_vector,
-                            std::vector<decltype(sorted_vector.size())> &sorted_list,
-                            std::vector<vector_double> &sol_archive) const;
-    void pheromone_computation(const unsigned gen, vector_double &prob_cumulative, vector_double &omega_vec,
-                               vector_double &sigma_vec, const population &popul,
-                               std::vector<vector_double> &sol_archive) const;
-    void generate_new_ants(const population &pop, std::uniform_real_distribution<> dist,
-                           std::normal_distribution<double> gauss_pdf, vector_double prob_cumulative,
-                           vector_double sigma, std::vector<vector_double> &dvs_new,
-                           std::vector<vector_double> &sol_archive) const;
+    PAGMO_DLL_LOCAL double penalty_computation(const vector_double &f, const population &pop,
+                                               const unsigned long long nobj, const unsigned long long nec,
+                                               const unsigned long long nic) const;
+    PAGMO_DLL_LOCAL void update_sol_archive(const population &pop, vector_double &sorted_vector,
+                                            std::vector<decltype(sorted_vector.size())> &sorted_list,
+                                            std::vector<vector_double> &sol_archive) const;
+    PAGMO_DLL_LOCAL void pheromone_computation(const unsigned gen, vector_double &prob_cumulative,
+                                               vector_double &omega_vec, vector_double &sigma_vec,
+                                               const population &popul, std::vector<vector_double> &sol_archive) const;
+    PAGMO_DLL_LOCAL void generate_new_ants(const population &pop, std::uniform_real_distribution<> dist,
+                                           std::normal_distribution<double> gauss_pdf, vector_double prob_cumulative,
+                                           vector_double sigma, std::vector<vector_double> &dvs_new,
+                                           std::vector<vector_double> &sol_archive) const;
 
     unsigned m_gen;
     double m_acc;
