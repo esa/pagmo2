@@ -98,7 +98,7 @@ if(PAGMO_WITH_IPOPT)
 endif()
 
 # Here are problematic tests. See config.hpp for an explanation.
-if(NOT YACMA_COMPILER_IS_MSVC)
+if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
     ADD_PAGMO_TESTCASE(cec2013)
     ADD_PAGMO_TESTCASE(cec2014)
 endif()

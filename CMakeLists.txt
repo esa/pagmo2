@@ -222,8 +222,8 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     )
 
-    # MSVC chokes on the cec2013/2014 data arrays.
-    if(NOT YACMA_COMPILER_IS_MSVC)
+    # Optional bits.
+    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
@@ -233,7 +233,6 @@ if(PAGMO_BUILD_PAGMO)
         )
     endif()
 
-    # Optional and platform-dependent bits.
     if(PAGMO_WITH_FORK_ISLAND)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/fork_island.cpp"
