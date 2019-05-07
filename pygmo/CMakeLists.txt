@@ -48,6 +48,8 @@ YACMA_PYTHON_MODULE(core
     bfe.cpp
     island.cpp
     problem.cpp
+    common_base.cpp
+    object_serialization.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp
