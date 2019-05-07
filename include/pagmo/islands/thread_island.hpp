@@ -46,7 +46,7 @@ namespace pagmo
  * on non-POSIX platforms or when both the island's problem and algorithm provide at least the
  * pagmo::thread_safety::basic thread safety guarantee.
  */
-class PAGMO_PUBLIC thread_island
+class PAGMO_DLL_PUBLIC thread_island
 {
 public:
     /// Island's name.

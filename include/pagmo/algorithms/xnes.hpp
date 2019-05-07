@@ -88,7 +88,7 @@ namespace pagmo
  *    393-400). ACM.
  * \endverbatim
  */
-class PAGMO_PUBLIC xnes
+class PAGMO_DLL_PUBLIC xnes
 {
 public:
     /// Single data line for the algorithm's log.

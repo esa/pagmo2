@@ -92,7 +92,7 @@ namespace pagmo
  * \endverbatim
  *
  */
-class PAGMO_PUBLIC compass_search : public not_population_based
+class PAGMO_DLL_PUBLIC compass_search : public not_population_based
 {
 public:
     /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range)

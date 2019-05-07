@@ -58,7 +58,7 @@ namespace pagmo
 namespace detail
 {
 
-PAGMO_PUBLIC unsigned ipopt_internal_test();
+PAGMO_DLL_PUBLIC unsigned ipopt_internal_test();
 
 }
 
@@ -135,7 +135,7 @@ PAGMO_PUBLIC unsigned ipopt_internal_test();
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC ipopt : public not_population_based
+class PAGMO_DLL_PUBLIC ipopt : public not_population_based
 {
     template <typename Pair>
     static void opt_checker(bool status, const Pair &p, const std::string &op_type)

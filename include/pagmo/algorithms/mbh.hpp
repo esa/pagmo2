@@ -78,7 +78,7 @@ namespace pagmo
  * See: https://arxiv.org/pdf/cond-mat/9803344.pdf for the paper introducing the basin hopping idea for a Lennard-Jones
  * cluster optimization.
  */
-class PAGMO_PUBLIC mbh
+class PAGMO_DLL_PUBLIC mbh
 {
 public:
     /// Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial).

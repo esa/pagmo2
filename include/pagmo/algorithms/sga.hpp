@@ -131,7 +131,7 @@ enum class sga_mutation { GAUSSIAN, UNIFORM, POLYNOMIAL };
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC sga
+class PAGMO_DLL_PUBLIC sga
 {
 public:
     /// Single entry of the log (gen, fevals, best, improvement)

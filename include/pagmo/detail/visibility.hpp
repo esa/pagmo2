@@ -29,31 +29,32 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_VISIBILITY_HPP
 #define PAGMO_DETAIL_VISIBILITY_HPP
 
-// Convenience macros for visibility attributes. Mostly insipred by:
+// Convenience macros for setting the visibility of entities
+// when building/using the shared library. Mostly inspired by:
 // https://gcc.gnu.org/wiki/Visibility
 // We check first for Windows, where we assume every compiler
 // knows dllexport/dllimport. On other platforms, we use the GCC-like
-// syntax for GCC, clang and ICC. Otherwise, we leave PAGMO_PUBLIC
+// syntax for GCC, clang and ICC. Otherwise, we leave PAGMO_DLL_PUBLIC
 // empty.
 #if defined(_WIN32) || defined(__CYGWIN__)
 
 #if defined(pagmo_EXPORTS)
 
-#define PAGMO_PUBLIC __declspec(dllexport)
+#define PAGMO_DLL_PUBLIC __declspec(dllexport)
 
 #else
 
-#define PAGMO_PUBLIC __declspec(dllimport)
+#define PAGMO_DLL_PUBLIC __declspec(dllimport)
 
 #endif
 
 #elif defined(__clang__) || defined(__GNUC__) || defined(__INTEL_COMPILER)
 
-#define PAGMO_PUBLIC __attribute__((visibility("default")))
+#define PAGMO_DLL_PUBLIC __attribute__((visibility("default")))
 
 #else
 
-#define PAGMO_PUBLIC
+#define PAGMO_DLL_PUBLIC
 
 #endif
 
@@ -66,11 +67,11 @@ see https://www.gnu.org/licenses/. */
 // Thus, we use a specialised definition for marking "public"ly visible inline classes.
 #if defined(_WIN32)
 
-#define PAGMO_PUBLIC_INLINE
+#define PAGMO_DLL_PUBLIC_INLINE
 
 #else
 
-#define PAGMO_PUBLIC_INLINE PAGMO_PUBLIC
+#define PAGMO_DLL_PUBLIC_INLINE PAGMO_DLL_PUBLIC
 
 #endif
 

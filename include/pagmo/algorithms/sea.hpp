@@ -79,7 +79,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC sea
+class PAGMO_DLL_PUBLIC sea
 {
 public:
     /// Single entry of the log (gen, fevals, best, improvement, mutations)

@@ -62,7 +62,7 @@ namespace pagmo
 /**
  * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
  */
-struct PAGMO_PUBLIC null_algorithm {
+struct PAGMO_DLL_PUBLIC null_algorithm {
     // Evolve method.
     population evolve(const population &) const;
     /// Algorithm name.
@@ -197,7 +197,7 @@ const bool is_uda<T>::value;
 namespace detail
 {
 
-struct PAGMO_PUBLIC_INLINE algo_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE algo_inner_base {
     virtual ~algo_inner_base() {}
     virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
@@ -215,7 +215,7 @@ struct PAGMO_PUBLIC_INLINE algo_inner_base {
 };
 
 template <typename T>
-struct PAGMO_PUBLIC_INLINE algo_inner final : algo_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE algo_inner final : algo_inner_base {
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -422,7 +422,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC algorithm
+class PAGMO_DLL_PUBLIC algorithm
 {
     // Enable the generic ctor only if T is not an algorithm (after removing
     // const/reference qualifiers), and if T is a uda.
@@ -684,7 +684,7 @@ private:
 };
 
 // Streaming operator for algorithm.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
 

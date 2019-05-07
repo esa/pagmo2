@@ -58,7 +58,7 @@ namespace pagmo
  * Lecture Notes in Economics and Mathematical Systems, 187, 1981. doi: 10.1007/978-3-642-48320-2.
  *
  */
-struct PAGMO_PUBLIC hock_schittkowsky_71 {
+struct PAGMO_DLL_PUBLIC hock_schittkowsky_71 {
     // Fitness computation
     vector_double fitness(const vector_double &) const;
 

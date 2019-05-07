@@ -44,12 +44,12 @@ namespace detail
 {
 
 // Helper for the selection of the default_bfe implementation.
-PAGMO_PUBLIC extern std::function<vector_double(const problem &, const vector_double &)> default_bfe_impl;
+PAGMO_DLL_PUBLIC extern std::function<vector_double(const problem &, const vector_double &)> default_bfe_impl;
 
 } // namespace detail
 
 // Default bfe implementation.
-class PAGMO_PUBLIC default_bfe
+class PAGMO_DLL_PUBLIC default_bfe
 {
 public:
     // Call operator.

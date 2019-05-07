@@ -47,7 +47,7 @@ namespace pagmo
 namespace detail
 {
 
-struct PAGMO_PUBLIC task_queue {
+struct PAGMO_DLL_PUBLIC task_queue {
     task_queue();
     ~task_queue();
     // Main enqueue function.

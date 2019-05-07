@@ -54,16 +54,16 @@ namespace detail
 {
 
 // Recursive function building all m-ple of elements of X summing to s
-PAGMO_PUBLIC void reksum(std::vector<std::vector<double>> &, const std::vector<population::size_type> &,
-                         population::size_type, population::size_type, std::vector<double> = std::vector<double>());
+PAGMO_DLL_PUBLIC void reksum(std::vector<std::vector<double>> &, const std::vector<population::size_type> &,
+                             population::size_type, population::size_type, std::vector<double> = std::vector<double>());
 
 } // namespace detail
 
 // Pareto-dominance
-PAGMO_PUBLIC bool pareto_dominance(const vector_double &, const vector_double &);
+PAGMO_DLL_PUBLIC bool pareto_dominance(const vector_double &, const vector_double &);
 
 // Non dominated front 2D (Kung's algorithm)
-PAGMO_PUBLIC std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &);
 
 /// Return type for the fast_non_dominated_sorting algorithm
 using fnds_return_type
@@ -71,23 +71,23 @@ using fnds_return_type
                  std::vector<vector_double::size_type>, std::vector<vector_double::size_type>>;
 
 // Fast non dominated sorting
-PAGMO_PUBLIC fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &);
 
 // Crowding distance
-PAGMO_PUBLIC vector_double crowding_distance(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC vector_double crowding_distance(const std::vector<vector_double> &);
 
 // Sorts a population in multi-objective optimization
-PAGMO_PUBLIC std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &);
 
 // Selects the best N individuals in multi-objective optimization
-PAGMO_PUBLIC std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &,
-                                                                    vector_double::size_type);
+PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &,
+                                                                        vector_double::size_type);
 
 // Ideal point
-PAGMO_PUBLIC vector_double ideal(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC vector_double ideal(const std::vector<vector_double> &);
 
 // Nadir point
-PAGMO_PUBLIC vector_double nadir(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
 
 /// Decomposition weights generation
 /**
@@ -215,8 +215,8 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
 }
 
 // Decomposes a vector of objectives.
-PAGMO_PUBLIC vector_double decompose_objectives(const vector_double &, const vector_double &, const vector_double &,
-                                                const std::string &);
+PAGMO_DLL_PUBLIC vector_double decompose_objectives(const vector_double &, const vector_double &, const vector_double &,
+                                                    const std::string &);
 
 } // namespace pagmo
 

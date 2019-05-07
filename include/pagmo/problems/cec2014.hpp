@@ -77,7 +77,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC cec2014
+class PAGMO_DLL_PUBLIC cec2014
 {
 
 public:

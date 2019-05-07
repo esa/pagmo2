@@ -48,7 +48,7 @@ namespace pagmo
  * by a fixed translation vector. pagmo::translate objects are user-defined problems that can be used in
  * the definition of a pagmo::problem.
  */
-class PAGMO_PUBLIC translate
+class PAGMO_DLL_PUBLIC translate
 {
 public:
     // Default constructor.

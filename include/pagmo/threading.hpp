@@ -42,7 +42,7 @@ namespace pagmo
 enum class thread_safety { none, basic, constant };
 
 // Stream operator for the thread_safety enum.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, thread_safety);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, thread_safety);
 
 #endif
 } // namespace pagmo

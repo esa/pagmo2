@@ -79,7 +79,7 @@ namespace pagmo
  * \endverbatim
  *
  */
-class PAGMO_PUBLIC gaco
+class PAGMO_DLL_PUBLIC gaco
 {
 public:
     /// Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp)

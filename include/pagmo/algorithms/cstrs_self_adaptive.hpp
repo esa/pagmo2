@@ -82,7 +82,7 @@ namespace detail
 //   we cannot locate a decision vector in the cache (meaning that
 //   the UDA operated on a copy of the original input problem), just re-evaluate
 //   the dv instead of asserting failure.
-struct PAGMO_PUBLIC penalized_udp {
+struct PAGMO_DLL_PUBLIC penalized_udp {
     // Unused default constructor to please the is_udp type trait
     penalized_udp()
     {
@@ -139,7 +139,7 @@ struct PAGMO_PUBLIC penalized_udp {
 };
 
 // Only for debug purposes
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &);
 
 } // namespace detail
 
@@ -215,7 +215,7 @@ PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &);
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC cstrs_self_adaptive
+class PAGMO_DLL_PUBLIC cstrs_self_adaptive
 {
 public:
     /// Single entry of the log (iter, fevals, best_f, infeas, n. constraints violated, violation norm).

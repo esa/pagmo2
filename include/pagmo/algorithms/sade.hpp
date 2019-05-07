@@ -88,7 +88,7 @@ namespace pagmo
  * \endverbatim
  *
  */
-class PAGMO_PUBLIC sade
+class PAGMO_DLL_PUBLIC sade
 {
 public:
     /// Single entry of the log (gen, fevals, best, F, CR, dx, df)

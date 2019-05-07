@@ -96,7 +96,7 @@ const std::vector<unsigned int> de1220_statics<T>::allowed_variants = {2u, 3u, 7
  *
  */
 
-class PAGMO_PUBLIC de1220
+class PAGMO_DLL_PUBLIC de1220
 {
 public:
     /// Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df)

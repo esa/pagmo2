@@ -82,7 +82,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC simulated_annealing : public not_population_based
+class PAGMO_DLL_PUBLIC simulated_annealing : public not_population_based
 {
 public:
     /// Single entry of the log (fevals, best, current, avg_range, temperature)

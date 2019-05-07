@@ -82,19 +82,19 @@ inline std::pair<vector_double::size_type, double> test_ineq_constraints(It1 cin
 } // namespace detail
 
 // Compares two fitness vectors in a single-objective, constrained, case (from a vector of tolerances)
-PAGMO_PUBLIC bool compare_fc(const vector_double &, const vector_double &, vector_double::size_type,
-                             const vector_double &);
+PAGMO_DLL_PUBLIC bool compare_fc(const vector_double &, const vector_double &, vector_double::size_type,
+                                 const vector_double &);
 
 // Compares two fitness vectors in a single-objective, constrained, case (from a scalar tolerance)
-PAGMO_PUBLIC bool compare_fc(const vector_double &, const vector_double &, vector_double::size_type, double);
+PAGMO_DLL_PUBLIC bool compare_fc(const vector_double &, const vector_double &, vector_double::size_type, double);
 
 // Sorts a population in a single-objective, constrained, case (from a vector of tolerances)
-PAGMO_PUBLIC std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &,
-                                                                       vector_double::size_type, const vector_double &);
+PAGMO_DLL_PUBLIC std::vector<vector_double::size_type>
+sort_population_con(const std::vector<vector_double> &, vector_double::size_type, const vector_double &);
 
 // Sorts a population in a single-objective, constrained, case (from a scalar tolerance)
-PAGMO_PUBLIC std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &,
-                                                                       vector_double::size_type, double = 0.);
+PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &,
+                                                                           vector_double::size_type, double = 0.);
 
 } // namespace pagmo
 #endif

@@ -85,7 +85,7 @@ namespace pagmo
  * See: K. Deb, L. Thiele, M. Laumanns, E. Zitzler, Scalable test problems for evolutionary multiobjective optimization
  */
 
-class PAGMO_PUBLIC dtlz
+class PAGMO_DLL_PUBLIC dtlz
 {
 public:
     /** Constructor

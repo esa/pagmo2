@@ -106,7 +106,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC pso
+class PAGMO_DLL_PUBLIC pso
 {
 public:
     /// Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.)

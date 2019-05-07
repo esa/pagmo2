@@ -53,7 +53,7 @@ namespace pagmo
  * \f]
  * The global minimum is in \f$x_i=1\f$, where \f$ F\left( 1,\ldots,1 \right) = 0 \f$.
  */
-struct PAGMO_PUBLIC rosenbrock {
+struct PAGMO_DLL_PUBLIC rosenbrock {
     /// Constructor from dimension
     /**
      * @param dim problem dimension.

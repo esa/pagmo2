@@ -72,7 +72,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC cec2013
+class PAGMO_DLL_PUBLIC cec2013
 {
 public:
     /// Constructor

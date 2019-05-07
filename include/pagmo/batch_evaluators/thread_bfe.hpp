@@ -40,7 +40,7 @@ namespace pagmo
 {
 
 // Multi-threaded bfe.
-class PAGMO_PUBLIC thread_bfe
+class PAGMO_DLL_PUBLIC thread_bfe
 {
 public:
     // Call operator.

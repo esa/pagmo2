@@ -61,7 +61,7 @@ namespace pagmo
  * See: Kuri Morales, A. and Quezada, C.C. A Universal eclectic genetic algorithm for constrained optimization,
  * Proceedings 6th European Congress on Intelligent Techniques & Soft Computing, EUFIT'98, 518-522, 1998.
  */
-class PAGMO_PUBLIC unconstrain
+class PAGMO_DLL_PUBLIC unconstrain
 {
     // Enabler for the ctor from UDP or problem. In this case we allow construction from type problem.
     template <typename T>

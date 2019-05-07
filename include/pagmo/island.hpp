@@ -74,7 +74,7 @@ namespace pagmo
 {
 
 // Fwd declaration.
-class PAGMO_PUBLIC island;
+class PAGMO_DLL_PUBLIC island;
 
 /// Detect \p run_evolve() method.
 /**
@@ -140,7 +140,7 @@ const bool is_udi<T>::value;
 namespace detail
 {
 
-struct PAGMO_PUBLIC_INLINE isl_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE isl_inner_base {
     virtual ~isl_inner_base() {}
     virtual std::unique_ptr<isl_inner_base> clone() const = 0;
     virtual void run_evolve(island &) const = 0;
@@ -153,7 +153,7 @@ struct PAGMO_PUBLIC_INLINE isl_inner_base {
 };
 
 template <typename T>
-struct PAGMO_PUBLIC_INLINE isl_inner final : isl_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE isl_inner final : isl_inner_base {
     // We just need the def ctor, delete everything else.
     isl_inner() = default;
     isl_inner(const isl_inner &) = delete;
@@ -211,11 +211,11 @@ struct PAGMO_PUBLIC_INLINE isl_inner final : isl_inner_base {
     T m_value;
 };
 
-PAGMO_PUBLIC void wait_f(const std::future<void> &) noexcept;
+PAGMO_DLL_PUBLIC void wait_f(const std::future<void> &) noexcept;
 
-PAGMO_PUBLIC bool future_has_exception(std::future<void> &) noexcept;
+PAGMO_DLL_PUBLIC bool future_has_exception(std::future<void> &) noexcept;
 
-PAGMO_PUBLIC bool future_running(const std::future<void> &);
+PAGMO_DLL_PUBLIC bool future_running(const std::future<void> &);
 
 } // namespace detail
 
@@ -240,20 +240,20 @@ namespace detail
 // do anything, but in Python we need to override this getter so that it returns
 // a RAII object that unlocks the GIL, otherwise we could run into deadlocks in Python
 // if isl::wait()/isl::wait_check() holds the GIL while waiting.
-PAGMO_PUBLIC extern std::function<boost::any()> wait_raii_getter;
+PAGMO_DLL_PUBLIC extern std::function<boost::any()> wait_raii_getter;
 
 // NOTE: this structure holds an std::function that implements the logic for the selection of the UDI
 // type in the constructor of island_data. The logic is decoupled so that we can override the default logic with
 // alternative implementations (e.g., use a process-based island rather than the default thread island if prob, algo,
 // etc. do not provide thread safety).
-PAGMO_PUBLIC extern std::function<void(const algorithm &, const population &,
-                                       std::unique_ptr<detail::isl_inner_base> &)>
+PAGMO_DLL_PUBLIC extern std::function<void(const algorithm &, const population &,
+                                           std::unique_ptr<detail::isl_inner_base> &)>
     island_factory;
 
 // NOTE: the idea with this class is that we use it to store the data members of pagmo::island, and,
 // within pagmo::island, we store a pointer to an instance of this struct. The reason for this approach
 // is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
-struct PAGMO_PUBLIC island_data {
+struct PAGMO_DLL_PUBLIC island_data {
     island_data();
     // This is the main ctor, from an algo and a population. The UDI type will be selected
     // by the island_factory functor.
@@ -340,14 +340,14 @@ struct island_status_hasher {
 };
 
 // A map to link a human-readable description to evolve_status.
-PAGMO_PUBLIC extern const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses;
+PAGMO_DLL_PUBLIC extern const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses;
 
 } // namespace detail
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Provide the stream operator overload for evolve_status.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
 
 #endif
 
@@ -414,12 +414,12 @@ PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC island
+class PAGMO_DLL_PUBLIC island
 {
     // Handy shortcut.
     using idata_t = detail::island_data;
     // archi needs access to the internal of island.
-    friend class PAGMO_PUBLIC archipelago;
+    friend class PAGMO_DLL_PUBLIC archipelago;
     // NOTE: the idea in the move members and the dtor is that
     // we want to wait *and* erase any future in the island, before doing
     // the move/destruction. Thus we use this small wrapper.
@@ -818,7 +818,7 @@ private:
 };
 
 // Stream operator for pagmo::island.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
 
 } // namespace pagmo
 

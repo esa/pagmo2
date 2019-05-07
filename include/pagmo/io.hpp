@@ -144,7 +144,7 @@ inline std::string to_string(const T &x)
 }
 
 // Gizmo to create simple ascii tables.
-struct PAGMO_PUBLIC table {
+struct PAGMO_DLL_PUBLIC table {
     using s_size_t = std::string::size_type;
     // Construct from table headers, and optional indentation to be used when printing
     // the table.
@@ -174,7 +174,7 @@ struct PAGMO_PUBLIC table {
 };
 
 // Print the table to stream.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const table &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const table &);
 
 } // end of namespace detail
 

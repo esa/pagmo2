@@ -78,7 +78,7 @@ namespace pagmo
  * See: https://en.wikipedia.org/wiki/Golomb_ruler
  *
  */
-class PAGMO_PUBLIC golomb_ruler
+class PAGMO_DLL_PUBLIC golomb_ruler
 {
 public:
     /// Constructor from ruler order and maximal consecutive ticks distance

@@ -70,7 +70,7 @@ namespace pagmo
  * \endverbatim
  *
  */
-class PAGMO_PUBLIC gwo
+class PAGMO_DLL_PUBLIC gwo
 {
 public:
     /// Single entry of the log (gen, alpha, beta, delta)

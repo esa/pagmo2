@@ -87,7 +87,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC ihs
+class PAGMO_DLL_PUBLIC ihs
 {
 public:
     /// Single data line for the algorithm's log.

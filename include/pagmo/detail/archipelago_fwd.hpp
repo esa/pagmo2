@@ -34,7 +34,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-class PAGMO_PUBLIC archipelago;
+class PAGMO_DLL_PUBLIC archipelago;
 
 }
 

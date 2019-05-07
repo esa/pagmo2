@@ -55,7 +55,7 @@ using random_engine_type = std::mt19937;
  * be set by the method random_device::set_seed(), else by default is initialized
  * once at run-time using std::random_device.
  */
-struct PAGMO_PUBLIC random_device {
+struct PAGMO_DLL_PUBLIC random_device {
     static unsigned int next();
     static void set_seed(unsigned int);
 };

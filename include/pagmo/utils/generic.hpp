@@ -52,7 +52,7 @@ namespace detail
 {
 
 // Checks that all elements of the problem bounds are not equal
-PAGMO_PUBLIC bool some_bound_is_equal(const problem &);
+PAGMO_DLL_PUBLIC bool some_bound_is_equal(const problem &);
 
 // Check that the lower/upper bounds lb/ub are suitable for the
 // generation of a real number. The boolean flags specify at
@@ -389,11 +389,11 @@ inline vector_double batch_random_decision_vector(const problem &prob, vector_do
 }
 
 // Binomial coefficient
-PAGMO_PUBLIC double binomial_coefficient(vector_double::size_type, vector_double::size_type);
+PAGMO_DLL_PUBLIC double binomial_coefficient(vector_double::size_type, vector_double::size_type);
 
 // K-Nearest Neighbours
-PAGMO_PUBLIC std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_double> &,
-                                                                    std::vector<vector_double>::size_type);
+PAGMO_DLL_PUBLIC std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_double> &,
+                                                                        std::vector<vector_double>::size_type);
 
 namespace detail
 {
@@ -412,10 +412,10 @@ inline void force_bounds_random(vector_double &x, const vector_double &lb, const
 }
 
 // modifies a chromosome so that it will be in the bounds. Elements that are off are reflected in the bounds
-PAGMO_PUBLIC void force_bounds_reflection(vector_double &, const vector_double &, const vector_double &);
+PAGMO_DLL_PUBLIC void force_bounds_reflection(vector_double &, const vector_double &, const vector_double &);
 
 // modifies a chromosome so that it will be in the bounds. Elements that are off are set on the bounds
-PAGMO_PUBLIC void force_bounds_stick(vector_double &, const vector_double &, const vector_double &);
+PAGMO_DLL_PUBLIC void force_bounds_stick(vector_double &, const vector_double &, const vector_double &);
 
 } // namespace detail
 

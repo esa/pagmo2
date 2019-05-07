@@ -52,7 +52,7 @@ namespace pagmo
  * in a population, which are meant to be used in the implementation of the <tt>evolve()</tt> method of the
  * user-defined algorithm (see, e.g., pagmo::nlopt::evolve()).
  */
-class PAGMO_PUBLIC not_population_based
+class PAGMO_DLL_PUBLIC not_population_based
 {
 public:
     // Default constructor.

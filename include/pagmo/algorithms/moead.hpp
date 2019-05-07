@@ -71,7 +71,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC moead
+class PAGMO_DLL_PUBLIC moead
 {
 public:
     /// Single entry of the log (gen, fevals, adf, ideal_point)

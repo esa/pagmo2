@@ -41,7 +41,7 @@ namespace pagmo
 {
 
 // Fwd declare for the type definition below.
-class PAGMO_PUBLIC cec2006;
+class PAGMO_DLL_PUBLIC cec2006;
 
 namespace detail
 {
@@ -78,7 +78,7 @@ typedef void (cec2006::*func_ptr)(vector_double &, const vector_double &) const;
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC cec2006
+class PAGMO_DLL_PUBLIC cec2006
 {
 public:
     /// Constructor

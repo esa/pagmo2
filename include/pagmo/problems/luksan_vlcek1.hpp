@@ -62,7 +62,7 @@ namespace pagmo
  * constrained optimization." (1999). http://hdl.handle.net/11104/0123965
  *
  */
-struct PAGMO_PUBLIC luksan_vlcek1 {
+struct PAGMO_DLL_PUBLIC luksan_vlcek1 {
     /// Constructor from dimension and bounds
     /**
      * Constructs the luksan_vlcek1 problem.

@@ -40,7 +40,7 @@ namespace pagmo
 {
 
 // Bfe that uses problem's member function.
-class PAGMO_PUBLIC member_bfe
+class PAGMO_DLL_PUBLIC member_bfe
 {
 public:
     // Call operator.

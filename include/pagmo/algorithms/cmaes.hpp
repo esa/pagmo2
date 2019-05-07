@@ -75,7 +75,7 @@ namespace pagmo
  *    Springer Berlin Heidelberg, 2006. 75-102.
  * \endverbatim
  */
-class PAGMO_PUBLIC cmaes
+class PAGMO_DLL_PUBLIC cmaes
 {
 public:
     /// Single data line for the algorithm's log.

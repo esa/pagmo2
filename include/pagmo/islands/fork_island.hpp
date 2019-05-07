@@ -45,7 +45,7 @@ namespace pagmo
 {
 
 // Fork island: will offload the evolution to a child process created with the fork() system call.
-class PAGMO_PUBLIC fork_island
+class PAGMO_DLL_PUBLIC fork_island
 {
 public:
     // NOTE: we need to implement these because of the m_pid member,

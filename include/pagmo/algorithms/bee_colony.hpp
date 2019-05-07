@@ -56,7 +56,7 @@ namespace pagmo
  *
  * See: https://www.sciencedirect.com/science/article/pii/S0020025514008378 for the pseudo-code
  */
-class PAGMO_PUBLIC bee_colony
+class PAGMO_DLL_PUBLIC bee_colony
 {
 public:
     /// Single entry of the log (gen, fevals, best, cur_best)

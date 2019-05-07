@@ -93,7 +93,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC decompose
+class PAGMO_DLL_PUBLIC decompose
 {
 public:
     // Default constructor.

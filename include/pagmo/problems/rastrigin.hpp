@@ -61,7 +61,7 @@ namespace pagmo
  * \f]
  * The global minimum is in the origin, where \f$ F\left( 0,\ldots,0 \right) = 0 \f$.
  */
-struct PAGMO_PUBLIC rastrigin {
+struct PAGMO_DLL_PUBLIC rastrigin {
     /// Constructor from dimension
     /**
      * Constructs a Rastrigin problem

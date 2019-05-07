@@ -77,7 +77,7 @@ namespace pagmo
 /**
  * This problem is used to implement the default constructors of pagmo::problem and of the meta-problems.
  */
-struct PAGMO_PUBLIC null_problem {
+struct PAGMO_DLL_PUBLIC null_problem {
     /// Constructor from number of objectives.
     /**
      * @param nobj the desired number of objectives.
@@ -579,16 +579,16 @@ namespace detail
 // - lower bounds greater than upper bounds.
 // - integer part larger than bounds size
 // - integer bounds not integers
-PAGMO_PUBLIC void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds,
-                                       vector_double::size_type nix = 0u);
+PAGMO_DLL_PUBLIC void check_problem_bounds(const std::pair<vector_double, vector_double> &bounds,
+                                           vector_double::size_type nix = 0u);
 
-PAGMO_PUBLIC sparsity_pattern dense_hessian(vector_double::size_type);
+PAGMO_DLL_PUBLIC sparsity_pattern dense_hessian(vector_double::size_type);
 
-PAGMO_PUBLIC std::vector<sparsity_pattern> dense_hessians(vector_double::size_type, vector_double::size_type);
+PAGMO_DLL_PUBLIC std::vector<sparsity_pattern> dense_hessians(vector_double::size_type, vector_double::size_type);
 
-PAGMO_PUBLIC sparsity_pattern dense_gradient(vector_double::size_type, vector_double::size_type);
+PAGMO_DLL_PUBLIC sparsity_pattern dense_gradient(vector_double::size_type, vector_double::size_type);
 
-struct PAGMO_PUBLIC_INLINE prob_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE prob_inner_base {
     virtual ~prob_inner_base() {}
     virtual std::unique_ptr<prob_inner_base> clone() const = 0;
     virtual vector_double fitness(const vector_double &) const = 0;
@@ -619,7 +619,7 @@ struct PAGMO_PUBLIC_INLINE prob_inner_base {
 };
 
 template <typename T>
-struct PAGMO_PUBLIC_INLINE prob_inner final : prob_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE prob_inner final : prob_inner_base {
     // We just need the def ctor, delete everything else.
     prob_inner() = default;
     prob_inner(const prob_inner &) = delete;
@@ -1003,10 +1003,10 @@ namespace pagmo
 {
 
 // Fwd declare for the declarations below.
-class PAGMO_PUBLIC problem;
+class PAGMO_DLL_PUBLIC problem;
 
 // Streaming operator
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
 
 namespace detail
 {
@@ -1014,9 +1014,9 @@ namespace detail
 // These are internal private helpers which are used both in problem
 // and elsewhere. Hence, decouple them from the problem class and provide
 // them as free functions.
-PAGMO_PUBLIC void prob_check_dv(const problem &, const double *, vector_double::size_type);
-PAGMO_PUBLIC void prob_check_fv(const problem &, const double *, vector_double::size_type);
-PAGMO_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+PAGMO_DLL_PUBLIC void prob_check_dv(const problem &, const double *, vector_double::size_type);
+PAGMO_DLL_PUBLIC void prob_check_fv(const problem &, const double *, vector_double::size_type);
+PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
 
 } // namespace detail
 
@@ -1103,11 +1103,11 @@ PAGMO_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const 
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC problem
+class PAGMO_DLL_PUBLIC problem
 {
     // Make friend with the streaming operator, which needs access
     // to the internals.
-    friend PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
+    friend PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
 
     // Enable the generic ctor only if T is not a problem (after removing
     // const/reference qualifiers), and if T is a udp.
@@ -1242,7 +1242,7 @@ public:
 private:
 #if !defined(PAGMO_DOXYGEN_INVOKED)
     // Make friends with the batch_fitness() invocation helper.
-    friend PAGMO_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+    friend PAGMO_DLL_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
 #endif
 
 public:

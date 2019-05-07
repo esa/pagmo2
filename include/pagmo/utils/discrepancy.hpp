@@ -38,7 +38,7 @@ namespace pagmo
 {
 
 // Sample from a simplex
-PAGMO_PUBLIC std::vector<double> sample_from_simplex(std::vector<double>);
+PAGMO_DLL_PUBLIC std::vector<double> sample_from_simplex(std::vector<double>);
 
 /// Van der Corput sequence
 /**
@@ -71,7 +71,7 @@ PAGMO_PUBLIC std::vector<double> sample_from_simplex(std::vector<double>);
  * See: https://en.wikipedia.org/wiki/Van_der_Corput_sequence
  *
  */
-class PAGMO_PUBLIC van_der_corput
+class PAGMO_DLL_PUBLIC van_der_corput
 {
 public:
     /// Constructor from base and starting element
@@ -128,7 +128,7 @@ private:
  * See: https://en.wikipedia.org/wiki/Halton_sequence
  *
  */
-class PAGMO_PUBLIC halton
+class PAGMO_DLL_PUBLIC halton
 {
 public:
     /// Constructor from base and starting element

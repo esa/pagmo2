@@ -52,7 +52,7 @@ namespace pagmo
  * \f]
  * The global minimum is in \f$x_i=0\f$, where \f$ F\left( 0,\ldots,0 \right) = 0 \f$.
  */
-struct PAGMO_PUBLIC ackley {
+struct PAGMO_DLL_PUBLIC ackley {
     /// Constructor from dimension
     /**
      * Constructs an Ackley problem

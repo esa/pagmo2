@@ -64,7 +64,7 @@ namespace pagmo
  * 	H_{ii}\left(x_1,\ldots,x_n\right) = 2 + 10 \cdot 4\pi^2 \cdot\cos\left( 2\pi \cdot x_i \right)
  * \f]
  */
-struct PAGMO_PUBLIC minlp_rastrigin {
+struct PAGMO_DLL_PUBLIC minlp_rastrigin {
     /// Constructor from continuous and integer dimension
     /**
      * Constructs a MINLP Rastrigin problem.

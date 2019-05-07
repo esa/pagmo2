@@ -74,7 +74,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC population
+class PAGMO_DLL_PUBLIC population
 {
 public:
     /// The size type of the population.
@@ -365,7 +365,7 @@ private:
 };
 
 // Streaming operator for the class pagmo::population.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 } // namespace pagmo
 

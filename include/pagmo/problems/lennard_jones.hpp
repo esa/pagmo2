@@ -54,7 +54,7 @@ namespace pagmo
  * See: http://doye.chem.ox.ac.uk/jon/structures/LJ.html
  *
  */
-class PAGMO_PUBLIC lennard_jones
+class PAGMO_DLL_PUBLIC lennard_jones
 {
 public:
     /// Constructor from number of atoms

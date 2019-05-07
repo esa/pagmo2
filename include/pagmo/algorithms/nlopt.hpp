@@ -114,7 +114,7 @@ namespace pagmo
 // - it looks like those lower_bound calls in the C objfun/constr computations related
 //   to the gradient sparsity pattern can be done once on construction, instead of
 //   repeatedly at every objfun.
-class PAGMO_PUBLIC nlopt : public not_population_based
+class PAGMO_DLL_PUBLIC nlopt : public not_population_based
 {
 public:
     /// Single data line for the algorithm's log.

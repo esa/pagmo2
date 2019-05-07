@@ -66,7 +66,7 @@ namespace pagmo
  * to conclude by calling the wait() and wait_check() methods. The status of
  * ongoing evolutions in the archipelago can be queried via status().
  */
-class PAGMO_PUBLIC archipelago
+class PAGMO_DLL_PUBLIC archipelago
 {
     using container_t = std::vector<std::unique_ptr<island>>;
     using size_type_implementation = container_t::size_type;
@@ -417,7 +417,7 @@ private:
 };
 
 // Stream operator.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const archipelago &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const archipelago &);
 
 } // namespace pagmo
 

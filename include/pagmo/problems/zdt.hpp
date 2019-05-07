@@ -128,7 +128,7 @@ namespace pagmo
  * \f]
  */
 
-class PAGMO_PUBLIC zdt
+class PAGMO_DLL_PUBLIC zdt
 {
 public:
     /** Constructor

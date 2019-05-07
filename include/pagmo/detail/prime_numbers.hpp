@@ -36,7 +36,7 @@ namespace pagmo
 namespace detail
 {
 
-PAGMO_PUBLIC unsigned prime(unsigned);
+PAGMO_DLL_PUBLIC unsigned prime(unsigned);
 
 } // namespace detail
 } // namespace pagmo

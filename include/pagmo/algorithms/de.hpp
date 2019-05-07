@@ -69,7 +69,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_PUBLIC de
+class PAGMO_DLL_PUBLIC de
 {
 public:
     /// Single entry of the log (gen, fevals, best, dx, df)

@@ -51,7 +51,7 @@ namespace pagmo
  * \f]
  * The global minimum is in \f$x_i=420.9687, i = 1..n\f$, where \f$ F\left( 420.9687,\ldots,420.9687 \right) = 0 \f$.
  */
-struct PAGMO_PUBLIC schwefel {
+struct PAGMO_DLL_PUBLIC schwefel {
     /// Constructor from dimension
     /**
      * Constructs a Schwefel problem

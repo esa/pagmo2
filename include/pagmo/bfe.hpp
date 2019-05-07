@@ -110,7 +110,7 @@ const bool is_udbfe<T>::value;
 namespace detail
 {
 
-struct PAGMO_PUBLIC_INLINE bfe_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE bfe_inner_base {
     virtual ~bfe_inner_base() {}
     virtual std::unique_ptr<bfe_inner_base> clone() const = 0;
     virtual vector_double operator()(const problem &, const vector_double &) const = 0;
@@ -124,7 +124,7 @@ struct PAGMO_PUBLIC_INLINE bfe_inner_base {
 };
 
 template <typename T>
-struct PAGMO_PUBLIC_INLINE bfe_inner final : bfe_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE bfe_inner final : bfe_inner_base {
     // We just need the def ctor, delete everything else.
     bfe_inner() = default;
     bfe_inner(const bfe_inner &) = delete;
@@ -213,7 +213,7 @@ struct is_virtual_base_of<pagmo::detail::bfe_inner_base, pagmo::detail::bfe_inne
 namespace pagmo
 {
 
-class PAGMO_PUBLIC bfe
+class PAGMO_DLL_PUBLIC bfe
 {
     // Enable the generic ctor only if T is not a bfe (after removing
     // const/reference qualifiers), and if T is a udbfe. Additionally,
@@ -337,7 +337,7 @@ private:
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator.
-PAGMO_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
 
 #endif
 

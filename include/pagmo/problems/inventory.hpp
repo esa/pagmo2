@@ -65,7 +65,7 @@ namespace pagmo
  * See: www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf
  *
  */
-class PAGMO_PUBLIC inventory
+class PAGMO_DLL_PUBLIC inventory
 {
 public:
     /// Constructor from weeks, sample size and random seed
