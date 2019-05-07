@@ -68,13 +68,11 @@ if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boo
     set_target_properties(core PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 endif()
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
-if(NOT (YACMA_COMPILER_IS_MSVC AND YACMA_COMPILER_IS_CLANGXX))
-    if(NOT CMAKE_CXX_STANDARD)
-        set_property(TARGET core PROPERTY CXX_STANDARD 11)
-    endif()
-    set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)
-    set_property(TARGET core PROPERTY CXX_EXTENSIONS NO)
+if(NOT CMAKE_CXX_STANDARD)
+    set_property(TARGET core PROPERTY CXX_STANDARD 11)
 endif()
+set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED YES)
+set_property(TARGET core PROPERTY CXX_EXTENSIONS NO)
 
 # Helper file with version number.
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/_version.py.in" "${CMAKE_CURRENT_BINARY_DIR}/_version.py" @ONLY)
