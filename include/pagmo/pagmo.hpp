@@ -79,10 +79,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/sga.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
-#include <pagmo/algorithms/xnes.hpp>
 
 #if defined(PAGMO_WITH_EIGEN3)
 #include <pagmo/algorithms/cmaes.hpp>
+#include <pagmo/algorithms/xnes.hpp>
 #endif
 
 #if defined(PAGMO_WITH_IPOPT)
