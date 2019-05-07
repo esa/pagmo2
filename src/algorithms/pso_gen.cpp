@@ -488,7 +488,7 @@ void pso_gen::set_seed(unsigned int seed)
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
  *
- * @return a string containing extra informations on the algorithm
+ * @return a string containing extra info on the algorithm
  */
 std::string pso_gen::get_extra_info() const
 {

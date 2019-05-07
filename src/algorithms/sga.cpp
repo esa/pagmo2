@@ -295,7 +295,7 @@ void sga::set_seed(unsigned seed)
 
 /// Extra info
 /**
- * @return a string containing extra informations on the algorithm
+ * @return a string containing extra info on the algorithm
  */
 std::string sga::get_extra_info() const
 {

@@ -254,7 +254,7 @@ void nsga2::set_seed(unsigned int seed)
 /**
  * Returns extra information on the algorithm.
  *
- * @return an <tt> std::string </tt> containing extra informations on the algorithm
+ * @return an <tt> std::string </tt> containing extra info on the algorithm
  */
 std::string nsga2::get_extra_info() const
 {

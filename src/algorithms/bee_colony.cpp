@@ -246,9 +246,9 @@ void bee_colony::set_seed(unsigned seed)
     m_seed = seed;
 }
 
-/// Extra informations
+/// Extra info
 /**
- * @return a string containing extra informations on the algorithm
+ * @return a string containing extra info on the algorithm
  */
 std::string bee_colony::get_extra_info() const
 {

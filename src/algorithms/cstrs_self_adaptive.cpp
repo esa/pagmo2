@@ -511,9 +511,9 @@ void cstrs_self_adaptive::set_seed(unsigned seed)
     m_seed = seed;
 }
 
-/// Extra informations
+/// Extra info
 /**
- * @return a string containing extra informations on the algorithm.
+ * @return a string containing extra info on the algorithm.
  */
 std::string cstrs_self_adaptive::get_extra_info() const
 {

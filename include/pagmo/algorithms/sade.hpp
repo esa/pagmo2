@@ -213,7 +213,7 @@ public:
         return "saDE: Self-adaptive Differential Evolution";
     }
 
-    // Extra informations
+    // Extra info
     std::string get_extra_info() const;
 
     /// Get log

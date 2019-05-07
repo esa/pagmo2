@@ -207,7 +207,7 @@ public:
     {
         return "CS: Compass Search";
     }
-    // Extra informations
+    // Extra info
     std::string get_extra_info() const;
 
     /// Get log

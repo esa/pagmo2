@@ -207,7 +207,7 @@ public:
     {
         return "PSO: Particle Swarm Optimization";
     }
-    // Extra informations
+    // Extra info
     std::string get_extra_info() const;
     /// Get log
     /**

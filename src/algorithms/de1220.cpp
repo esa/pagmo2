@@ -615,7 +615,7 @@ void de1220::set_seed(unsigned int seed)
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
  *
- * @return a string containing extra informations on the algorithm
+ * @return a string containing extra info on the algorithm
  */
 std::string de1220::get_extra_info() const
 {

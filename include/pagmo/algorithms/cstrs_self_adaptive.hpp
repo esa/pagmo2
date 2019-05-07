@@ -342,7 +342,7 @@ public:
         return "sa-CNSTR: Self-adaptive constraints handling";
     }
 
-    // Extra informations
+    // Extra info
     std::string get_extra_info() const;
 
     // Algorithm's thread safety level.

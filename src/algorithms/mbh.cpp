@@ -240,9 +240,9 @@ thread_safety mbh::get_thread_safety() const
     return std::min(m_algorithm.get_thread_safety(), thread_safety::basic);
 }
 
-/// Extra informations.
+/// Extra info.
 /**
- * @return a string containing extra informations on the algorithm.
+ * @return a string containing extra info on the algorithm.
  */
 std::string mbh::get_extra_info() const
 {

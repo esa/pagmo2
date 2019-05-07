@@ -193,11 +193,11 @@ population compass_search::evolve(population pop) const
     return pop;
 }
 
-/// Extra informations
+/// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
  *
- * @return a string containing extra informations on the algorithm
+ * @return a string containing extra info on the algorithm
  */
 std::string compass_search::get_extra_info() const
 {

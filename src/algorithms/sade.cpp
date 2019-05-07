@@ -597,11 +597,11 @@ void sade::set_seed(unsigned int seed)
     m_seed = seed;
 }
 
-/// Extra informations
+/// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
  *
- * @return a string containing extra informations on the algorithm
+ * @return a string containing extra info on the algorithm
  */
 std::string sade::get_extra_info() const
 {

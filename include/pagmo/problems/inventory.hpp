@@ -104,7 +104,7 @@ public:
     {
         return "Inventory problem";
     }
-    // Extra informations
+    // Extra info
     std::string get_extra_info() const;
 
     // Object serialization

@@ -144,7 +144,7 @@ public:
         return "ABC: Artificial Bee Colony";
     }
 
-    // Extra informations
+    // Extra info
     std::string get_extra_info() const;
 
     /// Get log

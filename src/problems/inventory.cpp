@@ -84,9 +84,9 @@ std::pair<vector_double, vector_double> inventory::get_bounds() const
     return {lb, ub};
 }
 
-/// Extra informations
+/// Extra info
 /**
- * @return a string containing extra informations on the problem
+ * @return a string containing extra info on the problem
  */
 std::string inventory::get_extra_info() const
 {

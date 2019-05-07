@@ -154,7 +154,7 @@ std::vector<sparsity_pattern> minlp_rastrigin::hessians_sparsity() const
 
 /// Extra info
 /**
- * @return a string containing extra informations on the problem
+ * @return a string containing extra info on the problem
  */
 std::string minlp_rastrigin::get_extra_info() const
 {

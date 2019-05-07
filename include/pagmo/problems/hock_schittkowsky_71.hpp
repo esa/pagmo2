@@ -107,9 +107,9 @@ struct PAGMO_DLL_PUBLIC hock_schittkowsky_71 {
         return "Hock Schittkowsky 71";
     }
 
-    /// Extra informations
+    /// Extra info
     /**
-     * @return a string containing extra informations on the problem
+     * @return a string containing extra info on the problem
      */
     std::string get_extra_info() const
     {
