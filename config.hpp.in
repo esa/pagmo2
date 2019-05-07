@@ -48,11 +48,6 @@ see https://www.gnu.org/licenses/. */
 
 #if !defined(_MSC_VER) && !defined(__APPLE__)
 
-// MSVC and at least some versions of Clang on OSX have issues
-// with the large data arrays in the CEC 2013/2014 problems.
-// Let's disable them on these platforms. We can probably
-// ameliorate and perhaps solve altogether the issues once
-// we switch to a compiled-library setup for pagmo.
 #define PAGMO_ENABLE_CEC2013
 #define PAGMO_ENABLE_CEC2014
 
