@@ -26,8 +26,8 @@ You should have received codetail::pi()es of the GNU General Public License and 
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_CEC2009_HPP
-#define PAGMO_PROBLEM_CEC2009_HPP
+#ifndef PAGMO_PROBLEMS_CEC2009_HPP
+#define PAGMO_PROBLEMS_CEC2009_HPP
 
 #include <string>
 #include <utility>

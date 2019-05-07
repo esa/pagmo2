@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_ROSENBROCK_HPP
-#define PAGMO_PROBLEM_ROSENBROCK_HPP
+#ifndef PAGMO_PROBLEMS_ROSENBROCK_HPP
+#define PAGMO_PROBLEMS_ROSENBROCK_HPP
 
 #include <string>
 #include <utility>

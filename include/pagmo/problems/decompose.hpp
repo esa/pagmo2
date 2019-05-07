@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_DECOMPOSE_HPP
-#define PAGMO_PROBLEM_DECOMPOSE_HPP
+#ifndef PAGMO_PROBLEMS_DECOMPOSE_HPP
+#define PAGMO_PROBLEMS_DECOMPOSE_HPP
 
 #include <string>
 #include <type_traits>

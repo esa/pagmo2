@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_THREAD_ISLAND_HPP
-#define PAGMO_THREAD_ISLAND_HPP
+#ifndef PAGMO_ISLANDS_THREAD_ISLAND_HPP
+#define PAGMO_ISLANDS_THREAD_ISLAND_HPP
 
 #include <string>
 

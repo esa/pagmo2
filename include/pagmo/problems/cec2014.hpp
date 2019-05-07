@@ -31,8 +31,8 @@ see https://www.gnu.org/licenses/. */
   Jane Jing Liang (email: liangjing@zzu.edu.cn; liangjing@pmail.ntu.edu.cn)
 */
 
-#ifndef PAGMO_PROBLEM_CEC2014_HPP
-#define PAGMO_PROBLEM_CEC2014_HPP
+#ifndef PAGMO_PROBLEMS_CEC2014_HPP
+#define PAGMO_PROBLEMS_CEC2014_HPP
 
 #include <pagmo/config.hpp>
 
