@@ -61,6 +61,12 @@ YACMA_PYTHON_MODULE(core
 )
 target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+# NOTE: some versions of Boost before 1.66 have wrongly defined visibility settings, hence
+# we enable default hidden visibility only for later versions.
+if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 65))
+    set_target_properties(core PROPERTIES CXX_VISIBILITY_PRESET hidden)
+    set_target_properties(core PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
+endif()
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
 if(NOT (YACMA_COMPILER_IS_MSVC AND YACMA_COMPILER_IS_CLANGXX))
     if(NOT CMAKE_CXX_STANDARD)
