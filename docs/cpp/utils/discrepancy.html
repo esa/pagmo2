@@ -178,7 +178,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE">
-<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1a0329797995bade31d52604daf6ad5247"></span>std::vector&lt;double&gt; <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">sample_from_simplex</code><span class="sig-paren">(</span>std::vector&lt;double&gt; <em>in</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span>std::vector&lt;double&gt; <code class="descclassname">pagmo<code class="descclassname">::</code></code><code class="descname">sample_from_simplex</code><span class="sig-paren">(</span>std::vector&lt;double&gt; <em>in</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sample from a simplex. </p>
 <p>Samples a point on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex from a <span class="math notranslate nohighlight">\(n-1\)</span> dimensional point</p>
 <p>In order to generate a uniform distribution on a simplex, that is to sample a <span class="math notranslate nohighlight">\(n\)</span>-dimensional point <span class="math notranslate nohighlight">\(\mathbf x\)</span> such that <span class="math notranslate nohighlight">\(\sum_{i=1}^{n} x_i = 1\)</span> one can follow the following approach: take <span class="math notranslate nohighlight">\(n-1\)</span> random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of <span class="math notranslate nohighlight">\(n+1\)</span> numbers. Sort the list and record the differences between two consecutive elements. This creates a list of <span class="math notranslate nohighlight">\(n\)</span> number that, by construction, will sum up to 1. Moreover this sampling is uniform. As an example the following code would generate points distributed on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex:</p>
@@ -226,7 +226,7 @@
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo14van_der_corput14van_der_corputEjj">
-<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned-i.unsigned-i"></span><span class="target" id="classpagmo_1_1van__der__corput_1a06bc0e26f8fab33fff6e66726b5eda0a"></span><code class="descname">van_der_corput</code><span class="sig-paren">(</span>unsigned int <em>b</em> = 2u, unsigned int <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><code class="descname">van_der_corput</code><span class="sig-paren">(</span>unsigned <em>b</em> = 2u, unsigned <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
 <p>Consruct a van der Corput lowp-discrepancy sequence with base <code class="docutils literal notranslate"><span class="pre">b</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
 <p><dl class="simple">
@@ -255,8 +255,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archive">
-<span id="_CPPv3I0EN5pagmo14van_der_corput9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo14van_der_corput9serializeER7Archive"></span><span class="target" id="classpagmo_1_1van__der__corput_1a83a2bdeadaa2f18eb327782e48774c77"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archive" title="pagmo::van_der_corput::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1van__der__corput_1ab44a224bb8ab618d0b440a8c103cb304"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="pagmo::van_der_corput::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -265,7 +265,7 @@
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
@@ -297,7 +297,7 @@
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo6halton6haltonEjj">
-<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned-i.unsigned-i"></span><span class="target" id="classpagmo_1_1halton_1aaf584e81f9063e121b777873bc703474"></span><code class="descname">halton</code><span class="sig-paren">(</span>unsigned int <em>dim</em> = 2u, unsigned int <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><code class="descname">halton</code><span class="sig-paren">(</span>unsigned <em>dim</em> = 2u, unsigned <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
 <p>Consruct a Halton low-discrepancy sequence with dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
 <p><dl class="simple">
@@ -316,7 +316,7 @@
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6haltonclEv">
-<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1ad9418498c74ca18c2e023fd5fe2e31af"></span>std::vector&lt;double&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span>std::vector&lt;double&gt; <code class="descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the next number in the sequence </p>
@@ -326,8 +326,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo6halton9serializeEvR7Archive">
-<span id="_CPPv3I0EN5pagmo6halton9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo6halton9serializeER7Archive"></span><span class="target" id="classpagmo_1_1halton_1ac0555fe6f1b387b933380b2623d1847c"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archive" title="pagmo::halton::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo6halton9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6halton9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1halton_1ac12d114cc25697e1c437e4d5d0a7d3a3"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="pagmo::halton::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -336,7 +336,7 @@
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> or of primitive types. </p></li>
 </ul>
 </dd>
 </dl>

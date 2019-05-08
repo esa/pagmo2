@@ -197,19 +197,22 @@ Batch fitness evaluator
 
       :exception unspecified: any exception raised by the (de)serialisation of primitive types or of the UDBFE.
 
-   .. cpp:function:: friend std::ostream &operator<<(std::ostream &os, const bfe &b)
+Functions
+---------
 
-      Stream insertion operator.
+.. cpp:function:: std::ostream &operator<<(std::ostream &os, const bfe &b)
 
-      This function will direct to *os* a human-readable representation of the input
-      :cpp:class:`~pagmo::bfe` *b*.
+   Stream insertion operator.
 
-      :param os: the input ``std::ostream``.
-      :param b: the batch fitness evaluator that will be directed to *os*.
+   This function will direct to *os* a human-readable representation of the input
+   :cpp:class:`~pagmo::bfe` *b*.
 
-      :return: a reference to *os*.
+   :param os: the input ``std::ostream``.
+   :param b: the batch fitness evaluator that will be directed to *os*.
 
-      :exception unspecified: any exception thrown by querying various properties of the evaluator and directing them to *os*.
+   :return: a reference to *os*.
+
+   :exception unspecified: any exception thrown by querying various properties of the evaluator and directing them to *os*.
 
 Associated type traits
 ----------------------

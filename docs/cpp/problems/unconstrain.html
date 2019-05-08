@@ -179,7 +179,7 @@
 <span id="_CPPv3N5pagmo11unconstrainE"></span><span id="_CPPv2N5pagmo11unconstrainE"></span><span id="pagmo::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain"></span><em class="property">class </em><code class="descname">unconstrain</code><a class="headerlink" href="#_CPPv4N5pagmo11unconstrainE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The unconstrain meta-problem. </p>
 <p>This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:<ul class="simple">
-<li><p>Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as checked by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ac53d0a801571b55912a60a72fadf73f1"><span class="std std-ref">pagmo::problem::feasibility_f()</span></a>.</p></li>
+<li><p>Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as checked by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a98358b389c7882d2e1a42023bceb69bf"><span class="std std-ref">pagmo::problem::feasibility_f()</span></a>.</p></li>
 <li><p>Kuri’s death penalty: defined by Angel Kuri Morales et al., penalizes all objectives according to the rate of satisfied constraints.</p></li>
 <li><p>Weighted violations penalty: penalizes all objectives by the weighted sum of the constraint violations.</p></li>
 <li><p>Ignore the constraints: simply ignores the constraints.</p></li>
@@ -203,7 +203,8 @@
 <dd><p>Constructor from UDP and unconstrain method. </p>
 <p><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>.</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>
+and if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo11unconstrainE" title="pagmo::unconstrain"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::unconstrain</span></code></a>.</p>
 </div>
 </p>
 <p>Wraps a user-defined problem so that its constraints will be removed</p>
@@ -225,7 +226,7 @@
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="pagmo::unconstrain::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1a04865c9518d9c2cc280ed514481635da"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="pagmo::unconstrain::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1a8bb88c00ea5db792cbbb0239ba789576"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness. </p>
 <p>The unconstrained fitness computation.</p>
 <p><dl class="simple">
@@ -236,7 +237,7 @@
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a8e29c2c806377fd1855274dac8376add"><span class="std std-ref">problem::fitness()</span></a>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a5969da5bb800845eda3101ce1cfa053f"><span class="std std-ref">problem::fitness()</span></a>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -267,14 +268,14 @@
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo11unconstrain10get_boundsEv">
-<span id="_CPPv3NK5pagmo11unconstrain10get_boundsEv"></span><span id="_CPPv2NK5pagmo11unconstrain10get_boundsEv"></span><span id="pagmo::unconstrain::get_boundsC"></span><span class="target" id="classpagmo_1_1unconstrain_1a62f916019bac1ffe4a41ef1ed080bb28"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain10get_boundsEv"></span><span id="_CPPv2NK5pagmo11unconstrain10get_boundsEv"></span><span id="pagmo::unconstrain::get_boundsC"></span><span class="target" id="classpagmo_1_1unconstrain_1af22ef4a676a651074a3acfa0b92cdc0e"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>Forwards the bounds computations to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae00e821bd8e59113ec5534e638691ea5"><span class="std std-ref"><span class="pre">problem::get_bounds()</span></span></a></code>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref"><span class="pre">problem::get_bounds()</span></span></a></code>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -295,9 +296,9 @@
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo11unconstrain8set_seedEj">
-<span id="_CPPv3N5pagmo11unconstrain8set_seedEj"></span><span id="_CPPv2N5pagmo11unconstrain8set_seedEj"></span><span id="pagmo::unconstrain::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1unconstrain_1a1c07c3e0eb4705e31d0ecdc58f790d43"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a1c07c3e0eb4705e31d0ecdc58f790d43"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
-<p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a1c07c3e0eb4705e31d0ecdc58f790d43"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem.</p>
+<span id="_CPPv3N5pagmo11unconstrain8set_seedEj"></span><span id="_CPPv2N5pagmo11unconstrain8set_seedEj"></span><span id="pagmo::unconstrain::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
+<p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem.</p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed to be set.</p></li>
@@ -325,7 +326,7 @@
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo11unconstrain17get_inner_problemEv">
-<span id="_CPPv3NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problemC"></span><span class="target" id="classpagmo_1_1unconstrain_1a907c726c0eaa741d17001e642928812e"></span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problemC"></span><span class="target" id="classpagmo_1_1unconstrain_1ae85b796a614b3c3a31a2f17974cf984e"></span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <p><dl class="simple">
@@ -337,7 +338,7 @@
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo11unconstrain17get_inner_problemEv">
-<span id="_CPPv3N5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2N5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problem"></span><span class="target" id="classpagmo_1_1unconstrain_1aa931494c7e37afc7d1428c69ed6b8680"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2N5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problem"></span><span class="target" id="classpagmo_1_1unconstrain_1ae8bd72016376e905097854950657ad6c"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <p><div class="admonition note">
@@ -387,8 +388,8 @@ non-const methods on the internal <a class="reference internal" href="../problem
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo11unconstrain9serializeEvR7Archive">
-<span id="_CPPv3I0EN5pagmo11unconstrain9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo11unconstrain9serializeER7Archive"></span><span class="target" id="classpagmo_1_1unconstrain_1ab87d62e276dd7cb3a1bd52a0144e3d0f"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11unconstrain9serializeEvR7Archive" title="pagmo::unconstrain::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11unconstrain9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo11unconstrain9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo11unconstrain9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo11unconstrain9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1unconstrain_1a21922af33fb916fefe2c9e69f41442a0"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11unconstrain9serializeEvR7Archivej" title="pagmo::unconstrain::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11unconstrain9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into/from the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

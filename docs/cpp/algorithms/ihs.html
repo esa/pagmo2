@@ -180,7 +180,7 @@
 <dd><p>Improved Harmony Search. </p>
 <p><img alt="../../../_images/ihs.gif" src="../../../_images/ihs.gif" /></p>
 <p>Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians. In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value) for finding a best harmony (i.e., the global optimum) all together.</p>
-<p>This code implements the so-called improved harmony search algorithm (IHS), in which the probability of picking the variables from the decision vector and the amount of mutation to which they are subject vary (respectively linearly and exponentially) at each call of the <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1ihs_1a14cd7c1097c8347bee260cf10cfdfaf6"><span class="std std-ref"><span class="pre">evolve()</span></span></a></code> method.</p>
+<p>This code implements the so-called improved harmony search algorithm (IHS), in which the probability of picking the variables from the decision vector and the amount of mutation to which they are subject vary (respectively linearly and exponentially) at each call of the <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1ihs_1a2e6e87e094bd1a22ed3cd2c3f7324b8e"><span class="std std-ref"><span class="pre">evolve()</span></span></a></code> method.</p>
 <p>In this algorithm the number of fitness function evaluations is equal to the number of iterations. All the individuals in the input population participate in the evolution. A new individual is generated at every iteration, substituting the current worst individual of the population if better.</p>
 <p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -230,7 +230,7 @@ harmony search.</p>
 <dt id="_CPPv4N5pagmo3ihs8log_typeE">
 <span id="_CPPv3N5pagmo3ihs8log_typeE"></span><span id="_CPPv2N5pagmo3ihs8log_typeE"></span><span id="pagmo::ihs::log_type"></span><span class="target" id="classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo3ihs13log_line_typeE" title="pagmo::ihs::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo3ihs8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Log type. </p>
-<p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1ihs_1a28290771e565656f6e59423c692722b7"><span class="std std-ref">ihs::set_verbosity()</span></a>). </p>
+<p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"><span class="std std-ref">ihs::set_verbosity()</span></a>). </p>
 </dd></dl>
 
 </div>
@@ -238,7 +238,7 @@ harmony search.</p>
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo3ihs3ihsEjdddddj">
-<span id="_CPPv3N5pagmo3ihs3ihsEjdddddj"></span><span id="_CPPv2N5pagmo3ihs3ihsEjdddddj"></span><span id="pagmo::ihs::ihs__unsigned.double.double.double.double.double.unsigned-i"></span><span class="target" id="classpagmo_1_1ihs_1a98cece1bf96b6d57cd6358725dd7814d"></span><code class="descname">ihs</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>phmcr</em> = 0.85, double <em>ppar_min</em> = 0.35, double <em>ppar_max</em> = 0.99, double <em>bw_min</em> = 1E-5, double <em>bw_max</em> = 1., unsigned int <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs3ihsEjdddddj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3ihs3ihsEjdddddj"></span><span id="_CPPv2N5pagmo3ihs3ihsEjdddddj"></span><span id="pagmo::ihs::ihs__unsigned.double.double.double.double.double.unsigned"></span><span class="target" id="classpagmo_1_1ihs_1abd9859b48876020027dfa85919b5779f"></span><code class="descname">ihs</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>phmcr</em> = 0.85, double <em>ppar_min</em> = 0.35, double <em>ppar_max</em> = 0.99, double <em>bw_min</em> = 1E-5, double <em>bw_max</em> = 1., unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs3ihsEjdddddj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs ihs</p>
 <p><dl class="simple">
@@ -262,8 +262,8 @@ harmony search.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3ihs6evolveE10population">
-<span id="_CPPv3NK5pagmo3ihs6evolveE10population"></span><span id="_CPPv2NK5pagmo3ihs6evolveE10population"></span><span id="pagmo::ihs::evolve__populationC"></span><span class="target" id="classpagmo_1_1ihs_1a14cd7c1097c8347bee260cf10cfdfaf6"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<span id="_CPPv3NK5pagmo3ihs6evolveE10population"></span><span id="_CPPv2NK5pagmo3ihs6evolveE10population"></span><span id="pagmo::ihs::evolve__populationC"></span><span class="target" id="classpagmo_1_1ihs_1a2e6e87e094bd1a22ed3cd2c3f7324b8e"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>evolved population </p>
 </dd>
@@ -281,7 +281,7 @@ harmony search.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo3ihs13set_verbosityEj">
-<span id="_CPPv3N5pagmo3ihs13set_verbosityEj"></span><span id="_CPPv2N5pagmo3ihs13set_verbosityEj"></span><span id="pagmo::ihs::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1ihs_1a28290771e565656f6e59423c692722b7"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3ihs13set_verbosityEj"></span><span id="_CPPv2N5pagmo3ihs13set_verbosityEj"></span><span id="pagmo::ihs::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm’s verbosity. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal notranslate"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"><span class="std std-ref">get_log()</span></a>.</p>
 <p>Example (verbosity 100, a constrained problem): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">ppar</span><span class="p">:</span>            <span class="n">bw</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>
@@ -310,7 +310,7 @@ harmony search.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3ihs13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3ihs13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3ihs13get_verbosityEv"></span><span id="pagmo::ihs::get_verbosityC"></span><span class="target" id="classpagmo_1_1ihs_1ad396f317bc9ed21a15116f42aca2cc0d"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3ihs13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3ihs13get_verbosityEv"></span><span id="pagmo::ihs::get_verbosityC"></span><span class="target" id="classpagmo_1_1ihs_1abf72adfdc7358b2a1b1e434eec2f3d65"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -321,7 +321,7 @@ harmony search.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo3ihs8set_seedEj">
-<span id="_CPPv3N5pagmo3ihs8set_seedEj"></span><span id="_CPPv2N5pagmo3ihs8set_seedEj"></span><span id="pagmo::ihs::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1ihs_1a7f7a76d3654273d9c514d0935e339fe5"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3ihs8set_seedEj"></span><span id="_CPPv2N5pagmo3ihs8set_seedEj"></span><span id="pagmo::ihs::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1ihs_1a6d8a85bb97256eaf0f4126b2822d586d"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -334,7 +334,7 @@ harmony search.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3ihs8get_seedEv">
-<span id="_CPPv3NK5pagmo3ihs8get_seedEv"></span><span id="_CPPv2NK5pagmo3ihs8get_seedEv"></span><span id="pagmo::ihs::get_seedC"></span><span class="target" id="classpagmo_1_1ihs_1a7ba64666d8716e677d9fe3482a04b4ae"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3ihs8get_seedEv"></span><span id="_CPPv2NK5pagmo3ihs8get_seedEv"></span><span id="pagmo::ihs::get_seedC"></span><span class="target" id="classpagmo_1_1ihs_1a9508242003ca610c14a67de8b1f6b021"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -358,10 +358,10 @@ harmony search.</p>
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3ihs14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo3ihs14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3ihs14get_extra_infoEv"></span><span id="pagmo::ihs::get_extra_infoC"></span><span class="target" id="classpagmo_1_1ihs_1a0fa01c57728fc1466a1edb9848755db1"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Extra informations. </p>
+<dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+<dt><strong>Return</strong></dt><dd><p>a string containing extra info on the algorithm </p>
 </dd>
 </dl>
 </p>
@@ -371,7 +371,7 @@ harmony search.</p>
 <dt id="_CPPv4NK5pagmo3ihs7get_logEv">
 <span id="_CPPv3NK5pagmo3ihs7get_logEv"></span><span id="_CPPv2NK5pagmo3ihs7get_logEv"></span><span id="pagmo::ihs::get_logC"></span><span class="target" id="classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3ihs8log_typeE" title="pagmo::ihs::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the optimisation log. </p>
-<p>See <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for a description of the optimisation log. Logging is turned on/off via <a class="reference internal" href="#classpagmo_1_1ihs_1a28290771e565656f6e59423c692722b7"><span class="std std-ref">set_verbosity()</span></a>.</p>
+<p>See <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for a description of the optimisation log. Logging is turned on/off via <a class="reference internal" href="#classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"><span class="std std-ref">set_verbosity()</span></a>.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>a const reference to the log. </p>
 </dd>
@@ -380,8 +380,8 @@ harmony search.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo3ihs9serializeEvR7Archive">
-<span id="_CPPv3I0EN5pagmo3ihs9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo3ihs9serializeER7Archive"></span><span class="target" id="classpagmo_1_1ihs_1a01b81e78a40db75d034e5c4e994e5a1c"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3ihs9serializeEvR7Archive" title="pagmo::ihs::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3ihs9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo3ihs9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo3ihs9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3ihs9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1ihs_1ab976c47924eafcca27d300fba092d134"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3ihs9serializeEvR7Archivej" title="pagmo::ihs::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3ihs9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

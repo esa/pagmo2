@@ -200,7 +200,7 @@ methods. The status of ongoing evolutions in the island can be queried via <a cl
 </pre></div>
 </div>
 </p>
-<p>The <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ad8a55ad69100eb32025558f8b07c6be6"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. Once the evolution is finished, <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> will then replace the population and the algorithm of the input island with, respectively, the evolved population and the algorithm used for the evolution.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1af738085169bf75c21377a0945ebfd199"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. Once the evolution is finished, <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> will then replace the population and the algorithm of the input island with, respectively, the evolved population and the algorithm used for the evolution.</p>
 <p>In addition to the mandatory <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -236,7 +236,7 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6island6islandERK6island">
-<span id="_CPPv3N5pagmo6island6islandERK6island"></span><span id="_CPPv2N5pagmo6island6islandERK6island"></span><span id="pagmo::island::island__islandCR"></span><span class="target" id="classpagmo_1_1island_1a8e694e237e5739b13fdca923698e96e4"></span><code class="descname">island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandERK6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6island6islandERK6island"></span><span id="_CPPv2N5pagmo6island6islandERK6island"></span><span id="pagmo::island::island__islandCR"></span><span class="target" id="classpagmo_1_1island_1a63de9c42e1450059504e9d32fbcd7c5b"></span><code class="descname">island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandERK6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy constructor. </p>
 <p>The copy constructor will initialise an island containing a copy of <code class="docutils literal notranslate"><span class="pre">other</span></code>’s UDI, population and algorithm. It is safe to call this constructor while <code class="docutils literal notranslate"><span class="pre">other</span></code> is evolving.</p>
 <p><dl class="simple">
@@ -259,7 +259,7 @@ in undefined behaviour.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6island6islandERR6island">
-<span id="_CPPv3N5pagmo6island6islandERR6island"></span><span id="_CPPv2N5pagmo6island6islandERR6island"></span><span id="pagmo::island::island__islandRR"></span><span class="target" id="classpagmo_1_1island_1a45761001fc726c6e1175911112b440c7"></span><code class="descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandERR6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6island6islandERR6island"></span><span id="_CPPv2N5pagmo6island6islandERR6island"></span><span id="pagmo::island::island__islandRR"></span><span class="target" id="classpagmo_1_1island_1a371496909c84dfe413222a93e1bb7f28"></span><code class="descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandERR6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move constructor. </p>
 <p>The move constructor will transfer the state of <code class="docutils literal notranslate"><span class="pre">other</span></code> into <code class="docutils literal notranslate"><span class="pre">this</span></code>, after any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">other</span></code> is finished.</p>
 <p><dl class="simple">
@@ -467,7 +467,7 @@ or UDBFE <em>b</em>.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6islandaSERR6island">
-<span id="_CPPv3N5pagmo6islandaSERR6island"></span><span id="_CPPv2N5pagmo6islandaSERR6island"></span><span id="pagmo::island::assign-operator__islandRR"></span><span class="target" id="classpagmo_1_1island_1a88c3289adf8d3e45fe85be0a41c41b8d"></span><a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6islandaSERR6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6islandaSERR6island"></span><span id="_CPPv2N5pagmo6islandaSERR6island"></span><span id="pagmo::island::assign-operator__islandRR"></span><span class="target" id="classpagmo_1_1island_1a15d9491d2ee7256c07a5a9c07e2f345d"></span><a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6islandaSERR6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move assignment. </p>
 <p>Move assignment will transfer the state of <code class="docutils literal notranslate"><span class="pre">other</span></code> into <code class="docutils literal notranslate"><span class="pre">this</span></code>, after any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">this</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> is finished.</p>
 <p><dl class="simple">
@@ -483,7 +483,7 @@ or UDBFE <em>b</em>.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6islandaSERK6island">
-<span id="_CPPv3N5pagmo6islandaSERK6island"></span><span id="_CPPv2N5pagmo6islandaSERK6island"></span><span id="pagmo::island::assign-operator__islandCR"></span><span class="target" id="classpagmo_1_1island_1a6765c786f500317ac5002003b9221608"></span><a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6islandaSERK6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6islandaSERK6island"></span><span id="_CPPv2N5pagmo6islandaSERK6island"></span><span id="pagmo::island::assign-operator__islandCR"></span><span class="target" id="classpagmo_1_1island_1a2c1b78d56a2caa7f0e5616ef9db1dde1"></span><a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6islandaSERK6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy assignment. </p>
 <p>Copy assignment is implemented as copy construction followed by move assignment.</p>
 <p><dl class="simple">
@@ -637,7 +637,7 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6island13set_algorithmE9algorithm">
-<span id="_CPPv3N5pagmo6island13set_algorithmE9algorithm"></span><span id="_CPPv2N5pagmo6island13set_algorithmE9algorithm"></span><span id="pagmo::island::set_algorithm__algorithm"></span><span class="target" id="classpagmo_1_1island_1a98aa860ab90869a0dc34e518a3d9c4f2"></span>void <code class="descname">set_algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island13set_algorithmE9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6island13set_algorithmE9algorithm"></span><span id="_CPPv2N5pagmo6island13set_algorithmE9algorithm"></span><span id="pagmo::island::set_algorithm__algorithm"></span><span class="target" id="classpagmo_1_1island_1a71ebf26dd20ed664750514d8598180d7"></span>void <code class="descname">set_algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island13set_algorithmE9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the algorithm. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="simple">
@@ -671,7 +671,7 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6island14set_populationE10population">
-<span id="_CPPv3N5pagmo6island14set_populationE10population"></span><span id="_CPPv2N5pagmo6island14set_populationE10population"></span><span id="pagmo::island::set_population__population"></span><span class="target" id="classpagmo_1_1island_1a491570338415bfb6b3fec96d76cff01c"></span>void <code class="descname">set_population</code><span class="sig-paren">(</span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island14set_populationE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6island14set_populationE10population"></span><span id="_CPPv2N5pagmo6island14set_populationE10population"></span><span id="pagmo::island::set_population__population"></span><span class="target" id="classpagmo_1_1island_1a1981aeeacb51a0bb5c5295a337d79cc3"></span>void <code class="descname">set_population</code><span class="sig-paren">(</span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island14set_populationE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the population. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="simple">
@@ -689,7 +689,7 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6island17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo6island17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo6island17get_thread_safetyEv"></span><span id="pagmo::island::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1island_1a748492007501f46e25db93e037e1c8fa"></span>std::array&lt;<a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a>, 2&gt; <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6island17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo6island17get_thread_safetyEv"></span><span id="pagmo::island::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1island_1ae63cb72c9786e85e521d1369f3eb3f2d"></span>std::array&lt;<a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a>, 2&gt; <code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the thread safety of the island’s members. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="simple">
@@ -738,8 +738,8 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0ENK5pagmo6island4saveEvR7Archive">
-<span id="_CPPv3I0ENK5pagmo6island4saveER7Archive"></span><span id="_CPPv2I0ENK5pagmo6island4saveER7Archive"></span><span class="target" id="classpagmo_1_1island_1a5d89f6c8068c029f73f95b0c50d90783"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo6island4saveEvR7Archive" title="pagmo::island::save::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo6island4saveEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0ENK5pagmo6island4saveEvR7Archivej">
+<span id="_CPPv3I0ENK5pagmo6island4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo6island4saveER7Archivej"></span><span class="target" id="classpagmo_1_1island_1a938c0b694b154bd04678c3934cc6a6fe"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo6island4saveEvR7Archivej" title="pagmo::island::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo6island4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
 <p>This method will save <code class="docutils literal notranslate"><span class="pre">this</span></code> to the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p>It is safe to call this method while the island is evolving.</p>
@@ -761,8 +761,8 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo6island4loadEvR7Archive">
-<span id="_CPPv3I0EN5pagmo6island4loadER7Archive"></span><span id="_CPPv2I0EN5pagmo6island4loadER7Archive"></span><span class="target" id="classpagmo_1_1island_1affd8a750e52bf579d0729a4a0b227c2d"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6island4loadEvR7Archive" title="pagmo::island::load::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6island4loadEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo6island4loadEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo6island4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo6island4loadER7Archivej"></span><span class="target" id="classpagmo_1_1island_1af538257d07ef2fe6bdbea82e8b721bcd"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6island4loadEvR7Archivej" title="pagmo::island::load::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6island4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
 <p>This method will load into <code class="docutils literal notranslate"><span class="pre">this</span></code> the content of <code class="docutils literal notranslate"><span class="pre">ar</span></code>. This method will wait until any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">this</span></code> is finished before returning.</p>
 <p><dl class="simple">
@@ -772,35 +772,6 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the deserialization of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Friends</p>
-<dl class="function">
-<dt id="_CPPv4lsRNSt7ostreamERK6island">
-<span id="_CPPv3lsRNSt7ostreamERK6island"></span><span id="_CPPv2lsRNSt7ostreamERK6island"></span><span id="lshift-operator__osR.islandCR"></span><span class="target" id="classpagmo_1_1island_1afe8c627eb931e63133f8b0d922a68eb8"></span>std::ostream &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> island &amp;<em>isl</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamERK6island" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Stream operator for <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
-<p>This operator will stream to <code class="docutils literal notranslate"><span class="pre">os</span></code> a human-readable representation of <code class="docutils literal notranslate"><span class="pre">isl</span></code>.</p>
-<p>It is safe to call this method while the island is evolving.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a reference to <code class="docutils literal notranslate"><span class="pre">os</span></code>.</p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: the target stream. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">isl</span></code>: the island.</p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
-<li><p>the stream operators of fundamental types, <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>,</p></li>
-<li><p><a class="reference internal" href="#classpagmo_1_1island_1a05d14fc114bdf533da94d2d30575e35f"><span class="std std-ref">pagmo::island::get_extra_info()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">pagmo::island::get_algorithm()</span></a>, <a class="reference internal" href="#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">pagmo::island::get_population()</span></a>. </p></li>
-</ul>
-</p></li>
 </ul>
 </dd>
 </dl>

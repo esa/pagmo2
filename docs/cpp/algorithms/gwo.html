@@ -193,7 +193,7 @@ Optimizer and the pseudo-code</p>
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv4N5pagmo3gwo13log_line_typeE">
-<span id="_CPPv3N5pagmo3gwo13log_line_typeE"></span><span id="_CPPv2N5pagmo3gwo13log_line_typeE"></span><span id="pagmo::gwo::log_line_type"></span><span class="target" id="classpagmo_1_1gwo_1a03349e7feb6c6248e0916202b5070bdb"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3gwo13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3gwo13log_line_typeE"></span><span id="_CPPv2N5pagmo3gwo13log_line_typeE"></span><span id="pagmo::gwo::log_line_type"></span><span class="target" id="classpagmo_1_1gwo_1ad29add9b8ff0857071facc01745194c5"></span><em class="property">typedef </em>std::tuple&lt;unsigned, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3gwo13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, alpha, beta, delta) </p>
 </dd></dl>
 
@@ -208,7 +208,7 @@ Optimizer and the pseudo-code</p>
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo3gwo3gwoEjj">
-<span id="_CPPv3N5pagmo3gwo3gwoEjj"></span><span id="_CPPv2N5pagmo3gwo3gwoEjj"></span><span id="pagmo::gwo::gwo__unsigned-i.unsigned-i"></span><span class="target" id="classpagmo_1_1gwo_1ae59d4f2d3f3264340e29c67ea2337c9b"></span><code class="descname">gwo</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1u, unsigned int <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3gwo3gwoEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3gwo3gwoEjj"></span><span id="_CPPv2N5pagmo3gwo3gwoEjj"></span><span id="pagmo::gwo::gwo__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1gwo_1a0b862b0ddc6e1e49f29edd7719f8690b"></span><code class="descname">gwo</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3gwo3gwoEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs a Grey Wolf Optimizer</p>
 <p><dl class="simple">
@@ -223,8 +223,8 @@ Optimizer and the pseudo-code</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3gwo6evolveE10population">
-<span id="_CPPv3NK5pagmo3gwo6evolveE10population"></span><span id="_CPPv2NK5pagmo3gwo6evolveE10population"></span><span id="pagmo::gwo::evolve__populationC"></span><span class="target" id="classpagmo_1_1gwo_1a39270a8fda8e319d8f0bf7854d2b37fe"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<span id="_CPPv3NK5pagmo3gwo6evolveE10population"></span><span id="_CPPv2NK5pagmo3gwo6evolveE10population"></span><span id="pagmo::gwo::evolve__populationC"></span><span class="target" id="classpagmo_1_1gwo_1a5ae0dc524478c2e31f4dffd3b79eec13"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until maximum number of generations is reached.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>alpha agent’s position </p>
@@ -244,7 +244,7 @@ Optimizer and the pseudo-code</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo3gwo8set_seedEj">
-<span id="_CPPv3N5pagmo3gwo8set_seedEj"></span><span id="_CPPv2N5pagmo3gwo8set_seedEj"></span><span id="pagmo::gwo::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1gwo_1a770e80a221e6bcfb70262f1bda8d1ffa"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3gwo8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3gwo8set_seedEj"></span><span id="_CPPv2N5pagmo3gwo8set_seedEj"></span><span id="pagmo::gwo::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gwo_1a9b6c739a0b6d1083435cb3000e40da2b"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3gwo8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -257,7 +257,7 @@ Optimizer and the pseudo-code</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3gwo8get_seedEv">
-<span id="_CPPv3NK5pagmo3gwo8get_seedEv"></span><span id="_CPPv2NK5pagmo3gwo8get_seedEv"></span><span id="pagmo::gwo::get_seedC"></span><span class="target" id="classpagmo_1_1gwo_1a3dbdcf36f7362a62ca487b11e6be0854"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3gwo8get_seedEv"></span><span id="_CPPv2NK5pagmo3gwo8get_seedEv"></span><span id="pagmo::gwo::get_seedC"></span><span class="target" id="classpagmo_1_1gwo_1a0fe8b24a9dca28e2fa04c7703515450c"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -268,7 +268,7 @@ Optimizer and the pseudo-code</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo3gwo13set_verbosityEj">
-<span id="_CPPv3N5pagmo3gwo13set_verbosityEj"></span><span id="_CPPv2N5pagmo3gwo13set_verbosityEj"></span><span id="pagmo::gwo::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1gwo_1a1637a7bb70af047f3f6fb1765756438e"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3gwo13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3gwo13set_verbosityEj"></span><span id="_CPPv2N5pagmo3gwo13set_verbosityEj"></span><span id="pagmo::gwo::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gwo_1a071dde15f6044606394ffb9761104192"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3gwo13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1gwo_1a0377d9404e13dadd5126951796366300"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -295,7 +295,7 @@ Optimizer and the pseudo-code</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3gwo13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3gwo13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3gwo13get_verbosityEv"></span><span id="pagmo::gwo::get_verbosityC"></span><span class="target" id="classpagmo_1_1gwo_1a97e575d8049f9dd9ec473d9cc759fd89"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3gwo13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3gwo13get_verbosityEv"></span><span id="pagmo::gwo::get_verbosityC"></span><span class="target" id="classpagmo_1_1gwo_1a37e988b0056d1406ef2cd0b612db6f40"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -306,7 +306,7 @@ Optimizer and the pseudo-code</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3gwo7get_genEv">
-<span id="_CPPv3NK5pagmo3gwo7get_genEv"></span><span id="_CPPv2NK5pagmo3gwo7get_genEv"></span><span id="pagmo::gwo::get_genC"></span><span class="target" id="classpagmo_1_1gwo_1a690fad2a83661383877575fd0992d2d9"></span>unsigned int <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3gwo7get_genEv"></span><span id="_CPPv2NK5pagmo3gwo7get_genEv"></span><span id="pagmo::gwo::get_genC"></span><span class="target" id="classpagmo_1_1gwo_1a4b49ef9e34ff9b2456c4d83b2d45cada"></span>unsigned <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
@@ -330,10 +330,10 @@ Optimizer and the pseudo-code</p>
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3gwo14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo3gwo14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3gwo14get_extra_infoEv"></span><span id="pagmo::gwo::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gwo_1a8654cbaaaeceaf6a7a736c8252b2969b"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Extra informations. </p>
+<dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+<dt><strong>Return</strong></dt><dd><p>a string containing extra info on the algorithm </p>
 </dd>
 </dl>
 </p>
@@ -343,16 +343,16 @@ Optimizer and the pseudo-code</p>
 <dt id="_CPPv4NK5pagmo3gwo7get_logEv">
 <span id="_CPPv3NK5pagmo3gwo7get_logEv"></span><span id="_CPPv2NK5pagmo3gwo7get_logEv"></span><span id="pagmo::gwo::get_logC"></span><span class="target" id="classpagmo_1_1gwo_1a0377d9404e13dadd5126951796366300"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3gwo8log_typeE" title="pagmo::gwo::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3gwo7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gwo_1a03349e7feb6c6248e0916202b5070bdb"><span class="std std-ref">gwo::log_line_type</span></a> containing: gen, alpha, beta, delta as described in <a class="reference internal" href="#classpagmo_1_1gwo_1a1637a7bb70af047f3f6fb1765756438e"><span class="std std-ref">gwo::set_verbosity</span></a> <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gwo_1a03349e7feb6c6248e0916202b5070bdb"><span class="std std-ref">gwo::log_line_type</span></a> containing the logged values gen, alpha, beta, delta </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gwo_1ad29add9b8ff0857071facc01745194c5"><span class="std std-ref">gwo::log_line_type</span></a> containing: gen, alpha, beta, delta as described in <a class="reference internal" href="#classpagmo_1_1gwo_1a071dde15f6044606394ffb9761104192"><span class="std std-ref">gwo::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gwo_1ad29add9b8ff0857071facc01745194c5"><span class="std std-ref">gwo::log_line_type</span></a> containing the logged values gen, alpha, beta, delta </p>
 </dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo3gwo9serializeEvR7Archive">
-<span id="_CPPv3I0EN5pagmo3gwo9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo3gwo9serializeER7Archive"></span><span class="target" id="classpagmo_1_1gwo_1a52fee83a82a9be93d092be41824bedbc"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3gwo9serializeEvR7Archive" title="pagmo::gwo::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3gwo9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo3gwo9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo3gwo9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3gwo9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1gwo_1a297c658f1b1c71055aa3b7185f9d5078"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3gwo9serializeEvR7Archivej" title="pagmo::gwo::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3gwo9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

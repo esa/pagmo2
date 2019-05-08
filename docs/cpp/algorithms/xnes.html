@@ -213,7 +213,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv4N5pagmo4xnes13log_line_typeE">
-<span id="_CPPv3N5pagmo4xnes13log_line_typeE"></span><span id="_CPPv2N5pagmo4xnes13log_line_typeE"></span><span id="pagmo::xnes::log_line_type"></span><span class="target" id="classpagmo_1_1xnes_1a2f2abb0afb1ab9ee2472435217820796"></span><em class="property">typedef </em>std::tuple&lt;unsigned int, unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes13log_line_typeE"></span><span id="_CPPv2N5pagmo4xnes13log_line_typeE"></span><span id="pagmo::xnes::log_line_type"></span><span class="target" id="classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single data line for the algorithm’s log. </p>
 <p>A log data line is a tuple consisting of:<ul class="simple">
 <li><p>the generation number,</p></li>
@@ -229,7 +229,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <dt id="_CPPv4N5pagmo4xnes8log_typeE">
 <span id="_CPPv3N5pagmo4xnes8log_typeE"></span><span id="_CPPv2N5pagmo4xnes8log_typeE"></span><span id="pagmo::xnes::log_type"></span><span class="target" id="classpagmo_1_1xnes_1af688ee4857b322540e91d7f773b94568"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="pagmo::xnes::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo4xnes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Log type. </p>
-<p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1xnes_1a2f2abb0afb1ab9ee2472435217820796"><span class="std std-ref">xnes::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1xnes_1a18c6eab20229cf5dbd4f36af0e211054"><span class="std std-ref">xnes::set_verbosity()</span></a>). </p>
+<p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"><span class="std std-ref">xnes::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"><span class="std std-ref">xnes::set_verbosity()</span></a>). </p>
 </dd></dl>
 
 </div>
@@ -237,7 +237,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo4xnes4xnesEjddddddbbj">
-<span id="_CPPv3N5pagmo4xnes4xnesEjddddddbbj"></span><span id="_CPPv2N5pagmo4xnes4xnesEjddddddbbj"></span><span id="pagmo::xnes::xnes__unsigned-i.double.double.double.double.double.double.b.b.unsigned-i"></span><span class="target" id="classpagmo_1_1xnes_1ae8afcac4484aaf0f11928c39616f047b"></span><code class="descname">xnes</code><span class="sig-paren">(</span>unsigned int <em>gen</em> = 1, double <em>eta_mu</em> = -1, double <em>eta_sigma</em> = -1, double <em>eta_b</em> = -1, double <em>sigma0</em> = -1, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, bool <em>force_bounds</em> = false, unsigned int <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes4xnesEjddddddbbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes4xnesEjddddddbbj"></span><span id="_CPPv2N5pagmo4xnes4xnesEjddddddbbj"></span><span id="pagmo::xnes::xnes__unsigned.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1xnes_1ab48ca3ab80a9817076015f862189750d"></span><code class="descname">xnes</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1, double <em>eta_mu</em> = -1, double <em>eta_sigma</em> = -1, double <em>eta_b</em> = -1, double <em>sigma0</em> = -1, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, bool <em>force_bounds</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes4xnesEjddddddbbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs xnes</p>
 <p><dl class="simple">
@@ -264,8 +264,8 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo4xnes6evolveE10population">
-<span id="_CPPv3NK5pagmo4xnes6evolveE10population"></span><span id="_CPPv2NK5pagmo4xnes6evolveE10population"></span><span id="pagmo::xnes::evolve__populationC"></span><span class="target" id="classpagmo_1_1xnes_1a4975ee5b570eea3b1d9174c9571b0270"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<span id="_CPPv3NK5pagmo4xnes6evolveE10population"></span><span id="_CPPv2NK5pagmo4xnes6evolveE10population"></span><span id="pagmo::xnes::evolve__populationC"></span><span class="target" id="classpagmo_1_1xnes_1a06fd17b6bdef1daed353b941c12e138d"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>evolved population </p>
@@ -286,7 +286,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo4xnes8set_seedEj">
-<span id="_CPPv3N5pagmo4xnes8set_seedEj"></span><span id="_CPPv2N5pagmo4xnes8set_seedEj"></span><span id="pagmo::xnes::set_seed__unsigned-i"></span><span class="target" id="classpagmo_1_1xnes_1aefe97175d43015641aa8a20a2ebbe8c2"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned int <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes8set_seedEj"></span><span id="_CPPv2N5pagmo4xnes8set_seedEj"></span><span id="pagmo::xnes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1xnes_1ad8acceacf5c45443696fc8b37c1de9ad"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -299,7 +299,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo4xnes8get_seedEv">
-<span id="_CPPv3NK5pagmo4xnes8get_seedEv"></span><span id="_CPPv2NK5pagmo4xnes8get_seedEv"></span><span id="pagmo::xnes::get_seedC"></span><span class="target" id="classpagmo_1_1xnes_1a1491ad176c0cf7f72a923c441079cc8e"></span>unsigned int <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes8get_seedEv"></span><span id="_CPPv2NK5pagmo4xnes8get_seedEv"></span><span id="pagmo::xnes::get_seedC"></span><span class="target" id="classpagmo_1_1xnes_1aba33a4a3a3d3f6f83f44cd78281d9fcf"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -310,7 +310,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo4xnes13set_verbosityEj">
-<span id="_CPPv3N5pagmo4xnes13set_verbosityEj"></span><span id="_CPPv2N5pagmo4xnes13set_verbosityEj"></span><span id="pagmo::xnes::set_verbosity__unsigned-i"></span><span class="target" id="classpagmo_1_1xnes_1a18c6eab20229cf5dbd4f36af0e211054"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned int <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes13set_verbosityEj"></span><span id="_CPPv2N5pagmo4xnes13set_verbosityEj"></span><span id="pagmo::xnes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1xnes_1ae7eb0349a85776f3cabf2ca0f0a29440"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -341,7 +341,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo4xnes13get_verbosityEv">
-<span id="_CPPv3NK5pagmo4xnes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4xnes13get_verbosityEv"></span><span id="pagmo::xnes::get_verbosityC"></span><span class="target" id="classpagmo_1_1xnes_1a85ad9c10663cc248eff771dd0ca1778d"></span>unsigned int <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4xnes13get_verbosityEv"></span><span id="pagmo::xnes::get_verbosityC"></span><span class="target" id="classpagmo_1_1xnes_1a54053e355931cebbe7db5e796984bb7a"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -352,7 +352,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo4xnes7get_genEv">
-<span id="_CPPv3NK5pagmo4xnes7get_genEv"></span><span id="_CPPv2NK5pagmo4xnes7get_genEv"></span><span id="pagmo::xnes::get_genC"></span><span class="target" id="classpagmo_1_1xnes_1a8af641d07965be4ab10d8d38a7f6afce"></span>unsigned int <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes7get_genEv"></span><span id="_CPPv2NK5pagmo4xnes7get_genEv"></span><span id="pagmo::xnes::get_genC"></span><span class="target" id="classpagmo_1_1xnes_1ae5e74577a1f506cc6287bc377cb34e85"></span>unsigned <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
@@ -376,10 +376,10 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <dl class="function">
 <dt id="_CPPv4NK5pagmo4xnes14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo4xnes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4xnes14get_extra_infoEv"></span><span id="pagmo::xnes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1xnes_1a049637ce96a535ea9bb2f70a34788392"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Extra informations. </p>
+<dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra informations on the algorithm </p>
+<dt><strong>Return</strong></dt><dd><p>a string containing extra info on the algorithm </p>
 </dd>
 </dl>
 </p>
@@ -389,16 +389,16 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <dt id="_CPPv4NK5pagmo4xnes7get_logEv">
 <span id="_CPPv3NK5pagmo4xnes7get_logEv"></span><span id="_CPPv2NK5pagmo4xnes7get_logEv"></span><span id="pagmo::xnes::get_logC"></span><span class="target" id="classpagmo_1_1xnes_1ae7eb0349a85776f3cabf2ca0f0a29440"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo4xnes8log_typeE" title="pagmo::xnes::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1xnes_1a2f2abb0afb1ab9ee2472435217820796"><span class="std std-ref">xnes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1xnes_1a18c6eab20229cf5dbd4f36af0e211054"><span class="std std-ref">xnes::set_verbosity</span></a> <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1xnes_1a2f2abb0afb1ab9ee2472435217820796"><span class="std std-ref">xnes::log_line_type</span></a> containing the logged values Gen, Fevals, Best, dx, df, sigma </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"><span class="std std-ref">xnes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"><span class="std std-ref">xnes::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"><span class="std std-ref">xnes::log_line_type</span></a> containing the logged values Gen, Fevals, Best, dx, df, sigma </p>
 </dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4I0EN5pagmo4xnes9serializeEvR7Archive">
-<span id="_CPPv3I0EN5pagmo4xnes9serializeER7Archive"></span><span id="_CPPv2I0EN5pagmo4xnes9serializeER7Archive"></span><span class="target" id="classpagmo_1_1xnes_1a051668c3abe082b12d49ced54f9538fc"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4xnes9serializeEvR7Archive" title="pagmo::xnes::serialize::Archive">Archive</a> &amp;<em>ar</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4xnes9serializeEvR7Archive" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN5pagmo4xnes9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo4xnes9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4xnes9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1xnes_1aeefeb8964af93f9ece2c5cb6e8efb9cb"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4xnes9serializeEvR7Archivej" title="pagmo::xnes::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4xnes9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -407,7 +407,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </p></li>
 </ul>
 </dd>
 </dl>
