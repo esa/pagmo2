@@ -49,17 +49,17 @@ struct ex_thrower {
     explicit ex_thrower(const char *file, line_type line, const char *func) : m_file(file), m_line(line), m_func(func)
     {
     }
-    template <typename... Args, typename = enable_if_t<std::is_constructible<Exception, Args...>::value>>
+    template <typename... Args, enable_if_t<std::is_constructible<Exception, Args...>::value, int> = 0>
     [[noreturn]] void operator()(Args &&... args) const
     {
-        Exception e(std::forward<Args>(args)...);
-        throw e;
+        throw Exception(std::forward<Args>(args)...);
     }
-    template <typename Str, typename... Args,
-              typename = typename std::enable_if<std::is_constructible<Exception, std::string, Args...>::value
-                                                 && (std::is_same<decay_t<Str>, std::string>::value
-                                                     || std::is_same<decay_t<Str>, char *>::value
-                                                     || std::is_same<decay_t<Str>, const char *>::value)>::type>
+    template <
+        typename Str, typename... Args,
+        enable_if_t<conjunction<std::is_constructible<Exception, std::string, Args...>,
+                                disjunction<std::is_same<decay_t<Str>, std::string>, std::is_same<decay_t<Str>, char *>,
+                                            std::is_same<decay_t<Str>, const char *>>>::value,
+                    int> = 0>
     [[noreturn]] void operator()(Str &&desc, Args &&... args) const
     {
         std::string msg("\nfunction: ");
@@ -71,13 +71,15 @@ struct ex_thrower {
         msg += "\nwhat: ";
         msg += desc;
         msg += "\n";
-        throw Exception(msg, std::forward<Args>(args)...);
+        throw Exception(std::move(msg), std::forward<Args>(args)...);
     }
     const char *m_file;
     const line_type m_line;
     const char *m_func;
 };
+
 } // namespace detail
+
 } // namespace pagmo
 
 /// Exception-throwing macro.
