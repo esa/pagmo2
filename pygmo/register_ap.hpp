@@ -49,10 +49,6 @@ inline void register_ap()
     // Import the numpy API.
     numpy_import_array();
 
-    // Make sure that polymorphic serialization info from the AP is imported into pygmo's
-    // serialization machinery.
-    merge_s11n_data_for_ap();
-
     // Register the AP with pygmo by adding it to the AP list.
     auto &ap_set = *reinterpret_cast<std::unordered_set<std::string> *>(
         bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_ap_set_address"))());

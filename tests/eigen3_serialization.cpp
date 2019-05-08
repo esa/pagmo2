@@ -26,8 +26,9 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE eigen_serialization_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE eigen_s11n_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <Eigen/Dense>
 #include <iterator>
@@ -35,7 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <sstream>
 #include <vector>
 
-#include <pagmo/serialization.hpp>
+#include <pagmo/detail/eigen_s11n.hpp>
+#include <pagmo/s11n.hpp>
 
 template <typename T>
 void serialize_deserialize_and_compare(T &object)
@@ -43,14 +45,14 @@ void serialize_deserialize_and_compare(T &object)
     auto object_copy(object);
     std::stringstream ss;
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(object_copy);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << object_copy;
     }
     // Change the content of p before deserializing.
     object_copy = T{};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(object_copy);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> object_copy;
     }
     auto nrows = object.rows();
     auto ncols = object.cols();

@@ -27,9 +27,9 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE algorithm_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -37,12 +37,14 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/lexical_cast.hpp>
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -63,23 +65,23 @@ struct al_01 {
     {
         return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);
     };
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     };
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(m_seed, m_verbosity);
+        detail::archive(ar, m_seed, m_verbosity);
     }
-    unsigned int m_seed = 0u;
-    unsigned int m_verbosity = 0u;
+    unsigned m_seed = 0u;
+    unsigned m_verbosity = 0u;
 };
-PAGMO_REGISTER_ALGORITHM(al_01)
+PAGMO_S11N_ALGORITHM_EXPORT(al_01)
 
 // Minimal algorithm deterministic
 struct al_02 {
@@ -89,11 +91,11 @@ struct al_02 {
         return pop;
     };
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
-PAGMO_REGISTER_ALGORITHM(al_02)
+PAGMO_S11N_ALGORITHM_EXPORT(al_02)
 
 BOOST_AUTO_TEST_CASE(algorithm_construction_test)
 {
@@ -220,16 +222,16 @@ struct al_03 {
     {
         return "\tSeed: " + std::to_string(m_seed) + "\n\tVerbosity: " + std::to_string(m_verbosity);
     };
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     };
-    void set_verbosity(unsigned int level)
+    void set_verbosity(unsigned level)
     {
         m_verbosity = level;
     };
-    unsigned int m_seed = 0u;
-    unsigned int m_verbosity = 0u;
+    unsigned m_seed = 0u;
+    unsigned m_verbosity = 0u;
     bool has_set_seed() const
     {
         return false;
@@ -372,15 +374,15 @@ BOOST_AUTO_TEST_CASE(algorithm_serialization_test)
     auto before = boost::lexical_cast<std::string>(algo);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Create a new algorithm object
     auto algo2 = algorithm{al_02{}};
     boost::lexical_cast<std::string>(algo2); // triggers the streaming operator for a deterministic algo
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo2);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo2;
     }
     auto after = boost::lexical_cast<std::string>(algo2);
     BOOST_CHECK_EQUAL(before, after);
@@ -410,13 +412,13 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     BOOST_CHECK_EQUAL(algo.get_name(), "Null algorithm");
     std::stringstream ss;
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     algo = algorithm{de{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
 }
 

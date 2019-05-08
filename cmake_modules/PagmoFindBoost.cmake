@@ -3,7 +3,13 @@
 set(_PAGMO_BOOST_MINIMUM_VERSION 1.55.0)
 find_package(Boost ${_PAGMO_BOOST_MINIMUM_VERSION} QUIET REQUIRED)
 
-set(_PAGMO_REQUIRED_BOOST_LIBS)
+set(_PAGMO_REQUIRED_BOOST_LIBS serialization)
+
+# Add the unit test framework, if needed.
+if(_PAGMO_FIND_BOOST_UNIT_TEST_FRAMEWORK)
+    list(APPEND _PAGMO_REQUIRED_BOOST_LIBS unit_test_framework)
+endif()
+
 if(_PAGMO_FIND_BOOST_PYTHON)
     # NOTE: since Boost 1.67, the naming of the Boost.Python library has changed to include the
     # major and minor python version as a suffix. See the release notes:

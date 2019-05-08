@@ -29,17 +29,12 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_EXCEPTIONS_HPP
 #define PAGMO_EXCEPTIONS_HPP
 
-/** \file exceptions.hpp
- * \brief Exceptions.
- *
- * This header contains exception-related utils used within pagmo.
- */
-
 #include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
 
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/type_traits.hpp>
 
 namespace pagmo
@@ -124,7 +119,7 @@ namespace pagmo
  * optional methods in user-defined classes are not implemented.
  * This class inherits the constructors from \p std::runtime_error.
  */
-struct not_implemented_error final : std::runtime_error {
+struct PAGMO_DLL_PUBLIC_INLINE_CLASS not_implemented_error final : std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 } // namespace pagmo

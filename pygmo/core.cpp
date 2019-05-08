@@ -76,16 +76,21 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/batch_evaluators/default_bfe.hpp>
+#include <pagmo/batch_evaluators/member_bfe.hpp>
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
+#include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/constrained.hpp>
 #include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
@@ -112,23 +117,25 @@ see https://www.gnu.org/licenses/. */
 namespace bp = boost::python;
 using namespace pagmo;
 
-// Test that the cereal serialization of BP objects works as expected.
+// Test that the serialization of BP objects works as expected.
 // The object returned by this function should be identical to the input
 // object.
 static inline bp::object test_object_serialization(const bp::object &o)
 {
     std::ostringstream oss;
     {
-        cereal::PortableBinaryOutputArchive oarchive(oss);
-        oarchive(o);
+        boost::archive::binary_oarchive oarchive(oss);
+        oarchive << pygmo::object_to_vchar(o);
     }
-    const std::string tmp = oss.str();
+    const std::string tmp_str = oss.str();
     std::istringstream iss;
-    iss.str(tmp);
+    iss.str(tmp_str);
     bp::object retval;
     {
-        cereal::PortableBinaryInputArchive iarchive(iss);
-        iarchive(retval);
+        boost::archive::binary_iarchive iarchive(iss);
+        std::vector<char> tmp;
+        iarchive >> tmp;
+        retval = pygmo::vchar_to_object(tmp);
     }
     return retval;
 }
@@ -173,8 +180,8 @@ struct population_pickle_suite : bp::pickle_suite {
     {
         std::ostringstream oss;
         {
-            cereal::PortableBinaryOutputArchive oarchive(oss);
-            oarchive(pop);
+            boost::archive::binary_oarchive oarchive(oss);
+            oarchive << pop;
         }
         auto s = oss.str();
         return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
@@ -201,8 +208,8 @@ struct population_pickle_suite : bp::pickle_suite {
         std::istringstream iss;
         iss.str(s);
         {
-            cereal::PortableBinaryInputArchive iarchive(iss);
-            iarchive(pop);
+            boost::archive::binary_iarchive iarchive(iss);
+            iarchive >> pop;
         }
     }
 };
@@ -213,8 +220,8 @@ struct archipelago_pickle_suite : bp::pickle_suite {
     {
         std::ostringstream oss;
         {
-            cereal::PortableBinaryOutputArchive oarchive(oss);
-            oarchive(archi);
+            boost::archive::binary_oarchive oarchive(oss);
+            oarchive << archi;
         }
         auto s = oss.str();
         return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
@@ -241,8 +248,8 @@ struct archipelago_pickle_suite : bp::pickle_suite {
         std::istringstream iss;
         iss.str(s);
         {
-            cereal::PortableBinaryInputArchive iarchive(iss);
-            iarchive(archi);
+            boost::archive::binary_iarchive iarchive(iss);
+            iarchive >> archi;
         }
     }
 };
@@ -351,7 +358,7 @@ BOOST_PYTHON_MODULE(core)
     }
 
     // Override the default implementation of the island factory.
-    detail::island_factory<>::s_func
+    detail::island_factory
         = [](const algorithm &algo, const population &pop, std::unique_ptr<detail::isl_inner_base> &ptr) {
               if (algo.get_thread_safety() >= thread_safety::basic
                   && pop.get_problem().get_thread_safety() >= thread_safety::basic) {
@@ -378,7 +385,7 @@ BOOST_PYTHON_MODULE(core)
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
     // destroyed at the end of island::wait().
-    detail::wait_raii<>::getter = []() { return std::make_shared<py_wait_locks>(); };
+    detail::wait_raii_getter = []() { return std::make_shared<py_wait_locks>(); };
 
     // Setup doc options
     bp::docstring_options doc_options;
@@ -461,22 +468,6 @@ BOOST_PYTHON_MODULE(core)
     bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
     bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
     bp::scope().attr("_bfe_address") = reinterpret_cast<std::uintptr_t>(&pygmo::bfe_ptr);
-
-    // Fetch and store addresses to the internal cereal global objects that contain the
-    // info for the serialization of polymorphic types.
-    // NOTE: this is a hack heavily dependent on cereal's implementation-details. We'll have
-    // to triple-check this if/when we update the bundled cereal.
-    // NOTE: at the moment we are just using the portable binary archives for pygmo's serialization
-    // machinery. If we ever make the archive type configurable, we'll probably have to add bits here.
-    // See also the merge_s11n_data_for_ap() function in common_utils.hpp.
-    bp::scope().attr("_s11n_in_address") = reinterpret_cast<std::uintptr_t>(
-        &cereal::detail::StaticObject<
-             cereal::detail::InputBindingMap<cereal::PortableBinaryInputArchive>>::getInstance()
-             .map);
-    bp::scope().attr("_s11n_out_address") = reinterpret_cast<std::uintptr_t>(
-        &cereal::detail::StaticObject<
-             cereal::detail::OutputBindingMap<cereal::PortableBinaryOutputArchive>>::getInstance()
-             .map);
 
     // Store the address to the list of registered APs.
     bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&ap_set);

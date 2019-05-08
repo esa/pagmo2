@@ -27,7 +27,8 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE problem_type_traits_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <string>
 #include <utility>
@@ -474,11 +475,11 @@ struct hss_00 {
 
 // The good one.
 struct hss_01 {
-    void set_seed(unsigned int);
+    void set_seed(unsigned);
 };
 
 struct hss_02 {
-    void set_seed(unsigned int) const;
+    void set_seed(unsigned) const;
 };
 
 struct hss_03 {
@@ -486,7 +487,7 @@ struct hss_03 {
 };
 
 struct hss_04 {
-    double set_seed(unsigned int);
+    double set_seed(unsigned);
 };
 
 BOOST_AUTO_TEST_CASE(has_set_seed_test)

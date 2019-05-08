@@ -130,6 +130,8 @@ if is_python_build:
     run_command(
         r'cmake -G "MinGW Makefiles" ..  -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts)
     run_command(r'mingw32-make install VERBOSE=1 -j2')
+    # Alter the path to find the pagmo dll.
+    os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
     os.chdir('..')
     os.makedirs('build_pygmo')
     os.chdir('build_pygmo')
@@ -143,6 +145,8 @@ elif 'Debug' in BUILD_TYPE:
     run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes ' +
                 common_cmake_opts + r' -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
+    # Alter the path to find the pagmo dll.
+    os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
     run_command(r'ctest')
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)

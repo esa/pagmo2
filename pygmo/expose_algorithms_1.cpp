@@ -99,6 +99,7 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(pso_, pso_get_log_docstring().c_str());
     pso_.def("get_seed", &pso::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // PSO (generational)
     auto pso_gen_ = expose_algorithm_pygmo<pso_gen>("pso_gen", pso_gen_docstring().c_str());
     pso_gen_.def(bp::init<unsigned, double, double, double, double, unsigned, unsigned, unsigned, bool>(
@@ -111,12 +112,14 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(pso_gen_, pso_gen_get_log_docstring().c_str());
     pso_gen_.def("get_seed", &pso_gen::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // SEA
     auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
     sea_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
     sea_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(sea_, sea_get_log_docstring().c_str());
     sea_.def("get_seed", &sea::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // IHS
     auto ihs_ = expose_algorithm_pygmo<ihs>("ihs", ihs_docstring().c_str());
     ihs_.def(bp::init<unsigned, double, double, double, double, double>(
@@ -137,6 +140,7 @@ void expose_algorithms_1()
              }),
              ihs_get_log_docstring().c_str());
     ihs_.def("get_seed", &ihs::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // SGA
     auto sga_ = expose_algorithm_pygmo<sga>("sga", sga_docstring().c_str());
     sga_.def(bp::init<unsigned, double, double, double, double, unsigned, std::string, std::string, std::string>(
@@ -150,6 +154,7 @@ void expose_algorithms_1()
              bp::arg("mutation") = "polynomial", bp::arg("selection") = "tournament", bp::arg("seed"))));
     expose_algo_log(sga_, sga_get_log_docstring().c_str());
     sga_.def("get_seed", &sga::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // SIMULATED ANNEALING
     auto simulated_annealing_
         = expose_algorithm_pygmo<simulated_annealing>("simulated_annealing", simulated_annealing_docstring().c_str());
@@ -162,6 +167,7 @@ void expose_algorithms_1()
     expose_algo_log(simulated_annealing_, simulated_annealing_get_log_docstring().c_str());
     simulated_annealing_.def("get_seed", &simulated_annealing::get_seed, generic_uda_get_seed_docstring().c_str());
     expose_not_population_based(simulated_annealing_, "simulated_annealing");
+
     // SADE
     auto sade_ = expose_algorithm_pygmo<sade>("sade", sade_docstring().c_str());
     sade_.def(bp::init<unsigned, unsigned, unsigned, double, double, bool>(
@@ -172,6 +178,7 @@ void expose_algorithms_1()
          bp::arg("xtol") = 1e-6, bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(sade_, sade_get_log_docstring().c_str());
     sade_.def("get_seed", &sade::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // NSGA2
     auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
@@ -191,6 +198,7 @@ void expose_algorithms_1()
                nsga2_get_log_docstring().c_str());
 
     nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // GACO
     auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());
     gaco_.def(
@@ -207,12 +215,14 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
     gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // GWO
     auto gwo_ = expose_algorithm_pygmo<gwo>("gwo", gwo_docstring().c_str());
     gwo_.def(bp::init<unsigned>((bp::arg("gen") = 1u)));
-    gwo_.def(bp::init<unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
+    gwo_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(gwo_, gwo_get_log_docstring().c_str());
     gwo_.def("get_seed", &gwo::get_seed, generic_uda_get_seed_docstring().c_str());
+
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
     auto nlopt_ = expose_algorithm_pygmo<nlopt>("nlopt", nlopt_docstring().c_str());

@@ -42,7 +42,7 @@ see https://www.gnu.org/licenses/. */
 //
 // and add the method
 //
-// void set_seed(unsigned int)
+// void set_seed(unsigned)
 //
 // which will be used to change the seed of the random engine
 
@@ -51,7 +51,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -60,7 +60,7 @@ class problem_basic_s
 public:
     // Since the problem is stochastic we introduce as data members a random engine
     // and a seed
-    problem_basic_s(unsigned int seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed) {}
+    problem_basic_s(unsigned seed = pagmo::random_device::next()) : m_e(seed), m_seed(seed) {}
 
     // Mandatory, computes ... well ... the fitness.
     // In a stochastic problem the fitness depends on the
@@ -84,7 +84,7 @@ public:
     }
 
     // Mandatory for the problem to be stochastic
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
@@ -113,7 +113,7 @@ private:
     // Random engine
     mutable detail::random_engine_type m_e;
     // Seed
-    unsigned int m_seed;
+    unsigned m_seed;
 };
 
 int main()

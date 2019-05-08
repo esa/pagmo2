@@ -29,72 +29,16 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DISCREPANCY_HPP
 #define PAGMO_DISCREPANCY_HPP
 
-/** \file discrepancy.hpp
- * \brief Low-discrepancy sequences
- *
- * This header contains utilities to generate low discrepancy sequences
- */
-
-#include <algorithm>
-#include <stdexcept>
-#include <string>
 #include <vector>
 
-#include <pagmo/detail/custom_comparisons.hpp>
-#include <pagmo/detail/prime_numbers.hpp>
-#include <pagmo/exceptions.hpp>
-#include <pagmo/io.hpp>
-#include <pagmo/types.hpp>
+#include <pagmo/detail/visibility.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
 
-/// Sample from a simplex
-/**
- * Samples a point on a \f$n\f$ dimensional simplex from a \f$n-1\f$ dimensional point
- *
- * In order to generate a uniform distribution on a simplex, that is to sample a \f$n\f$-dimensional
- * point \f$\mathbf x\f$ such that \f$\sum_{i=1}^{n} x_i = 1\f$ one can follow the following approach:
- * take \f$n-1\f$ random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of \f$n+1\f$ numbers.
- * Sort the list and record the differences between two consecutive elements. This creates
- * a list of \f$n\f$ number that, by construction, will sum up to 1. Moreover this sampling is uniform.
- * As an example the following code would generate points distributed on a \f$n\f$ dimensional simplex:
- *
- * @code{.unparsed}
- * std::vector<std::vector<double>> points_on_a_simplex;
- * halton ld_rng(n-1);
- * for (auto i = 0u; i < 100u; ++i) {
- *      points_on_a_simplex.push_back(project_to_simplex(ld_rng()));
- * }
- * @endcode
- *
- * @param in a <tt>std::vector</tt> containing a point in \f$n+1\f$ dimensions.
- * @return a <tt>std::vector</tt> containing the projected point of \f$n\f$ dimensions.
- *
- * @throws std::invalid_argument if the input vector elements are not in [0,1]
- * @throws std::invalid_argument if the input vector has size 0 or 1.
- *
- * See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134.
- */
-inline std::vector<double> sample_from_simplex(std::vector<double> in)
-{
-    if (std::any_of(in.begin(), in.end(), [](double item) { return (item < 0 || item > 1); })) {
-        pagmo_throw(std::invalid_argument, "Input vector must have all elements in [0,1]");
-    }
-    if (in.size() > 0u) {
-        std::sort(in.begin(), in.end(), detail::less_than_f<double>);
-        in.insert(in.begin(), 0.0);
-        in.push_back(1.0);
-        for (decltype(in.size()) i = 0u; i < in.size() - 1u; ++i) {
-            in[i] = in[i + 1u] - in[i];
-        }
-        in.pop_back();
-        return in;
-    } else {
-        pagmo_throw(std::invalid_argument, "Input vector must have at least dimension 1, a size of "
-                                               + std::to_string(in.size()) + " was detected instead.");
-    }
-}
+// Sample from a simplex
+PAGMO_DLL_PUBLIC std::vector<double> sample_from_simplex(std::vector<double>);
 
 /// Van der Corput sequence
 /**
@@ -127,7 +71,7 @@ inline std::vector<double> sample_from_simplex(std::vector<double> in)
  * See: https://en.wikipedia.org/wiki/Van_der_Corput_sequence
  *
  */
-class van_der_corput
+class PAGMO_DLL_PUBLIC van_der_corput
 {
 public:
     /// Constructor from base and starting element
@@ -139,51 +83,29 @@ public:
      * @param n position of the starting element
      *
      * @throws std::invalid_argument if the base is 0u or 1u
-     *
      */
-    van_der_corput(unsigned int b = 2u, unsigned int n = 0u) : m_base(b), m_counter(n)
-    {
-        if (b < 2u) {
-            pagmo_throw(std::invalid_argument, "The base of the van der Corput sequence must be at least 2: "
-                                                   + std::to_string(b) + " was detected");
-        }
-    }
-    /// Returns the next number in the sequence
-    /**
-     * @return the next number in the sequence
-     */
-    double operator()()
-    {
-        double retval = 0.;
-        double f = 1.0 / m_base;
-        unsigned int i = m_counter;
-        while (i > 0u) {
-            retval += f * (i % m_base);
-            i = i / m_base;
-            f = f / m_base;
-        }
-        ++m_counter;
-        return retval;
-    }
+    van_der_corput(unsigned b = 2u, unsigned n = 0u);
+    // Returns the next number in the sequence
+    double operator()();
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of primitive types.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(m_base, m_counter);
+        detail::archive(ar, m_base, m_counter);
     }
 
 private:
     // Base of the sequence
-    unsigned int m_base;
+    unsigned m_base;
     // Element of the sequence to compute
-    unsigned int m_counter;
+    unsigned m_counter;
 };
 
 /// Halton sequence
@@ -206,7 +128,7 @@ private:
  * See: https://en.wikipedia.org/wiki/Halton_sequence
  *
  */
-class halton
+class PAGMO_DLL_PUBLIC halton
 {
 public:
     /// Constructor from base and starting element
@@ -218,46 +140,31 @@ public:
      * @param n position of the starting element
      *
      * @throws unspecified all exceptions thrown by pagmo::van_der_corput
-     *
      */
-    halton(unsigned int dim = 2u, unsigned int n = 0u) : m_dim(dim)
-    {
-        for (auto i = 0u; i < m_dim; ++i) {
-            m_vdc.push_back(van_der_corput(detail::prime(i + 1), n));
-        }
-    }
-    /// Returns the next number in the sequence
-    /**
-     * @return the next number in the sequence
-     */
-    std::vector<double> operator()()
-    {
-        std::vector<double> retval;
-        for (auto i = 0u; i < m_dim; ++i) {
-            retval.push_back(m_vdc[i]());
-        }
-        return retval;
-    }
+    halton(unsigned dim = 2u, unsigned n = 0u);
+    // Returns the next number in the sequence
+    std::vector<double> operator()();
     /// Object serialization
     /**
      * This method will save/load \p this into the archive \p ar.
      *
      * @param ar target archive.
      *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
+     * @throws unspecified any exception thrown by the serialization of pagmo::van_der_corput or of primitive types.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(m_dim, m_vdc);
+        detail::archive(ar, m_dim, m_vdc);
     }
 
 private:
     // Dimension of the sequence
-    unsigned int m_dim;
+    unsigned m_dim;
     // van der Corput sequences used for each dimension
     std::vector<van_der_corput> m_vdc;
 };
 
 } // namespace pagmo
+
 #endif

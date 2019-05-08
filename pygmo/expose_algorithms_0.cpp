@@ -75,7 +75,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #if defined(PAGMO_WITH_IPOPT)
-#include <IpTNLP.hpp>
+#include <IpTypes.hpp>
 #include <pagmo/algorithms/ipopt.hpp>
 #endif
 #include <pagmo/algorithms/mbh.hpp>
@@ -149,6 +149,7 @@ void expose_algorithms_0()
                  bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
                                    bp::return_internal_reference<>()),
                  generic_uda_inner_algorithm_docstring().c_str());
+
     // cstrs_self_adaptive meta-algo.
     auto cstrs_sa
         = expose_algorithm_pygmo<cstrs_self_adaptive>("cstrs_self_adaptive", cstrs_self_adaptive_docstring().c_str());
@@ -174,6 +175,7 @@ void expose_algorithms_0()
     test_a.def("set_n", &test_algorithm::set_n);
     // Thread unsafe test algo.
     expose_algorithm_pygmo<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
+
     // ARTIFICIAL BEE COLONY
     auto bee_colony_ = expose_algorithm_pygmo<bee_colony>("bee_colony", bee_colony_docstring().c_str());
     bee_colony_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 1u)));
@@ -181,6 +183,7 @@ void expose_algorithms_0()
         bp::init<unsigned, unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("limit") = 20u, bp::arg("seed"))));
     expose_algo_log(bee_colony_, bee_colony_get_log_docstring().c_str());
     bee_colony_.def("get_seed", &bee_colony::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // DE
     auto de_ = expose_algorithm_pygmo<de>("de", de_docstring().c_str());
     de_.def(bp::init<unsigned, double, double, unsigned, double, double>(
@@ -235,6 +238,7 @@ void expose_algorithms_0()
                                       bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(de1220_, de1220_get_log_docstring().c_str());
     de1220_.def("get_seed", &de1220::get_seed, generic_uda_get_seed_docstring().c_str());
+
 #if defined(PAGMO_WITH_EIGEN3)
     // CMA-ES
     auto cmaes_ = expose_algorithm_pygmo<cmaes>("cmaes", cmaes_docstring().c_str());
@@ -248,6 +252,7 @@ void expose_algorithms_0()
          bp::arg("force_bounds") = false, bp::arg("seed"))));
     expose_algo_log(cmaes_, cmaes_get_log_docstring().c_str());
     cmaes_.def("get_seed", &cmaes::get_seed, generic_uda_get_seed_docstring().c_str());
+
     // xNES
     auto xnes_ = expose_algorithm_pygmo<xnes>("xnes", xnes_docstring().c_str());
     xnes_.def(bp::init<unsigned, double, double, double, double, double, double, bool, bool>(
@@ -261,6 +266,7 @@ void expose_algorithms_0()
     expose_algo_log(xnes_, xnes_get_log_docstring().c_str());
     xnes_.def("get_seed", &xnes::get_seed, generic_uda_get_seed_docstring().c_str());
 #endif
+
     // MOEA/D - DE
     auto moead_ = expose_algorithm_pygmo<moead>("moead", moead_docstring().c_str());
     moead_.def(bp::init<unsigned, std::string, std::string, unsigned, double, double, double, double, unsigned, bool>(

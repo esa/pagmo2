@@ -10,11 +10,11 @@ struct uda_basic {
         return pop;
     }
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
 
-PAGMO_REGISTER_ALGORITHM(uda_basic)
+PAGMO_S11N_ALGORITHM_EXPORT(uda_basic)
 
 #endif

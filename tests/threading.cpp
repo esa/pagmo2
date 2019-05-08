@@ -27,7 +27,8 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE threading_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -65,4 +66,6 @@ BOOST_AUTO_TEST_CASE(threading_test)
     oss << thread_safety::constant;
     BOOST_CHECK_EQUAL("constant", oss.str());
     oss.str("");
+    oss << static_cast<thread_safety>(100);
+    BOOST_CHECK_EQUAL("unknown value", oss.str());
 }

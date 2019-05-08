@@ -27,6 +27,8 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE cmaes_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <initializer_list>
 #include <iostream>
@@ -35,7 +37,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/test/included/unit_test.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cmaes.hpp>
@@ -45,6 +46,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/utils/generic.hpp>
 
 using namespace pagmo;
@@ -236,19 +238,19 @@ BOOST_AUTO_TEST_CASE(cmaes_serialization_test)
     auto before_log = algo.extract<cmaes>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<cmaes>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    BOOST_CHECK(before_log == after_log);
     // so we implement a close check
     BOOST_CHECK(before_log.size() > 0u);
     for (auto i = 0u; i < before_log.size(); ++i) {

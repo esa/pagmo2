@@ -27,14 +27,15 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE rng_serialization_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <iterator>
 #include <random>
 #include <sstream>
 #include <vector>
 
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 
 static std::mt19937 rng;
 
@@ -43,13 +44,13 @@ static const int ntrials = 100;
 BOOST_AUTO_TEST_CASE(rng_serialization_test)
 {
     using r_type = std::mt19937;
-    using ia_type = cereal::JSONInputArchive;
-    using oa_type = cereal::JSONOutputArchive;
+    using ia_type = boost::archive::binary_iarchive;
+    using oa_type = boost::archive::binary_oarchive;
     auto rng_save = [](const r_type &r) {
         std::stringstream ss;
         {
             oa_type oarchive(ss);
-            oarchive(r);
+            oarchive << r;
         }
         return ss.str();
     };
@@ -58,7 +59,7 @@ BOOST_AUTO_TEST_CASE(rng_serialization_test)
         ss.str(str);
         {
             ia_type iarchive(ss);
-            iarchive(r);
+            iarchive >> r;
         }
     };
     std::uniform_int_distribution<r_type::result_type> dist;

@@ -26,18 +26,14 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_MINLP_RASTRIGIN_HPP
-#define PAGMO_PROBLEM_MINLP_RASTRIGIN_HPP
+#ifndef PAGMO_PROBLEMS_MINLP_RASTRIGIN_HPP
+#define PAGMO_PROBLEMS_MINLP_RASTRIGIN_HPP
 
-#include <iostream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <pagmo/detail/constants.hpp>
-#include <pagmo/exceptions.hpp>
-#include <pagmo/io.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
@@ -68,7 +64,7 @@ namespace pagmo
  * 	H_{ii}\left(x_1,\ldots,x_n\right) = 2 + 10 \cdot 4\pi^2 \cdot\cos\left( 2\pi \cdot x_i \right)
  * \f]
  */
-struct minlp_rastrigin {
+struct PAGMO_DLL_PUBLIC minlp_rastrigin {
     /// Constructor from continuous and integer dimension
     /**
      * Constructs a MINLP Rastrigin problem.
@@ -78,49 +74,18 @@ struct minlp_rastrigin {
      *
      * @throw std::invalid_argument if \p dim_c+ \p dim_i is < 1
      */
-    minlp_rastrigin(unsigned dim_c = 1u, unsigned dim_i = 1u) : m_dim_c(dim_c), m_dim_i(dim_i)
-    {
-        if (dim_c + dim_i < 1u) {
-            pagmo_throw(std::invalid_argument, "Minlp Rastrigin Function must have minimum 1 dimension, "
-                                                   + std::to_string(dim_c + dim_i) + " requested");
-        }
-    };
-    /// Fitness computation
-    /**
-     * Computes the fitness for this UDP.
-     *
-     * @param x the decision vector.
-     *
-     * @return the fitness of \p x.
-     */
-    vector_double fitness(const vector_double &x) const
-    {
-        vector_double f(1, 0.);
-        const auto omega = 2. * pagmo::detail::pi();
-        auto n = x.size();
-        for (decltype(n) i = 0u; i < n; ++i) {
-            f[0] += x[i] * x[i] - 10. * std::cos(omega * x[i]);
-        }
-        f[0] += 10. * static_cast<double>(n);
-        return f;
-    }
+    minlp_rastrigin(unsigned dim_c = 1u, unsigned dim_i = 1u);
 
-    /// Box-bounds
+    // Fitness computation
+    vector_double fitness(const vector_double &) const;
+
+    // Box-bounds
     /**
      * It returns the box-bounds for this UDP.
      *
      * @return the lower and upper bounds for each of the decision vector components
      */
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        vector_double lb(m_dim_c + m_dim_i, -5.12);
-        vector_double ub(m_dim_c + m_dim_i, 5.12);
-        for (decltype(m_dim_i) i = m_dim_c; i < m_dim_i + m_dim_c; ++i) {
-            lb[i] = -10;
-            ub[i] = -5;
-        }
-        return {lb, ub};
-    }
+    std::pair<vector_double, vector_double> get_bounds() const;
 
     /// Integer dimension
     /**
@@ -132,68 +97,16 @@ struct minlp_rastrigin {
     {
         return m_dim_i;
     }
-    /// Gradients
-    /**
-     * It returns the fitness gradient for this UDP.
-     *
-     * The gradient is represented in a sparse form as required by
-     * problem::gradient().
-     *
-     * @param x the decision vector.
-     *
-     * @return the gradient of the fitness function
-     */
-    vector_double gradient(const vector_double &x) const
-    {
-        auto n = x.size();
-        vector_double g(n);
-        const auto omega = 2. * pagmo::detail::pi();
-        for (decltype(n) i = 0u; i < n; ++i) {
-            g[i] = 2 * x[i] + 10.0 * omega * std::sin(omega * x[i]);
-        }
-        return g;
-    }
 
-    /// Hessians
-    /**
-     * It returns the hessians for this UDP.
-     *
-     * The hessians are represented in a sparse form as required by
-     * problem::hessians().
-     *
-     * @param x the decision vector.
-     *
-     * @return the hessians of the fitness function
-     */
-    std::vector<vector_double> hessians(const vector_double &x) const
-    {
-        auto n = x.size();
-        vector_double h(n);
-        const auto omega = 2. * pagmo::detail::pi();
-        for (decltype(n) i = 0u; i < n; ++i) {
-            h[i] = 2 + 10.0 * omega * omega * std::cos(omega * x[i]);
-        }
-        return {h};
-    }
+    // Gradients
+    vector_double gradient(const vector_double &) const;
 
-    /// Hessians sparsity (only the diagonal elements are non zero)
-    /**
-     * It returns the hessian sparisty structure for this UDP.
-     *
-     * The hessian sparisty is represented in the form required by
-     * problem::hessians_sparsity().
-     *
-     * @return the hessians of the fitness function
-     */
-    std::vector<sparsity_pattern> hessians_sparsity() const
-    {
-        sparsity_pattern hs;
-        auto n = m_dim_c + m_dim_i;
-        for (decltype(n) i = 0u; i < n; ++i) {
-            hs.push_back({i, i});
-        }
-        return {hs};
-    }
+    // Hessians
+    std::vector<vector_double> hessians(const vector_double &) const;
+
+    // Hessians sparsity (only the diagonal elements are non zero)
+    std::vector<sparsity_pattern> hessians_sparsity() const;
+
     /// Problem name
     /**
      * @return a string containing the problem name
@@ -202,39 +115,22 @@ struct minlp_rastrigin {
     {
         return "MINLP Rastrigin Function";
     }
-    /// Extra informations
-    /**
-     * @return a string containing extra informations on the problem
-     */
-    std::string get_extra_info() const
-    {
-        std::ostringstream ss;
-        ss << "\tMINLP continuous dimension: " << std::to_string(m_dim_c) << "\n";
-        ss << "\tMINLP integer dimension: " << std::to_string(m_dim_i) << "\n";
-        return ss.str();
-    }
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+
+    // Extra info
+    std::string get_extra_info() const;
+
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(m_dim_c, m_dim_i);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
-    /// Problem dimensions
-    unsigned int m_dim_c;
-    unsigned int m_dim_i;
+    // Problem dimensions
+    unsigned m_dim_c;
+    unsigned m_dim_i;
 };
 
 } // namespace pagmo
 
-PAGMO_REGISTER_PROBLEM(pagmo::minlp_rastrigin)
+PAGMO_S11N_PROBLEM_EXPORT_KEY(pagmo::minlp_rastrigin)
 
 #endif

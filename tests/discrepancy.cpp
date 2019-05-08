@@ -27,11 +27,13 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE discrepancy_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/test/floating_point_comparison.hpp>
 #include <stdexcept>
 #include <tuple>
+
+#include <boost/test/floating_point_comparison.hpp>
 
 #include <pagmo/detail/prime_numbers.hpp>
 #include <pagmo/io.hpp>

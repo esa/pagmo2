@@ -15,19 +15,19 @@ fi
 if [[ "${PAGMO_BUILD}" == "ReleaseGCC48" ]]; then
     CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == "DebugGCC48" ]]; then
     CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == "OSXDebug" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os" ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     export CXX=g++-4.8
     export CC=gcc-4.8
@@ -68,7 +68,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     cd ../../;
     python test2.py
     if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
-        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python36 build.
+        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python37 build.
         exit 0;
     fi
 

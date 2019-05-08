@@ -424,6 +424,84 @@ class de_test_case(_ut.TestCase):
         log = uda.get_log()
 
 
+class nsga2_test_case(_ut.TestCase):
+    """Test case for the UDA nsga2
+
+    """
+
+    def runTest(self):
+        from .core import nsga2, algorithm
+        from pickle import loads, dumps
+        uda = nsga2()
+        uda = nsga2(gen=10, cr=0.94, eta_c=9., m=0.05, eta_m=10., seed=0)
+        self.assertEqual(uda.get_seed(), 0)
+        a = algorithm(uda)
+        self.assertEqual(str(a), str(loads(dumps(a))))
+        log = uda.get_log()
+
+
+class gaco_test_case(_ut.TestCase):
+    """Test case for the UDA gaco
+
+    """
+
+    def runTest(self):
+        from .core import gaco, algorithm
+        from pickle import loads, dumps
+        uda = gaco()
+        uda = gaco(gen=1000, seed=5)
+        self.assertEqual(uda.get_seed(), 5)
+        a = algorithm(uda)
+        self.assertEqual(str(a), str(loads(dumps(a))))
+        log = uda.get_log()
+
+
+class gwo_test_case(_ut.TestCase):
+    """Test case for the UDA gwo
+
+    """
+
+    def runTest(self):
+        from .core import gwo, algorithm
+        from pickle import loads, dumps
+        uda = gwo()
+        uda = gwo(gen=1000, seed=5)
+        self.assertEqual(uda.get_seed(), 5)
+        a = algorithm(uda)
+        self.assertEqual(str(a), str(loads(dumps(a))))
+        log = uda.get_log()
+
+
+class de1220_test_case(_ut.TestCase):
+    """Test case for the UDA de1220
+
+    """
+
+    def runTest(self):
+        from .core import de1220, algorithm
+        from pickle import loads, dumps
+        uda = de1220()
+        uda = de1220(gen=1000, seed=5)
+        self.assertEqual(uda.get_seed(), 5)
+        a = algorithm(uda)
+        self.assertEqual(str(a), str(loads(dumps(a))))
+        log = uda.get_log()
+
+
+class sea_test_case(_ut.TestCase):
+    """Test case for the UDA sea
+
+    """
+
+    def runTest(self):
+        from .core import sea
+        uda = sea()
+        uda = sea(gen=10000)
+        uda = sea(gen=10000, seed=32)
+        self.assertEqual(uda.get_seed(), 32)
+        log = uda.get_log()
+
+
 class pso_gen_test_case(_ut.TestCase):
     """Test case for the UDA pso_gen
 
@@ -560,21 +638,6 @@ class sga_test_case(_ut.TestCase):
                   mutation="polynomial", selection="tournament")
         uda = sga(gen=1, cr=.90, eta_c=1., m=0.02, param_m=1., param_s=2, crossover="exponential",
                   mutation="polynomial", selection="tournament", seed=32)
-        self.assertEqual(uda.get_seed(), 32)
-        seed = uda.get_seed()
-
-
-class nsga2_test_case(_ut.TestCase):
-    """Test case for the UDA nsga2
-
-    """
-
-    def runTest(self):
-        from .core import nsga2
-        uda = nsga2()
-        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01, eta_m=10)
-        uda = nsga2(gen=1, cr=0.95, eta_c=10, m=0.01,
-                    eta_m=10, int_dim=0, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         seed = uda.get_seed()
 
@@ -1014,6 +1077,23 @@ class minlp_rastrigin_test_case(_ut.TestCase):
         self.assertTrue(int(pop.get_x()[0][-3]) == pop.get_x()[0][-3])
         self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
         self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
+
+
+class rastrigin_test_case(_ut.TestCase):
+    """Test case for the Rastrigin function
+
+    """
+
+    def runTest(self):
+        from .core import rastrigin, problem, population
+        from pickle import loads, dumps
+        udp = rastrigin(dim=5)
+        prob = problem(udp)
+        self.assertTrue(prob.get_nx() == 5)
+        self.assertTrue(prob.get_nix() == 0)
+        self.assertTrue(prob.get_ncx() == 5)
+        pop = population(udp, 1)
+        self.assertEqual(str(pop), str(loads(dumps(pop))))
 
 
 class random_decision_vector_test_case(_ut.TestCase):
@@ -1977,6 +2057,11 @@ def run_test_suite(level=0):
     suite.addTest(golomb_ruler_test_case())
     suite.addTest(lennard_jones_test_case())
     suite.addTest(de_test_case())
+    suite.addTest(nsga2_test_case())
+    suite.addTest(gaco_test_case())
+    suite.addTest(gwo_test_case())
+    suite.addTest(de1220_test_case())
+    suite.addTest(sea_test_case())
     suite.addTest(pso_test_case())
     suite.addTest(pso_gen_test_case())
     suite.addTest(bee_colony_test_case())
@@ -2013,6 +2098,7 @@ def run_test_suite(level=0):
     suite.addTest(cec2014_test_case())
     suite.addTest(luksan_vlcek1_test_case())
     suite.addTest(minlp_rastrigin_test_case())
+    suite.addTest(rastrigin_test_case())
     suite.addTest(translate_test_case())
     suite.addTest(decompose_test_case())
     suite.addTest(unconstrain_test_case())

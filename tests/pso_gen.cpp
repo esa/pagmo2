@@ -27,12 +27,16 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE pso_gen_test
-#include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 #include <iostream>
 #include <limits> //  std::numeric_limits<double>::infinity();
+#include <numeric>
 #include <string>
+
+#include <boost/lexical_cast.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
@@ -55,7 +59,7 @@ struct my_sto_prob {
     /**
      * @param seed the random number generator seed
      */
-    void set_seed(unsigned int seed)
+    void set_seed(unsigned seed)
     {
         m_seed = seed;
     }
@@ -147,8 +151,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     // We check that evolution is deterministic if the
     // seed is controlled and for all algoritmic variants
     // 1) for deterministic optimization
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{rosenbrock{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
@@ -168,8 +172,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
     // And with active memory
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{rosenbrock{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
@@ -191,8 +195,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
     // 2) for stochastic optimization
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{my_sto_prob{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, false, 23u};
@@ -212,8 +216,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
     // And with active memory
-    for (unsigned int variant = 1u; variant <= 6u; ++variant) {
-        for (unsigned int neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
+    for (unsigned variant = 1u; variant <= 6u; ++variant) {
+        for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{my_sto_prob{10u}};
             population pop1{prob, 5u, 23u};
             pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, variant, neighb_type, 4u, true, 23u};
@@ -263,21 +267,19 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     auto before_log = algo.extract<pso_gen>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<pso_gen>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log);
-    // This fails because of floating point problems when using JSON and cereal
-    // so we implement a close check
+    BOOST_CHECK(before_log == after_log);
     for (auto i = 0u; i < before_log.size(); ++i) {
         BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
         BOOST_CHECK_EQUAL(std::get<1>(before_log[i]), std::get<1>(after_log[i]));

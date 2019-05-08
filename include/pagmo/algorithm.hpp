@@ -34,33 +34,26 @@ see https://www.gnu.org/licenses/. */
 #include <typeinfo>
 #include <utility>
 
+#include <boost/type_traits/integral_constant.hpp>
+#include <boost/type_traits/is_virtual_base_of.hpp>
+
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
-/// Macro for the registration of the serialization functionality for user-defined algorithms.
-/**
- * This macro should always be invoked after the declaration of a user-defined algorithm: it will register
- * the algorithm with pagmo's serialization machinery. The macro should be called in the root namespace
- * and using the fully qualified name of the algorithm to be registered. For example:
- * @code{.unparsed}
- * namespace my_namespace
- * {
- *
- * class my_algorithm
- * {
- *    // ...
- * };
- *
- * }
- *
- * PAGMO_REGISTER_ALGORITHM(my_namespace::my_algorithm)
- * @endcode
- */
-#define PAGMO_REGISTER_ALGORITHM(algo) CEREAL_REGISTER_TYPE_WITH_NAME(pagmo::detail::algo_inner<algo>, "uda " #algo)
+#define PAGMO_S11N_ALGORITHM_EXPORT_KEY(algo)                                                                          \
+    BOOST_CLASS_EXPORT_KEY2(pagmo::detail::algo_inner<algo>, "uda " #algo)                                             \
+    BOOST_CLASS_TRACKING(pagmo::detail::algo_inner<algo>, boost::serialization::track_never)
+
+#define PAGMO_S11N_ALGORITHM_IMPLEMENT(algo) BOOST_CLASS_EXPORT_IMPLEMENT(pagmo::detail::algo_inner<algo>)
+
+#define PAGMO_S11N_ALGORITHM_EXPORT(algo)                                                                              \
+    PAGMO_S11N_ALGORITHM_EXPORT_KEY(algo)                                                                              \
+    PAGMO_S11N_ALGORITHM_IMPLEMENT(algo)
 
 namespace pagmo
 {
@@ -69,20 +62,9 @@ namespace pagmo
 /**
  * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
  */
-struct null_algorithm {
-    /// Evolve method.
-    /**
-     * In the null algorithm, the evolve method just returns the input
-     * population.
-     *
-     * @param pop input population.
-     *
-     * @return a copy of the input population.
-     */
-    population evolve(const population &pop) const
-    {
-        return pop;
-    };
+struct PAGMO_DLL_PUBLIC null_algorithm {
+    // Evolve method.
+    population evolve(const population &) const;
     /// Algorithm name.
     /**
      * @return <tt>"Null algorithm"</tt>.
@@ -91,14 +73,9 @@ struct null_algorithm {
     {
         return "Null algorithm";
     }
-    /// Serialization support.
-    /**
-     * This class is stateless, no data will be loaded or saved during serialization.
-     */
+    // Serialization support.
     template <typename Archive>
-    void serialize(Archive &)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 
 } // namespace pagmo
@@ -204,10 +181,10 @@ template <typename T>
 class is_uda
 {
     static const bool implementation_defined
-        = (std::is_same<T, uncvref_t<T>>::value && std::is_default_constructible<T>::value
-           && std::is_copy_constructible<T>::value && std::is_move_constructible<T>::value
-           && std::is_destructible<T>::value && has_evolve<T>::value)
-          || detail::disable_uda_checks<T>::value;
+        = detail::disjunction<detail::conjunction<std::is_same<T, uncvref_t<T>>, std::is_default_constructible<T>,
+                                                  std::is_copy_constructible<T>, std::is_move_constructible<T>,
+                                                  std::is_destructible<T>, has_evolve<T>>,
+                              detail::disable_uda_checks<T>>::value;
 
 public:
     /// Value of the type trait.
@@ -220,7 +197,7 @@ const bool is_uda<T>::value;
 namespace detail
 {
 
-struct algo_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner_base {
     virtual ~algo_inner_base() {}
     virtual std::unique_ptr<algo_inner_base> clone() const = 0;
     virtual population evolve(const population &pop) const = 0;
@@ -232,13 +209,13 @@ struct algo_inner_base {
     virtual std::string get_extra_info() const = 0;
     virtual thread_safety get_thread_safety() const = 0;
     template <typename Archive>
-    void serialize(Archive &)
+    void serialize(Archive &, unsigned)
     {
     }
 };
 
 template <typename T>
-struct algo_inner final : algo_inner_base {
+struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
     // We just need the def ctor, delete everything else.
     algo_inner() = default;
     algo_inner(const algo_inner &) = delete;
@@ -375,14 +352,28 @@ struct algo_inner final : algo_inner_base {
 
     // Serialization
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(cereal::base_class<algo_inner_base>(this), m_value);
+        detail::archive(ar, boost::serialization::base_object<algo_inner_base>(*this), m_value);
     }
     T m_value;
 };
 
-} // end of namespace detail
+} // namespace detail
+
+} // namespace pagmo
+
+namespace boost
+{
+
+template <typename T>
+struct is_virtual_base_of<pagmo::detail::algo_inner_base, pagmo::detail::algo_inner<T>> : false_type {
+};
+
+} // namespace boost
+
+namespace pagmo
+{
 
 /// Algorithm class.
 /**
@@ -431,22 +422,22 @@ struct algo_inner final : algo_inner_base {
  *
  * \endverbatim
  */
-class algorithm
+class PAGMO_DLL_PUBLIC algorithm
 {
     // Enable the generic ctor only if T is not an algorithm (after removing
     // const/reference qualifiers), and if T is a uda.
     template <typename T>
-    using generic_ctor_enabler
-        = enable_if_t<!std::is_same<algorithm, uncvref_t<T>>::value && is_uda<uncvref_t<T>>::value, int>;
+    using generic_ctor_enabler = enable_if_t<
+        detail::conjunction<detail::negation<std::is_same<algorithm, uncvref_t<T>>>, is_uda<uncvref_t<T>>>::value, int>;
 
 public:
-    /// Default constructor.
-    /**
-     * The default constructor will initialize a pagmo::algorithm containing a pagmo::null_algorithm.
-     *
-     * @throws unspecified any exception thrown by the constructor from UDA.
-     */
-    algorithm() : algorithm(null_algorithm{}) {}
+    // Default constructor.
+    algorithm();
+
+private:
+    void generic_ctor_impl();
+
+public:
     /// Constructor from a user-defined algorithm of type \p T
     /**
      * \verbatim embed:rst:leading-asterisk
@@ -471,72 +462,16 @@ public:
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit algorithm(T &&x) : m_ptr(detail::make_unique<detail::algo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
-        // We detect if set_seed is implemented in the algorithm, in which case the algorithm is stochastic
-        m_has_set_seed = ptr()->has_set_seed();
-        // We detect if set_verbosity is implemented in the algorithm
-        m_has_set_verbosity = ptr()->has_set_verbosity();
-        // We store at construction the value returned from the user implemented get_name
-        m_name = ptr()->get_name();
-        // Store the thread safety value.
-        m_thread_safety = ptr()->get_thread_safety();
+        generic_ctor_impl();
     }
-    /// Copy constructor
-    /**
-     * The copy constructor will deep copy the input algorithm \p other.
-     *
-     * @param other the algorithm to be copied.
-     *
-     * @throws unspecified any exception thrown by:
-     * - memory allocation errors in standard containers,
-     * - the copying of the internal UDA.
-     */
-    algorithm(const algorithm &other)
-        : m_ptr(other.m_ptr->clone()), m_has_set_seed(other.m_has_set_seed),
-          m_has_set_verbosity(other.m_has_set_verbosity), m_name(other.m_name), m_thread_safety(other.m_thread_safety)
-    {
-    }
-    /// Move constructor
-    /**
-     * @param other the algorithm from which \p this will be move-constructed.
-     */
-    algorithm(algorithm &&other) noexcept
-        : m_ptr(std::move(other.m_ptr)), m_has_set_seed(std::move(other.m_has_set_seed)),
-          m_has_set_verbosity(other.m_has_set_verbosity), m_name(std::move(other.m_name)),
-          m_thread_safety(std::move(other.m_thread_safety))
-    {
-    }
-    /// Move assignment operator
-    /**
-     * @param other the assignment target.
-     *
-     * @return a reference to \p this.
-     */
-    algorithm &operator=(algorithm &&other) noexcept
-    {
-        if (this != &other) {
-            m_ptr = std::move(other.m_ptr);
-            m_has_set_seed = std::move(other.m_has_set_seed);
-            m_has_set_verbosity = other.m_has_set_verbosity;
-            m_name = std::move(other.m_name);
-            m_thread_safety = std::move(other.m_thread_safety);
-        }
-        return *this;
-    }
-    /// Copy assignment operator
-    /**
-     * Copy assignment is implemented as a copy constructor followed by a move assignment.
-     *
-     * @param other the assignment target.
-     *
-     * @return a reference to \p this.
-     *
-     * @throws unspecified any exception thrown by the copy constructor.
-     */
-    algorithm &operator=(const algorithm &other)
-    {
-        // Copy ctor + move assignment.
-        return *this = algorithm(other);
-    }
+    // Copy constructor
+    algorithm(const algorithm &);
+    // Move ctor.
+    algorithm(algorithm &&) noexcept;
+    // Move assignment.
+    algorithm &operator=(algorithm &&) noexcept;
+    // Copy assignment.
+    algorithm &operator=(const algorithm &);
 
     /// Extract a const pointer to the UDA.
     /**
@@ -606,37 +541,11 @@ public:
         return extract<T>() != nullptr;
     }
 
-    /// Evolve method.
-    /**
-     * This method will invoke the <tt>%evolve()</tt> method of the UDA. This is where the core of the optimization
-     * (*evolution*) is made.
-     *
-     * @param pop starting population
-     *
-     * @return evolved population
-     *
-     * @throws unspecified any exception thrown by the <tt>%evolve()</tt> method of the UDA.
-     */
-    population evolve(const population &pop) const
-    {
-        return ptr()->evolve(pop);
-    }
+    // Evolve method.
+    population evolve(const population &) const;
 
-    /// Set the seed for the stochastic evolution.
-    /**
-     * Sets the seed to be used in the <tt>%evolve()</tt> method of the UDA for all stochastic variables. If the UDA
-     * satisfies pagmo::has_set_seed, then its <tt>%set_seed()</tt> method will be invoked. Otherwise, an error will be
-     * raised.
-     *
-     * @param seed seed.
-     *
-     * @throws not_implemented_error if the UDA does not satisfy pagmo::has_set_seed.
-     * @throws unspecified any exception thrown by the <tt>%set_seed()</tt> method of the UDA.
-     */
-    void set_seed(unsigned seed)
-    {
-        ptr()->set_seed(seed);
-    }
+    // Set the seed for the stochastic evolution.
+    void set_seed(unsigned);
 
     /// Check if a <tt>%set_seed()</tt> method is available in the UDA.
     /**
@@ -665,22 +574,8 @@ public:
         return has_set_seed();
     }
 
-    /// Set the verbosity of logs and screen output.
-    /**
-     * This method will set the level of verbosity for the algorithm. If the UDA satisfies pagmo::has_set_verbosity,
-     * then its <tt>%set_verbosity()</tt> method will be invoked. Otherwise, an error will be raised.
-     *
-     * The exact meaning of the input parameter \p level is dependent on the UDA.
-     *
-     * @param level the desired verbosity level.
-     *
-     * @throws not_implemented_error if the UDA does not satisfy pagmo::has_set_verbosity.
-     * @throws unspecified any exception thrown by the <tt>%set_verbosity()</tt> method of the UDA.
-     */
-    void set_verbosity(unsigned level)
-    {
-        ptr()->set_verbosity(level);
-    }
+    // Set the verbosity of logs and screen output.
+    void set_verbosity(unsigned);
 
     /// Check if a <tt>%set_verbosity()</tt> method is available in the UDA.
     /**
@@ -715,19 +610,8 @@ public:
         return m_name;
     }
 
-    /// Algorithm's extra info.
-    /**
-     * If the UDA satisfies pagmo::has_extra_info, then this method will return the output of its
-     * <tt>%get_extra_info()</tt> method. Otherwise, an empty string will be returned.
-     *
-     * @return extra info about the UDA.
-     *
-     * @throws unspecified any exception thrown by the <tt>%get_extra_info()</tt> method of the UDA.
-     */
-    std::string get_extra_info() const
-    {
-        return ptr()->get_extra_info();
-    }
+    // Algorithm's extra info.
+    std::string get_extra_info() const;
 
     /// Algorithm's thread safety level.
     /**
@@ -742,34 +626,6 @@ public:
         return m_thread_safety;
     }
 
-    /// Streaming operator
-    /**
-     * This function will stream to \p os a human-readable representation of the input
-     * algorithm \p a.
-     *
-     * @param os input <tt>std::ostream</tt>.
-     * @param a pagmo::algorithm object to be streamed.
-     *
-     * @return a reference to \p os.
-     *
-     * @throws unspecified any exception thrown by querying various algorithm properties and streaming them into \p os.
-     */
-    friend std::ostream &operator<<(std::ostream &os, const algorithm &a)
-    {
-        os << "Algorithm name: " << a.get_name();
-        if (!a.has_set_seed()) {
-            stream(os, " [deterministic]");
-        } else {
-            stream(os, " [stochastic]");
-        }
-        stream(os, "\n\tThread safety: ", a.get_thread_safety(), '\n');
-        const auto extra_str = a.get_extra_info();
-        if (!extra_str.empty()) {
-            stream(os, "\nExtra info:\n", extra_str);
-        }
-        return os;
-    }
-
     /// Save to archive.
     /**
      * This method will save \p this into the archive \p ar.
@@ -779,9 +635,9 @@ public:
      * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
      */
     template <typename Archive>
-    void save(Archive &ar) const
+    void save(Archive &ar, unsigned) const
     {
-        ar(m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
+        detail::to_archive(ar, m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
     }
     /// Load from archive.
     /**
@@ -792,12 +648,14 @@ public:
      * @throws unspecified any exception thrown by the deserialization of the UDA and of primitive types.
      */
     template <typename Archive>
-    void load(Archive &ar)
+    void load(Archive &ar, unsigned)
     {
         algorithm tmp;
-        ar(tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name, tmp.m_thread_safety);
+        detail::from_archive(ar, tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name,
+                             tmp.m_thread_safety);
         *this = std::move(tmp);
     }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     // Two small helpers to make sure that whenever we require
@@ -824,8 +682,12 @@ private:
     std::string m_name;
     thread_safety m_thread_safety;
 };
+
+// Streaming operator for algorithm.
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
+
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::null_algorithm)
+PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::null_algorithm)
 
 #endif
