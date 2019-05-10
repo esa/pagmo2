@@ -7,6 +7,8 @@ Changelog
 New
 ~~~
 
+- Implement an ``uninstall`` target in the build system (`#282 <https://github.com/esa/pagmo2/pull/282>`__).
+
 - Implement the Grey Wolf Optimizer algorithm (`#268 <https://github.com/esa/pagmo2/pull/268>`__).
 
 - Add CircleCI to the continuous integration pipeline (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
@@ -30,6 +32,8 @@ Changes
 Fix
 ~~~
 
+- Fix a build failure when pagmo is configured without Eigen3 (`#281 <https://github.com/esa/pagmo2/pull/281>`__).
+
 - Fix a build failure in the Ipopt algorithm wrapper when using the Debian/Ubuntu Ipopt packages (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
 
 - Fix a few test suite build failures in debug mode when using recent Clang versions (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
@@ -39,7 +43,8 @@ Fix
 - Various documentation, build system and unit testing fixes/improvements (`#243 <https://github.com/esa/pagmo2/pull/243>`__,
   `#245 <https://github.com/esa/pagmo2/pull/245>`__, `#248 <https://github.com/esa/pagmo2/pull/248>`__,
   `#257 <https://github.com/esa/pagmo2/pull/257>`__, `#262 <https://github.com/esa/pagmo2/pull/262>`__,
-  `#265 <https://github.com/esa/pagmo2/pull/265>`__, `#266 <https://github.com/esa/pagmo2/pull/266>`__).
+  `#265 <https://github.com/esa/pagmo2/pull/265>`__, `#266 <https://github.com/esa/pagmo2/pull/266>`__,
+  `#279 <https://github.com/esa/pagmo2/pull/279>`__).
 
 - The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
 

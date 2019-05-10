@@ -233,6 +233,7 @@
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Implement an <code class="docutils literal notranslate"><span class="pre">uninstall</span></code> target in the build system (<a class="reference external" href="https://github.com/esa/pagmo2/pull/282">#282</a>).</p></li>
 <li><p>Implement the Grey Wolf Optimizer algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/268">#268</a>).</p></li>
 <li><p>Add CircleCI to the continuous integration pipeline (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
 <li><p>Implement the Extended Ant Colony Optimization algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/249">#249</a>).</p></li>
@@ -253,13 +254,15 @@ This change makes the behaviour of pygmo consistent with the behaviour of pagmo 
 <div class="section" id="fix">
 <h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Fix a build failure when pagmo is configured without Eigen3 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/281">#281</a>).</p></li>
 <li><p>Fix a build failure in the Ipopt algorithm wrapper when using the Debian/Ubuntu Ipopt packages (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
 <li><p>Fix a few test suite build failures in debug mode when using recent Clang versions (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
 <li><p>Fix the behaviour of NSGA2 and MOEAD when the problem has equal lower/upper bounds (<a class="reference external" href="https://github.com/esa/pagmo2/pull/244">#244</a>).</p></li>
 <li><p>Various documentation, build system and unit testing fixes/improvements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/243">#243</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/245">#245</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/248">#248</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/257">#257</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/262">#262</a>,
-<a class="reference external" href="https://github.com/esa/pagmo2/pull/265">#265</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
+<a class="reference external" href="https://github.com/esa/pagmo2/pull/265">#265</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>,
+<a class="reference external" href="https://github.com/esa/pagmo2/pull/279">#279</a>).</p></li>
 <li><p>The <a class="reference internal" href="docs/cpp/islands/fork_island.html#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> UDI now properly cleans up zombie processes (<a class="reference external" href="https://github.com/esa/pagmo2/pull/242">#242</a>).</p></li>
 </ul>
 </div>
