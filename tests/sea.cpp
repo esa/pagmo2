@@ -26,8 +26,9 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE sea_problem_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE sea_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -42,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -140,19 +141,19 @@ BOOST_AUTO_TEST_CASE(sea_serialization_test)
     auto before_log = algo.extract<sea>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<sea>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    BOOST_CHECK(before_log == after_log);
     // so we implement a close check
     for (auto i = 0u; i < before_log.size(); ++i) {
         BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));

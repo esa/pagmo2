@@ -1,26 +1,26 @@
 /*****************************************************************************
-*   Copyright (C) 2004-2015 The PaGMO development team,                     *
-*   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
-*                                                                           *
-*   https://github.com/esa/pagmo                                            *
-*                                                                           *
-*   act@esa.int                                                             *
-*                                                                           *
-*   This program is free software; you can redistribute it and/or modify    *
-*   it under the terms of the GNU General Public License as published by    *
-*   the Free Software Foundation; either version 2 of the License, or       *
-*   (at your option) any later version.                                     *
-*                                                                           *
-*   This program is distributed in the hope that it will be useful,         *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
-*   GNU General Public License for more details.                            *
-*                                                                           *
-*   You should have received a copy of the GNU General Public License       *
-*   along with this program; if not, write to the                           *
-*   Free Software Foundation, Inc.,                                         *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
-*****************************************************************************/
+ *   Copyright (C) 2004-2015 The PaGMO development team,                     *
+ *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
+ *                                                                           *
+ *   https://github.com/esa/pagmo                                            *
+ *                                                                           *
+ *   act@esa.int                                                             *
+ *                                                                           *
+ *   This program is free software; you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation; either version 2 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program; if not, write to the                           *
+ *   Free Software Foundation, Inc.,                                         *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
+ *****************************************************************************/
 
 #ifndef PAGMO_UTIL_HYPERVOLUME_H
 #define PAGMO_UTIL_HYPERVOLUME_H
@@ -34,6 +34,7 @@
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 
@@ -64,30 +65,28 @@ class hypervolume
 public:
     /// Default constructor
     /**
-    * Initiates hypervolume with empty set of points.
-    * Used for serialization purposes.
-    */
-    hypervolume() : m_points(), m_copy_points(true), m_verify(false)
-    {
-    }
+     * Initiates hypervolume with empty set of points.
+     * Used for serialization purposes.
+     */
+    hypervolume() : m_points(), m_copy_points(true), m_verify(false) {}
 
     /// Constructor from population
     /**
-    * Constructs a hypervolume object, where points are elicited from a pagmo::population object.
-    *
-    * @param pop a pagmo::population
-    * @param verify flag stating whether the points should be verified for consistency after the construction.
-    *
-    * Example:
-    *
-    * @code
-    * population pop(zdt{1u}, 20u);
-    * hypervolume hv(pop);
-    * hypervolume hv2(pop, false);
-    * @endcode
-    *
-    * @throw std::invalid_argument if the population contains a problem that is constrained or single-objective
-    */
+     * Constructs a hypervolume object, where points are elicited from a pagmo::population object.
+     *
+     * @param pop a pagmo::population
+     * @param verify flag stating whether the points should be verified for consistency after the construction.
+     *
+     * Example:
+     *
+     * @code
+     * population pop(zdt{1u}, 20u);
+     * hypervolume hv(pop);
+     * hypervolume hv2(pop, false);
+     * @endcode
+     *
+     * @throw std::invalid_argument if the population contains a problem that is constrained or single-objective
+     */
     hypervolume(const pagmo::population &pop, bool verify = false) : m_copy_points(true), m_verify(verify)
     {
         if (pop.get_problem().get_nc() > 0u) {
@@ -108,19 +107,19 @@ public:
 
     /// Constructor from points
     /**
-    * Constructs a hypervolume object from a provided set of points.
-    *
-    * @param points vector of points for which the hypervolume is computed
-    * @param verify flag stating whether the points should be verified after the construction.
-    *        This regulates validation for further computation as well, use 'set_verify'
-    *        flag to alter it later.
-    *
-    * Example:
-    * @code
-    * hypervolume hv({{2,3},{3,4}});
-    * hypervolume hv2({{2,3},{3,4}}, false);
-    * @endcode
-    */
+     * Constructs a hypervolume object from a provided set of points.
+     *
+     * @param points vector of points for which the hypervolume is computed
+     * @param verify flag stating whether the points should be verified after the construction.
+     *        This regulates validation for further computation as well, use 'set_verify'
+     *        flag to alter it later.
+     *
+     * Example:
+     * @code
+     * hypervolume hv({{2,3},{3,4}});
+     * hypervolume hv2({{2,3},{3,4}}, false);
+     * @endcode
+     */
     hypervolume(const std::vector<vector_double> &points, bool verify = true)
         : m_points(points), m_copy_points(true), m_verify(verify)
     {
@@ -150,23 +149,23 @@ public:
 
     /// Setter for 'copy_points' flag
     /**
-    *
-    * It is used in cases where we are certain that we can alter the original set of points
-    * from the hypervolume object.
-    * This is useful when we don't want to make a copy of the points first, as most algorithms
-    * alter the original set, but may result in unexpected behaviour when used incorrectly
-    * (e.g. requesting the computation twice out of the same object)
-    *
-    * \verbatim embed:rst:leading-asterisk
-    * .. warning::
-    *
-    *    When this flag is set to true the object can reliably be used only once to compute
-    *    the hypervolume. Successive usages are undefined behaviour.
-    *
-    * \endverbatim
-    *
-    * @param copy_points boolean value stating whether the hypervolume computation may use original set
-    */
+     *
+     * It is used in cases where we are certain that we can alter the original set of points
+     * from the hypervolume object.
+     * This is useful when we don't want to make a copy of the points first, as most algorithms
+     * alter the original set, but may result in unexpected behaviour when used incorrectly
+     * (e.g. requesting the computation twice out of the same object)
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. warning::
+     *
+     *    When this flag is set to true the object can reliably be used only once to compute
+     *    the hypervolume. Successive usages are undefined behaviour.
+     *
+     * \endverbatim
+     *
+     * @param copy_points boolean value stating whether the hypervolume computation may use original set
+     */
     void set_copy_points(bool copy_points)
     {
         m_copy_points = copy_points;
@@ -174,9 +173,9 @@ public:
 
     /// Getter for 'copy_points' flag
     /**
-    * Gets the copy_points flag
-    *
-    * @return the copy_points flag value
+     * Gets the copy_points flag
+     *
+     * @return the copy_points flag value
      */
     bool get_copy_points() const
     {
@@ -185,16 +184,16 @@ public:
 
     /// Setter for the 'verify' flag
     /**
-    * Turns off the verification phase.
-    * By default, the hypervolume object verifies whether certain characteristics of the point set hold,
-    * such as valid dimension sizes or a reference point that suits the minimisation.
-    * In order to optimize the computation when the rules above are certain, we can turn off that phase.
-    *
-    * This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation
-    * of empty set of points)
-    *
-    * @param verify boolean value stating whether the hypervolume computation is to be executed without verification
-    */
+     * Turns off the verification phase.
+     * By default, the hypervolume object verifies whether certain characteristics of the point set hold,
+     * such as valid dimension sizes or a reference point that suits the minimisation.
+     * In order to optimize the computation when the rules above are certain, we can turn off that phase.
+     *
+     * This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation
+     * of empty set of points)
+     *
+     * @param verify boolean value stating whether the hypervolume computation is to be executed without verification
+     */
     void set_verify(bool verify)
     {
         m_verify = verify;
@@ -213,23 +212,23 @@ public:
 
     /// Calculate a default reference point
     /**
-    * Calculates a mock refpoint by taking the maximum in each dimension over all points saved
-    * in the hypervolume object.
-    * The result is a point that is necessarily dominated by all other points, frequently used
-    * for hypervolume computations.
-    *
-    * \verbatim embed:rst:leading-asterisk
-    * .. note::
-    *
-    *    This point is different from the one computed by :cpp:func:`pagmo::nadir()` as only the non dominated front
-    *    is considered in that method (also its complexity is thus higher)
-    *
-    * \endverbatim
-    *
-    * @param offset value that can be added to each objective to assure strict domination
-    *
-    * @return reference point
-    */
+     * Calculates a mock refpoint by taking the maximum in each dimension over all points saved
+     * in the hypervolume object.
+     * The result is a point that is necessarily dominated by all other points, frequently used
+     * for hypervolume computations.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This point is different from the one computed by :cpp:func:`pagmo::nadir()` as only the non dominated front
+     *    is considered in that method (also its complexity is thus higher)
+     *
+     * \endverbatim
+     *
+     * @param offset value that can be added to each objective to assure strict domination
+     *
+     * @return reference point
+     */
     vector_double refpoint(double offset = 0.0) const
     {
         // Corner case
@@ -255,10 +254,10 @@ public:
 
     /// Get points
     /**
-    * Will return a vector containing the points as they were set up during construction of the hypervolume object.
-    *
-    * @return const reference to the vector containing the fitness_vectors representing the points in the hyperspace.
-    */
+     * Will return a vector containing the points as they were set up during construction of the hypervolume object.
+     *
+     * @return const reference to the vector containing the fitness_vectors representing the points in the hyperspace.
+     */
     const std::vector<vector_double> &get_points() const
     {
         return m_points;
@@ -267,18 +266,18 @@ public:
     // Choose the best algorithm to compute the hypervolume the actual implementation is given
     // in another headers as to not create a circular dependency problem
     std::shared_ptr<hv_algorithm> get_best_compute(const vector_double &r_point) const;
-    std::shared_ptr<hv_algorithm> get_best_exclusive(const unsigned int p_idx, const vector_double &r_point) const;
+    std::shared_ptr<hv_algorithm> get_best_exclusive(const unsigned p_idx, const vector_double &r_point) const;
     std::shared_ptr<hv_algorithm> get_best_contributions(const vector_double &r_point) const;
 
     /// Compute hypervolume
     /**
-    * Computes hypervolume for given reference point.
-    * This method chooses the hv_algorithm dynamically.
-    *
-    * @param r_point vector describing the reference point
-    *
-    * @return value representing the hypervolume
-    */
+     * Computes hypervolume for given reference point.
+     * This method chooses the hv_algorithm dynamically.
+     *
+     * @param r_point vector describing the reference point
+     *
+     * @return value representing the hypervolume
+     */
     double compute(const vector_double &r_point) const
     {
         return compute(r_point, *get_best_compute(r_point));
@@ -286,13 +285,13 @@ public:
 
     /// Compute hypervolume
     /**
-    * Computes hypervolume for given reference point, using given pagmo::hv_algorithm object.
-    *
-    * @param r_point fitness vector describing the reference point
-    * @param hv_algo instance of the algorithm object used for the computation
-    *
-    * @return the hypervolume
-    */
+     * Computes hypervolume for given reference point, using given pagmo::hv_algorithm object.
+     *
+     * @param r_point fitness vector describing the reference point
+     * @param hv_algo instance of the algorithm object used for the computation
+     *
+     * @return the hypervolume
+     */
     double compute(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
@@ -309,15 +308,15 @@ public:
 
     /// Compute exclusive contribution
     /**
-    * Computes exclusive hypervolume for given indivdual.
-    *
-    * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
-    * @param r_point fitness vector describing the reference point
-    * @param hv_algo instance of the algorithm object used for the computation
-    *
-    * @return the exclusive contribution to the hypervolume
-    */
-    double exclusive(unsigned int p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
+     * Computes exclusive hypervolume for given indivdual.
+     *
+     * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
+     * @param r_point fitness vector describing the reference point
+     * @param hv_algo instance of the algorithm object used for the computation
+     *
+     * @return the exclusive contribution to the hypervolume
+     */
+    double exclusive(unsigned p_idx, const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
             verify_before_compute(r_point, hv_algo);
@@ -338,30 +337,30 @@ public:
 
     /// Compute exclusive contribution
     /**
-    * Computes exclusive hypervolume for given indivdual.
-    * This methods chooses the hv_algorithm dynamically.
-    *
-    * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
-    * @param r_point fitness vector describing the reference point
-    *
-    * @return the exclusive contribution to the hypervolume
-    */
-    double exclusive(unsigned int p_idx, const vector_double &r_point) const
+     * Computes exclusive hypervolume for given indivdual.
+     * This methods chooses the hv_algorithm dynamically.
+     *
+     * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
+     * @param r_point fitness vector describing the reference point
+     *
+     * @return the exclusive contribution to the hypervolume
+     */
+    double exclusive(unsigned p_idx, const vector_double &r_point) const
     {
         return exclusive(p_idx, r_point, *get_best_exclusive(p_idx, r_point));
     }
 
     /// Contributions method
     /**
-    * This method returns the exclusive contribution to the hypervolume by every point.
-    * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor
-    * in a loop).
-    *
-    * @param r_point fitness vector describing the reference point
-    * @param hv_algo instance of the algorithm object used for the computation
-    *
-    * @return vector of exclusive contributions by every point
-    */
+     * This method returns the exclusive contribution to the hypervolume by every point.
+     * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor
+     * in a loop).
+     *
+     * @param r_point fitness vector describing the reference point
+     * @param hv_algo instance of the algorithm object used for the computation
+     *
+     * @return vector of exclusive contributions by every point
+     */
     std::vector<double> contributions(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
@@ -386,14 +385,14 @@ public:
 
     /// Contributions method
     /**
-    * This method returns the exclusive contribution to the hypervolume by every point.
-    * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor
-    * in a loop).
-    * The hv_algorithm itself is chosen dynamically, so the best performing method is employed for given task.
-    *
-    * @param r_point fitness vector describing the reference point
-    * @return vector of exclusive contributions by every point
-    */
+     * This method returns the exclusive contribution to the hypervolume by every point.
+     * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor
+     * in a loop).
+     * The hv_algorithm itself is chosen dynamically, so the best performing method is employed for given task.
+     *
+     * @param r_point fitness vector describing the reference point
+     * @return vector of exclusive contributions by every point
+     */
     std::vector<double> contributions(const vector_double &r_point) const
     {
         return contributions(r_point, *get_best_contributions(r_point));
@@ -401,13 +400,13 @@ public:
 
     /// Find the least contributing individual
     /**
-    * Establishes the individual contributing the least to the total hypervolume.
-    *
-    * @param r_point fitness vector describing the reference point
-    * @param hv_algo instance of the algorithm object used for the computation
-    *
-    * @return index of the least contributing point
-    */
+     * Establishes the individual contributing the least to the total hypervolume.
+     *
+     * @param r_point fitness vector describing the reference point
+     * @param hv_algo instance of the algorithm object used for the computation
+     *
+     * @return index of the least contributing point
+     */
     unsigned long long least_contributor(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
@@ -430,13 +429,13 @@ public:
 
     /// Find the least contributing individual
     /**
-    * Establishes the individual contributing the least to the total hypervolume.
-    * This method chooses the best performing hv_algorithm dynamically
-    *
-    * @param r_point fitness vector describing the reference point
-    *
-    * @return index of the least contributing point
-    */
+     * Establishes the individual contributing the least to the total hypervolume.
+     * This method chooses the best performing hv_algorithm dynamically
+     *
+     * @param r_point fitness vector describing the reference point
+     *
+     * @return index of the least contributing point
+     */
     unsigned long long least_contributor(const vector_double &r_point) const
     {
         return least_contributor(r_point, *get_best_contributions(r_point));
@@ -444,13 +443,13 @@ public:
 
     /// Find the most contributing individual
     /**
-    * Establish the individual contributing the most to the total hypervolume.
-    *
-    * @param r_point fitness vector describing the reference point
-    * @param hv_algo instance of the algorithm object used for the computation
-    *
-    * @return index of the most contributing point
-    */
+     * Establish the individual contributing the most to the total hypervolume.
+     *
+     * @param r_point fitness vector describing the reference point
+     * @param hv_algo instance of the algorithm object used for the computation
+     *
+     * @return index of the most contributing point
+     */
     unsigned long long greatest_contributor(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_verify) {
@@ -468,13 +467,13 @@ public:
 
     /// Find the most contributing individual
     /**
-    * Establish the individual contributing the most to the total hypervolume.
-    * This method chooses the best performing hv_algorithm dynamically
-    *
-    * @param r_point fitness vector describing the reference point
-    *
-    * @return index of the most contributing point
-    */
+     * Establish the individual contributing the most to the total hypervolume.
+     * This method chooses the best performing hv_algorithm dynamically
+     *
+     * @param r_point fitness vector describing the reference point
+     *
+     * @return index of the most contributing point
+     */
     unsigned long long greatest_contributor(const vector_double &r_point) const
     {
         return greatest_contributor(r_point, *get_best_contributions(r_point));
@@ -489,9 +488,9 @@ public:
      * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
      */
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
-        ar(m_points, m_copy_points, m_verify);
+        detail::archive(ar, m_points, m_copy_points, m_verify);
     }
 
 private:
@@ -501,10 +500,10 @@ private:
 
     /// Verify after construct method
     /**
-    * Verifies whether basic requirements are met for the initial set of points.
-    *
-    * @throws invalid_argument if point size is empty or when the dimensions among the points differ
-    */
+     * Verifies whether basic requirements are met for the initial set of points.
+     *
+     * @throws invalid_argument if point size is empty or when the dimensions among the points differ
+     */
     void verify_after_construct() const
     {
         if (m_points.size() == 0) {
@@ -523,13 +522,13 @@ private:
 
     /// Verify before compute method
     /**
-    * Verifies whether reference point and the hypervolume method meet certain criteria.
-    *
-    * @param r_point vector describing the reference point
-    * @param hv_algo instance of the algorithm object used for the computation
-    *
-    * @throws value_error if reference point's and point set dimension do not agree
-    */
+     * Verifies whether reference point and the hypervolume method meet certain criteria.
+     *
+     * @param r_point vector describing the reference point
+     * @param hv_algo instance of the algorithm object used for the computation
+     *
+     * @throws value_error if reference point's and point set dimension do not agree
+     */
     void verify_before_compute(const vector_double &r_point, hv_algorithm &hv_algo) const
     {
         if (m_points[0].size() != r_point.size()) {
@@ -543,15 +542,15 @@ namespace detail
 {
 /// Expected number of operations
 /**
-* Returns the expected average amount of elementary operations necessary to compute the hypervolume
-* for a given front size \f$n\f$ and dimension size \f$d\f$
-* This method is used by the approximated algorithms that fall back to exact computation.
-*
-* @param n size of the front
-* @param d dimension size
-*
-* @return expected number of operations
-*/
+ * Returns the expected average amount of elementary operations necessary to compute the hypervolume
+ * for a given front size \f$n\f$ and dimension size \f$d\f$
+ * This method is used by the approximated algorithms that fall back to exact computation.
+ *
+ * @param n size of the front
+ * @param d dimension size
+ *
+ * @return expected number of operations
+ */
 inline double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
 {
     if (d <= 3u) {

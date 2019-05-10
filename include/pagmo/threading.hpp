@@ -31,6 +31,8 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 
+#include <pagmo/detail/visibility.hpp>
+
 namespace pagmo
 {
 
@@ -40,21 +42,7 @@ namespace pagmo
 enum class thread_safety { none, basic, constant };
 
 // Stream operator for the thread_safety enum.
-inline std::ostream &operator<<(std::ostream &os, thread_safety ts)
-{
-    switch (ts) {
-        case thread_safety::none:
-            os << "none";
-            break;
-        case thread_safety::basic:
-            os << "basic";
-            break;
-        case thread_safety::constant:
-            os << "constant";
-            break;
-    }
-    return os;
-}
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, thread_safety);
 
 #endif
 } // namespace pagmo

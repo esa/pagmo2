@@ -8,7 +8,7 @@ Installation guide
 C++
 ---
 
-pagmo is a header-only library which has the following third-party dependencies:
+pagmo has the following third-party dependencies:
 
 * `Boost <https://www.boost.org/>`__, **mandatory**, header-only
 * `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__, optional, header-only
@@ -67,9 +67,9 @@ Installation on Arch Linux
 Pagmo is also available on the `Arch User Repository
 <https://aur.archlinux.org>`__ (AUR) in Arch Linux. It is
 recommended to use an AUR helper like
-`yay <https://aur.archlinux.org/packages/yay/`__ or
-`pikaur <https://aur.archlinux.org/packages/pikaur/`__ for ease of installation.
-See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers` page on
+`yay <https://aur.archlinux.org/packages/yay/>`__ or
+`pikaur <https://aur.archlinux.org/packages/pikaur/>`__ for ease of installation.
+See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers>`__ page on
 the Arch Linux wiki for more info.
 
 Note: To install pagmo with optional dependency support like nlopt or ipopt,

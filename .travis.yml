@@ -40,7 +40,7 @@ matrix:
           - gcc-4.8
           - g++-4.8
           - binutils-gold
-    - env: PAGMO_BUILD="Python36"
+    - env: PAGMO_BUILD="Python37"
       dist: trusty
       compiler: gcc
       os: linux
@@ -68,7 +68,7 @@ matrix:
     - env: PAGMO_BUILD="OSXRelease"
       os: osx
       osx_image: xcode6.4
-    - env: PAGMO_BUILD="OSXPython36"
+    - env: PAGMO_BUILD="OSXPython37"
       os: osx
       osx_image: xcode6.4
     - env: PAGMO_BUILD="OSXPython27"

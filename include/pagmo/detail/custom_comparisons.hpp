@@ -30,10 +30,11 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_CUSTOM_COMPARISONS_HPP
 
 #include <algorithm>
-#include <boost/functional/hash.hpp> // boost::hash_combine
 #include <cstddef>
 #include <type_traits>
 #include <vector>
+
+#include <boost/functional/hash.hpp> // boost::hash_combine
 
 #include <pagmo/type_traits.hpp>
 

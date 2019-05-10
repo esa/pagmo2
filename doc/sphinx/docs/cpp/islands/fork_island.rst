@@ -17,7 +17,7 @@ Fork island
 
    This user-defined island (UDI) will use the POSIX ``fork()`` system call to offload the evolution
    of a population to a child process.
-   
+
    Generally speaking, users are encouraged to use :cpp:class:`~pagmo::thread_island` rather than
    :cpp:class:`~pagmo::fork_island`: :cpp:class:`~pagmo::thread_island` performs better,
    it works also with problems and algorithms which are not serialisable, and it is available on all
@@ -46,6 +46,13 @@ Fork island
       that memory leaks in the child process may be flagged by such tools. These are spurious warnings due to the
       fact that the child process is exited via ``std::exit()`` (which does not invoke the destructors
       of objects with automatic storage duration). Thus, such warnings can be safely ignored.
+
+   .. note::
+
+      The ability of the forked process to handle errors raised during evolution is dependent on the
+      specific ``fork()`` implementation in use. For instance, it has been reported that on recent OSX versions
+      (i.e., since High Sierra), error handling in the forked process does not work, possibly because it employs
+      code which is not `asynchronous-safe <http://man7.org/linux/man-pages/man7/signal-safety.7.html>`__.
 
    .. cpp:function:: fork_island()
    .. cpp:function:: fork_island(const fork_island &)

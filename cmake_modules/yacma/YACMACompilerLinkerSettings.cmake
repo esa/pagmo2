@@ -168,7 +168,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
     endif()
 
     # MSVC setup.
-    if(YACMA_COMPILER_IS_MSVC)
+    if(YACMA_COMPILER_IS_MSVC AND NOT YACMA_COMPILER_IS_CLANGXX)
         # Enable higher warning level than usual.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(/W4)
         # Treat warnings as errors.

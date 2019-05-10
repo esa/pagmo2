@@ -31,6 +31,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <pygmo/python_includes.hpp>
 
+#include <cstdint>
+#include <memory>
+
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/extract.hpp>
@@ -38,8 +41,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/init.hpp>
 #include <boost/python/list.hpp>
 #include <boost/python/return_internal_reference.hpp>
-#include <cstdint>
-#include <memory>
 
 #include <pagmo/algorithm.hpp>
 

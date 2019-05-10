@@ -27,20 +27,22 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE cec2009_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
+#include <boost/lexical_cast.hpp>
+
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2009.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 
 using namespace pagmo;
-using statics = detail::cec2009_statics<>;
 
 BOOST_AUTO_TEST_CASE(cec2009_construction_test)
 {
@@ -75,7 +77,6 @@ BOOST_AUTO_TEST_CASE(cec2009_fitness_test)
         cec2009 udp{i, true};
         auto x = random_decision_vector(problem(udp), r_engine); // a random vector
         auto f = udp.fitness(x);
-        BOOST_CHECK_EQUAL(f.size(), statics::m_nic[i - 1u] + udp.get_nobj());
         BOOST_CHECK((udp.get_name().find("CEC2009 - CF")) != std::string::npos);
     }
 }
@@ -88,14 +89,11 @@ BOOST_AUTO_TEST_CASE(cec2009_getters_test)
         BOOST_CHECK((udp.get_name().find("CEC2009 - UF")) != std::string::npos);
         BOOST_CHECK((udp.get_nic() == 0u));
         BOOST_CHECK((problem(udp).get_nec() == 0u));
-        BOOST_CHECK((udp.get_nobj() == statics::m_nobj[i - 1u]));
     }
     for (unsigned i = 1u; i <= 10u; ++i) {
         cec2009 udp{i, true};
         BOOST_CHECK((udp.get_name().find("CEC2009 - CF")) != std::string::npos);
-        BOOST_CHECK((udp.get_nic() == statics::m_nic[i - 1u]));
         BOOST_CHECK((problem(udp).get_nec() == 0u));
-        BOOST_CHECK((udp.get_nobj() == statics::m_nobj[i - 1u]));
     }
 }
 
@@ -109,14 +107,14 @@ BOOST_AUTO_TEST_CASE(cec2009_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

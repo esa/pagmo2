@@ -27,19 +27,25 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE cec2014_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <random>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+#include <boost/lexical_cast.hpp>
 
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2014.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
-
-#include <pagmo/io.hpp>
 
 using namespace pagmo;
 
@@ -48,8 +54,8 @@ BOOST_AUTO_TEST_CASE(cec2014_test)
     std::mt19937 r_engine(32u);
     // We check that all problems can be constructed at all dimensions and that the name returned makes sense
     // (only for dim =2 for speed). We also perform a fitness test (we only check no throws, not correctness)
-    std::vector<unsigned int> allowed_dims = {2u, 10u, 20u, 30u, 50u, 100u};
-    for (unsigned int i = 1u; i <= 30u; ++i) {
+    std::vector<unsigned> allowed_dims = {2u, 10u, 20u, 30u, 50u, 100u};
+    for (unsigned i = 1u; i <= 30u; ++i) {
         for (auto dim : allowed_dims) {
             if (dim == 2
                 && ((i >= 17u && i <= 22u) || (i >= 29u && i <= 30u))) { // Not all functions are defined for dim = 2
@@ -112,7 +118,7 @@ BOOST_AUTO_TEST_CASE(cec2014_correctness_test)
         auto f_min = prob.fitness(x_min)[0];
 
         BOOST_CHECK_EQUAL(f_min, results[i].first);
-        BOOST_CHECK_CLOSE(f_origin, results[i].second, 1e-12); // Tolearnce EPS added to be safe
+        BOOST_CHECK_CLOSE(f_origin, results[i].second, 1e-12); // Tolerance EPS added to be safe
     }
 }
 
@@ -126,14 +132,14 @@ BOOST_AUTO_TEST_CASE(cec2014_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

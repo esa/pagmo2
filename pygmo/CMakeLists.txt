@@ -20,22 +20,12 @@ else()
     endif()
 endif()
 
-# Boost.Python version 1.64 (and possibly later?) has issues with default hidden visibility.
-if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 63))
-    list(FIND PAGMO_CXX_FLAGS_DEBUG "-fvisibility=hidden" _PYGMO_HAS_VHIDDEN)
-    if (NOT ${_PYGMO_HAS_VHIDDEN} EQUAL -1)
-        message(STATUS "Removing the '-fvisibility=hidden' flag for Boost.Python > 1.63.")
-        list(REMOVE_ITEM PAGMO_CXX_FLAGS_DEBUG "-fvisibility=hidden")
-        list(REMOVE_ITEM PAGMO_CXX_FLAGS_RELEASE "-fvisibility=hidden")
-    endif()
-endif()
-
 # Setup of the config.hpp file for pygmo.
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" @ONLY)
 
 # Setup of the header-only pygmo library.
 add_library(pygmo INTERFACE)
-target_link_libraries(pygmo INTERFACE ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy Pagmo::pagmo)
+target_link_libraries(pygmo INTERFACE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy)
 target_include_directories(pygmo INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/pygmo> $<INSTALL_INTERFACE:include>)
 # Setup of the export.
@@ -54,6 +44,12 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION
 
 # Setup of the pygmo core module.
 YACMA_PYTHON_MODULE(core
+    algorithm.cpp
+    bfe.cpp
+    island.cpp
+    problem.cpp
+    common_base.cpp
+    object_serialization.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp
@@ -63,8 +59,14 @@ YACMA_PYTHON_MODULE(core
     expose_islands.cpp
     expose_bfes.cpp
 )
-target_link_libraries(core PRIVATE ${PYGMO_BP_TARGET} Boost::disable_autolinking Pagmo::pagmo NumPy::numpy pygmo)
+target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+# NOTE: some versions of Boost before 1.66 have wrongly defined visibility settings, hence
+# we enable default hidden visibility only for later versions.
+if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 65))
+    set_target_properties(core PROPERTIES CXX_VISIBILITY_PRESET hidden)
+    set_target_properties(core PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
+endif()
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
 if(NOT CMAKE_CXX_STANDARD)
     set_property(TARGET core PROPERTY CXX_STANDARD 11)

@@ -27,12 +27,15 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE de1220_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
+#include <iostream>
+#include <numeric>
+#include <string>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <iostream>
-#include <string>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de1220.hpp>
@@ -42,14 +45,14 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(construction_test)
 {
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     de1220 user_algo(53u, mutation_variants, 1u, 1e-6, 1e-6, false, 23u);
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
@@ -65,7 +68,7 @@ BOOST_AUTO_TEST_CASE(construction_test)
 BOOST_AUTO_TEST_CASE(evolve_test)
 {
     // We consider all variants
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     // Here we only test that evolution is deterministic if the
     // seed is controlled for all variants
@@ -75,7 +78,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         population pop2{prob, 15u, 23u};
         population pop3{prob, 15u, 23u};
 
-        for (unsigned int i = 1u; i <= 2u; ++i) {
+        for (unsigned i = 1u; i <= 2u; ++i) {
             de1220 user_algo1(10u, mutation_variants, i, 1e-6, 1e-6, false, 41u);
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
@@ -127,7 +130,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
 BOOST_AUTO_TEST_CASE(setters_getters_test)
 {
     // We consider all variants
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     de1220 user_algo(10000u, mutation_variants, 1, 1e-6, 1e-6, false, 41u);
     user_algo.set_verbosity(23u);
@@ -144,7 +147,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     // Make one evolution
     problem prob{rosenbrock{2u}};
     population pop{prob, 15u, 23u};
-    std::vector<unsigned int> mutation_variants(18);
+    std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
     algorithm algo(de1220{10000u, mutation_variants, 1, 1e-6, 1e-6, false, 41u});
     algo.set_verbosity(1u);
@@ -156,19 +159,19 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     auto before_log = algo.extract<de1220>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<de1220>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    BOOST_CHECK(before_log == after_log);
     // so we implement a close check
     BOOST_CHECK(before_log.size() > 0u);
     for (auto i = 0u; i < before_log.size(); ++i) {

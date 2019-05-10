@@ -27,7 +27,8 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE golomb_ruler_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
@@ -37,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/sga.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/golomb_ruler.hpp>
@@ -103,14 +105,14 @@ BOOST_AUTO_TEST_CASE(golomb_ruler_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

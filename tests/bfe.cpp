@@ -34,7 +34,8 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #define BOOST_TEST_MODULE bfe_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <functional>
 #include <memory>
@@ -46,10 +47,11 @@ see https://www.gnu.org/licenses/. */
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -213,15 +215,15 @@ BOOST_AUTO_TEST_CASE(basic_tests)
         std::stringstream ss;
         {
             before = boost::lexical_cast<std::string>(bfe0);
-            cereal::JSONOutputArchive oarchive(ss);
-            oarchive(bfe0);
+            boost::archive::binary_oarchive oarchive(ss);
+            oarchive << bfe0;
         }
         bfe0 = bfe{udbfe0};
         BOOST_CHECK(bfe0.is<udbfe_func_t>());
         BOOST_CHECK(before != boost::lexical_cast<std::string>(bfe0));
         {
-            cereal::JSONInputArchive iarchive(ss);
-            iarchive(bfe0);
+            boost::archive::binary_iarchive iarchive(ss);
+            iarchive >> bfe0;
         }
         BOOST_CHECK(before == boost::lexical_cast<std::string>(bfe0));
         BOOST_CHECK(bfe0.is<default_bfe>());
@@ -410,14 +412,14 @@ struct udbfe_a {
         return thread_safety::constant;
     }
     template <typename Archive>
-    void serialize(Archive &ar)
+    void serialize(Archive &ar, unsigned)
     {
         ar &state;
     }
     int state = 42;
 };
 
-PAGMO_REGISTER_BFE(udbfe_a)
+PAGMO_S11N_BFE_EXPORT(udbfe_a)
 
 // Serialization tests.
 BOOST_AUTO_TEST_CASE(s11n)
@@ -430,14 +432,14 @@ BOOST_AUTO_TEST_CASE(s11n)
     auto before = boost::lexical_cast<std::string>(bfe0);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(bfe0);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << bfe0;
     }
     // Change the content of p before deserializing.
     bfe0 = bfe{};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(bfe0);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> bfe0;
     }
     auto after = boost::lexical_cast<std::string>(bfe0);
     BOOST_CHECK_EQUAL(before, after);

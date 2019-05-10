@@ -29,12 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_UTILS_GRADIENTS_AND_HESSIANS_HPP
 #define PAGMO_UTILS_GRADIENTS_AND_HESSIANS_HPP
 
-/** \file gradients_and_hessians.hpp
- * \brief Utilities of general interest for gradients and hessians related calculations
- *
- * This header contains utilities useful in general for gradients and hessians related calculations
- */
-
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>

@@ -1,5 +1,34 @@
+/* Copyright 2017-2018 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 #define BOOST_TEST_MODULE gaco_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -18,7 +47,7 @@
 #include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -55,7 +84,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         population pop1{prob, 10u, 23u};
         population pop2{prob, 10u, 23u};
         population pop3{prob, 10u, 23u};
-        for (unsigned int i = 1u; i < 3u; ++i) {
+        for (unsigned i = 1u; i < 3u; ++i) {
             gaco user_algo1{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo1.set_verbosity(1u);
             pop1 = user_algo1.evolve(pop1);
@@ -133,19 +162,19 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     auto before_log = algo.extract<gaco>()->get_log();
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(algo);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
     }
     // Change the content of p before deserializing.
     algo = algorithm{null_algorithm{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(algo);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
     }
     auto after_text = boost::lexical_cast<std::string>(algo);
     auto after_log = algo.extract<gaco>()->get_log();
     BOOST_CHECK_EQUAL(before_text, after_text);
-    // BOOST_CHECK(before_log == after_log); // This fails because of floating point problems when using JSON and cereal
+    BOOST_CHECK(before_log == after_log);
     // so we implement a close check
     BOOST_CHECK(before_log.size() > 0u);
     for (auto i = 0u; i < before_log.size(); ++i) {
@@ -234,7 +263,7 @@ struct udp_inf {
         return {{0., 0.}, {1., 1.}};
     }
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 struct udp_nan {
@@ -256,7 +285,7 @@ struct udp_nan {
         return {{0., 0.}, {1., 1.}};
     }
     /// Problem dimensions
-    unsigned int m_dim;
+    unsigned m_dim;
 };
 
 BOOST_AUTO_TEST_CASE(test_for_inf_and_nan)

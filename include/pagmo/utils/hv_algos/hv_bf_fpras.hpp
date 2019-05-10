@@ -65,7 +65,7 @@ public:
      * @param delta confidence of the approximation
      * @param seed seeding for the pseudo-random number generator
      */
-    bf_fpras(double eps = 1e-2, double delta = 1e-2, unsigned int seed = pagmo::random_device::next())
+    bf_fpras(double eps = 1e-2, double delta = 1e-2, unsigned seed = pagmo::random_device::next())
         : m_eps(eps), m_delta(delta), m_e(seed)
     {
         if (eps <= 0 || eps > 1) {
@@ -118,7 +118,7 @@ public:
         // volume iterator - used for finding the contributor using std::lower_bound
         vector_double::iterator it_sums;
 
-        unsigned int i = 0u;
+        unsigned i = 0u;
 
         // Total sum of every box
         double V = 0.0;
@@ -140,19 +140,19 @@ public:
 
             // Find the contributor using binary search
             it_sums = std::lower_bound(sums.begin(), sums.end(), r);
-            i = static_cast<unsigned int>(std::distance(sums.begin(), it_sums));
+            i = static_cast<unsigned>(std::distance(sums.begin(), it_sums));
 
             // Sample a point inside the 'box' (r_point, points[i])
             for (decltype(dim) d_idx = 0u; d_idx < dim; ++d_idx) {
                 rnd_point[d_idx] = (points[i][d_idx] + unireal_dist(m_e) * (r_point[d_idx] - points[i][d_idx]));
             }
 
-            unsigned int j = 0u;
+            unsigned j = 0u;
             do {
                 if (M_sum >= T) {
                     return (T * V) / (static_cast<double>(n) * M);
                 }
-                j = static_cast<unsigned int>(static_cast<double>(n) * unireal_dist(m_e));
+                j = static_cast<unsigned>(static_cast<double>(n) * unireal_dist(m_e));
                 ++M_sum;
             } while (!(hv_algorithm::dom_cmp(rnd_point, points[j], 0) == hv_algorithm::DOM_CMP_B_DOMINATES_A));
             ++M;
@@ -164,7 +164,7 @@ public:
      * This algorithm does not support this method.
      * @return Nothing as it throws before
      */
-    double exclusive(unsigned int, std::vector<vector_double> &, const vector_double &) const override
+    double exclusive(unsigned, std::vector<vector_double> &, const vector_double &) const override
     {
         pagmo_throw(std::invalid_argument, "This method is not supported by the bf_fpras algorithm");
     }

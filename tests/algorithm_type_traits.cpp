@@ -26,8 +26,9 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE algorithm_type_traits_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE algorithm_type_traits
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <utility>
 
@@ -41,12 +42,12 @@ struct hsv_00 {
 
 // The good one
 struct hsv_01 {
-    void set_verbosity(unsigned int);
+    void set_verbosity(unsigned);
 };
 
 // also good
 struct hsv_02 {
-    void set_verbosity(unsigned int) const;
+    void set_verbosity(unsigned) const;
 };
 
 // also good
@@ -55,7 +56,7 @@ struct hsv_03 {
 };
 
 struct hsv_04 {
-    double set_verbosity(unsigned int);
+    double set_verbosity(unsigned);
 };
 
 BOOST_AUTO_TEST_CASE(has_set_verbose_test)

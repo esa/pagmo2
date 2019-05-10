@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_UTIL_HV3D_H
 
 #include <cmath>
+#include <deque>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -420,7 +421,7 @@ inline std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_
  *
  * @return an std::shared_ptr to the selected algorithm
  */
-inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsigned int p_idx,
+inline std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsigned p_idx,
                                                                      const vector_double &r_point) const
 {
     (void)p_idx;
