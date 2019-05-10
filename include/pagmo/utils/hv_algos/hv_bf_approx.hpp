@@ -74,9 +74,9 @@ public:
      * @param alpha coefficicient stating how accurately current lowest contributor should be sampled
      * @param seed seeding for the pseudo-random number generator
      */
-    bf_approx(bool use_exact = true, unsigned int trivial_subcase_size = 1, double eps = 1e-2, double delta = 1e-6,
+    bf_approx(bool use_exact = true, unsigned trivial_subcase_size = 1, double eps = 1e-2, double delta = 1e-6,
               double delta_multiplier = 0.775, double alpha = 0.2, double initial_delta_coeff = 0.1,
-              double gamma = 0.25, unsigned int seed = pagmo::random_device::next())
+              double gamma = 0.25, unsigned seed = pagmo::random_device::next())
         : m_use_exact(use_exact), m_trivial_subcase_size(trivial_subcase_size), m_eps(eps), m_delta(delta),
           m_delta_multiplier(delta_multiplier), m_alpha(alpha), m_initial_delta_coeff(initial_delta_coeff),
           m_gamma(gamma), m_e(seed)
@@ -115,8 +115,8 @@ public:
     unsigned long long least_contributor(std::vector<vector_double> &points,
                                          const vector_double &r_point) const override
     {
-        return approx_extreme_contributor(points, r_point, LEAST, [](double a, double b) { return a < b; },
-                                          lc_erase_condition, lc_end_condition);
+        return approx_extreme_contributor(
+            points, r_point, LEAST, [](double a, double b) { return a < b; }, lc_erase_condition, lc_end_condition);
     }
 
     /// Greatest contributor method
@@ -132,8 +132,8 @@ public:
     unsigned long long greatest_contributor(std::vector<vector_double> &points,
                                             const vector_double &r_point) const override
     {
-        return approx_extreme_contributor(points, r_point, GREATEST, [](double a, double b) { return a > b; },
-                                          gc_erase_condition, gc_end_condition);
+        return approx_extreme_contributor(
+            points, r_point, GREATEST, [](double a, double b) { return a > b; }, gc_erase_condition, gc_end_condition);
     }
 
     /// Verify before compute method
@@ -174,7 +174,7 @@ private:
      * Uses chernoff inequality as it was proposed in the article by Bringmann and Friedrich
      * The parameters of the method are taked from the Shark implementation of the algorithm.
      */
-    double compute_point_delta(unsigned int round_no, vector_double::size_type idx, double log_factor) const
+    double compute_point_delta(unsigned round_no, vector_double::size_type idx, double log_factor) const
     {
         return std::sqrt(0.5 * ((1. + m_gamma) * std::log(static_cast<double>(round_no)) + log_factor)
                          / (static_cast<double>(m_no_samples[idx])));
@@ -253,7 +253,7 @@ private:
     }
 
     /// Performs a single round of sampling for given point at index 'idx'
-    void sampling_round(const std::vector<vector_double> &points, double delta, unsigned int round,
+    void sampling_round(const std::vector<vector_double> &points, double delta, unsigned round,
                         vector_double::size_type idx, double log_factor) const
     {
         if (m_use_exact) {
@@ -396,7 +396,7 @@ private:
             = std::log(2. * static_cast<double>(points.size()) * (1. + m_gamma) / (m_delta * m_gamma));
 
         // round counter
-        unsigned int round_no = 0u;
+        unsigned round_no = 0u;
 
         // round delta
         double r_delta = 0.0;
@@ -470,7 +470,7 @@ private:
             }
 
             // erase known non-extreme contributors
-            // std::vector<unsigned int>::iterator it = m_point_set.begin();
+            // std::vector<unsigned>::iterator it = m_point_set.begin();
             auto it = m_point_set.begin();
             while (it != m_point_set.end()) {
                 auto idx = *it;
@@ -534,7 +534,7 @@ private:
 
     // if the number of points overlapping the bounding box is small enough we can just compute that exactly
     // following variable states the number of points for which we perform the optimization
-    const unsigned int m_trivial_subcase_size;
+    const unsigned m_trivial_subcase_size;
 
     // accuracy of the approximation
     const double m_eps;

@@ -16,11 +16,13 @@ These are the core PyGMO classes.
    py_population
    py_island
    py_archipelago
+   py_bfe
    py_misc
 
-Implemented problems, algorithms and islands
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-These are the user-defined problems, algorithms and islands implemented in PyGMO.
+Implemented problems, algorithms, islands and bfes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+These are the user-defined problems, algorithms, islands and
+bfes implemented in PyGMO.
 
 .. toctree::
    :maxdepth: 1
@@ -28,6 +30,7 @@ These are the user-defined problems, algorithms and islands implemented in PyGMO
    problems/py_problems
    algorithms/py_algorithms
    islands/py_islands
+   bfes/py_bfes
 
 Utilities
 ^^^^^^^^^

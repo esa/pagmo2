@@ -33,11 +33,11 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #define BOOST_TEST_MODULE archipelago_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <algorithm>
 #include <atomic>
-#include <boost/lexical_cast.hpp>
 #include <initializer_list>
 #include <iterator>
 #include <sstream>
@@ -47,16 +47,21 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/lexical_cast.hpp>
+
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/island.hpp>
+#include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/serialization.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -342,13 +347,13 @@ BOOST_AUTO_TEST_CASE(archipelago_serialization)
     auto before = boost::lexical_cast<std::string>(a);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(a);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << a;
     }
     a = archipelago{10, de{}, population{rosenbrock{}, 25}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(a);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> a;
     }
     auto after = boost::lexical_cast<std::string>(a);
     BOOST_CHECK_EQUAL(before, after);
@@ -474,4 +479,121 @@ int pthrower_00::counter = 0;
 BOOST_AUTO_TEST_CASE(archipelago_throw_on_ctor)
 {
     BOOST_CHECK_THROW((archipelago{100u, de{}, pthrower_00{}, 1u}), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
+{
+    archipelago archi00{100, de{}, rosenbrock{20}, bfe{}, 100u, 42u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // With udbfe.
+    archi00 = archipelago{100, de{}, rosenbrock{20}, thread_bfe{}, 100u, 42u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100u, 42u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.is<thread_island>());
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // With udbfe.
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, thread_bfe{}, 100u, 42u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.is<thread_island>());
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // Try also a ctor with bfe argument but without seed argument.
+    archi00 = archipelago{100, de{}, rosenbrock{20}, bfe{}, 100u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // With udbfe.
+    archi00 = archipelago{100, de{}, rosenbrock{20}, thread_bfe{}, 100u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // Try also a ctor with UDI, bfe argument but without seed argument.
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, bfe{}, 100u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.is<thread_island>());
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
+
+    // With udbfe.
+    archi00 = archipelago{100, thread_island{}, de{}, rosenbrock{20}, thread_bfe{}, 100u};
+    BOOST_CHECK(archi00.size() == 100u);
+    for (const auto &isl : archi00) {
+        BOOST_CHECK(isl.is<thread_island>());
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        auto pop = isl.get_population();
+        BOOST_CHECK(pop.get_problem().is<rosenbrock>());
+        BOOST_CHECK(pop.size() == 100u);
+        BOOST_CHECK(pop.get_problem().get_fevals() == 100u);
+        for (auto i = 0u; i < 100u; ++i) {
+            BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
+        }
+    }
 }

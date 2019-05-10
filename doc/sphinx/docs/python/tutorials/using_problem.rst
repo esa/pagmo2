@@ -35,6 +35,7 @@ Let us start:
     	Inequality constraints dimension:	0
     	Lower bounds: [-5, -5, -5, -5, -5]
     	Upper bounds: [10, 10, 10, 10, 10]
+        Has batch fitness evaluation:  false
     <BLANKLINE>
         Has gradient: true
     	User implemented gradient sparsity: false
@@ -45,7 +46,7 @@ Let us start:
     	Fitness evaluations: 0
         Gradient evaluations: 0
     <BLANKLINE>
-    	Thread safety: basic
+    	Thread safety: constant
     <BLANKLINE>
 
 

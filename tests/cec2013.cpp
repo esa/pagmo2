@@ -27,15 +27,21 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE cec2013_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <random>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
+
+#include <boost/lexical_cast.hpp>
 
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2013.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 
@@ -46,8 +52,8 @@ BOOST_AUTO_TEST_CASE(cec2013_test)
     std::mt19937 r_engine(32u);
     // We check that all problems can be constructed at all dimensions and that the name returned makes sense
     // (only for dim =2 for speed). We also perform a fitness test (we only check no throws, not correctness)
-    std::vector<unsigned int> allowed_dims = {2u, 5u, 10u, 20u, 30u, 40u, 50u, 60u, 70u, 80u, 90u, 100u};
-    for (unsigned int i = 1u; i <= 28u; ++i) {
+    std::vector<unsigned> allowed_dims = {2u, 5u, 10u, 20u, 30u, 40u, 50u, 60u, 70u, 80u, 90u, 100u};
+    for (unsigned i = 1u; i <= 28u; ++i) {
         for (auto dim : allowed_dims) {
             cec2013 udp{i, dim};
             auto x = random_decision_vector(problem(udp), r_engine); // a random vector
@@ -71,14 +77,14 @@ BOOST_AUTO_TEST_CASE(cec2013_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

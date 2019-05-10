@@ -27,21 +27,26 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE population_test
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/test/included/unit_test.hpp>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
 
+#include <boost/lexical_cast.hpp>
+
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -55,7 +60,7 @@ static inline std::string pop_to_string(const population &pop)
 
 BOOST_AUTO_TEST_CASE(population_construction_test)
 {
-    unsigned int seed = 123;
+    unsigned seed = 123;
     population pop1{};
     population pop2{problem{zdt{1, 5}}, 2, seed};
     population pop3{problem{zdt{2, 5}}, 2, seed};
@@ -156,7 +161,7 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
     // Create an empty population
     population pop{problem{zdt{1u, 30u}}};
     // We fill it with a few individuals and check the size growth
-    for (unsigned int i = 0u; i < 5u; ++i) {
+    for (unsigned i = 0u; i < 5u; ++i) {
         BOOST_CHECK(pop.size() == i);
         BOOST_CHECK(pop.get_f().size() == i);
         BOOST_CHECK(pop.get_x().size() == i);
@@ -331,14 +336,14 @@ BOOST_AUTO_TEST_CASE(population_serialization_test)
     auto before = boost::lexical_cast<std::string>(pop);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(pop);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << pop;
     }
     // Change the content of p before deserializing.
     pop = population{problem{zdt{5, 20u}}, 30};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(pop);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> pop;
     }
     auto after = boost::lexical_cast<std::string>(pop);
     BOOST_CHECK_EQUAL(before, after);
@@ -385,4 +390,39 @@ BOOST_AUTO_TEST_CASE(population_cout_test)
     BOOST_CHECK_NO_THROW(std::cout << pop);
     BOOST_CHECK_NO_THROW(std::cout << pop_sto);
     BOOST_CHECK_NO_THROW(std::cout << pop_mo);
+}
+
+BOOST_AUTO_TEST_CASE(population_bfe_ctor_test)
+{
+    // Empty pop test. Use rosenbrock as we know
+    // it's fully thread-safe.
+    problem prob{rosenbrock{2u}};
+    population pop0{prob, bfe{}};
+    BOOST_CHECK(pop0.size() == 0u);
+    BOOST_CHECK(pop0.get_problem().get_fevals() == 0u);
+
+    // Population with 100 individuals, verify that
+    // the fitnesses are computed correctly.
+    population pop100{rosenbrock{2u}, bfe{}, 100};
+    BOOST_CHECK(pop100.size() == 100u);
+    BOOST_CHECK(pop100.get_problem().get_fevals() == 100u);
+    for (auto i = 0u; i < 100u; ++i) {
+        BOOST_CHECK(pop100.get_f()[i] == prob.fitness(pop100.get_x()[i]));
+    }
+
+    // Same with 1000 individuals.
+    population pop1000{rosenbrock{2u}, bfe{}, 1000};
+    BOOST_CHECK(pop1000.size() == 1000u);
+    BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+    }
+
+    // Do a test with a UDBFE.
+    pop1000 = population{rosenbrock{2u}, thread_bfe{}, 1000};
+    BOOST_CHECK(pop1000.size() == 1000u);
+    BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
+    for (auto i = 0u; i < 1000u; ++i) {
+        BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+    }
 }

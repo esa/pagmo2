@@ -46,6 +46,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <pagmo/island.hpp>
+#include <pagmo/islands/thread_island.hpp>
 
 #include <pygmo/docstrings.hpp>
 #include <pygmo/expose_islands.hpp>

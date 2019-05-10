@@ -29,19 +29,14 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_BEE_COLONY_HPP
 #define PAGMO_ALGORITHMS_BEE_COLONY_HPP
 
-#include <iomanip>
-#include <random>
-#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
-#include <pagmo/exceptions.hpp>
-#include <pagmo/io.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -61,7 +56,7 @@ namespace pagmo
  *
  * See: https://www.sciencedirect.com/science/article/pii/S0020025514008378 for the pseudo-code
  */
-class bee_colony
+class PAGMO_DLL_PUBLIC bee_colony
 {
 public:
     /// Single entry of the log (gen, fevals, best, cur_best)
@@ -79,206 +74,14 @@ public:
      *
      * @throws std::invalid_argument if limit equals 0
      */
-    bee_colony(unsigned gen = 1u, unsigned limit = 20u, unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_limit(limit), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
-    {
-        if (limit == 0u) {
-            pagmo_throw(std::invalid_argument, "The limit must be greater than 0.");
-        }
-    }
+    bee_colony(unsigned gen = 1u, unsigned limit = 20u, unsigned seed = pagmo::random_device::next());
 
-    /// Algorithm evolve method (juice implementation of the algorithm)
-    /**
-     * Evolves the population for a maximum number of generations
-     *
-     * @param pop population to be evolved
-     * @return evolved population
-     * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
-     * @throws std::invalid_argument if the population size is smaller than 2
-     */
-    population evolve(population pop) const
-    {
-        const auto &prob = pop.get_problem();
-        auto dim = prob.get_nx();
-        const auto bounds = prob.get_bounds();
-        const auto &lb = bounds.first;
-        const auto &ub = bounds.second;
-        auto NP = pop.size();
-        auto fevals0 = prob.get_fevals(); // fevals already made
-        auto count = 1u;                  // regulates the screen output
-        // PREAMBLE-------------------------------------------------------------------------------------------------
-        // Check whether the problem/population are suitable for bee_colony
-        if (prob.get_nc() != 0u) {
-            pagmo_throw(std::invalid_argument, "Constraints detected in " + prob.get_name() + " instance. " + get_name()
-                                                   + " cannot deal with them");
-        }
-        if (prob.get_nf() != 1u) {
-            pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                                   + get_name() + " cannot deal with them");
-        }
-        if (prob.is_stochastic()) {
-            pagmo_throw(std::invalid_argument,
-                        "The problem appears to be stochastic. " + get_name() + " cannot deal with it");
-        }
-        if (NP < 2u) {
-            pagmo_throw(std::invalid_argument, prob.get_name() + " needs at least 2 individuals in the population, "
-                                                   + std::to_string(NP) + " detected");
-        }
-        // Get out if there is nothing to do.
-        if (m_gen == 0u) {
-            return pop;
-        }
-        // ---------------------------------------------------------------------------------------------------------
+    // Algorithm evolve method
+    population evolve(population) const;
 
-        // No throws, all valid: we clear the logs
-        m_log.clear();
+    // Sets the seed
+    void set_seed(unsigned);
 
-        // Some vectors used during evolution are declared.
-        vector_double newsol(dim); // contains the mutated candidate
-        auto X = pop.get_x();
-        auto fit = pop.get_f();
-        std::vector<unsigned> trial(NP, 0u);
-        std::uniform_real_distribution<double> phirng(-1., 1.); // to generate a number in [-1, 1)
-        std::uniform_real_distribution<double> rrng(0., 1.);    // to generate a number in [0, 1)
-        std::uniform_int_distribution<vector_double::size_type> comprng(
-            0u, dim - 1u); // to generate a random index for the component to mutate
-        std::uniform_int_distribution<vector_double::size_type> dvrng(
-            0u, NP - 2u); // to generate a random index for the second decision vector
-
-        for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-            // 1 - Employed bees phase
-            std::vector<unsigned>::size_type mi = 0u;
-            for (decltype(NP) i = 1u; i < NP; ++i) {
-                if (trial[i] > trial[mi]) {
-                    mi = i;
-                }
-            }
-            bool scout = false;
-            if (trial[mi] >= m_limit) {
-                scout = true;
-            }
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                if (trial[i] < m_limit || i != mi) {
-                    newsol = X[i];
-                    // selects a random component of the decision vector
-                    auto comp2change = comprng(m_e);
-                    // selects a random decision vector in the population other than the current
-                    auto rdv = dvrng(m_e);
-                    if (rdv >= i) {
-                        ++rdv;
-                    }
-                    // mutate new solution
-                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[rdv][comp2change]);
-                    // if the generated parameter value is out of boundaries, shift it into the boundaries
-                    if (newsol[comp2change] < lb[comp2change]) {
-                        newsol[comp2change] = lb[comp2change];
-                    }
-                    if (newsol[comp2change] > ub[comp2change]) {
-                        newsol[comp2change] = ub[comp2change];
-                    }
-                    // if the new solution is better than the old one replace it and reset its trial counter
-                    auto newfitness = prob.fitness(newsol);
-                    if (newfitness[0] < fit[i][0]) {
-                        fit[i][0] = newfitness[0];
-                        X[i][comp2change] = newsol[comp2change];
-                        pop.set_xf(i, newsol, newfitness);
-                        trial[i] = 0;
-                    } else {
-                        ++trial[i];
-                    }
-                }
-            }
-            // 2 - Scout bee phase
-            if (scout) {
-                for (auto j = 0u; j < dim; ++j) {
-                    X[mi][j] = uniform_real_from_range(lb[j], ub[j], m_e);
-                }
-                pop.set_x(mi, X[mi]); // this causes a fitness evaluation
-                trial[mi] = 0;
-            }
-            // 3 - Onlooker bee phase
-            // compute probabilities
-            vector_double p(NP);
-            auto sump = 0.;
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                if (fit[i][0] >= 0.) {
-                    p[i] = 1. / (1. + fit[i][0]);
-                } else {
-                    p[i] = 1. - fit[i][0];
-                }
-                sump += p[i];
-            }
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                p[i] /= sump;
-            }
-            vector_double::size_type s = 0u;
-            decltype(NP) t = 0u;
-            // for each onlooker bee
-            while (t < NP) {
-                // probabilistic selection of a food source
-                auto r = rrng(m_e);
-                if (r < p[s]) {
-                    ++t;
-                    newsol = X[s];
-                    // selects a random component of the decision vector
-                    auto comp2change = comprng(m_e);
-                    // selects a random decision vector in the population other than the current
-                    auto rdv = dvrng(m_e);
-                    if (rdv >= s) {
-                        ++rdv;
-                    }
-                    // mutate new solution
-                    newsol[comp2change] += phirng(m_e) * (newsol[comp2change] - X[rdv][comp2change]);
-                    // if the generated parameter value is out of boundaries, shift it into the boundaries
-                    if (newsol[comp2change] < lb[comp2change]) {
-                        newsol[comp2change] = lb[comp2change];
-                    }
-                    if (newsol[comp2change] > ub[comp2change]) {
-                        newsol[comp2change] = ub[comp2change];
-                    }
-                    // if the new solution is better than the old one replace it and reset its trial counter
-                    auto newfitness = prob.fitness(newsol);
-                    if (newfitness[0] < fit[s][0]) {
-                        fit[s][0] = newfitness[0];
-                        X[s][comp2change] = newsol[comp2change];
-                        pop.set_xf(s, newsol, newfitness);
-                        trial[s] = 0;
-                    } else {
-                        ++trial[s];
-                    }
-                }
-                s = (s + 1) % NP;
-            }
-            // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-            if (m_verbosity > 0u) {
-                // Every m_verbosity generations print a log line
-                if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                    auto best_idx = pop.best_idx();
-                    // Every 50 lines print the column names
-                    if (count % 50u == 1u) {
-                        print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15),
-                              "Best:", std::setw(15), "Current Best:\n");
-                    }
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                          pop.champion_f()[0], std::setw(15), pop.get_f()[best_idx][0], '\n');
-                    ++count;
-                    // Logs
-                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.champion_f()[0], pop.get_f()[best_idx][0]);
-                }
-            }
-        }
-        return pop;
-    }
-
-    /// Sets the seed
-    /**
-     * @param seed the seed controlling the algorithm stochastic behaviour
-     */
-    void set_seed(unsigned seed)
-    {
-        m_e.seed(seed);
-        m_seed = seed;
-    }
     /// Gets the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
@@ -287,6 +90,7 @@ public:
     {
         return m_seed;
     }
+
     /// Sets the algorithm verbosity
     /**
      * Sets the verbosity level of the screen output and of the
@@ -312,6 +116,7 @@ public:
     {
         m_verbosity = level;
     }
+
     /// Gets the verbosity level
     /**
      * @return the verbosity level
@@ -320,6 +125,7 @@ public:
     {
         return m_verbosity;
     }
+
     /// Gets the number of generations
     /**
      * @return the number of generations to evolve for
@@ -328,6 +134,7 @@ public:
     {
         return m_gen;
     }
+
     /// Algorithm name
     /**
      * @return a string containing the algorithm name
@@ -336,19 +143,10 @@ public:
     {
         return "ABC: Artificial Bee Colony";
     }
-    /// Extra informations
-    /**
-     * @return a string containing extra informations on the algorithm
-     */
-    std::string get_extra_info() const
-    {
-        std::ostringstream ss;
-        stream(ss, "\tMaximum number of generations: ", m_gen);
-        stream(ss, "\n\tLimit: ", m_limit);
-        stream(ss, "\n\tVerbosity: ", m_verbosity);
-        stream(ss, "\n\tSeed: ", m_seed);
-        return ss.str();
-    }
+
+    // Extra info
+    std::string get_extra_info() const;
+
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
@@ -362,19 +160,10 @@ public:
     {
         return m_log;
     }
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(m_gen, m_limit, m_e, m_seed, m_verbosity, m_log);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
     unsigned m_gen;
@@ -387,6 +176,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::bee_colony)
+PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::bee_colony)
 
 #endif

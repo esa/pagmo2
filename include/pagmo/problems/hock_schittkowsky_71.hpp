@@ -26,15 +26,14 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_HOCK_SCHITTKOWSKY_71_HPP
-#define PAGMO_PROBLEM_HOCK_SCHITTKOWSKY_71_HPP
+#ifndef PAGMO_PROBLEMS_HOCK_SCHITTKOWSKY_71_HPP
+#define PAGMO_PROBLEMS_HOCK_SCHITTKOWSKY_71_HPP
 
-#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <pagmo/io.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
@@ -59,23 +58,9 @@ namespace pagmo
  * Lecture Notes in Economics and Mathematical Systems, 187, 1981. doi: 10.1007/978-3-642-48320-2.
  *
  */
-struct hock_schittkowsky_71 {
-    /// Fitness computation
-    /**
-     * Computes the fitness for this UDP
-     *
-     * @param x the decision vector.
-     *
-     * @return the fitness of \p x.
-     */
-    vector_double fitness(const vector_double &x) const
-    {
-        return {
-            x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2],                   // objfun
-            x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3] - 40., // equality con.
-            25. - x[0] * x[1] * x[2] * x[3]                              // inequality con.
-        };
-    }
+struct PAGMO_DLL_PUBLIC hock_schittkowsky_71 {
+    // Fitness computation
+    vector_double fitness(const vector_double &) const;
 
     /// Equality constraint dimension
     /**
@@ -101,86 +86,20 @@ struct hock_schittkowsky_71 {
         return 1u;
     }
 
-    /// Box-bounds
-    /**
-     *
-     * It returns the box-bounds for this UDP.
-     *
-     * @return the lower and upper bounds for each of the decision vector components
-     */
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        return {{1., 1., 1., 1.}, {5., 5., 5., 5.}};
-    }
+    // Box-bounds
+    std::pair<vector_double, vector_double> get_bounds() const;
 
-    /// Gradients
-    /**
-     *
-     * It returns the fitness gradient for this UDP.
-     *
-     * The gradient is represented in a sparse form as required by
-     * problem::gradient().
-     *
-     * @param x the decision vector.
-     *
-     * @return the gradient of the fitness function
-     */
-    vector_double gradient(const vector_double &x) const
-    {
-        return {x[0] * x[3] + x[3] * (x[0] + x[1] + x[2]),
-                x[0] * x[3],
-                x[0] * x[3] + 1,
-                x[0] * (x[0] + x[1] + x[2]),
-                2 * x[0],
-                2 * x[1],
-                2 * x[2],
-                2 * x[3],
-                -x[1] * x[2] * x[3],
-                -x[0] * x[2] * x[3],
-                -x[0] * x[1] * x[3],
-                -x[0] * x[1] * x[2]};
-    }
+    // Gradients
+    vector_double gradient(const vector_double &) const;
 
-    /// Hessians
-    /**
-     *
-     * It returns the hessians for this UDP.
-     *
-     * The hessians are represented in a sparse form as required by
-     * problem::hessians().
-     *
-     * @param x the decision vector.
-     *
-     * @return the hessians of the fitness function
-     */
-    std::vector<vector_double> hessians(const vector_double &x) const
-    {
-        return {{2 * x[3], x[3], x[3], 2 * x[0] + x[1] + x[2], x[0], x[0]},
-                {2., 2., 2., 2.},
-                {-x[2] * x[3], -x[1] * x[3], -x[0] * x[3], -x[1] * x[2], -x[0] * x[2], -x[0] * x[1]}};
-    }
+    // Hessians
+    std::vector<vector_double> hessians(const vector_double &) const;
 
-    /// Hessians sparsity (only the diagonal elements are non zero)
-    /**
-     *
-     * It returns the hessian sparisty structure for this UDP.
-     *
-     * The hessian sparisty is represented in the form required by
-     * problem::hessians_sparsity().
-     *
-     * @return the hessians of the fitness function
-     */
-    std::vector<sparsity_pattern> hessians_sparsity() const
-    {
-        return {{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {3, 1}, {3, 2}},
-                {{0, 0}, {1, 1}, {2, 2}, {3, 3}},
-                {{1, 0}, {2, 0}, {2, 1}, {3, 0}, {3, 1}, {3, 2}}};
-    }
+    // Hessians sparsity (only the diagonal elements are non zero)
+    std::vector<sparsity_pattern> hessians_sparsity() const;
 
     /// Problem name
     /**
-     *
-     *
      * @return a string containing the problem name
      */
     std::string get_name() const
@@ -188,37 +107,24 @@ struct hock_schittkowsky_71 {
         return "Hock Schittkowsky 71";
     }
 
-    /// Extra informations
+    /// Extra info
     /**
-     *
-     *
-     * @return a string containing extra informations on the problem
+     * @return a string containing extra info on the problem
      */
     std::string get_extra_info() const
     {
         return "\tProblem number 71 from the Hock-Schittkowsky test suite";
     }
 
-    /// Optimal solution
-    /**
-     * @return the decision vector corresponding to the best solution for this problem.
-     */
-    vector_double best_known() const
-    {
-        return {1., 4.74299963, 3.82114998, 1.37940829};
-    }
+    // Optimal solution
+    vector_double best_known() const;
 
-    /// Object serialization
-    /**
-     * This method is needed by the cereal serialization pipeline
-     */
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &)
-    {
-    }
+    void serialize(Archive &, unsigned);
 };
 } // namespace pagmo
 
-PAGMO_REGISTER_PROBLEM(pagmo::hock_schittkowsky_71)
+PAGMO_S11N_PROBLEM_EXPORT_KEY(pagmo::hock_schittkowsky_71)
 
 #endif

@@ -15,19 +15,19 @@ fi
 if [[ "${PAGMO_BUILD}" == "ReleaseGCC48" ]]; then
     CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == "DebugGCC48" ]]; then
     CXX=g++-4.8 CC=gcc-4.8 cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="-fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == "OSXDebug" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os" ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == "OSXRelease" ]]; then
     CXX=clang++ CC=clang cmake -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes ../;
     make -j2 VERBOSE=1;
-    ctest;
+    ctest -VV;
 elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     export CXX=g++-4.8
     export CC=gcc-4.8
@@ -68,14 +68,13 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     cd ../../;
     python test2.py
     if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
-        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python36 build.
+        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python37 build.
         exit 0;
     fi
 
     # Documentation.
     cd ../build
-    # At the moment conda has these packages only for Python 3.4. Install via pip instead.
-    pip install 'sphinx<1.7' 'breathe<4.12' requests[security] sphinx-bootstrap-theme;
+    pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
     # Run doxygen and check the output.
     cd ../doc/doxygen;
     export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;
@@ -88,7 +87,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     # Copy the images into the xml output dir (this is needed by sphinx).
     cp images/* xml/;
     cd ../sphinx/;
-    export SPHINX_OUTPUT=`make html linkcheck 2>&1 >/dev/null`;
+    export SPHINX_OUTPUT=`make html linkcheck 2>&1 | grep -v "Duplicate declaration" | grep -v "is deprecated" >/dev/null`;
     if [[ "${SPHINX_OUTPUT}" != "" ]]; then
         echo "Sphinx encountered some problem:";
         echo "${SPHINX_OUTPUT}";

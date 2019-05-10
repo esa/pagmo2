@@ -40,11 +40,6 @@ if(MINGW)
 	list(APPEND YACMA_THREADING_CXX_FLAGS "-mthreads")
 endif()
 
-if(YACMA_COMPILER_IS_MSVC)
-	message(STATUS "Enabling the '_MT' definition for MSVC.")
-	list(APPEND YACMA_THREADING_CXX_FLAGS "/D_MT")
-endif()
-
 # Check if we have thread_local.
 # NOTE: we need to double check what happens with OSX's clang here.
 list(FIND CMAKE_CXX_COMPILE_FEATURES "cxx_thread_local" YACMA_HAVE_THREAD_LOCAL)

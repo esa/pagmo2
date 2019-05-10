@@ -26,16 +26,15 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_PROBLEM_TRANSLATE_HPP
-#define PAGMO_PROBLEM_TRANSLATE_HPP
+#ifndef PAGMO_PROBLEMS_TRANSLATE_HPP
+#define PAGMO_PROBLEMS_TRANSLATE_HPP
 
-#include <algorithm>
-#include <cassert>
-#include <stdexcept>
+#include <string>
 #include <type_traits>
+#include <utility>
+#include <vector>
 
-#include <pagmo/exceptions.hpp>
-#include <pagmo/io.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
@@ -49,19 +48,20 @@ namespace pagmo
  * by a fixed translation vector. pagmo::translate objects are user-defined problems that can be used in
  * the definition of a pagmo::problem.
  */
-class translate
+class PAGMO_DLL_PUBLIC translate
 {
+public:
+    // Default constructor.
+    translate();
+
+private:
     // Enabler for the ctor from UDP or problem. In this case we also allow construction from type problem.
     template <typename T>
     using ctor_enabler = enable_if_t<std::is_constructible<problem, T &&>::value, int>;
+    // Implementation of the generic ctor.
+    void generic_ctor_impl(const vector_double &);
 
 public:
-    /// Default constructor.
-    /**
-     * The default constructor will initialize a non-translated pagmo::null_problem.
-     */
-    translate() : m_problem(null_problem{}), m_translation({0.}) {}
-
     /// Constructor from problem and translation vector.
     /**
      * \verbatim embed:rst:leading-asterisk
@@ -85,332 +85,97 @@ public:
     explicit translate(T &&p, const vector_double &translation)
         : m_problem(std::forward<T>(p)), m_translation(translation)
     {
-        if (translation.size() != m_problem.get_nx()) {
-            pagmo_throw(std::invalid_argument,
-                        "Length of shift vector is: " + std::to_string(translation.size())
-                            + " while the problem dimension is: " + std::to_string(m_problem.get_nx()));
-        }
+        generic_ctor_impl(translation);
     }
 
-    /// Fitness.
-    /**
-     * The fitness computation is forwarded to the inner UDP, after the translation of \p x.
-     *
-     * @param x the decision vector.
-     *
-     * @return the fitness of \p x.
-     *
-     * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by problem::fitness().
-     */
-    vector_double fitness(const vector_double &x) const
-    {
-        vector_double x_deshifted = translate_back(x);
-        return m_problem.fitness(x_deshifted);
-    }
+    // Fitness.
+    vector_double fitness(const vector_double &) const;
 
-    /// Box-bounds.
-    /**
-     * The box-bounds returned by this method are the translated box-bounds of the inner UDP.
-     *
-     * @return the lower and upper bounds for each of the decision vector components.
-     *
-     * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by problem::get_bounds().
-     */
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        auto b_sh = m_problem.get_bounds();
-        // NOTE: this should be safe as the translation vector has been checked against the
-        // bounds size upon construction (via get_nx()).
-        return {apply_translation(b_sh.first), apply_translation(b_sh.second)};
-    }
+    // Batch fitness.
+    vector_double batch_fitness(const vector_double &) const;
 
-    /// Number of objectives.
-    /**
-     * @return the number of objectives of the inner problem.
-     */
-    vector_double::size_type get_nobj() const
-    {
-        return m_problem.get_nobj();
-    }
+    // Check if the inner problem can compute fitnesses in batch mode.
+    bool has_batch_fitness() const;
 
-    /// Equality constraint dimension.
-    /**
-     * Returns the number of equality constraints of the inner problem.
-     *
-     * @return the number of equality constraints of the inner problem.
-     */
-    vector_double::size_type get_nec() const
-    {
-        return m_problem.get_nec();
-    }
+    // Box-bounds.
+    std::pair<vector_double, vector_double> get_bounds() const;
 
-    /// Inequality constraint dimension.
-    /**
-     * Returns the number of inequality constraints of the inner problem.
-     *
-     * @return the number of inequality constraints of the inner problem.
-     */
-    vector_double::size_type get_nic() const
-    {
-        return m_problem.get_nic();
-    }
+    // Number of objectives.
+    vector_double::size_type get_nobj() const;
 
-    /// Integer dimension
-    /**
-     * @return the integer dimension of the inner problem.
-     */
-    vector_double::size_type get_nix() const
-    {
-        return m_problem.get_nix();
-    }
+    // Equality constraint dimension.
+    vector_double::size_type get_nec() const;
 
-    /// Checks if the inner problem has gradients.
-    /**
-     * The <tt>has_gradient()</tt> computation is forwarded to the inner problem.
-     *
-     * @return a flag signalling the availability of the gradient in the inner problem.
-     */
-    bool has_gradient() const
-    {
-        return m_problem.has_gradient();
-    }
+    // Inequality constraint dimension.
+    vector_double::size_type get_nic() const;
 
-    /// Gradients.
-    /**
-     * The gradients computation is forwarded to the inner problem, after the translation of \p x.
-     *
-     * @param x the decision vector.
-     *
-     * @return the gradient of the fitness function.
-     *
-     * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by <tt>problem::gradient()</tt>.
-     */
-    vector_double gradient(const vector_double &x) const
-    {
-        vector_double x_deshifted = translate_back(x);
-        return m_problem.gradient(x_deshifted);
-    }
+    // Integer dimension
+    vector_double::size_type get_nix() const;
 
-    /// Checks if the inner problem has gradient sparisty implemented.
-    /**
-     * The <tt>has_gradient_sparsity()</tt> computation is forwarded to the inner problem.
-     *
-     * @return a flag signalling the availability of the gradient sparisty in the inner problem.
-     */
-    bool has_gradient_sparsity() const
-    {
-        return m_problem.has_gradient_sparsity();
-    }
+    // Checks if the inner problem has gradients.
+    bool has_gradient() const;
 
-    /// Gradient sparsity.
-    /**
-     * The <tt>gradient_sparsity</tt> computation is forwarded to the inner problem.
-     *
-     * @return the gradient sparsity of the inner problem.
-     */
-    sparsity_pattern gradient_sparsity() const
-    {
-        return m_problem.gradient_sparsity();
-    }
+    // Gradients.
+    vector_double gradient(const vector_double &) const;
 
-    /// Checks if the inner problem has hessians.
-    /**
-     * The <tt>has_hessians()</tt> computation is forwarded to the inner problem.
-     *
-     * @return a flag signalling the availability of the hessians in the inner problem.
-     */
-    bool has_hessians() const
-    {
-        return m_problem.has_hessians();
-    }
+    // Checks if the inner problem has gradient sparisty implemented.
+    bool has_gradient_sparsity() const;
 
-    /// Hessians.
-    /**
-     * The <tt>hessians()</tt> computation is forwarded to the inner problem, after the translation of \p x.
-     *
-     * @param x the decision vector.
-     *
-     * @return the hessians of the fitness function computed at \p x.
-     *
-     * @throws unspecified any exception thrown by memory errors in standard containers,
-     * or by problem::hessians().
-     */
-    std::vector<vector_double> hessians(const vector_double &x) const
-    {
-        vector_double x_deshifted = translate_back(x);
-        return m_problem.hessians(x_deshifted);
-    }
+    // Gradient sparsity.
+    sparsity_pattern gradient_sparsity() const;
 
-    /// Checks if the inner problem has hessians sparisty implemented.
-    /**
-     * The <tt>has_hessians_sparsity()</tt> computation is forwarded to the inner problem.
-     *
-     * @return a flag signalling the availability of the hessians sparisty in the inner problem.
-     */
-    bool has_hessians_sparsity() const
-    {
-        return m_problem.has_hessians_sparsity();
-    }
+    // Checks if the inner problem has hessians.
+    bool has_hessians() const;
 
-    /// Hessians sparsity.
-    /**
-     * The <tt>hessians_sparsity()</tt> computation is forwarded to the inner problem.
-     *
-     * @return the hessians sparsity of the inner problem.
-     */
-    std::vector<sparsity_pattern> hessians_sparsity() const
-    {
-        return m_problem.hessians_sparsity();
-    }
+    // Hessians.
+    std::vector<vector_double> hessians(const vector_double &) const;
 
-    /// Calls <tt>has_set_seed()</tt> of the inner problem.
-    /**
-     * Calls the method <tt>has_set_seed()</tt> of the inner problem.
-     *
-     * @return a flag signalling wether the inner problem is stochastic.
-     */
-    bool has_set_seed() const
-    {
-        return m_problem.has_set_seed();
-    }
+    // Checks if the inner problem has hessians sparisty implemented.
+    bool has_hessians_sparsity() const;
 
-    /// Calls <tt>set_seed()</tt> of the inner problem.
-    /**
-     * Calls the method <tt>set_seed()</tt> of the inner problem.
-     *
-     * @param seed seed to be set.
-     *
-     * @throws unspecified any exception thrown by the method <tt>set_seed()</tt> of the inner problem.
-     */
-    void set_seed(unsigned seed)
-    {
-        return m_problem.set_seed(seed);
-    }
+    // Hessians sparsity.
+    std::vector<sparsity_pattern> hessians_sparsity() const;
 
-    /// Problem name
-    /**
-     * This method will add <tt>[translated]</tt> to the name provided by the inner problem.
-     *
-     * @return a string containing the problem name.
-     *
-     * @throws unspecified any exception thrown by <tt>problem::get_name()</tt> or memory errors in standard classes.
-     */
-    std::string get_name() const
-    {
-        return m_problem.get_name() + " [translated]";
-    }
+    // Calls <tt>has_set_seed()</tt> of the inner problem.
+    bool has_set_seed() const;
 
-    /// Extra info
-    /**
-     * This method will append a description of the translation vector to the extra info provided
-     * by the inner problem.
-     *
-     * @return a string containing extra info on the problem.
-     *
-     * @throws unspecified any exception thrown by problem::get_extra_info(), the public interface of
-     * \p std::ostringstream or memory errors in standard classes.
-     */
-    std::string get_extra_info() const
-    {
-        std::ostringstream oss;
-        stream(oss, m_translation);
-        return m_problem.get_extra_info() + "\n\tTranslation Vector: " + oss.str();
-    }
+    // Calls <tt>set_seed()</tt> of the inner problem.
+    void set_seed(unsigned);
 
-    /// Get the translation vector
-    /**
-     * @return a reference to the translation vector.
-     */
-    const vector_double &get_translation() const
-    {
-        return m_translation;
-    }
+    // Problem name
+    std::string get_name() const;
 
-    /// Problem's thread safety level.
-    /**
-     * The thread safety of a meta-problem is defined by the thread safety of the inner pagmo::problem.
-     *
-     * @return the thread safety level of the inner pagmo::problem.
-     */
-    thread_safety get_thread_safety() const
-    {
-        return m_problem.get_thread_safety();
-    }
+    // Extra info
+    std::string get_extra_info() const;
 
-    /// Getter for the inner problem.
-    /**
-     * Returns a const reference to the inner pagmo::problem.
-     *
-     * @return a const reference to the inner pagmo::problem.
-     */
-    const problem &get_inner_problem() const
-    {
-        return m_problem;
-    }
+    // Get the translation vector
+    const vector_double &get_translation() const;
 
-    /// Getter for the inner problem.
-    /**
-     * Returns a reference to the inner pagmo::problem.
-     *
-     * \verbatim embed:rst:leading-asterisk
-     * .. note::
-     *
-     *    The ability to extract a non const reference is provided only in order to allow to call
-     *    non-const methods on the internal :cpp:class:`pagmo::problem` instance. Assigning a new
-     *    :cpp:class:`pagmo::problem` via this reference is undefined behaviour.
-     *
-     * \endverbatim
-     *
-     * @return a reference to the inner pagmo::problem.
-     */
-    problem &get_inner_problem()
-    {
-        return m_problem;
-    }
+    // Problem's thread safety level.
+    thread_safety get_thread_safety() const;
 
-    /// Object serialization
-    /**
-     * This method will save/load \p this into/from the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
-     */
+    // Getter for the inner problem.
+    const problem &get_inner_problem() const;
+
+    // Getter for the inner problem.
+    problem &get_inner_problem();
+
+    // Object serialization
     template <typename Archive>
-    void serialize(Archive &ar)
-    {
-        ar(m_problem, m_translation);
-    }
+    void serialize(Archive &, unsigned);
 
 private:
-    vector_double translate_back(const vector_double &x) const
-    {
-        // NOTE: here we use assert instead of throwing because the general idea is that we don't
-        // protect UDPs from misuses, and we have checks in problem. In Python, UDP methods that could cause
-        // troubles are not exposed.
-        assert(x.size() == m_translation.size());
-        vector_double x_sh(x.size());
-        std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::minus<double>());
-        return x_sh;
-    }
+    PAGMO_DLL_LOCAL vector_double translate_back(const vector_double &) const;
+    PAGMO_DLL_LOCAL vector_double apply_translation(const vector_double &) const;
 
-    vector_double apply_translation(const vector_double &x) const
-    {
-        assert(x.size() == m_translation.size());
-        vector_double x_sh(x.size());
-        std::transform(x.begin(), x.end(), m_translation.begin(), x_sh.begin(), std::plus<double>());
-        return x_sh;
-    }
     // Inner problem
     problem m_problem;
     // translation vector
     vector_double m_translation;
 };
+
 } // namespace pagmo
 
-PAGMO_REGISTER_PROBLEM(pagmo::translate)
+PAGMO_S11N_PROBLEM_EXPORT_KEY(pagmo::translate)
 
 #endif

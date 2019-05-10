@@ -27,13 +27,17 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE translate_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <numeric>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
@@ -112,14 +116,14 @@ BOOST_AUTO_TEST_CASE(translate_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);
@@ -204,4 +208,50 @@ BOOST_AUTO_TEST_CASE(translate_inner_algo_get_test)
         BOOST_CHECK(!std::is_const<decltype(udp)>::value);
         BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
     }
+}
+
+struct udp_with_bfe {
+    vector_double fitness(const vector_double &) const
+    {
+        return {2};
+    }
+    vector_double batch_fitness(const vector_double &xs) const
+    {
+        vector_double fvs(xs.size() / 2u);
+
+        for (decltype(xs.size()) i = 0; i < xs.size() / 2u; ++i) {
+            fvs[i] = 10. * (xs[i] + xs[i + 1u]);
+        }
+
+        return fvs;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0, 0}, {1, 1}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(translate_batch_fitness_test)
+{
+    problem p0{udp_with_bfe{}};
+    problem p1{translate{udp_with_bfe{}, {1, 1}}};
+    problem p2{translate{translate{udp_with_bfe{}, {1, 1}}, {-1, -1}}};
+
+    BOOST_CHECK(p0.has_batch_fitness());
+    BOOST_CHECK(p1.has_batch_fitness());
+    BOOST_CHECK(p2.has_batch_fitness());
+
+    vector_double dvs(10000u * 2u);
+    std::iota(dvs.begin(), dvs.end(), 0.);
+
+    auto fvs0 = p0.batch_fitness(dvs);
+    auto fvs1 = p1.batch_fitness(dvs);
+    auto fvs2 = p2.batch_fitness(dvs);
+
+    BOOST_CHECK(fvs0 != fvs1);
+    BOOST_CHECK(fvs0 == fvs2);
+
+    auto no_bfe = problem{translate{hock_schittkowsky_71{}, {0.1, -0.2, 0.3, 0.4}}};
+    BOOST_CHECK(!no_bfe.has_batch_fitness());
+    BOOST_CHECK_THROW(no_bfe.batch_fitness({3., 3., 3., 3.}), not_implemented_error);
 }

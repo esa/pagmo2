@@ -27,16 +27,20 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE rosenbrock_test
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
-#include <boost/lexical_cast.hpp>
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
+#include <boost/lexical_cast.hpp>
+
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/s11n.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -72,6 +76,8 @@ BOOST_AUTO_TEST_CASE(rosenbrock_test)
     BOOST_CHECK(std::abs(g5[2] - 13.4) < 1E-8);
     BOOST_CHECK(std::abs(g5[3] - 6.4) < 1E-8);
     BOOST_CHECK(std::abs(g5[4] - 68.) < 1E-8);
+    // Thread safety level.
+    BOOST_CHECK(problem{rosenbrock{}}.get_thread_safety() == thread_safety::constant);
 }
 
 BOOST_AUTO_TEST_CASE(rosenbrock_serialization_test)
@@ -84,14 +90,14 @@ BOOST_AUTO_TEST_CASE(rosenbrock_serialization_test)
     auto before = boost::lexical_cast<std::string>(p);
     // Now serialize, deserialize and compare the result.
     {
-        cereal::JSONOutputArchive oarchive(ss);
-        oarchive(p);
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << p;
     }
     // Change the content of p before deserializing.
     p = problem{null_problem{}};
     {
-        cereal::JSONInputArchive iarchive(ss);
-        iarchive(p);
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> p;
     }
     auto after = boost::lexical_cast<std::string>(p);
     BOOST_CHECK_EQUAL(before, after);

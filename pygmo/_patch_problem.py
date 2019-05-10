@@ -66,10 +66,10 @@ def _problem_extract(self, t):
         >>> p1.extract(pg.ackley) is None
         True
         >>> class prob:
-        ...:     def fitness(self, x):
-        ...:         return [x[0]]
-        ...:     def get_bounds(self):
-        ...:         return ([0],[1])
+        ...     def fitness(self, x):
+        ...         return [x[0]]
+        ...     def get_bounds(self):
+        ...         return ([0],[1])
         >>> p2 = pg.problem(prob())
         >>> p2.extract(object) # doctest: +SKIP
         <__main__.prob at 0x7f56a66b6588>

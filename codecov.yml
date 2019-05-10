@@ -2,7 +2,9 @@ coverage:
   ignore:
   - "tests/.*"
   - "tutorials/.*"
-  - "include/pagmo/external"
+  # Exclude these large datafiles.
+  - "src/problems/cec2013_data.cpp"
+  - "src/problems/cec2014_data.cpp"
 
   notify:
     gitter:

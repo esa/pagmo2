@@ -31,34 +31,18 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 
+#include <pagmo/detail/visibility.hpp>
+
 namespace pagmo
 {
 
-/// Thread safety levels.
-/**
- * This enum defines a set of values that can be used to specify
- * the thread safety of problems, algorithms, etc.
- */
-enum class thread_safety {
-    none, ///< No thread safety: any concurrent operation on distinct instances is unsafe
-    basic ///< Basic thread safety: any concurrent operation on distinct instances is safe
-};
-
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
+// Thread safety levels.
+enum class thread_safety { none, basic, constant };
+
 // Stream operator for the thread_safety enum.
-inline std::ostream &operator<<(std::ostream &os, thread_safety ts)
-{
-    switch (ts) {
-        case thread_safety::none:
-            os << "none";
-            break;
-        case thread_safety::basic:
-            os << "basic";
-            break;
-    }
-    return os;
-}
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, thread_safety);
 
 #endif
 } // namespace pagmo

@@ -37,13 +37,7 @@ see https://www.gnu.org/licenses/. */
 @PAGMO_ENABLE_EIGEN3@
 @PAGMO_ENABLE_NLOPT@
 @PAGMO_ENABLE_IPOPT@
-// NOTE: in order to enable the fork island, we have to:
-// - verify in the build system that the required headers and the fork() function
-//   are present (which will set the PAGMO_ENABLE_FORK_ISLAND variable), and
-// - verify that the _POSIX_C_SOURCE definition is active during compilation.
-#if defined(_POSIX_C_SOURCE)
 @PAGMO_ENABLE_FORK_ISLAND@
-#endif
 // clang-format on
 // End of defines instantiated by CMake.
 
@@ -54,11 +48,6 @@ see https://www.gnu.org/licenses/. */
 
 #if !defined(_MSC_VER) && !defined(__APPLE__)
 
-// MSVC and at least some versions of Clang on OSX have issues
-// with the large data arrays in the CEC 2013/2014 problems.
-// Let's disable them on these platforms. We can probably
-// ameliorate and perhaps solve altogether the issues once
-// we switch to a compiled-library setup for pagmo.
 #define PAGMO_ENABLE_CEC2013
 #define PAGMO_ENABLE_CEC2014
 
