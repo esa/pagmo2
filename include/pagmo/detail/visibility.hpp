@@ -34,7 +34,7 @@ see https://www.gnu.org/licenses/. */
 // https://gcc.gnu.org/wiki/Visibility
 // We check first for Windows, where we assume every compiler
 // knows dllexport/dllimport. On other platforms, we use the GCC-like
-// syntax for GCC, clang and ICC. Otherwise, we leave PAGMO_DLL_PUBLIC
+// syntax for GCC, clang and ICC. Otherwise, we leave the definitions
 // empty.
 #if defined(_WIN32) || defined(__CYGWIN__)
 

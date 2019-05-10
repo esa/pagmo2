@@ -18,7 +18,7 @@ Lennard Jones Cluster
    The complexity for computing the objective function scales with the square of the number of atoms.
   
    The decision vector contains :math:`[z_2, y_3, z_3, x_4, y_4, z_4, ....]` as the cartesian coordinates
-   :math:`x_1, y_1, z_1, x_2, y_2` and :math:`x3` are fixed to be zero.
+   :math:`x_1, y_1, z_1, x_2, y_2` and :math:`x_3` are fixed to be zero.
   
    See: http://doye.chem.ox.ac.uk/jon/structures/LJ.html
   
