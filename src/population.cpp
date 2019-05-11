@@ -60,8 +60,13 @@ population::population() : population(null_problem{}, 0u, 0u) {}
 
 void population::prob_ctor_impl(size_type pop_size)
 {
+    std::vector<std::pair<vector_double, vector_double>> tmp(pop_size);
     for (size_type i = 0u; i < pop_size; ++i) {
-        push_back(random_decision_vector());
+        tmp[i].first = random_decision_vector();
+        tmp[i].second = m_prob.fitness(tmp[i].first);
+    }
+    for (size_type i = 0u; i < pop_size; ++i) {
+        push_back(std::move(tmp[i].first), std::move(tmp[i].second));
     }
 }
 
