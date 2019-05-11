@@ -48,7 +48,7 @@ Lennard Jones Cluster
 
       :return: a string containing the problem name: "Lennard Jones Cluster (*atoms* atoms)".
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar)
+   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
 
       Object serialization.
 
