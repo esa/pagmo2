@@ -3953,11 +3953,11 @@ Examples:
     >>> import pygmo as pg
     >>> pg.set_global_rng_seed(seed = 32)
     >>> pop = pg.population(prob = pg.ackley(5), size = 20)
-    >>> print(pop.champion_f)
+    >>> print(pop.champion_f) # doctest: +SKIP
     [17.26891503]
     >>> pg.set_global_rng_seed(seed = 32)
     >>> pop = pg.population(prob = pg.ackley(5), size = 20)
-    >>> print(pop.champion_f)
+    >>> print(pop.champion_f) # doctest: +SKIP
     [17.26891503]
     )";
 }
