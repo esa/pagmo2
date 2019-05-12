@@ -187,7 +187,7 @@ Batch fitness evaluator
       :return: the thread safety level of the UDBFE.
 
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
-   .. cpp:function:: template <typename Archive> void load(Archive &ar)
+   .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
 
       Serialisation support.
 
