@@ -187,7 +187,7 @@ namespace pagmo
         
         /// Sets the batch function evaluation scheme:
         /**
-         * @param batch function evaluation object
+         * @param b batch function evaluation object
          */
         void set_bfe(const bfe &b)
         {
