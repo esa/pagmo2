@@ -1,30 +1,30 @@
 /* Copyright 2017-2018 PaGMO development team
 
-This file is part of the PaGMO library.
+ This file is part of the PaGMO library.
 
-The PaGMO library is free software; you can redistribute it and/or modify
-it under the terms of either:
+ The PaGMO library is free software; you can redistribute it and/or modify
+ it under the terms of either:
 
-  * the GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 3 of the License, or (at your
-    option) any later version.
+ * the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 3 of the License, or (at your
+ option) any later version.
 
-or
+ or
 
-  * the GNU General Public License as published by the Free Software
-    Foundation; either version 3 of the License, or (at your option) any
-    later version.
+ * the GNU General Public License as published by the Free Software
+ Foundation; either version 3 of the License, or (at your option) any
+ later version.
 
-or both in parallel, as here.
+ or both in parallel, as here.
 
-The PaGMO library is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
+ The PaGMO library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
 
-You should have received copies of the GNU General Public License and the
-GNU Lesser General Public License along with the PaGMO library.  If not,
-see https://www.gnu.org/licenses/. */
+ You should have received copies of the GNU General Public License and the
+ GNU Lesser General Public License along with the PaGMO library.  If not,
+ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cmath>
@@ -49,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -59,7 +60,7 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     : m_gen(gen), m_acc(acc), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker), m_oracle(oracle),
       m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(), m_res(),
       m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(),
-      m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u)
+      m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u), m_bfe()
 {
     if (acc < 0.) {
         pagmo_throw(std::invalid_argument,
@@ -128,6 +129,9 @@ population gaco::evolve(population pop) const
     std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
     vector_double ant(n_x);
     vector_double sigma(n_x);
+    vector_double fitness(n_f);
+    vector_double ant_final(n_x);
+    vector_double fitness_final(n_f);
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -270,18 +274,56 @@ population gaco::evolve(population pop) const
         // 5 - use pheromone values to generate new ants (i.e., individuals)
         generate_new_ants(popold, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
-        for (population::size_type i = 0; i < pop_size; ++i) {
-            // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
-            // function
-            for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
-                ant[ii] = new_ants[i][ii];
+        if (m_bfe) {
+            // bfe is available:
+            unsigned pos = 0u;
+            vector_double ants(pop_size * new_ants[0].size());
+
+            for (population::size_type i = 0; i < pop_size; ++i) {
+                // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
+                // function
+                for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
+                    ants[pos] = new_ants[i][ii];
+                    ++pos;
+                }
             }
 
-            auto fitness = prob.fitness(ant);
-            ++m_fevals;
-            // I set the individuals for the next generation
-            pop.set_xf(i, ant, fitness);
+            auto fitnesses = (*m_bfe)(prob, ants);
+            m_fevals += pop_size;
+            unsigned pos_dim = 0u;
+            unsigned pos_fit = 0u;
+
+            for (population::size_type i = 0; i < pop_size; ++i) {
+
+                for (decltype(n_x) ii_dim = 0u; ii_dim < n_x; ++ii_dim) {
+                    ant[ii_dim] = ants[pos_dim];
+                    ++pos_dim;
+                }
+
+                for (decltype(n_f) ii_f = 0u; ii_f < n_f; ++ii_f) {
+                    fitness[ii_f] = fitnesses[pos_fit];
+                    ++pos_fit;
+                }
+                // I set the individuals for the next generation
+                pop.set_xf(i, ant, fitness);
+            }
+
+        } else {
+            // bfe not available:
+            for (population::size_type i = 0; i < pop_size; ++i) {
+                // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
+                // function
+                for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
+                    ant[ii] = new_ants[i][ii];
+                }
+
+                auto ftns = prob.fitness(ant);
+                ++m_fevals;
+                // I set the individuals for the next generation
+                pop.set_xf(i, ant, ftns);
+            }
         }
+
         // If the current best of the population has not improved wrt to the previous one, then check=false
         bool check = compare_fc(pop.champion_f(), popold.champion_f(), n_ec, pop.get_problem().get_c_tol());
 
@@ -352,8 +394,6 @@ population gaco::evolve(population pop) const
     if (m_memory == false) {
         for (decltype(m_ker) i_ker = 0; i_ker < m_ker; ++i_ker) {
 
-            vector_double ant_final(n_x);
-            vector_double fitness_final(n_f);
             for (decltype(n_x) ii_dim = 0u; ii_dim < n_x; ++ii_dim) {
                 ant_final[ii_dim] = sol_archive[i_ker][1 + ii_dim];
             }
@@ -427,18 +467,43 @@ std::string gaco::get_extra_info() const
 
 /// Object serialization
 /**
- * This method will save/load \p this into the archive \p ar.
+ * This method will save \p this into the archive \p ar.
  *
  * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
  */
 template <typename Archive>
-void gaco::serialize(Archive &ar, unsigned)
+void gaco::save(Archive &ar, unsigned) const
 {
-    detail::archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
-                    m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
-                    m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals);
+    detail::to_archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
+                       m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
+                       m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals);
+    if (m_bfe) {
+        detail::to_archive(ar, true, *m_bfe);
+
+    } else {
+        ar << false;
+    }
+}
+/**
+ * This method will load \p this into the archive \p ar.
+ *
+ * @param ar target archive.
+ */
+template <typename Archive>
+void gaco::load(Archive &ar, unsigned)
+{
+    bool has_bfe;
+    detail::from_archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
+                         m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
+                         m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals, has_bfe);
+    if (has_bfe) {
+        bfe tmp;
+        ar >> tmp;
+        m_bfe = std::move(tmp);
+
+    } else {
+        m_bfe.reset();
+    }
 }
 
 /**

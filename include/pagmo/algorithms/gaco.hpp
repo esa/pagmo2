@@ -1,43 +1,39 @@
 /* Copyright 2017-2018 PaGMO development team
-
-This file is part of the PaGMO library.
-
-The PaGMO library is free software; you can redistribute it and/or modify
-it under the terms of either:
-
-  * the GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 3 of the License, or (at your
-    option) any later version.
-
-or
-
-  * the GNU General Public License as published by the Free Software
-    Foundation; either version 3 of the License, or (at your option) any
-    later version.
-
-or both in parallel, as here.
-
-The PaGMO library is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
-
-You should have received copies of the GNU General Public License and the
-GNU Lesser General Public License along with the PaGMO library.  If not,
-see https://www.gnu.org/licenses/. */
+ This file is part of the PaGMO library.
+ The PaGMO library is free software; you can redistribute it and/or modify
+ it under the terms of either:
+ * the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 3 of the License, or (at your
+ option) any later version.
+ or
+ * the GNU General Public License as published by the Free Software
+ Foundation; either version 3 of the License, or (at your option) any
+ later version.
+ or both in parallel, as here.
+ The PaGMO library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+ You should have received copies of the GNU General Public License and the
+ GNU Lesser General Public License along with the PaGMO library.  If not,
+ see https://www.gnu.org/licenses/. */
 
 #ifndef PAGMO_ALGORITHMS_GACO_HPP
 #define PAGMO_ALGORITHMS_GACO_HPP
 
+#include <boost/math/constants/constants.hpp>
+#include <boost/optional.hpp>
 #include <random>
 #include <string>
 #include <tuple>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -189,6 +185,15 @@ public:
         return m_gen;
     }
 
+    /// Sets the batch function evaluation scheme:
+    /**
+     * @param b batch function evaluation object
+     */
+    void set_bfe(const bfe &b)
+    {
+        m_bfe = b;
+    }
+
     /// Algorithm name
     /**
      * Returns the name of the algorithm.
@@ -217,9 +222,15 @@ public:
         return m_log;
     }
 
-    // Object serialization
+    // Save to archive.
     template <typename Archive>
-    void serialize(Archive &, unsigned);
+    void save(Archive &, unsigned) const;
+
+    // Load from archive.
+    template <typename Archive>
+    void load(Archive &, unsigned);
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     PAGMO_DLL_LOCAL double penalty_computation(const vector_double &f, const population &pop,
@@ -260,6 +271,7 @@ private:
     mutable unsigned m_n_impstop;
     mutable unsigned m_gen_mark;
     mutable unsigned m_fevals;
+    boost::optional<bfe> m_bfe;
 };
 
 } // namespace pagmo
