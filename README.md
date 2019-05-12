@@ -1,14 +1,17 @@
 pagmo
 =====
 
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/pagmo2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/esa/pagmo2.svg?branch=master)](https://travis-ci.org/esa/pagmo2)
-[![Build status](https://ci.appveyor.com/api/projects/status/sus3dsyg3376tiri/branch/master?svg=true)](https://ci.appveyor.com/project/ci4esa/pagmo2/branch/master)
-[![Docs](https://media.readthedocs.org/static/projects/badges/passing.svg)](https://esa.github.io/pagmo2/)
-[![codecov.io](https://codecov.io/github/esa/pagmo2/coverage.svg?branch=master)](https://codecov.io/github/esa/pagmo2?branch=master)
-[![PyPI](https://img.shields.io/pypi/v/pygmo.svg)](https://pypi.python.org/pypi/pygmo)
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pagmo/badges/version.svg)](https://anaconda.org/conda-forge/pagmo)
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygmo/badges/version.svg)](https://anaconda.org/conda-forge/pygmo)
+[![Build Status](https://img.shields.io/circleci/project/github/esa/pagmo2/master.svg?style=for-the-badge)](https://circleci.com/gh/esa/pagmo2)
+[![Build Status](https://img.shields.io/travis/esa/pagmo2/master.svg?logo=travis&style=for-the-badge)](https://travis-ci.org/esa/pagmo2)
+[![Build Status](https://img.shields.io/appveyor/ci/ci4esa/pagmo2/master.svg?logo=appveyor&style=for-the-badge)](https://ci.appveyor.com/project/ci4esa/pagmo2)
+[![Code Coverage](https://img.shields.io/codecov/c/github/esa/pagmo2.svg?style=for-the-badge)](https://codecov.io/github/esa/pagmo2?branch=master)
+
+[![Anaconda-Server Badge](https://img.shields.io/conda/vn/conda-forge/pagmo.svg?style=for-the-badge)](https://anaconda.org/conda-forge/pagmo)
+[![Anaconda-Server Badge](https://img.shields.io/conda/vn/conda-forge/pygmo.svg?style=for-the-badge)](https://anaconda.org/conda-forge/pygmo)
+[![PyPI](https://img.shields.io/pypi/v/pygmo.svg?style=for-the-badge)](https://pypi.python.org/pypi/pygmo)
+
+[![Join the chat at https://gitter.im/pagmo2/Lobby](https://img.shields.io/badge/gitter-join--chat-green.svg?logo=gitter-white&style=for-the-badge)](https://gitter.im/pagmo2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1045337.svg)](https://doi.org/10.5281/zenodo.1045336)
 
 pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built around the idea of providing a unified interface to optimization algorithms and to optimization problems and to make their deployment in massively parallel environments easy.

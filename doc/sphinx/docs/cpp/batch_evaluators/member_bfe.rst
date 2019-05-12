@@ -33,7 +33,7 @@ Member function BFE
 
       :return: a human-readable name for this :cpp:class:`~pagmo::member_bfe`.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &)
+   .. cpp:function:: template <typename Archive> void serialize(Archive &, unsigned)
 
       Serialisation support.
 

@@ -403,26 +403,43 @@ BOOST_AUTO_TEST_CASE(population_bfe_ctor_test)
 
     // Population with 100 individuals, verify that
     // the fitnesses are computed correctly.
-    population pop100{rosenbrock{2u}, bfe{}, 100};
+    population pop100{rosenbrock{2u}, bfe{}, 100, 42};
+    population pop100a{rosenbrock{2u}, 100, 42};
     BOOST_CHECK(pop100.size() == 100u);
     BOOST_CHECK(pop100.get_problem().get_fevals() == 100u);
     for (auto i = 0u; i < 100u; ++i) {
         BOOST_CHECK(pop100.get_f()[i] == prob.fitness(pop100.get_x()[i]));
+        BOOST_CHECK(pop100.get_x()[i] == pop100a.get_x()[i]);
+        BOOST_CHECK(pop100.get_f()[i] == pop100a.get_f()[i]);
+        BOOST_CHECK(pop100.get_ID()[i] == pop100a.get_ID()[i]);
     }
+    BOOST_CHECK(pop100.champion_x() == pop100a.champion_x());
+    BOOST_CHECK(pop100.champion_f() == pop100a.champion_f());
 
     // Same with 1000 individuals.
-    population pop1000{rosenbrock{2u}, bfe{}, 1000};
+    population pop1000{rosenbrock{2u}, bfe{}, 1000, 42};
+    population pop1000a{rosenbrock{2u}, 1000, 42};
     BOOST_CHECK(pop1000.size() == 1000u);
     BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
     for (auto i = 0u; i < 1000u; ++i) {
         BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+        BOOST_CHECK(pop1000.get_x()[i] == pop1000a.get_x()[i]);
+        BOOST_CHECK(pop1000.get_f()[i] == pop1000a.get_f()[i]);
+        BOOST_CHECK(pop1000.get_f()[i] == pop1000a.get_f()[i]);
     }
+    BOOST_CHECK(pop1000.champion_x() == pop1000a.champion_x());
+    BOOST_CHECK(pop1000.champion_f() == pop1000a.champion_f());
 
     // Do a test with a UDBFE.
-    pop1000 = population{rosenbrock{2u}, thread_bfe{}, 1000};
+    pop1000 = population{rosenbrock{2u}, thread_bfe{}, 1000, 42};
     BOOST_CHECK(pop1000.size() == 1000u);
     BOOST_CHECK(pop1000.get_problem().get_fevals() == 1000u);
     for (auto i = 0u; i < 1000u; ++i) {
         BOOST_CHECK(pop1000.get_f()[i] == prob.fitness(pop1000.get_x()[i]));
+        BOOST_CHECK(pop1000.get_x()[i] == pop1000a.get_x()[i]);
+        BOOST_CHECK(pop1000.get_f()[i] == pop1000a.get_f()[i]);
+        BOOST_CHECK(pop1000.get_f()[i] == pop1000a.get_f()[i]);
     }
+    BOOST_CHECK(pop1000.champion_x() == pop1000a.champion_x());
+    BOOST_CHECK(pop1000.champion_f() == pop1000a.champion_f());
 }

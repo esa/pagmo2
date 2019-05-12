@@ -86,7 +86,7 @@ Optimal Golomb Ruler
 
       :return: a string containing the problem name: "Golomb Ruler (order *order*)".
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar)
+   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
 
       Object serialization.
 
