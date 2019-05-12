@@ -1,30 +1,30 @@
 /* Copyright 2017-2018 PaGMO development team
-
-This file is part of the PaGMO library.
-
-The PaGMO library is free software; you can redistribute it and/or modify
-it under the terms of either:
-
-  * the GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 3 of the License, or (at your
-    option) any later version.
-
-or
-
-  * the GNU General Public License as published by the Free Software
-    Foundation; either version 3 of the License, or (at your option) any
-    later version.
-
-or both in parallel, as here.
-
-The PaGMO library is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
-
-You should have received copies of the GNU General Public License and the
-GNU Lesser General Public License along with the PaGMO library.  If not,
-see https://www.gnu.org/licenses/. */
+ 
+ This file is part of the PaGMO library.
+ 
+ The PaGMO library is free software; you can redistribute it and/or modify
+ it under the terms of either:
+ 
+ * the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 3 of the License, or (at your
+ option) any later version.
+ 
+ or
+ 
+ * the GNU General Public License as published by the Free Software
+ Foundation; either version 3 of the License, or (at your option) any
+ later version.
+ 
+ or both in parallel, as here.
+ 
+ The PaGMO library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+ 
+ You should have received copies of the GNU General Public License and the
+ GNU Lesser General Public License along with the PaGMO library.  If not,
+ see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE gaco_test
 #define BOOST_TEST_DYN_LINK
@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <chrono>
 #include <iostream>
 #include <string>
 
@@ -44,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/golomb_ruler.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -92,13 +94,13 @@ BOOST_AUTO_TEST_CASE(evolve_test)
             gaco user_algo2{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo2.set_verbosity(1u);
             pop2 = user_algo2.evolve(pop2);
-
+            
             BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
-
+            
             gaco user_algo3{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo3.set_verbosity(1u);
             pop3 = user_algo3.evolve(pop3);
-
+            
             BOOST_CHECK(user_algo2.get_log() == user_algo3.get_log());
         }
     }
@@ -120,7 +122,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         pop = user_algo.evolve(pop);
         BOOST_CHECK(user_algo.get_log().size() < 200u);
     }
-
+    
     // We then check that the evolve throws if called on unsuitable problems
     // Integer variables problem
     //    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{minlp_rastrigin{}}, 64u}), std::invalid_argument);
@@ -155,7 +157,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     algorithm algo{gaco{10u, 13u, 1.0, 100.0, 0.01, 9u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
-
+    
     // Store the string representation of p.
     std::stringstream ss;
     auto before_text = boost::lexical_cast<std::string>(algo);
@@ -245,7 +247,7 @@ BOOST_AUTO_TEST_CASE(construction_test_2)
 
 // Inf and NaN tests: we verify that the algo can handle NaN and inf has objectives w/o returning errors
 struct udp_inf {
-
+    
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -256,7 +258,7 @@ struct udp_inf {
     {
         return 1u;
     }
-
+    
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -267,7 +269,7 @@ struct udp_inf {
 };
 
 struct udp_nan {
-
+    
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -278,7 +280,7 @@ struct udp_nan {
     {
         return 1u;
     }
-
+    
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -342,4 +344,47 @@ BOOST_AUTO_TEST_CASE(integer_test_2)
         auto x = pop.get_x()[i];
         std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); });
     }
+}
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+    population pop{rosenbrock{10u}, 200u, 23u};
+    gaco uda{40u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{}); // This will use the default bfe.
+    pop = uda.evolve(pop);
+    
+    population pop_2{rosenbrock{10u}, 200u, 23u};
+    gaco uda_2{40u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
+    uda_2.set_verbosity(1u);
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+    
+    BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
+}
+
+BOOST_AUTO_TEST_CASE(bfe_performance_test)
+{
+    
+    auto start_time = std::chrono::high_resolution_clock::now();
+    population pop{lennard_jones{40u}, 200u, 23u};
+    gaco uda{10u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{});
+    pop = uda.evolve(pop);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "gaco on Lennard Jones with bfe duration:" << std::endl;
+    std::cout << std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count() << ":";
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() << std::endl;
+    
+    auto start_time_2 = std::chrono::high_resolution_clock::now();
+    population pop_2{lennard_jones{40u}, 200u, 23u};
+    gaco uda_2{10u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+    auto end_time_2 = std::chrono::high_resolution_clock::now();
+    std::cout << "gaco on Lennard Jones without bfe duration:" << std::endl;
+    std::cout << std::chrono::duration_cast<std::chrono::seconds>(end_time_2 - start_time_2).count() << ":";
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end_time_2 - start_time_2).count();
 }
