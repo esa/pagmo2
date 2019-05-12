@@ -60,8 +60,19 @@ population::population() : population(null_problem{}, 0u, 0u) {}
 
 void population::prob_ctor_impl(size_type pop_size)
 {
+    // NOTE: generate the random decision vectors in temporary storage,
+    // and only at the end move them into the population. This ensures
+    // that, for a given rng seed, the generated dvs are identical
+    // to those generated in the constructor from bfe.
+    std::vector<std::pair<vector_double, vector_double>> tmp(pop_size);
     for (size_type i = 0u; i < pop_size; ++i) {
-        push_back(random_decision_vector());
+        tmp[i].first = random_decision_vector();
+        tmp[i].second = m_prob.fitness(tmp[i].first);
+    }
+    // Move the generated dvs/fvs into the population. push_back()
+    // will take care of generating the IDs, updating the champion, etc.
+    for (size_type i = 0u; i < pop_size; ++i) {
+        push_back(std::move(tmp[i].first), std::move(tmp[i].second));
     }
 }
 

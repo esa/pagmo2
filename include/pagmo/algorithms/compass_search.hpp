@@ -236,9 +236,9 @@ private:
     mutable log_type m_log;
     // Deleting the methods load save public in base as to avoid conflict with serialize
     template <typename Archive>
-    void load(Archive &ar) = delete;
+    void load(Archive &, unsigned) = delete;
     template <typename Archive>
-    void save(Archive &ar) const = delete;
+    void save(Archive &, unsigned) const = delete;
 };
 
 } // namespace pagmo
