@@ -470,3 +470,30 @@ BOOST_AUTO_TEST_CASE(thread_safety_test)
     BOOST_CHECK(algorithm{ts2{}}.get_thread_safety() == thread_safety::none);
     BOOST_CHECK(algorithm{ts3{}}.get_thread_safety() == thread_safety::basic);
 }
+
+BOOST_AUTO_TEST_CASE(has_value)
+{
+    algorithm p0;
+    BOOST_CHECK(p0.has_value());
+    algorithm p1(std::move(p0));
+    BOOST_CHECK(!p0.has_value());
+    p0 = algorithm{al_01{}};
+    BOOST_CHECK(p0.has_value());
+    p1 = std::move(p0);
+    BOOST_CHECK(!p0.has_value());
+    p0 = algorithm{al_01{}};
+    BOOST_CHECK(p0.has_value());
+}
+
+BOOST_AUTO_TEST_CASE(generic_assignment)
+{
+    algorithm p0;
+    BOOST_CHECK(p0.is<null_algorithm>());
+    BOOST_CHECK(&(p0 = al_01{}) == &p0);
+    BOOST_CHECK(p0.has_value());
+    BOOST_CHECK(p0.is<al_01>());
+    BOOST_CHECK((!std::is_assignable<algorithm, void>::value));
+    BOOST_CHECK((!std::is_assignable<algorithm, int &>::value));
+    BOOST_CHECK((!std::is_assignable<algorithm, const int &>::value));
+    BOOST_CHECK((!std::is_assignable<algorithm, int &&>::value));
+}

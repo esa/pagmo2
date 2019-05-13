@@ -398,8 +398,9 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
- *    in undefined behaviour.
+ *    The only operations allowed on a moved-from :cpp:class:`pagmo::algorithm` are destruction,
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::algorithm::has_value()` member function.
+ *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
  */
@@ -453,6 +454,32 @@ public:
     algorithm &operator=(algorithm &&) noexcept;
     // Copy assignment.
     algorithm &operator=(const algorithm &);
+    /// Assignment from a user-defined algorithm of type \p T
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This operator is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::algorithm` (that is, this operator does not compete with the copy/move
+     *    assignment operators of :cpp:class:`pagmo::algorithm`), or if ``T`` does not satisfy
+     *    :cpp:class:`pagmo::is_uda`.
+     *
+     * \endverbatim
+     *
+     * This operator will set the internal UDA to ``x`` by constructing a pagmo::algorithm from ``x``, and then
+     * move-assigning the result to ``this``.
+     *
+     * @param x the UDA.
+     *
+     * @return a reference to ``this``.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDA.
+     */
+    template <typename T, generic_ctor_enabler<T> = 0>
+    algorithm &operator=(T &&x)
+    {
+        return (*this) = algorithm(std::forward<T>(x));
+    }
 
     /// Extract a const pointer to the UDA.
     /**
@@ -606,6 +633,9 @@ public:
     {
         return m_thread_safety;
     }
+
+    // Check if the algorithm contains a UDA.
+    bool has_value() const;
 
     /// Save to archive.
     /**

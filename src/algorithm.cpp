@@ -183,6 +183,15 @@ std::string algorithm::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+/// Check if the algorithm contains a UDA.
+/**
+ * @return ``true`` if the algorithm contains a UDA, ``false`` otherwise (i.e., if ``this`` was moved from).
+ */
+bool algorithm::has_value() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 /// Streaming operator for pagmo::algorithm
 /**
  * This function will stream to \p os a human-readable representation of the input
