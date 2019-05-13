@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(ackley_serialization_test)
         oarchive << p;
     }
     // Change the content of p before deserializing.
-    p = problem{null_problem{}};
+    p = problem{};
     {
         boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;

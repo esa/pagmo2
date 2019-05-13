@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>

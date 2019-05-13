@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>

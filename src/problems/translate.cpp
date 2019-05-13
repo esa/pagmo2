@@ -60,9 +60,9 @@ namespace pagmo
 
 /// Default constructor.
 /**
- * The default constructor will initialize a non-translated pagmo::null_problem.
+ * The constructor will initialize a non-translated default-constructed pagmo::problem.
  */
-translate::translate() : m_problem(null_problem{}), m_translation({0.}) {}
+translate::translate() : m_translation({0.}) {}
 
 void translate::generic_ctor_impl(const vector_double &translation)
 {

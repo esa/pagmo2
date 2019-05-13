@@ -61,17 +61,19 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/ackley.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
-#if defined(PAGMO_ENABLE_CEC2014)
-#include <pagmo/problems/cec2014.hpp>
-#endif
 #include <pagmo/problems/decompose.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/griewank.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/lennard_jones.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
+
+#if defined(PAGMO_ENABLE_CEC2014)
+#include <pagmo/problems/cec2014.hpp>
+#endif
 
 #include <pygmo/common_utils.hpp>
 #include <pygmo/docstrings.hpp>

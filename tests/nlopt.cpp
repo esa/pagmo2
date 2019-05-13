@@ -47,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/luksan_vlcek1.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>

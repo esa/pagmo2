@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
@@ -210,7 +211,7 @@ BOOST_AUTO_TEST_CASE(decompose_serialization_test)
         oarchive << p;
     }
     // Change the content of p before deserializing.
-    p = problem{null_problem{}};
+    p = problem{};
     {
         boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;

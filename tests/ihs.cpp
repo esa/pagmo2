@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 

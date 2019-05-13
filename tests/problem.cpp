@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
@@ -1010,7 +1011,7 @@ BOOST_AUTO_TEST_CASE(problem_feasibility_methods_test)
 BOOST_AUTO_TEST_CASE(null_problem_test)
 {
     // Problem instantiation
-    problem p{null_problem{}};
+    problem p;
     BOOST_CHECK_EQUAL(p.get_name(), "Null problem");
     // Pick a few reference points
     vector_double x1 = {1};
@@ -1049,7 +1050,7 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
         oarchive << p;
     }
     // Change the content of p before deserializing.
-    p = problem{null_problem{}};
+    p = problem{};
     BOOST_CHECK_EQUAL(p.get_nobj(), 1u);
     {
         boost::archive::binary_iarchive iarchive(ss);
@@ -1065,7 +1066,7 @@ BOOST_AUTO_TEST_CASE(null_problem_serialization_test)
 
 BOOST_AUTO_TEST_CASE(extract_test)
 {
-    problem p{null_problem{}};
+    problem p;
     BOOST_CHECK(p.is<null_problem>());
     BOOST_CHECK(!p.is<base_p>());
     BOOST_CHECK((std::is_same<null_problem *, decltype(p.extract<null_problem>())>::value));
@@ -1120,7 +1121,7 @@ struct ts3 {
 
 BOOST_AUTO_TEST_CASE(thread_safety_test)
 {
-    BOOST_CHECK(problem{null_problem{}}.get_thread_safety() == thread_safety::basic);
+    BOOST_CHECK(problem{}.get_thread_safety() == thread_safety::basic);
     BOOST_CHECK(problem{ts1{}}.get_thread_safety() == thread_safety::basic);
     BOOST_CHECK(problem{ts2{}}.get_thread_safety() == thread_safety::none);
     BOOST_CHECK(problem{ts3{}}.get_thread_safety() == thread_safety::basic);
