@@ -766,6 +766,15 @@ std::string problem::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+/// Check if the problem contains a UDP.
+/**
+ * @return ``true`` if the problem contains a UDP, ``false`` otherwise (i.e., if ``this`` was moved from).
+ */
+bool problem::has_value() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 /// Streaming operator
 /**
  * This function will stream to \p os a human-readable representation of the input

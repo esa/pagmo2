@@ -1565,3 +1565,30 @@ BOOST_AUTO_TEST_CASE(batch_fitness)
     BOOST_CHECK_EQUAL(before, after);
     BOOST_CHECK(p.has_batch_fitness());
 }
+
+BOOST_AUTO_TEST_CASE(has_value)
+{
+    problem p0;
+    BOOST_CHECK(p0.has_value());
+    problem p1(std::move(p0));
+    BOOST_CHECK(!p0.has_value());
+    p0 = problem{full_p{}};
+    BOOST_CHECK(p0.has_value());
+    p1 = std::move(p0);
+    BOOST_CHECK(!p0.has_value());
+    p0 = problem{full_p{}};
+    BOOST_CHECK(p0.has_value());
+}
+
+BOOST_AUTO_TEST_CASE(generic_assignment)
+{
+    problem p0;
+    BOOST_CHECK(p0.is<null_problem>());
+    BOOST_CHECK(&(p0 = full_p{}) == &p0);
+    BOOST_CHECK(p0.has_value());
+    BOOST_CHECK(p0.is<full_p>());
+    BOOST_CHECK((!std::is_assignable<problem, void>::value));
+    BOOST_CHECK((!std::is_assignable<problem, int &>::value));
+    BOOST_CHECK((!std::is_assignable<problem, const int &>::value));
+    BOOST_CHECK((!std::is_assignable<problem, int &&>::value));
+}

@@ -1111,8 +1111,9 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
- *    A moved-from :cpp:class:`pagmo::problem` is destructible and assignable. Any other operation will result
- *    in undefined behaviour.
+ *    The only operations allowed on a moved-from :cpp:class:`pagmo::problem` are destruction,
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::problem::has_value()` member function.
+ *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
  */
@@ -1183,6 +1184,31 @@ public:
     problem &operator=(problem &&) noexcept;
     // Copy assignment operator
     problem &operator=(const problem &);
+    /// Assignment from a user-defined problem of type \p T
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This operator is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::problem` (that is, this operator does not compete with the copy/move
+     *    assignment operators of :cpp:class:`pagmo::problem`), or if ``T`` does not satisfy :cpp:class:`pagmo::is_udp`.
+     *
+     * \endverbatim
+     *
+     * This operator will set the internal UDP to ``x`` by constructing a pagmo::problem from ``x``, and then
+     * move-assigning the result to ``this``.
+     *
+     * @param x the UDP.
+     *
+     * @return a reference to ``this``.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDP.
+     */
+    template <typename T, generic_ctor_enabler<T> = 0>
+    problem &operator=(T &&x)
+    {
+        return (*this) = problem(std::forward<T>(x));
+    }
 
     /// Extract a const pointer to the UDP used for construction.
     /**
@@ -1634,6 +1660,9 @@ public:
     {
         return m_thread_safety;
     }
+
+    // Check if the problem contains a UDP.
+    bool has_value() const;
 
     /// Save to archive.
     /**
