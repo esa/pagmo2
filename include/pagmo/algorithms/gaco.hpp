@@ -21,7 +21,6 @@
 #ifndef PAGMO_ALGORITHMS_GACO_HPP
 #define PAGMO_ALGORITHMS_GACO_HPP
 
-#include <boost/math/constants/constants.hpp>
 #include <boost/optional.hpp>
 #include <random>
 #include <string>
@@ -33,7 +32,6 @@
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
-#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {

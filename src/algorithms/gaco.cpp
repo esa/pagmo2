@@ -50,7 +50,6 @@
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
-#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
