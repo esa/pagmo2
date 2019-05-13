@@ -39,6 +39,7 @@
 #include <vector>
 
 #include <boost/math/constants/constants.hpp>
+#include <boost/serialization/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/gaco.hpp>
@@ -467,43 +468,18 @@ std::string gaco::get_extra_info() const
 
 /// Object serialization
 /**
- * This method will save \p this into the archive \p ar.
+ * This method will save/load \p this into the archive \p ar.
  *
  * @param ar target archive.
- */
-template <typename Archive>
-void gaco::save(Archive &ar, unsigned) const
-{
-    detail::to_archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
-                       m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
-                       m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals);
-    if (m_bfe) {
-        detail::to_archive(ar, true, *m_bfe);
-
-    } else {
-        ar << false;
-    }
-}
-/**
- * This method will load \p this into the archive \p ar.
  *
- * @param ar target archive.
+ * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
  */
 template <typename Archive>
-void gaco::load(Archive &ar, unsigned)
+void gaco::serialize(Archive &ar, unsigned)
 {
-    bool has_bfe;
-    detail::from_archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
-                         m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
-                         m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals, has_bfe);
-    if (has_bfe) {
-        bfe tmp;
-        ar >> tmp;
-        m_bfe = std::move(tmp);
-
-    } else {
-        m_bfe.reset();
-    }
+    detail::archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
+                    m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
+                    m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals, m_bfe);
 }
 
 /**

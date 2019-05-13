@@ -222,15 +222,9 @@ public:
         return m_log;
     }
 
-    // Save to archive.
+    // Object serialization
     template <typename Archive>
-    void save(Archive &, unsigned) const;
-
-    // Load from archive.
-    template <typename Archive>
-    void load(Archive &, unsigned);
-
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    void serialize(Archive &, unsigned);
 
 private:
     PAGMO_DLL_LOCAL double penalty_computation(const vector_double &f, const population &pop,
