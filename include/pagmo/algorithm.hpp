@@ -276,12 +276,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
         pagmo_throw(not_implemented_error,
                     "The set_seed() method has been invoked but it is not implemented in the UDA");
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, override_has_set_seed<U>>::value, int> = 0>
     static bool has_set_seed_impl(const U &a)
     {
         return a.has_set_seed();
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, detail::negation<override_has_set_seed<U>>>::value,
+                    int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
@@ -302,14 +306,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
         pagmo_throw(not_implemented_error,
                     "The set_verbosity() method has been invoked but it is not implemented in the UDA");
     }
-    template <typename U,
-              enable_if_t<pagmo::has_set_verbosity<U>::value && override_has_set_verbosity<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<detail::conjunction<pagmo::has_set_verbosity<U>, override_has_set_verbosity<U>>::value, int> = 0>
     static bool has_set_verbosity_impl(const U &a)
     {
         return a.has_set_verbosity();
     }
-    template <typename U,
-              enable_if_t<pagmo::has_set_verbosity<U>::value && !override_has_set_verbosity<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_set_verbosity<U>,
+                                                          detail::negation<override_has_set_verbosity<U>>>::value,
+                                      int> = 0>
     static bool has_set_verbosity_impl(const U &)
     {
         return true;

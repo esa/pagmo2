@@ -734,13 +734,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                         + get_name_impl(value) + "'");
     }
     template <typename U,
-              enable_if_t<pagmo::has_batch_fitness<U>::value && pagmo::override_has_batch_fitness<U>::value, int> = 0>
+              enable_if_t<detail::conjunction<pagmo::has_batch_fitness<U>, pagmo::override_has_batch_fitness<U>>::value,
+                          int> = 0>
     static bool has_batch_fitness_impl(const U &p)
     {
         return p.has_batch_fitness();
     }
     template <typename U,
-              enable_if_t<pagmo::has_batch_fitness<U>::value && !pagmo::override_has_batch_fitness<U>::value, int> = 0>
+              enable_if_t<detail::conjunction<pagmo::has_batch_fitness<U>,
+                                              detail::negation<pagmo::override_has_batch_fitness<U>>>::value,
+                          int> = 0>
     static bool has_batch_fitness_impl(const U &)
     {
         return true;
@@ -772,13 +775,15 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                     "The gradient has been requested, but it is not implemented in a UDP of type '"
                         + get_name_impl(value) + "'");
     }
-    template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_gradient<U>, pagmo::override_has_gradient<U>>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
     {
         return p.has_gradient();
     }
-    template <typename U,
-              enable_if_t<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_gradient<U>,
+                                                          detail::negation<pagmo::override_has_gradient<U>>>::value,
+                                      int> = 0>
     static bool has_gradient_impl(const U &)
     {
         return true;
@@ -802,15 +807,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         assert(false); // LCOV_EXCL_LINE
         throw;
     }
-    template <
-        typename U,
-        enable_if_t<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_gradient_sparsity<U>,
+                                                          pagmo::override_has_gradient_sparsity<U>>::value,
+                                      int> = 0>
     static bool has_gradient_sparsity_impl(const U &p)
     {
         return p.has_gradient_sparsity();
     }
     template <typename U,
-              enable_if_t<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,
+              enable_if_t<detail::conjunction<pagmo::has_gradient_sparsity<U>,
+                                              detail::negation<pagmo::override_has_gradient_sparsity<U>>>::value,
                           int> = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
@@ -833,13 +839,15 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                     "The hessians have been requested, but they are not implemented in a UDP of type '"
                         + get_name_impl(value) + "'");
     }
-    template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_hessians<U>, pagmo::override_has_hessians<U>>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
     {
         return p.has_hessians();
     }
-    template <typename U,
-              enable_if_t<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_hessians<U>,
+                                                          detail::negation<pagmo::override_has_hessians<U>>>::value,
+                                      int> = 0>
     static bool has_hessians_impl(const U &)
     {
         return true;
@@ -863,15 +871,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         assert(false); // LCOV_EXCL_LINE
         throw;
     }
-    template <
-        typename U,
-        enable_if_t<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_hessians_sparsity<U>,
+                                                          pagmo::override_has_hessians_sparsity<U>>::value,
+                                      int> = 0>
     static bool has_hessians_sparsity_impl(const U &p)
     {
         return p.has_hessians_sparsity();
     }
     template <typename U,
-              enable_if_t<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,
+              enable_if_t<detail::conjunction<pagmo::has_hessians_sparsity<U>,
+                                              detail::negation<pagmo::override_has_hessians_sparsity<U>>>::value,
                           int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
@@ -912,7 +921,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     {
         return 0u;
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value, int> = 0>
     static void set_seed_impl(U &value, unsigned seed)
     {
         value.set_seed(seed);
@@ -924,12 +933,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                     "The set_seed() method has been invoked, but it is not implemented in a UDP of type '"
                         + get_name_impl(value) + "'");
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, override_has_set_seed<U>>::value, int> = 0>
     static bool has_set_seed_impl(const U &p)
     {
         return p.has_set_seed();
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, detail::negation<override_has_set_seed<U>>>::value,
+                    int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
