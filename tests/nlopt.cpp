@@ -290,7 +290,7 @@ BOOST_AUTO_TEST_CASE(nlopt_serialization)
                 oarchive << algo;
             }
             // Change the content of p before deserializing.
-            algo = algorithm{null_algorithm{}};
+            algo = algorithm{};
             {
                 boost::archive::binary_iarchive iarchive(ss);
                 iarchive >> algo;
@@ -319,7 +319,7 @@ BOOST_AUTO_TEST_CASE(nlopt_serialization)
                 oarchive << algo;
             }
             // Change the content of p before deserializing.
-            algo = algorithm{null_algorithm{}};
+            algo = algorithm{};
             {
                 boost::archive::binary_iarchive iarchive(ss);
                 iarchive >> algo;
@@ -348,7 +348,7 @@ BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
             oarchive << algo;
         }
         // Change the content of p before deserializing.
-        algo = algorithm{null_algorithm{}};
+        algo = algorithm{};
         {
             boost::archive::binary_iarchive iarchive(ss);
             iarchive >> algo;

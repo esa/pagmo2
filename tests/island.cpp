@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>

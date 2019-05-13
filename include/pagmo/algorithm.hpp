@@ -58,31 +58,6 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Null algorithm
-/**
- * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
- */
-struct PAGMO_DLL_PUBLIC null_algorithm {
-    // Evolve method.
-    population evolve(const population &) const;
-    /// Algorithm name.
-    /**
-     * @return <tt>"Null algorithm"</tt>.
-     */
-    std::string get_name() const
-    {
-        return "Null algorithm";
-    }
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
-
-} // namespace pagmo
-
-namespace pagmo
-{
-
 /// Detect \p set_verbosity() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -693,7 +668,5 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
-
-PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::null_algorithm)
 
 #endif
