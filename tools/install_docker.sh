@@ -46,10 +46,18 @@ fi
 cd /pagmo2
 mkdir build_pagmo
 cd build_pagmo
-cmake ../ -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_BUILD_TYPE=Release
+cmake -DBoost_NO_BOOST_CMAKE=ON \
+	-DPAGMO_WITH_EIGEN3=yes \
+	-DPAGMO_WITH_NLOPT=yes \
+	-DPAGMO_WITH_IPOPT=yes \
+	-DCMAKE_BUILD_TYPE=Release ../;
 make install
 cd ../build
-cmake -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
+cmake -DBoost_NO_BOOST_CMAKE=ON \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DPAGMO_BUILD_PYGMO=yes \
+	-DPAGMO_BUILD_PAGMO=no \
+	-DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
 make -j2 install
 cd wheel
 # Copy the installed pygmo files, wherever they might be in /usr/local,
