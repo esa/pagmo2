@@ -93,7 +93,7 @@ if is_python_build:
         python_version = r'27'
         python_folder = r'Python27-x64'
         python_library = r'C:\\' + python_folder + r'\\libs\\python27.dll '
-        # Fot py27 I could not get it to work with the appveyor python (I was close but got tired).
+        # For py27 I could not get it to work with the appveyor python (I was close but got tired).
         # Since this is anyway going to disappear (py27 really!!!), I am handling it as a one time workaround using the old py27 patched by bluescarni
         rm_fr(r'c:\\Python27-x64')
         wget(r'https://github.com/bluescarni/binary_deps/raw/master/python27_mingw_64.7z', 'python.7z')
