@@ -1,5 +1,5 @@
-c:\local\lib\libboost_python3-mgw62-mt-1_63.dll
-c:\local\lib\libboost_serialization-mgw62-mt-1_63.dll
+c:\local\lib\libboost_python36-mgw81-mt-x64-1_70.dll
+c:\local\lib\libboost_serialization-mgw81-mt-x64-1_70.dll
 c:\local\lib\tbb.dll
 c:\local\bin\libpagmo.dll
 c:\mingw64\bin\libgcc_s_seh-1.dll

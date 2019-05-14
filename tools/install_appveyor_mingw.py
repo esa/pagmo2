@@ -63,16 +63,16 @@ if is_release_build and not is_python_build:
     sys.exit()
 
 # Get mingw and set the path.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z', 'mw64.7z')
-run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
+# USING: mingw64 8.1.0 from the appveyor VMs
+run_command(r'mv C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64 C:\\mingw64')
 ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 
 # Download common deps.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mingw_64.7z', 'boost.7z')
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/nlopt_mingw_64.7z', 'nlopt.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mingw81_64.7z', 'boost.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/nlopt_mingw81_64.7z', 'nlopt.7z')
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/eigen3.7z', 'eigen3.7z')
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/tbb_2019_mgw62.7z', 'tbb.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/tbb_2019_mgw81.7z', 'tbb.7z')
 # Extract them.
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 run_command(r'7z x -aoa -oC:\\ nlopt.7z', verbose=False)
@@ -80,34 +80,34 @@ run_command(r'7z x -aoa -oC:\\ eigen3.7z', verbose=False)
 run_command(r'7z x -aoa -oC:\\ tbb.7z', verbose=False)
 
 # Setup of the dependencies for a Python build.
-if is_python_build:
-    if 'Python36' in BUILD_TYPE:
+    if '64_Python37' in BUILD_TYPE:
+        python_version = r'37'
+        python_folder = r'Python37-x64'
+        python_library = r'C:\\' + python_folder + r'\\python37.dll '
+    elif '64_Python36' in BUILD_TYPE:
         python_version = '36'
-    elif 'Python35' in BUILD_TYPE:
-        python_version = '35'
-    elif 'Python27' in BUILD_TYPE:
-        python_version = '27'
+        python_folder = r'Python36-x64'
+        python_library = r'C:\\' + python_folder + r'\\python36.dll '
+    elif '64_Python27' in BUILD_TYPE:
+        python_version = r'27'
+        python_folder = r'Python27-x64'
+        python_library = r'C:\\' + python_folder + r'\\libs\\python27.dll '
+        # Fot py27 I could not get it to work with the appveyor python (I was close but got tired).
+        # Since this is anyway going to disappear (py27 really!!!), I am handling it as a one time workaround using the old py27 patched by bluescarni
+        rm_fr(r'c:\\Python27-x64')
+        wget(r'https://github.com/bluescarni/binary_deps/raw/master/python27_mingw_64.7z', 'python.7z')
+        run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
+        run_command(r'mv C:\\Python27 C:\\Python27-x64', verbose=False)
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
-    python_package = r'python' + python_version + r'_mingw_64.7z'
-    boost_python_package = r'boost_python_' + python_version + r'_mingw_64.7z'
-    # Remove any existing Python installation.
-    rm_fr(r'c:\\Python' + python_version)
+
     # Set paths.
     pinterp = r'c:\\Python' + python_version + r'\\python.exe'
     pip = r'c:\\Python' + python_version + r'\\scripts\\pip'
     twine = r'c:\\Python' + python_version + r'\\scripts\\twine'
     pygmo_install_path = r'C:\\Python' + \
         python_version + r'\\Lib\\site-packages\\pygmo'
-    # Get Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
-         python_package, 'python.7z')
-    run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
-    # Get Boost Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
-         boost_python_package, 'boost_python.7z')
-    run_command(r'7z x -aoa -oC:\\ boost_python.7z', verbose=False)
-    # Install pip and deps.
+     # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
     # NOTE: at the moment we have troubles installing ipyparallel.
@@ -121,29 +121,52 @@ if is_python_build:
 os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 
 # Proceed to the build.
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes'
+# NOTE: at the moment boost 1.70 seems to have problem to autodetect 
+# the mingw library (with CMake 1.13 currently installed in appveyor)
+# Thus we manually point to the boost libs.
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local ' + \
+                    r'-DCMAKE_INSTALL_PREFIX=c:\\local ' + \
+                    r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
+                    r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll '
+
 
 # Configuration step.
 if is_python_build:
     os.makedirs('build_pagmo')
     os.chdir('build_pagmo')
-    run_command(
-        r'cmake -G "MinGW Makefiles" ..  -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts)
+    run_command(r'cmake -G "MinGW Makefiles" .. ' + \
+                common_cmake_opts + \
+                r'-DPAGMO_WITH_EIGEN3=yes ' + \
+                r'-DPAGMO_WITH_NLOPT=yes ' + \
+                r'-DCMAKE_BUILD_TYPE=Release ')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the pagmo dll.
     os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
     os.chdir('..')
     os.makedirs('build_pygmo')
     os.chdir('build_pygmo')
-    run_command(r'cmake -G "MinGW Makefiles" ..  -DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DPAGMO_BUILD_PYGMO=yes -DPAGMO_BUILD_PAGMO=no -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-s -DBoost_PYTHON_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
-                (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_63.dll -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll' +
-                r' -DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include')
+    run_command(r'cmake -G "MinGW Makefiles" .. ' + \
+                common_cmake_opts + \
+                r'-DPAGMO_BUILD_PYGMO=yes ' + \
+                r'-DPAGMO_BUILD_PAGMO=no ' + \
+                r'-DCMAKE_BUILD_TYPE=Release ' + \
+                r'-DCMAKE_CXX_FLAGS=-s ' + \
+                r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' + \
+                r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
+                r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
+                r'-DPYTHON_LIBRARY=' + python_library)
     run_command(r'mingw32-make install VERBOSE=1 -j2')
 elif 'Debug' in BUILD_TYPE:
     os.makedirs('build_pagmo')
     os.chdir('build_pagmo')
-    run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_BUILD_TUTORIALS=yes ' +
-                common_cmake_opts + r' -DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
+    run_command(r'cmake -G "MinGW Makefiles" .. ' + \
+                common_cmake_opts + \
+                r'-DPAGMO_WITH_EIGEN3=yes ' + \
+                r'-DPAGMO_WITH_NLOPT=yes ' + \
+                r'-DCMAKE_BUILD_TYPE=Debug ' + \
+                r'-DPAGMO_BUILD_TESTS=yes ' + \
+                r'-DPAGMO_BUILD_TUTORIALS=yes ' + \
+                r'-DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the pagmo dll.
     os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
@@ -160,7 +183,7 @@ if is_python_build:
     import shutil
     os.chdir('wheel')
     shutil.move(pygmo_install_path, r'.')
-    wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
+    wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version)
     DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
     for _ in DLL_LIST:
         shutil.copy(_, 'pygmo')

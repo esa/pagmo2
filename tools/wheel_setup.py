@@ -43,8 +43,8 @@ class BinaryDistribution(Distribution):
 # Setup the list of external dlls.
 import os
 if os.name == 'nt':
-    mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(
-        sys.version_info[0])
+    mingw_wheel_libs = 'mingw_wheel_libs_python{}{}.txt'.format(
+        sys.version_info[0], sys.version_info[1])
     l = open(mingw_wheel_libs, 'r').readlines()
     DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
 
