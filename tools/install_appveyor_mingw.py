@@ -80,6 +80,7 @@ run_command(r'7z x -aoa -oC:\\ eigen3.7z', verbose=False)
 run_command(r'7z x -aoa -oC:\\ tbb.7z', verbose=False)
 
 # Setup of the dependencies for a Python build.
+if is_python_build:
     if '64_Python37' in BUILD_TYPE:
         python_version = r'37'
         python_folder = r'Python37-x64'
