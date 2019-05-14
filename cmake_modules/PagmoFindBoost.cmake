@@ -1,6 +1,6 @@
 # Run a first pass for finding the headers only,
 # and establishing the Boost version.
-set(_PAGMO_BOOST_MINIMUM_VERSION 1.55.0)
+set(_PAGMO_BOOST_MINIMUM_VERSION 1.60.0)
 find_package(Boost ${_PAGMO_BOOST_MINIMUM_VERSION} QUIET REQUIRED)
 
 set(_PAGMO_REQUIRED_BOOST_LIBS serialization)
