@@ -103,11 +103,11 @@ if is_python_build:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
     # Set paths.
-    pinterp = r'c:\\Python' + python_version + r'\\python.exe'
-    pip = r'c:\\Python' + python_version + r'\\scripts\\pip'
-    twine = r'c:\\Python' + python_version + r'\\scripts\\twine'
-    pygmo_install_path = r'C:\\Python' + \
-        python_version + r'\\Lib\\site-packages\\pygmo'
+    # Set paths.
+    pinterp = r"C:\\" + python_folder + r'\\python.exe'
+    pip = r"C:\\" + python_folder + r'\\scripts\\pip'
+    twine = r"C:\\" + python_folder + r'\\scripts\\twine'
+    pygmo_install_path = r"C:\\" + python_folder + r'\\Lib\\site-packages\\pygmo'
      # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
