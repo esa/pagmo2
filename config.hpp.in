@@ -46,7 +46,7 @@ see https://www.gnu.org/licenses/. */
 // here some heuristic to signal the capability of compiling
 // these problems on the current platform.
 
-#if !defined(_MSC_VER) && !defined(__APPLE__)
+#if !defined(_MSC_VER) && !defined(__APPLE__) && !defined(__MINGW32__)
 
 #define PAGMO_ENABLE_CEC2013
 #define PAGMO_ENABLE_CEC2014

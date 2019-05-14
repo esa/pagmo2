@@ -223,7 +223,7 @@ if(PAGMO_BUILD_PAGMO)
     )
 
     # Some compilers choke on the cec2013/2014 data arrays.
-    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
+    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE AND NOT MINGW)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
