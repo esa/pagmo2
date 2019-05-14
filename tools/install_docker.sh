@@ -28,7 +28,6 @@ else
 fi
 
 cd
-mkdir install
 cd install
 
 # Python mandatory deps.
