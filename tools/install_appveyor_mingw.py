@@ -69,7 +69,7 @@ ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 
 # Download common deps.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mingw81_64.7z', 'boost.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mgw81-mt-x64-1_70.7z', 'boost.7z')
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/nlopt_mingw81_64.7z', 'nlopt.7z')
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/eigen3.7z', 'eigen3.7z')
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/tbb_2019_mgw81.7z', 'tbb.7z')
