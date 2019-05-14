@@ -1,30 +1,30 @@
 /* Copyright 2017-2018 PaGMO development team
 
- This file is part of the PaGMO library.
+This file is part of the PaGMO library.
 
- The PaGMO library is free software; you can redistribute it and/or modify
- it under the terms of either:
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
 
- * the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 3 of the License, or (at your
- option) any later version.
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
 
- or
+or
 
- * the GNU General Public License as published by the Free Software
- Foundation; either version 3 of the License, or (at your option) any
- later version.
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
 
- or both in parallel, as here.
+or both in parallel, as here.
 
- The PaGMO library is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- for more details.
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
 
- You should have received copies of the GNU General Public License and the
- GNU Lesser General Public License along with the PaGMO library.  If not,
- see https://www.gnu.org/licenses/. */
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
 
 #define BOOST_TEST_MODULE gaco_test
 #define BOOST_TEST_DYN_LINK
@@ -362,29 +362,4 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
     pop_2 = uda_2.evolve(pop_2);
 
     BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
-}
-
-BOOST_AUTO_TEST_CASE(bfe_performance_test)
-{
-
-    auto start_time = std::chrono::high_resolution_clock::now();
-    population pop{lennard_jones{40u}, 200u, 23u};
-    gaco uda{10u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
-    uda.set_seed(23u);
-    uda.set_bfe(bfe{});
-    pop = uda.evolve(pop);
-    auto end_time = std::chrono::high_resolution_clock::now();
-    std::cout << "gaco on Lennard Jones with bfe duration:" << std::endl;
-    std::cout << std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count() << ":";
-    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count() << std::endl;
-
-    auto start_time_2 = std::chrono::high_resolution_clock::now();
-    population pop_2{lennard_jones{40u}, 200u, 23u};
-    gaco uda_2{10u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
-    uda_2.set_seed(23u);
-    pop_2 = uda_2.evolve(pop_2);
-    auto end_time_2 = std::chrono::high_resolution_clock::now();
-    std::cout << "gaco on Lennard Jones without bfe duration:" << std::endl;
-    std::cout << std::chrono::duration_cast<std::chrono::seconds>(end_time_2 - start_time_2).count() << ":";
-    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end_time_2 - start_time_2).count();
 }

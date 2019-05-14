@@ -1,30 +1,30 @@
 /* Copyright 2017-2018 PaGMO development team
 
- This file is part of the PaGMO library.
+This file is part of the PaGMO library.
 
- The PaGMO library is free software; you can redistribute it and/or modify
- it under the terms of either:
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
 
- * the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 3 of the License, or (at your
- option) any later version.
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
 
- or
+or
 
- * the GNU General Public License as published by the Free Software
- Foundation; either version 3 of the License, or (at your option) any
- later version.
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
 
- or both in parallel, as here.
+or both in parallel, as here.
 
- The PaGMO library is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- for more details.
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
 
- You should have received copies of the GNU General Public License and the
- GNU Lesser General Public License along with the PaGMO library.  If not,
- see https://www.gnu.org/licenses/. */
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cmath>
@@ -72,8 +72,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     }
 
     if (epsilon >= 1. || epsilon < 0.) {
-        pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
-                                               + std::to_string(epsilon) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "The Pareto precision parameter must be in [0, 1[, while a value of " + std::to_string(epsilon)
+                        + " was detected");
     }
     if ((threshold < 1 || threshold > gen) && gen != 0 && memory == false) {
         pagmo_throw(std::invalid_argument,
@@ -81,8 +82,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
                         + std::to_string(threshold) + " was detected");
     }
     if (threshold < 1 && gen != 0 && memory == true) {
-        pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
-                                               + std::to_string(threshold) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "If memory is active, the threshold parameter must be >=1 while a value of "
+                        + std::to_string(threshold) + " was detected");
     }
 }
 
@@ -153,8 +155,9 @@ population gaco::evolve(population pop) const
                     get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (n_obj != 1u) {
-        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                               + get_name() + " cannot deal with them");
+        pagmo_throw(std::invalid_argument,
+                    "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                        + " cannot deal with them");
     }
 
     // ---------------------------------------------------------------------------------------------------------
