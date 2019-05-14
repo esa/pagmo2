@@ -21,11 +21,12 @@
 #ifndef PAGMO_ALGORITHMS_GACO_HPP
 #define PAGMO_ALGORITHMS_GACO_HPP
 
-#include <boost/optional.hpp>
 #include <random>
 #include <string>
 #include <tuple>
 #include <vector>
+
+#include <boost/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
@@ -183,14 +184,8 @@ public:
         return m_gen;
     }
 
-    /// Sets the batch function evaluation scheme:
-    /**
-     * @param b batch function evaluation object
-     */
-    void set_bfe(const bfe &b)
-    {
-        m_bfe = b;
-    }
+    // Sets the bfe
+    void set_bfe(const bfe &b);
 
     /// Algorithm name
     /**

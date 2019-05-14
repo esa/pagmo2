@@ -60,7 +60,7 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     : m_gen(gen), m_acc(acc), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker), m_oracle(oracle),
       m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(), m_res(),
       m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(),
-      m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u), m_bfe()
+      m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u)
 {
     if (acc < 0.) {
         pagmo_throw(std::invalid_argument,
@@ -276,8 +276,8 @@ population gaco::evolve(population pop) const
 
         if (m_bfe) {
             // bfe is available:
-            unsigned pos = 0u;
             vector_double ants(pop_size * new_ants[0].size());
+            decltype(ants.size()) pos = 0u;
 
             for (population::size_type i = 0; i < pop_size; ++i) {
                 // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
@@ -290,8 +290,8 @@ population gaco::evolve(population pop) const
 
             auto fitnesses = (*m_bfe)(prob, ants);
             m_fevals += pop_size;
-            unsigned pos_dim = 0u;
-            unsigned pos_fit = 0u;
+            decltype(ant.size()) pos_dim = 0u;
+            decltype(fitness.size()) pos_fit = 0u;
 
             for (population::size_type i = 0; i < pop_size; ++i) {
 
@@ -440,6 +440,15 @@ void gaco::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme:
+/**
+ * @param b batch function evaluation object
+ */
+void gaco::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
 /// Extra info
 /**
  * Returns extra information on the algorithm.
@@ -585,7 +594,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
             fitness[i] = pop.get_f()[sorted_list[i]];
             temporary_penalty[i] = sol_archive[i][0];
         }
-        std::vector<unsigned> saved_value_position;
+        std::vector<unsigned long> saved_value_position;
         bool count = true;
         // I merge the new and old penalties:
         temporary_penalty.insert(temporary_penalty.end(), sorted_vector.begin(), sorted_vector.end());
@@ -594,8 +603,8 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
 
         saved_value_position.push_back(0);
         temporary_archive[0][0] = temporary_penalty[0];
-        unsigned j;
-        unsigned k = 1u;
+        decltype(temporary_penalty.size()) j;
+        decltype(temporary_archive.size()) k = 1u;
         for (decltype(m_ker) i = 1u; i < 2 * m_ker && count == true; ++i) {
             j = i;
             if (i > saved_value_position.back()) {
@@ -809,7 +818,7 @@ void gaco::generate_new_ants(const population &pop, std::uniform_real_distributi
 
         double number = dist(m_e);
         double g_h = 0.0;
-        unsigned long k_omega = 0u;
+        decltype(sol_archive.size()) k_omega = 0u;
 
         if (number <= prob_cumulative[0]) {
             k_omega = 0;
