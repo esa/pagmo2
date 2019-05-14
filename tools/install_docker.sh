@@ -57,6 +57,7 @@ cmake -DBoost_NO_BOOST_CMAKE=ON \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DPAGMO_BUILD_PYGMO=yes \
 	-DPAGMO_BUILD_PAGMO=no \
+	-DBoost_PYTHON${PYTHON_VERSION}_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIBRARY_NAME} \
 	-DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
 make -j2 install
 cd wheel
