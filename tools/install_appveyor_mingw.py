@@ -167,6 +167,7 @@ elif 'Debug' in BUILD_TYPE:
                 r'-DCMAKE_BUILD_TYPE=Debug ' + \
                 r'-DPAGMO_BUILD_TESTS=yes ' + \
                 r'-DPAGMO_BUILD_TUTORIALS=yes ' + \
+                r'-DBoost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE=c:\\local\\lib\\libboost_unit_test_framework-mgw81-mt-x64-1_70.dll ' + \
                 r'-DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the pagmo dll.
