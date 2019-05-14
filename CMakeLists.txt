@@ -223,7 +223,7 @@ if(PAGMO_BUILD_PAGMO)
     )
 
     # Some compilers choke on the cec2013/2014 data arrays.
-    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
+    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE AND NOT MINGW)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
@@ -353,7 +353,7 @@ if(PAGMO_BUILD_PYGMO)
             configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
         endif()
         if(MINGW)
-            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" @ONLY)
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" @ONLY)
         endif()
 	endif()
 endif()
