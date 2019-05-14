@@ -2,15 +2,15 @@ environment:
   TWINE_PASSWORD:
     secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
   matrix:
-    #- BUILD_TYPE: "MSVC_64_Debug"
-    #  COMPILER: MSVC15
-    #  PLATFORM: "x64"
-    #- BUILD_TYPE: "MSVC_64_Python37"
-    #  COMPILER: MSVC15
-    #  PLATFORM: "x64"
-    #- BUILD_TYPE: "MSVC_64_Python36"
-    #  COMPILER: MSVC15
-    #  PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Debug"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Python37"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Python36"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
     - BUILD_TYPE: "MinGW_64_Debug"
     - BUILD_TYPE: "MinGW_64_Python37"
     - BUILD_TYPE: "MinGW_64_Python36"
