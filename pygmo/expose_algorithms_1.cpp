@@ -215,6 +215,7 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
     gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
+    gaco_.def("set_bfe", &gaco::set_bfe, gaco_set_bfe_docstring().c_str(), bp::arg("b"));
 
     // GWO
     auto gwo_ = expose_algorithm_pygmo<gwo>("gwo", gwo_docstring().c_str());
@@ -240,17 +241,16 @@ void expose_algorithms_1()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(
-        nlopt_, "local_optimizer",
-        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
-        lcast([](nlopt &n, const nlopt *ptr) {
-            if (ptr) {
-                n.set_local_optimizer(*ptr);
-            } else {
-                n.unset_local_optimizer();
-            }
-        }),
-        nlopt_local_optimizer_docstring().c_str());
+    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
+                                                              bp::return_internal_reference<>()),
+                 lcast([](nlopt &n, const nlopt *ptr) {
+                     if (ptr) {
+                         n.set_local_optimizer(*ptr);
+                     } else {
+                         n.unset_local_optimizer();
+                     }
+                 }),
+                 nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 } // namespace pygmo
