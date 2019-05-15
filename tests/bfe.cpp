@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -472,4 +473,35 @@ BOOST_AUTO_TEST_CASE(lambda_std_function)
         BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
         BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
     }
+}
+
+BOOST_AUTO_TEST_CASE(is_valid)
+{
+    bfe p0;
+    BOOST_CHECK(p0.is_valid());
+    bfe p1(std::move(p0));
+    BOOST_CHECK(!p0.is_valid());
+    p0 = bfe{udbfe_a{}};
+    BOOST_CHECK(p0.is_valid());
+    p1 = std::move(p0);
+    BOOST_CHECK(!p0.is_valid());
+    p0 = bfe{udbfe_a{}};
+    BOOST_CHECK(p0.is_valid());
+}
+
+BOOST_AUTO_TEST_CASE(generic_assignment)
+{
+    bfe p0;
+    BOOST_CHECK(p0.is<default_bfe>());
+    BOOST_CHECK(&(p0 = udbfe_a{}) == &p0);
+    BOOST_CHECK(p0.is_valid());
+    BOOST_CHECK(p0.is<udbfe_a>());
+    p0 = udbfe0;
+    BOOST_CHECK(p0.is<udbfe_func_t>());
+    p0 = &udbfe0;
+    BOOST_CHECK(p0.is<udbfe_func_t>());
+    BOOST_CHECK((!std::is_assignable<bfe, void>::value));
+    BOOST_CHECK((!std::is_assignable<bfe, int &>::value));
+    BOOST_CHECK((!std::is_assignable<bfe, const int &>::value));
+    BOOST_CHECK((!std::is_assignable<bfe, int &&>::value));
 }

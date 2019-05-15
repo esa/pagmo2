@@ -260,6 +260,13 @@ public:
     bfe &operator=(bfe &&) noexcept;
     // Copy assignment operator
     bfe &operator=(const bfe &);
+    // Assignment from a UDBFE.
+    template <typename T, generic_ctor_enabler<T> = 0>
+    bfe &operator=(T &&x)
+    {
+        return (*this) = bfe(std::forward<T>(x));
+    }
+
     // Extraction and related.
     template <typename T>
     const T *extract() const noexcept
@@ -292,6 +299,10 @@ public:
     {
         return m_thread_safety;
     }
+
+    // Check if the bfe is valid.
+    bool is_valid() const;
+
     // Serialisation support.
     template <typename Archive>
     void save(Archive &ar, unsigned) const

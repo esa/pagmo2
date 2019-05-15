@@ -51,12 +51,12 @@ namespace pagmo
 
 /// Default constructor
 /**
- * Constructs an empty population with a pagmo::null_problem.
+ * Constructs an empty population with a default-constructed problem.
  * The random seed is initialised to zero.
  *
  * @throws unspecified any exception thrown by the constructor from problem.
  */
-population::population() : population(null_problem{}, 0u, 0u) {}
+population::population() : population(problem{}, 0u, 0u) {}
 
 void population::prob_ctor_impl(size_type pop_size)
 {

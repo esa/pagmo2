@@ -168,6 +168,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/rng.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/threading.cpp"
         # UDP.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/null_problem.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2009.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/schwefel.cpp"
@@ -187,6 +188,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/minlp_rastrigin.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/luksan_vlcek1.cpp"
         # UDA.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/null_algorithm.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/not_population_based.cpp"
@@ -223,7 +225,7 @@ if(PAGMO_BUILD_PAGMO)
     )
 
     # Some compilers choke on the cec2013/2014 data arrays.
-    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE)
+    if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE AND NOT MINGW)
         set(PAGMO_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
@@ -353,7 +355,7 @@ if(PAGMO_BUILD_PYGMO)
             configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
         endif()
         if(MINGW)
-            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" @ONLY)
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" @ONLY)
         endif()
 	endif()
 endif()

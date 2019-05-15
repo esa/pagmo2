@@ -7,7 +7,13 @@ Changelog
 New
 ~~~
 
-- Implement an ``uninstall`` target in the build system (`#282 <https://github.com/esa/pagmo2/pull/282>`__).
+- Various additions to the C++ API of user-defined classes
+  (`#294 <https://github.com/esa/pagmo2/pull/294>`__).
+
+- Ipopt is now included in the linux pip packages (`#293 <https://github.com/esa/pagmo2/pull/293>`__).
+
+- Implement an ``uninstall`` target in the build system when using the CMake
+  ``Unix Makefiles`` generator (`#282 <https://github.com/esa/pagmo2/pull/282>`__).
 
 - Implement the Grey Wolf Optimizer algorithm (`#268 <https://github.com/esa/pagmo2/pull/268>`__).
 
@@ -20,13 +26,18 @@ New
 Changes
 ~~~~~~~
 
+- Various improvements to the MinGW pip packages: the toolchain
+  and the dependencies have
+  been updated, support for Python 3.7 has been added (`#292 <https://github.com/esa/pagmo2/pull/292>`__).
+
 - **BREAKING**: unconditionally disable the CEC2013/CEC2014 problem suites on
-  OSX, as they cause build
-  issues when compiling pygmo (`#266 <https://github.com/esa/pagmo2/pull/266>`__).
+  OSX and MinGW, as they cause build
+  issues (`#266 <https://github.com/esa/pagmo2/pull/266>`__, `#292 <https://github.com/esa/pagmo2/pull/292>`__).
 
 - Various performance improvements in the :cpp:class:`~pagmo::population` API (`#250 <https://github.com/esa/pagmo2/pull/250>`__).
 
-- **BREAKING**: :class:`pygmo.problem` and :class:`pygmo.algorithm` cannot be used as UDPs and UDAs any more.
+- **BREAKING**: :class:`pygmo.problem` and :class:`pygmo.algorithm`
+  cannot be used as UDPs and UDAs any more.
   This change makes the behaviour of pygmo consistent with the behaviour of pagmo (`#248 <https://github.com/esa/pagmo2/pull/248>`__).
 
 Fix
@@ -44,7 +55,8 @@ Fix
   `#245 <https://github.com/esa/pagmo2/pull/245>`__, `#248 <https://github.com/esa/pagmo2/pull/248>`__,
   `#257 <https://github.com/esa/pagmo2/pull/257>`__, `#262 <https://github.com/esa/pagmo2/pull/262>`__,
   `#265 <https://github.com/esa/pagmo2/pull/265>`__, `#266 <https://github.com/esa/pagmo2/pull/266>`__,
-  `#279 <https://github.com/esa/pagmo2/pull/279>`__).
+  `#279 <https://github.com/esa/pagmo2/pull/279>`__, `#287 <https://github.com/esa/pagmo2/pull/287>`__,
+  `#288 <https://github.com/esa/pagmo2/pull/288>`__).
 
 - The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
 

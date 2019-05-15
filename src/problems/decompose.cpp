@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/decompose.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>

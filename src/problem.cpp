@@ -44,52 +44,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
 namespace pagmo
 {
-
-null_problem::null_problem(vector_double::size_type nobj, vector_double::size_type nec, vector_double::size_type nic,
-                           vector_double::size_type nix)
-    : m_nobj(nobj), m_nec(nec), m_nic(nic), m_nix(nix)
-{
-    if (!nobj) {
-        pagmo_throw(std::invalid_argument, "The null problem must have a non-zero number of objectives");
-    }
-    if (nix > 1u) {
-        pagmo_throw(std::invalid_argument, "The null problem must have an integer part strictly smaller than 2");
-    }
-}
-
-/// Fitness.
-/**
- * @return a zero-filled vector of size equal to the number of objectives.
- */
-vector_double null_problem::fitness(const vector_double &) const
-{
-    return vector_double(get_nobj() + get_nec() + get_nic(), 0.);
-}
-
-/// Problem bounds.
-/**
- * @return the pair <tt>([0.],[1.])</tt>.
- */
-std::pair<vector_double, vector_double> null_problem::get_bounds() const
-{
-    return {{0.}, {1.}};
-}
-
-/// Serialization
-/**
- * @param ar the target serialization archive.
- */
-template <typename Archive>
-void null_problem::serialize(Archive &ar, unsigned)
-{
-    detail::archive(ar, m_nobj, m_nec, m_nic, m_nix);
-}
 
 namespace detail
 {
@@ -766,6 +727,15 @@ std::string problem::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+/// Check if the problem is in a valid state.
+/**
+ * @return ``false`` if ``this`` was moved from, ``true`` otherwise.
+ */
+bool problem::is_valid() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 /// Streaming operator
 /**
  * This function will stream to \p os a human-readable representation of the input
@@ -978,5 +948,3 @@ vector_double prob_invoke_mem_batch_fitness(const problem &p, const vector_doubl
 } // namespace detail
 
 } // namespace pagmo
-
-PAGMO_S11N_PROBLEM_IMPLEMENT(pagmo::null_problem)

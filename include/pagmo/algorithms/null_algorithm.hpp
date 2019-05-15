@@ -26,31 +26,40 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_CONFIG_HPP
-#define PAGMO_CONFIG_HPP
+#ifndef PAGMO_ALGORITHMS_NULL_ALGORITHM_HPP
+#define PAGMO_ALGORITHMS_NULL_ALGORITHM_HPP
 
-// Start of defines instantiated by CMake.
-// clang-format off
-#define PAGMO_VERSION "@pagmo_VERSION@"
-#define PAGMO_VERSION_MAJOR @pagmo_VERSION_MAJOR@
-#define PAGMO_VERSION_MINOR @pagmo_VERSION_MINOR@
-@PAGMO_ENABLE_EIGEN3@
-@PAGMO_ENABLE_NLOPT@
-@PAGMO_ENABLE_IPOPT@
-@PAGMO_ENABLE_FORK_ISLAND@
-// clang-format on
-// End of defines instantiated by CMake.
+#include <string>
 
-// NOTE: some compilers are not able to deal with the large data
-// arrays embedded in the CEC 2013/2014 problems. We thus implement
-// here some heuristic to signal the capability of compiling
-// these problems on the current platform.
+#include <pagmo/algorithm.hpp>
+#include <pagmo/detail/visibility.hpp>
+#include <pagmo/population.hpp>
 
-#if !defined(_MSC_VER) && !defined(__APPLE__) && !defined(__MINGW32__)
+namespace pagmo
+{
 
-#define PAGMO_ENABLE_CEC2013
-#define PAGMO_ENABLE_CEC2014
+/// Null algorithm
+/**
+ * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
+ */
+struct PAGMO_DLL_PUBLIC null_algorithm {
+    // Evolve method.
+    population evolve(const population &) const;
+    /// Algorithm name.
+    /**
+     * @return <tt>"Null algorithm"</tt>.
+     */
+    std::string get_name() const
+    {
+        return "Null algorithm";
+    }
+    // Serialization support.
+    template <typename Archive>
+    void serialize(Archive &, unsigned);
+};
 
-#endif
+} // namespace pagmo
+
+PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::null_algorithm)
 
 #endif

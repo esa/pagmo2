@@ -95,6 +95,12 @@ std::string bfe::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+// Check if the bfe is in a valid state.
+bool bfe::is_valid() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator.

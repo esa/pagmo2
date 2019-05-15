@@ -26,31 +26,37 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_CONFIG_HPP
-#define PAGMO_CONFIG_HPP
+#include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/s11n.hpp>
 
-// Start of defines instantiated by CMake.
-// clang-format off
-#define PAGMO_VERSION "@pagmo_VERSION@"
-#define PAGMO_VERSION_MAJOR @pagmo_VERSION_MAJOR@
-#define PAGMO_VERSION_MINOR @pagmo_VERSION_MINOR@
-@PAGMO_ENABLE_EIGEN3@
-@PAGMO_ENABLE_NLOPT@
-@PAGMO_ENABLE_IPOPT@
-@PAGMO_ENABLE_FORK_ISLAND@
-// clang-format on
-// End of defines instantiated by CMake.
+namespace pagmo
+{
 
-// NOTE: some compilers are not able to deal with the large data
-// arrays embedded in the CEC 2013/2014 problems. We thus implement
-// here some heuristic to signal the capability of compiling
-// these problems on the current platform.
+/// Evolve method.
+/**
+ * In the null algorithm, the evolve method just returns the input
+ * population.
+ *
+ * @param pop input population.
+ *
+ * @return a copy of the input population.
+ */
+population null_algorithm::evolve(const population &pop) const
+{
+    return pop;
+}
 
-#if !defined(_MSC_VER) && !defined(__APPLE__) && !defined(__MINGW32__)
+/// Serialization support.
+/**
+ * This class is stateless, no data will be loaded or saved during serialization.
+ */
+template <typename Archive>
+void null_algorithm::serialize(Archive &, unsigned)
+{
+}
 
-#define PAGMO_ENABLE_CEC2013
-#define PAGMO_ENABLE_CEC2014
+} // namespace pagmo
 
-#endif
-
-#endif
+PAGMO_S11N_ALGORITHM_IMPLEMENT(pagmo::null_algorithm)

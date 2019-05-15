@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/unconstrain.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -183,7 +184,7 @@ BOOST_AUTO_TEST_CASE(unconstrain_serialization_test)
         oarchive << p;
     }
     // Change the content of p before deserializing.
-    p = problem{null_problem{}};
+    p = problem{};
     {
         boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;

@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/cec2009.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
@@ -120,7 +121,7 @@ BOOST_AUTO_TEST_CASE(translate_serialization_test)
         oarchive << p;
     }
     // Change the content of p before deserializing.
-    p = problem{null_problem{}};
+    p = problem{};
     {
         boost::archive::binary_iarchive iarchive(ss);
         iarchive >> p;
