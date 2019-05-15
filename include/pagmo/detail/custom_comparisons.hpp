@@ -38,6 +38,12 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/type_traits.hpp>
 
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#endif
+
 namespace pagmo
 {
 namespace detail
@@ -125,5 +131,9 @@ struct hash_vf {
 };
 } // namespace detail
 } // namespace pagmo
+
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif
