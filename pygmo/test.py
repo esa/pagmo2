@@ -446,7 +446,7 @@ class gaco_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        from .core import gaco, algorithm
+        from .core import gaco, algorithm, bfe
         from pickle import loads, dumps
         uda = gaco()
         uda = gaco(gen=1000, seed=5)
@@ -454,7 +454,8 @@ class gaco_test_case(_ut.TestCase):
         a = algorithm(uda)
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
-
+        uda.set_bfe(b = bfe())
+        uda.set_bfe(bfe())
 
 class gwo_test_case(_ut.TestCase):
     """Test case for the UDA gwo

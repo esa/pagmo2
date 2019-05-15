@@ -34,7 +34,10 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -189,6 +192,9 @@ public:
         return m_gen;
     }
 
+    // Sets the bfe
+    void set_bfe(const bfe &b);
+
     /// Algorithm name
     /**
      * Returns the name of the algorithm.
@@ -260,6 +266,7 @@ private:
     mutable unsigned m_n_impstop;
     mutable unsigned m_gen_mark;
     mutable unsigned m_fevals;
+    boost::optional<bfe> m_bfe;
 };
 
 } // namespace pagmo

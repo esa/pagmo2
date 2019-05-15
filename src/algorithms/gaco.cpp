@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/math/constants/constants.hpp>
+#include <boost/serialization/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/gaco.hpp>
@@ -71,8 +72,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     }
 
     if (epsilon >= 1. || epsilon < 0.) {
-        pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
-                                               + std::to_string(epsilon) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "The Pareto precision parameter must be in [0, 1[, while a value of " + std::to_string(epsilon)
+                        + " was detected");
     }
     if ((threshold < 1 || threshold > gen) && gen != 0 && memory == false) {
         pagmo_throw(std::invalid_argument,
@@ -80,8 +82,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
                         + std::to_string(threshold) + " was detected");
     }
     if (threshold < 1 && gen != 0 && memory == true) {
-        pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
-                                               + std::to_string(threshold) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "If memory is active, the threshold parameter must be >=1 while a value of "
+                        + std::to_string(threshold) + " was detected");
     }
 }
 
@@ -128,6 +131,9 @@ population gaco::evolve(population pop) const
     std::vector<vector_double> new_ants(pop_size, vector_double(n_x, 1));
     vector_double ant(n_x);
     vector_double sigma(n_x);
+    vector_double fitness(n_f);
+    vector_double ant_final(n_x);
+    vector_double fitness_final(n_f);
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -149,8 +155,9 @@ population gaco::evolve(population pop) const
                     get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (n_obj != 1u) {
-        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                               + get_name() + " cannot deal with them");
+        pagmo_throw(std::invalid_argument,
+                    "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                        + " cannot deal with them");
     }
 
     // ---------------------------------------------------------------------------------------------------------
@@ -270,18 +277,56 @@ population gaco::evolve(population pop) const
         // 5 - use pheromone values to generate new ants (i.e., individuals)
         generate_new_ants(popold, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
-        for (population::size_type i = 0; i < pop_size; ++i) {
-            // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
-            // function
-            for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
-                ant[ii] = new_ants[i][ii];
+        if (m_bfe) {
+            // bfe is available:
+            vector_double ants(pop_size * new_ants[0].size());
+            decltype(ants.size()) pos = 0u;
+
+            for (population::size_type i = 0; i < pop_size; ++i) {
+                // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
+                // function
+                for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
+                    ants[pos] = new_ants[i][ii];
+                    ++pos;
+                }
             }
 
-            auto fitness = prob.fitness(ant);
-            ++m_fevals;
-            // I set the individuals for the next generation
-            pop.set_xf(i, ant, fitness);
+            auto fitnesses = (*m_bfe)(prob, ants);
+            m_fevals += pop_size;
+            decltype(ant.size()) pos_dim = 0u;
+            decltype(fitness.size()) pos_fit = 0u;
+
+            for (population::size_type i = 0; i < pop_size; ++i) {
+
+                for (decltype(n_x) ii_dim = 0u; ii_dim < n_x; ++ii_dim) {
+                    ant[ii_dim] = ants[pos_dim];
+                    ++pos_dim;
+                }
+
+                for (decltype(n_f) ii_f = 0u; ii_f < n_f; ++ii_f) {
+                    fitness[ii_f] = fitnesses[pos_fit];
+                    ++pos_fit;
+                }
+                // I set the individuals for the next generation
+                pop.set_xf(i, ant, fitness);
+            }
+
+        } else {
+            // bfe not available:
+            for (population::size_type i = 0; i < pop_size; ++i) {
+                // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
+                // function
+                for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
+                    ant[ii] = new_ants[i][ii];
+                }
+
+                auto ftns = prob.fitness(ant);
+                ++m_fevals;
+                // I set the individuals for the next generation
+                pop.set_xf(i, ant, ftns);
+            }
         }
+
         // If the current best of the population has not improved wrt to the previous one, then check=false
         bool check = compare_fc(pop.champion_f(), popold.champion_f(), n_ec, pop.get_problem().get_c_tol());
 
@@ -352,8 +397,6 @@ population gaco::evolve(population pop) const
     if (m_memory == false) {
         for (decltype(m_ker) i_ker = 0; i_ker < m_ker; ++i_ker) {
 
-            vector_double ant_final(n_x);
-            vector_double fitness_final(n_f);
             for (decltype(n_x) ii_dim = 0u; ii_dim < n_x; ++ii_dim) {
                 ant_final[ii_dim] = sol_archive[i_ker][1 + ii_dim];
             }
@@ -400,6 +443,15 @@ void gaco::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme
+/**
+ * @param b batch function evaluation object
+ */
+void gaco::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
 /// Extra info
 /**
  * Returns extra information on the algorithm.
@@ -438,7 +490,7 @@ void gaco::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
                     m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
-                    m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals);
+                    m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals, m_bfe);
 }
 
 /**
@@ -545,7 +597,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
             fitness[i] = pop.get_f()[sorted_list[i]];
             temporary_penalty[i] = sol_archive[i][0];
         }
-        std::vector<unsigned> saved_value_position;
+        std::vector<unsigned long> saved_value_position;
         bool count = true;
         // I merge the new and old penalties:
         temporary_penalty.insert(temporary_penalty.end(), sorted_vector.begin(), sorted_vector.end());
@@ -554,8 +606,8 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
 
         saved_value_position.push_back(0);
         temporary_archive[0][0] = temporary_penalty[0];
-        unsigned j;
-        unsigned k = 1u;
+        decltype(temporary_penalty.size()) j;
+        decltype(temporary_archive.size()) k = 1u;
         for (decltype(m_ker) i = 1u; i < 2 * m_ker && count == true; ++i) {
             j = i;
             if (i > saved_value_position.back()) {
@@ -769,7 +821,7 @@ void gaco::generate_new_ants(const population &pop, std::uniform_real_distributi
 
         double number = dist(m_e);
         double g_h = 0.0;
-        unsigned long k_omega = 0u;
+        decltype(sol_archive.size()) k_omega = 0u;
 
         if (number <= prob_cumulative[0]) {
             k_omega = 0;
