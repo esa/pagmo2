@@ -214,8 +214,9 @@ methods. The status of ongoing evolutions in the island can be queried via <a cl
 </p>
 <p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>A moved-from <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a> is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
+<p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a> are destruction,
+assignment, and the invocation of the <a class="reference internal" href="#_CPPv4NK5pagmo6island8is_validEv" title="pagmo::island::is_valid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">is_valid()</span></code></a> member function.
+Any other operation will result in undefined behaviour.</p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
@@ -732,6 +733,17 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDI. </p></li>
 </ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo6island8is_validEv">
+<span id="_CPPv3NK5pagmo6island8is_validEv"></span><span id="_CPPv2NK5pagmo6island8is_validEv"></span><span id="pagmo::island::is_validC"></span><span class="target" id="classpagmo_1_1island_1a8e3429def9818d4e9ef14b2e5dec2698"></span>bool <code class="descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island8is_validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the island is in a valid state. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">false</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span></code> was moved from, <code class="docutils literal notranslate"><span class="pre">true</span></code> otherwise. </p>
 </dd>
 </dl>
 </p>

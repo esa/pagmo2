@@ -199,8 +199,9 @@
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDA are used by <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <p><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
+<p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> are destruction,
+assignment, and the invocation of the <a class="reference internal" href="#_CPPv4NK5pagmo9algorithm8is_validEv" title="pagmo::algorithm::is_valid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">is_valid()</span></code></a> member function.
+Any other operation will result in undefined behaviour.</p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
@@ -308,6 +309,34 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" t
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T">
+<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSERR1T"></span><span class="target" id="classpagmo_1_1algorithm_1a2b5139a74bd3697207ec18131447a363"></span>template&lt;typename <code class="descname">T</code>, generic_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="pagmo::algorithm::operator=::T">T</a>&gt; = 0&gt;<br /><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="pagmo::algorithm::operator=::T">T</a> &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Assignment from a user-defined algorithm of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operator is not enabled if, after the removal of cv and reference qualifiers,
+<code class="docutils literal notranslate"><span class="pre">T</span></code> is of type <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> (that is, this operator does not compete with the copy/move
+assignment operators of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>), or if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not satisfy
+<code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_uda</span></code>.</p>
+</div>
+</p>
+<p>This operator will set the internal UDA to <code class="docutils literal notranslate"><span class="pre">x</span></code> by constructing a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from <code class="docutils literal notranslate"><span class="pre">x</span></code>, and then move-assigning the result to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the UDA.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the constructor from UDA. </p></li>
 </ul>
 </dd>
 </dl>
@@ -512,6 +541,17 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 <p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__get__thread__safety"><span class="std std-ref">pagmo::has_get_thread_safety</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method. Otherwise, thread_safety::basic will be returned. That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the thread safety level of the UDA. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo9algorithm8is_validEv">
+<span id="_CPPv3NK5pagmo9algorithm8is_validEv"></span><span id="_CPPv2NK5pagmo9algorithm8is_validEv"></span><span id="pagmo::algorithm::is_validC"></span><span class="target" id="classpagmo_1_1algorithm_1af4cf759aedbcf8eab8b9532bfbb2ed4a"></span>bool <code class="descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm8is_validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the algorithm is in a valid state. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">false</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span></code> was moved from, <code class="docutils literal notranslate"><span class="pre">true</span></code> otherwise. </p>
 </dd>
 </dl>
 </p>

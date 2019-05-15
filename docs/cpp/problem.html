@@ -219,8 +219,9 @@
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDP are used by <a class="reference internal" href="#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>A moved-from <a class="reference internal" href="#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
+<p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> are destruction,
+assignment, and the invocation of the <a class="reference internal" href="#_CPPv4NK5pagmo7problem8is_validEv" title="pagmo::problem::is_valid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">is_valid()</span></code></a> member function.
+Any other operation will result in undefined behaviour.</p>
 </div>
  </p>
 <div class="breathe-sectiondef docutils container">
@@ -336,6 +337,33 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo7problemE" tit
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo7problemaSER7problemRR1T">
+<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo7problemaSERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo7problemaSERR1T"></span><span class="target" id="classpagmo_1_1problem_1a2bfc283101483d9ab3bd273fe8a91523"></span>template&lt;typename <code class="descname">T</code>, generic_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo7problemaSER7problemRR1T" title="pagmo::problem::operator=::T">T</a>&gt; = 0&gt;<br /><a class="reference internal" href="#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo7problemaSER7problemRR1T" title="pagmo::problem::operator=::T">T</a> &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo7problemaSER7problemRR1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Assignment from a user-defined problem of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operator is not enabled if, after the removal of cv and reference qualifiers,
+<code class="docutils literal notranslate"><span class="pre">T</span></code> is of type <a class="reference internal" href="#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> (that is, this operator does not compete with the copy/move
+assignment operators of <a class="reference internal" href="#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>), or if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not satisfy <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udp</span></code>.</p>
+</div>
+</p>
+<p>This operator will set the internal UDP to <code class="docutils literal notranslate"><span class="pre">x</span></code> by constructing a <a class="reference internal" href="#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> from <code class="docutils literal notranslate"><span class="pre">x</span></code>, and then move-assigning the result to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the UDP.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the constructor from UDP. </p></li>
 </ul>
 </dd>
 </dl>
@@ -1008,6 +1036,17 @@ sparsity pattern of the hessians is dense. See <code class="xref cpp cpp-func do
 <p>If the UDP satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__get__thread__safety"><span class="std std-ref">pagmo::has_get_thread_safety</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method. Otherwise, thread_safety::basic will be returned. That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDP instances.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the thread safety level of the UDP. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo7problem8is_validEv">
+<span id="_CPPv3NK5pagmo7problem8is_validEv"></span><span id="_CPPv2NK5pagmo7problem8is_validEv"></span><span id="pagmo::problem::is_validC"></span><span class="target" id="classpagmo_1_1problem_1af10ee693234efdfe8bbfefa3b3230eb6"></span>bool <code class="descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7problem8is_validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the problem is in a valid state. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">false</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span></code> was moved from, <code class="docutils literal notranslate"><span class="pre">true</span></code> otherwise. </p>
 </dd>
 </dl>
 </p>

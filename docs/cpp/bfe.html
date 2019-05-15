@@ -228,8 +228,9 @@ are UDBFEs, but lambda functions are not (as they currently are not default-cons
 member functions in the UDBFE are used by <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>A moved-from <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
+<p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a> are destruction,
+assignment, and the invocation of the <a class="reference internal" href="#_CPPv4NK5pagmo3bfe8is_validEv" title="pagmo::bfe::is_valid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">is_valid()</span></code></a> member function.
+Any other operation will result in undefined behaviour.</p>
 </div>
 <dl class="function">
 <dt id="_CPPv4N5pagmo3bfe3bfeEv">
@@ -289,6 +290,32 @@ the following signature</p>
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public API of the UDBFE, or by memory allocation failures.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T">
+<span id="_CPPv3I0EN5pagmo3bfeaSERR1T"></span><span id="_CPPv2I0EN5pagmo3bfeaSERR1T"></span>template&lt;typename <code class="descname">T</code>&gt;<br /><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T" title="pagmo::bfe::operator=::T">T</a> &amp;&amp;<em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generic assignment operator from a UDBFE.</p>
+<p>This operator participates in overload resolution only if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference
+and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="pagmo::is_udbfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udbfe</span></code></a>.</p>
+<p>Additionally, the operator will also be enabled if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers,
+is a function type with the following signature</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="p">(</span><span class="k">const</span> <span class="n">problem</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This operator will set the internal UDBFE to <em>x</em> by constructing a <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> from <em>x</em>,
+and then move-assigning the result to <em>this</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the input UDBFE.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to <em>this</em>.</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the generic constructor from a UDBFE.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -405,6 +432,17 @@ That is, pagmo assumes by default that is it safe to operate concurrently on dis
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the thread safety level of the UDBFE.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo3bfe8is_validEv">
+<span id="_CPPv3NK5pagmo3bfe8is_validEv"></span><span id="_CPPv2NK5pagmo3bfe8is_validEv"></span><span id="pagmo::bfe::is_validC"></span>bool <code class="descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3bfe8is_validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if this bfe is in a valid state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">false</span></code> if <em>this</em> was moved from, <code class="docutils literal notranslate"><span class="pre">true</span></code> otherwise.</p>
 </dd>
 </dl>
 </dd></dl>
