@@ -57,20 +57,21 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/config.hpp>
 
-#include <pagmo/algorithm.hpp>
-#if defined(PAGMO_WITH_NLOPT)
-#include <pagmo/algorithms/nlopt.hpp>
-#endif
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/algorithms/sga.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
+
+#if defined(PAGMO_WITH_NLOPT)
+#include <pagmo/algorithms/nlopt.hpp>
+#endif
 
 #include <pygmo/algorithm_exposition_suite.hpp>
 #include <pygmo/common_utils.hpp>

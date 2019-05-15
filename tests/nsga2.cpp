@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE(nsga2_serialization_test)
         oarchive << algo;
     }
     // Change the content of p before deserializing.
-    algo = algorithm{null_algorithm{}};
+    algo = algorithm{};
     {
         boost::archive::binary_iarchive iarchive(ss);
         iarchive >> algo;

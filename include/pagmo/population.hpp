@@ -162,7 +162,8 @@ public:
      */
     template <
         typename T, typename U,
-        enable_if_t<std::is_constructible<problem, T &&>::value && std::is_constructible<bfe, U &&>::value, int> = 0>
+        enable_if_t<detail::conjunction<std::is_constructible<problem, T &&>, std::is_constructible<bfe, U &&>>::value,
+                    int> = 0>
     explicit population(T &&x, U &&b, size_type pop_size = 0u, unsigned seed = pagmo::random_device::next())
         : m_prob(std::forward<T>(x)), m_e(seed), m_seed(seed)
     {

@@ -62,8 +62,9 @@ Batch fitness evaluator
 
    .. warning::
 
-      A moved-from :cpp:class:`~pagmo::bfe` is destructible and assignable. Any other operation will result
-      in undefined behaviour.
+      The only operations allowed on a moved-from :cpp:class:`pagmo::bfe` are destruction,
+      assignment, and the invocation of the :cpp:func:`~pagmo::bfe::is_valid()` member function.
+      Any other operation will result in undefined behaviour.
 
    .. cpp:function:: bfe()
 
@@ -103,6 +104,29 @@ Batch fitness evaluator
       :param x: the input UDBFE.
 
       :exception unspecified: any exception thrown by the public API of the UDBFE, or by memory allocation failures.
+
+   .. cpp:function:: template <typename T> bfe &operator=(T &&x)
+
+      Generic assignment operator from a UDBFE.
+
+      This operator participates in overload resolution only if ``T``, after the removal of reference
+      and cv qualifiers, is not :cpp:class:`~pagmo::bfe` and if it satisfies :cpp:class:`pagmo::is_udbfe`.
+
+      Additionally, the operator will also be enabled if ``T``, after the removal of reference and cv qualifiers,
+      is a function type with the following signature
+
+      .. code-block:: c++
+
+         vector_double (const problem &, const vector_double &)
+
+      This operator will set the internal UDBFE to *x* by constructing a :cpp:class:`~pagmo::bfe` from *x*,
+      and then move-assigning the result to *this*.
+
+      :param x: the input UDBFE.
+
+      :return: a reference to *this*.
+
+      :exception unspecified: any exception thrown by the generic constructor from a UDBFE.
 
    .. cpp:function:: template <typename T> const T *extract() const noexcept
    .. cpp:function:: template <typename T> T *extract() noexcept
@@ -185,6 +209,12 @@ Batch fitness evaluator
       That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDBFE instances.
 
       :return: the thread safety level of the UDBFE.
+
+   .. cpp:function:: bool is_valid() const
+
+      Check if this bfe is in a valid state.
+
+      :return: ``false`` if *this* was moved from, ``true`` otherwise.
 
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
    .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)

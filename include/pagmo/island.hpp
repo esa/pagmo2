@@ -409,8 +409,9 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
- *    A moved-from :cpp:class:`pagmo::island` is destructible and assignable. Any other operation will result
- *    in undefined behaviour.
+ *    The only operations allowed on a moved-from :cpp:class:`pagmo::island` are destruction,
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::island::is_valid()` member function.
+ *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
  */
@@ -774,6 +775,8 @@ public:
     std::string get_name() const;
     // Island's extra info.
     std::string get_extra_info() const;
+    // Check if the island is valid.
+    bool is_valid() const;
     /// Save to archive.
     /**
      * This method will save \p this to the archive \p ar.

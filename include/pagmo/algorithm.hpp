@@ -58,31 +58,6 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Null algorithm
-/**
- * This algorithm is used to implement the default constructors of pagmo::algorithm and of the meta-algorithms.
- */
-struct PAGMO_DLL_PUBLIC null_algorithm {
-    // Evolve method.
-    population evolve(const population &) const;
-    /// Algorithm name.
-    /**
-     * @return <tt>"Null algorithm"</tt>.
-     */
-    std::string get_name() const
-    {
-        return "Null algorithm";
-    }
-    // Serialization support.
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-};
-
-} // namespace pagmo
-
-namespace pagmo
-{
-
 /// Detect \p set_verbosity() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -276,12 +251,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
         pagmo_throw(not_implemented_error,
                     "The set_seed() method has been invoked but it is not implemented in the UDA");
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, override_has_set_seed<U>>::value, int> = 0>
     static bool has_set_seed_impl(const U &a)
     {
         return a.has_set_seed();
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, detail::negation<override_has_set_seed<U>>>::value,
+                    int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
@@ -302,14 +281,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
         pagmo_throw(not_implemented_error,
                     "The set_verbosity() method has been invoked but it is not implemented in the UDA");
     }
-    template <typename U,
-              enable_if_t<pagmo::has_set_verbosity<U>::value && override_has_set_verbosity<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<detail::conjunction<pagmo::has_set_verbosity<U>, override_has_set_verbosity<U>>::value, int> = 0>
     static bool has_set_verbosity_impl(const U &a)
     {
         return a.has_set_verbosity();
     }
-    template <typename U,
-              enable_if_t<pagmo::has_set_verbosity<U>::value && !override_has_set_verbosity<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_set_verbosity<U>,
+                                                          detail::negation<override_has_set_verbosity<U>>>::value,
+                                      int> = 0>
     static bool has_set_verbosity_impl(const U &)
     {
         return true;
@@ -417,8 +398,9 @@ namespace pagmo
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    A moved-from pagmo::algorithm is destructible and assignable. Any other operation will result
- *    in undefined behaviour.
+ *    The only operations allowed on a moved-from :cpp:class:`pagmo::algorithm` are destruction,
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::algorithm::is_valid()` member function.
+ *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
  */
@@ -472,6 +454,32 @@ public:
     algorithm &operator=(algorithm &&) noexcept;
     // Copy assignment.
     algorithm &operator=(const algorithm &);
+    /// Assignment from a user-defined algorithm of type \p T
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This operator is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::algorithm` (that is, this operator does not compete with the copy/move
+     *    assignment operators of :cpp:class:`pagmo::algorithm`), or if ``T`` does not satisfy
+     *    :cpp:class:`pagmo::is_uda`.
+     *
+     * \endverbatim
+     *
+     * This operator will set the internal UDA to ``x`` by constructing a pagmo::algorithm from ``x``, and then
+     * move-assigning the result to ``this``.
+     *
+     * @param x the UDA.
+     *
+     * @return a reference to ``this``.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDA.
+     */
+    template <typename T, generic_ctor_enabler<T> = 0>
+    algorithm &operator=(T &&x)
+    {
+        return (*this) = algorithm(std::forward<T>(x));
+    }
 
     /// Extract a const pointer to the UDA.
     /**
@@ -626,6 +634,9 @@ public:
         return m_thread_safety;
     }
 
+    // Check if the algorithm is valid.
+    bool is_valid() const;
+
     /// Save to archive.
     /**
      * This method will save \p this into the archive \p ar.
@@ -687,7 +698,5 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
-
-PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::null_algorithm)
 
 #endif

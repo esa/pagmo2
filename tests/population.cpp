@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/s11n.hpp>
@@ -187,7 +188,7 @@ BOOST_AUTO_TEST_CASE(population_push_back_test)
 BOOST_AUTO_TEST_CASE(population_random_decision_vector_test)
 {
     // Create an empty population
-    population pop{problem{null_problem{}}};
+    population pop{problem{}};
     auto bounds = pop.get_problem().get_bounds();
     // Generate a random decision_vector
     auto x = pop.random_decision_vector();
@@ -203,7 +204,7 @@ BOOST_AUTO_TEST_CASE(population_best_worst_test)
     // Test throw
     {
         population pop{problem{zdt{}}, 2};
-        population pop2{problem{null_problem{}}, 0u};
+        population pop2{problem{}, 0u};
         BOOST_CHECK_THROW(pop.best_idx(), std::invalid_argument);
         BOOST_CHECK_THROW(pop.worst_idx(), std::invalid_argument);
         BOOST_CHECK_THROW(pop2.best_idx(), std::invalid_argument);
@@ -229,7 +230,7 @@ BOOST_AUTO_TEST_CASE(population_best_worst_test)
 
 BOOST_AUTO_TEST_CASE(population_setters_test)
 {
-    population pop{problem{null_problem{}}, 2};
+    population pop{problem{}, 2};
     // Test throw
     BOOST_CHECK_THROW(pop.set_xf(2, {3}, {1, 2, 3}), std::invalid_argument); // index invalid
     BOOST_CHECK_THROW(pop.set_xf(1, {3, 2}, {1}), std::invalid_argument);    // chromosome invalid
@@ -246,7 +247,7 @@ BOOST_AUTO_TEST_CASE(population_setters_test)
 
 BOOST_AUTO_TEST_CASE(population_getters_test)
 {
-    population pop{problem{null_problem{}}, 1, 1234u};
+    population pop{problem{}, 1, 1234u};
     pop.set_xf(0, {3}, {1});
     // Test
     BOOST_CHECK((pop.get_f()[0] == vector_double{1}));
@@ -330,7 +331,7 @@ BOOST_AUTO_TEST_CASE(population_champion_test)
 
 BOOST_AUTO_TEST_CASE(population_serialization_test)
 {
-    population pop{problem{null_problem{}}, 30, 1234u};
+    population pop{problem{}, 30, 1234u};
     // Store the string representation of p.
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(pop);

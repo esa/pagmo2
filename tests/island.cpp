@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>
@@ -51,6 +52,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -499,4 +501,18 @@ BOOST_AUTO_TEST_CASE(island_bfe_ctors)
     for (auto i = 0u; i < 1000u; ++i) {
         BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
     }
+}
+
+BOOST_AUTO_TEST_CASE(is_valid)
+{
+    island p0;
+    BOOST_CHECK(p0.is_valid());
+    island p1(std::move(p0));
+    BOOST_CHECK(!p0.is_valid());
+    p0 = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
+    BOOST_CHECK(p0.is_valid());
+    p1 = std::move(p0);
+    BOOST_CHECK(!p0.is_valid());
+    p0 = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
+    BOOST_CHECK(p0.is_valid());
 }

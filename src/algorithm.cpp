@@ -31,35 +31,13 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
-
-/// Evolve method.
-/**
- * In the null algorithm, the evolve method just returns the input
- * population.
- *
- * @param pop input population.
- *
- * @return a copy of the input population.
- */
-population null_algorithm::evolve(const population &pop) const
-{
-    return pop;
-}
-
-/// Serialization support.
-/**
- * This class is stateless, no data will be loaded or saved during serialization.
- */
-template <typename Archive>
-void null_algorithm::serialize(Archive &, unsigned)
-{
-}
 
 /// Default constructor.
 /**
@@ -205,6 +183,15 @@ std::string algorithm::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+/// Check if the algorithm is in a valid state.
+/**
+ * @return ``false`` if ``this`` was moved from, ``true`` otherwise.
+ */
+bool algorithm::is_valid() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 /// Streaming operator for pagmo::algorithm
 /**
  * This function will stream to \p os a human-readable representation of the input
@@ -234,5 +221,3 @@ std::ostream &operator<<(std::ostream &os, const algorithm &a)
 }
 
 } // namespace pagmo
-
-PAGMO_S11N_ALGORITHM_IMPLEMENT(pagmo::null_algorithm)

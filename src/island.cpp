@@ -591,4 +591,13 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
     return os;
 }
 
+/// Check if the island is in a valid state.
+/**
+ * @return ``false`` if ``this`` was moved from, ``true`` otherwise.
+ */
+bool island::is_valid() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 } // namespace pagmo

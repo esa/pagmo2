@@ -168,6 +168,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/rng.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/threading.cpp"
         # UDP.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/null_problem.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2009.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/schwefel.cpp"
@@ -187,6 +188,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/minlp_rastrigin.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/luksan_vlcek1.cpp"
         # UDA.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/null_algorithm.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/pso.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/not_population_based.cpp"

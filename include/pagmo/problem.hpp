@@ -73,81 +73,6 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Null problem
-/**
- * This problem is used to implement the default constructors of pagmo::problem and of the meta-problems.
- */
-struct PAGMO_DLL_PUBLIC null_problem {
-    /// Constructor from number of objectives.
-    /**
-     * @param nobj the desired number of objectives.
-     * @param nec the desired number of equality constraints.
-     * @param nic the desired number of inequality constraints.
-     * @param nix the problem integer dimension.
-     *
-     * @throws std::invalid_argument if \p nobj is zero.
-     */
-    null_problem(vector_double::size_type nobj = 1u, vector_double::size_type nec = 0u,
-                 vector_double::size_type nic = 0u, vector_double::size_type nix = 0u);
-    // Fitness.
-    vector_double fitness(const vector_double &) const;
-    // Problem bounds.
-    std::pair<vector_double, vector_double> get_bounds() const;
-    /// Number of objectives.
-    /**
-     * @return the number of objectives of the problem (as specified upon construction).
-     */
-    vector_double::size_type get_nobj() const
-    {
-        return m_nobj;
-    }
-    /// Number of equality constraints.
-    /**
-     * @return the number of equality constraints of the problem (as specified upon construction).
-     */
-    vector_double::size_type get_nec() const
-    {
-        return m_nec;
-    }
-    /// Number of inequality constraints.
-    /**
-     * @return the number of inequality constraints of the problem (as specified upon construction).
-     */
-    vector_double::size_type get_nic() const
-    {
-        return m_nic;
-    }
-    /// Size of the integer part.
-    /**
-     * @return the size of the integer part (as specified upon construction).
-     */
-    vector_double::size_type get_nix() const
-    {
-        return m_nix;
-    }
-    /// Problem name.
-    /**
-     * @return <tt>"Null problem"</tt>.
-     */
-    std::string get_name() const
-    {
-        return "Null problem";
-    }
-    // Serialization
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-
-private:
-    vector_double::size_type m_nobj;
-    vector_double::size_type m_nec;
-    vector_double::size_type m_nic;
-    vector_double::size_type m_nix;
-};
-} // namespace pagmo
-
-namespace pagmo
-{
-
 /// Detect \p fitness() method.
 /**
  * This type trait will be \p true if \p T provides a method with
@@ -734,13 +659,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                         + get_name_impl(value) + "'");
     }
     template <typename U,
-              enable_if_t<pagmo::has_batch_fitness<U>::value && pagmo::override_has_batch_fitness<U>::value, int> = 0>
+              enable_if_t<detail::conjunction<pagmo::has_batch_fitness<U>, pagmo::override_has_batch_fitness<U>>::value,
+                          int> = 0>
     static bool has_batch_fitness_impl(const U &p)
     {
         return p.has_batch_fitness();
     }
     template <typename U,
-              enable_if_t<pagmo::has_batch_fitness<U>::value && !pagmo::override_has_batch_fitness<U>::value, int> = 0>
+              enable_if_t<detail::conjunction<pagmo::has_batch_fitness<U>,
+                                              detail::negation<pagmo::override_has_batch_fitness<U>>>::value,
+                          int> = 0>
     static bool has_batch_fitness_impl(const U &)
     {
         return true;
@@ -772,13 +700,15 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                     "The gradient has been requested, but it is not implemented in a UDP of type '"
                         + get_name_impl(value) + "'");
     }
-    template <typename U, enable_if_t<pagmo::has_gradient<U>::value && pagmo::override_has_gradient<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_gradient<U>, pagmo::override_has_gradient<U>>::value, int> = 0>
     static bool has_gradient_impl(const U &p)
     {
         return p.has_gradient();
     }
-    template <typename U,
-              enable_if_t<pagmo::has_gradient<U>::value && !pagmo::override_has_gradient<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_gradient<U>,
+                                                          detail::negation<pagmo::override_has_gradient<U>>>::value,
+                                      int> = 0>
     static bool has_gradient_impl(const U &)
     {
         return true;
@@ -802,15 +732,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         assert(false); // LCOV_EXCL_LINE
         throw;
     }
-    template <
-        typename U,
-        enable_if_t<pagmo::has_gradient_sparsity<U>::value && pagmo::override_has_gradient_sparsity<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_gradient_sparsity<U>,
+                                                          pagmo::override_has_gradient_sparsity<U>>::value,
+                                      int> = 0>
     static bool has_gradient_sparsity_impl(const U &p)
     {
         return p.has_gradient_sparsity();
     }
     template <typename U,
-              enable_if_t<pagmo::has_gradient_sparsity<U>::value && !pagmo::override_has_gradient_sparsity<U>::value,
+              enable_if_t<detail::conjunction<pagmo::has_gradient_sparsity<U>,
+                                              detail::negation<pagmo::override_has_gradient_sparsity<U>>>::value,
                           int> = 0>
     static bool has_gradient_sparsity_impl(const U &)
     {
@@ -833,13 +764,15 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                     "The hessians have been requested, but they are not implemented in a UDP of type '"
                         + get_name_impl(value) + "'");
     }
-    template <typename U, enable_if_t<pagmo::has_hessians<U>::value && pagmo::override_has_hessians<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_hessians<U>, pagmo::override_has_hessians<U>>::value, int> = 0>
     static bool has_hessians_impl(const U &p)
     {
         return p.has_hessians();
     }
-    template <typename U,
-              enable_if_t<pagmo::has_hessians<U>::value && !pagmo::override_has_hessians<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_hessians<U>,
+                                                          detail::negation<pagmo::override_has_hessians<U>>>::value,
+                                      int> = 0>
     static bool has_hessians_impl(const U &)
     {
         return true;
@@ -863,15 +796,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         assert(false); // LCOV_EXCL_LINE
         throw;
     }
-    template <
-        typename U,
-        enable_if_t<pagmo::has_hessians_sparsity<U>::value && pagmo::override_has_hessians_sparsity<U>::value, int> = 0>
+    template <typename U, enable_if_t<detail::conjunction<pagmo::has_hessians_sparsity<U>,
+                                                          pagmo::override_has_hessians_sparsity<U>>::value,
+                                      int> = 0>
     static bool has_hessians_sparsity_impl(const U &p)
     {
         return p.has_hessians_sparsity();
     }
     template <typename U,
-              enable_if_t<pagmo::has_hessians_sparsity<U>::value && !pagmo::override_has_hessians_sparsity<U>::value,
+              enable_if_t<detail::conjunction<pagmo::has_hessians_sparsity<U>,
+                                              detail::negation<pagmo::override_has_hessians_sparsity<U>>>::value,
                           int> = 0>
     static bool has_hessians_sparsity_impl(const U &)
     {
@@ -912,7 +846,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     {
         return 0u;
     }
-    template <typename U, typename std::enable_if<pagmo::has_set_seed<U>::value, int>::type = 0>
+    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value, int> = 0>
     static void set_seed_impl(U &value, unsigned seed)
     {
         value.set_seed(seed);
@@ -924,12 +858,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
                     "The set_seed() method has been invoked, but it is not implemented in a UDP of type '"
                         + get_name_impl(value) + "'");
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && override_has_set_seed<U>::value, int> = 0>
+    template <typename U,
+              enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, override_has_set_seed<U>>::value, int> = 0>
     static bool has_set_seed_impl(const U &p)
     {
         return p.has_set_seed();
     }
-    template <typename U, enable_if_t<pagmo::has_set_seed<U>::value && !override_has_set_seed<U>::value, int> = 0>
+    template <
+        typename U,
+        enable_if_t<detail::conjunction<pagmo::has_set_seed<U>, detail::negation<override_has_set_seed<U>>>::value,
+                    int> = 0>
     static bool has_set_seed_impl(const U &)
     {
         return true;
@@ -1098,8 +1036,9 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  * \verbatim embed:rst:leading-asterisk
  * .. warning::
  *
- *    A moved-from :cpp:class:`pagmo::problem` is destructible and assignable. Any other operation will result
- *    in undefined behaviour.
+ *    The only operations allowed on a moved-from :cpp:class:`pagmo::problem` are destruction,
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::problem::is_valid()` member function.
+ *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
  */
@@ -1170,6 +1109,31 @@ public:
     problem &operator=(problem &&) noexcept;
     // Copy assignment operator
     problem &operator=(const problem &);
+    /// Assignment from a user-defined problem of type \p T
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This operator is not enabled if, after the removal of cv and reference qualifiers,
+     *    ``T`` is of type :cpp:class:`pagmo::problem` (that is, this operator does not compete with the copy/move
+     *    assignment operators of :cpp:class:`pagmo::problem`), or if ``T`` does not satisfy :cpp:class:`pagmo::is_udp`.
+     *
+     * \endverbatim
+     *
+     * This operator will set the internal UDP to ``x`` by constructing a pagmo::problem from ``x``, and then
+     * move-assigning the result to ``this``.
+     *
+     * @param x the UDP.
+     *
+     * @return a reference to ``this``.
+     *
+     * @throws unspecified any exception thrown by the constructor from UDP.
+     */
+    template <typename T, generic_ctor_enabler<T> = 0>
+    problem &operator=(T &&x)
+    {
+        return (*this) = problem(std::forward<T>(x));
+    }
 
     /// Extract a const pointer to the UDP used for construction.
     /**
@@ -1622,6 +1586,9 @@ public:
         return m_thread_safety;
     }
 
+    // Check if the problem is in a valid state.
+    bool is_valid() const;
+
     /// Save to archive.
     /**
      * This method will save \p this into the archive \p ar.
@@ -1723,7 +1690,5 @@ private:
 };
 
 } // namespace pagmo
-
-PAGMO_S11N_PROBLEM_EXPORT_KEY(pagmo::null_problem)
 
 #endif
