@@ -95,6 +95,12 @@ std::string bfe::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
+// Check if the bfe contains a UDBFE.
+bool bfe::has_value() const
+{
+    return static_cast<bool>(m_ptr);
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator.
