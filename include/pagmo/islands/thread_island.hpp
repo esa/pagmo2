@@ -49,6 +49,7 @@ namespace pagmo
 class PAGMO_DLL_PUBLIC thread_island
 {
 public:
+    thread_island(bool use_pool = true);
     /// Island's name.
     /**
      * @return <tt>"Thread island"</tt>.
@@ -61,6 +62,9 @@ public:
     // Serialization support.
     template <typename Archive>
     void serialize(Archive &, unsigned);
+
+private:
+    bool m_use_pool;
 };
 
 } // namespace pagmo

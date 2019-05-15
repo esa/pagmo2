@@ -29,6 +29,8 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <utility>
 
+#include <tbb/task.h>
+
 #include <pagmo/exceptions.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
@@ -37,6 +39,44 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+
+namespace detail
+{
+
+namespace
+{
+
+void ti_evolve_impl(island &isl)
+{
+    // Get out a copy of the algorithm for evolution.
+    auto algo = isl.get_algorithm();
+    // Replace the island's population with the evolved population.
+    isl.set_population(algo.evolve(isl.get_population()));
+    // Replace the island's algorithm with the algorithm used for the evolution.
+    // NOTE: if set_algorithm() fails, we will have the new population with the
+    // original algorithm, which is still a valid state for the island.
+    isl.set_algorithm(std::move(algo));
+}
+
+class ti_evolve_task final : public tbb::task
+{
+public:
+    ti_evolve_task(island &isl) : m_isl(isl) {}
+    tbb::task *execute() override final
+    {
+        ti_evolve_impl(m_isl);
+        return nullptr;
+    }
+
+private:
+    island &m_isl;
+};
+
+} // namespace
+
+} // namespace detail
+
+thread_island::thread_island(bool use_pool) : m_use_pool(use_pool) {}
 
 /// Run evolve.
 /**
@@ -67,14 +107,13 @@ void thread_island::run_evolve(island &isl) const
         pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
                                            "thread safety guarantee");
     }
-    // Get out a copy of the algorithm for evolution.
-    auto algo = isl.get_algorithm();
-    // Replace the island's population with the evolved population.
-    isl.set_population(algo.evolve(isl.get_population()));
-    // Replace the island's algorithm with the algorithm used for the evolution.
-    // NOTE: if set_algorithm() fails, we will have the new population with the
-    // original algorithm, which is still a valid state for the island.
-    isl.set_algorithm(std::move(algo));
+
+    if (m_use_pool) {
+        detail::ti_evolve_task &t = *new (tbb::task::allocate_root()) detail::ti_evolve_task(isl);
+        tbb::task::spawn_root_and_wait(t);
+    } else {
+        detail::ti_evolve_impl(isl);
+    }
 }
 
 /// Serialization support.
@@ -82,8 +121,9 @@ void thread_island::run_evolve(island &isl) const
  * This class is stateless, no data will be saved to or loaded from the archive.
  */
 template <typename Archive>
-void thread_island::serialize(Archive &, unsigned)
+void thread_island::serialize(Archive &ar, unsigned)
 {
+    detail::archive(ar, m_use_pool);
 }
 
 } // namespace pagmo
