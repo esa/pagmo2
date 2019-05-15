@@ -63,7 +63,7 @@ Batch fitness evaluator
    .. warning::
 
       The only operations allowed on a moved-from :cpp:class:`pagmo::bfe` are destruction,
-      assignment, and the invocation of the :cpp:func:`~pagmo::bfe::has_value()` member function.
+      assignment, and the invocation of the :cpp:func:`~pagmo::bfe::is_valid()` member function.
       Any other operation will result in undefined behaviour.
 
    .. cpp:function:: bfe()
@@ -210,11 +210,11 @@ Batch fitness evaluator
 
       :return: the thread safety level of the UDBFE.
 
-   .. cpp:function:: bool has_value() const
+   .. cpp:function:: bool is_valid() const
 
-      Check if this bfe contains a UDBFE.
+      Check if this bfe is in a valid state.
 
-      :return: ``true`` if *this* contains a UDBFE, ``false`` otherwise (i.e., if *this* was moved from).
+      :return: ``false`` if *this* was moved from, ``true`` otherwise.
 
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
    .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)

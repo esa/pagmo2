@@ -502,3 +502,17 @@ BOOST_AUTO_TEST_CASE(island_bfe_ctors)
         BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
     }
 }
+
+BOOST_AUTO_TEST_CASE(is_valid)
+{
+    island p0;
+    BOOST_CHECK(p0.is_valid());
+    island p1(std::move(p0));
+    BOOST_CHECK(!p0.is_valid());
+    p0 = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
+    BOOST_CHECK(p0.is_valid());
+    p1 = std::move(p0);
+    BOOST_CHECK(!p0.is_valid());
+    p0 = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
+    BOOST_CHECK(p0.is_valid());
+}

@@ -95,8 +95,8 @@ std::string bfe::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
-// Check if the bfe contains a UDBFE.
-bool bfe::has_value() const
+// Check if the bfe is in a valid state.
+bool bfe::is_valid() const
 {
     return static_cast<bool>(m_ptr);
 }

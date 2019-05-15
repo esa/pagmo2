@@ -183,11 +183,11 @@ std::string algorithm::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
-/// Check if the algorithm contains a UDA.
+/// Check if the algorithm is in a valid state.
 /**
- * @return ``true`` if the algorithm contains a UDA, ``false`` otherwise (i.e., if ``this`` was moved from).
+ * @return ``false`` if ``this`` was moved from, ``true`` otherwise.
  */
-bool algorithm::has_value() const
+bool algorithm::is_valid() const
 {
     return static_cast<bool>(m_ptr);
 }

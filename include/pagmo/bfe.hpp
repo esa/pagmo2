@@ -300,8 +300,8 @@ public:
         return m_thread_safety;
     }
 
-    // Check if the bfe contains a UDBFE.
-    bool has_value() const;
+    // Check if the bfe is valid.
+    bool is_valid() const;
 
     // Serialisation support.
     template <typename Archive>

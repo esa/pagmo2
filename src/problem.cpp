@@ -727,11 +727,11 @@ std::string problem::get_extra_info() const
     return ptr()->get_extra_info();
 }
 
-/// Check if the problem contains a UDP.
+/// Check if the problem is in a valid state.
 /**
- * @return ``true`` if the problem contains a UDP, ``false`` otherwise (i.e., if ``this`` was moved from).
+ * @return ``false`` if ``this`` was moved from, ``true`` otherwise.
  */
-bool problem::has_value() const
+bool problem::is_valid() const
 {
     return static_cast<bool>(m_ptr);
 }

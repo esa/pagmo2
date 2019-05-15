@@ -399,7 +399,7 @@ namespace pagmo
  * .. note::
  *
  *    The only operations allowed on a moved-from :cpp:class:`pagmo::algorithm` are destruction,
- *    assignment, and the invocation of the :cpp:func:`~pagmo::algorithm::has_value()` member function.
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::algorithm::is_valid()` member function.
  *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
@@ -634,8 +634,8 @@ public:
         return m_thread_safety;
     }
 
-    // Check if the algorithm contains a UDA.
-    bool has_value() const;
+    // Check if the algorithm is valid.
+    bool is_valid() const;
 
     /// Save to archive.
     /**

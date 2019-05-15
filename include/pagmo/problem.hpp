@@ -1037,7 +1037,7 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  * .. warning::
  *
  *    The only operations allowed on a moved-from :cpp:class:`pagmo::problem` are destruction,
- *    assignment, and the invocation of the :cpp:func:`~pagmo::problem::has_value()` member function.
+ *    assignment, and the invocation of the :cpp:func:`~pagmo::problem::is_valid()` member function.
  *    Any other operation will result in undefined behaviour.
  *
  * \endverbatim
@@ -1586,8 +1586,8 @@ public:
         return m_thread_safety;
     }
 
-    // Check if the problem contains a UDP.
-    bool has_value() const;
+    // Check if the problem is in a valid state.
+    bool is_valid() const;
 
     /// Save to archive.
     /**
