@@ -443,7 +443,7 @@ void gaco::set_seed(unsigned seed)
     m_seed = seed;
 }
 
-/// Sets the batch function evaluation scheme:
+/// Sets the batch function evaluation scheme
 /**
  * @param b batch function evaluation object
  */
