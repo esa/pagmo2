@@ -123,7 +123,7 @@ os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 
 # Proceed to the build.
 # NOTE: at the moment boost 1.70 seems to have problem to autodetect 
-# the mingw library (with CMake 1.13 currently installed in appveyor)
+# the mingw library (with CMake 3.13 currently installed in appveyor)
 # Thus we manually point to the boost libs.
 common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local ' + \
                     r'-DCMAKE_INSTALL_PREFIX=c:\\local ' + \

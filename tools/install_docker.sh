@@ -23,7 +23,7 @@ elif [[ ${PAGMO_BUILD} == *27 ]]; then
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python27.so"
 	PYTHON_VERSION="27"
 else
-	echo "Invalid build type: ${PYKEP_BUILD}"
+	echo "Invalid build type: ${PAGMO_BUILD}"
 	exit 1
 fi
 
