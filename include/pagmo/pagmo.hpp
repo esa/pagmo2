@@ -73,6 +73,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/algorithms/sade.hpp>
@@ -113,6 +114,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
+#include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
