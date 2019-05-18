@@ -167,6 +167,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/io.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/rng.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/threading.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/topology.cpp"
         # UDP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/null_problem.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
@@ -213,6 +214,8 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/default_bfe.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/member_bfe.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/thread_bfe.cpp"
+        # UDT.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
         # Utils.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
