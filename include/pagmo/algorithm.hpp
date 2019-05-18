@@ -29,7 +29,9 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHM_HPP
 #define PAGMO_ALGORITHM_HPP
 
+#include <cassert>
 #include <memory>
+#include <string>
 #include <type_traits>
 #include <typeinfo>
 #include <utility>
