@@ -237,27 +237,7 @@ private:
     void generic_ctor_impl();
 
 public:
-    /// Constructor from a user-defined topology of type \p T
-    /**
-     * \verbatim embed:rst:leading-asterisk
-     * .. note::
-     *
-     *    This constructor is not enabled if, after the removal of cv and reference qualifiers,
-     *    ``T`` is of type :cpp:class:`pagmo::topology` (that is, this constructor does not compete with the copy/move
-     *    constructors of :cpp:class:`pagmo::topology`), or if  ``T`` does not satisfy :cpp:class:`pagmo::is_udt`.
-     *
-     * \endverbatim
-     *
-     * This constructor will construct a pagmo::topology from the UDT (user-defined topology) \p x of type \p T. In
-     * order for the construction to be successful, the UDT must implement a minimal set of methods,
-     * as described in the documentation of pagmo::topology. The constructor will examine the properties of \p x and
-     * store them as data members of \p this.
-     *
-     * @param x the UDT.
-     *
-     * @throws unspecified any exception thrown by methods of the UDT invoked during construction or by memory errors
-     * in strings and standard containers.
-     */
+    // Generic constructor.
     template <typename T, generic_ctor_enabler<T> = 0>
     explicit topology(T &&x) : m_ptr(detail::make_unique<detail::topo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {

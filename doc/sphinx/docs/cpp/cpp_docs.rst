@@ -17,6 +17,7 @@ we suggest to follow the tutorials / examples.
   island
   archipelago
   bfe
+  topology
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -94,6 +95,13 @@ Implemented batch evaluators
   batch_evaluators/default_bfe
   batch_evaluators/thread_bfe
   batch_evaluators/member_bfe
+
+Implemented topologies
+^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+  :maxdepth: 1
+
+  topologies/unconnected
 
 Utilities
 ^^^^^^^^^
