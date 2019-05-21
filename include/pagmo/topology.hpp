@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <type_traits>
 #include <typeinfo>
@@ -243,6 +244,72 @@ public:
     {
         generic_ctor_impl();
     }
+    // Copy ctor.
+    topology(const topology &);
+    // Move ctor.
+    topology(topology &&) noexcept;
+    // Move assignment.
+    topology &operator=(topology &&) noexcept;
+    // Copy assignment.
+    topology &operator=(const topology &);
+    // Generic assignment.
+    template <typename T, generic_ctor_enabler<T> = 0>
+    topology &operator=(T &&x)
+    {
+        return (*this) = topology(std::forward<T>(x));
+    }
+
+    // Extract.
+    template <typename T>
+    const T *extract() const noexcept
+    {
+        auto p = dynamic_cast<const detail::topo_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+    template <typename T>
+    T *extract() noexcept
+    {
+        auto p = dynamic_cast<detail::topo_inner<T> *>(ptr());
+        return p == nullptr ? nullptr : &(p->m_value);
+    }
+    template <typename T>
+    bool is() const noexcept
+    {
+        return extract<T>() != nullptr;
+    }
+
+    // Name.
+    std::string get_name() const
+    {
+        return m_name;
+    }
+
+    // Extra info.
+    std::string get_extra_info() const;
+
+    // Check if the topology is valid.
+    bool is_valid() const;
+
+    // Get the connections to a vertex.
+    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
+
+    // Add a vertex.
+    void push_back();
+
+    // Serialization.
+    template <typename Archive>
+    void save(Archive &ar, unsigned) const
+    {
+        detail::to_archive(ar, m_ptr, m_name);
+    }
+    template <typename Archive>
+    void load(Archive &ar, unsigned)
+    {
+        topology tmp;
+        detail::from_archive(ar, tmp.m_ptr, tmp.m_name);
+        *this = std::move(tmp);
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     // Two small helpers to make sure that whenever we require
@@ -265,6 +332,9 @@ private:
     // of topology, but we cannot mark them as such because of serialization.
     std::string m_name;
 };
+
+// Streaming operator for topology.
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const topology &);
 
 } // namespace pagmo
 
