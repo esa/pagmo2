@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <mutex>
 #include <random>
+#include <string>
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
