@@ -238,13 +238,9 @@ how two of the three pheromone values are computed (in particular, the weights a
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
-    
-    * <em>acc</em> is not &gt;=0.
-    * <em>focus</em> is not &gt;=0.
-    * <em>epsilon</em> is not in [0,1].
-    * <em>threshold</em> is not in [1,gen] when gen!=0 and memory==false.
-    * <em>threshold</em> is not in &gt;=1 when gen!=0 and memory==true.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>acc</em> is not &gt;=0, <em>focus</em> is not &gt;=0, <em>epsilon</em> is not in [0,1],
+    <em>threshold</em> is not in [1,gen] when gen!=0 and memory==false, or
+    <em>threshold</em> is not in &gt;=1 when gen!=0 and memory==true</p></li>
 </ul>
 </dd>
 </dl>
@@ -357,9 +353,7 @@ optimization, with continuous value.</p>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
-    
-    * <em>gen</em> is not &gt;=3.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>gen</em> is not &gt;=3</p></li>
 </ul>
 </dd>
 </dl>
@@ -765,7 +759,7 @@ all parents and children are put in the same pool and only the best are passed t
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
     is not one of <code class="docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="docutils literal notranslate"><span class="pre">uniform</span></code> or <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>, if <em>selection</em> not one of “roulette”,
     “truncated” or <em>crossover</em> is not one of <code class="docutils literal notranslate"><span class="pre">exponential</span></code>, <code class="docutils literal notranslate"><span class="pre">binomial</span></code>, <code class="docutils literal notranslate"><span class="pre">sbx</span></code>, <code class="docutils literal notranslate"><span class="pre">single</span></code>, if <em>param_m</em> is
-    not in [0,1] and <em>mutation</em> is not <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>, if <em>mutation</em> is not in [1,100] and <em>mutation</em> is <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>.</p></li>
+    not in [0,1] and <em>mutation</em> is not <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>, if <em>mutation</em> is not in [1,100] and <em>mutation</em> is <code class="docutils literal notranslate"><span class="pre">polynomial</span></code></p></li>
 <li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python
     (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
@@ -1222,12 +1216,9 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em>, <em>neighbours</em>, <em>seed</em> or <em>limit</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
-    
-    * <em>decomposition</em> is not one of ‘tchebycheff’, ‘weighted’ or ‘bi’.
-    * <em>weight_generation</em> is not one of ‘random’, ‘low discrepancy’ or ‘grid’.
-    * <em>CR</em> or <em>F</em> or <em>realb</em> are not in [0.,1.]
-    * <em>eta_m</em> is negative</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>decomposition</em> is not one of ‘tchebycheff’, ‘weighted’ or ‘bi’,
+    <em>weight_generation</em> is not one of ‘random’, ‘low discrepancy’ or ‘grid’,
+    <em>CR</em> or <em>F</em> or <em>realb</em> are not in [0.,1.] or <em>eta_m</em> is negative</p></li>
 </ul>
 </dd>
 </dl>
@@ -1936,12 +1927,8 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
-    
-    * <em>cr</em> is not in [0,1[.
-    * <em>eta_c</em> is not in [0,100[.
-    * <em>m</em> is not in [0,1].
-    * <em>eta_m</em> is not in [0,100[.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>cr</em> is not in [0,1[, <em>eta_c</em> is not in [0,100[, <em>m</em> is not in [0,1], or
+    <em>eta_m</em> is not in [0,100[</p></li>
 </ul>
 </dd>
 </dl>

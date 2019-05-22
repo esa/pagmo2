@@ -227,13 +227,10 @@ member functions in the UDBFE are used by <a class="reference internal" href="#p
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>udbfe</em> does not implement the mandatory methods detailed above</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
-    
-    * methods of the UDBFE invoked during construction,
-    * the deep copy of the UDBFE,
-    * the constructor of the underlying C++ class,
-    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by methods of the UDBFE invoked during construction,
+    the deep copy of the UDBFE, the constructor of the underlying C++ class, or
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
 </ul>
 </dd>
 </dl>

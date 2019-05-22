@@ -273,21 +273,16 @@ full list of UDPs already coded in pygmo).</p>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>udp</em> does not implement the mandatory methods detailed above</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – in the following cases:
-    
-    * the number of objectives of the UDP is zero,
-    * the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
-    * the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
-      different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
-    * the <code class="docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code> and <code class="docutils literal notranslate"><span class="pre">hessians_sparsity()</span></code> methods of the UDP fail basic sanity checks
-      (e.g., they return vectors with repeated indices, they contain indices exceeding the problem’s dimensions, etc.)</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
-    
-    * methods of the UDP invoked during construction,
-    * the deep copy of the UDP,
-    * the constructor of the underlying C++ class,
-    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the number of objectives of the UDP is zero, the number of objectives,
+    equality or inequality constraints is larger than an implementation-defined value,
+    the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+    different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+    or if the <code class="docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code> and <code class="docutils literal notranslate"><span class="pre">hessians_sparsity()</span></code> methods of the UDP fail basic sanity checks
+    (e.g., they return vectors with repeated indices, they contain indices exceeding the problem’s dimensions, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by methods of the UDP invoked during construction,
+    the deep copy of the UDP, the constructor of the underlying C++ class,
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
 </ul>
 </dd>
 </dl>
@@ -878,23 +873,19 @@ containing each exactly 2 elements representing the indices <span class="math no
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – in the following cases:
-    
-    * the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
-      shape, dimensions, etc.),
-    * at least one element of the returned iterable Python object does not consist of a collection of exactly
-      2 elements,
-    * if the sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
-      or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
-      returned pattern is different from the size recorded upon construction)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
+    shape, dimensions, etc.),
+    at least one element of the returned iterable Python object does not consist of a collection of exactly
+    2 elements, or the sparsity pattern returned by the UDP is invalid
+    (specifically, if it is not strictly sorted lexicographically,
+    or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
+    returned pattern is different from the size recorded upon construction)</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the NumPy array returned by the UDP contains integer values which are negative or outside an
     implementation-defined range</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
-    
-    * the underlying C++ function,
-    * the <code class="docutils literal notranslate"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API,
-    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the underlying C++ function,
+    the <code class="docutils literal notranslate"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API, or
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1131,23 +1122,18 @@ containing each exactly 2 elements representing the indices <span class="math no
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – in the following cases:
-    
-    * the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
-      shape, dimensions, etc.),
-    * at least one element of a returned iterable Python object does not consist of a collection of exactly
-      2 elements,
-    * if a sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
-      if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
-      differs from the size recorded upon construction)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
+    shape, dimensions, etc.),
+    at least one element of a returned iterable Python object does not consist of a collection of exactly
+    2 elements, or if a sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
+    if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
+    differs from the size recorded upon construction)</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
     implementation-defined range</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
-    
-    * the underlying C++ function,
-    * the <code class="docutils literal notranslate"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API,
-    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the underlying C++ function,
+    the <code class="docutils literal notranslate"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API, or
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
 </ul>
 </dd>
 </dl>

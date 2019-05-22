@@ -225,13 +225,10 @@ full list of UDAs already coded in pygmo).</p>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>uda</em> does not implement the mandatory method detailed above</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
-    
-    * methods of the UDA invoked during construction,
-    * the deep copy of the UDA,
-    * the constructor of the underlying C++ class,
-    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by methods of the UDA invoked during construction,
+    the deep copy of the UDA, the constructor of the underlying C++ class, or
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
 </ul>
 </dd>
 </dl>
