@@ -31,8 +31,10 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <random>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -65,6 +67,14 @@ namespace pagmo
  * state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
  * to conclude by calling the wait() and wait_check() methods. The status of
  * ongoing evolutions in the archipelago can be queried via status().
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. warning::
+ *
+ *    The only operations allowed on a moved-from :cpp:class:`pagmo::archipelago` are destruction
+ *    and assignment. Any other operation will result in undefined behaviour.
+ *
+ * \endverbatim
  */
 class PAGMO_DLL_PUBLIC archipelago
 {
@@ -83,15 +93,24 @@ public:
      * archipelago.
      */
     using size_type = size_type_implementation;
+
+private:
+    // A map to connect island pointers to an idx
+    // in the archipelago. This will be used by islands
+    // during migration in order to establish the island
+    // indices within the archipelago.
+    using idx_map_t = std::unordered_map<const island *, size_type>;
+
+public:
     /// Mutable iterator.
     /**
      * Dereferencing a mutable iterator will yield a reference to an island within the archipelago.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
-     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *    on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.
      *
      * \endverbatim
      */
@@ -106,7 +125,7 @@ public:
     // Copy constructor.
     archipelago(const archipelago &);
     // Move constructor.
-    archipelago(archipelago &&other) noexcept;
+    archipelago(archipelago &&) noexcept;
 
 private:
 #if defined(_MSC_VER)
@@ -252,6 +271,9 @@ private:
     using push_back_enabler = enable_if_t<std::is_constructible<island, Args...>::value, int>;
 #endif
 
+    // Implementation of push_back().
+    void push_back_impl(std::unique_ptr<island> &&);
+
 public:
     /// Add island.
     /**
@@ -269,15 +291,17 @@ public:
      *
      * @param args the arguments that will be used for the construction of the island.
      *
-     * @throws unspecified any exception thrown by memory allocation errors or by the invoked constructor
-     * of pagmo::island.
+     * @throws std::overflow_error if the size of the archipelago is greater than an
+     * implementation-defined maximum.
+     * @throws unspecified any exception thrown by:
+     * - memory allocation errors,
+     * - threading primitives,
+     * - the invoked constructor of pagmo::island.
      */
     template <typename... Args, push_back_enabler<Args &&...> = 0>
     void push_back(Args &&... args)
     {
-        m_islands.emplace_back(detail::make_unique<island>(std::forward<Args>(args)...));
-        // NOTE: this is noexcept.
-        m_islands.back()->m_ptr->archi_ptr = this;
+        push_back_impl(detail::make_unique<island>(std::forward<Args>(args)...));
     }
     /// Evolve archipelago.
     /**
@@ -306,10 +330,10 @@ public:
      * Adding an island to the archipelago will invalidate all existing iterators.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
-     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *    on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.
      *
      * \endverbatim
      *
@@ -326,10 +350,10 @@ public:
      * Adding an island to the archipelago will invalidate all existing iterators.
      *
      * \verbatim embed:rst:leading-asterisk
-     * .. note::
+     * .. warning::
      *
      *    Mutable iterators are provided solely in order to allow calling non-const methods
-     *    on the islands. Assigning an island via a mutable iterator will be undefined behaviour.
+     *    on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.
      *
      * \endverbatim
      *
@@ -369,6 +393,8 @@ public:
     std::vector<vector_double> get_champions_f() const;
     // Get the decision vectors of the islands' champions.
     std::vector<vector_double> get_champions_x() const;
+    // Get the index of an island.
+    size_type get_island_idx(const island &) const;
     /// Save to archive.
     /**
      * This method will save to \p ar the islands of the archipelago.
@@ -389,31 +415,47 @@ public:
      *
      * @param ar the input archive.
      *
-     * @throws unspecified any exception thrown by the deserialization of pagmo::island.
+     * @throws unspecified any exception thrown by the deserialization of pagmo::island
+     * or primitive types, or by memory errors in standard containers.
      */
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
+        // NOTE: the idea here is that we will be loading the member of archi one by one in
+        // separate variables, move assign the loaded data into a tmp archi and finally move-assign
+        // the tmp archi into this. This allows the method to be exception safe, and to have
+        // archi objects always in a consistent state at every stage of the deserialization.
+
+        // The tmp archi. This is def-cted and idle, we will be able to move-in data without
+        // worrying about synchronization.
         archipelago tmp;
-        try {
-            ar >> tmp.m_islands;
-            // LCOV_EXCL_START
-        } catch (...) {
-            // Clear the islands vector before re-throwing if anything goes wrong.
-            // The islands in tmp will not have the archi ptr set correctly,
-            // and thus an assertion would fail in the archi dtor in debug mode.
-            tmp.m_islands.clear();
-            throw;
+
+        // The islands.
+        container_t tmp_islands;
+        ar >> tmp_islands;
+
+        // Map the islands to indices.
+        idx_map_t tmp_idx_map;
+        for (size_type i = 0; i < tmp_islands.size(); ++i) {
+            tmp_idx_map.emplace(tmp_islands[i].get(), i);
         }
-        // LCOV_EXCL_STOP
-        // This will set the island archi pointers
-        // to the correct value.
+
+        // From now on, everything is noexcept.
+        tmp.m_islands = std::move(tmp_islands);
+        tmp.m_idx_map = std::move(tmp_idx_map);
+
+        // NOTE: this final assignment will take care of setting the islands' archi pointers
+        // appropriately via archi's move assignment operator.
         *this = std::move(tmp);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     container_t m_islands;
+    // The map from island pointers to indices in the archi.
+    // It needs to be protected by a mutex.
+    mutable std::mutex m_idx_map_mutex;
+    idx_map_t m_idx_map;
 };
 
 // Stream operator.

@@ -29,7 +29,9 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <limits>
 #include <memory>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -55,13 +57,14 @@ void archipelago::wait_check_ignore()
 
 /// Default constructor.
 /**
- * The default constructor will initialise an empty archipelago.
+ * The default constructor will initialise an empty archipelago with a
+ * default-constructed topology.
  */
 archipelago::archipelago() {}
 
 /// Copy constructor.
 /**
- * The islands of \p other will be copied into \p this via archipelago::push_back().
+ * The copy constructor will perform a deep copy of \p other.
  *
  * @param other the archipelago that will be copied.
  *
@@ -71,7 +74,7 @@ archipelago::archipelago(const archipelago &other)
 {
     for (const auto &iptr : other.m_islands) {
         // This will end up copying the island members,
-        // and assign the archi pointer as well.
+        // and assign the archi pointer, and associating ids to island pointers.
         push_back(*iptr);
     }
 }
@@ -80,7 +83,7 @@ archipelago::archipelago(const archipelago &other)
 /**
  * The move constructor will wait for any ongoing evolution in \p other to finish
  * and it will then transfer the state of \p other into \p this. After the move,
- * \p other is left in an unspecified but valid state.
+ * \p other is left in a state which is assignable and destructible.
  *
  * @param other the archipelago that will be moved.
  */
@@ -89,13 +92,22 @@ archipelago::archipelago(archipelago &&other) noexcept
     // NOTE: in move operations we have to wait, because the ongoing
     // island evolutions are interacting with their hosting archi 'other'.
     // We cannot just move in the vector of islands.
+    // NOTE: we want to ensure that other is in a known state
+    // after the move, so that we can run assertion checks in
+    // the destructor in debug mode.
     other.wait_check_ignore();
-    // Move in the islands.
+    // Move in the islands, make sure that other is cleared.
     m_islands = std::move(other.m_islands);
+    other.m_islands.clear();
     // Re-direct the archi pointers to point to this.
     for (const auto &iptr : m_islands) {
         iptr->m_ptr->archi_ptr = this;
     }
+    // Move over the indices, clear other.
+    // NOTE: the indices are still valid as above we just moved in a vector
+    // of unique_ptrs, without changing their content.
+    m_idx_map = std::move(other.m_idx_map);
+    other.m_idx_map.clear();
 }
 
 /// Copy assignment.
@@ -119,7 +131,8 @@ archipelago &archipelago::operator=(const archipelago &other)
 /// Move assignment.
 /**
  * Move assignment will transfer the state of \p other into \p this, after any ongoing
- * evolution in \p this and \p other has finished.
+ * evolution in \p this and \p other has finished. After the move,
+ * \p other is left in a state which is assignable and destructible.
  *
  * @param other the assignment argument.
  *
@@ -130,14 +143,21 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
     if (this != &other) {
         // NOTE: as in the move ctor, we need to wait on other and this as well.
         // This mirrors the island's behaviour.
+        // NOTE: we want to ensure that other is in a known state
+        // after the move, so that we can run assertion checks in
+        // the destructor in debug mode.
         wait_check_ignore();
         other.wait_check_ignore();
-        // Move in the islands.
+        // Move in the islands, clear other.
         m_islands = std::move(other.m_islands);
+        other.m_islands.clear();
         // Re-direct the archi pointers to point to this.
         for (const auto &iptr : m_islands) {
             iptr->m_ptr->archi_ptr = this;
         }
+        // Move the indices map, clear other.
+        m_idx_map = std::move(other.m_idx_map);
+        other.m_idx_map.clear();
     }
     return *this;
 }
@@ -152,8 +172,17 @@ archipelago::~archipelago()
     // NOTE: this is not strictly necessary, but it will not hurt. And, if we add further
     // sanity checks, we know the archi is stopped.
     wait_check_ignore();
+    // NOTE: we made sure in the move ctor/assignment that the island vector, the migrants and the indices
+    // map are all cleared out after a move. Thus we can safely assert the following.
     assert(std::all_of(m_islands.begin(), m_islands.end(),
                        [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
+    assert(m_idx_map.size() == m_islands.size());
+#if !defined(NDEBUG)
+    for (size_type i = 0; i < m_islands.size(); ++i) {
+        assert(m_idx_map.find(m_islands[i].get()) != m_idx_map.end());
+        assert(m_idx_map.find(m_islands[i].get())->second == i);
+    }
+#endif
 }
 
 /// Mutable island access.
@@ -164,7 +193,7 @@ archipelago::~archipelago()
  * obtained via this method.
  *
  * \verbatim embed:rst:leading-asterisk
- * .. note::
+ * .. warning::
  *
  *    The mutable version of the subscript operator exists solely to allow calling non-const methods
  *    on the islands. Assigning an island via a reference obtained through this operator will result
@@ -303,11 +332,11 @@ evolve_status archipelago::status() const
         return evolve_status::busy_error;
     }
 
-    // The other error case.
+    // The other error case: at least one island is idle with error.
     if (n_idle_error) {
         if (n_busy) {
-            // At least one island is idle with error. If any other
-            // island is busy, we return busy error.
+            // At least one island is idle with error and at least one island is busy:
+            // return busy error.
             return evolve_status::busy_error;
         }
         // No island is busy at all, at least one island is idle with error.
@@ -349,6 +378,56 @@ std::vector<vector_double> archipelago::get_champions_x() const
         retval.emplace_back(isl_ptr->get_population().champion_x());
     }
     return retval;
+}
+
+void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
+{
+    // Assign the pointer to this.
+    new_island->m_ptr->archi_ptr = this;
+
+    // Try to make space for the new island in the islands vector.
+    // LCOV_EXCL_START
+    if (m_islands.size() == std::numeric_limits<decltype(m_islands.size())>::max()) {
+        pagmo_throw(std::overflow_error, "cannot add a new island to an archipelago due to an overflow condition");
+    }
+    // LCOV_EXCL_STOP
+    m_islands.reserve(m_islands.size() + 1u);
+
+    // Map the new island idx.
+    {
+        // NOTE: if anything fails here, we won't have modified the state of the archi
+        // (apart from reserving memory).
+        std::lock_guard<std::mutex> lock(m_idx_map_mutex);
+
+        assert(m_idx_map.find(new_island.get()) == m_idx_map.end());
+        m_idx_map.emplace(new_island.get(), m_islands.size());
+    }
+
+    // Actually add the island. This cannot fail as we already reserved space.
+    m_islands.push_back(std::move(new_island));
+}
+
+/// Get the index of an island.
+/**
+ * This function will return the index of the island \p isl in the archipelago. If \p isl does
+ * not belong to the archipelago, an error will be reaised.
+ *
+ * @param isl the island whose index will be returned.
+ *
+ * @return the index of \p isl in the archipelago.
+ *
+ * @throws std::invalid_argument if \p isl does not belong to the archipelago.
+ * @throws unspecified any exception thrown by failures in threading primitives.
+ */
+archipelago::size_type archipelago::get_island_idx(const island &isl) const
+{
+    std::lock_guard<std::mutex> lock(m_idx_map_mutex);
+    const auto ret = m_idx_map.find(&isl);
+    if (ret == m_idx_map.end()) {
+        pagmo_throw(std::invalid_argument,
+                    "the index of an island in an archipelago was requested, but the island is not in the archipelago");
+    }
+    return ret->second;
 }
 
 /// Stream operator.
