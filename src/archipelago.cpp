@@ -28,6 +28,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -68,7 +69,8 @@ archipelago::archipelago() {}
  *
  * @param other the archipelago that will be copied.
  *
- * @throws unspecified any exception thrown by archipelago::push_back().
+ * @throws unspecified any exception thrown by archipelago::push_back(), or
+ * archipelago::get_migrants_db().
  */
 archipelago::archipelago(const archipelago &other)
 {
@@ -77,6 +79,9 @@ archipelago::archipelago(const archipelago &other)
         // and assign the archi pointer, and associating ids to island pointers.
         push_back(*iptr);
     }
+
+    // Set the migrants.
+    m_migrants = other.get_migrants_db();
 }
 
 /// Move constructor.
@@ -96,6 +101,7 @@ archipelago::archipelago(archipelago &&other) noexcept
     // after the move, so that we can run assertion checks in
     // the destructor in debug mode.
     other.wait_check_ignore();
+
     // Move in the islands, make sure that other is cleared.
     m_islands = std::move(other.m_islands);
     other.m_islands.clear();
@@ -103,11 +109,16 @@ archipelago::archipelago(archipelago &&other) noexcept
     for (const auto &iptr : m_islands) {
         iptr->m_ptr->archi_ptr = this;
     }
+
     // Move over the indices, clear other.
     // NOTE: the indices are still valid as above we just moved in a vector
     // of unique_ptrs, without changing their content.
     m_idx_map = std::move(other.m_idx_map);
     other.m_idx_map.clear();
+
+    // Move over the migrants, clear other.
+    m_migrants = std::move(other.m_migrants);
+    other.m_migrants.clear();
 }
 
 /// Copy assignment.
@@ -148,6 +159,7 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
         // the destructor in debug mode.
         wait_check_ignore();
         other.wait_check_ignore();
+
         // Move in the islands, clear other.
         m_islands = std::move(other.m_islands);
         other.m_islands.clear();
@@ -155,9 +167,14 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
         for (const auto &iptr : m_islands) {
             iptr->m_ptr->archi_ptr = this;
         }
+
         // Move the indices map, clear other.
         m_idx_map = std::move(other.m_idx_map);
         other.m_idx_map.clear();
+
+        // Move over the migrants, clear other.
+        m_migrants = std::move(other.m_migrants);
+        other.m_migrants.clear();
     }
     return *this;
 }
@@ -177,8 +194,15 @@ archipelago::~archipelago()
     assert(std::all_of(m_islands.begin(), m_islands.end(),
                        [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
     assert(m_idx_map.size() == m_islands.size());
+    assert(m_migrants.size() == m_islands.size());
 #if !defined(NDEBUG)
     for (size_type i = 0; i < m_islands.size(); ++i) {
+        // Ensure that the vectors in the migrant db have
+        // consistent sizes.
+        assert(std::get<0>(m_migrants[i]).size() == std::get<1>(m_migrants[i]).size());
+        assert(std::get<1>(m_migrants[i]).size() == std::get<2>(m_migrants[i]).size());
+
+        // Ensure the map of indices is correct.
         assert(m_idx_map.find(m_islands[i].get()) != m_idx_map.end());
         assert(m_idx_map.find(m_islands[i].get())->second == i);
     }
@@ -393,14 +417,39 @@ void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
     // LCOV_EXCL_STOP
     m_islands.reserve(m_islands.size() + 1u);
 
+    // Try to make space for the new migrants entry.
+    // LCOV_EXCL_START
+    if (m_migrants.size() == std::numeric_limits<decltype(m_migrants.size())>::max()) {
+        pagmo_throw(std::overflow_error, "cannot add a new island to an archipelago due to an overflow condition");
+    }
+    // LCOV_EXCL_STOP
+    {
+        std::lock_guard<std::mutex> lock(m_migrants_mutex);
+        m_migrants.reserve(m_migrants.size() + 1u);
+    }
+
     // Map the new island idx.
     {
         // NOTE: if anything fails here, we won't have modified the state of the archi
         // (apart from reserving memory).
         std::lock_guard<std::mutex> lock(m_idx_map_mutex);
-
         assert(m_idx_map.find(new_island.get()) == m_idx_map.end());
         m_idx_map.emplace(new_island.get(), m_islands.size());
+    }
+
+    // Add an empty entry to the migrants db.
+    try {
+        std::lock_guard<std::mutex> lock(m_migrants_mutex);
+        m_migrants.emplace_back();
+    } catch (...) {
+        // LCOV_EXCL_START
+        // NOTE: we get here only if the lock throws, because we made space for the
+        // new migrants above already. Better to abort in such case, as we have no
+        // reasonable path for recovering from this.
+        std::cerr << "An unrecoverable error arose while adding an island to the archipelago, aborting now."
+                  << std::endl;
+        std::abort();
+        // LCOV_EXCL_STOP
     }
 
     // Actually add the island. This cannot fail as we already reserved space.
@@ -428,6 +477,23 @@ archipelago::size_type archipelago::get_island_idx(const island &isl) const
                     "the index of an island in an archipelago was requested, but the island is not in the archipelago");
     }
     return ret->second;
+}
+
+archipelago::migrants_db_t archipelago::get_migrants_db() const
+{
+    std::lock_guard<std::mutex> lock(m_migrants_mutex);
+    return m_migrants;
+}
+
+migrants_t archipelago::get_migrants(size_type i) const
+{
+    std::lock_guard<std::mutex> lock(m_migrants_mutex);
+    if (i >= m_migrants.size()) {
+        pagmo_throw(std::out_of_range, "cannot access the migrants of the island at index " + std::to_string(i)
+                                           + ": the migrants database has a size of only "
+                                           + std::to_string(m_migrants.size()));
+    }
+    return m_migrants[i];
 }
 
 /// Stream operator.

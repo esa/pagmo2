@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <mutex>
 #include <random>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
@@ -54,6 +55,8 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+
+using migrants_t = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
 
 /// Archipelago.
 /**
@@ -87,6 +90,8 @@ class PAGMO_DLL_PUBLIC archipelago
     void wait_check_ignore();
 
 public:
+    using migrants_db_t = std::vector<migrants_t>;
+
     /// The size type of the archipelago.
     /**
      * This is an unsigned integer type used to represent the number of islands in the
@@ -395,18 +400,21 @@ public:
     std::vector<vector_double> get_champions_x() const;
     // Get the index of an island.
     size_type get_island_idx(const island &) const;
+    migrants_db_t get_migrants_db() const;
+    migrants_t get_migrants(size_type) const;
     /// Save to archive.
     /**
      * This method will save to \p ar the islands of the archipelago.
      *
      * @param ar the output archive.
      *
-     * @throws unspecified any exception thrown by the serialization of pagmo::island.
+     * @throws unspecified any exception thrown by the serialization of pagmo::island, pagmo::topology
+     * or primitive types.
      */
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
-        ar << m_islands;
+        detail::to_archive(ar, m_islands, get_migrants_db());
     }
     /// Load from archive.
     /**
@@ -415,7 +423,7 @@ public:
      *
      * @param ar the input archive.
      *
-     * @throws unspecified any exception thrown by the deserialization of pagmo::island
+     * @throws unspecified any exception thrown by the deserialization of pagmo::island, pagmo::topology
      * or primitive types, or by memory errors in standard containers.
      */
     template <typename Archive>
@@ -440,9 +448,14 @@ public:
             tmp_idx_map.emplace(tmp_islands[i].get(), i);
         }
 
+        // The migrants.
+        migrants_db_t tmp_migrants;
+        ar >> tmp_migrants;
+
         // From now on, everything is noexcept.
         tmp.m_islands = std::move(tmp_islands);
         tmp.m_idx_map = std::move(tmp_idx_map);
+        tmp.m_migrants = std::move(tmp_migrants);
 
         // NOTE: this final assignment will take care of setting the islands' archi pointers
         // appropriately via archi's move assignment operator.
@@ -456,6 +469,9 @@ private:
     // It needs to be protected by a mutex.
     mutable std::mutex m_idx_map_mutex;
     idx_map_t m_idx_map;
+    // The migrants.
+    mutable std::mutex m_migrants_mutex;
+    migrants_db_t m_migrants;
 };
 
 // Stream operator.
