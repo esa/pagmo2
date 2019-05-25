@@ -430,21 +430,16 @@ Args:
 
 Raises:
     NotImplementedError: if *udp* does not implement the mandatory methods detailed above
-    ValueError: in the following cases:
-
-      * the number of objectives of the UDP is zero,
-      * the number of objectives, equality or inequality constraints is larger than an implementation-defined value,
-      * the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
-        different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
-      * the ``gradient_sparsity()`` and ``hessians_sparsity()`` methods of the UDP fail basic sanity checks
-        (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.)
-    unspecified: any exception thrown by:
-
-      * methods of the UDP invoked during construction,
-      * the deep copy of the UDP,
-      * the constructor of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+    ValueError: if the number of objectives of the UDP is zero, the number of objectives,
+      equality or inequality constraints is larger than an implementation-defined value,
+      the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
+      different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
+      or if the ``gradient_sparsity()`` and ``hessians_sparsity()`` methods of the UDP fail basic sanity checks
+      (e.g., they return vectors with repeated indices, they contain indices exceeding the problem's dimensions, etc.)
+    unspecified: any exception thrown by methods of the UDP invoked during construction,
+      the deep copy of the UDP, the constructor of the underlying C++ class,
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
 
 )";
 }
@@ -949,23 +944,19 @@ Returns:
     2D Numpy int array: the gradient sparsity pattern
 
 Raises:
-    ValueError: in the following cases:
-
-      * the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
-        shape, dimensions, etc.),
-      * at least one element of the returned iterable Python object does not consist of a collection of exactly
-        2 elements,
-      * if the sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
-        or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
-        returned pattern is different from the size recorded upon construction)
+    ValueError: if the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
+      shape, dimensions, etc.),
+      at least one element of the returned iterable Python object does not consist of a collection of exactly
+      2 elements, or the sparsity pattern returned by the UDP is invalid
+      (specifically, if it is not strictly sorted lexicographically,
+      or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
+      returned pattern is different from the size recorded upon construction)
     OverflowError: if the NumPy array returned by the UDP contains integer values which are negative or outside an
       implementation-defined range
-    unspecified: any exception thrown by:
-
-      * the underlying C++ function,
-      * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+    unspecified: any exception thrown by the underlying C++ function,
+      the ``PyArray_FROM_OTF()`` function from the NumPy C API, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
 
 )";
 }
@@ -1093,23 +1084,18 @@ Returns:
     ``list`` of 2D Numpy int array: the hessians sparsity patterns
 
 Raises:
-    ValueError: in the following cases:
-
-      * the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
-        shape, dimensions, etc.),
-      * at least one element of a returned iterable Python object does not consist of a collection of exactly
-        2 elements,
-      * if a sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
-        if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
-        differs from the size recorded upon construction)
+    ValueError: if the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
+      shape, dimensions, etc.),
+      at least one element of a returned iterable Python object does not consist of a collection of exactly
+      2 elements, or if a sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
+      if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
+      differs from the size recorded upon construction)
     OverflowError: if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
       implementation-defined range
-    unspecified: any exception thrown by:
-
-      * the underlying C++ function,
-      * the ``PyArray_FROM_OTF()`` function from the NumPy C API,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+    unspecified: any exception thrown by the underlying C++ function,
+      the ``PyArray_FROM_OTF()`` function from the NumPy C API, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
 
 )";
 }
@@ -1358,13 +1344,10 @@ Args:
 
 Raises:
     NotImplementedError: if *uda* does not implement the mandatory method detailed above
-    unspecified: any exception thrown by:
-
-      * methods of the UDA invoked during construction,
-      * the deep copy of the UDA,
-      * the constructor of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+    unspecified: any exception thrown by methods of the UDA invoked during construction,
+      the deep copy of the UDA, the constructor of the underlying C++ class, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
 
 )";
 }
@@ -2394,12 +2377,8 @@ Args:
 
 Raises:
     OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
-    ValueError: if either:
-
-      * *cr* is not in [0,1[.
-      * *eta_c* is not in [0,100[.
-      * *m* is not in [0,1].
-      * *eta_m* is not in [0,100[.
+    ValueError: if either *cr* is not in [0,1[, *eta_c* is not in [0,100[, *m* is not in [0,1], or
+      *eta_m* is not in [0,100[
     
 See also the docs of the C++ class :cpp:class:`pagmo::nsga2`.
 
@@ -2509,13 +2488,9 @@ Args:
 
 Raises:
     OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
-    ValueError: if either:
-
-      * *acc* is not >=0.
-      * *focus* is not >=0.
-      * *epsilon* is not in [0,1].
-      * *threshold* is not in [1,gen] when gen!=0 and memory==false.
-      * *threshold* is not in >=1 when gen!=0 and memory==true.
+    ValueError: if either *acc* is not >=0, *focus* is not >=0, *epsilon* is not in [0,1],
+      *threshold* is not in [1,gen] when gen!=0 and memory==false, or
+      *threshold* is not in >=1 when gen!=0 and memory==true
 
 See also the docs of the C++ class :cpp:class:`pagmo::gaco`.
 
@@ -2595,9 +2570,7 @@ Args:
 
 Raises:
     OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
-    ValueError: if either:
-
-        * *gen* is not >=3.
+    ValueError: if *gen* is not >=3
     
 See also the docs of the C++ class :cpp:class:`pagmo::gwo`.
 
@@ -2663,12 +2636,9 @@ Args:
 
 Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
-    ValueError: if either:
-    
-      * *decomposition* is not one of 'tchebycheff', 'weighted' or 'bi'.
-      * *weight_generation* is not one of 'random', 'low discrepancy' or 'grid'.
-      * *CR* or *F* or *realb* are not in [0.,1.] 
-      * *eta_m* is negative
+    ValueError: if either *decomposition* is not one of 'tchebycheff', 'weighted' or 'bi',
+      *weight_generation* is not one of 'random', 'low discrepancy' or 'grid',
+      *CR* or *F* or *realb* are not in [0.,1.] or *eta_m* is negative
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
@@ -5411,7 +5381,7 @@ Raises:
     ValueError: if *cr* is not in [0,1], if *eta_c* is not in [1,100], if *m* is not in [0,1], input_f *mutation* 
       is not one of ``gaussian``, ``uniform`` or ``polynomial``, if *selection* not one of "roulette", 
       "truncated" or *crossover* is not one of ``exponential``, ``binomial``, ``sbx``, ``single``, if *param_m* is
-      not in [0,1] and *mutation* is not ``polynomial``, if *mutation* is not in [1,100] and *mutation* is ``polynomial``.
+      not in [0,1] and *mutation* is not ``polynomial``, if *mutation* is not in [1,100] and *mutation* is ``polynomial``
     unspecified: any exception thrown by failures at the intersection between C++ and Python
       (e.g., type conversion errors, mismatched function signatures, etc.)
 
@@ -6019,13 +5989,10 @@ Args:
 
 Raises:
     NotImplementedError: if *udbfe* does not implement the mandatory methods detailed above
-    unspecified: any exception thrown by:
-
-      * methods of the UDBFE invoked during construction,
-      * the deep copy of the UDBFE,
-      * the constructor of the underlying C++ class,
-      * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-        signatures, etc.)
+    unspecified: any exception thrown by methods of the UDBFE invoked during construction,
+      the deep copy of the UDBFE, the constructor of the underlying C++ class, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
 
 )";
 }

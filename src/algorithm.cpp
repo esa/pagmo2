@@ -34,7 +34,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
