@@ -120,6 +120,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/unconstrain.hpp>
+#include <pagmo/problems/wga.hpp>
 #include <pagmo/problems/zdt.hpp>
 
 // Enable conditionally the inclusion of these
