@@ -215,7 +215,9 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/member_bfe.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/batch_evaluators/thread_bfe.cpp"
         # UDT.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/base_bgl_topology.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
         # Utils.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
