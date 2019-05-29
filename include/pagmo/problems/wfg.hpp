@@ -55,7 +55,8 @@ namespace pagmo
  * .. seealso::
  *
  *    Huband, Simon, Hingston, Philip, Barone, Luigi and While Lyndon. "A Review of Multi-Objective Test Problems and a
- *    Scalable Test Problem Toolkit". IEEE Transactions on Evolutionary Computation (2006), 10(5), 477-506. doi: 10.1109/TEVC.2005.861417.
+ *    Scalable Test Problem Toolkit". IEEE Transactions on Evolutionary Computation (2006), 10(5), 477-506. doi:
+ * 10.1109/TEVC.2005.861417.
  *
  * \endverbatim
  */
@@ -78,7 +79,8 @@ public:
      * @throws std::invalid_argument if \p dim_k is not < \p dim_dvs or is not >=1 or \p dim_k % (\p dim_obj -1) != 0.
      *
      */
-    wfg(unsigned prob_id = 1u, vector_double::size_type dim_dvs = 4u, vector_double::size_type dim_obj=4u, vector_double::size_type dim_k=2u);
+    wfg(unsigned prob_id = 1u, vector_double::size_type dim_dvs = 5u, vector_double::size_type dim_obj = 3u,
+        vector_double::size_type dim_k = 4u);
     // Fitness computation
     vector_double fitness(const vector_double &) const;
 
