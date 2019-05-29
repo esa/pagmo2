@@ -28,20 +28,26 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <cstdlib>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <memory>
 #include <mutex>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
+
+#include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/archipelago.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -69,8 +75,8 @@ archipelago::archipelago() {}
  *
  * @param other the archipelago that will be copied.
  *
- * @throws unspecified any exception thrown by archipelago::push_back(), or
- * archipelago::get_migrants_db().
+ * @throws unspecified any exception thrown by archipelago::push_back(),
+ * archipelago::get_migrants_db() or get_topology().
  */
 archipelago::archipelago(const archipelago &other)
 {
@@ -82,6 +88,9 @@ archipelago::archipelago(const archipelago &other)
 
     // Set the migrants.
     m_migrants = other.get_migrants_db();
+
+    // Set the topology.
+    m_topology = other.get_topology();
 }
 
 /// Move constructor.
@@ -119,6 +128,10 @@ archipelago::archipelago(archipelago &&other) noexcept
     // Move over the migrants, clear other.
     m_migrants = std::move(other.m_migrants);
     other.m_migrants.clear();
+
+    // Move over the topology. No need to clear here as we know
+    // in which state the topology will be in after the move.
+    m_topology = std::move(other.m_topology);
 }
 
 /// Copy assignment.
@@ -175,6 +188,9 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
         // Move over the migrants, clear other.
         m_migrants = std::move(other.m_migrants);
         other.m_migrants.clear();
+
+        // Move over the topology.
+        m_topology = std::move(other.m_topology);
     }
     return *this;
 }
@@ -407,6 +423,14 @@ std::vector<vector_double> archipelago::get_champions_x() const
 void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
 {
     // Assign the pointer to this.
+    // NOTE: perhaps this can be delayed until the last line?
+    // The reason would be that, in case of exceptions,
+    // new_island will be destroyed while pointing
+    // to an archipelago, although the island is not
+    // actually in the archipelago. In theory this
+    // could lead to assertion failures on destruction, if
+    // we implement archipelago-based checks in the dtor
+    // of island. This is not the case at the moment.
     new_island->m_ptr->archi_ptr = this;
 
     // Try to make space for the new island in the islands vector.
@@ -454,6 +478,11 @@ void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
 
     // Actually add the island. This cannot fail as we already reserved space.
     m_islands.push_back(std::move(new_island));
+
+    // Finally, push back the topology. This is required to be thread safe, no need for locks.
+    // If this fails, we will have a possibly *bad* topology in the archi, but this can
+    // always happen via a bogus set_topology() and there's nothing we can do about it.
+    m_topology.push_back();
 }
 
 /// Get the index of an island.
@@ -496,6 +525,43 @@ migrants_t archipelago::get_migrants(size_type i) const
     return m_migrants[i];
 }
 
+topology archipelago::get_topology() const
+{
+    // NOTE: topology is supposed to be thread-safe,
+    // no need to protect the access.
+    return m_topology;
+}
+
+void archipelago::set_topology(topology topo)
+{
+    // NOTE: make sure we finish any ongoing evolution before setting the topology.
+    // The assignment will trigger the destructor of the UDT, so we need to make
+    // sure there's no interaction with the UDT happening.
+    wait_check_ignore();
+    m_topology = std::move(topo);
+}
+
+std::pair<std::vector<archipelago::size_type>, vector_double> archipelago::get_island_connections(size_type i) const
+{
+    // NOTE: get_connections() is required to be thread-safe.
+    auto tmp = m_topology.get_connections(boost::numeric_cast<std::size_t>(i));
+
+    // NOTE: the get_connections() method of the topology
+    // returns indices represented by std::size_t, but this method
+    // returns indices represented by size_type. Hence, we formally
+    // need to go through a conversion. If this becomes a problem
+    // performance-wise, we can write some TMP to elide the
+    // conversion in the likely case the two types coincide
+    std::pair<std::vector<size_type>, vector_double> retval;
+    retval.first.reserve(boost::numeric_cast<decltype(retval.first.size())>(tmp.first.size()));
+
+    std::transform(tmp.first.begin(), tmp.first.end(), std::back_inserter(retval.first),
+                   [](const std::size_t &n) { return boost::numeric_cast<size_type>(n); });
+    retval.second = std::move(tmp.second);
+
+    return retval;
+}
+
 /// Stream operator.
 /**
  * This operator will stream to \p os a human-readable representation of the input
@@ -513,6 +579,7 @@ migrants_t archipelago::get_migrants(size_type i) const
 std::ostream &operator<<(std::ostream &os, const archipelago &archi)
 {
     stream(os, "Number of islands: ", archi.size(), "\n");
+    stream(os, "Topology: ", archi.get_topology().get_name(), "\n");
     stream(os, "Status: ", archi.status(), "\n\n");
     stream(os, "Islands summaries:\n\n");
     detail::table t({"#", "Type", "Algo", "Prob", "Size", "Status"}, "\t");

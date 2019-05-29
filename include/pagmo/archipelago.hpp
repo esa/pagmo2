@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -57,6 +58,10 @@ namespace pagmo
 {
 
 using migrants_t = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
+
+// TODO
+// - move docs to sphinx.
+// - ctors with topology arguments.
 
 /// Archipelago.
 /**
@@ -229,7 +234,8 @@ public:
      *
      * \endverbatim
      *
-     * This constructor will forward \p n times the input arguments \p args to the
+     * This constructor will first initialise an empty archipelago with a default-constructed
+     * topology, and then forward \p n times the input arguments \p args to the
      * push_back() method. If, however, the parameter pack contains an argument which
      * would be interpreted as a seed by the invoked island constructor, then this seed
      * will be used to initialise a random number generator that in turn will be used to generate
@@ -292,7 +298,8 @@ public:
      *
      * This method will construct an island from the supplied arguments and add it to the archipelago.
      * Islands are added at the end of the archipelago (that is, the new island will have an index
-     * equal to the value of size() before the call to this method).
+     * equal to the value of size() before the call to this method). pagmo::topology::push_back()
+     * will also be called on the pagmo::topology associated to this archipelago.
      *
      * @param args the arguments that will be used for the construction of the island.
      *
@@ -301,6 +308,7 @@ public:
      * @throws unspecified any exception thrown by:
      * - memory allocation errors,
      * - threading primitives,
+     * - pagmo::topology::push_back(),
      * - the invoked constructor of pagmo::island.
      */
     template <typename... Args, push_back_enabler<Args &&...> = 0>
@@ -326,6 +334,7 @@ public:
     void wait_check();
     // Status of the archipelago.
     evolve_status status() const;
+
     /// Mutable begin iterator.
     /**
      * This method will return a mutable iterator pointing to the beginning of the internal island container. That is,
@@ -394,6 +403,7 @@ public:
     {
         return const_iterator(m_islands.end());
     }
+
     // Get the fitness vectors of the islands' champions.
     std::vector<vector_double> get_champions_f() const;
     // Get the decision vectors of the islands' champions.
@@ -402,6 +412,10 @@ public:
     size_type get_island_idx(const island &) const;
     migrants_db_t get_migrants_db() const;
     migrants_t get_migrants(size_type) const;
+    topology get_topology() const;
+    void set_topology(topology);
+    std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;
+
     /// Save to archive.
     /**
      * This method will save to \p ar the islands of the archipelago.
@@ -414,7 +428,7 @@ public:
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
-        detail::to_archive(ar, m_islands, get_migrants_db());
+        detail::to_archive(ar, m_islands, get_migrants_db(), get_topology());
     }
     /// Load from archive.
     /**
@@ -452,10 +466,15 @@ public:
         migrants_db_t tmp_migrants;
         ar >> tmp_migrants;
 
+        // The topology.
+        topology tmp_topo;
+        ar >> tmp_topo;
+
         // From now on, everything is noexcept.
         tmp.m_islands = std::move(tmp_islands);
         tmp.m_idx_map = std::move(tmp_idx_map);
         tmp.m_migrants = std::move(tmp_migrants);
+        tmp.m_topology = std::move(tmp_topo);
 
         // NOTE: this final assignment will take care of setting the islands' archi pointers
         // appropriately via archi's move assignment operator.
@@ -472,6 +491,11 @@ private:
     // The migrants.
     mutable std::mutex m_migrants_mutex;
     migrants_db_t m_migrants;
+    // The topology.
+    // NOTE: the topology does not need
+    // an associated mutex as it is supposed
+    // to be thread-safe already.
+    topology m_topology;
 };
 
 // Stream operator.
