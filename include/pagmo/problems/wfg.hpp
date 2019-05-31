@@ -77,6 +77,8 @@ public:
      * @throws std::invalid_argument if \p dim_dvs is not >=1.
      * @throws std::invalid_argument if \p dim_obj is not >=2.
      * @throws std::invalid_argument if \p dim_k is not < \p dim_dvs or is not >=1 or \p dim_k % (\p dim_obj -1) != 0.
+     * @throws std::invalid_argument if (\p prob_id == 2 or \p prob_id == 3) and it does not hold (\p dim_dvs - \p
+     * dim_k)mod(2) == 0.
      *
      */
     wfg(unsigned prob_id = 1u, vector_double::size_type dim_dvs = 5u, vector_double::size_type dim_obj = 3u,

@@ -150,7 +150,7 @@ std::pair<vector_double, vector_double> wfg::get_bounds() const
 {
     vector_double upper_bounds(m_dim_dvs);
     for (decltype(m_dim_dvs) i = 0u; i < m_dim_dvs; ++i) {
-        upper_bounds[i] = std::pow(2.0, i + 1);
+        upper_bounds[i] = 2.0 * (i + 1);
     }
 
     return {vector_double(m_dim_dvs, 0.), upper_bounds};
@@ -188,11 +188,11 @@ double wfg::linear(const vector_double &parameters, const unsigned long m) const
             g *= parameters[i];
         }
         return g;
-    } else if (m > 1u && m < m_dim_obj - 1) {
+    } else if (m > 1u && m < m_dim_obj) {
         for (decltype(m_dim_obj) i = 0u; i < m_dim_obj - m; ++i) {
             g *= parameters[i];
         }
-        return g * (parameters[m_dim_obj - m]);
+        return g * (1.0 - parameters[m_dim_obj - m]);
     } else {
         return 1.0 - parameters[0];
     }
@@ -222,7 +222,7 @@ double wfg::concave(const vector_double &parameters, const unsigned long m) cons
             g *= std::sin(parameters[i] * boost::math::constants::pi<double>() / 2.0);
         }
         return g;
-    } else if (m > 1 && m < m_dim_obj - 1) {
+    } else if (m > 1 && m < m_dim_obj) {
         for (decltype(m_dim_obj) i = 0u; i < m_dim_obj - m; ++i) {
             g *= std::sin(parameters[i] * boost::math::constants::pi<double>() / 2.0);
         }
@@ -245,7 +245,8 @@ double wfg::disconnected(const double parameters_0, const double alpha, const do
 {
     return 1.0
            - std::pow(parameters_0, alpha)
-                 * std::pow(deg_const * std::pow(parameters_0, beta) * boost::math::constants::pi<double>(), 2.0);
+                 * std::pow(std::cos(deg_const * std::pow(parameters_0, beta) * boost::math::constants::pi<double>()),
+                            2);
 }
 
 // We now define the transformation functions:
@@ -303,15 +304,20 @@ double wfg::r_sum(const vector_double &y_vec, const vector_double &weights) cons
 
 double wfg::r_nonsep(const vector_double &y_vec, const unsigned long a_par) const
 {
-    double g = 0.;
-    auto len = y_vec.size();
-    for (decltype(len) j = 0u; j < len; ++j) {
-        g += y_vec[j];
-        for (decltype(len) i = 0u; i < a_par - 2; ++i) {
-            g += std::abs(y_vec[j] - y_vec[(1 + j + m_dim_k) % len]);
+    if (a_par == 1) {
+        vector_double weights(y_vec.size(), 1.0);
+        return r_sum(y_vec, weights);
+    } else {
+        double g = 0.;
+        auto len = y_vec.size();
+        for (decltype(len) j = 0u; j < len; ++j) {
+            g += y_vec[j];
+            for (decltype(len) i = 0u; i <= a_par - 2; ++i) {
+                g += std::abs(y_vec[j] - y_vec[(1 + j + i) % len]);
+            }
         }
+        return g / (len / a_par * std::ceil(a_par / 2) * (1.0 + 2.0 * a_par - 2.0 * std::ceil(a_par / 2.0)));
     }
-    return g / (len / a_par * std::ceil(a_par / 2) * (1.0 + 2.0 * a_par - 2.0 * std::ceil(a_par / 2.0)));
 }
 
 vector_double wfg::wfg1_fitness(const vector_double &x) const
@@ -420,8 +426,6 @@ vector_double wfg::wfg2_fitness(const vector_double &x) const
     vector_double t_1(m_dim_dvs);
     vector_double t_2(m_dim_k + l / 2);
     vector_double t_3(m_dim_obj);
-    decltype(m_dim_obj) head;
-    decltype(m_dim_obj) tail;
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
@@ -447,8 +451,8 @@ vector_double wfg::wfg2_fitness(const vector_double &x) const
         if (i <= m_dim_k) {
             t_2[i - 1] = y[i - 1];
         } else {
-            head = m_dim_k + 2 * (i - m_dim_k) - 2;
-            tail = m_dim_k + 2 * (i - m_dim_k);
+            decltype(m_dim_k) head = m_dim_k + 2 * (i - m_dim_k) - 2;
+            decltype(m_dim_k) tail = m_dim_k + 2 * (i - m_dim_k);
             decltype(m_dim_obj) index = 0u;
             vector_double first_input(tail - head);
             for (decltype(head) j = head; j < tail; ++j) {
@@ -461,8 +465,8 @@ vector_double wfg::wfg2_fitness(const vector_double &x) const
     }
     // t_3:
     for (decltype(m_dim_obj) i = 1u; i <= m_dim_obj - 1; ++i) {
-        head = (i - 1) * m_dim_k / (m_dim_obj - 1);
-        tail = i * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) head = (i - 1) * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) tail = i * m_dim_k / (m_dim_obj - 1);
         vector_double first_input_2(tail - head);
         vector_double weights(tail - head, 1.0);
         decltype(m_dim_obj) index_2 = 0u;
@@ -472,16 +476,14 @@ vector_double wfg::wfg2_fitness(const vector_double &x) const
         }
         t_3[i - 1] = r_sum(first_input_2, weights);
     }
-    vector_double first_input_3(t_3.size() - m_dim_k);
-    vector_double weights_2(first_input_3.size(), 1.0);
+    vector_double first_input_3(l / 2);
+    vector_double weights_2(l / 2, 1.0);
     decltype(m_dim_obj) index_3 = 0u;
-    for (decltype(m_dim_k) i = m_dim_k; i < t_3.size(); ++i) {
+    for (decltype(m_dim_k) i = m_dim_k; i < m_dim_k + l / 2; ++i) {
         first_input_3[index_3] = y[i];
         ++index_3;
     }
-
     t_3[m_dim_obj - 1] = r_sum(first_input_3, weights_2);
-
     // parameters:
     for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
         parameters[i] = std::max(t_3[m_dim_obj - 1], 1.0) * (t_3[i] - 0.5) + 0.5;
@@ -514,8 +516,6 @@ vector_double wfg::wfg3_fitness(const vector_double &x) const
     vector_double t_1(m_dim_dvs);
     vector_double t_2(m_dim_k + l / 2);
     vector_double t_3(m_dim_obj);
-    decltype(m_dim_obj) head;
-    decltype(m_dim_obj) tail;
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
@@ -541,8 +541,8 @@ vector_double wfg::wfg3_fitness(const vector_double &x) const
         if (i <= m_dim_k) {
             t_2[i - 1] = y[i - 1];
         } else {
-            head = m_dim_k + 2 * (i - m_dim_k) - 2;
-            tail = m_dim_k + 2 * (i - m_dim_k);
+            decltype(m_dim_k) head = m_dim_k + 2 * (i - m_dim_k) - 2;
+            decltype(m_dim_k) tail = m_dim_k + 2 * (i - m_dim_k);
             decltype(m_dim_obj) index = 0u;
             vector_double first_input(tail - head);
             for (decltype(head) j = head; j < tail; ++j) {
@@ -555,8 +555,8 @@ vector_double wfg::wfg3_fitness(const vector_double &x) const
     }
     // t_3:
     for (decltype(m_dim_obj) i = 1u; i <= m_dim_obj - 1; ++i) {
-        head = (i - 1) * m_dim_k / (m_dim_obj - 1);
-        tail = i * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) head = (i - 1) * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) tail = i * m_dim_k / (m_dim_obj - 1);
         vector_double first_input_2(tail - head);
         vector_double weights(tail - head, 1.0);
         decltype(m_dim_obj) index_2 = 0u;
@@ -566,22 +566,27 @@ vector_double wfg::wfg3_fitness(const vector_double &x) const
         }
         t_3[i - 1] = r_sum(first_input_2, weights);
     }
-    vector_double first_input_3(t_3.size() - m_dim_k);
-    vector_double weights_2(first_input_3.size(), 1.0);
-    decltype(m_dim_obj) index_2 = 0u;
-    for (decltype(m_dim_k) i = m_dim_k; i < t_3.size(); ++i) {
-        first_input_3[index_2] = y[i];
-        ++index_2;
+    vector_double first_input_3(l / 2);
+    vector_double weights_2(l / 2, 1.0);
+    decltype(m_dim_obj) index_3 = 0u;
+    for (decltype(m_dim_k) i = m_dim_k; i < m_dim_k + l / 2; ++i) {
+        first_input_3[index_3] = y[i];
+        ++index_3;
     }
-
     t_3[m_dim_obj - 1] = r_sum(first_input_3, weights_2);
+
+    // parameters:
+    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
+        parameters[i] = std::max(t_3[m_dim_obj - 1], 1.0) * (t_3[i] - 0.5) + 0.5;
+    }
+    parameters[m_dim_obj - 1] = t_3[m_dim_obj - 1];
 
     // parameters:
     for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
         if (i == 0u) {
             parameters[i] = std::max(t_3[m_dim_obj - 1], 1.0) * (t_3[i] - 0.5) + 0.5;
         } else {
-            parameters[i] = std::max(t_3[m_dim_obj - 0], 1.0) * (t_3[i] - 0.5) + 0.5;
+            parameters[i] = std::max(t_3[m_dim_obj - 1], 0.0) * (t_3[i] - 0.5) + 0.5;
         }
     }
     parameters[m_dim_obj - 1] = t_3[m_dim_obj - 1];
@@ -747,8 +752,6 @@ vector_double wfg::wfg6_fitness(const vector_double &x) const
     auto l = m_dim_dvs - m_dim_k;
     vector_double t_1(m_dim_dvs);
     vector_double t_2(m_dim_obj);
-    decltype(m_dim_obj) head;
-    decltype(m_dim_obj) tail;
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
@@ -771,16 +774,18 @@ vector_double wfg::wfg6_fitness(const vector_double &x) const
     }
     // t_2:
     for (decltype(m_dim_obj) i = 1u; i <= m_dim_obj - 1; ++i) {
-        head = (i - 1) * m_dim_k / (m_dim_obj - 1);
-        tail = i * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) head = (i - 1) * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) tail = i * m_dim_k / (m_dim_obj - 1);
+        decltype(m_dim_k) index = 0u;
         vector_double first_input(tail - head);
-        decltype(m_dim_obj) index = 0u;
+
         for (decltype(head) j = head; j < tail; ++j) {
             first_input[index] = y[j];
             ++index;
         }
         t_2[i - 1] = r_nonsep(first_input, m_dim_k / (m_dim_obj - 1));
     }
+
     vector_double first_input_2(m_dim_dvs - m_dim_k);
     decltype(m_dim_obj) index_2 = 0u;
     for (decltype(m_dim_k) i = m_dim_k; i < m_dim_dvs; ++i) {
@@ -796,10 +801,9 @@ vector_double wfg::wfg6_fitness(const vector_double &x) const
     parameters[m_dim_obj - 1] = t_2[m_dim_obj - 1];
 
     // shape functions:
-    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj - 1; ++i) {
-        shape_fun[i] = convex(parameters, i + 1);
+    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
+        shape_fun[i] = concave(parameters, i + 1);
     }
-    shape_fun[m_dim_obj - 1] = disconnected(parameters[0], 1.0, 1.0, 5.0);
 
     // fitness computation:
     vector_double f(m_dim_obj);
@@ -835,10 +839,10 @@ vector_double wfg::wfg7_fitness(const vector_double &x) const
     // t_1:
     for (decltype(m_dim_k) i = 1u; i <= m_dim_k; ++i) {
         vector_double first_input(m_dim_dvs - i);
-        vector_double weights(m_dim_dvs - i);
+        vector_double weights(m_dim_dvs - i, 1.0);
         decltype(m_dim_obj) index = 0u;
         for (decltype(m_dim_dvs) j = i; j < m_dim_dvs; ++j) {
-            first_input[j] = x_norm[j];
+            first_input[index] = x_norm[j];
             ++index;
         }
         t_1[i - 1] = b_param(x_norm[i - 1], r_sum(first_input, weights), 0.98 / 49.98, 0.02, 50);
@@ -848,7 +852,6 @@ vector_double wfg::wfg7_fitness(const vector_double &x) const
         t_1[i] = x_norm[i];
         y[i] = t_1[i];
     }
-
     // t_2:
     for (decltype(m_dim_dvs) i = 0u; i < m_dim_dvs; ++i) {
         if (i < m_dim_k) {
@@ -889,10 +892,9 @@ vector_double wfg::wfg7_fitness(const vector_double &x) const
     parameters[m_dim_obj - 1] = t_3[m_dim_obj - 1];
 
     // shape functions:
-    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj - 1; ++i) {
-        shape_fun[i] = convex(parameters, i + 1);
+    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
+        shape_fun[i] = concave(parameters, i + 1);
     }
-    shape_fun[m_dim_obj - 1] = disconnected(parameters[0], 1.0, 1.0, 5.0);
 
     // fitness computation:
     vector_double f(m_dim_obj);
@@ -981,10 +983,9 @@ vector_double wfg::wfg8_fitness(const vector_double &x) const
     parameters[m_dim_obj - 1] = t_3[m_dim_obj - 1];
 
     // shape functions:
-    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj - 1; ++i) {
-        shape_fun[i] = convex(parameters, i + 1);
+    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
+        shape_fun[i] = concave(parameters, i + 1);
     }
-    shape_fun[m_dim_obj - 1] = disconnected(parameters[0], 1.0, 1.0, 5.0);
 
     // fitness computation:
     vector_double f(m_dim_obj);
@@ -1024,14 +1025,14 @@ vector_double wfg::wfg9_fitness(const vector_double &x) const
         vector_double weights((m_dim_dvs - 1) - i, 1.0);
         decltype(m_dim_obj) index = 0u;
         for (decltype(i) j = i + 1; j < m_dim_dvs; ++j) {
-            first_input[index] = y[j];
+            first_input[index] = x_norm[j];
+            ++index;
         }
         t_1[i] = b_param(x_norm[i], r_sum(first_input, weights), 0.98 / 49.98, 0.02, 50);
         y[i] = t_1[i];
     }
     t_1[m_dim_dvs - 1] = x_norm[m_dim_dvs - 1];
     y[m_dim_dvs - 1] = t_1[m_dim_dvs - 1];
-
     // t_2:
     for (decltype(m_dim_dvs) i = 0u; i < m_dim_dvs; ++i) {
         if (i < m_dim_k) {
@@ -1069,10 +1070,9 @@ vector_double wfg::wfg9_fitness(const vector_double &x) const
     parameters[m_dim_obj - 1] = t_3[m_dim_obj - 1];
 
     // shape functions:
-    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj - 1; ++i) {
-        shape_fun[i] = convex(parameters, i + 1);
+    for (decltype(m_dim_obj) i = 0u; i < m_dim_obj; ++i) {
+        shape_fun[i] = concave(parameters, i + 1);
     }
-    shape_fun[m_dim_obj - 1] = disconnected(parameters[0], 1.0, 1.0, 5.0);
 
     // fitness computation:
     vector_double f(m_dim_obj);
