@@ -1079,6 +1079,17 @@ class minlp_rastrigin_test_case(_ut.TestCase):
         self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
         self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
 
+class wfg_test_case(_ut.TestCase):
+    """Test case for the UDP wfg
+        
+        """
+    
+    def runTest(self):
+        from .core import wfg, population
+        udp = wfg(prob_id=1, dim_dvs=5, dim_obj=3, dim_k=4)
+        pop = population(udp, 20)
+        self.assertTrue(prob.get_nx() == 5)
+        self.assertTrue(prob.get_nobj() == 3)
 
 class rastrigin_test_case(_ut.TestCase):
     """Test case for the Rastrigin function

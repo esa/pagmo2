@@ -71,7 +71,7 @@ public:
      * @param prob_id problem number. Must be in [1, .., 9].
      * @param dim_dvs decision vector dimension.
      * @param dim_obj objective function dimension.
-     * @param dim_k k parameter. This parameter influences the shape functions of the various problems.
+     * @param dim_k position parameter. This parameter influences the shape functions of the various problems.
      *
      * @throws std::invalid_argument if \p prob_id is not in [1,..,9].
      * @throws std::invalid_argument if \p dim_dvs is not >=1.
