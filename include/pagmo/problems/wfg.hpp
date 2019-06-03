@@ -43,20 +43,21 @@ namespace pagmo
 /// WFG problem test suite
 /**
  *
- * This test suite was conceived to
+ * This test suite was conceived to exceed the functionalities of previously implemented
+ * test suites.
+ * The WFG test suite was introduced by Simon Huband, Luigi Barone, Lyndon While, and Phil Hingston. In their paper the
+ * authors
+ * identify the absence of nonseparable multimodal problems in order to test multi-objective optimization algorithms.
+ * In view of this, they propose a set of 9 different scalable multi-objective unconstrained problems (both in their
+ * objectives and in their decision vectors).
  *
- * In their paper the authors identify the absence of nonseparable multimodal problems in order
- * to test multi-objective optimization algorithms. In view of this, they propose a set of 9 different
- * scalable multi-objective unconstrained problems (both in their objectives and in their decision vectors)
- * in order to cover this lack. In the original paper, the use of NSGA-II and MOEA for this test suite is also
- * illustrated.
  *
  * \verbatim embed:rst:leading-asterisk
  * .. seealso::
  *
  *    Huband, Simon, Hingston, Philip, Barone, Luigi and While Lyndon. "A Review of Multi-Objective Test Problems and a
  *    Scalable Test Problem Toolkit". IEEE Transactions on Evolutionary Computation (2006), 10(5), 477-506. doi:
- * 10.1109/TEVC.2005.861417.
+ *    10.1109/TEVC.2005.861417.
  *
  * \endverbatim
  */
@@ -66,7 +67,7 @@ class PAGMO_DLL_PUBLIC wfg
 public:
     /** Constructor
      *
-     * Will construct one problem from the WFG test-suite.
+     * Will construct one problem from the Walking Fish Group (WFG) test-suite.
      *
      * @param prob_id problem number. Must be in [1, .., 9].
      * @param dim_dvs decision vector dimension.
