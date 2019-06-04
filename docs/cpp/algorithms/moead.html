@@ -176,7 +176,7 @@
 <h1>Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)<a class="headerlink" href="#multi-objective-evolutionary-algorithm-by-decomposition-moea-d-de" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv4N5pagmo5moeadE">
-<span id="_CPPv3N5pagmo5moeadE"></span><span id="_CPPv2N5pagmo5moeadE"></span><span id="pagmo::moead"></span><span class="target" id="classpagmo_1_1moead"></span><em class="property">class </em><code class="descname">moead</code><a class="headerlink" href="#_CPPv4N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5moeadE"></span><span id="_CPPv2N5pagmo5moeadE"></span><span id="pagmo::moead"></span><span class="target" id="classpagmo_1_1moead"></span><em class="property">class </em><code class="sig-name descname">moead</code><a class="headerlink" href="#_CPPv4N5pagmo5moeadE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Multi Objective Evolutionary Algorithms by Decomposition (the DE variant) </p>
 <p><img alt="../../../_images/moead.png" src="../../../_images/moead.png" /></p>
 <p>MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of problem decomposition, it leverages evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particular algorithm implemented in pagmo with the name <a class="reference internal" href="#classpagmo_1_1moead"><span class="std std-ref">pagmo::moead</span></a> uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the Tchebycheff, weighted or boundary intersection decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is also implemented.</p>
@@ -201,13 +201,13 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv4N5pagmo5moead13log_line_typeE">
-<span id="_CPPv3N5pagmo5moead13log_line_typeE"></span><span id="_CPPv2N5pagmo5moead13log_line_typeE"></span><span id="pagmo::moead::log_line_type"></span><span class="target" id="classpagmo_1_1moead_1a6dfd520834ab0b7f28a03f0f31f08833"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo5moead13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5moead13log_line_typeE"></span><span id="_CPPv2N5pagmo5moead13log_line_typeE"></span><span id="pagmo::moead::log_line_type"></span><span class="target" id="classpagmo_1_1moead_1a6dfd520834ab0b7f28a03f0f31f08833"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo5moead13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, adf, ideal_point) </p>
 </dd></dl>
 
 <dl class="type">
 <dt id="_CPPv4N5pagmo5moead8log_typeE">
-<span id="_CPPv3N5pagmo5moead8log_typeE"></span><span id="_CPPv2N5pagmo5moead8log_typeE"></span><span id="pagmo::moead::log_type"></span><span class="target" id="classpagmo_1_1moead_1aa853a22b62807391fe984b5dc1878072"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo5moead13log_line_typeE" title="pagmo::moead::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo5moead8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5moead8log_typeE"></span><span id="_CPPv2N5pagmo5moead8log_typeE"></span><span id="pagmo::moead::log_type"></span><span class="target" id="classpagmo_1_1moead_1aa853a22b62807391fe984b5dc1878072"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo5moead13log_line_typeE" title="pagmo::moead::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo5moead8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -216,7 +216,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj">
-<span id="_CPPv3N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj"></span><span id="_CPPv2N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj"></span><span id="pagmo::moead::moead__unsigned.ss.ss.population::size_type.double.double.double.double.unsigned.b.unsigned"></span><span class="target" id="classpagmo_1_1moead_1aca577b5ce94b0e94f42899c3f3f3d462"></span><code class="descname">moead</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, std::string <em>weight_generation</em> = &quot;grid&quot;, std::string <em>decomposition</em> = &quot;tchebycheff&quot;, <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>neighbours</em> = 20u, double <em>CR</em> = 1.0, double <em>F</em> = 0.5, double <em>eta_m</em> = 20., double <em>realb</em> = 0.9, unsigned <em>limit</em> = 2u, bool <em>preserve_diversity</em> = true, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj"></span><span id="_CPPv2N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj"></span><span id="pagmo::moead::moead__unsigned.ss.ss.population::size_type.double.double.double.double.unsigned.b.unsigned"></span><span class="target" id="classpagmo_1_1moead_1aca577b5ce94b0e94f42899c3f3f3d462"></span><code class="sig-name descname">moead</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, std::string <em>weight_generation</em> = &quot;grid&quot;, std::string <em>decomposition</em> = &quot;tchebycheff&quot;, <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>neighbours</em> = 20u, double <em>CR</em> = 1.0, double <em>F</em> = 0.5, double <em>eta_m</em> = 20., double <em>realb</em> = 0.9, unsigned <em>limit</em> = 2u, bool <em>preserve_diversity</em> = true, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead5moeadEjNSt6stringENSt6stringEN10population9size_typeEddddjbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs MOEA/D-DE</p>
 <p><dl class="simple">
@@ -244,7 +244,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead6evolveE10population">
-<span id="_CPPv3NK5pagmo5moead6evolveE10population"></span><span id="_CPPv2NK5pagmo5moead6evolveE10population"></span><span id="pagmo::moead::evolve__populationC"></span><span class="target" id="classpagmo_1_1moead_1a18e9a0e66917907a0d396b5c7076aaf9"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead6evolveE10population"></span><span id="_CPPv2NK5pagmo5moead6evolveE10population"></span><span id="pagmo::moead::evolve__populationC"></span><span class="target" id="classpagmo_1_1moead_1a18e9a0e66917907a0d396b5c7076aaf9"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for the requested number of generations.</p>
 <p><dl class="simple">
@@ -260,7 +260,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo5moead8set_seedEj">
-<span id="_CPPv3N5pagmo5moead8set_seedEj"></span><span id="_CPPv2N5pagmo5moead8set_seedEj"></span><span id="pagmo::moead::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1moead_1af71b74fb233b25a9db38eb89facdf9ac"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5moead8set_seedEj"></span><span id="_CPPv2N5pagmo5moead8set_seedEj"></span><span id="pagmo::moead::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1moead_1af71b74fb233b25a9db38eb89facdf9ac"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -273,7 +273,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead8get_seedEv">
-<span id="_CPPv3NK5pagmo5moead8get_seedEv"></span><span id="_CPPv2NK5pagmo5moead8get_seedEv"></span><span id="pagmo::moead::get_seedC"></span><span class="target" id="classpagmo_1_1moead_1aa182233fec595289070ebd07ab10d06e"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead8get_seedEv"></span><span id="_CPPv2NK5pagmo5moead8get_seedEv"></span><span id="pagmo::moead::get_seedC"></span><span class="target" id="classpagmo_1_1moead_1aa182233fec595289070ebd07ab10d06e"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -284,7 +284,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo5moead13set_verbosityEj">
-<span id="_CPPv3N5pagmo5moead13set_verbosityEj"></span><span id="_CPPv2N5pagmo5moead13set_verbosityEj"></span><span id="pagmo::moead::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1moead_1a889cc949b01652a802840a7ad95e8919"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5moead13set_verbosityEj"></span><span id="_CPPv2N5pagmo5moead13set_verbosityEj"></span><span id="pagmo::moead::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1moead_1a889cc949b01652a802840a7ad95e8919"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5moead13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -316,7 +316,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead13get_verbosityEv">
-<span id="_CPPv3NK5pagmo5moead13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5moead13get_verbosityEv"></span><span id="pagmo::moead::get_verbosityC"></span><span class="target" id="classpagmo_1_1moead_1a26e6ca6e2759f20f4cf2bfb743311f2c"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5moead13get_verbosityEv"></span><span id="pagmo::moead::get_verbosityC"></span><span class="target" id="classpagmo_1_1moead_1a26e6ca6e2759f20f4cf2bfb743311f2c"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -327,7 +327,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead7get_genEv">
-<span id="_CPPv3NK5pagmo5moead7get_genEv"></span><span id="_CPPv2NK5pagmo5moead7get_genEv"></span><span id="pagmo::moead::get_genC"></span><span class="target" id="classpagmo_1_1moead_1a875bbd56a79ee101ea23bdb577b62c2a"></span>unsigned <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead7get_genEv"></span><span id="_CPPv2NK5pagmo5moead7get_genEv"></span><span id="pagmo::moead::get_genC"></span><span class="target" id="classpagmo_1_1moead_1a875bbd56a79ee101ea23bdb577b62c2a"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
@@ -338,7 +338,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead8get_nameEv">
-<span id="_CPPv3NK5pagmo5moead8get_nameEv"></span><span id="_CPPv2NK5pagmo5moead8get_nameEv"></span><span id="pagmo::moead::get_nameC"></span><span class="target" id="classpagmo_1_1moead_1a3c2887bcb50fbc9b4292daf64b4b8e44"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead8get_nameEv"></span><span id="_CPPv2NK5pagmo5moead8get_nameEv"></span><span id="pagmo::moead::get_nameC"></span><span class="target" id="classpagmo_1_1moead_1a3c2887bcb50fbc9b4292daf64b4b8e44"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -350,7 +350,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo5moead14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5moead14get_extra_infoEv"></span><span id="pagmo::moead::get_extra_infoC"></span><span class="target" id="classpagmo_1_1moead_1af2127817557417be55974f4a98da8436"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5moead14get_extra_infoEv"></span><span id="pagmo::moead::get_extra_infoC"></span><span class="target" id="classpagmo_1_1moead_1af2127817557417be55974f4a98da8436"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -362,7 +362,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5moead7get_logEv">
-<span id="_CPPv3NK5pagmo5moead7get_logEv"></span><span id="_CPPv2NK5pagmo5moead7get_logEv"></span><span id="pagmo::moead::get_logC"></span><span class="target" id="classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo5moead8log_typeE" title="pagmo::moead::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5moead7get_logEv"></span><span id="_CPPv2NK5pagmo5moead7get_logEv"></span><span id="pagmo::moead::get_logC"></span><span class="target" id="classpagmo_1_1moead_1a1eb37504b10dbed8ea4f304250d5c25a"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo5moead8log_typeE" title="pagmo::moead::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5moead7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1moead_1a6dfd520834ab0b7f28a03f0f31f08833"><span class="std std-ref">moead::log_line_type</span></a> containing: Gen, Fevals, ADR, ideal_point as described in <a class="reference internal" href="#classpagmo_1_1moead_1a889cc949b01652a802840a7ad95e8919"><span class="std std-ref">moead::set_verbosity</span></a> <dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1moead_1a6dfd520834ab0b7f28a03f0f31f08833"><span class="std std-ref">moead::log_line_type</span></a> containing the logged values Gen, Fevals, ADR, ideal_point </p>
@@ -373,7 +373,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 
 <dl class="function">
 <dt id="_CPPv4I0EN5pagmo5moead9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo5moead9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo5moead9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1moead_1a8f82eaf637a3e99c3eab118f706768b6"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5moead9serializeEvR7Archivej" title="pagmo::moead::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5moead9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo5moead9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo5moead9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1moead_1a8f82eaf637a3e99c3eab118f706768b6"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5moead9serializeEvR7Archivej" title="pagmo::moead::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5moead9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -407,7 +407,7 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

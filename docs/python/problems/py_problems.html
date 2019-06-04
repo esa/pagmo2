@@ -182,7 +182,7 @@
 <span id="py-problems-py"></span><h2>Problems implemented in Python<a class="headerlink" href="#problems-implemented-in-python" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pygmo.decorator_problem">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">decorator_problem</code><span class="sig-paren">(</span><em>prob=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">decorator_problem</code><span class="sig-paren">(</span><em class="sig-param">prob=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator meta-problem.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.9.</span></p>
@@ -236,17 +236,17 @@ read-only property.</p>
 <li><p><strong>kwargs</strong> – the dictionary of decorators to be applied to the functions of the input problem</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if at least one of the values in <em>kwargs</em> is not callable</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or the deep copy
-    of <em>prob</em> or <em>kwargs</em></p></li>
-</ul>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if at least one of the values in <em>kwargs</em> is not callable</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or the deep copy
+    of <em>prob</em> or <em>kwargs</em></p>
 </dd>
 </dl>
 <dl class="method">
 <dt id="pygmo.decorator_problem.get_decorator">
-<code class="descname">get_decorator</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem.get_decorator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_decorator</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decorator_problem.get_decorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the decorator for the function called <em>fname</em>.</p>
 <p>This method will return a copy of the decorator that has been registered upon construction
 for the function called <em>fname</em>. If no decorator for <em>fname</em> has been specified during
@@ -266,30 +266,33 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the function whose decorator will be returned</p>
+<dd class="field-odd"><p><strong>fname</strong> – the name of the function whose decorator will be returned</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a copy of the decorator registered for <em>fname</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if no decorator for <em>fname</em> has been registered</p>
+<dt class="field-even">Type fname</dt>
+<dd class="field-even"><p>str</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>fname</em> is not a string</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by the deep copying of the decorator for <em>fname</em></p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a copy of the decorator registered for <em>fname</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if no decorator for <em>fname</em> has been registered</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>fname</em> is not a string</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by the deep copying of the decorator for <em>fname</em></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.decorator_problem.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.decorator_problem.inner_problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">inner_problem</code><a class="headerlink" href="#pygmo.decorator_problem.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem.</p>
 <p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a reference to the inner problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
 </dd>
 </dl>
@@ -302,23 +305,32 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <span id="py-problems-cpp"></span><h2>Problems exposed from C++<a class="headerlink" href="#problems-exposed-from-c" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pygmo.null_problem">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">null_problem</code><span class="sig-paren">(</span><em>nobj = 1</em>, <em>nec = 0</em>, <em>nic = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.null_problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">null_problem</code><span class="sig-paren">(</span><em class="sig-param">nobj = 1</em>, <em class="sig-param">nec = 0</em>, <em class="sig-param">nic = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.null_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>The null problem.</p>
 <p>A problem used in the default-initialization of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a> and of the meta-problems.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nobj</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of objectives</p></li>
-<li><p><strong>nec</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of equality constraints</p></li>
-<li><p><strong>nic</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of inequality constraintsctives</p></li>
+<li><p><strong>nobj</strong> – the number of objectives</p></li>
+<li><p><strong>nec</strong> – the number of equality constraints</p></li>
+<li><p><strong>nic</strong> – the number of inequality constraintsctives</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>nobj</em>, <em>nec</em>, <em>nic</em> are negative or greater than an implementation-defined value or if <em>nobj</em> is zero</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p></li>
-</ul>
+<dt class="field-even">Type nobj</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type nec</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Type nic</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>nobj</em>, <em>nec</em>, <em>nic</em> are negative or greater than an implementation-defined value or if <em>nobj</em> is zero</p>
+</dd>
+<dt class="field-even">Raises unspecified</dt>
+<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -326,7 +338,7 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.cec2014">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2014</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2014" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">cec2014</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2014" title="Permalink to this definition">¶</a></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.8.</span></p>
 </div>
@@ -334,15 +346,21 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – problem id (one of [1..30])</p></li>
-<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of dimensions (one of [2, 10, 20, 30, 50, 100])</p></li>
+<li><p><strong>prob_id</strong> – problem id (one of [1..30])</p></li>
+<li><p><strong>dim</strong> – number of dimensions (one of [2, 10, 20, 30, 50, 100])</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 10, 20, 30, 50, 100] or if <em>dim</em> is 2 and <em>prob_id</em> is in [17,18,19,20,21,22,29,30]</p></li>
-</ul>
+<dt class="field-even">Type prob_id</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Type dim</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 10, 20, 30, 50, 100] or if <em>dim</em> is 2 and <em>prob_id</em> is in [17,18,19,20,21,22,29,30]</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/cec2014.html#_CPPv4N5pagmo7cec2014E" title="pagmo::cec2014"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2014</span></code></a>.</p>
@@ -351,20 +369,26 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.cec2013">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2013</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2013" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">cec2013</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2013" title="Permalink to this definition">¶</a></dt>
 <dd><p>The CEC 2013 problem suite (continuous, box-bounded, single-objective problems)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob_id</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem id (one of [1..28])</p></li>
-<li><p><strong>dim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of dimensions (one of [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])</p></li>
+<li><p><strong>prob_id</strong> – problem id (one of [1..28])</p></li>
+<li><p><strong>dim</strong> – number of dimensions (one of [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]</p></li>
-</ul>
+<dt class="field-even">Type prob_id</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type dim</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/cec2013.html#_CPPv4N5pagmo7cec2013E" title="pagmo::cec2013"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2013</span></code></a>.</p>
@@ -373,29 +397,32 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.cec2006">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2006</code><span class="sig-paren">(</span><em>prob_id = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2006" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">cec2006</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2006" title="Permalink to this definition">¶</a></dt>
 <dd><p>The CEC 2006 problem suite (continuous, constrained, single-objective problems)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>prob_id</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem id (one of [1..24])</p>
+<dd class="field-odd"><p><strong>prob_id</strong> – problem id (one of [1..24])</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..24]</p></li>
-</ul>
+<dt class="field-even">Type prob_id</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Raises OverflowError</dt>
+<dd class="field-odd"><p>if <em>prob_id</em> is negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if <em>prob_id</em> is not in [1..24]</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/cec2006.html#_CPPv4N5pagmo7cec2006E" title="pagmo::cec2006"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2006</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.cec2006.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2006.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2006.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the CEC 2006 problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the CEC 2006 problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -406,21 +433,30 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.cec2009">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">cec2009</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>is_constrained = false</em>, <em>dim = 30u</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2009" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">cec2009</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">is_constrained = false</em>, <em class="sig-param">dim = 30u</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.cec2009" title="Permalink to this definition">¶</a></dt>
 <dd><p>The CEC 2009 problem suite (continuous, constrained, single-objective problems)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob_id</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem id (one of [1..10])</p></li>
-<li><p><strong>is_constrained</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – selects the constrained version of the problems</p></li>
-<li><p><strong>dim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem dimension</p></li>
+<li><p><strong>prob_id</strong> – problem id (one of [1..10])</p></li>
+<li><p><strong>is_constrained</strong> – selects the constrained version of the problems</p></li>
+<li><p><strong>dim</strong> – problem dimension</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em> or <em>dim</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..10] or if <em>dim</em> is zero</p></li>
-</ul>
+<dt class="field-even">Type prob_id</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type is_constrained</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Type dim</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Raises OverflowError</dt>
+<dd class="field-odd"><p>if <em>prob_id</em> or <em>dim</em> are negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if <em>prob_id</em> is not in [1..10] or if <em>dim</em> is zero</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/cec2009.html#_CPPv4N5pagmo7cec2009E" title="pagmo::cec2009"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2009</span></code></a>.</p>
@@ -429,29 +465,32 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.rosenbrock">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">rosenbrock</code><span class="sig-paren">(</span><em>dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rosenbrock" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">rosenbrock</code><span class="sig-paren">(</span><em class="sig-param">dim = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rosenbrock" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Rosenbrock problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem dimension</p>
+<dd class="field-odd"><p><strong>dim</strong> – problem dimension</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>dim</em> is less than 2</p></li>
-</ul>
+<dt class="field-even">Type dim</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Raises OverflowError</dt>
+<dd class="field-odd"><p>if <em>dim</em> is negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if <em>dim</em> is less than 2</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/rosenbrock.html#_CPPv4N5pagmo10rosenbrockE" title="pagmo::rosenbrock"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::rosenbrock</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.rosenbrock.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rosenbrock.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rosenbrock.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Rosenbrock problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the Rosenbrock problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -462,18 +501,18 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.rastrigin">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">rastrigin</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rastrigin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">rastrigin</code><span class="sig-paren">(</span><em class="sig-param">dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rastrigin" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Rastrigin problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/rastrigin.html#_CPPv4N5pagmo9rastriginE" title="pagmo::rastrigin"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::rastrigin</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.rastrigin.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rastrigin.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.rastrigin.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Rastrigin problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the Rastrigin problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -484,20 +523,26 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.minlp_rastrigin">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">minlp_rastrigin</code><span class="sig-paren">(</span><em>dim_c = 1</em>, <em>dim_i = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.minlp_rastrigin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">minlp_rastrigin</code><span class="sig-paren">(</span><em class="sig-param">dim_c = 1</em>, <em class="sig-param">dim_i = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.minlp_rastrigin" title="Permalink to this definition">¶</a></dt>
 <dd><p>The scalable MINLP Rastrigin problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dim_c</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – MINLP continuous dimension</p></li>
-<li><p><strong>dim_i</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – MINLP integer dimension</p></li>
+<li><p><strong>dim_c</strong> – MINLP continuous dimension</p></li>
+<li><p><strong>dim_i</strong> – MINLP integer dimension</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim_c</em> / <em>dim_i</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>dim_c</em> + <em>dim_i</em> is less than 1</p></li>
-</ul>
+<dt class="field-even">Type dim_c</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type dim_i</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>dim_c</em> / <em>dim_i</em> is negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>dim_c</em> + <em>dim_i</em> is less than 1</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/minlp_rastrigin.html#_CPPv4N5pagmo15minlp_rastriginE" title="pagmo::minlp_rastrigin"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::minlp_rastrigin</span></code></a>.</p>
@@ -506,18 +551,18 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.schwefel">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">schwefel</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">schwefel</code><span class="sig-paren">(</span><em class="sig-param">dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Schwefel problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/schwefel.html#_CPPv4N5pagmo8schwefelE" title="pagmo::schwefel"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::schwefel</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.schwefel.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.schwefel.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Schwefel problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the Schwefel problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -528,18 +573,18 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.ackley">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ackley</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ackley" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">ackley</code><span class="sig-paren">(</span><em class="sig-param">dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ackley" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Ackley problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/ackley.html#_CPPv4N5pagmo6ackleyE" title="pagmo::ackley"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ackley</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.ackley.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ackley.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ackley.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Ackley problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the Ackley problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -550,18 +595,18 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.griewank">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">griewank</code><span class="sig-paren">(</span><em>dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.griewank" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">griewank</code><span class="sig-paren">(</span><em class="sig-param">dim = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.griewank" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Griewank problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/griewank.html#_CPPv4N5pagmo8griewankE" title="pagmo::griewank"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::griewank</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.griewank.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.griewank.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.griewank.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Griewank problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the Griewank problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -572,7 +617,7 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.lennard_jones">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">lennard_jones</code><span class="sig-paren">(</span><em>atoms = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.lennard_jones" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">lennard_jones</code><span class="sig-paren">(</span><em class="sig-param">atoms = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.lennard_jones" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Lennard Jones Cluster problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/lennard_jones.html#_CPPv4N5pagmo13lennard_jonesE" title="pagmo::lennard_jones"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::lennard_jones</span></code></a>.</p>
 </dd></dl>
@@ -580,7 +625,7 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.golomb_ruler">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">golomb_ruler</code><span class="sig-paren">(</span><em>order</em>, <em>upper_bound</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.golomb_ruler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">golomb_ruler</code><span class="sig-paren">(</span><em class="sig-param">order</em>, <em class="sig-param">upper_bound</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.golomb_ruler" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Golomb Ruler Problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/golomb_ruler.html#_CPPv4N5pagmo12golomb_rulerE" title="pagmo::golomb_ruler"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::golomb_ruler</span></code></a>.</p>
 </dd></dl>
@@ -588,12 +633,12 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.zdt">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">zdt</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>param = 30</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.zdt" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">zdt</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">param = 30</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.zdt" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ZDT problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/zdt.html#_CPPv4N5pagmo3zdtE" title="pagmo::zdt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::zdt</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.zdt.p_distance">
-<code class="descname">p_distance</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.zdt.p_distance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="sig-param">point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.zdt.p_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>p_distance(pop)</p>
 <p>Convergence metric for decision vectors (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure “a distance” of any point from
@@ -601,14 +646,20 @@ the pareto front of any DTLZ problem analytically.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>point</strong> (<em>array-like object</em>) – decision vector for which the p distance is requested</p></li>
-<li><p><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – population for which the average p distance is requested</p></li>
+<li><p><strong>point</strong> – decision vector for which the p distance is requested</p></li>
+<li><p><strong>pop</strong> – population for which the average p distance is requested</p></li>
 </ul>
+</dd>
+<dt class="field-even">Type point</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Type pop</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the distance (or average distance) from the Pareto front</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Rtype</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -620,28 +671,40 @@ the pareto front of any DTLZ problem analytically.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.dtlz">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">dtlz</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>dim = 5</em>, <em>fdim = 3</em>, <em>alpha = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">dtlz</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">dim = 5</em>, <em class="sig-param">fdim = 3</em>, <em class="sig-param">alpha = 100</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz" title="Permalink to this definition">¶</a></dt>
 <dd><p>The DTLZ problem suite problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob_id</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – DTLZ problem id</p></li>
-<li><p><strong>dim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem dimension</p></li>
-<li><p><strong>fdim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of objectives</p></li>
-<li><p><strong>alpha</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – controls density of solutions (used only by DTLZ4)</p></li>
+<li><p><strong>prob_id</strong> – DTLZ problem id</p></li>
+<li><p><strong>dim</strong> – problem dimension</p></li>
+<li><p><strong>fdim</strong> – number of objectives</p></li>
+<li><p><strong>alpha</strong> – controls density of solutions (used only by DTLZ4)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em>, <em>dim</em>, <em>fdim</em> or <em>alpha</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..7], <em>fdim</em> is smaller than 2, <em>dim</em> is smaller or equal to <em>fdim</em>.</p></li>
-</ul>
+<dt class="field-even">Type prob_id</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type dim</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Type fdim</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type alpha</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>prob_id</em>, <em>dim</em>, <em>fdim</em> or <em>alpha</em> are negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>prob_id</em> is not in [1..7], <em>fdim</em> is smaller than 2, <em>dim</em> is smaller or equal to <em>fdim</em>.</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/dtlz.html#_CPPv4N5pagmo4dtlzE" title="pagmo::dtlz"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::dtlz</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.dtlz.p_distance">
-<code class="descname">p_distance</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz.p_distance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="sig-param">point</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz.p_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>p_distance(pop)</p>
 <p>Convergence metric for decision vectors (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure “a distance” of any point from
@@ -649,14 +712,20 @@ the pareto front of any DTLZ problem analytically.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>point</strong> (<em>array-like object</em>) – decision vector for which the p distance is requested</p></li>
-<li><p><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – population for which the average p distance is requested</p></li>
+<li><p><strong>point</strong> – decision vector for which the p distance is requested</p></li>
+<li><p><strong>pop</strong> – population for which the average p distance is requested</p></li>
 </ul>
+</dd>
+<dt class="field-even">Type point</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Type pop</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the distance (or average distance) from the Pareto front</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Rtype</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -665,25 +734,34 @@ the pareto front of any DTLZ problem analytically.</p>
 
 <dl class="method">
 <dt id="pygmo.dtlz.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>pop, az=40, comp=[0, 1, 2]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">pop, az=40, comp=[0, 1, 2]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.dtlz.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots solutions to the DTLZ problems in three dimensions. The Pareto Front is also
 visualized if the problem id is 2,3 or 4.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – population of solutions to a dtlz problem</p></li>
-<li><p><strong>az</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – angle of view on which the 3d-plot is created</p></li>
-<li><p><strong>comp</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – indexes the fitness dimension for x,y and z axis in that order</p></li>
+<li><p><strong>pop</strong> – population of solutions to a dtlz problem</p></li>
+<li><p><strong>az</strong> – angle of view on which the 3d-plot is created</p></li>
+<li><p><strong>comp</strong> – indexes the fitness dimension for x,y and z axis in that order</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the current <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> instance on the current figure</p>
+<dt class="field-even">Type pop</dt>
+<dd class="field-even"><p><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+<dt class="field-odd">Type az</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>pop</em> does not contain a DTLZ problem (veryfied by its name only) or if <em>comp</em> is not of length 3</p>
+<dt class="field-even">Type comp</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the current <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> instance on the current figure</p>
+</dd>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>pop</em> does not contain a DTLZ problem (veryfied by its name only) or if <em>comp</em> is not of length 3</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -700,7 +778,7 @@ visualized if the problem id is 2,3 or 4.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.inventory">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">inventory</code><span class="sig-paren">(</span><em>weeks = 4</em>, <em>sample_size = 10</em>, <em>seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.inventory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">inventory</code><span class="sig-paren">(</span><em class="sig-param">weeks = 4</em>, <em class="sig-param">sample_size = 10</em>, <em class="sig-param">seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.inventory" title="Permalink to this definition">¶</a></dt>
 <dd><p>The inventory problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/inventory.html#_CPPv4N5pagmo9inventoryE" title="pagmo::inventory"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::inventory</span></code></a>.</p>
 </dd></dl>
@@ -708,18 +786,18 @@ visualized if the problem id is 2,3 or 4.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.hock_schittkowsky_71">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">hock_schittkowsky_71</code><a class="headerlink" href="#pygmo.hock_schittkowsky_71" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">hock_schittkowsky_71</code><a class="headerlink" href="#pygmo.hock_schittkowsky_71" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Hock-Schittkowsky 71 problem.</p>
 <p>See <a class="reference internal" href="../../cpp/problems/hock_schittkowsky_71.html#_CPPv4N5pagmo20hock_schittkowsky_71E" title="pagmo::hock_schittkowsky_71"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::hock_schittkowsky_71</span></code></a>.</p>
 <dl class="method">
 <dt id="pygmo.hock_schittkowsky_71.best_known">
-<code class="descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hock_schittkowsky_71.best_known" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.hock_schittkowsky_71.best_known" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best known solution for the Hock-Schittkowsky 71 problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the best known solution for the Hock-Schittkowsky 71 problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -730,7 +808,7 @@ visualized if the problem id is 2,3 or 4.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.luksan_vlcek1">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">luksan_vlcek1</code><span class="sig-paren">(</span><em>dim = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.luksan_vlcek1" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">luksan_vlcek1</code><span class="sig-paren">(</span><em class="sig-param">dim = 3</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.luksan_vlcek1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of Example 5.1 in the report from Luksan and Vlcek.</p>
 <p>The problem is also known as the Chained Rosenbrock function with trigonometric-exponential constraints.</p>
 <p>Its formulation in pygmo is written as:</p>
@@ -746,10 +824,13 @@ visualized if the problem id is 2,3 or 4.</p>
 constrained optimization.” (1999). <a class="reference external" href="http://hdl.handle.net/11104/0123965">http://hdl.handle.net/11104/0123965</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem dimension</p>
+<dd class="field-odd"><p><strong>dim</strong> – problem dimension</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> is negative or greater than an implementation-defined value</p>
+<dt class="field-even">Type dim</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Raises OverflowError</dt>
+<dd class="field-odd"><p>if <em>dim</em> is negative or greater than an implementation-defined value</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/luksan_vlcek1.html#_CPPv4N5pagmo13luksan_vlcek1E" title="pagmo::luksan_vlcek1"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::luksan_vlcek1</span></code></a>.</p>
@@ -758,7 +839,7 @@ constrained optimization.” (1999). <a class="reference external" href="http://
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.translate">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">translate</code><span class="sig-paren">(</span><em>prob=None, translation=[0.0]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.translate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">translate</code><span class="sig-paren">(</span><em class="sig-param">prob=None, translation=[0.0]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.translate" title="Permalink to this definition">¶</a></dt>
 <dd><p>The translate meta-problem.</p>
 <p>This meta-problem translates the whole search space of an input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a> or
 user-defined problem (UDP) by a fixed translation vector. <a class="reference internal" href="#pygmo.translate" title="pygmo.translate"><code class="xref py py-class docutils literal notranslate"><span class="pre">translate</span></code></a> objects
@@ -768,39 +849,42 @@ are user-defined problems that can be used in the construction of a <a class="re
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
 (if <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
-<li><p><strong>translation</strong> (<em>array-like object</em>) – an array containing the translation to be applied</p></li>
+<li><p><strong>translation</strong> – an array containing the translation to be applied</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the length of <em>translation</em> is not equal to the dimension of <em>prob</em></p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
+<dt class="field-even">Type translation</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if the length of <em>translation</em> is not equal to the dimension of <em>prob</em></p>
+</dd>
+<dt class="field-even">Raises unspecified</dt>
+<dd class="field-even"><p>any exception thrown by:
     
     * the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a>,
     * the constructor of the underlying C++ class,
     * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
-</ul>
+      signatures, etc.)</p>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.translate.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.translate.inner_problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">inner_problem</code><a class="headerlink" href="#pygmo.translate.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem.</p>
 <p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a reference to the inner problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.translate.translation">
-<code class="descname">translation</code><a class="headerlink" href="#pygmo.translate.translation" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">translation</code><a class="headerlink" href="#pygmo.translate.translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translation vector.</p>
 <p>This read-only property contains an array of <code class="docutils literal notranslate"><span class="pre">float</span></code> representing the translation vector used in the
 construction of this problem.</p>
@@ -808,7 +892,7 @@ construction of this problem.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the translation vector</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -819,7 +903,7 @@ construction of this problem.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.decompose">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">decompose</code><span class="sig-paren">(</span><em>prob=None, weight=[0.5, 0.5], z=[0.0, 0.0], method='weighted', adapt_ideal=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">decompose</code><span class="sig-paren">(</span><em class="sig-param">prob=None, weight=[0.5, 0.5], z=[0.0, 0.0], method='weighted', adapt_ideal=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose" title="Permalink to this definition">¶</a></dt>
 <dd><p>The decompose meta-problem.</p>
 <p>This meta-problem <em>decomposes</em> a multi-objective input user-defined problem,
 resulting in a single-objective user-defined problem with a fitness function combining the
@@ -859,42 +943,54 @@ derivative-free optimization.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
 (if <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
-<li><p><strong>weight</strong> (<em>array-like object</em>) – the vector of weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
-<li><p><strong>z</strong> (<em>array-like object</em>) – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span></p></li>
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – a string containing the decomposition method chosen</p></li>
-<li><p><strong>adapt_ideal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – when <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a>, the reference point is adapted at each fitness evaluation
+<li><p><strong>weight</strong> – the vector of weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
+<li><p><strong>z</strong> – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span></p></li>
+<li><p><strong>method</strong> – a string containing the decomposition method chosen</p></li>
+<li><p><strong>adapt_ideal</strong> – when <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a>, the reference point is adapted at each fitness evaluation
 to be the ideal point</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
+<dt class="field-even">Type weight</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Type z</dt>
+<dd class="field-odd"><p>array-like object</p>
+</dd>
+<dt class="field-even">Type method</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Type adapt_ideal</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if either:
     
     * <em>prob</em> is single objective or constrained,
     * <em>method</em> is not one of [<code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'tchebycheff'</span></code>, <code class="docutils literal notranslate"><span class="pre">'bi'</span></code>],
     * <em>weight</em> is not of size <span class="math notranslate nohighlight">\(n\)</span>,
     * <em>z</em> is not of size <span class="math notranslate nohighlight">\(n\)</span>
     * <em>weight</em> is not such that <span class="math notranslate nohighlight">\(\lambda_i &gt; 0, \forall i=1..n\)</span>,
-    * <em>weight</em> is not such that <span class="math notranslate nohighlight">\(\sum_i \lambda_i = 1\)</span></p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
+    * <em>weight</em> is not such that <span class="math notranslate nohighlight">\(\sum_i \lambda_i = 1\)</span></p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by:
     
     * the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a>,
     * the constructor of the underlying C++ class,
     * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
-</ul>
+      signatures, etc.)</p>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.decompose.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.decompose.inner_problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">inner_problem</code><a class="headerlink" href="#pygmo.decompose.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem.</p>
 <p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a reference to the inner problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
 </dd>
 </dl>
@@ -902,29 +998,32 @@ to be the ideal point</p></li>
 
 <dl class="method">
 <dt id="pygmo.decompose.original_fitness">
-<code class="descname">original_fitness</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose.original_fitness" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">original_fitness</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose.original_fitness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fitness of the original problem.</p>
 <p>Returns the fitness of the original multi-objective problem used to construct the decomposed problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>array-like object</em>) – input decision vector</p>
+<dd class="field-odd"><p><strong>x</strong> – input decision vector</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the fitness of the original multi-objective problem</p>
+<dt class="field-even">Type x</dt>
+<dd class="field-even"><p>array-like object</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>1D NumPy float array</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the fitness of the original multi-objective problem</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the original fitness computation, or by failures at the
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>1D NumPy float array</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by the original fitness computation, or by failures at the
     intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.decompose.z">
-<code class="descname">z</code><a class="headerlink" href="#pygmo.decompose.z" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">z</code><a class="headerlink" href="#pygmo.decompose.z" title="Permalink to this definition">¶</a></dt>
 <dd><p>Current reference point.</p>
 <p>This read-only property contains the reference point to be used for the decomposition. This is only
 used for Tchebycheff and boundary interception decomposition methods.</p>
@@ -933,11 +1032,11 @@ used for Tchebycheff and boundary interception decomposition methods.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the reference point</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -948,7 +1047,7 @@ used for Tchebycheff and boundary interception decomposition methods.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.unconstrain">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">unconstrain</code><span class="sig-paren">(</span><em>prob=None</em>, <em>method='death penalty'</em>, <em>weights=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.unconstrain" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">unconstrain</code><span class="sig-paren">(</span><em class="sig-param">prob=None</em>, <em class="sig-param">method='death penalty'</em>, <em class="sig-param">weights=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.unconstrain" title="Permalink to this definition">¶</a></dt>
 <dd><p>The unconstrain meta-problem.</p>
 <p>This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:</p>
 <ul class="simple">
@@ -971,41 +1070,85 @@ Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or a user-defined problem, either C++ or Python (if
 <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – a string containing the unconstrain method chosen, one of [<code class="docutils literal notranslate"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kuri'</span></code>, <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_o'</span></code>]</p></li>
-<li><p><strong>weights</strong> (<em>array-like object</em>) – the vector of weights to be used if the method chosen is <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code></p></li>
+<li><p><strong>method</strong> – a string containing the unconstrain method chosen, one of [<code class="docutils literal notranslate"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kuri'</span></code>, <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_o'</span></code>]</p></li>
+<li><p><strong>weights</strong> – the vector of weights to be used if the method chosen is <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
+<dt class="field-even">Type method</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Type weights</dt>
+<dd class="field-odd"><p>array-like object</p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if either:
     
     * <em>prob</em> is unconstrained,
     * <em>method</em> is not one of [<code class="docutils literal notranslate"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kuri'</span></code>, <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_o'</span></code>],
-    * <em>weight</em> is not of the same size as the problem constraints (if the method <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code> is selected), or not empty otherwise.</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
+    * <em>weight</em> is not of the same size as the problem constraints (if the method <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code> is selected), or not empty otherwise.</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by:
     
     * the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a>,
     * the constructor of the underlying C++ class,
     * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
-</ul>
+      signatures, etc.)</p>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.unconstrain.inner_problem">
-<code class="descname">inner_problem</code><a class="headerlink" href="#pygmo.unconstrain.inner_problem" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">inner_problem</code><a class="headerlink" href="#pygmo.unconstrain.inner_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inner problem of the meta-problem.</p>
 <p>This read-only property gives direct access to the <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> stored within this meta-problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a reference to the inner problem</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="pygmo.wfg">
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">wfg</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">dim_dvs = 5</em>, <em class="sig-param">dim_obj = 3</em>, <em class="sig-param">dim_k = 4</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.wfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>The WFG problem suite.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prob_id</strong> – WFG problem id</p></li>
+<li><p><strong>dim_dvs</strong> – decision vector size</p></li>
+<li><p><strong>dim_obj</strong> – number of objectives</p></li>
+<li><p><strong>dim_k</strong> – position parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type prob_id</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Type dim_dvs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Type dim_obj</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Type dim_k</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>prob_id</em>, <em>dim_dvs</em>, <em>dim_obj</em> or <em>dim_k</em> are negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>prob_id</em> is not in [1, …, 9], <em>dim_dvs</em> is smaller than 1, <em>dim_obj</em> is smaller than 2, <em>dim_k</em> is
+    smaller than 1 or bigger or equal to <em>dim_dvs</em> or if <em>dim_k*mod(*dim_obj</em>-1) is different than zero. Also, when <em>prob_id</em> equals
+    to 2 or 3, if (<em>dim_dvs</em>-<em>dim_k</em>)mod(2) is different than zero.</p>
+</dd>
+</dl>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/wfg.html#_CPPv4N5pagmo3wfgE" title="pagmo::wfg"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::wfg</span></code></a>.</p>
 </dd></dl>
 
 </div>
@@ -1024,7 +1167,7 @@ Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

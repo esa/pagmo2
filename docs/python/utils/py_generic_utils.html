@@ -176,7 +176,7 @@
 <span id="py-generic-utils"></span><h1>Generic optimization utilities<a class="headerlink" href="#generic-optimization-utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pygmo.random_decision_vector">
-<code class="descclassname">pygmo.</code><code class="descname">random_decision_vector</code><span class="sig-paren">(</span><em>prob</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.random_decision_vector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">random_decision_vector</code><span class="sig-paren">(</span><em class="sig-param">prob</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.random_decision_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will generate a decision vector whose values are randomly chosen with uniform probability within
 the lower and upper bounds <span class="math notranslate nohighlight">\(lb\)</span> and <span class="math notranslate nohighlight">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> <em>prob</em>.</p>
 <p>For the continuous part of the decision vector, the <span class="math notranslate nohighlight">\(i\)</span>-th component of the randomly generated decision
@@ -186,20 +186,23 @@ is guaranteed to be an integral value such that <span class="math notranslate no
 <p>For both the continuous and discrete parts of the decision vector, if <span class="math notranslate nohighlight">\(lb_i == ub_i\)</span> then <span class="math notranslate nohighlight">\(lb_i\)</span> is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>) – the input problem</p>
+<dd class="field-odd"><p><strong>prob</strong> – the input problem</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a random decision vector within the problem’s bounds</p>
+<dt class="field-even">Type prob</dt>
+<dd class="field-even"><p><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a random decision vector within the problem’s bounds</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p></li>
-</ul>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if the problem’s bounds are not finite or larger than an implementation-defined limit</p>
+</dd>
+<dt class="field-even">Raises unspecified</dt>
+<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,7 +210,7 @@ is guaranteed to be an integral value such that <span class="math notranslate no
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.batch_random_decision_vector">
-<code class="descclassname">pygmo.</code><code class="descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em>prob</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.batch_random_decision_vector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">batch_random_decision_vector</code><span class="sig-paren">(</span><em class="sig-param">prob</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.batch_random_decision_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will generate a batch of <em>n</em> decision vectors whose values are randomly chosen with uniform probability within
 the lower and upper bounds <span class="math notranslate nohighlight">\(lb\)</span> and <span class="math notranslate nohighlight">\(ub\)</span> of the input <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> <em>prob</em>.
 The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math notranslate nohighlight">\(x\)</span>,
@@ -221,23 +224,31 @@ are guaranteed to be integral values such that <span class="math notranslate noh
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob</strong> (<a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>) – the input problem</p></li>
-<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of decision vectors that will be generated</p></li>
+<li><p><strong>prob</strong> – the input problem</p></li>
+<li><p><strong>n</strong> – the number of decision vectors that will be generated</p></li>
 </ul>
+</dd>
+<dt class="field-even">Type prob</dt>
+<dd class="field-even"><p><a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
+</dd>
+<dt class="field-odd">Type n</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a random decision vector within the problem’s bounds</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Rtype</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – in case of (unlikely) overflows</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the problem’s bounds are not finite or larger than an implementation-defined limit</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p></li>
-</ul>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>in case of (unlikely) overflows</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if the problem’s bounds are not finite or larger than an implementation-defined limit</p>
+</dd>
+<dt class="field-even">Raises unspecified</dt>
+<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -245,13 +256,16 @@ are guaranteed to be integral values such that <span class="math notranslate noh
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.set_global_rng_seed">
-<code class="descclassname">pygmo.</code><code class="descname">set_global_rng_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.set_global_rng_seed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">set_global_rng_seed</code><span class="sig-paren">(</span><em class="sig-param">seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.set_global_rng_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>In pygmo it is, in general, possible to control the seed of all random generators by a dedicated <em>seed</em> kwarg passed on via various
 constructors. If no <em>seed</em> is passed pygmo randomly creates a seed for you using its global random number generator.</p>
 <p>This function allows to be able to reset the seed of such a global random number generator. This can be useful to create a deterministic behaviour of pygmo easily.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the new global seed for random number generation</p>
+<dd class="field-odd"><p><strong>seed</strong> – the new global seed for random number generation</p>
+</dd>
+<dt class="field-even">Type seed</dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -289,7 +303,7 @@ be reproduced deterministically.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

@@ -180,14 +180,14 @@
 <p><em>#include &lt;pagmo/batch_evaluators/member_bfe.hpp&gt;</em></p>
 <dl class="class">
 <dt id="_CPPv4N5pagmo10member_bfeE">
-<span id="_CPPv3N5pagmo10member_bfeE"></span><span id="_CPPv2N5pagmo10member_bfeE"></span><span id="pagmo::member_bfe"></span><em class="property">class </em><code class="descname">member_bfe</code><a class="headerlink" href="#_CPPv4N5pagmo10member_bfeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10member_bfeE"></span><span id="_CPPv2N5pagmo10member_bfeE"></span><span id="pagmo::member_bfe"></span><em class="property">class </em><code class="sig-name descname">member_bfe</code><a class="headerlink" href="#_CPPv4N5pagmo10member_bfeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
 construct a <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.
 <a class="reference internal" href="#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> is a simple wrapper which delegates batch fitness evaluations
 to the input problem’s <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a> member function.</p>
 <dl class="function">
 <dt id="_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double">
-<span id="_CPPv3NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="pagmo::member_bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dvs</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="pagmo::member_bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dvs</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will pass <em>dvs</em> to the input problem <em>p</em>’s <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a> member function,
 and return its output. If the UDP stored within <em>p</em> does not implement <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a>,
@@ -210,7 +210,7 @@ an error will be raised.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo10member_bfe8get_nameEv">
-<span id="_CPPv3NK5pagmo10member_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo10member_bfe8get_nameEv"></span><span id="pagmo::member_bfe::get_nameC"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10member_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo10member_bfe8get_nameEv"></span><span id="pagmo::member_bfe::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a human-readable name for this <a class="reference internal" href="#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a>.</p>
@@ -220,7 +220,7 @@ an error will be raised.</p>
 
 <dl class="function">
 <dt id="_CPPv4I0EN5pagmo10member_bfe9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo10member_bfe9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo10member_bfe9serializeER7Archivej"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo10member_bfe9serializeEvR7Archivej" title="pagmo::member_bfe::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo10member_bfe9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo10member_bfe9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo10member_bfe9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo10member_bfe9serializeEvR7Archivej" title="pagmo::member_bfe::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo10member_bfe9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialisation support.</p>
 <p>Note that <a class="reference internal" href="#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> is stateless, and thus this (de)serialisation function is empty and performs no work.</p>
 </dd></dl>
@@ -242,7 +242,7 @@ an error will be raised.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

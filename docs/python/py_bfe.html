@@ -176,7 +176,7 @@
 <h1>Bfe class<a class="headerlink" href="#bfe-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pygmo.bfe">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">bfe</code><span class="sig-paren">(</span><em>udbfe = default_bfe()</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">bfe</code><span class="sig-paren">(</span><em class="sig-param">udbfe = default_bfe()</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Batch fitness evaluator.</p>
 <p>This class implements the evaluation of decision vectors in batch mode. That is,
 whereas a <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a> provides the means to evaluate a single decision
@@ -224,19 +224,19 @@ member functions in the UDBFE are used by <a class="reference internal" href="#p
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>udbfe</strong> – a user-defined batch fitness evaluator, either C++ or Python</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>udbfe</em> does not implement the mandatory methods detailed above</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by methods of the UDBFE invoked during construction,
+<dt class="field-even">Raises NotImplementedError</dt>
+<dd class="field-even"><p>if <em>udbfe</em> does not implement the mandatory methods detailed above</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by methods of the UDBFE invoked during construction,
     the deep copy of the UDBFE, the constructor of the underlying C++ class, or
     failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-    signatures, etc.)</p></li>
-</ul>
+    signatures, etc.)</p>
 </dd>
 </dl>
 <dl class="method">
 <dt id="pygmo.bfe.__call__">
-<code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>prob</em>, <em>dvs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">prob</em>, <em class="sig-param">dvs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
 of the decision vectors stored in <em>dvs</em> using the input problem <em>prob</em>, and it will return the corresponding
@@ -251,29 +251,35 @@ will occupy the range <span class="math notranslate nohighlight">\(\left[f, 2f\r
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob</strong> (<a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>) – the input problem</p></li>
-<li><p><strong>dvs</strong> (<em>array-like object</em>) – the input decision vectors that will be evaluated in batch mode</p></li>
+<li><p><strong>prob</strong> – the input problem</p></li>
+<li><p><strong>dvs</strong> – the input decision vectors that will be evaluated in batch mode</p></li>
 </ul>
+</dd>
+<dt class="field-even">Type prob</dt>
+<dd class="field-even"><p><a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
+</dd>
+<dt class="field-odd">Type dvs</dt>
+<dd class="field-odd"><p>array-like object</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the fitness vectors corresponding to the input decision vectors in <em>dvs</em></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Rtype</dt>
 <dd class="field-odd"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>dvs</em> or the return value produced by the UDBFE are incompatible with the input problem <em>prob</em></p></li>
-<li><p><strong>unspecified</strong> – any exception raised by the invocation of the UDBFE, or by failures at the intersection
-    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
-</ul>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if <em>dvs</em> or the return value produced by the UDBFE are incompatible with the input problem <em>prob</em></p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception raised by the invocation of the UDBFE, or by failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.bfe.extract">
-<code class="descname">extract</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.extract" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extract</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the user-defined batch fitness evaluator (bfe).</p>
 <p>This method allows to extract a reference to the user-defined bfe (UDBFE) stored within this
 <a class="reference internal" href="#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a> instance. The behaviour of this function depends on the value
@@ -289,13 +295,16 @@ UDBFE will be returned (this allows to extract a Python UDBFE without knowing it
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type of the user-defined bfe to extract</p>
+<dd class="field-odd"><p><strong>t</strong> – the type of the user-defined bfe to extract</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a reference to the internal user-defined bfe, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
+<dt class="field-even">Type t</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a reference to the internal user-defined bfe, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -319,7 +328,7 @@ UDBFE will be returned (this allows to extract a Python UDBFE without knowing it
 
 <dl class="method">
 <dt id="pygmo.bfe.get_extra_info">
-<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bfe’s extra info.</p>
 <p>If the UDBFE provides a <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code>
 method. Otherwise, an empty string will be returned.</p>
@@ -328,18 +337,18 @@ method. Otherwise, an empty string will be returned.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>extra info about the UDBFE</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDBFE</p>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDBFE</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.bfe.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bfe’s name.</p>
 <p>If the UDBFE provides a <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method.
 Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.</p>
@@ -348,7 +357,7 @@ Otherwise, an implementation-defined name based on the type of the UDBFE will be
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the bfe’s name</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
@@ -356,7 +365,7 @@ Otherwise, an implementation-defined name based on the type of the UDBFE will be
 
 <dl class="method">
 <dt id="pygmo.bfe.get_thread_safety">
-<code class="descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.get_thread_safety" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.get_thread_safety" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bfe’s thread safety level.</p>
 <p>This method will return a value of the enum <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.thread_safety</span></code></a> which indicates the thread safety level
 of the UDBFE. Unlike in C++, in Python it is not possible to re-implement this method in the UDBFE. That is, for C++
@@ -366,7 +375,7 @@ UDBFEs, the returned value will be unconditionally <a class="reference internal"
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the thread safety level of the UDBFE</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>a value of <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.thread_safety</span></code></a></p>
 </dd>
 </dl>
@@ -374,22 +383,25 @@ UDBFEs, the returned value will be unconditionally <a class="reference internal"
 
 <dl class="method">
 <dt id="pygmo.bfe.is_">
-<code class="descname">is_</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.is_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.is_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the type of the user-defined batch fitness evaluator.</p>
 <p>This method returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a> if <a class="reference internal" href="#pygmo.bfe.extract" title="pygmo.bfe.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract(t)</span></code></a> returns
 <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> otherwise.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDBFE</p>
+<dd class="field-odd"><p><strong>t</strong> – the type that will be compared to the type of the UDBFE</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>whether the UDBFE is of type <em>t</em> or not</p>
+<dt class="field-even">Type t</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether the UDBFE is of type <em>t</em> or not</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.bfe.extract" title="pygmo.bfe.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.bfe.extract" title="pygmo.bfe.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -411,7 +423,7 @@ UDBFEs, the returned value will be unconditionally <a class="reference internal"
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

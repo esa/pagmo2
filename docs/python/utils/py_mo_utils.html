@@ -176,17 +176,20 @@
 <span id="py-mo-utils"></span><h1>Multi-objective optimization utilities<a class="headerlink" href="#multi-objective-optimization-utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pygmo.fast_non_dominated_sorting">
-<code class="descclassname">pygmo.</code><code class="descname">fast_non_dominated_sorting</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.fast_non_dominated_sorting" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">fast_non_dominated_sorting</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.fast_non_dominated_sorting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the fast non dominated sorting algorithm on the input <em>points</em></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
+<dd class="field-odd"><p><strong>points</strong> – the input points</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>points</em> is malformed</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d-array-like object</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>points</em> is malformed</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>points</em> cannot be converted to a vector of vector floats</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><p>(<em>ndf</em>, <em>dl</em>, <em>dc</em>, <em>ndr</em>), where:</p>
@@ -198,7 +201,7 @@
 </ul>
 </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code></p>
 </dd>
 </dl>
@@ -212,24 +215,27 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.nadir">
-<code class="descclassname">pygmo.</code><code class="descname">nadir</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nadir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">nadir</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nadir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the nadir point of a set of points, i.e objective vectors. The nadir is that point that has the maximum
 value of the objective function in the points of the non-dominated front.</p>
 <p>Complexity is <span class="math notranslate nohighlight">\(\mathcal{O}(MN^2)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
+<dd class="field-odd"><p><strong>points</strong> – the input points</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>points</em> is malformed</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d-array-like object</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>points</em> is malformed</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>points</em> cannot be converted to a vector of vector floats</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the nadir point</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -238,24 +244,27 @@ value of the objective function in the points of the non-dominated front.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.ideal">
-<code class="descclassname">pygmo.</code><code class="descname">ideal</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ideal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">ideal</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ideal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the ideal point of a set of points, i.e objective vectors. The ideal point is that point that has, in each
 component, the minimum value of the objective functions of the input points.</p>
 <p>Complexity is <span class="math notranslate nohighlight">\(\mathcal{O}(MN)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
+<dd class="field-odd"><p><strong>points</strong> – the input points</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>points</em> is malformed</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d-array-like object</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>points</em> is malformed</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>points</em> cannot be converted to a vector of vector floats</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the ideal point</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -264,7 +273,7 @@ component, the minimum value of the objective functions of the input points.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.pareto_dominance">
-<code class="descclassname">pygmo.</code><code class="descname">pareto_dominance</code><span class="sig-paren">(</span><em>obj1</em>, <em>obj2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.pareto_dominance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">pareto_dominance</code><span class="sig-paren">(</span><em class="sig-param">obj1</em>, <em class="sig-param">obj2</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.pareto_dominance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>obj1</em> Pareto dominates <em>obj2</em>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Minimization
 is assumed.</p>
 <p>Each pair of corresponding elements in  <em>obj1</em> and <em>obj2</em> is compared: if all
@@ -273,21 +282,27 @@ but at least one is different, <code class="docutils literal notranslate"><span 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj1</strong> (<em>array-like object</em>) – the first list of objectives</p></li>
-<li><p><strong>obj2</strong> (<em>array-like object</em>) – the second list of objectives</p></li>
+<li><p><strong>obj1</strong> – the first list of objectives</p></li>
+<li><p><strong>obj2</strong> – the second list of objectives</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the dimensions of <em>obj1</em> and <em>obj2</em> are different</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>obj1</em> or <em>obj2</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type obj1</dt>
+<dd class="field-even"><p>array-like object</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>obj1</em> is dominating <em>obj2</em>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dt class="field-odd">Type obj2</dt>
+<dd class="field-odd"><p>array-like object</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if the dimensions of <em>obj1</em> and <em>obj2</em> are different</p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>if <em>obj1</em> or <em>obj2</em> cannot be converted to a vector of vector floats</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>obj1</em> is dominating <em>obj2</em>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -301,25 +316,28 @@ but at least one is different, <code class="docutils literal notranslate"><span 
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.non_dominated_front_2d">
-<code class="descclassname">pygmo.</code><code class="descname">non_dominated_front_2d</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.non_dominated_front_2d" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">non_dominated_front_2d</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.non_dominated_front_2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the non dominated front of a set of two dimensional objectives. Complexity is <span class="math notranslate nohighlight">\(\mathcal{O}(N \log N)\)</span>
 and is thus lower than the complexity of calling <a class="reference internal" href="#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-func docutils literal notranslate"><span class="pre">fast_non_dominated_sorting()</span></code></a></p>
 <p>See: Jensen, Mikkel T. “Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms.”
 IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
+<dd class="field-odd"><p><strong>points</strong> – the input points</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>points</em> contain anything else than 2 dimensional objectives</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d-array-like object</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>points</em> contain anything else than 2 dimensional objectives</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>points</em> cannot be converted to a vector of vector floats</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the non dominated fronts</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
 </dd>
 </dl>
@@ -334,7 +352,7 @@ IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.sort_population_mo">
-<code class="descclassname">pygmo.</code><code class="descname">sort_population_mo</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sort_population_mo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">sort_population_mo</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sort_population_mo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sorts a multi-objective, unconstrained,  population (intended here as a 2D array-like
 containing objective vectors) with respect to the following strict ordering:</p>
 <ul class="simple">
@@ -352,18 +370,21 @@ of size 1, in which case, though, it is more efficient to sort using python buil
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> (<em>2d-array-like object</em>) – the input objective vectors</p>
+<dd class="field-odd"><p><strong>points</strong> – the input objective vectors</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>unspecified</strong> – all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d-array-like object</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance</p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>points</em> cannot be converted to a vector of vector floats</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the indexes of the sorted objectives vectors.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
 </dd>
 </dl>
@@ -379,7 +400,7 @@ of size 1, in which case, though, it is more efficient to sort using python buil
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.select_best_N_mo">
-<code class="descclassname">pygmo.</code><code class="descname">select_best_N_mo</code><span class="sig-paren">(</span><em>points</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.select_best_N_mo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">select_best_N_mo</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">N</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.select_best_N_mo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns (unordered) the best N individuals out of a multi-objective, unconstrained population, (intended here
 as a 2D array-like containing objective vectors). The strict ordering used is the same as that defined
 in <a class="reference internal" href="#pygmo.sort_population_mo" title="pygmo.sort_population_mo"><code class="xref py py-func docutils literal notranslate"><span class="pre">sort_population_mo()</span></code></a></p>
@@ -390,21 +411,27 @@ non-dominated front containing individuals included in the best N.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<em>2d-array-like object</em>) – the input objective vectors</p></li>
-<li><p><strong>N</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The size of the returned list of bests.</p></li>
+<li><p><strong>points</strong> – the input objective vectors</p></li>
+<li><p><strong>N</strong> – The size of the returned list of bests.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>unspecified</strong> – all exceptions thrown by <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="pagmo::fast_non_dominated_sorting"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv4N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="pagmo::crowding_distance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::crowding_distance()</span></code></a></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
-</ul>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d-array-like object</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the indexes of the <em>N</em> best objectives vectors.</p>
+<dt class="field-odd">Type N</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
+<dt class="field-even">Raises unspecified</dt>
+<dd class="field-even"><p>all exceptions thrown by <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="pagmo::fast_non_dominated_sorting"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv4N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="pagmo::crowding_distance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::crowding_distance()</span></code></a></p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>if <em>points</em> cannot be converted to a vector of vector floats</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the indexes of the <em>N</em> best objectives vectors.</p>
+</dd>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -419,7 +446,7 @@ non-dominated front containing individuals included in the best N.</p>
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.decompose_objectives">
-<code class="descclassname">pygmo.</code><code class="descname">decompose_objectives</code><span class="sig-paren">(</span><em>objs</em>, <em>weights</em>, <em>ref_point</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose_objectives" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">decompose_objectives</code><span class="sig-paren">(</span><em class="sig-param">objs</em>, <em class="sig-param">weights</em>, <em class="sig-param">ref_point</em>, <em class="sig-param">method</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decompose_objectives" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decomposes a vector of objectives.</p>
 <p>A vector of objectives is reduced to one only objective using a decomposition technique.</p>
 <p>Three different possibilities for <em>method</em> are here made available:</p>
@@ -446,23 +473,35 @@ z^*_n)\)</span> an <span class="math notranslate nohighlight">\(n\)</span>-dimen
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>objs</strong> (<em>array-like object</em>) – the objective vectors</p></li>
-<li><p><strong>weights</strong> (<em>array-like object</em>) – the weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
-<li><p><strong>ref_point</strong> (<em>array-like object</em>) – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span> . It is not used if <em>method</em> is <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code></p></li>
-<li><p><strong>method</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – the decomposition method: one of <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code></p></li>
+<li><p><strong>objs</strong> – the objective vectors</p></li>
+<li><p><strong>weights</strong> – the weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
+<li><p><strong>ref_point</strong> – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span> . It is not used if <em>method</em> is <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code></p></li>
+<li><p><strong>method</strong> – the decomposition method: one of <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>objs</em>, <em>weight</em> and <em>ref_point</em> have different sizes or if <em>method</em> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code>.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>weights</em> or <em>ref_point</em> or <em>objs</em> cannot be converted to a vector of floats.</p></li>
-</ul>
+<dt class="field-even">Type objs</dt>
+<dd class="field-even"><p>array-like object</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a one dimensional array containing the decomposed objective.</p>
+<dt class="field-odd">Type weights</dt>
+<dd class="field-odd"><p>array-like object</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>1D NumPy float array</p>
+<dt class="field-even">Type ref_point</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Type method</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if <em>objs</em>, <em>weight</em> and <em>ref_point</em> have different sizes or if <em>method</em> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>if <em>weights</em> or <em>ref_point</em> or <em>objs</em> cannot be converted to a vector of floats.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a one dimensional array containing the decomposed objective.</p>
+</dd>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p>1D NumPy float array</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -480,7 +519,7 @@ z^*_n)\)</span> an <span class="math notranslate nohighlight">\(n\)</span>-dimen
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.decomposition_weights">
-<code class="descclassname">pygmo.</code><code class="descname">decomposition_weights</code><span class="sig-paren">(</span><em>n_f</em>, <em>n_w</em>, <em>method</em>, <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decomposition_weights" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">decomposition_weights</code><span class="sig-paren">(</span><em class="sig-param">n_f</em>, <em class="sig-param">n_w</em>, <em class="sig-param">method</em>, <em class="sig-param">seed</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.decomposition_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code> generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible.
@@ -497,23 +536,36 @@ to generate the canonical weights [1,0,0,…], [0,1,0,..], … first.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_f</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the objective vectors</p></li>
-<li><p><strong>n_w</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
-<li><p><strong>method</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span>. It is not used if <em>method</em> is <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code></p></li>
-<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the decomposition method: one of <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code></p></li>
+<li><p><strong>n_f</strong> – the objective vectors</p></li>
+<li><p><strong>n_w</strong> – the weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
+<li><p><strong>method</strong> – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span>. It is not used if <em>method</em> is <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code></p></li>
+<li><p><strong>seed</strong> – the decomposition method: one of <code class="docutils literal notranslate"><span class="pre">&quot;weighted&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;tchebycheff&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>n_f</em>, <em>n_w</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>n_f</em> and <em>n_w</em> are not compatible with the selected weight generation method or if <em>method</em> is not</p></li>
-<li><p><strong>one of &quot;grid&quot;</strong><strong>, </strong><strong>&quot;random&quot;</strong><strong> or </strong><strong>&quot;low discrepancy&quot;</strong> – </p></li>
-</ul>
+<dt class="field-even">Type n_f</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
+<dt class="field-odd">Type n_w</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Type method</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+<dt class="field-odd">Type seed</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>n_f</em>, <em>n_w</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>n_f</em> and <em>n_w</em> are not compatible with the selected weight generation method or if <em>method</em> is not</p>
+</dd>
+<dt class="field-even">Raises one of “grid”, “random” or “low discrepancy”<code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;low</span> <span class="pre">discrepancy&quot;</span></code></dt>
+<dd class="field-even"><p></p></dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the weights</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -545,7 +597,7 @@ to generate the canonical weights [1,0,0,…], [0,1,0,..], … first.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

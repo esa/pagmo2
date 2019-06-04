@@ -45,6 +45,7 @@ CEC2013                            :cpp:class:`pagmo::cec2013`                  
 CEC2014                            :cpp:class:`pagmo::cec2014`                  :class:`pygmo.cec2014`                       S-U
 ZDT                                :cpp:class:`pagmo::zdt`                      :class:`pygmo.zdt`                           M-U
 DTLZ                               :cpp:class:`pagmo::dtlz`                     :class:`pygmo.dtlz`                          M-U
+WFG                                :cpp:class:`pagmo::wfg`                      :class:`pygmo.wfg`                           M-U
 ================================== ============================================ ============================================ =============== 
 
 .. _meta_problems:

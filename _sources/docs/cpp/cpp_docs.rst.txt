@@ -75,6 +75,7 @@ Implemented problems
   problems/cec2013
   problems/cec2014
   problems/unconstrain
+  problems/wfg
 
 Implemented islands
 ^^^^^^^^^^^^^^^^^^^

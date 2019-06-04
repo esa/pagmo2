@@ -176,7 +176,7 @@
 <span id="py-con-utils"></span><h1>Constrained optimization utilities<a class="headerlink" href="#constrained-optimization-utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pygmo.compare_fc">
-<code class="descclassname">pygmo.</code><code class="descname">compare_fc</code><span class="sig-paren">(</span><em>f1</em>, <em>f2</em>, <em>nec</em>, <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.compare_fc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">compare_fc</code><span class="sig-paren">(</span><em class="sig-param">f1</em>, <em class="sig-param">f2</em>, <em class="sig-param">nec</em>, <em class="sig-param">tol</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.compare_fc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares two fitness vectors in a single-objective, constrained, case.</p>
 <p>The following strict ordering is used:</p>
 <ul class="simple">
@@ -195,24 +195,38 @@ in <span class="math notranslate nohighlight">\(f_1\)</span> is smaller than the
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>f1</strong> (<em>array-like object</em>) – the first fitness vector</p></li>
-<li><p><strong>f2</strong> (<em>array-like object</em>) – the second fitness vector</p></li>
-<li><p><strong>nec</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of equality consraints in the fitness vectors</p></li>
-<li><p><strong>tol</strong> (<em>array-like object</em>) – tolerances to be accounted for in the constraints</p></li>
+<li><p><strong>f1</strong> – the first fitness vector</p></li>
+<li><p><strong>f2</strong> – the second fitness vector</p></li>
+<li><p><strong>nec</strong> – the number of equality consraints in the fitness vectors</p></li>
+<li><p><strong>tol</strong> – tolerances to be accounted for in the constraints</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>nec</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>f1</em> and <em>f2</em> do not have equal size <span class="math notranslate nohighlight">\(n\)</span>, if <em>f1</em> does not have at least size 1,
-    if <em>neq</em> is larger than <span class="math notranslate nohighlight">\(n-1\)</span> (too many constraints) or if the size of <em>tol</em> is not <span class="math notranslate nohighlight">\(n - 1\)</span></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>f1</em>, <em>f2</em> or <em>tol</em> cannot be converted to a vector of floats</p></li>
-</ul>
+<dt class="field-even">Type f1</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Type f2</dt>
+<dd class="field-odd"><p>array-like object</p>
+</dd>
+<dt class="field-even">Type nec</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+<dt class="field-odd">Type tol</dt>
+<dd class="field-odd"><p>array-like object</p>
+</dd>
+<dt class="field-even">Raises OverflowError</dt>
+<dd class="field-even"><p>if <em>nec</em> is negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if <em>f1</em> and <em>f2</em> do not have equal size <span class="math notranslate nohighlight">\(n\)</span>, if <em>f1</em> does not have at least size 1,
+    if <em>neq</em> is larger than <span class="math notranslate nohighlight">\(n-1\)</span> (too many constraints) or if the size of <em>tol</em> is not <span class="math notranslate nohighlight">\(n - 1\)</span></p>
+</dd>
+<dt class="field-even">Raises TypeError</dt>
+<dd class="field-even"><p>if <em>f1</em>, <em>f2</em> or <em>tol</em> cannot be converted to a vector of floats</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>f1</em> is better than <em>f2</em>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Rtype</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -227,7 +241,7 @@ in <span class="math notranslate nohighlight">\(f_1\)</span> is smaller than the
 <hr class="docutils" />
 <dl class="function">
 <dt id="pygmo.sort_population_con">
-<code class="descclassname">pygmo.</code><code class="descname">sort_population_con</code><span class="sig-paren">(</span><em>input_f</em>, <em>nec</em>, <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sort_population_con" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">sort_population_con</code><span class="sig-paren">(</span><em class="sig-param">input_f</em>, <em class="sig-param">nec</em>, <em class="sig-param">tol</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.sort_population_con" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sorts a population (intended here as a 2D array-like
 containing fitness vectors) assuming a single-objective, constrained case.</p>
 <p>The following strict ordering is used (same as the one used in <a class="reference internal" href="#pygmo.compare_fc" title="pygmo.compare_fc"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.compare_fc()</span></code></a>):</p>
@@ -247,24 +261,35 @@ in <span class="math notranslate nohighlight">\(f_1\)</span> is smaller than the
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_f</strong> (<em>2-D array-like object</em>) – the fitness vectors</p></li>
-<li><p><strong>nec</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of equality constraints in the fitness vectors</p></li>
-<li><p><strong>tol</strong> (<em>array-like object</em>) – tolerances to be accounted for in the constraints</p></li>
+<li><p><strong>input_f</strong> – the fitness vectors</p></li>
+<li><p><strong>nec</strong> – the number of equality constraints in the fitness vectors</p></li>
+<li><p><strong>tol</strong> – tolerances to be accounted for in the constraints</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>nec</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the input fitness vectors do not have all the same size <span class="math notranslate nohighlight">\(n &gt;=1\)</span>, or if <em>neq</em> is larger than <span class="math notranslate nohighlight">\(n-1\)</span> (too many constraints)
-    or if the size of <em>tol</em> is not equal to <span class="math notranslate nohighlight">\(n-1\)</span></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>input_f</em> cannot be converted to a vector of vector of floats or <em>tol</em> cannot be converted to a vector of floats.</p></li>
-</ul>
+<dt class="field-even">Type input_f</dt>
+<dd class="field-even"><p>2-D array-like object</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the indexes of the sorted fitnesses vectors.</p>
+<dt class="field-odd">Type nec</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array</p>
+<dt class="field-even">Type tol</dt>
+<dd class="field-even"><p>array-like object</p>
+</dd>
+<dt class="field-odd">Raises OverflowError</dt>
+<dd class="field-odd"><p>if <em>nec</em> is negative or greater than an implementation-defined value</p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if the input fitness vectors do not have all the same size <span class="math notranslate nohighlight">\(n &gt;=1\)</span>, or if <em>neq</em> is larger than <span class="math notranslate nohighlight">\(n-1\)</span> (too many constraints)
+    or if the size of <em>tol</em> is not equal to <span class="math notranslate nohighlight">\(n-1\)</span></p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>if <em>input_f</em> cannot be converted to a vector of vector of floats or <em>tol</em> cannot be converted to a vector of floats.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the indexes of the sorted fitnesses vectors.</p>
+</dd>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -291,7 +316,7 @@ in <span class="math notranslate nohighlight">\(f_1\)</span> is smaller than the
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

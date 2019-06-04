@@ -176,7 +176,7 @@
 <h1>Self-adaptive Differential Evolution (DE 1220 aka pDE)<a class="headerlink" href="#self-adaptive-differential-evolution-de-1220-aka-pde" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv4N5pagmo6de1220E">
-<span id="_CPPv3N5pagmo6de1220E"></span><span id="_CPPv2N5pagmo6de1220E"></span><span id="pagmo::de1220"></span><span class="target" id="classpagmo_1_1de1220"></span><em class="property">class </em><code class="descname">de1220</code><a class="headerlink" href="#_CPPv4N5pagmo6de1220E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de1220E"></span><span id="_CPPv2N5pagmo6de1220E"></span><span id="pagmo::de1220"></span><span class="target" id="classpagmo_1_1de1220"></span><em class="property">class </em><code class="sig-name descname">de1220</code><a class="headerlink" href="#_CPPv4N5pagmo6de1220E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!) </p>
 <p><p>.</p>
 <img alt="../../../_images/original.jpg" src="../../../_images/original.jpg" /></p>
@@ -205,13 +205,13 @@ will produce an error.</p>
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv4N5pagmo6de122013log_line_typeE">
-<span id="_CPPv3N5pagmo6de122013log_line_typeE"></span><span id="_CPPv2N5pagmo6de122013log_line_typeE"></span><span id="pagmo::de1220::log_line_type"></span><span class="target" id="classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double, unsigned, double, double&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de122013log_line_typeE"></span><span id="_CPPv2N5pagmo6de122013log_line_typeE"></span><span id="pagmo::de1220::log_line_type"></span><span class="target" id="classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double, unsigned, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df) </p>
 </dd></dl>
 
 <dl class="type">
 <dt id="_CPPv4N5pagmo6de12208log_typeE">
-<span id="_CPPv3N5pagmo6de12208log_typeE"></span><span id="_CPPv2N5pagmo6de12208log_typeE"></span><span id="pagmo::de1220::log_type"></span><span class="target" id="classpagmo_1_1de1220_1a8f728a62d26f5c51672762356b501625"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="pagmo::de1220::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo6de12208log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de12208log_typeE"></span><span id="_CPPv2N5pagmo6de12208log_typeE"></span><span id="pagmo::de1220::log_type"></span><span class="target" id="classpagmo_1_1de1220_1a8f728a62d26f5c51672762356b501625"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="pagmo::de1220::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo6de12208log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -220,7 +220,7 @@ will produce an error.</p>
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj">
-<span id="_CPPv3N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="_CPPv2N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="pagmo::de1220::de1220__unsigned.std::vector:unsigned:.unsigned.double.double.b.unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a278d3be0b2835d6225ebd00889c6be3e"></span><code class="descname">de1220</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, std::vector&lt;unsigned&gt; <em>allowed_variants</em> = de1220_statics&lt;void&gt;::allowed_variants, unsigned <em>variant_adptv</em> = 1u, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="_CPPv2N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="pagmo::de1220::de1220__unsigned.std::vector:unsigned:.unsigned.double.double.b.unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a278d3be0b2835d6225ebd00889c6be3e"></span><code class="sig-name descname">de1220</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, std::vector&lt;unsigned&gt; <em>allowed_variants</em> = de1220_statics&lt;void&gt;::allowed_variants, unsigned <em>variant_adptv</em> = 1u, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs pDE (a.k.a. DE 1220)</p>
 <p>The same two self-adaptation variants used in <a class="reference internal" href="sade.html#classpagmo_1_1sade"><span class="std std-ref">pagmo::sade</span></a> are used to self-adapt the CR and F parameters:</p>
@@ -265,7 +265,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de12206evolveE10population">
-<span id="_CPPv3NK5pagmo6de12206evolveE10population"></span><span id="_CPPv2NK5pagmo6de12206evolveE10population"></span><span id="pagmo::de1220::evolve__populationC"></span><span class="target" id="classpagmo_1_1de1220_1ae4f9443ae56e5f36c4f819f16e3d23ca"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12206evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12206evolveE10population"></span><span id="_CPPv2NK5pagmo6de12206evolveE10population"></span><span id="pagmo::de1220::evolve__populationC"></span><span class="target" id="classpagmo_1_1de1220_1ae4f9443ae56e5f36c4f819f16e3d23ca"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12206evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <p><dl class="simple">
@@ -286,7 +286,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6de12208set_seedEj">
-<span id="_CPPv3N5pagmo6de12208set_seedEj"></span><span id="_CPPv2N5pagmo6de12208set_seedEj"></span><span id="pagmo::de1220::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a3f504d6a2f731c34abb23689c341bc8d"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12208set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de12208set_seedEj"></span><span id="_CPPv2N5pagmo6de12208set_seedEj"></span><span id="pagmo::de1220::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a3f504d6a2f731c34abb23689c341bc8d"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12208set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -299,7 +299,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de12208get_seedEv">
-<span id="_CPPv3NK5pagmo6de12208get_seedEv"></span><span id="_CPPv2NK5pagmo6de12208get_seedEv"></span><span id="pagmo::de1220::get_seedC"></span><span class="target" id="classpagmo_1_1de1220_1a9daeb59d3e3f049f2c4ace1e368a1f2b"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12208get_seedEv"></span><span id="_CPPv2NK5pagmo6de12208get_seedEv"></span><span id="pagmo::de1220::get_seedC"></span><span class="target" id="classpagmo_1_1de1220_1a9daeb59d3e3f049f2c4ace1e368a1f2b"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -310,7 +310,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo6de122013set_verbosityEj">
-<span id="_CPPv3N5pagmo6de122013set_verbosityEj"></span><span id="_CPPv2N5pagmo6de122013set_verbosityEj"></span><span id="pagmo::de1220::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1ac5a773a4305f55a0b01b0c50e55894bd"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de122013set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de122013set_verbosityEj"></span><span id="_CPPv2N5pagmo6de122013set_verbosityEj"></span><span id="pagmo::de1220::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1ac5a773a4305f55a0b01b0c50e55894bd"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de122013set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1de1220_1abf19bc705a07fcb8843ee72d38f22eca"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -343,7 +343,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de122013get_verbosityEv">
-<span id="_CPPv3NK5pagmo6de122013get_verbosityEv"></span><span id="_CPPv2NK5pagmo6de122013get_verbosityEv"></span><span id="pagmo::de1220::get_verbosityC"></span><span class="target" id="classpagmo_1_1de1220_1a7135ee783652f512bf2a0eee8a329cae"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de122013get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de122013get_verbosityEv"></span><span id="_CPPv2NK5pagmo6de122013get_verbosityEv"></span><span id="pagmo::de1220::get_verbosityC"></span><span class="target" id="classpagmo_1_1de1220_1a7135ee783652f512bf2a0eee8a329cae"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de122013get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -354,7 +354,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de12207get_genEv">
-<span id="_CPPv3NK5pagmo6de12207get_genEv"></span><span id="_CPPv2NK5pagmo6de12207get_genEv"></span><span id="pagmo::de1220::get_genC"></span><span class="target" id="classpagmo_1_1de1220_1a537f6abb5b9e98e2f00af2c45fcb84ed"></span>unsigned <code class="descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12207get_genEv"></span><span id="_CPPv2NK5pagmo6de12207get_genEv"></span><span id="pagmo::de1220::get_genC"></span><span class="target" id="classpagmo_1_1de1220_1a537f6abb5b9e98e2f00af2c45fcb84ed"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
@@ -365,7 +365,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de12208get_nameEv">
-<span id="_CPPv3NK5pagmo6de12208get_nameEv"></span><span id="_CPPv2NK5pagmo6de12208get_nameEv"></span><span id="pagmo::de1220::get_nameC"></span><span class="target" id="classpagmo_1_1de1220_1ab76e87d559762addeac62f29d8a27ee5"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12208get_nameEv"></span><span id="_CPPv2NK5pagmo6de12208get_nameEv"></span><span id="pagmo::de1220::get_nameC"></span><span class="target" id="classpagmo_1_1de1220_1ab76e87d559762addeac62f29d8a27ee5"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -377,7 +377,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de122014get_extra_infoEv">
-<span id="_CPPv3NK5pagmo6de122014get_extra_infoEv"></span><span id="_CPPv2NK5pagmo6de122014get_extra_infoEv"></span><span id="pagmo::de1220::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de1220_1a653a7bd9a43c9774f5f3720d3166d216"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de122014get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de122014get_extra_infoEv"></span><span id="_CPPv2NK5pagmo6de122014get_extra_infoEv"></span><span id="pagmo::de1220::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de1220_1a653a7bd9a43c9774f5f3720d3166d216"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de122014get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -389,7 +389,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo6de12207get_logEv">
-<span id="_CPPv3NK5pagmo6de12207get_logEv"></span><span id="_CPPv2NK5pagmo6de12207get_logEv"></span><span id="pagmo::de1220::get_logC"></span><span class="target" id="classpagmo_1_1de1220_1abf19bc705a07fcb8843ee72d38f22eca"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6de12208log_typeE" title="pagmo::de1220::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12207get_logEv"></span><span id="_CPPv2NK5pagmo6de12207get_logEv"></span><span id="pagmo::de1220::get_logC"></span><span class="target" id="classpagmo_1_1de1220_1abf19bc705a07fcb8843ee72d38f22eca"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6de12208log_typeE" title="pagmo::de1220::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"><span class="std std-ref">de1220::log_line_type</span></a> containing: Gen, Fevals, Best, F, CR, Variant, dx, df as described in <a class="reference internal" href="#classpagmo_1_1de1220_1ac5a773a4305f55a0b01b0c50e55894bd"><span class="std std-ref">de1220::set_verbosity</span></a> <dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"><span class="std std-ref">de1220::log_line_type</span></a> containing the logged values Gen, Fevals, Best, F, CR, Variant, dx, df </p>
@@ -400,7 +400,7 @@ will produce an error.</p>
 
 <dl class="function">
 <dt id="_CPPv4I0EN5pagmo6de12209serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo6de12209serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6de12209serializeER7Archivej"></span><span class="target" id="classpagmo_1_1de1220_1a93598fef8a561eac6c228935fe718b42"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6de12209serializeEvR7Archivej" title="pagmo::de1220::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6de12209serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6de12209serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6de12209serializeER7Archivej"></span><span class="target" id="classpagmo_1_1de1220_1a93598fef8a561eac6c228935fe718b42"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6de12209serializeEvR7Archivej" title="pagmo::de1220::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6de12209serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -421,13 +421,13 @@ will produce an error.</p>
 
 <dl class="class">
 <dt id="_CPPv4I0EN5pagmo14de1220_staticsE">
-<span id="_CPPv3I0EN5pagmo14de1220_staticsE"></span><span id="_CPPv2I0EN5pagmo14de1220_staticsE"></span><span class="target" id="structpagmo_1_1de1220__statics"></span>template&lt;typename <code class="descname">T</code>&gt;<br /><em class="property">struct </em><code class="descname">de1220_statics</code><a class="headerlink" href="#_CPPv4I0EN5pagmo14de1220_staticsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14de1220_staticsE"></span><span id="_CPPv2I0EN5pagmo14de1220_staticsE"></span><span class="target" id="structpagmo_1_1de1220__statics"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">struct </em><code class="sig-name descname">de1220_statics</code><a class="headerlink" href="#_CPPv4I0EN5pagmo14de1220_staticsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Static variables used in <a class="reference internal" href="#classpagmo_1_1de1220"><span class="std std-ref">pagmo::de1220</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="member">
 <dt id="_CPPv4N5pagmo14de1220_statics16allowed_variantsE">
-<span id="_CPPv3N5pagmo14de1220_statics16allowed_variantsE"></span><span id="_CPPv2N5pagmo14de1220_statics16allowed_variantsE"></span><span id="pagmo::de1220_statics::allowed_variants__std::vector:unsigned:C"></span><span class="target" id="structpagmo_1_1de1220__statics_1a5cdc28c95d6be880f586ef4d9f9adcee"></span><em class="property">const</em> std::vector&lt;unsigned&gt; <code class="descname">allowed_variants</code> = {2u, , , , , , , }<a class="headerlink" href="#_CPPv4N5pagmo14de1220_statics16allowed_variantsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14de1220_statics16allowed_variantsE"></span><span id="_CPPv2N5pagmo14de1220_statics16allowed_variantsE"></span><span id="pagmo::de1220_statics::allowed_variants__std::vector:unsigned:C"></span><span class="target" id="structpagmo_1_1de1220__statics_1a5cdc28c95d6be880f586ef4d9f9adcee"></span><em class="property">const</em> std::vector&lt;unsigned&gt; <code class="sig-name descname">allowed_variants</code> = {2u, , , , , , , }<a class="headerlink" href="#_CPPv4N5pagmo14de1220_statics16allowed_variantsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Allowed mutation variants considered by default: {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u}. </p>
 </dd></dl>
 
@@ -449,7 +449,7 @@ will produce an error.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

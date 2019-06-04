@@ -182,7 +182,7 @@
 <h2>Islands implemented in Python<a class="headerlink" href="#islands-implemented-in-python" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pygmo.mp_island">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">mp_island</code><span class="sig-paren">(</span><em>use_pool=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">mp_island</code><span class="sig-paren">(</span><em class="sig-param">use_pool=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multiprocessing island.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.10: </span>The <em>use_pool</em> parameter (in previous versions, <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code></a> always used a process pool).</p>
@@ -227,20 +227,25 @@ are thus advised to tread carefully with interrupt signals (especially in intera
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_pool</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a>, a process from a global pool will be used to run the evolution, otherwise a new
+<dd class="field-odd"><p><strong>use_pool</strong> – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a>, a process from a global pool will be used to run the evolution, otherwise a new
 process will be spawned for each evolution</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – is <em>use_pool</em> is not of type <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – if the multiprocessing island is not supported on the current platform and <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a></p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a> if <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a></p></li>
-</ul>
+<dt class="field-even">Type use_pool</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>is <em>use_pool</em> is not of type <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+<dt class="field-even">Raises RuntimeError</dt>
+<dd class="field-even"><p>if the multiprocessing island is not supported on the current platform and <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a></p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a> if <em>use_pool</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a></p>
 </dd>
 </dl>
 <dl class="method">
 <dt id="pygmo.mp_island.get_extra_info">
-<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island’s extra info.</p>
 <p>If the island uses a process pool and the pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutdown_pool()</span></code></a>,
 invoking this function will trigger the creation of a new pool.</p>
@@ -248,32 +253,32 @@ invoking this function will trigger the creation of a new pool.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>str</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.get_pool_size" title="pygmo.mp_island.get_pool_size"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pool_size()</span></code></a></p>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.mp_island.get_pool_size" title="pygmo.mp_island.get_pool_size"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pool_size()</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.mp_island.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island’s name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Multiprocessing</span> <span class="pre">island&quot;</span></code></p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pygmo.mp_island.get_pool_size">
-<em class="property">static </em><code class="descname">get_pool_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_pool_size" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_pool_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.get_pool_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the size of the process pool.</p>
 <p>If the process pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutdown_pool()</span></code></a>, invoking this
 function will trigger the creation of a new pool.</p>
@@ -281,80 +286,90 @@ function will trigger the creation of a new pool.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the current size of the pool</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>int</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a></p>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pygmo.mp_island.init_pool">
-<em class="property">static </em><code class="descname">init_pool</code><span class="sig-paren">(</span><em>processes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.init_pool" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">init_pool</code><span class="sig-paren">(</span><em class="sig-param">processes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.init_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise the process pool.</p>
 <p>This method will initialise the process pool backing <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code></a>, if the pool
 has not been initialised yet or if the pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutdown_pool()</span></code></a>.
 Otherwise, this method will have no effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>processes</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> or an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – the size of the pool (if <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, the size of the pool will be
+<dd class="field-odd"><p><strong>processes</strong> – the size of the pool (if <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, the size of the pool will be
 equal to the number of logical CPUs on the system)</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the pool does not exist yet and the function is being called from a thread different
-    from the main one, or if <em>processes</em> is a non-positive value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – if the current platform or Python version is not supported</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>processes</em> is not <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> and not an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p></li>
-</ul>
+<dt class="field-even">Type processes</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> or an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if the pool does not exist yet and the function is being called from a thread different
+    from the main one, or if <em>processes</em> is a non-positive value</p>
+</dd>
+<dt class="field-even">Raises RuntimeError</dt>
+<dd class="field-even"><p>if the current platform or Python version is not supported</p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>if <em>processes</em> is not <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> and not an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.mp_island.pid">
-<code class="descname">pid</code><a class="headerlink" href="#pygmo.mp_island.pid" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">pid</code><a class="headerlink" href="#pygmo.mp_island.pid" title="Permalink to this definition">¶</a></dt>
 <dd><p>ID of the evolution process (read-only).</p>
 <p>This property is available only if the island is <em>not</em> using a process pool.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the ID of the process running the current evolution, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if no evolution is ongoing</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>int</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the island is using a process pool</p>
+<dt class="field-odd">Raises ValueError</dt>
+<dd class="field-odd"><p>if the island is using a process pool</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pygmo.mp_island.resize_pool">
-<em class="property">static </em><code class="descname">resize_pool</code><span class="sig-paren">(</span><em>processes</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.resize_pool" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">resize_pool</code><span class="sig-paren">(</span><em class="sig-param">processes</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.resize_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resize pool.</p>
 <p>This method will resize the process pool backing <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code></a>.</p>
 <p>If the process pool was previously shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutdown_pool()</span></code></a>, invoking this
 function will trigger the creation of a new pool.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>processes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the desired number of processes in the pool</p>
+<dd class="field-odd"><p><strong>processes</strong> – the desired number of processes in the pool</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the <em>processes</em> argument is not an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the <em>processes</em> argument is not strictly positive</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a></p></li>
-</ul>
+<dt class="field-even">Type processes</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises TypeError</dt>
+<dd class="field-odd"><p>if the <em>processes</em> argument is not an <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+<dt class="field-even">Raises ValueError</dt>
+<dd class="field-even"><p>if the <em>processes</em> argument is not strictly positive</p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.mp_island.init_pool" title="pygmo.mp_island.init_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_pool()</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.mp_island.run_evolve">
-<code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.run_evolve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_evolve</code><span class="sig-paren">(</span><em class="sig-param">algo</em>, <em class="sig-param">pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
@@ -364,29 +379,35 @@ shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>algo</strong> (<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>) – the input algorithm</p></li>
-<li><p><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – the input population</p></li>
+<li><p><strong>algo</strong> – the input algorithm</p></li>
+<li><p><strong>pop</strong> – the input population</p></li>
 </ul>
+</dd>
+<dt class="field-even">Type algo</dt>
+<dd class="field-even"><p><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
+</dd>
+<dt class="field-odd">Type pop</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a tuple of 2 elements containing <em>algo</em> (i.e., the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> object that was used for the evolution) and the evolved <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – if the pool was manually shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutdown_pool()</span></code></a></p></li>
-<li><p><strong>unspecified</strong> – any exception thrown during the evolution, or by the public interface of the
-    process pool</p></li>
-</ul>
+<dt class="field-even">Raises RuntimeError</dt>
+<dd class="field-even"><p>if the pool was manually shut down via <a class="reference internal" href="#pygmo.mp_island.shutdown_pool" title="pygmo.mp_island.shutdown_pool"><code class="xref py py-func docutils literal notranslate"><span class="pre">shutdown_pool()</span></code></a></p>
+</dd>
+<dt class="field-odd">Raises unspecified</dt>
+<dd class="field-odd"><p>any exception thrown during the evolution, or by the public interface of the
+    process pool</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="pygmo.mp_island.shutdown_pool">
-<em class="property">static </em><code class="descname">shutdown_pool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.shutdown_pool" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">shutdown_pool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mp_island.shutdown_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shutdown pool.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.8.</span></p>
@@ -399,16 +420,16 @@ will raise an error. A new process pool can be created via an explicit call to
 <a class="reference internal" href="#pygmo.mp_island" title="pygmo.mp_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code></a> which trigger the creation of a new process pool.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="pygmo.mp_island.use_pool">
-<code class="descname">use_pool</code><a class="headerlink" href="#pygmo.mp_island.use_pool" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">use_pool</code><a class="headerlink" href="#pygmo.mp_island.use_pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pool usage flag (read-only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> if this island uses a process pool, <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a> otherwise</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -417,7 +438,7 @@ will raise an error. A new process pool can be created via an explicit call to
 
 <dl class="class">
 <dt id="pygmo.ipyparallel_island">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">ipyparallel_island</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">ipyparallel_island</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ipyparallel island.</p>
 <p>This user-defined island (UDI) will dispatch evolution tasks to an ipyparallel cluster.
 Upon construction, an instance of this UDI will first initialise an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.Client</span></code></a>
@@ -431,35 +452,35 @@ object that will be created internally.</p>
 </div>
 <dl class="method">
 <dt id="pygmo.ipyparallel_island.get_extra_info">
-<code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_extra_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island’s extra info.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a string with extra information about the status of the island</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.ipyparallel_island.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island’s name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Ipyparallel</span> <span class="pre">island&quot;</span></code></p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pygmo.ipyparallel_island.run_evolve">
-<code class="descname">run_evolve</code><span class="sig-paren">(</span><em>algo</em>, <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.run_evolve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_evolve</code><span class="sig-paren">(</span><em class="sig-param">algo</em>, <em class="sig-param">pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
@@ -468,18 +489,24 @@ instance initialised during the construction of the island.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pop</strong> (<a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – the input population</p></li>
-<li><p><strong>algo</strong> (<a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>) – the input algorithm</p></li>
+<li><p><strong>pop</strong> – the input population</p></li>
+<li><p><strong>algo</strong> – the input algorithm</p></li>
 </ul>
+</dd>
+<dt class="field-even">Type pop</dt>
+<dd class="field-even"><p><a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
+</dd>
+<dt class="field-odd">Type algo</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a tuple of 2 elements containing <em>algo</em> (i.e., the <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> object that was used for the evolution) and the evolved <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+<dt class="field-odd">Rtype</dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown during the evolution, or by submitting the evolution task
+<dt class="field-even">Raises unspecified</dt>
+<dd class="field-even"><p>any exception thrown during the evolution, or by submitting the evolution task
     to the ipyparallel cluster</p>
 </dd>
 </dl>
@@ -492,7 +519,7 @@ instance initialised during the construction of the island.</p>
 <span id="py-islands-cpp"></span><h2>Islands exposed from C++<a class="headerlink" href="#islands-exposed-from-c" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pygmo.thread_island">
-<em class="property">class </em><code class="descclassname">pygmo.</code><code class="descname">thread_island</code><a class="headerlink" href="#pygmo.thread_island" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">thread_island</code><a class="headerlink" href="#pygmo.thread_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Thread island.</p>
 <p>This class is a user-defined island (UDI) that will run evolutions directly inside
 the separate thread of execution within <a class="reference internal" href="../py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.island</span></code></a>. Evolution tasks running on this
@@ -520,7 +547,7 @@ this UDI can be used only with algorithms and problems implemented in C++.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

@@ -176,22 +176,31 @@
 <span id="py-plotting"></span><h1>Plotting utilities<a class="headerlink" href="#plotting-utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pygmo.plotting.plot_non_dominated_fronts">
-<code class="descclassname">pygmo.plotting.</code><code class="descname">plot_non_dominated_fronts</code><span class="sig-paren">(</span><em>points, marker='o', comp=[0, 1]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.plotting.plot_non_dominated_fronts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.plotting.</code><code class="sig-name descname">plot_non_dominated_fronts</code><span class="sig-paren">(</span><em class="sig-param">points, marker='o', comp=[0, 1]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.plotting.plot_non_dominated_fronts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the nondominated fronts of a set of points. Makes use of <a class="reference internal" href="py_mo_utils.html#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-class docutils literal notranslate"><span class="pre">fast_non_dominated_sorting</span></code></a> to
 compute the non dominated fronts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<em>2d array-like</em>) – points to plot</p></li>
-<li><p><strong>marker</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – matplotlib marker used to plot the <em>points</em></p></li>
-<li><p><strong>comp</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – Components to be considered in the two dimensional plot (useful in many-objectives cases)</p></li>
+<li><p><strong>points</strong> – points to plot</p></li>
+<li><p><strong>marker</strong> – matplotlib marker used to plot the <em>points</em></p></li>
+<li><p><strong>comp</strong> – Components to be considered in the two dimensional plot (useful in many-objectives cases)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the current <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> instance on the current figure</p>
+<dt class="field-even">Type points</dt>
+<dd class="field-even"><p>2d array-like</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+<dt class="field-odd">Type marker</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-even">Type comp</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the current <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> instance on the current figure</p>
+</dd>
+<dt class="field-even">Rtype</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -218,7 +227,7 @@ compute the non dominated fronts.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

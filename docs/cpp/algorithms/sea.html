@@ -176,7 +176,7 @@
 <h1>(N+1)-ES Simple Evolutionary Algorithm<a class="headerlink" href="#n-1-es-simple-evolutionary-algorithm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="_CPPv4N5pagmo3seaE">
-<span id="_CPPv3N5pagmo3seaE"></span><span id="_CPPv2N5pagmo3seaE"></span><span id="pagmo::sea"></span><span class="target" id="classpagmo_1_1sea"></span><em class="property">class </em><code class="descname">sea</code><a class="headerlink" href="#_CPPv4N5pagmo3seaE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3seaE"></span><span id="_CPPv2N5pagmo3seaE"></span><span id="pagmo::sea"></span><span class="target" id="classpagmo_1_1sea"></span><em class="property">class </em><code class="sig-name descname">sea</code><a class="headerlink" href="#_CPPv4N5pagmo3seaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>(N+1)-ES Simple Evolutionary Algorithm </p>
 <p><img alt="../../../_images/sea.png" src="../../../_images/sea.png" /></p>
 <p>Evolutionary strategies date back to the mid 1960s when P. Bienert, I. Rechenberg, and H.-P. Schwefel at the Technical University of Berlin, Germany, developed the first bionics-inspired schemes for evolving optimal shapes of minimal drag bodies in a wind tunnel using Darwin’s evolution principle.</p>
@@ -206,13 +206,13 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv4N5pagmo3sea13log_line_typeE">
-<span id="_CPPv3N5pagmo3sea13log_line_typeE"></span><span id="_CPPv2N5pagmo3sea13log_line_typeE"></span><span id="pagmo::sea::log_line_type"></span><span class="target" id="classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt; <code class="descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sea13log_line_typeE"></span><span id="_CPPv2N5pagmo3sea13log_line_typeE"></span><span id="pagmo::sea::log_line_type"></span><span class="target" id="classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, improvement, mutations) </p>
 </dd></dl>
 
 <dl class="type">
 <dt id="_CPPv4N5pagmo3sea8log_typeE">
-<span id="_CPPv3N5pagmo3sea8log_typeE"></span><span id="_CPPv2N5pagmo3sea8log_typeE"></span><span id="pagmo::sea::log_type"></span><span class="target" id="classpagmo_1_1sea_1a65a18f8ef53a2338d1b0015c6e43c785"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="pagmo::sea::log_line_type">log_line_type</a>&gt; <code class="descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sea8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sea8log_typeE"></span><span id="_CPPv2N5pagmo3sea8log_typeE"></span><span id="pagmo::sea::log_type"></span><span class="target" id="classpagmo_1_1sea_1a65a18f8ef53a2338d1b0015c6e43c785"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="pagmo::sea::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sea8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -221,7 +221,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt id="_CPPv4N5pagmo3sea3seaEjj">
-<span id="_CPPv3N5pagmo3sea3seaEjj"></span><span id="_CPPv2N5pagmo3sea3seaEjj"></span><span id="pagmo::sea::sea__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1sea_1a35b7a8cd5ffa2e5247e6b64bff3ee048"></span><code class="descname">sea</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea3seaEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sea3seaEjj"></span><span id="_CPPv2N5pagmo3sea3seaEjj"></span><span id="pagmo::sea::sea__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1sea_1a35b7a8cd5ffa2e5247e6b64bff3ee048"></span><code class="sig-name descname">sea</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea3seaEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs sea</p>
 <p><dl class="simple">
@@ -236,7 +236,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3sea6evolveE10population">
-<span id="_CPPv3NK5pagmo3sea6evolveE10population"></span><span id="_CPPv2NK5pagmo3sea6evolveE10population"></span><span id="pagmo::sea::evolve__populationC"></span><span class="target" id="classpagmo_1_1sea_1af10e7cff90ec2c4d121a24ad2c32d2c7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea6evolveE10population"></span><span id="_CPPv2NK5pagmo3sea6evolveE10population"></span><span id="pagmo::sea::evolve__populationC"></span><span class="target" id="classpagmo_1_1sea_1af10e7cff90ec2c4d121a24ad2c32d2c7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>evolved population </p>
@@ -255,7 +255,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo3sea13set_verbosityEj">
-<span id="_CPPv3N5pagmo3sea13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sea13set_verbosityEj"></span><span id="pagmo::sea::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sea_1a68cb8bf7c3d8ca1340481768cd7e7c1e"></span>void <code class="descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sea13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sea13set_verbosityEj"></span><span id="pagmo::sea::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sea_1a68cb8bf7c3d8ca1340481768cd7e7c1e"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -283,7 +283,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3sea13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3sea13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sea13get_verbosityEv"></span><span id="pagmo::sea::get_verbosityC"></span><span class="target" id="classpagmo_1_1sea_1a491217b8da164734bfb167c710726430"></span>unsigned <code class="descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sea13get_verbosityEv"></span><span id="pagmo::sea::get_verbosityC"></span><span class="target" id="classpagmo_1_1sea_1a491217b8da164734bfb167c710726430"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -294,7 +294,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4N5pagmo3sea8set_seedEj">
-<span id="_CPPv3N5pagmo3sea8set_seedEj"></span><span id="_CPPv2N5pagmo3sea8set_seedEj"></span><span id="pagmo::sea::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sea_1acc57548b6c44730c0e653dfbdbe60505"></span>void <code class="descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sea8set_seedEj"></span><span id="_CPPv2N5pagmo3sea8set_seedEj"></span><span id="pagmo::sea::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sea_1acc57548b6c44730c0e653dfbdbe60505"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -307,7 +307,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3sea8get_seedEv">
-<span id="_CPPv3NK5pagmo3sea8get_seedEv"></span><span id="_CPPv2NK5pagmo3sea8get_seedEv"></span><span id="pagmo::sea::get_seedC"></span><span class="target" id="classpagmo_1_1sea_1aa3b7441c8a0690c4e727aaa0f5b2bd98"></span>unsigned <code class="descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea8get_seedEv"></span><span id="_CPPv2NK5pagmo3sea8get_seedEv"></span><span id="pagmo::sea::get_seedC"></span><span class="target" id="classpagmo_1_1sea_1aa3b7441c8a0690c4e727aaa0f5b2bd98"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -318,7 +318,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3sea8get_nameEv">
-<span id="_CPPv3NK5pagmo3sea8get_nameEv"></span><span id="_CPPv2NK5pagmo3sea8get_nameEv"></span><span id="pagmo::sea::get_nameC"></span><span class="target" id="classpagmo_1_1sea_1ae776b2b673a432eec781ec91836f2a25"></span>std::string <code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea8get_nameEv"></span><span id="_CPPv2NK5pagmo3sea8get_nameEv"></span><span id="pagmo::sea::get_nameC"></span><span class="target" id="classpagmo_1_1sea_1ae776b2b673a432eec781ec91836f2a25"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -330,7 +330,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3sea14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo3sea14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sea14get_extra_infoEv"></span><span id="pagmo::sea::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sea_1a9eb697445b8f79b06725add45c780f06"></span>std::string <code class="descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sea14get_extra_infoEv"></span><span id="pagmo::sea::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sea_1a9eb697445b8f79b06725add45c780f06"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -342,7 +342,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4NK5pagmo3sea7get_logEv">
-<span id="_CPPv3NK5pagmo3sea7get_logEv"></span><span id="_CPPv2NK5pagmo3sea7get_logEv"></span><span id="pagmo::sea::get_logC"></span><span class="target" id="classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3sea8log_typeE" title="pagmo::sea::log_type">log_type</a> &amp;<code class="descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea7get_logEv"></span><span id="_CPPv2NK5pagmo3sea7get_logEv"></span><span id="pagmo::sea::get_logC"></span><span class="target" id="classpagmo_1_1sea_1ad48c6dd7134e50340257dfacb7dfab09"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3sea8log_typeE" title="pagmo::sea::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sea7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"><span class="std std-ref">sea::log_line_type</span></a> containing: Gen, Fevals, Best, Improvement, Mutations as described in <a class="reference internal" href="#classpagmo_1_1sea_1a68cb8bf7c3d8ca1340481768cd7e7c1e"><span class="std std-ref">sea::set_verbosity</span></a> <dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"><span class="std std-ref">sea::log_line_type</span></a> containing the logged values Gen, Fevals, Best, Improvement, Mutations </p>
@@ -353,7 +353,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="function">
 <dt id="_CPPv4I0EN5pagmo3sea9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo3sea9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3sea9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1sea_1a8022e92cd940282eaf04636541d4adbc"></span>template&lt;typename <code class="descname">Archive</code>&gt;<br />void <code class="descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3sea9serializeEvR7Archivej" title="pagmo::sea::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3sea9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3sea9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3sea9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1sea_1a8022e92cd940282eaf04636541d4adbc"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3sea9serializeEvR7Archivej" title="pagmo::sea::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3sea9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -387,7 +387,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>
