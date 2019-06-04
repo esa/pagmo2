@@ -118,3 +118,8 @@ Problems exposed from C++
 
 .. autoclass:: pygmo.unconstrain
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.wfg
+   :members:

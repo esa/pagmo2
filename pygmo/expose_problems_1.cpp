@@ -68,6 +68,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/unconstrain.hpp>
+#include <pagmo/problems/wfg.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
 
@@ -155,5 +156,9 @@ void expose_problems_1()
                  bp::make_function(lcast([](unconstrain &udp) -> problem & { return udp.get_inner_problem(); }),
                                    bp::return_internal_reference<>()),
                  generic_udp_inner_problem_docstring().c_str());
+    // WFG.
+    auto wfg_p = expose_problem_pygmo<wfg>("wfg", wfg_docstring().c_str());
+    wfg_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
+        (bp::arg("prob_id") = 1u, bp::arg("dim_dvs") = 5u, bp::arg("dim_obj") = 3u, bp::arg("dim_k") = 4u)));
 }
 } // namespace pygmo

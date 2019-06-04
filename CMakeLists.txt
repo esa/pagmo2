@@ -187,6 +187,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/rastrigin.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/minlp_rastrigin.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/luksan_vlcek1.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/wfg.cpp"
         # UDA.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/null_algorithm.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
