@@ -87,14 +87,7 @@ wfg::wfg(unsigned prob_id, vector_double::size_type dim_dvs, vector_double::size
     }
 }
 
-/// Fitness computation
-/**
- * Computes the fitness for this UDP
- *
- * @param x the decision vector.
- *
- * @return the fitness of \p x.
- */
+// Fitness computation
 vector_double wfg::fitness(const vector_double &x) const
 {
     vector_double retval;
@@ -130,22 +123,12 @@ vector_double wfg::fitness(const vector_double &x) const
     return retval;
 }
 
-/// Number of objectives
-/**
-     * It returns the number of objectives.
-     *
-     * @return the number of objectives
-     */
+// Number of objectives
 vector_double::size_type wfg::get_nobj() const
 {
     return m_dim_obj;
 }
-/// Box-bounds
-/**
- * It returns the box-bounds for this UDP.
- *
- * @return the lower and upper bounds for each of the decision vector components
- */
+// Box-bounds
 std::pair<vector_double, vector_double> wfg::get_bounds() const
 {
     vector_double upper_bounds(m_dim_dvs);
@@ -156,23 +139,13 @@ std::pair<vector_double, vector_double> wfg::get_bounds() const
     return {vector_double(m_dim_dvs, 0.), upper_bounds};
 }
 
-/// Problem name
-/**
- * @return a string containing the problem name
- */
+// Problem name
 std::string wfg::get_name() const
 {
     return "WFG" + std::to_string(m_prob_id);
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void wfg::serialize(Archive &ar, unsigned)
 {

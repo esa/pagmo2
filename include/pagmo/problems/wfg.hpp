@@ -40,48 +40,24 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// WFG problem test suite
-/**
- *
- * This test suite was conceived to exceed the functionalities of previously implemented
- * test suites.
- * The WFG test suite was introduced by Simon Huband, Luigi Barone, Lyndon While, and Phil Hingston. In their paper the
- * authors
- * identify the absence of nonseparable multimodal problems in order to test multi-objective optimization algorithms.
- * In view of this, they propose a set of 9 different scalable multi-objective unconstrained problems (both in their
- * objectives and in their decision vectors).
- *
- *
- * \verbatim embed:rst:leading-asterisk
- * .. seealso::
- *
- *    Huband, Simon, Hingston, Philip, Barone, Luigi and While Lyndon. "A Review of Multi-Objective Test Problems and a
- *    Scalable Test Problem Toolkit". IEEE Transactions on Evolutionary Computation (2006), 10(5), 477-506. doi:
- *    10.1109/TEVC.2005.861417.
- *
- * \endverbatim
- */
+// WFG problem test suite
+//  This test suite was conceived to exceed the functionalities of previously implemented
+//  test suites.
+//  The WFG test suite was introduced by Simon Huband, Luigi Barone, Lyndon While, and Phil Hingston. In their paper the
+//  authors
+//  identify the absence of nonseparable multimodal problems in order to test multi-objective optimization algorithms.
+//  In view of this, they propose a set of 9 different scalable multi-objective unconstrained problems (both in their
+//  objectives and in their decision vectors).
+//  See:
+//  Huband, Simon, Hingston, Philip, Barone, Luigi and While Lyndon. "A Review of Multi-Objective Test Problems and a
+//  Scalable Test Problem Toolkit". IEEE Transactions on Evolutionary Computation (2006), 10(5), 477-506. doi:
+//  10.1109/TEVC.2005.861417.
 
 class PAGMO_DLL_PUBLIC wfg
 {
 public:
-    /** Constructor
-     *
-     * Will construct one problem from the Walking Fish Group (WFG) test-suite.
-     *
-     * @param prob_id problem number. Must be in [1, .., 9].
-     * @param dim_dvs decision vector dimension.
-     * @param dim_obj objective function dimension.
-     * @param dim_k position parameter. This parameter influences the shape functions of the various problems.
-     *
-     * @throws std::invalid_argument if \p prob_id is not in [1,..,9].
-     * @throws std::invalid_argument if \p dim_dvs is not >=1.
-     * @throws std::invalid_argument if \p dim_obj is not >=2.
-     * @throws std::invalid_argument if \p dim_k is not < \p dim_dvs or is not >=1 or \p dim_k % (\p dim_obj -1) != 0.
-     * @throws std::invalid_argument if (\p prob_id == 2 or \p prob_id == 3) and it does not hold (\p dim_dvs - \p
-     * dim_k)mod(2) == 0.
-     *
-     */
+    // Constructor
+    // Will construct one problem from the Walking Fish Group (WFG) test-suite
     wfg(unsigned prob_id = 1u, vector_double::size_type dim_dvs = 5u, vector_double::size_type dim_obj = 3u,
         vector_double::size_type dim_k = 4u);
     // Fitness computation
