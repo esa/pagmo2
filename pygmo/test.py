@@ -1088,8 +1088,8 @@ class wfg_test_case(_ut.TestCase):
         from .core import wfg, population
         udp = wfg(prob_id=1, dim_dvs=5, dim_obj=3, dim_k=4)
         pop = population(udp, 20)
-        self.assertTrue(prob.get_nx() == 5)
-        self.assertTrue(prob.get_nobj() == 3)
+        self.assertTrue(udp.get_nx() == 5)
+        self.assertTrue(udp.get_nobj() == 3)
 
 class rastrigin_test_case(_ut.TestCase):
     """Test case for the Rastrigin function
