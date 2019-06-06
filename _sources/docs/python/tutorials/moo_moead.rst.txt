@@ -71,7 +71,7 @@ particular the **weight_generation** kwarg was set to **grid** and the **decompo
         Weight generation: grid
         Decomposition method: tchebycheff
         Neighbourhood size: 20
-        Parameter CR: 0.5
+        Parameter CR: 1
         Parameter F: 0.5
         Distribution index: 20
         Chance for diversity preservation: 0.9
