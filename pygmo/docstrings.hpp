@@ -118,6 +118,7 @@ std::string decompose_z_docstring();
 std::string unconstrain_docstring();
 std::string get_best_docstring(const std::string &);
 std::string generic_udp_inner_problem_docstring();
+std::string wfg_docstring();
 
 // user - algorithms
 std::string null_algorithm_docstring();

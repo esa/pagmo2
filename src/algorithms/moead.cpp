@@ -308,7 +308,7 @@ std::string moead::get_extra_info() const
     stream(ss, "\n\tWeight generation: ", m_weight_generation);
     stream(ss, "\n\tDecomposition method: ", m_decomposition);
     stream(ss, "\n\tNeighbourhood size: ", m_neighbours);
-    stream(ss, "\n\tParameter CR: ", m_F);
+    stream(ss, "\n\tParameter CR: ", m_CR);
     stream(ss, "\n\tParameter F: ", m_F);
     stream(ss, "\n\tDistribution index: ", m_eta_m);
     stream(ss, "\n\tChance for diversity preservation: ", m_realb);

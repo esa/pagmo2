@@ -1929,6 +1929,29 @@ See also the docs of the C++ class :cpp:class:`pagmo::dtlz`.
 )";
 }
 
+std::string wfg_docstring()
+{
+    return R"(__init__(prob_id = 1, dim_dvs = 5, dim_obj = 3, dim_k = 4)
+
+The WFG problem suite.
+
+Args:
+    prob_id (int): WFG problem id
+    dim_dvs (int): decision vector size
+    dim_obj (int): number of objectives
+    dim_k (int): position parameter
+
+Raises:
+    OverflowError: if *prob_id*, *dim_dvs*, *dim_obj* or *dim_k* are negative or greater than an implementation-defined value
+    ValueError: if *prob_id* is not in [1, ..., 9], *dim_dvs* is smaller than 1, *dim_obj* is smaller than 2, *dim_k* is
+      smaller than 1 or bigger or equal to *dim_dvs* or if *dim_k*mod(*dim_obj*-1) is different than zero. Also, when *prob_id* equals
+      to 2 or 3, if (*dim_dvs*-*dim_k*)mod(2) is different than zero.
+
+See also the docs of the C++ class :cpp:class:`pagmo::wfg`.
+
+)";
+}
+
 std::string cec2014_docstring()
 {
     return R"(__init__(prob_id = 1, dim = 2)
