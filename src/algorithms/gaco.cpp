@@ -613,7 +613,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
                 while (temporary_penalty[j] + m_acc < temporary_archive[k - 1][0] && j < 2 * m_ker) {
                     ++j;
                 }
-                saved_value_position.push_back(j);
+                saved_value_position.push_back(static_cast<unsigned long>(j));
                 temporary_archive[k][0] = temporary_penalty[j];
                 if (saved_value_position.size() == m_ker) {
                     count = false;
