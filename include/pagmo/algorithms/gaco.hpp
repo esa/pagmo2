@@ -86,7 +86,7 @@ class PAGMO_DLL_PUBLIC gaco
 {
 public:
     /// Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp)
-    typedef std::tuple<unsigned, unsigned, double, unsigned, double, double, double> log_line_type;
+    typedef std::tuple<unsigned, unsigned long, double, unsigned, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
