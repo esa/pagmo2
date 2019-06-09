@@ -265,7 +265,7 @@ private:
     mutable unsigned m_n_evalstop;
     mutable unsigned m_n_impstop;
     mutable unsigned m_gen_mark;
-    mutable unsigned m_fevals;
+    mutable unsigned long m_fevals;
     boost::optional<bfe> m_bfe;
 };
 

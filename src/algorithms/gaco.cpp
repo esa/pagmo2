@@ -289,7 +289,7 @@ population gaco::evolve(population pop) const
             }
 
             auto fitnesses = (*m_bfe)(prob, ants);
-            m_fevals += static_cast<unsigned>(pop_size);
+            m_fevals += pop_size;
             decltype(ant.size()) pos_dim = 0u;
             decltype(fitness.size()) pos_fit = 0u;
 
@@ -594,7 +594,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
             fitness[i] = pop.get_f()[sorted_list[i]];
             temporary_penalty[i] = sol_archive[i][0];
         }
-        std::vector<unsigned long> saved_value_position;
+        std::vector<decltype(temporary_penalty.size())> saved_value_position;
         bool count = true;
         // I merge the new and old penalties:
         temporary_penalty.insert(temporary_penalty.end(), sorted_vector.begin(), sorted_vector.end());
@@ -604,7 +604,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
         saved_value_position.push_back(0);
         temporary_archive[0][0] = temporary_penalty[0];
         decltype(temporary_penalty.size()) j;
-        decltype(temporary_archive.size()) k = 1u;
+        decltype(temporary_penalty.size()) k = 1u;
         for (decltype(m_ker) i = 1u; i < 2 * m_ker && count == true; ++i) {
             j = i;
             if (i > saved_value_position.back()) {
@@ -613,7 +613,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
                 while (temporary_penalty[j] + m_acc < temporary_archive[k - 1][0] && j < 2 * m_ker) {
                     ++j;
                 }
-                saved_value_position.push_back(static_cast<unsigned long>(j));
+                saved_value_position.push_back(j);
                 temporary_archive[k][0] = temporary_penalty[j];
                 if (saved_value_position.size() == m_ker) {
                     count = false;

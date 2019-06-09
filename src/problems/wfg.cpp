@@ -151,7 +151,7 @@ void wfg::serialize(Archive &ar, unsigned)
 }
 
 // We first define the shape functions (we assume that m varies from 1 to m_dim_obj):
-double wfg::linear(const vector_double &parameters, const unsigned long m) const
+double wfg::linear(const vector_double &parameters, const vector_double::size_type m) const
 {
     double g = 1.;
     if (m == 1u) {
@@ -169,7 +169,7 @@ double wfg::linear(const vector_double &parameters, const unsigned long m) const
     }
 }
 
-double wfg::convex(const vector_double &parameters, const unsigned long m) const
+double wfg::convex(const vector_double &parameters, const vector_double::size_type m) const
 {
     double g = 1.;
     if (m == 1) {
@@ -185,7 +185,7 @@ double wfg::convex(const vector_double &parameters, const unsigned long m) const
     }
 }
 
-double wfg::concave(const vector_double &parameters, const unsigned long m) const
+double wfg::concave(const vector_double &parameters, const vector_double::size_type m) const
 {
     double g = 1.;
     if (m == 1) {
@@ -274,7 +274,7 @@ double wfg::r_sum(const vector_double &y_vec, const vector_double &weights) cons
     return g_1 / g_2;
 }
 
-double wfg::r_nonsep(const vector_double &y_vec, const unsigned long a_par) const
+double wfg::r_nonsep(const vector_double &y_vec, const vector_double::size_type a_par) const
 {
     if (a_par == 1) {
         vector_double weights(y_vec.size(), 1.0);
