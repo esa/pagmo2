@@ -158,7 +158,7 @@ void expose_problems_1()
                  generic_udp_inner_problem_docstring().c_str());
     // WFG.
     auto wfg_p = expose_problem_pygmo<wfg>("wfg", wfg_docstring().c_str());
-    wfg_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
+    wfg_p.def(bp::init<unsigned, vector_double::size_type, vector_double::size_type, vector_double::size_type>(
         (bp::arg("prob_id") = 1u, bp::arg("dim_dvs") = 5u, bp::arg("dim_obj") = 3u, bp::arg("dim_k") = 4u)));
 }
 } // namespace pygmo

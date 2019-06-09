@@ -55,12 +55,14 @@ wfg::wfg(unsigned prob_id, vector_double::size_type dim_dvs, vector_double::size
 {
 
     if (prob_id == 0u || prob_id > 9u) {
-        pagmo_throw(std::invalid_argument, "WFG test suite contains nine (prob_id=[1 ... 9]) problems, prob_id="
-                                               + std::to_string(prob_id) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "WFG test suite contains nine (prob_id=[1 ... 9]) problems, prob_id=" + std::to_string(prob_id)
+                        + " was detected");
     }
     if (dim_dvs < 1u) {
-        pagmo_throw(std::invalid_argument, "WFG problem suite must have minimum 1 dimension for the decision vector, "
-                                               + std::to_string(dim_dvs) + " requested");
+        pagmo_throw(std::invalid_argument,
+                    "WFG problem suite must have minimum 1 dimension for the decision vector, "
+                        + std::to_string(dim_dvs) + " requested");
     }
 
     if (dim_obj < 2u) {
@@ -256,9 +258,8 @@ double wfg::s_decept(const double y, const double a_par, const double b_par, con
 
 double wfg::s_multi(const double y, const double a_par, const double b_par, const double c_par) const
 {
-    return (1
-            + std::cos((4.0 * a_par + 2.0) * boost::math::constants::pi<double>()
-                       * (0.5 - (std::abs(y - c_par)) / (2.0 * (std::floor(c_par - y) + c_par))))
+    return (1 + std::cos((4.0 * a_par + 2.0) * boost::math::constants::pi<double>()
+                         * (0.5 - (std::abs(y - c_par)) / (2.0 * (std::floor(c_par - y) + c_par))))
             + 4.0 * b_par * std::pow(std::abs(y - c_par) / (2 * (std::floor(c_par - y) + c_par)), 2))
            / (b_par + 2.0);
 }
@@ -288,9 +289,8 @@ double wfg::r_nonsep(const vector_double &y_vec, const vector_double::size_type 
                 g += std::abs(y_vec[j] - y_vec[(1 + j + i) % len]);
             }
         }
-        return g
-               / (static_cast<double>(len) / static_cast<double>(a_par) * std::ceil(a_par / 2)
-                  * (1.0 + 2.0 * static_cast<double>(a_par) - 2.0 * std::ceil(static_cast<double>(a_par) / 2.0)));
+        return g / (static_cast<double>(len) / static_cast<double>(a_par) * std::ceil(a_par / 2)
+                    * (1.0 + 2.0 * static_cast<double>(a_par) - 2.0 * std::ceil(static_cast<double>(a_par) / 2.0)));
     }
 }
 

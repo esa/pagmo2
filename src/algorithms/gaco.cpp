@@ -72,8 +72,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     }
 
     if (epsilon >= 1. || epsilon < 0.) {
-        pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
-                                               + std::to_string(epsilon) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "The Pareto precision parameter must be in [0, 1[, while a value of " + std::to_string(epsilon)
+                        + " was detected");
     }
     if ((threshold < 1 || threshold > gen) && gen != 0 && memory == false) {
         pagmo_throw(std::invalid_argument,
@@ -81,8 +82,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
                         + std::to_string(threshold) + " was detected");
     }
     if (threshold < 1 && gen != 0 && memory == true) {
-        pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
-                                               + std::to_string(threshold) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "If memory is active, the threshold parameter must be >=1 while a value of "
+                        + std::to_string(threshold) + " was detected");
     }
 }
 
@@ -153,8 +155,9 @@ population gaco::evolve(population pop) const
                     get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (n_obj != 1u) {
-        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                               + get_name() + " cannot deal with them");
+        pagmo_throw(std::invalid_argument,
+                    "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
+                        + " cannot deal with them");
     }
 
     // ---------------------------------------------------------------------------------------------------------
@@ -605,7 +608,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
         temporary_archive[0][0] = temporary_penalty[0];
         decltype(temporary_penalty.size()) j;
         decltype(temporary_penalty.size()) k = 1u;
-        for (decltype(m_ker) i = 1u; i < 2 * m_ker && count == true; ++i) {
+        for (decltype(temporary_penalty.size()) i = 1u; i < 2 * m_ker && count == true; ++i) {
             j = i;
             if (i > saved_value_position.back()) {
                 // I check if the new penalties are better than the old ones of at least m_acc difference (user
