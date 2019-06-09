@@ -1765,7 +1765,17 @@ class archipelago_test_case(_ut.TestCase):
         self.run_status_tests()
         if self._level > 0:
             self.run_torture_test_0()
-            self.run_torture_test_1()
+            # NOTE: skip this test for the time being.
+            # It was copy-pasted from an interactive
+            # python session ages ago, and it's not clear
+            # whether we can control its internal randomness
+            # or not, with the result that it seems to
+            # fail rarely (in the sense that it won't
+            # raise an expected exception, not that it crashes
+            # or anything like that). We'll have to
+            # investigate further if we ever want to
+            # turn it back on.
+            # self.run_torture_test_1()
 
     def run_init_tests(self):
         from . import archipelago, de, rosenbrock, population, null_problem, thread_island, mp_island
