@@ -72,9 +72,8 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     }
 
     if (epsilon >= 1. || epsilon < 0.) {
-        pagmo_throw(std::invalid_argument,
-                    "The Pareto precision parameter must be in [0, 1[, while a value of " + std::to_string(epsilon)
-                        + " was detected");
+        pagmo_throw(std::invalid_argument, "The Pareto precision parameter must be in [0, 1[, while a value of "
+                                               + std::to_string(epsilon) + " was detected");
     }
     if ((threshold < 1 || threshold > gen) && gen != 0 && memory == false) {
         pagmo_throw(std::invalid_argument,
@@ -82,9 +81,8 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
                         + std::to_string(threshold) + " was detected");
     }
     if (threshold < 1 && gen != 0 && memory == true) {
-        pagmo_throw(std::invalid_argument,
-                    "If memory is active, the threshold parameter must be >=1 while a value of "
-                        + std::to_string(threshold) + " was detected");
+        pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
+                                               + std::to_string(threshold) + " was detected");
     }
 }
 
@@ -155,9 +153,8 @@ population gaco::evolve(population pop) const
                     get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (n_obj != 1u) {
-        pagmo_throw(std::invalid_argument,
-                    "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
-                        + " cannot deal with them");
+        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                               + get_name() + " cannot deal with them");
     }
 
     // ---------------------------------------------------------------------------------------------------------
@@ -292,7 +289,7 @@ population gaco::evolve(population pop) const
             }
 
             auto fitnesses = (*m_bfe)(prob, ants);
-            m_fevals += pop_size;
+            m_fevals += static_cast<unsigned>(pop_size);
             decltype(ant.size()) pos_dim = 0u;
             decltype(fitness.size()) pos_fit = 0u;
 
@@ -616,7 +613,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
                 while (temporary_penalty[j] + m_acc < temporary_archive[k - 1][0] && j < 2 * m_ker) {
                     ++j;
                 }
-                saved_value_position.push_back(j);
+                saved_value_position.push_back(static_cast<unsigned long>(j));
                 temporary_archive[k][0] = temporary_penalty[j];
                 if (saved_value_position.size() == m_ker) {
                     count = false;
