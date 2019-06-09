@@ -613,7 +613,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
             if (i > saved_value_position.back()) {
                 // I check if the new penalties are better than the old ones of at least m_acc difference (user
                 // defined parameter).
-                while (temporary_penalty[j] - temporary_archive[k - 1][0] < m_acc && j < 2 * m_ker) {
+                while (temporary_penalty[j] + m_acc < temporary_archive[k - 1][0] && j < 2 * m_ker) {
                     ++j;
                 }
                 saved_value_position.push_back(j);
@@ -630,8 +630,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
         for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
             count_2 = false;
             for (decltype(m_ker) jj = 0u; jj < m_ker && count_2 == false; ++jj) {
-                if (temporary_archive[i][0] == sol_archive[jj][0]) {
-                    temporary_archive[i] = sol_archive[jj];
+                if (temporary_archive[i] == sol_archive[jj]) {
                     count_2 = true;
                 } else if (temporary_archive[i][0] == sorted_vector[jj]) {
                     for (decltype(variables[0].size()) i_var = 0u; i_var < variables[0].size(); ++i_var) {
