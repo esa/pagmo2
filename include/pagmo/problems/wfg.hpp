@@ -86,7 +86,7 @@ private:
     PAGMO_DLL_LOCAL double b_flat(const double, const double, const double, const double) const;
     PAGMO_DLL_LOCAL double b_param(const double, const double, const double, const double, const double) const;
     PAGMO_DLL_LOCAL double s_linear(const double, const double) const;
-    PAGMO_DLL_LOCAL double s_decept(const double, double, const double, const double) const;
+    PAGMO_DLL_LOCAL double s_decept(const double, const double, const double, const double) const;
     PAGMO_DLL_LOCAL double s_multi(const double, const double, const double, const double) const;
     PAGMO_DLL_LOCAL double r_sum(const vector_double &, const vector_double &) const;
     PAGMO_DLL_LOCAL double r_nonsep(const vector_double &,  const vector_double::size_type) const;
