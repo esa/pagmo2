@@ -199,7 +199,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
 <dt id="_CPPv4N5pagmo4gaco13log_line_typeE">
-<span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1aae2a87efdd827e42ad76be40bfad7a20"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned, double, unsigned, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"></span><em class="property">typedef </em>std::tuple&lt;unsigned, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, unsigned, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp) </p>
 </dd></dl>
 
@@ -381,8 +381,8 @@ how two of the three pheromone values are computed (in particular, the weights a
 <dt id="_CPPv4NK5pagmo4gaco7get_logEv">
 <span id="_CPPv3NK5pagmo4gaco7get_logEv"></span><span id="_CPPv2NK5pagmo4gaco7get_logEv"></span><span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gaco_1aae2a87efdd827e42ad76be40bfad7a20"><span class="std std-ref">gaco::log_line_type</span></a> containing: gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp as described in <a class="reference internal" href="#classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"><span class="std std-ref">gaco::set_verbosity</span></a> <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gaco_1aae2a87efdd827e42ad76be40bfad7a20"><span class="std std-ref">gaco::log_line_type</span></a> containing the logged values gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing: gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp as described in <a class="reference internal" href="#classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"><span class="std std-ref">gaco::set_verbosity</span></a> <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing the logged values gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp </p>
 </dd>
 </dl>
 </p>
@@ -424,7 +424,7 @@ how two of the three pheromone values are computed (in particular, the weights a
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
     </p>
   </div>
 </footer>
