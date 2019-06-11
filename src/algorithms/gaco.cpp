@@ -631,6 +631,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
             count_2 = false;
             for (decltype(m_ker) jj = 0u; jj < m_ker && count_2 == false; ++jj) {
                 if (temporary_archive[i] == sol_archive[jj]) {
+                    temporary_archive[i] = sol_archive[jj];
                     count_2 = true;
                 } else if (temporary_archive[i][0] == sorted_vector[jj]) {
                     for (decltype(variables[0].size()) i_var = 0u; i_var < variables[0].size(); ++i_var) {
