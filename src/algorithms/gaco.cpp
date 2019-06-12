@@ -582,6 +582,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
     std::vector<vector_double> old_archive(sol_archive);
     std::vector<vector_double> temporary_archive(sol_archive);
     vector_double temporary_penalty(m_ker);
+    vector_double archive_penalties(m_ker);
 
     // I now re-order the variables and objective vectors (remember that the objective vector also contains the eq
     // and ineq constraints). This is done only if at least the best solution of the current population is better
@@ -595,52 +596,63 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
         for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
             variables[i] = pop.get_x()[sorted_list[i]];
             fitness[i] = pop.get_f()[sorted_list[i]];
-            temporary_penalty[i] = sol_archive[i][0];
+            temporary_penalty[i] = sorted_vector[i];
+            // Now the penalties of the archive:
+            archive_penalties[i] = sol_archive[i][0];
         }
-        std::vector<decltype(temporary_penalty.size())> saved_value_position;
-        bool count = true;
         // I merge the new and old penalties:
-        temporary_penalty.insert(temporary_penalty.end(), sorted_vector.begin(), sorted_vector.end());
+        temporary_penalty.insert(temporary_penalty.end(), archive_penalties.begin(), archive_penalties.end());
+        std::vector<decltype(temporary_penalty.size())> sort_list_penalty(temporary_penalty.size());
         // I now reorder them depending on the penalty values (smallest first):
-        std::sort(temporary_penalty.begin(), temporary_penalty.end(), detail::less_than_f<double>);
-
-        saved_value_position.push_back(0);
-        temporary_archive[0][0] = temporary_penalty[0];
-        decltype(temporary_penalty.size()) j;
-        decltype(temporary_penalty.size()) k = 1u;
-        for (decltype(temporary_penalty.size()) i = 1u; i < 2 * m_ker && count == true; ++i) {
-            j = i;
-            if (i > saved_value_position.back()) {
-                // I check if the new penalties are better than the old ones of at least m_acc difference (user
-                // defined parameter).
-                while (temporary_penalty[j] + m_acc < temporary_archive[k - 1][0] && j < 2 * m_ker) {
-                    ++j;
-                }
-                saved_value_position.push_back(j);
-                temporary_archive[k][0] = temporary_penalty[j];
-                if (saved_value_position.size() == m_ker) {
-                    count = false;
-                }
-                ++k;
+        std::iota(std::begin(sort_list_penalty), std::end(sort_list_penalty), decltype(temporary_penalty.size())(0));
+        std::sort(
+            sort_list_penalty.begin(), sort_list_penalty.end(),
+            [&temporary_penalty](decltype(temporary_penalty.size()) idx1, decltype(temporary_penalty.size()) idx2) {
+                return detail::less_than_f(temporary_penalty[idx1], temporary_penalty[idx2]);
+            });
+        // Only if one of the current population's penalty is better than the one of the archive, I replace the
+        // first element of the temporary archive (which is a copy of the solution archive until now) with that
+        vector_double::size_type count = 0;
+        if (sort_list_penalty[0] < m_ker) {
+            temporary_archive[0][0] = temporary_penalty[sort_list_penalty[0]];
+            for (decltype(variables[0].size()) i_var = 0u; i_var < variables[0].size(); ++i_var) {
+                temporary_archive[0][1 + i_var] = variables[sort_list_penalty[0]][i_var];
+            }
+            for (decltype(fitness[0].size()) i_obj = 0u; i_obj < fitness[0].size(); ++i_obj) {
+                temporary_archive[0][1 + variables[0].size() + i_obj] = fitness[sort_list_penalty[0]][i_obj];
+            }
+        } else {
+            ++count;
+        }
+        std::vector<vector_double::size_type> new_sort_list;
+        new_sort_list.push_back(0);
+        for (decltype(temporary_penalty.size()) j = 1u; j < temporary_penalty.size(); ++j) {
+            if (std::abs(temporary_penalty[sort_list_penalty[j]] - temporary_penalty[sort_list_penalty[count]])
+                < m_acc) {
+            } else {
+                ++count;
+                new_sort_list.push_back(j);
             }
         }
-
-        // I now update the temporary archive according to the new individuals stored:
-        bool count_2;
-        for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
-            count_2 = false;
-            for (decltype(m_ker) jj = 0u; jj < m_ker && count_2 == false; ++jj) {
-                if (temporary_archive[i] == sol_archive[jj]) {
-                    temporary_archive[i] = sol_archive[jj];
-                    count_2 = true;
-                } else if (temporary_archive[i][0] == sorted_vector[jj]) {
-                    for (decltype(variables[0].size()) i_var = 0u; i_var < variables[0].size(); ++i_var) {
-                        temporary_archive[i][1 + i_var] = variables[jj][i_var];
-                    }
-                    for (decltype(fitness[0].size()) i_obj = 0u; i_obj < fitness[0].size(); ++i_obj) {
-                        temporary_archive[i][1 + variables[0].size() + i_obj] = fitness[jj][i_obj];
-                    }
-                    count_2 = true;
+        for (decltype(new_sort_list.size()) ii = 0u; ii < m_ker && ii < new_sort_list.size(); ++ii) {
+            if (sort_list_penalty[new_sort_list[ii]] < m_ker) {
+                temporary_archive[ii][0] = temporary_penalty[sort_list_penalty[new_sort_list[ii]]];
+                for (decltype(variables[0].size()) i_var = 0u; i_var < variables[0].size(); ++i_var) {
+                    temporary_archive[ii][1 + i_var] = variables[sort_list_penalty[new_sort_list[ii]]][i_var];
+                }
+                for (decltype(fitness[0].size()) i_obj = 0u; i_obj < fitness[0].size(); ++i_obj) {
+                    temporary_archive[ii][1 + variables[0].size() + i_obj]
+                        = fitness[sort_list_penalty[new_sort_list[ii]]][i_obj];
+                }
+            } else {
+                temporary_archive[ii][0] = sol_archive[sort_list_penalty[new_sort_list[ii]] - m_ker][0];
+                for (decltype(variables[0].size()) i_var = 0u; i_var < variables[0].size(); ++i_var) {
+                    temporary_archive[ii][1 + i_var]
+                        = sol_archive[sort_list_penalty[new_sort_list[ii]] - m_ker][1 + i_var];
+                }
+                for (decltype(fitness[0].size()) i_obj = 0u; i_obj < fitness[0].size(); ++i_obj) {
+                    temporary_archive[ii][1 + variables[0].size() + i_obj]
+                        = sol_archive[sort_list_penalty[new_sort_list[ii]] - m_ker][1 + variables[0].size() + i_obj];
                 }
             }
         }
