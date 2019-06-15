@@ -57,8 +57,6 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-using migrants_t = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
-
 // TODO
 // - move docs to sphinx.
 // - ctors with topology arguments.
@@ -411,7 +409,7 @@ public:
     // Get the index of an island.
     size_type get_island_idx(const island &) const;
     migrants_db_t get_migrants_db() const;
-    migrants_t get_migrants(size_type) const;
+    migrants_t extract_migrants(size_type);
     topology get_topology() const;
     void set_topology(topology);
     std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;

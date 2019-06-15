@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <mutex>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -514,15 +515,26 @@ archipelago::migrants_db_t archipelago::get_migrants_db() const
     return m_migrants;
 }
 
-migrants_t archipelago::get_migrants(size_type i) const
+migrants_t archipelago::extract_migrants(size_type i)
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
+
     if (i >= m_migrants.size()) {
         pagmo_throw(std::out_of_range, "cannot access the migrants of the island at index " + std::to_string(i)
                                            + ": the migrants database has a size of only "
                                            + std::to_string(m_migrants.size()));
     }
-    return m_migrants[i];
+
+    // Move-construct the return value.
+    migrants_t retval(std::move(m_migrants[i]));
+
+    // Ensure the tuple we moved-from is completely
+    // cleared out.
+    std::get<0>(m_migrants[i]).clear();
+    std::get<1>(m_migrants[i]).clear();
+    std::get<2>(m_migrants[i]).clear();
+
+    return retval;
 }
 
 topology archipelago::get_topology() const

@@ -51,11 +51,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/archipelago_fwd.hpp>
+#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -73,9 +75,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-// Fwd declaration.
-class PAGMO_DLL_PUBLIC island;
 
 /// Detect \p run_evolve() method.
 /**
@@ -112,6 +111,7 @@ namespace detail
 template <typename>
 struct disable_udi_checks : std::false_type {
 };
+
 } // namespace detail
 
 /// Detect user-defined islands (UDI).

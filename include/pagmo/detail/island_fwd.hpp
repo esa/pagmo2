@@ -26,24 +26,16 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_TYPES_HPP
-#define PAGMO_TYPES_HPP
+#ifndef PAGMO_DETAIL_ISLAND_FWD_HPP
+#define PAGMO_DETAIL_ISLAND_FWD_HPP
 
-#include <tuple>
-#include <utility>
-#include <vector>
+#include <pagmo/detail/visibility.hpp>
 
-/// Root PaGMO namespace.
 namespace pagmo
 {
 
-/// Alias for an <tt>std::vector</tt> of <tt>double</tt>s.
-typedef std::vector<double> vector_double;
-/// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
-typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
-
-// A pared-down counterpart to pagmo::population for use in migration.
-using migrants_t = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
+// Fwd declaration.
+class PAGMO_DLL_PUBLIC island;
 
 } // namespace pagmo
 

@@ -38,18 +38,22 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <random>
 #include <string>
 #include <unordered_map>
 #include <utility>
 
 #include <boost/any.hpp>
+#include <boost/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/archipelago.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/threading.hpp>
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
@@ -292,7 +296,58 @@ void island::evolve(unsigned n)
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
         m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+            // Random bits for use in the migration logic.
+            // Wrap them in optionals so that, if we don't need
+            // them, we don't waste cycles initialising them.
+            boost::optional<std::mt19937> migr_eng;
+            // Migration probability distribution.
+            boost::optional<std::uniform_real_distribution<double>> pdist;
+            // Distribution for selecting the connecting island.
+            boost::optional<std::uniform_int_distribution<archipelago::size_type>> idist;
+
+            // Cache the archi pointer.
+            const auto aptr = this->m_ptr->archi_ptr;
+
+            // Figure out what is the island's index in the archi, if we are
+            // in an archi. Otherwise, this variable will be unused.
+            const auto isl_idx = aptr ? aptr->get_island_idx(*this) : 0u;
+
             for (auto i = 0u; i < n; ++i) {
+                if (aptr) {
+                    // If the island is in an archi, before
+                    // launching the evolution migrate the
+                    // individuals from the connecting islands.
+                    const auto connections = aptr->get_island_connections(isl_idx);
+                    assert(connections.first.size() == connections.second.size());
+
+                    // Do something only if we actually have connections.
+                    if (connections.first.size()) {
+                        // Init the rng bits, if necessary.
+                        if (!migr_eng) {
+                            assert(!pdist);
+                            assert(!idist);
+
+                            migr_eng.emplace(static_cast<std::mt19937::result_type>(random_device::next()));
+                            pdist.emplace(0., 1.);
+                            idist.emplace();
+                        }
+
+                        // Pick a random island index among the islands connecting to this.
+                        const auto idx
+                            = (*idist)(*migr_eng, std::uniform_int_distribution<archipelago::size_type>::param_type(
+                                                      0, connections.first.size() - 1u));
+
+                        // Throw the dice against the migration probability.
+                        if ((*pdist)(*migr_eng)
+                            < connections.second[static_cast<decltype(connections.second.size())>(idx)]) {
+                            // Extract the candidate migrants from the archipelago.
+                            const auto migrants = aptr->extract_migrants(idx);
+
+                            // this->m_ptr->r_pol_ptr->replace(*this, migrants);
+                        }
+                    }
+                }
+
                 this->m_ptr->isl_ptr->run_evolve(*this);
             }
         });

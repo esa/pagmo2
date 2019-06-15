@@ -168,6 +168,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/rng.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/threading.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topology.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policy.cpp"
         # UDP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/null_problem.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
@@ -219,6 +220,8 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/base_bgl_topology.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
+        # UDRP.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/replace_worst.cpp"
         # Utils.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
