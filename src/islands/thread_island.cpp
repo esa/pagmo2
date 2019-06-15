@@ -74,7 +74,7 @@ void thread_island::run_evolve(island &isl) const
     // Replace the island's algorithm with the algorithm used for the evolution.
     // NOTE: if set_algorithm() fails, we will have the new population with the
     // original algorithm, which is still a valid state for the island.
-    isl.set_algorithm(std::move(algo));
+    isl.set_algorithm(algo);
 }
 
 /// Serialization support.

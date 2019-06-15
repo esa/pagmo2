@@ -251,6 +251,8 @@ PAGMO_DLL_PUBLIC extern std::function<void(const algorithm &, const population &
                                            std::unique_ptr<detail::isl_inner_base> &)>
     island_factory;
 
+PAGMO_DLL_PUBLIC extern std::function<boost::any()> isl_pop_algo_raii_getter;
+
 // NOTE: the idea with this class is that we use it to store the data members of pagmo::island, and,
 // within pagmo::island, we store a pointer to an instance of this struct. The reason for this approach
 // is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
@@ -765,7 +767,7 @@ public:
     // Get the algorithm.
     algorithm get_algorithm() const;
     // Set the algorithm.
-    void set_algorithm(algorithm);
+    void set_algorithm(const algorithm &);
     // Get the population.
     population get_population() const;
     // Set the population.

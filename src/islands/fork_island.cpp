@@ -257,7 +257,7 @@ void fork_island::run_evolve(island &isl) const
                                             "child process. The full error message reported by the child is:\n"
                                                 + std::get<1>(m));
         }
-        isl.set_algorithm(std::move(std::get<2>(m)));
+        isl.set_algorithm(std::get<2>(m));
         isl.set_population(std::move(std::get<3>(m)));
     } else {
         // NOTE: we won't get any coverage data from the child process, so just disable
