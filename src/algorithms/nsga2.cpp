@@ -253,10 +253,11 @@ population nsga2::evolve(population pop) const
           // poptemp   is a structured list of children   (no fitneeses)
           // fitnesses is an ordered list of fitneeses
           for(decltype(poptemp.size()) i=0; i<poptemp.size(); i++) {
-            std::vector<double> f1(fitnesses.begin() + (i * n_obj), fitnesses.begin() + (i+1)*n_obj );
-            //auto f1 = //prob.wait_get_fitness(fidtemp[i], poptemp[i]);
+            // cut the fitness into a chunks of length n_obj
+            auto n_obj_d_type = static_cast<std::vector<double>::difference_type>(n_obj);
+            std::vector<double> f1(fitnesses.begin() + i * n_obj_d_type,  fitnesses.begin() +(i+1)*n_obj_d_type );
             popnew.push_back(poptemp[i], f1);
-          } // at this point the code is the same as before
+          }
         } else {
           // bfe not available:
           for (decltype(NP) i = 0u; i < NP; i += 4) {
