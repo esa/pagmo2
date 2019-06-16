@@ -46,6 +46,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=const"
+#endif
+
 namespace pagmo
 {
 
@@ -55,14 +62,12 @@ wfg::wfg(unsigned prob_id, vector_double::size_type dim_dvs, vector_double::size
 {
 
     if (prob_id == 0u || prob_id > 9u) {
-        pagmo_throw(std::invalid_argument,
-                    "WFG test suite contains nine (prob_id=[1 ... 9]) problems, prob_id=" + std::to_string(prob_id)
-                        + " was detected");
+        pagmo_throw(std::invalid_argument, "WFG test suite contains nine (prob_id=[1 ... 9]) problems, prob_id="
+                                               + std::to_string(prob_id) + " was detected");
     }
     if (dim_dvs < 1u) {
-        pagmo_throw(std::invalid_argument,
-                    "WFG problem suite must have minimum 1 dimension for the decision vector, "
-                        + std::to_string(dim_dvs) + " requested");
+        pagmo_throw(std::invalid_argument, "WFG problem suite must have minimum 1 dimension for the decision vector, "
+                                               + std::to_string(dim_dvs) + " requested");
     }
 
     if (dim_obj < 2u) {
@@ -133,7 +138,7 @@ std::pair<vector_double, vector_double> wfg::get_bounds() const
 {
     vector_double upper_bounds(m_dim_dvs);
     for (decltype(m_dim_dvs) i = 0u; i < m_dim_dvs; ++i) {
-        upper_bounds[i] = 2.0 * (i + 1);
+        upper_bounds[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     return {vector_double(m_dim_dvs, 0.), upper_bounds};
@@ -153,7 +158,7 @@ void wfg::serialize(Archive &ar, unsigned)
 }
 
 // We first define the shape functions (we assume that m varies from 1 to m_dim_obj):
-double wfg::linear(const vector_double &parameters, const unsigned long m) const
+double wfg::linear(const vector_double &parameters, const vector_double::size_type m) const
 {
     double g = 1.;
     if (m == 1u) {
@@ -171,7 +176,7 @@ double wfg::linear(const vector_double &parameters, const unsigned long m) const
     }
 }
 
-double wfg::convex(const vector_double &parameters, const unsigned long m) const
+double wfg::convex(const vector_double &parameters, const vector_double::size_type m) const
 {
     double g = 1.;
     if (m == 1) {
@@ -187,7 +192,7 @@ double wfg::convex(const vector_double &parameters, const unsigned long m) const
     }
 }
 
-double wfg::concave(const vector_double &parameters, const unsigned long m) const
+double wfg::concave(const vector_double &parameters, const vector_double::size_type m) const
 {
     double g = 1.;
     if (m == 1) {
@@ -258,8 +263,9 @@ double wfg::s_decept(const double y, const double a_par, const double b_par, con
 
 double wfg::s_multi(const double y, const double a_par, const double b_par, const double c_par) const
 {
-    return (1 + std::cos((4.0 * a_par + 2.0) * boost::math::constants::pi<double>()
-                         * (0.5 - (std::abs(y - c_par)) / (2.0 * (std::floor(c_par - y) + c_par))))
+    return (1
+            + std::cos((4.0 * a_par + 2.0) * boost::math::constants::pi<double>()
+                       * (0.5 - (std::abs(y - c_par)) / (2.0 * (std::floor(c_par - y) + c_par))))
             + 4.0 * b_par * std::pow(std::abs(y - c_par) / (2 * (std::floor(c_par - y) + c_par)), 2))
            / (b_par + 2.0);
 }
@@ -275,7 +281,7 @@ double wfg::r_sum(const vector_double &y_vec, const vector_double &weights) cons
     return g_1 / g_2;
 }
 
-double wfg::r_nonsep(const vector_double &y_vec, const unsigned long a_par) const
+double wfg::r_nonsep(const vector_double &y_vec, const vector_double::size_type a_par) const
 {
     if (a_par == 1) {
         vector_double weights(y_vec.size(), 1.0);
@@ -289,7 +295,9 @@ double wfg::r_nonsep(const vector_double &y_vec, const unsigned long a_par) cons
                 g += std::abs(y_vec[j] - y_vec[(1 + j + i) % len]);
             }
         }
-        return g / (len / a_par * std::ceil(a_par / 2) * (1.0 + 2.0 * a_par - 2.0 * std::ceil(a_par / 2.0)));
+        return g
+               / (static_cast<double>(len) / static_cast<double>(a_par) * std::ceil(a_par / 2)
+                  * (1.0 + 2.0 * static_cast<double>(a_par) - 2.0 * std::ceil(static_cast<double>(a_par) / 2.0)));
     }
 }
 
@@ -310,7 +318,7 @@ vector_double wfg::wfg1_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     // I normalize the decision vector:
@@ -352,7 +360,7 @@ vector_double wfg::wfg1_fitness(const vector_double &x) const
 
         for (decltype(head) j = head; j < tail; ++j) {
             first_input[index] = y[j];
-            second_input[index] = 2 * (j + 1);
+            second_input[index] = 2. * (static_cast<double>(j) + 1);
             ++index;
         }
 
@@ -362,7 +370,7 @@ vector_double wfg::wfg1_fitness(const vector_double &x) const
     decltype(m_dim_obj) index_2 = 0u;
     for (decltype(m_dim_k) i = m_dim_k; i < m_dim_dvs; ++i) {
         first_input_2[index_2] = y[i];
-        second_input_2[index_2] = 2 * (i + 1);
+        second_input_2[index_2] = 2. * (static_cast<double>(i) + 1);
         ++index_2;
     }
     t_4[m_dim_obj - 1] = r_sum(first_input_2, second_input_2);
@@ -402,7 +410,7 @@ vector_double wfg::wfg2_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
     // I normalize the decision vector:
     for (decltype(x_norm.size()) i = 0u; i < x_norm.size(); ++i) {
@@ -492,7 +500,7 @@ vector_double wfg::wfg3_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
     // I normalize the decision vector:
     for (decltype(x_norm.size()) i = 0u; i < x_norm.size(); ++i) {
@@ -589,7 +597,7 @@ vector_double wfg::wfg4_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     // I normalize the decision vector:
@@ -658,7 +666,7 @@ vector_double wfg::wfg5_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     // I normalize the decision vector:
@@ -728,7 +736,7 @@ vector_double wfg::wfg6_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
     // I normalize the decision vector:
     for (decltype(x_norm.size()) i = 0u; i < x_norm.size(); ++i) {
@@ -800,7 +808,7 @@ vector_double wfg::wfg7_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     // I normalize the decision vector:
@@ -891,7 +899,7 @@ vector_double wfg::wfg8_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     // I normalize the decision vector:
@@ -983,7 +991,7 @@ vector_double wfg::wfg9_fitness(const vector_double &x) const
 
     // s_parameter (useful for the shape function computation):
     for (decltype(s_parameter.size()) i = 0u; i < s_parameter.size(); ++i) {
-        s_parameter[i] = 2.0 * (i + 1);
+        s_parameter[i] = 2.0 * (static_cast<double>(i) + 1);
     }
 
     // I normalize the decision vector:

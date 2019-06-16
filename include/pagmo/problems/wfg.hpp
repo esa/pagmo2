@@ -77,19 +77,19 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    PAGMO_DLL_LOCAL double linear(const vector_double &, unsigned long) const;
-    PAGMO_DLL_LOCAL double convex(const vector_double &, unsigned long) const;
-    PAGMO_DLL_LOCAL double concave(const vector_double &, unsigned long) const;
-    PAGMO_DLL_LOCAL double mixed(double, double, double) const;
-    PAGMO_DLL_LOCAL double disconnected(double, double, double, double) const;
-    PAGMO_DLL_LOCAL double b_poly(double, double) const;
-    PAGMO_DLL_LOCAL double b_flat(double, double, double, double) const;
-    PAGMO_DLL_LOCAL double b_param(double, double, double, double, double) const;
-    PAGMO_DLL_LOCAL double s_linear(double, double) const;
-    PAGMO_DLL_LOCAL double s_decept(double, double, double, double) const;
-    PAGMO_DLL_LOCAL double s_multi(double, double, double, double) const;
+    PAGMO_DLL_LOCAL double linear(const vector_double &, const vector_double::size_type) const;
+    PAGMO_DLL_LOCAL double convex(const vector_double &, const vector_double::size_type) const;
+    PAGMO_DLL_LOCAL double concave(const vector_double &, const vector_double::size_type) const;
+    PAGMO_DLL_LOCAL double mixed(const double, const double, const double) const;
+    PAGMO_DLL_LOCAL double disconnected(const double, const double, const double, const double) const;
+    PAGMO_DLL_LOCAL double b_poly(const double, const double) const;
+    PAGMO_DLL_LOCAL double b_flat(const double, const double, const double, const double) const;
+    PAGMO_DLL_LOCAL double b_param(const double, const double, const double, const double, const double) const;
+    PAGMO_DLL_LOCAL double s_linear(const double, const double) const;
+    PAGMO_DLL_LOCAL double s_decept(const double, const double, const double, const double) const;
+    PAGMO_DLL_LOCAL double s_multi(const double, const double, const double, const double) const;
     PAGMO_DLL_LOCAL double r_sum(const vector_double &, const vector_double &) const;
-    PAGMO_DLL_LOCAL double r_nonsep(const vector_double &, unsigned long) const;
+    PAGMO_DLL_LOCAL double r_nonsep(const vector_double &, const vector_double::size_type) const;
     PAGMO_DLL_LOCAL vector_double wfg1_fitness(const vector_double &) const;
     PAGMO_DLL_LOCAL vector_double wfg2_fitness(const vector_double &) const;
     PAGMO_DLL_LOCAL vector_double wfg3_fitness(const vector_double &) const;

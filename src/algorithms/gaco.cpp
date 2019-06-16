@@ -597,7 +597,7 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
             fitness[i] = pop.get_f()[sorted_list[i]];
             temporary_penalty[i] = sol_archive[i][0];
         }
-        std::vector<unsigned long> saved_value_position;
+        std::vector<decltype(temporary_penalty.size())> saved_value_position;
         bool count = true;
         // I merge the new and old penalties:
         temporary_penalty.insert(temporary_penalty.end(), sorted_vector.begin(), sorted_vector.end());
@@ -607,8 +607,8 @@ void gaco::update_sol_archive(const population &pop, vector_double &sorted_vecto
         saved_value_position.push_back(0);
         temporary_archive[0][0] = temporary_penalty[0];
         decltype(temporary_penalty.size()) j;
-        decltype(temporary_archive.size()) k = 1u;
-        for (decltype(m_ker) i = 1u; i < 2 * m_ker && count == true; ++i) {
+        decltype(temporary_penalty.size()) k = 1u;
+        for (decltype(temporary_penalty.size()) i = 1u; i < 2 * m_ker && count == true; ++i) {
             j = i;
             if (i > saved_value_position.back()) {
                 // I check if the new penalties are better than the old ones of at least m_acc difference (user
