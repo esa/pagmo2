@@ -387,7 +387,8 @@ BOOST_PYTHON_MODULE(core)
     // destroyed at the end of island::wait().
     detail::wait_raii_getter = []() { return std::make_shared<py_wait_locks>(); };
 
-    detail::isl_pop_algo_raii_getter = []() { return std::make_shared<pygmo::gil_thread_ensurer>(); };
+    // NOTE: override the isl raii accessor with the thread ensurer.
+    detail::isl_raii_accessor_getter = []() { return std::make_shared<pygmo::gil_thread_ensurer>(); };
 
     // Setup doc options
     bp::docstring_options doc_options;

@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <array>
 #include <cassert>
 #include <chrono>
+#include <cstdlib>
 #include <exception>
 #include <functional>
 #include <future>
@@ -158,7 +159,7 @@ std::function<void(const algorithm &, const population &, std::unique_ptr<detail
 namespace
 {
 
-boost::any default_isl_pop_algo_raii_getter()
+boost::any default_isl_raii_accessor_getter()
 {
     return boost::any{};
 }
@@ -167,7 +168,7 @@ boost::any default_isl_pop_algo_raii_getter()
 
 // NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
 // will have no effect.
-std::function<boost::any()> isl_pop_algo_raii_getter = &default_isl_pop_algo_raii_getter;
+std::function<boost::any()> isl_raii_accessor_getter = &default_isl_raii_accessor_getter;
 
 // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
 // are both thread safe.
@@ -486,25 +487,40 @@ algorithm island::get_algorithm() const
     // This might involve calling into python, hence the use of the
     // raii getter.
     {
-        auto ipar = detail::isl_pop_algo_raii_getter();
+        auto ipar = detail::isl_raii_accessor_getter();
         (void)ipar;
-        // NOTE: copy-assignment is implemented via
-        // copy-construction + move assignment.
-        retval = *new_algo_ptr;
-        // Reset the reference we used for assignemt.
-        // NOTE: this is important, because if we don't
-        // do this then the dtor of new_algo_ptr at the end
-        // of this function will reduce the refcount, and
-        // if the refcount goes to zero, the destructor
-        // of the object pointed-to by new_algo_ptr
-        // will be invoked, potentially calling into Python.
-        new_algo_ptr.reset();
+
+        try {
+            // NOTE: copy-assignment is implemented via
+            // copy-construction + move assignment.
+            retval = *new_algo_ptr;
+            // Reset the reference we used for assignemt.
+            // NOTE: this is important, because if we don't
+            // do this then the dtor of new_algo_ptr at the end
+            // of this function will reduce the refcount, and
+            // if the refcount goes to zero, the destructor
+            // of the object pointed-to by new_algo_ptr
+            // will be invoked, potentially calling into Python.
+            // By resetting it now, we ensure that, if the dtor
+            // of the pointed-to object is called, it is called
+            // while still holding the GIL.
+            new_algo_ptr.reset();
+        } catch (...) {
+            // NOTE: in the code block above, the only
+            // thing that may throw is the copy assignment
+            // of retval. In such a case, make sure we reset the
+            // new algo pointer before re-throwing, while still holding
+            // the GIL.
+            new_algo_ptr.reset();
+            throw;
+        }
     }
 
     // Step 4: return the retval. This will involve, at most,
     // a move construction of algorithm, which will *not*
     // call into python (as the algorithm contains a
-    // unique_ptr).
+    // unique_ptr to the UDA, hence move construction only
+    // moves the pointer).
     // NOTE: upon returning, the dtor of new_algo_ptr will
     // be called. This will be a no-op because we reset
     // it earlier.
@@ -530,7 +546,7 @@ void island::set_algorithm(const algorithm &algo)
     // constructor of algorithm and hence might call into
     // python to copy the UDA.
     {
-        auto ipar = detail::isl_pop_algo_raii_getter();
+        auto ipar = detail::isl_raii_accessor_getter();
         (void)ipar;
         *new_algo_ptr = algo;
     }
@@ -541,7 +557,7 @@ void island::set_algorithm(const algorithm &algo)
     // Step 4: store a reference to the old algo
     // in old_ptr, and assign a reference to the
     // new algo.
-    {
+    try {
         std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
         old_ptr = m_ptr->algo;
         // NOTE: this assignment will never invoke
@@ -549,6 +565,13 @@ void island::set_algorithm(const algorithm &algo)
         // by m_ptr->algo, as we made sure
         // to create a new reference above.
         m_ptr->algo = new_algo_ptr;
+    } catch (...) {
+        // NOTE: the only bit that can throw here
+        // is the locking of the mutex. There's not much
+        // we can do in such a case, print an error
+        // message and abort.
+        std::cerr << "Fatal error: could not lock mutex in island::set_algorithm(), aborting." << std::endl;
+        std::abort();
     }
 
     // Step 5: make sure we decrease the ref count of
@@ -557,7 +580,7 @@ void island::set_algorithm(const algorithm &algo)
     // the dtor of its object will be called now (rather
     // than when the dtor of old_ptr is called).
     {
-        auto ipar = detail::isl_pop_algo_raii_getter();
+        auto ipar = detail::isl_raii_accessor_getter();
         (void)ipar;
         old_ptr.reset();
     }
@@ -580,10 +603,43 @@ void island::set_algorithm(const algorithm &algo)
  */
 population island::get_population() const
 {
-    std::unique_lock<std::mutex> lock(m_ptr->pop_mutex);
-    auto new_pop_ptr = m_ptr->pop;
-    lock.unlock();
-    return *new_pop_ptr;
+    // NOTE: same pattern as in get_algorithm().
+
+    // Step 1: init the return value.
+    population retval;
+
+    // Step 2: create a new reference to the internal pop
+    // (this involves only C++ operations).
+    std::shared_ptr<population> new_pop_ptr;
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
+        new_pop_ptr = m_ptr->pop;
+    }
+
+    // Step 3: copy-assign the retval via the new reference.
+    // This might involve calling into python, hence the use of the
+    // raii getter.
+    {
+        auto ipar = detail::isl_raii_accessor_getter();
+        (void)ipar;
+
+        try {
+            retval = *new_pop_ptr;
+            // Reset the reference we used for assignemt.
+            new_pop_ptr.reset();
+        } catch (...) {
+            // In case of exceptions during the pop
+            // copy assignment, make sure to reset
+            // the new pop pointer while holding the
+            // GIL, before re-throwing.
+            new_pop_ptr.reset();
+            throw;
+        }
+    }
+
+    // Step 4: return the retval. This will involve, at most,
+    // a move construction of population.
+    return retval;
 }
 
 /// Set the population.
@@ -595,11 +651,60 @@ population island::get_population() const
  * @throws unspecified any exception thrown by threading primitives, memory allocation errors
  * or by the invoked copy constructor.
  */
-void island::set_population(population pop)
+void island::set_population(const population &pop)
 {
-    auto new_pop_ptr = std::make_shared<population>(std::move(pop));
-    std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-    m_ptr->pop = new_pop_ptr;
+    // Step 1: create a new shared ptr to a default-constructed population.
+    auto new_pop_ptr = std::make_shared<population>();
+
+    // Step 2: make a copy (via assignment) of the input
+    // pop into new_pop_ptr. This will invoke the copy
+    // constructor of population and hence might call into
+    // python.
+    {
+        auto ipar = detail::isl_raii_accessor_getter();
+        (void)ipar;
+        *new_pop_ptr = pop;
+    }
+
+    // Step 3: init an empty population pointer.
+    std::shared_ptr<population> old_ptr;
+
+    // Step 4: store a reference to the old pop
+    // in old_ptr, and assign a reference to the
+    // new pop.
+    try {
+        std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
+        old_ptr = m_ptr->pop;
+        // NOTE: this assignment will never invoke
+        // the destructor of the object pointed-to
+        // by m_ptr->pop, as we made sure
+        // to create a new reference above.
+        m_ptr->pop = new_pop_ptr;
+    } catch (...) {
+        // NOTE: the only bit that can throw here
+        // is the locking of the mutex. There's not much
+        // we can do in such a case, print an error
+        // message and abort.
+        std::cerr << "Fatal error: could not lock mutex in island::set_population(), aborting." << std::endl;
+        std::abort();
+    }
+
+    // Step 5: make sure we decrease the ref count of
+    // old_ptr while potentially holding the GIL. This
+    // makes sure that, if old_ptr contains the last reference,
+    // the dtor of its object will be called now (rather
+    // than when the dtor of old_ptr is called).
+    {
+        auto ipar = detail::isl_raii_accessor_getter();
+        (void)ipar;
+        old_ptr.reset();
+    }
+
+    // Step 6: the dtor of old_ptr will be called, no-op.
+    // The dtor of new_pop_ptr will also be called, but we
+    // are sure that it won't end up calling the dtor of
+    // the object it points to because another reference
+    // exists (m_ptr->pop).
 }
 
 /// Get the thread safety of the island's members.
