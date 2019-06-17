@@ -25,3 +25,14 @@ doc/doxygen/Doxyfile
 doc/sphinx/conf.py
 
 doc/sphinx/_build
+
+*.cfg
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!*.cpp
+!*.hpp
+!*.h
+!*.c
