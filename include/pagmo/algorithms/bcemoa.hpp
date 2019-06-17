@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_NSGA2_HPP
-#define PAGMO_ALGORITHMS_NSGA2_HPP
+#ifndef PAGMO_ALGORITHMS_BCEMOA_HPP
+#define PAGMO_ALGORITHMS_BCEMOA_HPP
 
 #include <algorithm> // std::shuffle, std::transform
 #include <iomanip>
@@ -37,6 +37,8 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 
 #include <pagmo/algorithm.hpp> // needed for the cereal macro
+#include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/MDM.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -45,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/rng.hpp>
 #include <pagmo/utils/generic.hpp>         // uniform_real_from_range, some_bound_is_equal
 #include <pagmo/utils/multi_objective.hpp> // crowding_distance, etc..
+#include <pagmo/problems/dtlz.hpp>
 
 namespace pagmo
 {
@@ -64,7 +67,7 @@ namespace pagmo
  * See:  Deb, K., Pratap, A., Agarwal, S., & Meyarivan, T. A. M. T. (2002). A fast and elitist multiobjective genetic
  * algorithm: NSGA-II. IEEE transactions on evolutionary computation, 6(2), 182-197.
  */
-class nsga2
+class bcemoa
 {
 public:
     /// Single entry of the log (gen, fevals, ideal_point)
@@ -85,9 +88,11 @@ public:
      * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
      * [1,100[ or \p eta_m is not in [1,100[.
      */
-    nsga2(unsigned gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
+    bcemoa(unsigned gen = 1u, unsigned geni = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01,
+           double eta_m = 50.,
           unsigned seed = pagmo::random_device::next())
-        : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed), m_verbosity(0u),
+        : m_gen(gen), m_geni(geni), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed),
+          m_verbosity(0u),
           m_log()
     {
         if (cr >= 1. || cr < 0.) {
@@ -108,6 +113,10 @@ public:
                         "The distribution index for mutation must be in [1, 100], while a value of "
                             + std::to_string(eta_m) + " was detected");
         }
+        algorithm dm{MDM()};
+		//algorithm m_algo{nsga2(gen, cr, eta_c, m, eta_m, seed)};
+        //problem prob{dtlz(1, 10, 2)};
+        //pop = m_algo.evolve(pop);
     }
 
     /// Algorithm evolve method (juice implementation of the algorithm)
@@ -174,7 +183,7 @@ public:
         std::iota(shuffle2.begin(), shuffle2.end(), 0u);
 
         // Main NSGA-II loop
-        for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
+        for (decltype(m_gen) gen = 1u; gen <= m_geni; gen++) {
             // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
             if (m_verbosity > 0u) {
                 // Every m_verbosity generations print a log line
@@ -195,7 +204,7 @@ public:
                     }
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
                     for (decltype(ideal_point.size()) i = 0u; i < ideal_point.size(); ++i) {
-                        if (i >= 5u) { 
+                        if (i >= 5u) {
                             break;
                         }
                         print(std::setw(15), ideal_point[i]);
@@ -217,25 +226,17 @@ public:
             // 1 - We compute crowding distance and non dominated rank for the current population
             auto fnds_res = fast_non_dominated_sorting(pop.get_f());
             auto ndf = std::get<0>(fnds_res); // non dominated fronts [[0,3,2],[1,5,6],[4],...]
-            vector_double pop_cd(NP);         // crowding distances of the whole population
+            vector_double pop_cd(NP);         // We use preference instead of crowding distances of the whole population
             auto ndr = std::get<3>(fnds_res); // non domination rank [0,1,0,0,2,1,1, ... ]
-            for (const auto &front_idxs : ndf) {
-                if (front_idxs.size() == 1u) { // handles the case where the front has collapsed to one point
-                    pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
-                } else {
-                    if (front_idxs.size() == 2u) { // handles the case where the front has collapsed to one point
-                        pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
-                        pop_cd[front_idxs[1]] = std::numeric_limits<double>::infinity();
-                    } else {
-                        std::vector<vector_double> front;
-                        for (auto idx : front_idxs) {
-                            front.push_back(pop.get_f()[idx]);
-                        }
-                        auto cd = crowding_distance(front);
-                        for (decltype(cd.size()) i = 0u; i < cd.size(); ++i) {
-                            pop_cd[front_idxs[i]] = cd[i];
-                        }
-                    }
+            vector_double v;
+			for (const auto &front_idxs : ndf) {
+                std::vector<vector_double> front;
+                for (auto idx : front_idxs) {
+					
+                    v=pop.get_f()[idx];
+                    //pop_cd[idx] = accumulate(v.begin(), v.end(), 0.0) / v.size();
+                    vector<double> w(v.size(), 1.0 / v.size())
+                    pop_cd[idx] = dm.linear_utility(v, w, ideal_point)
                 }
             }
 
@@ -550,6 +551,7 @@ private:
     }
 
     unsigned int m_gen;
+    unsigned int m_geni;
     double m_cr;
     double m_eta_c;
     double m_m;
@@ -562,6 +564,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_REGISTER_ALGORITHM(pagmo::nsga2)
+PAGMO_REGISTER_ALGORITHM(pagmo::bcemoa)
 
 #endif
