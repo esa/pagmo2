@@ -75,7 +75,7 @@ r_policy &r_policy::operator=(const r_policy &other)
 }
 
 // Replace individuals in isl with the input migrants mig.
-migrants_t r_policy::replace(island &isl, const migrants_t &mig) const
+individuals_group_t r_policy::replace(island &isl, const individuals_group_t &mig) const
 {
     // Check the input migrants.
     if (std::get<0>(mig).size() != std::get<1>(mig).size() || std::get<0>(mig).size() != std::get<2>(mig).size()) {

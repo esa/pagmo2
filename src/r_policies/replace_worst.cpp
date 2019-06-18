@@ -63,12 +63,12 @@ void replace_worst::verify_fp_ctor() const
     }
 }
 
-migrants_t replace_worst::replace(island &isl, const migrants_t &mig) const
+individuals_group_t replace_worst::replace(island &isl, const individuals_group_t &mig) const
 {
     // Get out the population from the island.
     const auto pop = isl.get_population();
 
-    return migrants_t{};
+    return individuals_group_t{};
 }
 
 // Extra info.

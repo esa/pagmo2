@@ -62,6 +62,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 
 #define PAGMO_S11N_ISLAND_EXPORT_KEY(isl)                                                                              \
     BOOST_CLASS_EXPORT_KEY2(pagmo::detail::isl_inner<isl>, "udi " #isl)                                                \
@@ -777,6 +778,8 @@ public:
     void set_algorithm(const algorithm &);
     // Get the population.
     population get_population() const;
+    // Get all the individuals in the population.
+    individuals_group_t get_individuals() const;
     // Set the population.
     void set_population(const population &);
     // Get the thread safety of the island's members.

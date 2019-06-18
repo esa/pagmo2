@@ -65,9 +65,9 @@ template <typename T>
 class has_replace
 {
     template <typename U>
-    using replace_t
-        = decltype(std::declval<const U &>().replace(std::declval<island &>(), std::declval<const migrants_t &>()));
-    static const bool implementation_defined = std::is_same<detected_t<replace_t, T>, migrants_t>::value;
+    using replace_t = decltype(
+        std::declval<const U &>().replace(std::declval<island &>(), std::declval<const individuals_group_t &>()));
+    static const bool implementation_defined = std::is_same<detected_t<replace_t, T>, individuals_group_t>::value;
 
 public:
     static const bool value = implementation_defined;
@@ -113,7 +113,7 @@ namespace detail
 struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner_base {
     virtual ~r_pol_inner_base() {}
     virtual std::unique_ptr<r_pol_inner_base> clone() const = 0;
-    virtual migrants_t replace(island &, const migrants_t &) const = 0;
+    virtual individuals_group_t replace(island &, const individuals_group_t &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     template <typename Archive>
@@ -139,7 +139,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner final : r_pol_inner_base {
         return detail::make_unique<r_pol_inner>(m_value);
     }
     // The mandatory replace() method.
-    virtual migrants_t replace(island &isl, const migrants_t &mig) const override final
+    virtual individuals_group_t replace(island &isl, const individuals_group_t &mig) const override final
     {
         return m_value.replace(isl, mig);
     }
@@ -252,7 +252,7 @@ public:
     }
 
     // Replace.
-    migrants_t replace(island &, const migrants_t &) const;
+    individuals_group_t replace(island &, const individuals_group_t &) const;
 
     // Name.
     std::string get_name() const

@@ -93,7 +93,7 @@ class PAGMO_DLL_PUBLIC archipelago
     void wait_check_ignore();
 
 public:
-    using migrants_db_t = std::vector<migrants_t>;
+    using migrants_db_t = std::vector<individuals_group_t>;
 
     /// The size type of the archipelago.
     /**
@@ -409,7 +409,7 @@ public:
     // Get the index of an island.
     size_type get_island_idx(const island &) const;
     migrants_db_t get_migrants_db() const;
-    migrants_t extract_migrants(size_type);
+    individuals_group_t extract_migrants(size_type);
     topology get_topology() const;
     void set_topology(topology);
     std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;

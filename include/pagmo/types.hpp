@@ -42,8 +42,9 @@ typedef std::vector<double> vector_double;
 /// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
 typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
 
-// A pared-down counterpart to pagmo::population for use in migration.
-using migrants_t = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
+// A group of individuals: IDs, dvs and fvs.
+using individuals_group_t
+    = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
 
 } // namespace pagmo
 

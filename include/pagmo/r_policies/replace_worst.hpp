@@ -75,7 +75,7 @@ public:
     {
     }
 
-    migrants_t replace(island &, const migrants_t &) const;
+    individuals_group_t replace(island &, const individuals_group_t &) const;
 
     std::string get_name() const
     {

@@ -515,7 +515,7 @@ archipelago::migrants_db_t archipelago::get_migrants_db() const
     return m_migrants;
 }
 
-migrants_t archipelago::extract_migrants(size_type i)
+individuals_group_t archipelago::extract_migrants(size_type i)
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
 
@@ -526,7 +526,7 @@ migrants_t archipelago::extract_migrants(size_type i)
     }
 
     // Move-construct the return value.
-    migrants_t retval(std::move(m_migrants[i]));
+    individuals_group_t retval(std::move(m_migrants[i]));
 
     // Ensure the tuple we moved-from is completely
     // cleared out.

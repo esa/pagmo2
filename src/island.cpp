@@ -56,6 +56,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/types.hpp>
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
 #include <pagmo/islands/fork_island.hpp>
@@ -760,6 +761,27 @@ void island::set_population(const population &pop)
     // are sure that it won't end up calling the dtor of
     // the object it points to because another reference
     // exists (m_ptr->pop).
+}
+
+/// Get all individuals from the island's population.
+/**
+ * It is safe to call this method while the island is evolving.
+ *
+ * @return a tuple containing the IDs, decision vectors and fitness vectors
+ * of all the individuals in the population.
+ */
+individuals_group_t island::get_individuals() const
+{
+    individuals_group_t retval;
+
+    {
+        auto ipar = detail::isl_raii_accessor_getter();
+        (void)ipar;
+
+        retval = get_population().get_individuals();
+    }
+
+    return retval;
 }
 
 /// Get the thread safety of the island's members.
