@@ -218,8 +218,6 @@ population nsga2::evolve(population pop) const
 
               poptemp.push_back(child1);
               poptemp.push_back(child2);
-              //popnew.push_back(child1, f1);
-              //popnew.push_back(child2, f2);
 
               // We repeat with the shuffled list 2
               parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
