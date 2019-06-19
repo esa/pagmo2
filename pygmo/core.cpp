@@ -278,8 +278,8 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 }
 
 // NOTE: we need to provide a custom raii waiter in the island. The reason is the following.
-// Boost.Python locks the GIL when crossing the boundary from Python into C++. So, if we call wait() from Python,
-// BP will lock the GIL and then we will be waiting for evolutions in the island to finish. During this time, no
+// When we call wait() from Python, the calling thread will be holding the GIL and then we will be waiting
+// for evolutions in the island to finish. During this time, no
 // Python code will be executed because the GIL is locked. This means that if we have a Python thread doing background
 // work (e.g., managing the task queue in pythonic islands), it will have to wait before doing any progress. By
 // unlocking the GIL before calling thread_island::wait(), we give the chance to other Python threads to continue

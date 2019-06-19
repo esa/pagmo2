@@ -505,6 +505,7 @@ algorithm island::get_algorithm() const
             // of the pointed-to object is called, it is called
             // while still holding the GIL.
             new_algo_ptr.reset();
+            // LCOV_EXCL_START
         } catch (...) {
             // NOTE: in the code block above, the only
             // thing that may throw is the copy assignment
@@ -514,6 +515,7 @@ algorithm island::get_algorithm() const
             new_algo_ptr.reset();
             throw;
         }
+        // LCOV_EXCL_STOP
     }
 
     // Step 4: return the retval. This will involve, at most,
@@ -565,6 +567,7 @@ void island::set_algorithm(const algorithm &algo)
         // by m_ptr->algo, as we made sure
         // to create a new reference above.
         m_ptr->algo = new_algo_ptr;
+        // LCOV_EXCL_START
     } catch (...) {
         // NOTE: the only bit that can throw here
         // is the locking of the mutex. There's not much
@@ -573,6 +576,7 @@ void island::set_algorithm(const algorithm &algo)
         std::cerr << "Fatal error: could not lock mutex in island::set_algorithm(), aborting." << std::endl;
         std::abort();
     }
+    // LCOV_EXCL_STOP
 
     // Step 5: make sure we decrease the ref count of
     // old_ptr while potentially holding the GIL. This
@@ -627,6 +631,7 @@ population island::get_population() const
             retval = *new_pop_ptr;
             // Reset the reference we used for assignemt.
             new_pop_ptr.reset();
+            // LCOV_EXCL_START
         } catch (...) {
             // In case of exceptions during the pop
             // copy assignment, make sure to reset
@@ -635,6 +640,7 @@ population island::get_population() const
             new_pop_ptr.reset();
             throw;
         }
+        // LCOV_EXCL_STOP
     }
 
     // Step 4: return the retval. This will involve, at most,
@@ -680,6 +686,7 @@ void island::set_population(const population &pop)
         // by m_ptr->pop, as we made sure
         // to create a new reference above.
         m_ptr->pop = new_pop_ptr;
+        // LCOV_EXCL_START
     } catch (...) {
         // NOTE: the only bit that can throw here
         // is the locking of the mutex. There's not much
@@ -688,6 +695,7 @@ void island::set_population(const population &pop)
         std::cerr << "Fatal error: could not lock mutex in island::set_population(), aborting." << std::endl;
         std::abort();
     }
+    // LCOV_EXCL_STOP
 
     // Step 5: make sure we decrease the ref count of
     // old_ptr while potentially holding the GIL. This
