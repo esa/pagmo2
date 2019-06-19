@@ -32,17 +32,16 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <utility>
 
-#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/exceptions.hpp>
-#include <pagmo/r_policies/replace_worst.hpp>
+#include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
 {
 
-// Default constructor: replace_worst with default parameters.
-r_policy::r_policy() : r_policy(replace_worst{}) {}
+// Default constructor: fair_replace with default parameters.
+r_policy::r_policy() : r_policy(fair_replace{}) {}
 
 // Implementation of the generic constructor.
 void r_policy::generic_ctor_impl()
@@ -74,9 +73,19 @@ r_policy &r_policy::operator=(const r_policy &other)
     return *this = r_policy(other);
 }
 
-// Replace individuals in isl with the input migrants mig.
-individuals_group_t r_policy::replace(island &isl, const individuals_group_t &mig) const
+// Replace individuals in inds with the input migrants mig.
+individuals_group_t r_policy::replace(const individuals_group_t &inds, const individuals_group_t &mig) const
 {
+    // Check the input individuals.
+    if (std::get<0>(inds).size() != std::get<1>(inds).size() || std::get<0>(inds).size() != std::get<2>(inds).size()) {
+        pagmo_throw(std::invalid_argument,
+                    "an invalid group of individuals was passed to a replacement policy of type '" + get_name()
+                        + "': the sets of individuals IDs, decision vectors and fitness vectors "
+                          "must all have the same sizes, but instead their sizes are "
+                        + std::to_string(std::get<0>(inds).size()) + ", " + std::to_string(std::get<1>(inds).size())
+                        + " and " + std::to_string(std::get<2>(inds).size()));
+    }
+
     // Check the input migrants.
     if (std::get<0>(mig).size() != std::get<1>(mig).size() || std::get<0>(mig).size() != std::get<2>(mig).size()) {
         pagmo_throw(std::invalid_argument,
@@ -88,14 +97,14 @@ individuals_group_t r_policy::replace(island &isl, const individuals_group_t &mi
     }
 
     // Call the replace() method from the UDRP.
-    auto retval = ptr()->replace(isl, mig);
+    auto retval = ptr()->replace(inds, mig);
 
     // Check the return value.
     if (std::get<0>(retval).size() != std::get<1>(retval).size()
         || std::get<0>(retval).size() != std::get<2>(retval).size()) {
         pagmo_throw(std::invalid_argument,
-                    "an invalid group of migrants was returned by a replacement policy of type '" + get_name()
-                        + "': the sets of migrants IDs, decision vectors and fitness vectors "
+                    "an invalid group of individuals was returned by a replacement policy of type '" + get_name()
+                        + "': the sets of individuals IDs, decision vectors and fitness vectors "
                           "must all have the same sizes, but instead their sizes are "
                         + std::to_string(std::get<0>(retval).size()) + ", " + std::to_string(std::get<1>(retval).size())
                         + " and " + std::to_string(std::get<2>(retval).size()));

@@ -40,7 +40,9 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <mutex>
 #include <random>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 
@@ -50,6 +52,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
@@ -365,7 +368,11 @@ void island::evolve(unsigned n)
                             // Extract the candidate migrants from the archipelago.
                             const auto migrants = aptr->extract_migrants(idx);
 
-                            // this->m_ptr->r_pol_ptr->replace(*this, migrants);
+                            const auto inds = this->get_individuals();
+                            // auto new_inds = this->m_ptr->r_pol_ptr->replace(inds, migrants);
+                            // Determine which individuals were migrated from migrants into new_inds,
+                            // log them.
+                            // this->set_individuals(new_inds);
                         }
                     }
                 }
@@ -543,8 +550,8 @@ algorithm island::get_algorithm() const
     // This might involve calling into python, hence the use of the
     // raii getter.
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
 
         try {
             // NOTE: copy-assignment is implemented via
@@ -602,8 +609,8 @@ void island::set_algorithm(const algorithm &algo)
     // constructor of algorithm and hence might call into
     // python to copy the UDA.
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
         *new_algo_ptr = algo;
     }
 
@@ -636,8 +643,8 @@ void island::set_algorithm(const algorithm &algo)
     // the dtor of its object will be called now (rather
     // than when the dtor of old_ptr is called).
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
         old_ptr.reset();
     }
 
@@ -676,8 +683,8 @@ population island::get_population() const
     // This might involve calling into python, hence the use of the
     // raii getter.
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
 
         try {
             retval = *new_pop_ptr;
@@ -717,8 +724,8 @@ void island::set_population(const population &pop)
     // constructor of population and hence might call into
     // python.
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
         *new_pop_ptr = pop;
     }
 
@@ -751,8 +758,8 @@ void island::set_population(const population &pop)
     // the dtor of its object will be called now (rather
     // than when the dtor of old_ptr is called).
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
         old_ptr.reset();
     }
 
@@ -765,7 +772,11 @@ void island::set_population(const population &pop)
 
 /// Get all individuals from the island's population.
 /**
- * It is safe to call this method while the island is evolving.
+ * This member function will return a triplet containing
+ * the IDs, decision vector and fitness vectors of the
+ * island's population.
+ *
+ * It is safe to call this function while the island is evolving.
  *
  * @return a tuple containing the IDs, decision vectors and fitness vectors
  * of all the individuals in the population.
@@ -775,13 +786,71 @@ individuals_group_t island::get_individuals() const
     individuals_group_t retval;
 
     {
-        auto ipar = detail::isl_raii_accessor_getter();
-        (void)ipar;
+        // NOTE: protect with the irag, as the destructor
+        // of pop may call into python.
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
 
-        retval = get_population().get_individuals();
+        // Get out a copy of the population.
+        auto pop = get_population();
+
+        // Move out the data.
+        std::get<0>(retval) = std::move(pop.m_ID);
+        std::get<1>(retval) = std::move(pop.m_x);
+        std::get<2>(retval) = std::move(pop.m_f);
     }
 
     return retval;
+}
+
+/// Set all individuals in the island's population.
+/**
+ * This member function will set the IDs, decision vectors and fitness
+ * vectors of the internal population to the values contained in ``inds``.
+ *
+ * It is safe to call this function while the island is evolving.
+ *
+ * @param inds the IDs, decision vectors and fitness vectors that will
+ * be assigned to the internal population.
+ *
+ * @throws std::invalid_argument if the vectors in ``inds`` don't have all the
+ * same size.
+ */
+void island::set_individuals(const individuals_group_t &inds)
+{
+    // Check the input value.
+    if (std::get<0>(inds).size() != std::get<1>(inds).size() || std::get<0>(inds).size() != std::get<2>(inds).size()) {
+        pagmo_throw(std::invalid_argument, "an invalid group of individuals was passed to island::set_individuals(): "
+                                           "the sets of IDs, decision vectors and fitness vectors "
+                                           "must all have the same sizes, but instead their sizes are "
+                                               + std::to_string(std::get<0>(inds).size()) + ", "
+                                               + std::to_string(std::get<1>(inds).size()) + " and "
+                                               + std::to_string(std::get<2>(inds).size()));
+    }
+
+    // Make copy for move semantics.
+    auto tmp(inds);
+
+    {
+        // NOTE: protect with the irag, as the destructor
+        // of pop may call into python.
+        auto irag = detail::isl_raii_accessor_getter();
+        (void)irag;
+
+        // Get out a copy of the population.
+        auto pop = get_population();
+
+        // NOTE: setting the pop members with move
+        // semantics ensures that the following
+        // three lines cannot fail, and the population
+        // is thus never left in an inconsistent state.
+        pop.m_ID = std::move(std::get<0>(tmp));
+        pop.m_x = std::move(std::get<1>(tmp));
+        pop.m_f = std::move(std::get<2>(tmp));
+
+        // Set the modified population.
+        set_population(pop);
+    }
 }
 
 /// Get the thread safety of the island's members.

@@ -221,7 +221,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
         # UDRP.
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/replace_worst.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/fair_replace.cpp"
         # Utils.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"

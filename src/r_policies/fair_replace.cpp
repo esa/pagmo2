@@ -35,9 +35,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/variant/get.hpp>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/r_policies/replace_worst.hpp>
+#include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
@@ -46,10 +45,10 @@ namespace pagmo
 {
 
 // Default constructor: fractional migration rate, 10%.
-replace_worst::replace_worst() : replace_worst(.1) {}
+fair_replace::fair_replace() : fair_replace(.1) {}
 
 // Helper to verify the ctor from a fractional rate.
-void replace_worst::verify_fp_ctor() const
+void fair_replace::verify_fp_ctor() const
 {
     assert(m_migr_rate.which() == 1);
 
@@ -57,22 +56,19 @@ void replace_worst::verify_fp_ctor() const
 
     if (!std::isfinite(rate) || rate < 0. || rate > 1.) {
         pagmo_throw(std::invalid_argument,
-                    "Invalid fractional migration rate specified in the constructor of the replace_worst replacement "
+                    "Invalid fractional migration rate specified in the constructor of the fair_replace replacement "
                     "policy: the rate must be in the [0., 1.] range, but it is "
                         + std::to_string(rate) + " instead");
     }
 }
 
-individuals_group_t replace_worst::replace(island &isl, const individuals_group_t &mig) const
+individuals_group_t fair_replace::replace(const individuals_group_t &, const individuals_group_t &) const
 {
-    // Get out the population from the island.
-    const auto pop = isl.get_population();
-
     return individuals_group_t{};
 }
 
 // Extra info.
-std::string replace_worst::get_extra_info() const
+std::string fair_replace::get_extra_info() const
 {
     if (m_migr_rate.which()) {
         const auto rate = boost::get<double>(m_migr_rate);
@@ -85,11 +81,11 @@ std::string replace_worst::get_extra_info() const
 
 // Serialization support.
 template <typename Archive>
-void replace_worst::serialize(Archive &ar, unsigned)
+void fair_replace::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_migr_rate);
 }
 
 } // namespace pagmo
 
-PAGMO_S11N_R_POLICY_IMPLEMENT(pagmo::replace_worst)
+PAGMO_S11N_R_POLICY_IMPLEMENT(pagmo::fair_replace)

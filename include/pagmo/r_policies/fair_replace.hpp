@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_R_POLICIES_REPLACE_WORST_HPP
-#define PAGMO_R_POLICIES_REPLACE_WORST_HPP
+#ifndef PAGMO_R_POLICIES_FAIR_REPLACE_HPP
+#define PAGMO_R_POLICIES_FAIR_REPLACE_HPP
 
 #include <string>
 #include <type_traits>
@@ -35,7 +35,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/variant/variant.hpp>
 
-#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/r_policy.hpp>
@@ -45,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-class PAGMO_DLL_PUBLIC replace_worst
+class PAGMO_DLL_PUBLIC fair_replace
 {
     void verify_fp_ctor() const;
 
@@ -57,29 +56,29 @@ class PAGMO_DLL_PUBLIC replace_worst
     };
     // Absolute migration rate.
     template <typename T, enable_if_t<std::is_integral<T>::value, int> = 0>
-    explicit replace_worst(ptag, T n) : m_migr_rate(boost::numeric_cast<population::size_type>(n))
+    explicit fair_replace(ptag, T n) : m_migr_rate(boost::numeric_cast<population::size_type>(n))
     {
     }
     // Fractional migration rate.
     template <typename T, enable_if_t<std::is_floating_point<T>::value, int> = 0>
-    explicit replace_worst(ptag, T x) : m_migr_rate(static_cast<double>(x))
+    explicit fair_replace(ptag, T x) : m_migr_rate(static_cast<double>(x))
     {
         verify_fp_ctor();
     }
 
 public:
-    replace_worst();
+    fair_replace();
     template <typename T,
               enable_if_t<detail::disjunction<std::is_integral<T>, std::is_floating_point<T>>::value, int> = 0>
-    explicit replace_worst(T x) : replace_worst(ptag{}, x)
+    explicit fair_replace(T x) : fair_replace(ptag{}, x)
     {
     }
 
-    individuals_group_t replace(island &, const individuals_group_t &) const;
+    individuals_group_t replace(const individuals_group_t &, const individuals_group_t &) const;
 
     std::string get_name() const
     {
-        return "Replace worst";
+        return "Fair replace";
     }
 
     std::string get_extra_info() const;
@@ -94,6 +93,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_S11N_R_POLICY_EXPORT_KEY(pagmo::replace_worst)
+PAGMO_S11N_R_POLICY_EXPORT_KEY(pagmo::fair_replace)
 
 #endif

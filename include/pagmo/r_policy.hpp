@@ -40,7 +40,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
-#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/s11n.hpp>
@@ -65,8 +64,8 @@ template <typename T>
 class has_replace
 {
     template <typename U>
-    using replace_t = decltype(
-        std::declval<const U &>().replace(std::declval<island &>(), std::declval<const individuals_group_t &>()));
+    using replace_t = decltype(std::declval<const U &>().replace(std::declval<const individuals_group_t &>(),
+                                                                 std::declval<const individuals_group_t &>()));
     static const bool implementation_defined = std::is_same<detected_t<replace_t, T>, individuals_group_t>::value;
 
 public:
@@ -113,7 +112,7 @@ namespace detail
 struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner_base {
     virtual ~r_pol_inner_base() {}
     virtual std::unique_ptr<r_pol_inner_base> clone() const = 0;
-    virtual individuals_group_t replace(island &, const individuals_group_t &) const = 0;
+    virtual individuals_group_t replace(const individuals_group_t &, const individuals_group_t &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     template <typename Archive>
@@ -139,9 +138,10 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner final : r_pol_inner_base {
         return detail::make_unique<r_pol_inner>(m_value);
     }
     // The mandatory replace() method.
-    virtual individuals_group_t replace(island &isl, const individuals_group_t &mig) const override final
+    virtual individuals_group_t replace(const individuals_group_t &inds,
+                                        const individuals_group_t &mig) const override final
     {
-        return m_value.replace(isl, mig);
+        return m_value.replace(inds, mig);
     }
     // Optional methods.
     virtual std::string get_name() const override final
@@ -252,7 +252,7 @@ public:
     }
 
     // Replace.
-    individuals_group_t replace(island &, const individuals_group_t &) const;
+    individuals_group_t replace(const individuals_group_t &, const individuals_group_t &) const;
 
     // Name.
     std::string get_name() const

@@ -772,6 +772,7 @@ public:
     void wait();
     // Status of the island.
     evolve_status status() const;
+
     // Get the algorithm.
     algorithm get_algorithm() const;
     // Set the algorithm.
@@ -780,6 +781,8 @@ public:
     population get_population() const;
     // Get all the individuals in the population.
     individuals_group_t get_individuals() const;
+    // Set all the individuals in the population.
+    void set_individuals(const individuals_group_t &);
     // Set the population.
     void set_population(const population &);
     // Get the thread safety of the island's members.
@@ -788,6 +791,7 @@ public:
     std::string get_name() const;
     // Island's extra info.
     std::string get_extra_info() const;
+
     // Check if the island is valid.
     bool is_valid() const;
     /// Save to archive.

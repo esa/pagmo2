@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
@@ -76,6 +77,8 @@ namespace pagmo
  */
 class PAGMO_DLL_PUBLIC population
 {
+    friend class PAGMO_DLL_PUBLIC island;
+
 public:
     /// The size type of the population.
     typedef std::vector<vector_double>::size_type size_type;
