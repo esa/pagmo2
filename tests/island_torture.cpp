@@ -51,8 +51,6 @@ BOOST_AUTO_TEST_CASE(island_torture_00)
         isl.set_algorithm(algo);
         isl.set_population(pop);
         auto isl_copy(isl);
-        auto ts = isl.get_thread_safety();
-        (void)ts;
         auto name = isl.get_name();
         auto einfo = isl.get_extra_info();
         std::ostringstream oss;

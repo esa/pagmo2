@@ -889,11 +889,6 @@ BOOST_PYTHON_MODULE(core)
         .def("set_population", &island::set_population, pygmo::island_set_population_docstring().c_str(),
              bp::arg("pop"))
         .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
-        .def("get_thread_safety", lcast([](const island &isl) -> bp::tuple {
-                 const auto ts = isl.get_thread_safety();
-                 return bp::make_tuple(ts[0], ts[1]);
-             }),
-             pygmo::island_get_thread_safety_docstring().c_str())
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
     pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());

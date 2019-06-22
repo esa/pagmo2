@@ -29,9 +29,12 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <utility>
 
+#include <pagmo/algorithm.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
+#include <pagmo/population.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 
@@ -57,20 +60,49 @@ namespace pagmo
  */
 void thread_island::run_evolve(island &isl) const
 {
-    const auto i_ts = isl.get_thread_safety();
-    if (i_ts[0] < thread_safety::basic) {
-        pagmo_throw(std::invalid_argument,
-                    "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
-                    "thread safety guarantee");
+    // Init default-constructed algo/pop. We will move
+    // later into these variables the algo/pop from isl.
+    algorithm algo;
+    population pop;
+
+    {
+        // NOTE: run_evolve() is called from the separate
+        // thread of execution within pagmo::island. Since
+        // we need to extract copies of algorithm and population,
+        // which may be implemented in Python, we need to protect
+        // with a gte.
+        auto gte = detail::gte_getter();
+        (void)gte;
+
+        // Get copies of algo/pop from isl.
+        // NOTE: in case of exceptions, any Pythonic object
+        // existing within this scope will be destroyed before the gte,
+        // while it is still safe to call into Python.
+        auto tmp_algo(isl.get_algorithm());
+        auto tmp_pop(isl.get_population());
+
+        // Check the thread safety levels.
+        if (tmp_algo.get_thread_safety() < thread_safety::basic) {
+            pagmo_throw(std::invalid_argument,
+                        "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
+                        "thread safety guarantee");
+        }
+
+        if (tmp_pop.get_problem().get_thread_safety() < thread_safety::basic) {
+            pagmo_throw(std::invalid_argument,
+                        "the 'thread_island' UDI requires a problem providing at least the 'basic' "
+                        "thread safety guarantee");
+        }
+
+        // Move the copies into algo/pop. At this point, we know
+        // that algo and pop are not Pythonic, as Pythonic entities are never
+        // marked as thread-safe.
+        algo = std::move(tmp_algo);
+        pop = std::move(tmp_pop);
     }
-    if (i_ts[1] < thread_safety::basic) {
-        pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
-                                           "thread safety guarantee");
-    }
-    // Get out a copy of the algorithm for evolution.
-    auto algo = isl.get_algorithm();
-    // Replace the island's population with the evolved population.
-    isl.set_population(algo.evolve(isl.get_population()));
+
+    // Evolve and replace the island's population with the evolved population.
+    isl.set_population(algo.evolve(pop));
     // Replace the island's algorithm with the algorithm used for the evolution.
     // NOTE: if set_algorithm() fails, we will have the new population with the
     // original algorithm, which is still a valid state for the island.

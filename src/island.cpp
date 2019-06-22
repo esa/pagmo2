@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/config.hpp>
 
-#include <array>
 #include <cassert>
 #include <chrono>
 #include <exception>
@@ -552,29 +551,6 @@ void island::set_population(const population &pop)
         old_ptr = m_ptr->pop;
         m_ptr->pop = new_pop_ptr;
     }
-}
-
-/// Get the thread safety of the island's members.
-/**
- * It is safe to call this method while the island is evolving.
- *
- * @return an array containing the pagmo::thread_safety values for the internal algorithm and population's
- * problem (as returned by pagmo::algorithm::get_thread_safety() and pagmo::problem::get_thread_safety()).
- *
- * @throws unspecified any exception thrown by threading primitives.
- */
-std::array<thread_safety, 2> island::get_thread_safety() const
-{
-    std::array<thread_safety, 2> retval;
-    {
-        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
-        retval[0] = m_ptr->algo->get_thread_safety();
-    }
-    {
-        std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-        retval[1] = m_ptr->pop->get_problem().get_thread_safety();
-    }
-    return retval;
 }
 
 /// Island's name.
