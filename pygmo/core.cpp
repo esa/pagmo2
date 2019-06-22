@@ -80,6 +80,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
@@ -388,8 +389,8 @@ BOOST_PYTHON_MODULE(core)
     // destroyed at the end of island::wait().
     detail::wait_raii_getter = []() { return std::make_shared<py_wait_locks>(); };
 
-    // NOTE: override the isl raii accessor with the thread ensurer.
-    detail::isl_raii_accessor_getter = []() { return std::make_shared<pygmo::gil_thread_ensurer>(); };
+    // NOTE: set the gte getter.
+    detail::gte_getter = []() { return std::make_shared<pygmo::gil_thread_ensurer>(); };
 
     // Setup doc options
     bp::docstring_options doc_options;

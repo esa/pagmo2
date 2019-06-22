@@ -251,15 +251,6 @@ PAGMO_DLL_PUBLIC extern std::function<void(const algorithm &, const population &
                                            std::unique_ptr<detail::isl_inner_base> &)>
     island_factory;
 
-// NOTE: this construct is used to create a RAII-style object when getting/setting
-// island attributes such as algorithm, population, etc. Because such operations
-// end up creating copies of objects which may be implemented in Python, and because
-// these setters/getters might be invoked from a thread created from C++, we need
-// to be sure we are correctly registering the thread and holding the GIL
-// when making such copies. This object allows to hook up the GIL handling machinery
-// in a RAII fashion.
-PAGMO_DLL_PUBLIC extern std::function<boost::any()> isl_raii_accessor_getter;
-
 // NOTE: the idea with this class is that we use it to store the data members of pagmo::island, and,
 // within pagmo::island, we store a pointer to an instance of this struct. The reason for this approach
 // is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
