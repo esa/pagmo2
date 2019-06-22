@@ -154,6 +154,7 @@ std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 
 // Exposed pagmo::bfe.
 std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
+
 } // namespace pygmo
 
 // The cleanup function.
