@@ -232,7 +232,7 @@ population nsga2::evolve(population pop) const
 
           } // poptemp now contains 2NP individuals
 
-          vector_double genes(2 * NP * poptemp[0].size());
+          vector_double genes(NP * poptemp[0].size());
           decltype(genes.size()) pos = 0u;
           for (population::size_type i = 0; i < NP; ++i) {
               // I compute the fitness for each new individual which was generated in the
