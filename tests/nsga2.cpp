@@ -228,5 +228,5 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
 
     // 7 - Evolve the population
     pop2 = algo2.evolve(pop);
-    BOOST_CHECK(uda1.get_log() == uda2.get_log());
+    BOOST_CHECK(algo1.extract<nsga2>()->get_log() == algo2.extract<nsga2>()->get_log() );
 }
