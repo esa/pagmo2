@@ -231,6 +231,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/gte_getter.cpp"
     )
 
     # Some compilers choke on the cec2013/2014 data arrays.

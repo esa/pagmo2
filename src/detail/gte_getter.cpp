@@ -26,36 +26,30 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE island_torture_test
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
+#include <functional>
 
-#include <sstream>
+#include <boost/any.hpp>
 
-#include <pagmo/algorithms/de.hpp>
-#include <pagmo/island.hpp>
-#include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 
-using namespace pagmo;
-
-// A small test for poking at an island while it is evolving.
-BOOST_AUTO_TEST_CASE(island_torture_00)
+namespace pagmo
 {
-    island isl{de{50}, rosenbrock{100}, 100};
-    for (auto i = 0; i < 100; ++i) {
-        isl.evolve();
-    }
-    while (isl.status() == evolve_status::busy) {
-        auto algo = isl.get_algorithm();
-        auto pop = isl.get_population();
-        isl.set_algorithm(algo);
-        isl.set_population(pop);
-        auto isl_copy(isl);
-        auto name = isl.get_name();
-        auto einfo = isl.get_extra_info();
-        std::ostringstream oss;
-        oss << isl;
-        BOOST_CHECK(!oss.str().empty());
-    }
-    BOOST_CHECK_NO_THROW(isl.wait_check());
+
+namespace detail
+{
+
+namespace
+{
+
+boost::any default_gte_getter()
+{
+    return boost::any{};
 }
+
+} // namespace
+
+std::function<boost::any()> gte_getter = &default_gte_getter;
+
+} // namespace detail
+
+} // namespace pagmo
