@@ -637,8 +637,8 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N5pagmo6island13set_algorithmE9algorithm">
-<span id="_CPPv3N5pagmo6island13set_algorithmE9algorithm"></span><span id="_CPPv2N5pagmo6island13set_algorithmE9algorithm"></span><span id="pagmo::island::set_algorithm__algorithm"></span><span class="target" id="classpagmo_1_1island_1a71ebf26dd20ed664750514d8598180d7"></span>void <code class="sig-name descname">set_algorithm</code><span class="sig-paren">(</span><a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> <em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island13set_algorithmE9algorithm" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo6island13set_algorithmERK9algorithm">
+<span id="_CPPv3N5pagmo6island13set_algorithmERK9algorithm"></span><span id="_CPPv2N5pagmo6island13set_algorithmERK9algorithm"></span><span id="pagmo::island::set_algorithm__algorithmCR"></span><span class="target" id="classpagmo_1_1island_1a0a46bea4f312b213caf9c004af7971a8"></span>void <code class="sig-name descname">set_algorithm</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm">algorithm</a> &amp;<em>algo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island13set_algorithmERK9algorithm" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the algorithm. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="simple">
@@ -671,8 +671,8 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd></dl>
 
 <dl class="function">
-<dt id="_CPPv4N5pagmo6island14set_populationE10population">
-<span id="_CPPv3N5pagmo6island14set_populationE10population"></span><span id="_CPPv2N5pagmo6island14set_populationE10population"></span><span id="pagmo::island::set_population__population"></span><span class="target" id="classpagmo_1_1island_1a1981aeeacb51a0bb5c5295a337d79cc3"></span>void <code class="sig-name descname">set_population</code><span class="sig-paren">(</span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island14set_populationE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N5pagmo6island14set_populationERK10population">
+<span id="_CPPv3N5pagmo6island14set_populationERK10population"></span><span id="_CPPv2N5pagmo6island14set_populationERK10population"></span><span id="pagmo::island::set_population__populationCR"></span><span class="target" id="classpagmo_1_1island_1a089c9710c65f8523b6d18ccd4d156eb7"></span>void <code class="sig-name descname">set_population</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island14set_populationERK10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the population. </p>
 <p>It is safe to call this method while the island is evolving.</p>
 <p><dl class="simple">
@@ -682,22 +682,6 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives, memory allocation errors or by the invoked copy constructor. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="_CPPv4NK5pagmo6island17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo6island17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo6island17get_thread_safetyEv"></span><span id="pagmo::island::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1island_1ae63cb72c9786e85e521d1369f3eb3f2d"></span>std::array&lt;<a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a>, 2&gt; <code class="sig-name descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get the thread safety of the island’s members. </p>
-<p>It is safe to call this method while the island is evolving.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an array containing the pagmo::thread_safety values for the internal algorithm and population’s problem (as returned by <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"><span class="std std-ref">pagmo::algorithm::get_thread_safety()</span></a> and <a class="reference internal" href="problem.html#classpagmo_1_1problem_1a3a4b11756d597508afdd2ef0c3c4c4dc"><span class="std std-ref">pagmo::problem::get_thread_safety()</span></a>).</p>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives. </p></li>
 </ul>
 </dd>
 </dl>
@@ -845,7 +829,7 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>

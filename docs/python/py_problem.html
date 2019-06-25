@@ -270,22 +270,20 @@ full list of UDPs already coded in pygmo).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>udp</strong> – a user-defined problem, either C++ or Python</p>
 </dd>
-<dt class="field-even">Raises NotImplementedError</dt>
-<dd class="field-even"><p>if <em>udp</em> does not implement the mandatory methods detailed above</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if the number of objectives of the UDP is zero, the number of objectives,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>udp</em> does not implement the mandatory methods detailed above</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the number of objectives of the UDP is zero, the number of objectives,
     equality or inequality constraints is larger than an implementation-defined value,
     the problem bounds are invalid (e.g., they contain NaNs, the dimensionality of the lower bounds is
     different from the dimensionality of the upper bounds, etc. - note that infinite bounds are allowed),
     or if the <code class="docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code> and <code class="docutils literal notranslate"><span class="pre">hessians_sparsity()</span></code> methods of the UDP fail basic sanity checks
-    (e.g., they return vectors with repeated indices, they contain indices exceeding the problem’s dimensions, etc.)</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by methods of the UDP invoked during construction,
+    (e.g., they return vectors with repeated indices, they contain indices exceeding the problem’s dimensions, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by methods of the UDP invoked during construction,
     the deep copy of the UDP, the constructor of the underlying C++ class,
     failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-    signatures, etc.)</p>
+    signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="method">
@@ -311,23 +309,20 @@ method of the UDP will also be checked before being returned. If the UDP does no
 and it must return the fitness vectors as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dvs</strong> – the decision vectors (chromosomes) to be evaluated in batch mode</p>
+<dd class="field-odd"><p><strong>dvs</strong> (<em>array-like object</em>) – the decision vectors (chromosomes) to be evaluated in batch mode</p>
 </dd>
-<dt class="field-even">Type dvs</dt>
-<dd class="field-even"><p>array-like object</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitness vectors of <em>dvs</em></p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the fitness vectors of <em>dvs</em></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p>1D NumPy float array</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>dvs</em> and/or the return value are not compatible with the problem’s properties</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code> method of the UDP, or by failures at the intersection
-    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>dvs</em> and/or the return value are not compatible with the problem’s properties</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code> method of the UDP, or by failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -345,16 +340,16 @@ will be set to the provided scalar value.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the constraints’ tolerances</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if, when setting this property, the size of the input array differs from the number
-    of constraints of the problem or if any element of the array is negative or NaN</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if, when setting this property, the size of the input array differs from the number
+    of constraints of the problem or if any element of the array is negative or NaN</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -390,16 +385,13 @@ UDP will be returned (this allows to extract a Python UDP without knowing its ty
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> – the type of the user-defined problem to extract</p>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type of the user-defined problem to extract</p>
 </dd>
-<dt class="field-even">Type t</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to the internal user-defined problem, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a reference to the internal user-defined problem, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
-</dd>
-<dt class="field-even">Raises TypeError</dt>
-<dd class="field-even"><p>if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -432,19 +424,16 @@ UDP will be returned (this allows to extract a Python UDP without knowing its ty
 <a class="reference internal" href="#pygmo.problem.c_tol" title="pygmo.problem.c_tol"><code class="xref py py-attr docutils literal notranslate"><span class="pre">c_tol</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>f</strong> – a fitness vector</p>
+<dd class="field-odd"><p><strong>f</strong> (<em>array-like object</em>) – a fitness vector</p>
 </dd>
-<dt class="field-even">Type f</dt>
-<dd class="field-even"><p>array-like object</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the fitness vector is feasible, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the fitness vector is feasible, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if the size of <em>f</em> is not the same as the output of
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the size of <em>f</em> is not the same as the output of
     <a class="reference internal" href="#pygmo.problem.get_nf" title="pygmo.problem.get_nf"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nf()</span></code></a></p>
 </dd>
 </dl>
@@ -458,19 +447,16 @@ the tolerances returned by <a class="reference internal" href="#pygmo.problem.c_
 <p>This will cause one fitness evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dv</strong> – a decision vector</p>
+<dd class="field-odd"><p><strong>dv</strong> (<em>array-like object</em>) – a decision vector</p>
 </dd>
-<dt class="field-even">Type dv</dt>
-<dd class="field-even"><p>array-like object</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>x</em> results in a feasible fitness, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>x</em> results in a feasible fitness, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.problem.feasibility_f" title="pygmo.problem.feasibility_f"><code class="xref py py-func docutils literal notranslate"><span class="pre">feasibility_f()</span></code></a> or
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.problem.feasibility_f" title="pygmo.problem.feasibility_f"><code class="xref py py-func docutils literal notranslate"><span class="pre">feasibility_f()</span></code></a> or
     <a class="reference internal" href="#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal notranslate"><span class="pre">fitness()</span></code></a></p>
 </dd>
 </dl>
@@ -493,24 +479,21 @@ evaluation counter (see <a class="reference internal" href="#pygmo.problem.get_f
 return the fitness vector as an iterable Python object (e.g., 1D NumPy array, list, tuple, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dv</strong> – the decision vector (chromosome) to be evaluated</p>
+<dd class="field-odd"><p><strong>dv</strong> (<em>array-like object</em>) – the decision vector (chromosome) to be evaluated</p>
 </dd>
-<dt class="field-even">Type dv</dt>
-<dd class="field-even"><p>array-like object</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitness of <em>dv</em></p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the fitness of <em>dv</em></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p>1D NumPy float array</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nx()</span></code></a>, or
-    the length of the returned fitness vector differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nf" title="pygmo.problem.get_nf"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nf()</span></code></a></p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method of the UDP, or by failures at the intersection
-    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nx()</span></code></a>, or
+    the length of the returned fitness vector differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nf" title="pygmo.problem.get_nf"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nf()</span></code></a></p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method of the UDP, or by failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -529,11 +512,11 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a tuple of two 1D NumPy float arrays representing the lower and upper box-bounds of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the invoked method of the underlying C++ class, or failures at the
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the invoked method of the underlying C++ class, or failures at the
     intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -550,11 +533,11 @@ method. Otherwise, an empty string will be returned.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>extra info about the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDP</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDP</p>
 </dd>
 </dl>
 </dd></dl>
@@ -570,7 +553,7 @@ reset. Copy operations copy the counter as well.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of times <a class="reference internal" href="#pygmo.problem.fitness" title="pygmo.problem.fitness"><code class="xref py py-func docutils literal notranslate"><span class="pre">fitness()</span></code></a> was successfully called</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -587,7 +570,7 @@ reset. Copy operations copy the counter as well.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of times <a class="reference internal" href="#pygmo.problem.gradient" title="pygmo.problem.gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">gradient()</span></code></a> was successfully called</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -604,7 +587,7 @@ reset. Copy operations copy the counter as well.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of times <a class="reference internal" href="#pygmo.problem.hessians" title="pygmo.problem.hessians"><code class="xref py py-func docutils literal notranslate"><span class="pre">hessians()</span></code></a> was successfully called</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -620,11 +603,11 @@ for a detailed explanation of how the bounds are determined.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>an array representing the lower box-bounds of this problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the invoked method of the underlying C++ class, or failures at the
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the invoked method of the underlying C++ class, or failures at the
     intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -641,7 +624,7 @@ Otherwise, an implementation-defined name based on the type of the UDP will be r
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the problem’s name</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
@@ -657,7 +640,7 @@ Otherwise, an implementation-defined name based on the type of the UDP will be r
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the total number of constraints of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -672,7 +655,7 @@ Otherwise, an implementation-defined name based on the type of the UDP will be r
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the continuous dimension of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -691,7 +674,7 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of equality constraints of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -707,7 +690,7 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the dimension of the fitness</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -726,7 +709,7 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of inequality constraints of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -745,7 +728,7 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the integer dimension of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -764,7 +747,7 @@ of a <a class="reference internal" href="#pygmo.problem" title="pygmo.problem"><
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of objectives of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -780,7 +763,7 @@ the bounds returned by <a class="reference internal" href="#pygmo.problem.get_bo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the dimension of the problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -798,7 +781,7 @@ UDPs, the returned value will be unconditionally <a class="reference internal" h
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the thread safety level of the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>a value of <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.thread_safety</span></code></a></p>
 </dd>
 </dl>
@@ -814,11 +797,11 @@ for a detailed explanation of how the bounds are determined.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>an array representing the upper box-bounds of this problem</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the invoked method of the underlying C++ class, or failures at the
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the invoked method of the underlying C++ class, or failures at the
     intersection between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -844,28 +827,23 @@ array, and it must return the gradient vector as an iterable Python object (e.g.
 list, tuple, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dv</strong> – the decision vector whose gradient will be computed</p>
+<dd class="field-odd"><p><strong>dv</strong> (<em>array-like object</em>) – the decision vector whose gradient will be computed</p>
 </dd>
-<dt class="field-even">Type dv</dt>
-<dd class="field-even"><p>array-like object</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the gradient of <em>dv</em></p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the gradient of <em>dv</em></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>1D NumPy float array</p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p>1D NumPy float array</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nx()</span></code></a>, or
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nx()</span></code></a>, or
     the returned gradient vector does not have the same size as the vector returned by
-    <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code></a></p>
-</dd>
-<dt class="field-even">Raises NotImplementedError</dt>
-<dd class="field-even"><p>if the UDP does not provide a <code class="docutils literal notranslate"><span class="pre">gradient()</span></code> method</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">gradient()</span></code> method of the UDP, or by failures at the intersection
-    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+    <a class="reference internal" href="#pygmo.problem.gradient_sparsity" title="pygmo.problem.gradient_sparsity"><code class="xref py py-func docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if the UDP does not provide a <code class="docutils literal notranslate"><span class="pre">gradient()</span></code> method</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">gradient()</span></code> method of the UDP, or by failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -890,27 +868,25 @@ containing each exactly 2 elements representing the indices <span class="math no
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the gradient sparsity pattern</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>2D Numpy int array</p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the NumPy array returned by the UDP does not satisfy the requirements described above (e.g., invalid
     shape, dimensions, etc.),
     at least one element of the returned iterable Python object does not consist of a collection of exactly
     2 elements, or the sparsity pattern returned by the UDP is invalid
     (specifically, if it is not strictly sorted lexicographically,
     or if the indices in the pattern are incompatible with the properties of the problem, or if the size of the
-    returned pattern is different from the size recorded upon construction)</p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if the NumPy array returned by the UDP contains integer values which are negative or outside an
-    implementation-defined range</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ function,
+    returned pattern is different from the size recorded upon construction)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the NumPy array returned by the UDP contains integer values which are negative or outside an
+    implementation-defined range</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the underlying C++ function,
     the <code class="docutils literal notranslate"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API, or
     failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-    signatures, etc.)</p>
+    signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -934,7 +910,7 @@ implement the <code class="docutils literal notranslate"><span class="pre">batch
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code> method in the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -959,7 +935,7 @@ implement the <code class="docutils literal notranslate"><span class="pre">gradi
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the gradient in the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -990,7 +966,7 @@ pattern of the gradient is dense. See <a class="reference internal" href="#pygmo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the gradient sparsity in the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -1015,7 +991,7 @@ implement the <code class="docutils literal notranslate"><span class="pre">hessi
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the hessians in the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -1046,7 +1022,7 @@ pattern of the hessians is dense. See <a class="reference internal" href="#pygmo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the hessians sparsity in the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -1071,7 +1047,7 @@ implement the <code class="docutils literal notranslate"><span class="pre">set_s
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method in the UDP</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -1097,28 +1073,23 @@ evaluation counter (see <a class="reference internal" href="#pygmo.problem.get_h
 array, and it must return the hessians vector as an iterable Python object (e.g., list, tuple, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dv</strong> – the decision vector whose hessians will be computed</p>
+<dd class="field-odd"><p><strong>dv</strong> (<em>array-like object</em>) – the decision vector whose hessians will be computed</p>
 </dd>
-<dt class="field-even">Type dv</dt>
-<dd class="field-even"><p>array-like object</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the hessians of <em>dv</em></p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the hessians of <em>dv</em></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy float array</p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy float array</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nx()</span></code></a>, or
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the length of <em>dv</em> differs from the value returned by <a class="reference internal" href="#pygmo.problem.get_nx" title="pygmo.problem.get_nx"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_nx()</span></code></a>, or
     the length of returned hessians does not match the corresponding hessians sparsity pattern dimensions, or
-    the size of the return value is not equal to the fitness dimension</p>
-</dd>
-<dt class="field-even">Raises NotImplementedError</dt>
-<dd class="field-even"><p>if the UDP does not provide a <code class="docutils literal notranslate"><span class="pre">hessians()</span></code> method</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">hessians()</span></code> method of the UDP, or by failures at the intersection
-    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+    the size of the return value is not equal to the fitness dimension</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if the UDP does not provide a <code class="docutils literal notranslate"><span class="pre">hessians()</span></code> method</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">hessians()</span></code> method of the UDP, or by failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1146,26 +1117,24 @@ containing each exactly 2 elements representing the indices <span class="math no
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the hessians sparsity patterns</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of 2D Numpy int array</p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the NumPy arrays returned by the UDP do not satisfy the requirements described above (e.g., invalid
     shape, dimensions, etc.),
     at least one element of a returned iterable Python object does not consist of a collection of exactly
     2 elements, or if a sparsity pattern returned by the UDP is invalid (specifically, if it is not strictly sorted lexicographically,
     if the indices in the pattern are incompatible with the properties of the problem or if the size of the pattern
-    differs from the size recorded upon construction)</p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
-    implementation-defined range</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ function,
+    differs from the size recorded upon construction)</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the NumPy arrays returned by the UDP contain integer values which are negative or outside an
+    implementation-defined range</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the underlying C++ function,
     the <code class="docutils literal notranslate"><span class="pre">PyArray_FROM_OTF()</span></code> function from the NumPy C API, or
     failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-    signatures, etc.)</p>
+    signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1178,19 +1147,16 @@ containing each exactly 2 elements representing the indices <span class="math no
 <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> otherwise.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> – the type that will be compared to the type of the UDP</p>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDP</p>
 </dd>
-<dt class="field-even">Type t</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the UDP is of type <em>t</em> or not</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>whether the UDP is of type <em>t</em> or not</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.problem.extract" title="pygmo.problem.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.problem.extract" title="pygmo.problem.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1212,20 +1178,15 @@ The <em>seed</em> parameter must be non-negative.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDP must be able to take an <code class="docutils literal notranslate"><span class="pre">int</span></code> as input parameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – the desired seed value</p>
+<dd class="field-odd"><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the desired seed value</p>
 </dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises NotImplementedError</dt>
-<dd class="field-odd"><p>if the UDP does not provide a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method</p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>seed</em> is negative</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception raised by the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDP or failures at the intersection
-    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if the UDP does not provide a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>seed</em> is negative</p></li>
+<li><p><strong>unspecified</strong> – any exception raised by the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDP or failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1247,7 +1208,7 @@ The <em>seed</em> parameter must be non-negative.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>

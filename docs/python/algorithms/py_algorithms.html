@@ -219,71 +219,29 @@ how two of the three pheromone values are computed (in particular, the weights a
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>ker</strong> – kernel size</p></li>
-<li><p><strong>q</strong> – convergence speed parameter</p></li>
-<li><p><strong>oracle</strong> – oracle parameter</p></li>
-<li><p><strong>acc</strong> – accuracy parameter</p></li>
-<li><p><strong>threshold</strong> – threshold parameter</p></li>
-<li><p><strong>n_gen_mark</strong> – std convergence speed parameter</p></li>
-<li><p><strong>impstop</strong> – improvement stopping criterion</p></li>
-<li><p><strong>evalstop</strong> – evaluation stopping criterion</p></li>
-<li><p><strong>focus</strong> – focus parameter</p></li>
-<li><p><strong>paretomax</strong> – max number of non-dominated solutions</p></li>
-<li><p><strong>epsilon</strong> – pareto decision parameter</p></li>
-<li><p><strong>memory</strong> – memory parameter</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>ker</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – kernel size</p></li>
+<li><p><strong>q</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – convergence speed parameter</p></li>
+<li><p><strong>oracle</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – oracle parameter</p></li>
+<li><p><strong>acc</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – accuracy parameter</p></li>
+<li><p><strong>threshold</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – threshold parameter</p></li>
+<li><p><strong>n_gen_mark</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – std convergence speed parameter</p></li>
+<li><p><strong>impstop</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – improvement stopping criterion</p></li>
+<li><p><strong>evalstop</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – evaluation stopping criterion</p></li>
+<li><p><strong>focus</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – focus parameter</p></li>
+<li><p><strong>paretomax</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – max number of non-dominated solutions</p></li>
+<li><p><strong>epsilon</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – pareto decision parameter</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – memory parameter</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type ker</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type q</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type oracle</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type acc</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type threshold</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type n_gen_mark</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type impstop</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type evalstop</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type focus</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type paretomax</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type epsilon</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type memory</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if either <em>acc</em> is not &gt;=0, <em>focus</em> is not &gt;=0, <em>epsilon</em> is not in [0,1],
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>acc</em> is not &gt;=0, <em>focus</em> is not &gt;=0, <em>epsilon</em> is not in [0,1],
     <em>threshold</em> is not in [1,gen] when gen!=0 and memory==false, or
-    <em>threshold</em> is not in &gt;=1 when gen!=0 and memory==true</p>
+    <em>threshold</em> is not in &gt;=1 when gen!=0 and memory==true</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/gaco.html#_CPPv4N5pagmo4gacoE" title="pagmo::gaco"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::gaco</span></code></a>.</p>
@@ -307,7 +265,7 @@ constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -345,7 +303,7 @@ constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -358,13 +316,10 @@ constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo
 <p>This method will set the batch function evaluation scheme to be used for <a class="reference internal" href="#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal notranslate"><span class="pre">gaco</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>b</strong> – the batch function evaluation object</p>
+<dd class="field-odd"><p><strong>b</strong> (<a class="reference internal" href="../py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a>) – the batch function evaluation object</p>
 </dd>
-<dt class="field-even">Type b</dt>
-<dd class="field-even"><p><a class="reference internal" href="../py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ method</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -391,21 +346,15 @@ optimization, with continuous value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>gen</em> is not &gt;=3</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>gen</em> is not &gt;=3</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/gwo.html#_CPPv4N5pagmo3gwoE" title="pagmo::gwo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::gwo</span></code></a>.</p>
@@ -426,7 +375,7 @@ constructed with a <a class="reference internal" href="#pygmo.gwo" title="pygmo.
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -459,7 +408,7 @@ constructed with a <a class="reference internal" href="#pygmo.gwo" title="pygmo.
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -475,25 +424,16 @@ constructed with a <a class="reference internal" href="#pygmo.gwo" title="pygmo.
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>limit</strong> – maximum number of trials for abandoning a source</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>limit</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – maximum number of trials for abandoning a source</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type limit</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em>, <em>limit</em> or <em>seed</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>limit</em> is not greater than 0</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em>, <em>limit</em> or <em>seed</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>limit</em> is not greater than 0</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/bee_colony.html#_CPPv4N5pagmo10bee_colonyE" title="pagmo::bee_colony"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bee_colony</span></code></a>.</p>
@@ -514,7 +454,7 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -547,7 +487,7 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -563,41 +503,20 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>F</strong> – weight coefficient (dafault value is 0.8)</p></li>
-<li><p><strong>CR</strong> – crossover probability (dafault value is 0.9)</p></li>
-<li><p><strong>variant</strong> – mutation variant (dafault variant is 2: /rand/1/exp)</p></li>
-<li><p><strong>ftol</strong> – stopping criteria on the f tolerance (default is 1e-6)</p></li>
-<li><p><strong>xtol</strong> – stopping criteria on the x tolerance (default is 1e-6)</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>F</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – weight coefficient (dafault value is 0.8)</p></li>
+<li><p><strong>CR</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – crossover probability (dafault value is 0.9)</p></li>
+<li><p><strong>variant</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – mutation variant (dafault variant is 2: /rand/1/exp)</p></li>
+<li><p><strong>ftol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the f tolerance (default is 1e-6)</p></li>
+<li><p><strong>xtol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the x tolerance (default is 1e-6)</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type F</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type CR</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type variant</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type ftol</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type xtol</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em>, <em>variant</em> or <em>seed</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>F</em>, <em>CR</em> are not in [0,1] or <em>variant</em> is not in [1, 10]</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em>, <em>variant</em> or <em>seed</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>F</em>, <em>CR</em> are not in [0,1] or <em>variant</em> is not in [1, 10]</p></li>
+</ul>
 </dd>
 </dl>
 <p>The following variants (mutation variants) are available to create a new candidate individual:</p>
@@ -643,7 +562,7 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -677,7 +596,7 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -693,22 +612,16 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations to consider (each generation will compute the objective function once)</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations to consider (each generation will compute the objective function once)</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python
-    (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python
+    (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/sea.html#_CPPv4N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sea</span></code></a>.</p>
@@ -733,7 +646,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -771,7 +684,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -828,60 +741,28 @@ all parents and children are put in the same pool and only the best are passed t
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations.</p></li>
-<li><p><strong>cr</strong> – crossover probability.</p></li>
-<li><p><strong>eta_c</strong> – distribution index for <code class="docutils literal notranslate"><span class="pre">sbx</span></code> crossover. This parameter is inactive if other types of crossover are selected.</p></li>
-<li><p><strong>m</strong> – mutation probability.</p></li>
-<li><p><strong>param_m</strong> – distribution index (<code class="docutils literal notranslate"><span class="pre">polynomial</span></code> mutation), gaussian width (<code class="docutils literal notranslate"><span class="pre">gaussian</span></code> mutation) or inactive (<code class="docutils literal notranslate"><span class="pre">uniform</span></code> mutation)</p></li>
-<li><p><strong>param_s</strong> – the number of best individuals to use in “truncated” selection or the size of the tournament in <code class="docutils literal notranslate"><span class="pre">tournament</span></code> selection.</p></li>
-<li><p><strong>crossover</strong> – the crossover strategy. One of <code class="docutils literal notranslate"><span class="pre">exponential</span></code>, <code class="docutils literal notranslate"><span class="pre">binomial</span></code>, <code class="docutils literal notranslate"><span class="pre">single</span></code> or <code class="docutils literal notranslate"><span class="pre">sbx</span></code></p></li>
-<li><p><strong>mutation</strong> – the mutation strategy. One of <code class="docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="docutils literal notranslate"><span class="pre">polynomial</span></code> or <code class="docutils literal notranslate"><span class="pre">uniform</span></code>.</p></li>
-<li><p><strong>selection</strong> – the selection strategy. One of <code class="docutils literal notranslate"><span class="pre">tournament</span></code>, “truncated”.</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations.</p></li>
+<li><p><strong>cr</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – crossover probability.</p></li>
+<li><p><strong>eta_c</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – distribution index for <code class="docutils literal notranslate"><span class="pre">sbx</span></code> crossover. This parameter is inactive if other types of crossover are selected.</p></li>
+<li><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – mutation probability.</p></li>
+<li><p><strong>param_m</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – distribution index (<code class="docutils literal notranslate"><span class="pre">polynomial</span></code> mutation), gaussian width (<code class="docutils literal notranslate"><span class="pre">gaussian</span></code> mutation) or inactive (<code class="docutils literal notranslate"><span class="pre">uniform</span></code> mutation)</p></li>
+<li><p><strong>param_s</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – the number of best individuals to use in “truncated” selection or the size of the tournament in <code class="docutils literal notranslate"><span class="pre">tournament</span></code> selection.</p></li>
+<li><p><strong>crossover</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the crossover strategy. One of <code class="docutils literal notranslate"><span class="pre">exponential</span></code>, <code class="docutils literal notranslate"><span class="pre">binomial</span></code>, <code class="docutils literal notranslate"><span class="pre">single</span></code> or <code class="docutils literal notranslate"><span class="pre">sbx</span></code></p></li>
+<li><p><strong>mutation</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the mutation strategy. One of <code class="docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="docutils literal notranslate"><span class="pre">polynomial</span></code> or <code class="docutils literal notranslate"><span class="pre">uniform</span></code>.</p></li>
+<li><p><strong>selection</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the selection strategy. One of <code class="docutils literal notranslate"><span class="pre">tournament</span></code>, “truncated”.</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type cr</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta_c</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type m</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type param_m</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type param_s</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type crossover</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Type mutation</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-even">Type selection</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>cr</em> is not in [0,1], if <em>eta_c</em> is not in [1,100], if <em>m</em> is not in [0,1], input_f <em>mutation</em>
     is not one of <code class="docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="docutils literal notranslate"><span class="pre">uniform</span></code> or <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>, if <em>selection</em> not one of “roulette”,
     “truncated” or <em>crossover</em> is not one of <code class="docutils literal notranslate"><span class="pre">exponential</span></code>, <code class="docutils literal notranslate"><span class="pre">binomial</span></code>, <code class="docutils literal notranslate"><span class="pre">sbx</span></code>, <code class="docutils literal notranslate"><span class="pre">single</span></code>, if <em>param_m</em> is
-    not in [0,1] and <em>mutation</em> is not <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>, if <em>mutation</em> is not in [1,100] and <em>mutation</em> is <code class="docutils literal notranslate"><span class="pre">polynomial</span></code></p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python
-    (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+    not in [0,1] and <em>mutation</em> is not <code class="docutils literal notranslate"><span class="pre">polynomial</span></code>, if <em>mutation</em> is not in [1,100] and <em>mutation</em> is <code class="docutils literal notranslate"><span class="pre">polynomial</span></code></p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python
+    (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/sga.html#_CPPv4N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sga</span></code></a>.</p>
@@ -903,7 +784,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <code class="docutils literal notranslate"><span class="pre">Improvement</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>), improvement made by the last generation.</p>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -941,7 +822,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -957,41 +838,20 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>variant</strong> – mutation variant (dafault variant is 2: /rand/1/exp)</p></li>
-<li><p><strong>variant_adptv</strong> – F and CR parameter adaptation scheme to be used (one of 1..2)</p></li>
-<li><p><strong>ftol</strong> – stopping criteria on the x tolerance (default is 1e-6)</p></li>
-<li><p><strong>xtol</strong> – stopping criteria on the f tolerance (default is 1e-6)</p></li>
-<li><p><strong>memory</strong> – when true the adapted parameters CR anf F are not reset between successive calls to the evolve method</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>variant</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – mutation variant (dafault variant is 2: /rand/1/exp)</p></li>
+<li><p><strong>variant_adptv</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – F and CR parameter adaptation scheme to be used (one of 1..2)</p></li>
+<li><p><strong>ftol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the x tolerance (default is 1e-6)</p></li>
+<li><p><strong>xtol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the f tolerance (default is 1e-6)</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the adapted parameters CR anf F are not reset between successive calls to the evolve method</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type variant</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type variant_adptv</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type ftol</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type xtol</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type memory</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>variant</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>variant</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</p></li>
+</ul>
 </dd>
 </dl>
 <p>The following variants (mutation variants) are available to create a new candidate individual:</p>
@@ -1063,7 +923,7 @@ constructed with a <a class="reference internal" href="#pygmo.sade" title="pygmo
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -1097,7 +957,7 @@ constructed with a <a class="reference internal" href="#pygmo.sade" title="pygmo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -1114,41 +974,20 @@ The adaptation of the mutation variant is added to <a class="reference internal"
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>allowed_variants</strong> – allowed mutation variants, each one being a number in [1, 18]</p></li>
-<li><p><strong>variant_adptv</strong> – <em>F</em> and <em>CR</em> parameter adaptation scheme to be used (one of 1..2)</p></li>
-<li><p><strong>ftol</strong> – stopping criteria on the x tolerance (default is 1e-6)</p></li>
-<li><p><strong>xtol</strong> – stopping criteria on the f tolerance (default is 1e-6)</p></li>
-<li><p><strong>memory</strong> – when true the adapted parameters <em>CR</em> anf <em>F</em> are not reset between successive calls to the evolve method</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>allowed_variants</strong> (<em>array-like object</em>) – allowed mutation variants, each one being a number in [1, 18]</p></li>
+<li><p><strong>variant_adptv</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – <em>F</em> and <em>CR</em> parameter adaptation scheme to be used (one of 1..2)</p></li>
+<li><p><strong>ftol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the x tolerance (default is 1e-6)</p></li>
+<li><p><strong>xtol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the f tolerance (default is 1e-6)</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the adapted parameters <em>CR</em> anf <em>F</em> are not reset between successive calls to the evolve method</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type allowed_variants</dt>
-<dd class="field-odd"><p>array-like object</p>
-</dd>
-<dt class="field-even">Type variant_adptv</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type ftol</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type xtol</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type memory</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if each id in <em>variant_adptv</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em>, <em>variant</em>, <em>variant_adptv</em> or <em>seed</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if each id in <em>variant_adptv</em> is not in [1,18] or <em>variant_adptv</em> is not in [0,1]</p></li>
+</ul>
 </dd>
 </dl>
 <p>The following variants (mutation variants) can be put into <em>allowed_variants</em>:</p>
@@ -1221,7 +1060,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -1255,7 +1094,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -1271,57 +1110,24 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>cc</strong> – backward time horizon for the evolution path (by default is automatically assigned)</p></li>
-<li><p><strong>cs</strong> – makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)</p></li>
-<li><p><strong>c1</strong> – learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)</p></li>
-<li><p><strong>cmu</strong> – learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)</p></li>
-<li><p><strong>sigma0</strong> – initial step-size</p></li>
-<li><p><strong>ftol</strong> – stopping criteria on the x tolerance</p></li>
-<li><p><strong>xtol</strong> – stopping criteria on the f tolerance</p></li>
-<li><p><strong>memory</strong> – when true the adapted parameters are not reset between successive calls to the evolve method</p></li>
-<li><p><strong>force_bounds</strong> – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>cc</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – backward time horizon for the evolution path (by default is automatically assigned)</p></li>
+<li><p><strong>cs</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned)</p></li>
+<li><p><strong>c1</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – learning rate for the rank-one update of the covariance matrix (by default is automatically assigned)</p></li>
+<li><p><strong>cmu</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – learning rate for the rank-mu  update of the covariance matrix (by default is automatically assigned)</p></li>
+<li><p><strong>sigma0</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – initial step-size</p></li>
+<li><p><strong>ftol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the x tolerance</p></li>
+<li><p><strong>xtol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the f tolerance</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the adapted parameters are not reset between successive calls to the evolve method</p></li>
+<li><p><strong>force_bounds</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type cc</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type cs</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type c1</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type cmu</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type sigma0</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type ftol</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type xtol</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type memory</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Type force_bounds</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>cc</em>, <em>cs</em>, <em>c1</em>, <em>cmu</em> are not in [0,1] or -1</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>cc</em>, <em>cs</em>, <em>c1</em>, <em>cmu</em> are not in [0,1] or -1</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/cmaes.html#_CPPv4N5pagmo5cmaesE" title="pagmo::cmaes"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cmaes</span></code></a>.</p>
@@ -1344,7 +1150,7 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -1378,7 +1184,7 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -1394,59 +1200,26 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>weight_generation</strong> – method used to generate the weights, one of “grid”, “low discrepancy” or “random”</p></li>
-<li><p><strong>decomposition</strong> – method used to decompose the objectives, one of “tchebycheff”, “weighted” or “bi”</p></li>
-<li><p><strong>neighbours</strong> – size of the weight’s neighborhood</p></li>
-<li><p><strong>CR</strong> – crossover parameter in the Differential Evolution operator</p></li>
-<li><p><strong>F</strong> – parameter for the Differential Evolution operator</p></li>
-<li><p><strong>eta_m</strong> – distribution index used by the polynomial mutation</p></li>
-<li><p><strong>realb</strong> – chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)</p></li>
-<li><p><strong>limit</strong> – maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)</p></li>
-<li><p><strong>preserve_diversity</strong> – when true activates diversity preservation mechanisms</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>weight_generation</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – method used to generate the weights, one of “grid”, “low discrepancy” or “random”</p></li>
+<li><p><strong>decomposition</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – method used to decompose the objectives, one of “tchebycheff”, “weighted” or “bi”</p></li>
+<li><p><strong>neighbours</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – size of the weight’s neighborhood</p></li>
+<li><p><strong>CR</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – crossover parameter in the Differential Evolution operator</p></li>
+<li><p><strong>F</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – parameter for the Differential Evolution operator</p></li>
+<li><p><strong>eta_m</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – distribution index used by the polynomial mutation</p></li>
+<li><p><strong>realb</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – chance that the neighbourhood is considered at each generation, rather than the whole population (only if preserve_diversity is true)</p></li>
+<li><p><strong>limit</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – maximum number of copies reinserted in the population  (only if m_preserve_diversity is true)</p></li>
+<li><p><strong>preserve_diversity</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true activates diversity preservation mechanisms</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type weight_generation</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-even">Type decomposition</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Type neighbours</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type CR</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type F</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta_m</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type realb</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type limit</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type preserve_diversity</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em>, <em>neighbours</em>, <em>seed</em> or <em>limit</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if either <em>decomposition</em> is not one of ‘tchebycheff’, ‘weighted’ or ‘bi’,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em>, <em>neighbours</em>, <em>seed</em> or <em>limit</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>decomposition</em> is not one of ‘tchebycheff’, ‘weighted’ or ‘bi’,
     <em>weight_generation</em> is not one of ‘random’, ‘low discrepancy’ or ‘grid’,
-    <em>CR</em> or <em>F</em> or <em>realb</em> are not in [0.,1.] or <em>eta_m</em> is negative</p>
+    <em>CR</em> or <em>F</em> or <em>realb</em> are not in [0.,1.] or <em>eta_m</em> is negative</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/moead.html#_CPPv4N5pagmo5moeadE" title="pagmo::moead"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::moead</span></code></a>.</p>
@@ -1467,7 +1240,7 @@ constructed with a <a class="reference internal" href="#pygmo.moead" title="pygm
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -1500,7 +1273,7 @@ constructed with a <a class="reference internal" href="#pygmo.moead" title="pygm
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -1516,29 +1289,17 @@ constructed with a <a class="reference internal" href="#pygmo.moead" title="pygm
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>max_fevals</strong> – maximum number of function evaluation</p></li>
-<li><p><strong>start_range</strong> – start range (dafault value is .1)</p></li>
-<li><p><strong>stop_range</strong> – stop range (dafault value is .01)</p></li>
-<li><p><strong>reduction_coeff</strong> – range reduction coefficient (dafault value is .5)</p></li>
+<li><p><strong>max_fevals</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – maximum number of function evaluation</p></li>
+<li><p><strong>start_range</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – start range (dafault value is .1)</p></li>
+<li><p><strong>stop_range</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stop range (dafault value is .01)</p></li>
+<li><p><strong>reduction_coeff</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – range reduction coefficient (dafault value is .5)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type max_fevals</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type start_range</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type stop_range</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type reduction_coeff</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>max_fevals</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>start_range</em> is not in (0, 1], if <em>stop_range</em> is not in (<em>start_range</em>, 1] or if <em>reduction_coeff</em> is not in (0,1)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>max_fevals</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>start_range</em> is not in (0, 1], if <em>stop_range</em> is not in (<em>start_range</em>, 1] or if <em>reduction_coeff</em> is not in (0,1)</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/compass_search.html#_CPPv4N5pagmo14compass_searchE" title="pagmo::compass_search"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::compass_search</span></code></a>.</p>
@@ -1559,7 +1320,7 @@ change in the search range.</p>
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -1625,21 +1386,17 @@ replaced by the optimised individual.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual replacement policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1664,21 +1421,17 @@ for optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual selection policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1689,19 +1442,16 @@ for optimisation.</p>
 <dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
+<dd class="field-odd"><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.compass_search.selection" title="pygmo.compass_search.selection"><code class="xref py py-attr docutils literal notranslate"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.compass_search.replacement" title="pygmo.compass_search.replacement"><code class="xref py py-attr docutils literal notranslate"><span class="pre">replacement</span></code></a>)</p>
 </dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1716,44 +1466,21 @@ election/replacement policies (see <a class="reference internal" href="#pygmo.co
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Ts</strong> – starting temperature</p></li>
-<li><p><strong>Tf</strong> – final temperature</p></li>
-<li><p><strong>n_T_adj</strong> – number of temperature adjustments in the annealing schedule</p></li>
-<li><p><strong>n_range_adj</strong> – number of adjustments of the search range performed at a constant temperature</p></li>
-<li><p><strong>bin_size</strong> – number of mutations that are used to compute the acceptance rate</p></li>
-<li><p><strong>start_range</strong> – starting range for mutating the decision vector</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>Ts</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – starting temperature</p></li>
+<li><p><strong>Tf</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – final temperature</p></li>
+<li><p><strong>n_T_adj</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of temperature adjustments in the annealing schedule</p></li>
+<li><p><strong>n_range_adj</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of adjustments of the search range performed at a constant temperature</p></li>
+<li><p><strong>bin_size</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of mutations that are used to compute the acceptance rate</p></li>
+<li><p><strong>start_range</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – starting range for mutating the decision vector</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type Ts</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type Tf</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type n_T_adj</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type n_range_adj</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type bin_size</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type start_range</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>n_T_adj</em>, <em>n_range_adj</em> or <em>bin_size</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>Ts</em> is not in (0, inf), if <em>Tf</em> is not in (0, inf), if <em>Tf</em> &gt; <em>Ts</em> or if <em>start_range</em> is not in (0,1]</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>n_T_adj</em> is not strictly positive or if <em>n_range_adj</em> is not strictly positive</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>n_T_adj</em>, <em>n_range_adj</em> or <em>bin_size</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>Ts</em> is not in (0, inf), if <em>Tf</em> is not in (0, inf), if <em>Tf</em> &gt; <em>Ts</em> or if <em>start_range</em> is not in (0,1]</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>n_T_adj</em> is not strictly positive or if <em>n_range_adj</em> is not strictly positive</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/simulated_annealing.html#_CPPv4N5pagmo19simulated_annealingE" title="pagmo::simulated_annealing"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::simulated_annealing</span></code></a>.</p>
@@ -1777,7 +1504,7 @@ each verbosity fitness evaluations.</p>
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -1825,7 +1552,7 @@ each verbosity fitness evaluations.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -1851,21 +1578,17 @@ replaced by the optimised individual.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual replacement policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1890,21 +1613,17 @@ for optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual selection policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1915,19 +1634,16 @@ for optimisation.</p>
 <dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
+<dd class="field-odd"><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.simulated_annealing.selection" title="pygmo.simulated_annealing.selection"><code class="xref py py-attr docutils literal notranslate"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.simulated_annealing.replacement" title="pygmo.simulated_annealing.replacement"><code class="xref py py-attr docutils literal notranslate"><span class="pre">replacement</span></code></a>)</p>
 </dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1942,56 +1658,24 @@ election/replacement policies (see <a class="reference internal" href="#pygmo.si
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>omega</strong> – inertia weight (or constriction factor)</p></li>
-<li><p><strong>eta1</strong> – social component</p></li>
-<li><p><strong>eta2</strong> – cognitive component</p></li>
-<li><p><strong>max_vel</strong> – maximum allowed particle velocities (normalized with respect to the bounds width)</p></li>
-<li><p><strong>variant</strong> – algoritmic variant</p></li>
-<li><p><strong>neighb_type</strong> – swarm topology (defining each particle’s neighbours)</p></li>
-<li><p><strong>neighb_param</strong> – topology parameter (defines how many neighbours to consider)</p></li>
-<li><p><strong>memory</strong> – when true the velocities are not reset between successive calls to the evolve method</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>omega</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – inertia weight (or constriction factor)</p></li>
+<li><p><strong>eta1</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – social component</p></li>
+<li><p><strong>eta2</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – cognitive component</p></li>
+<li><p><strong>max_vel</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – maximum allowed particle velocities (normalized with respect to the bounds width)</p></li>
+<li><p><strong>variant</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – algoritmic variant</p></li>
+<li><p><strong>neighb_type</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – swarm topology (defining each particle’s neighbours)</p></li>
+<li><p><strong>neighb_param</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – topology parameter (defines how many neighbours to consider)</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the velocities are not reset between successive calls to the evolve method</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type omega</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta1</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type eta2</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type max_vel</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type variant</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type neighb_type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type neighb_param</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type memory</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>omega</em> is not in the [0,1] interval, if <em>eta1</em>, <em>eta2</em> are not in the [0,4] interval, if <em>max_vel</em> is not in ]0,1]</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p><em>variant</em> is not one of 1 .. 6, if <em>neighb_type</em> is not one of 1 .. 4 or if <em>neighb_param</em> is zero</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>omega</em> is not in the [0,1] interval, if <em>eta1</em>, <em>eta2</em> are not in the [0,4] interval, if <em>max_vel</em> is not in ]0,1]</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – <em>variant</em> is not one of 1 .. 6, if <em>neighb_type</em> is not one of 1 .. 4 or if <em>neighb_param</em> is zero</p></li>
+</ul>
 </dd>
 </dl>
 <p>The following variants can be selected via the <em>variant</em> parameter:</p>
@@ -2048,7 +1732,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -2086,7 +1770,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -2104,56 +1788,24 @@ at a time. Consequently, the generational PSO algorithm is suited for stochastic
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>omega</strong> – inertia weight (or constriction factor)</p></li>
-<li><p><strong>eta1</strong> – social component</p></li>
-<li><p><strong>eta2</strong> – cognitive component</p></li>
-<li><p><strong>max_vel</strong> – maximum allowed particle velocities (normalized with respect to the bounds width)</p></li>
-<li><p><strong>variant</strong> – algoritmic variant</p></li>
-<li><p><strong>neighb_type</strong> – swarm topology (defining each particle’s neighbours)</p></li>
-<li><p><strong>neighb_param</strong> – topology parameter (defines how many neighbours to consider)</p></li>
-<li><p><strong>memory</strong> – when true the velocities are not reset between successive calls to the evolve method</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>omega</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – inertia weight (or constriction factor)</p></li>
+<li><p><strong>eta1</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – social component</p></li>
+<li><p><strong>eta2</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – cognitive component</p></li>
+<li><p><strong>max_vel</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – maximum allowed particle velocities (normalized with respect to the bounds width)</p></li>
+<li><p><strong>variant</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – algoritmic variant</p></li>
+<li><p><strong>neighb_type</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – swarm topology (defining each particle’s neighbours)</p></li>
+<li><p><strong>neighb_param</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – topology parameter (defines how many neighbours to consider)</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the velocities are not reset between successive calls to the evolve method</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type omega</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta1</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type eta2</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type max_vel</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type variant</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type neighb_type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type neighb_param</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Type memory</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>omega</em> is not in the [0,1] interval, if <em>eta1</em>, <em>eta2</em> are not in the [0,1] interval, if <em>max_vel</em> is not in ]0,1]</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p><em>variant</em> is not one of 1 .. 6, if <em>neighb_type</em> is not one of 1 .. 4 or if <em>neighb_param</em> is zero</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>omega</em> is not in the [0,1] interval, if <em>eta1</em>, <em>eta2</em> are not in the [0,1] interval, if <em>max_vel</em> is not in ]0,1]</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – <em>variant</em> is not one of 1 .. 6, if <em>neighb_type</em> is not one of 1 .. 4 or if <em>neighb_param</em> is zero</p></li>
+</ul>
 </dd>
 </dl>
 <p>The following variants can be selected via the <em>variant</em> parameter:</p>
@@ -2210,7 +1862,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -2248,7 +1900,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -2264,38 +1916,20 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>cr</strong> – crossover probability</p></li>
-<li><p><strong>eta_c</strong> – distribution index for crossover</p></li>
-<li><p><strong>m</strong> – mutation probability</p></li>
-<li><p><strong>eta_m</strong> – distribution index for mutation</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>cr</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – crossover probability</p></li>
+<li><p><strong>eta_c</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – distribution index for crossover</p></li>
+<li><p><strong>m</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – mutation probability</p></li>
+<li><p><strong>eta_m</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – distribution index for mutation</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type cr</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta_c</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type m</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta_m</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if either <em>cr</em> is not in [0,1[, <em>eta_c</em> is not in [0,100[, <em>m</em> is not in [0,1], or
-    <em>eta_m</em> is not in [0,100[</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>cr</em> is not in [0,1[, <em>eta_c</em> is not in [0,100[, <em>m</em> is not in [0,1], or
+    <em>eta_m</em> is not in [0,100[</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/nsga2.html#_CPPv4N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nsga2</span></code></a>.</p>
@@ -2315,7 +1949,7 @@ constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygm
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -2347,7 +1981,7 @@ constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygm
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -2391,30 +2025,21 @@ cluster optimization.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> or a user-defined algorithm, either C++ or Python (if
 <em>algo</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.compass_search" title="pygmo.compass_search"><code class="xref py py-class docutils literal notranslate"><span class="pre">compass_search</span></code></a> algorithm will be used in its stead)</p></li>
-<li><p><strong>stop</strong> – consecutive runs of the inner algorithm that need to result in no improvement for
+<li><p><strong>stop</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – consecutive runs of the inner algorithm that need to result in no improvement for
 <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbh</span></code></a> to stop</p></li>
-<li><p><strong>perturb</strong> – the perturbation to be applied to each component</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (if <em>seed</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a
+<li><p><strong>perturb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em> or </em><em>array-like object</em>) – the perturbation to be applied to each component</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – seed used by the internal random number generator (if <em>seed</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a
 randomly-generated value will be used in its stead)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type stop</dt>
-<dd class="field-even"><p>int</p>
-</dd>
-<dt class="field-odd">Type perturb</dt>
-<dd class="field-odd"><p>float or array-like object</p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p>int</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>perturb</em> (or one of its components, if <em>perturb</em> is an array) is not in the
-    (0,1] range</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a>, or by
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>perturb</em> (or one of its components, if <em>perturb</em> is an array) is not in the
+    (0,1] range</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a>, or by
     failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-    signatures, etc.)</p>
+    signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="method">
@@ -2435,7 +2060,7 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -2467,7 +2092,7 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the perturbation vector</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>1D NumPy float array</p>
 </dd>
 </dl>
@@ -2481,7 +2106,7 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the seed value</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -2495,7 +2120,7 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the verbosity level</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -2510,7 +2135,7 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a reference to the inner algorithm</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
 </dd>
 </dl>
@@ -2522,13 +2147,10 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <dd><p>Set the perturbation vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>perturb</strong> – perturb the perturbation to be applied to each component</p>
+<dd class="field-odd"><p><strong>perturb</strong> (<em>array-like object</em>) – perturb the perturbation to be applied to each component</p>
 </dd>
-<dt class="field-even">Type perturb</dt>
-<dd class="field-even"><p>array-like object</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
     mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -2600,26 +2222,20 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>iter</strong> – number of iterations (i.e., calls to the inner algorithm evolve)</p></li>
+<li><p><strong>iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of iterations (i.e., calls to the inner algorithm evolve)</p></li>
 <li><p><strong>algo</strong> – an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> or a user-defined algorithm, either C++ or Python (if
 <em>algo</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal notranslate"><span class="pre">de</span></code></a> algorithm will be used in its stead)</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (if <em>seed</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – seed used by the internal random number generator (if <em>seed</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a
 randomly-generated value will be used in its stead)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type iter</dt>
-<dd class="field-even"><p>int</p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>iters</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a>, or by
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>iters</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a>, or by
     failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-    signatures, etc.)</p>
+    signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="method">
@@ -2643,7 +2259,7 @@ with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="p
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -2679,7 +2295,7 @@ with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="p
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a reference to the inner algorithm</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
 </dd>
 </dl>
@@ -2818,20 +2434,15 @@ description of each supported solver.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>solver</strong> – the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal notranslate"><span class="pre">nlopt</span></code></a> object</p>
+<dd class="field-odd"><p><strong>solver</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal notranslate"><span class="pre">nlopt</span></code></a> object</p>
 </dd>
-<dt class="field-even">Type solver</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Raises RuntimeError</dt>
-<dd class="field-odd"><p>if the NLopt version is not at least 2</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>solver</em> is not one of the allowed algorithm names</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – if the NLopt version is not at least 2</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>solver</em> is not one of the allowed algorithm names</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2893,15 +2504,15 @@ Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -2917,15 +2528,15 @@ function value. Defaults to 0 (that is, this stopping criterion is disabled by d
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -2938,11 +2549,11 @@ function value. Defaults to 0 (that is, this stopping criterion is disabled by d
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the NLopt return code for the last optimisation run, or <code class="docutils literal notranslate"><span class="pre">NLOPT_SUCCESS</span></code> if no optimisations have been run yet</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -2964,11 +2575,11 @@ function value. Defaults to 0 (that is, this stopping criterion is disabled by d
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the optimisation log</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -2982,11 +2593,11 @@ function value. Defaults to 0 (that is, this stopping criterion is disabled by d
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the name of the NLopt solver used during construction</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3015,11 +2626,11 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the local optimizer, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if not set</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal notranslate"><span class="pre">nlopt</span></code></a></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python
     (e.g., type conversion errors, mismatched function signatures, etc.), when setting the property</p>
 </dd>
 </dl>
@@ -3035,11 +2646,11 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">maxeval</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3055,11 +2666,11 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">maxtime</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3085,21 +2696,17 @@ replaced by the optimised individual.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual replacement policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3124,21 +2731,17 @@ for optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual selection policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3149,19 +2752,16 @@ for optimisation.</p>
 <dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
+<dd class="field-odd"><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.nlopt.selection" title="pygmo.nlopt.selection"><code class="xref py py-attr docutils literal notranslate"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.nlopt.replacement" title="pygmo.nlopt.replacement"><code class="xref py py-attr docutils literal notranslate"><span class="pre">replacement</span></code></a>)</p>
 </dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3177,15 +2777,15 @@ is disabled by default).</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">stopval</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3201,15 +2801,15 @@ by default).</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3225,15 +2825,15 @@ Defaults to 1E-8.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if, when setting this property, a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is passed</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3352,7 +2952,7 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a name-value dictionary of optimisation integer options</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">int</span></code> pairs</p>
 </dd>
 </dl>
@@ -3374,11 +2974,11 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the Ipopt return code for the last optimisation run, or <code class="docutils literal notranslate"><span class="pre">Ipopt::Solve_Succeeded</span></code> if no optimisations have been run yet</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3407,11 +3007,11 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the optimisation log</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3438,7 +3038,7 @@ Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity setti
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a name-value dictionary of optimisation numeric options</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">float</span></code> pairs</p>
 </dd>
 </dl>
@@ -3460,7 +3060,7 @@ Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity setti
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a name-value dictionary of optimisation string options</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">str</span></code> pairs</p>
 </dd>
 </dl>
@@ -3494,21 +3094,17 @@ replaced by the optimised individual.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual replacement policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3584,21 +3180,17 @@ for optimisation.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the individual selection policy or index</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if the attribute is set to an invalid string</p>
-</dd>
-<dt class="field-odd">Raises TypeError</dt>
-<dd class="field-odd"><p>if the attribute is set to a value of an invalid type</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the attribute is set to an invalid string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if the attribute is set to a value of an invalid type</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3612,18 +3204,12 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – the name of the option</p></li>
-<li><p><strong>value</strong> – the value of the option</p></li>
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the name of the option</p></li>
+<li><p><strong>value</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the value of the option</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type name</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Type value</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3654,13 +3240,10 @@ It is equivalent to calling <a class="reference internal" href="#pygmo.ipopt.set
 as arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>opts</strong> – the name-value map that will be used to set the options</p>
+<dd class="field-odd"><p><strong>opts</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">int</span></code> pairs) – the name-value map that will be used to set the options</p>
 </dd>
-<dt class="field-even">Type opts</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">int</span></code> pairs</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3691,18 +3274,12 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – the name of the option</p></li>
-<li><p><strong>value</strong> – the value of the option</p></li>
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the name of the option</p></li>
+<li><p><strong>value</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – the value of the option</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type name</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Type value</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3733,13 +3310,10 @@ It is equivalent to calling <a class="reference internal" href="#pygmo.ipopt.set
 as arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>opts</strong> – the name-value map that will be used to set the options</p>
+<dd class="field-odd"><p><strong>opts</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">float</span></code> pairs) – the name-value map that will be used to set the options</p>
 </dd>
-<dt class="field-even">Type opts</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">float</span></code> pairs</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3767,19 +3341,16 @@ as arguments.</p>
 <dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
+<dd class="field-odd"><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>
 election/replacement policies (see <a class="reference internal" href="#pygmo.ipopt.selection" title="pygmo.ipopt.selection"><code class="xref py py-attr docutils literal notranslate"><span class="pre">selection</span></code></a> and
 <a class="reference internal" href="#pygmo.ipopt.replacement" title="pygmo.ipopt.replacement"><code class="xref py py-attr docutils literal notranslate"><span class="pre">replacement</span></code></a>)</p>
 </dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if the attribute is set to an integer which is negative or too large</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
-    type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if the attribute is set to an integer which is negative or too large</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -3793,18 +3364,12 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – the name of the option</p></li>
-<li><p><strong>value</strong> – the value of the option</p></li>
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the name of the option</p></li>
+<li><p><strong>value</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – the value of the option</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type name</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Type value</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3836,13 +3401,10 @@ It is equivalent to calling <a class="reference internal" href="#pygmo.ipopt.set
 as arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>opts</strong> – the name-value map that will be used to set the options</p>
+<dd class="field-odd"><p><strong>opts</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">str</span></code> pairs) – the name-value map that will be used to set the options</p>
 </dd>
-<dt class="field-even">Type opts</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code>-<code class="docutils literal notranslate"><span class="pre">str</span></code> pairs</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python (e.g.,
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p>
 </dd>
 </dl>
@@ -3897,46 +3459,23 @@ Such extension is original with pygmo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations to consider (each generation will compute the objective function once)</p></li>
-<li><p><strong>phmcr</strong> – probability of choosing from memory (similar to a crossover probability)</p></li>
-<li><p><strong>ppar_min</strong> – minimum pitch adjustment rate. (similar to a mutation rate)</p></li>
-<li><p><strong>ppar_max</strong> – maximum pitch adjustment rate. (similar to a mutation rate)</p></li>
-<li><p><strong>bw_min</strong> – minimum distance bandwidth. (similar to a mutation width)</p></li>
-<li><p><strong>bw_max</strong> – maximum distance bandwidth. (similar to a mutation width)</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations to consider (each generation will compute the objective function once)</p></li>
+<li><p><strong>phmcr</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – probability of choosing from memory (similar to a crossover probability)</p></li>
+<li><p><strong>ppar_min</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – minimum pitch adjustment rate. (similar to a mutation rate)</p></li>
+<li><p><strong>ppar_max</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – maximum pitch adjustment rate. (similar to a mutation rate)</p></li>
+<li><p><strong>bw_min</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – minimum distance bandwidth. (similar to a mutation width)</p></li>
+<li><p><strong>bw_max</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – maximum distance bandwidth. (similar to a mutation width)</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type phmcr</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type ppar_min</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type ppar_max</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type bw_min</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type bw_max</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type seed</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises ValueError</dt>
-<dd class="field-even"><p>if <em>phmcr</em> is not in the ]0,1[ interval, <em>ppar_min</em> or <em>ppar_max</em> are not in the ]0,1[
-    interval, min/max quantities are less than/greater than max/min quantities, <em>bw_min</em> is negative.</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by failures at the intersection between C++ and Python
-    (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>phmcr</em> is not in the ]0,1[ interval, <em>ppar_min</em> or <em>ppar_max</em> are not in the ]0,1[
+    interval, min/max quantities are less than/greater than max/min quantities, <em>bw_min</em> is negative.</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python
+    (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/ihs.html#_CPPv4N5pagmo3ihsE" title="pagmo::ihs"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ihs</span></code></a>.</p>
@@ -3963,7 +3502,7 @@ A verbosity larger than 1 will produce a log with one entry each verbosity fitne
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -4002,7 +3541,7 @@ A verbosity larger than 1 will produce a log with one entry each verbosity fitne
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -4018,53 +3557,23 @@ A verbosity larger than 1 will produce a log with one entry each verbosity fitne
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gen</strong> – number of generations</p></li>
-<li><p><strong>eta_mu</strong> – learning rate for mean update (if -1 will be automatically selected to be 1)</p></li>
-<li><p><strong>eta_sigma</strong> – learning rate for step-size update (if -1 will be automatically selected)</p></li>
-<li><p><strong>eta_b</strong> – learning rate for the covariance matrix update (if -1 will be automatically selected)</p></li>
-<li><p><strong>sigma0</strong> – the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)</p></li>
-<li><p><strong>ftol</strong> – stopping criteria on the x tolerance</p></li>
-<li><p><strong>xtol</strong> – stopping criteria on the f tolerance</p></li>
-<li><p><strong>memory</strong> – when true the adapted parameters are not reset between successive calls to the evolve method</p></li>
-<li><p><strong>force_bounds</strong> – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen</p></li>
-<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
+<li><p><strong>gen</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – number of generations</p></li>
+<li><p><strong>eta_mu</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – learning rate for mean update (if -1 will be automatically selected to be 1)</p></li>
+<li><p><strong>eta_sigma</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – learning rate for step-size update (if -1 will be automatically selected)</p></li>
+<li><p><strong>eta_b</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – learning rate for the covariance matrix update (if -1 will be automatically selected)</p></li>
+<li><p><strong>sigma0</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – the initial search width will be sigma0 * (ub - lb) (if -1 will be automatically selected to be 1)</p></li>
+<li><p><strong>ftol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the x tolerance</p></li>
+<li><p><strong>xtol</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – stopping criteria on the f tolerance</p></li>
+<li><p><strong>memory</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the adapted parameters are not reset between successive calls to the evolve method</p></li>
+<li><p><strong>force_bounds</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation  mechanism will worsen</p></li>
+<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type gen</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Type eta_mu</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type eta_sigma</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type eta_b</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type sigma0</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type ftol</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-even">Type xtol</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Type memory</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-even">Type force_bounds</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
-</dd>
-<dt class="field-odd">Type seed</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-even">Raises OverflowError</dt>
-<dd class="field-even"><p>if <em>gen</em> is negative or greater than an implementation-defined value</p>
-</dd>
-<dt class="field-odd">Raises ValueError</dt>
-<dd class="field-odd"><p>if <em>eta_mu</em>, <em>eta_sigma</em>, <em>eta_b</em>, <em>sigma0</em> are not in ]0,1] or -1</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>eta_mu</em>, <em>eta_sigma</em>, <em>eta_b</em>, <em>sigma0</em> are not in ]0,1] or -1</p></li>
+</ul>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/xnes.html#_CPPv4N5pagmo4xnesE" title="pagmo::xnes"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::xnes</span></code></a>.</p>
@@ -4087,7 +3596,7 @@ constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo
 </ul>
 </p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
 </dd>
 </dl>
@@ -4121,7 +3630,7 @@ constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the random seed of the population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -4145,7 +3654,7 @@ constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>

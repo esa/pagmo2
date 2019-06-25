@@ -186,30 +186,21 @@ confident the estimate will be correct.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>callable</strong> – The function we want to estimate sparsity (typically a fitness).</p></li>
-<li><p><strong>x</strong> – decision vector to use when testing for sparisty.</p></li>
-<li><p><strong>dx</strong> – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
+<li><p><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</p></li>
+<li><p><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</p></li>
+<li><p><strong>dx</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type callable</dt>
-<dd class="field-even"><p>a callable object</p>
-</dd>
-<dt class="field-odd">Type x</dt>
-<dd class="field-odd"><p>array-like object</p>
-</dd>
-<dt class="field-even">Type dx</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p>
-</dd>
-<dt class="field-even">Raises TypeError</dt>
-<dd class="field-even"><p>if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>unspecified</strong> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the sparsity_pattern of <em>callable</em> detected around <em>x</em></p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>2D NumPy float array</p>
 </dd>
 </dl>
@@ -241,30 +232,21 @@ and contain, in the lexicographic order requested by <a class="reference interna
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>callable</strong> – The function we want to estimate sparsity (typically a fitness).</p></li>
-<li><p><strong>x</strong> – decision vector to use when testing for sparisty.</p></li>
-<li><p><strong>dx</strong> – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
+<li><p><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</p></li>
+<li><p><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</p></li>
+<li><p><strong>dx</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type callable</dt>
-<dd class="field-even"><p>a callable object</p>
-</dd>
-<dt class="field-odd">Type x</dt>
-<dd class="field-odd"><p>array-like object</p>
-</dd>
-<dt class="field-even">Type dx</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p>
-</dd>
-<dt class="field-even">Raises TypeError</dt>
-<dd class="field-even"><p>if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>unspecified</strong> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the dense gradient of <em>callable</em> detected around <em>x</em></p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>2D NumPy float array</p>
 </dd>
 </dl>
@@ -296,30 +278,21 @@ and contain, in the lexicographic order requested by <a class="reference interna
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>callable</strong> – The function we want to estimate sparsity (typically a fitness).</p></li>
-<li><p><strong>x</strong> – decision vector to use when testing for sparisty.</p></li>
-<li><p><strong>dx</strong> – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
+<li><p><strong>callable</strong> (<em>a callable object</em>) – The function we want to estimate sparsity (typically a fitness).</p></li>
+<li><p><strong>x</strong> (<em>array-like object</em>) – decision vector to use when testing for sparisty.</p></li>
+<li><p><strong>dx</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – To detect the sparsity each component of <em>x</em> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|,1) dx\)</span>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type callable</dt>
-<dd class="field-even"><p>a callable object</p>
-</dd>
-<dt class="field-odd">Type x</dt>
-<dd class="field-odd"><p>array-like object</p>
-</dd>
-<dt class="field-even">Type dx</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p>
-</dd>
-<dt class="field-even">Raises TypeError</dt>
-<dd class="field-even"><p>if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>unspecified</strong> – any exception thrown by the <em>callable</em> object when called on <em>x</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>x</em> cannot be converted to a vector of floats or <em>callable</em> is not callable.</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the dense gradient of <em>callable</em> detected around <em>x</em></p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p>2D NumPy float array</p>
 </dd>
 </dl>
@@ -348,7 +321,7 @@ and contain, in the lexicographic order requested by <a class="reference interna
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>

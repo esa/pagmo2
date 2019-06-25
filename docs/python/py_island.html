@@ -248,47 +248,28 @@ and the UDI, if not specified, will be chosen according to the heuristic detaile
 <p>If the keyword arguments list is invalid, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> exception will be raised.</p>
 <p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Keyword udi</dt>
-<dd class="field-odd"><p>a user-defined island, either Python or C++</p>
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>udi</strong> – a user-defined island, either Python or C++</p></li>
+<li><p><strong>algo</strong> – a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p></li>
+<li><p><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – a population</p></li>
+<li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of individuals</p></li>
+<li><p><strong>b</strong> – a user-defined batch fitness evaluator (either Python or C++), or an instance of <a class="reference internal" href="py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a></p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the random seed (if not specified, it will be randomly-generated)</p></li>
+</ul>
 </dd>
-<dt class="field-even">Keyword algo</dt>
-<dd class="field-even"><p>a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
-</dd>
-<dt class="field-odd">Keyword pop</dt>
-<dd class="field-odd"><p>a population</p>
-</dd>
-<dt class="field-even">Kwtype pop</dt>
-<dd class="field-even"><p><a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
-</dd>
-<dt class="field-odd">Keyword prob</dt>
-<dd class="field-odd"><p>a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p>
-</dd>
-<dt class="field-even">Keyword size</dt>
-<dd class="field-even"><p>the number of individuals</p>
-</dd>
-<dt class="field-odd">Kwtype size</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Keyword b</dt>
-<dd class="field-even"><p>a user-defined batch fitness evaluator (either Python or C++), or an instance of <a class="reference internal" href="py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a></p>
-</dd>
-<dt class="field-odd">Keyword seed</dt>
-<dd class="field-odd"><p>the random seed (if not specified, it will be randomly-generated)</p>
-</dd>
-<dt class="field-even">Kwtype seed</dt>
-<dd class="field-even"><p>int</p>
-</dd>
-<dt class="field-odd">Raises KeyError</dt>
-<dd class="field-odd"><p>if the set of keyword arguments is invalid</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by:
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><strong>KeyError</strong></a> – if the set of keyword arguments is invalid</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by:
     
     * the invoked C++ constructors,
     * the deep copy of the UDI,
     * the constructors of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> and <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>,
     * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p>
+      signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="method">
@@ -308,17 +289,14 @@ tasks have been completed, and to fetch exceptions raised during the execution o
 attribute can be used to query the status of the asynchronous operations in the island.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> – the number of times the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will be called within the evolution task</p>
+<dd class="field-odd"><p><strong>n</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of times the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will be called within the evolution task</p>
 </dd>
-<dt class="field-even">Type n</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
-</dd>
-<dt class="field-odd">Raises OverflowError</dt>
-<dd class="field-odd"><p>if <em>n</em> is negative or larger than an implementation-defined value</p>
-</dd>
-<dt class="field-even">Raises unspecified</dt>
-<dd class="field-even"><p>any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
-    Python (e.g., type conversion errors, mismatched function signatures, etc.)</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>n</em> is negative or larger than an implementation-defined value</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
+    Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -341,16 +319,13 @@ UDI will be returned (this allows to extract a Python UDI without knowing its ty
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> – the type of the user-defined island to extract</p>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type of the user-defined island to extract</p>
 </dd>
-<dt class="field-even">Type t</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to the internal user-defined island, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a reference to the internal user-defined island, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
-</dd>
-<dt class="field-even">Raises TypeError</dt>
-<dd class="field-even"><p>if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -383,11 +358,11 @@ UDI will be returned (this allows to extract a Python UDI without knowing its ty
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a copy of the island’s algorithm</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ method</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -404,11 +379,11 @@ method. Otherwise, an empty string will be returned.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>extra info about the UDI</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDI</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDI</p>
 </dd>
 </dl>
 </dd></dl>
@@ -425,11 +400,11 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the name of the UDI</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method of the UDI</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method of the UDI</p>
 </dd>
 </dl>
 </dd></dl>
@@ -443,28 +418,11 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a copy of the island’s population</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
 </dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ method</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pygmo.island.get_thread_safety">
-<code class="sig-name descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.get_thread_safety" title="Permalink to this definition">¶</a></dt>
-<dd><p>It is safe to call this method while the island is evolving.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a tuple containing the <a class="reference internal" href="py_misc.html#pygmo.thread_safety" title="pygmo.thread_safety"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_safety</span></code></a> levels of the island’s algorithm and problem</p>
-</dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ method</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -477,19 +435,16 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> otherwise.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> – the type that will be compared to the type of the UDI</p>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDI</p>
 </dd>
-<dt class="field-even">Type t</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the UDI is of type <em>t</em> or not</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>whether the UDI is of type <em>t</em> or not</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
 </dd>
-<dt class="field-even">Rtype</dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#pygmo.island.extract" title="pygmo.island.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.island.extract" title="pygmo.island.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -501,13 +456,10 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 <p>It is safe to call this method while the island is evolving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>algo</strong> – the algorithm that will be copied into the island</p>
+<dd class="field-odd"><p><strong>algo</strong> (<a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>) – the algorithm that will be copied into the island</p>
 </dd>
-<dt class="field-even">Type algo</dt>
-<dd class="field-even"><p><a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ method</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -519,13 +471,10 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 <p>It is safe to call this method while the island is evolving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pop</strong> – the population that will be copied into the island</p>
+<dd class="field-odd"><p><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – the population that will be copied into the island</p>
 </dd>
-<dt class="field-even">Type pop</dt>
-<dd class="field-even"><p><a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a></p>
-</dd>
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the underlying C++ method</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -553,7 +502,7 @@ will always return either <a class="reference internal" href="py_misc.html#pygmo
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag indicating the current status of asynchronous operations in the island</p>
 </dd>
-<dt class="field-even">Rtype</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="py_misc.html#pygmo.evolve_status" title="pygmo.evolve_status"><code class="xref py py-class docutils literal notranslate"><span class="pre">evolve_status</span></code></a></p>
 </dd>
 </dl>
@@ -580,8 +529,8 @@ from all the other tasks that threw will be ignored.</p>
 <p>Note that <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a> resets the status of the island: after a call to <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>,
 <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a> will always return <a class="reference internal" href="py_misc.html#pygmo.evolve_status.idle" title="pygmo.evolve_status.idle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pygmo.evolve_status.idle</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by evolution tasks or by the underlying C++ method</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by evolution tasks or by the underlying C++ method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -603,7 +552,7 @@ from all the other tasks that threw will be ignored.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>
