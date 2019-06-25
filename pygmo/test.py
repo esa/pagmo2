@@ -454,8 +454,9 @@ class gaco_test_case(_ut.TestCase):
         a = algorithm(uda)
         self.assertEqual(str(a), str(loads(dumps(a))))
         log = uda.get_log()
-        uda.set_bfe(b = bfe())
+        uda.set_bfe(b=bfe())
         uda.set_bfe(bfe())
+
 
 class gwo_test_case(_ut.TestCase):
     """Test case for the UDA gwo
@@ -1079,11 +1080,12 @@ class minlp_rastrigin_test_case(_ut.TestCase):
         self.assertTrue(int(pop.get_x()[0][0]) != pop.get_x()[0][0])
         self.assertTrue(int(pop.get_x()[0][1]) != pop.get_x()[0][1])
 
+
 class wfg_test_case(_ut.TestCase):
     """Test case for the UDP wfg
-        
-        """
-    
+
+    """
+
     def runTest(self):
         from .core import wfg, problem, population
         udp = wfg(prob_id=1, dim_dvs=5, dim_obj=3, dim_k=4)
@@ -1091,6 +1093,55 @@ class wfg_test_case(_ut.TestCase):
         pop = population(udp, 20)
         self.assertTrue(prob.get_nx() == 5)
         self.assertTrue(prob.get_nobj() == 3)
+
+
+class thread_island_torture_test_case(_ut.TestCase):
+    """Stress test for thread_island
+
+    """
+
+    def runTest(self):
+        from .core import thread_island, population, algorithm, island
+        from . import evolve_status
+
+        pop = population(prob=_prob(), size=5)
+        algo = algorithm()
+        udi = thread_island()
+
+        for i in range(50):
+            l = []
+            for _ in range(100):
+                l.append(island(udi=udi, pop=pop, algo=algo))
+                l[-1].evolve()
+                l[-1].get_algorithm()
+                l[-1].get_population()
+
+            for i in l:
+                i.get_algorithm()
+                i.get_population()
+                i.wait()
+                self.assertTrue(i.status == evolve_status.idle_error)
+
+        class my_algo(object):
+            def evolve(self, pop):
+                return pop
+
+        algo = algorithm(my_algo())
+
+        for i in range(50):
+            l = []
+            for _ in range(100):
+                l.append(island(udi=udi, pop=pop, algo=algo))
+                l[-1].evolve()
+                l[-1].get_algorithm()
+                l[-1].get_population()
+
+            for i in l:
+                i.get_algorithm()
+                i.get_population()
+                i.wait()
+                self.assertTrue(i.status == evolve_status.idle_error)
+
 
 class rastrigin_test_case(_ut.TestCase):
     """Test case for the Rastrigin function
@@ -2072,6 +2123,7 @@ def run_test_suite(level=0):
 
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
+    suite.addTest(thread_island_torture_test_case())
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
     suite.addTest(_island_test.island_test_case())

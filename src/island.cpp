@@ -28,7 +28,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/config.hpp>
 
-#include <array>
 #include <cassert>
 #include <chrono>
 #include <exception>
@@ -456,9 +455,22 @@ algorithm island::get_algorithm() const
     // by set_algorithm() below, and we guarantee strong thread safety for this method.
     // NOTE: it might be possible to replace the locks with atomic operations:
     // http://en.cppreference.com/w/cpp/memory/shared_ptr/atomic
-    std::unique_lock<std::mutex> lock(m_ptr->algo_mutex);
-    auto new_algo_ptr = m_ptr->algo;
-    lock.unlock();
+
+    // Create a new reference to the internal algo
+    // (this involves only C++ operations).
+    std::shared_ptr<algorithm> new_algo_ptr;
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
+        new_algo_ptr = m_ptr->algo;
+    }
+
+    // Return a copy.
+    // NOTE: when exiting the function, the dtor of new_algo_ptr
+    // will be called. This will result in the refcount
+    // decreasing, and, if new_algo_ptr is the last existing reference,
+    // in the call of the dtor of the internal algorithm. This could
+    // be the case, for instance, if we are using set_algorithm() from
+    // another thread.
     return *new_algo_ptr;
 }
 
@@ -471,11 +483,30 @@ algorithm island::get_algorithm() const
  * @throws unspecified any exception thrown by threading primitives, memory allocation erros
  * or the invoked copy constructor.
  */
-void island::set_algorithm(algorithm algo)
+void island::set_algorithm(const algorithm &algo)
 {
-    auto new_algo_ptr = std::make_shared<algorithm>(std::move(algo));
-    std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
-    m_ptr->algo = new_algo_ptr;
+    // Step 1: create a new shared ptr to a copy of algo.
+    auto new_algo_ptr = std::make_shared<algorithm>(algo);
+
+    // Step 2: init an empty algorithm pointer.
+    std::shared_ptr<algorithm> old_ptr;
+
+    // Step 3: store a reference to the old algo
+    // in old_ptr, and assign a reference to the
+    // new algo.
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
+        old_ptr = m_ptr->algo;
+        // NOTE: this assignment will never invoke
+        // the destructor of the object pointed-to
+        // by m_ptr->algo, as we made sure
+        // to create a new reference above.
+        m_ptr->algo = new_algo_ptr;
+    }
+
+    // NOTE: upon exit, the refcount of old_ptr and
+    // new_algo_ptr will be decreased, possibly invoking
+    // the dtor of the contained objects.
 }
 
 /// Get the population.
@@ -489,9 +520,13 @@ void island::set_algorithm(algorithm algo)
  */
 population island::get_population() const
 {
-    std::unique_lock<std::mutex> lock(m_ptr->pop_mutex);
-    auto new_pop_ptr = m_ptr->pop;
-    lock.unlock();
+    // NOTE: same pattern as in get_algorithm().
+    std::shared_ptr<population> new_pop_ptr;
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
+        new_pop_ptr = m_ptr->pop;
+    }
+
     return *new_pop_ptr;
 }
 
@@ -504,34 +539,18 @@ population island::get_population() const
  * @throws unspecified any exception thrown by threading primitives, memory allocation errors
  * or by the invoked copy constructor.
  */
-void island::set_population(population pop)
+void island::set_population(const population &pop)
 {
-    auto new_pop_ptr = std::make_shared<population>(std::move(pop));
-    std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-    m_ptr->pop = new_pop_ptr;
-}
+    // Same pattern as in set_algorithm().
+    auto new_pop_ptr = std::make_shared<population>(pop);
 
-/// Get the thread safety of the island's members.
-/**
- * It is safe to call this method while the island is evolving.
- *
- * @return an array containing the pagmo::thread_safety values for the internal algorithm and population's
- * problem (as returned by pagmo::algorithm::get_thread_safety() and pagmo::problem::get_thread_safety()).
- *
- * @throws unspecified any exception thrown by threading primitives.
- */
-std::array<thread_safety, 2> island::get_thread_safety() const
-{
-    std::array<thread_safety, 2> retval;
-    {
-        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
-        retval[0] = m_ptr->algo->get_thread_safety();
-    }
+    std::shared_ptr<population> old_ptr;
+
     {
         std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-        retval[1] = m_ptr->pop->get_problem().get_thread_safety();
+        old_ptr = m_ptr->pop;
+        m_ptr->pop = new_pop_ptr;
     }
-    return retval;
 }
 
 /// Island's name.

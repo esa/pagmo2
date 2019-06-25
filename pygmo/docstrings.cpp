@@ -4487,21 +4487,6 @@ Raises:
 )";
 }
 
-std::string island_get_thread_safety_docstring()
-{
-    return R"(get_thread_safety()
-
-It is safe to call this method while the island is evolving.
-
-Returns:
-    ``tuple``: a tuple containing the :class:`~pygmo.thread_safety` levels of the island's algorithm and problem
-
-Raises:
-    unspecified: any exception thrown by the underlying C++ method
-
-)";
-}
-
 std::string island_get_name_docstring()
 {
     return R"(get_name()

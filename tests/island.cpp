@@ -256,66 +256,6 @@ BOOST_AUTO_TEST_CASE(island_get_wait_busy)
     isl.wait();
 }
 
-#if !defined(PAGMO_WITH_FORK_ISLAND)
-
-struct prob_02 {
-    vector_double fitness(const vector_double &) const
-    {
-        return {.5};
-    }
-    std::pair<vector_double, vector_double> get_bounds() const
-    {
-        return {{0.}, {1.}};
-    }
-    thread_safety get_thread_safety() const
-    {
-        return thread_safety::none;
-    }
-};
-
-struct algo_01 {
-    population evolve(const population &pop) const
-    {
-        return pop;
-    }
-    thread_safety get_thread_safety() const
-    {
-        return thread_safety::none;
-    }
-};
-
-BOOST_AUTO_TEST_CASE(island_thread_safety)
-{
-    island isl{de{}, population{rosenbrock{}, 25}};
-    auto ts = isl.get_thread_safety();
-    BOOST_CHECK(ts[0] == thread_safety::basic);
-    BOOST_CHECK(ts[1] == thread_safety::constant);
-    isl.evolve();
-    isl.wait_check();
-    isl = island{de{}, population{prob_02{}, 25}};
-    ts = isl.get_thread_safety();
-    BOOST_CHECK(ts[0] == thread_safety::basic);
-    BOOST_CHECK(ts[1] == thread_safety::none);
-    isl.evolve();
-    isl.wait();
-    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
-    isl = island{algo_01{}, population{rosenbrock{}, 25}};
-    ts = isl.get_thread_safety();
-    BOOST_CHECK(ts[0] == thread_safety::none);
-    BOOST_CHECK(ts[1] == thread_safety::constant);
-    isl.evolve();
-    isl.wait();
-    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
-    isl = island{algo_01{}, population{prob_02{}, 25}};
-    ts = isl.get_thread_safety();
-    BOOST_CHECK(ts[0] == thread_safety::none);
-    BOOST_CHECK(ts[1] == thread_safety::none);
-    isl.evolve();
-    BOOST_CHECK_THROW(isl.wait_check(), std::invalid_argument);
-}
-
-#endif
-
 BOOST_AUTO_TEST_CASE(island_name_info_stream)
 {
     std::ostringstream oss;

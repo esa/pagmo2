@@ -29,7 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ISLAND_HPP
 #define PAGMO_ISLAND_HPP
 
-#include <array>
 #include <cstddef>
 #include <functional>
 #include <future>
@@ -58,7 +57,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
-#include <pagmo/threading.hpp>
 #include <pagmo/type_traits.hpp>
 
 #define PAGMO_S11N_ISLAND_EXPORT_KEY(isl)                                                                              \
@@ -765,13 +763,11 @@ public:
     // Get the algorithm.
     algorithm get_algorithm() const;
     // Set the algorithm.
-    void set_algorithm(algorithm);
+    void set_algorithm(const algorithm &);
     // Get the population.
     population get_population() const;
     // Set the population.
-    void set_population(population);
-    // Get the thread safety of the island's members.
-    std::array<thread_safety, 2> get_thread_safety() const;
+    void set_population(const population &);
     // Island's name.
     std::string get_name() const;
     // Island's extra info.

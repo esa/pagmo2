@@ -254,7 +254,6 @@ std::string island_get_population_docstring();
 std::string island_set_population_docstring();
 std::string island_get_name_docstring();
 std::string island_get_extra_info_docstring();
-std::string island_get_thread_safety_docstring();
 
 // udi.
 std::string thread_island_docstring();

@@ -26,36 +26,32 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE island_torture_test
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
+#ifndef PAGMO_DETAIL_GTE_GETTER_HPP
+#define PAGMO_DETAIL_GTE_GETTER_HPP
 
-#include <sstream>
+#include <functional>
 
-#include <pagmo/algorithms/de.hpp>
-#include <pagmo/island.hpp>
-#include <pagmo/problems/rosenbrock.hpp>
+#include <boost/any.hpp>
 
-using namespace pagmo;
+#include <pagmo/detail/visibility.hpp>
 
-// A small test for poking at an island while it is evolving.
-BOOST_AUTO_TEST_CASE(island_torture_00)
+namespace pagmo
 {
-    island isl{de{50}, rosenbrock{100}, 100};
-    for (auto i = 0; i < 100; ++i) {
-        isl.evolve();
-    }
-    while (isl.status() == evolve_status::busy) {
-        auto algo = isl.get_algorithm();
-        auto pop = isl.get_population();
-        isl.set_algorithm(algo);
-        isl.set_population(pop);
-        auto isl_copy(isl);
-        auto name = isl.get_name();
-        auto einfo = isl.get_extra_info();
-        std::ostringstream oss;
-        oss << isl;
-        BOOST_CHECK(!oss.str().empty());
-    }
-    BOOST_CHECK_NO_THROW(isl.wait_check());
-}
+
+namespace detail
+{
+
+// NOTE: in some cases, we need to call into Python
+// from a thread created within C++ (e.g., the island thread).
+// This function will return a RAII-style object that
+// can be used to ensure that we can safely call into Python
+// from the external thread. When working in C++, this
+// functor will return an empty object with no side
+// effects.
+PAGMO_DLL_PUBLIC extern std::function<boost::any()> gte_getter;
+
+} // namespace detail
+
+} // namespace pagmo
+
+#endif

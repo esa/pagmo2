@@ -96,7 +96,6 @@ class island_test_case(_ut.TestCase):
         self.run_concurrent_access_tests()
         self.run_evolve_tests()
         self.run_get_busy_wait_tests()
-        self.run_thread_safety_tests()
         self.run_io_tests()
         self.run_status_tests()
         self.run_stateful_algo_tests()
@@ -229,35 +228,6 @@ class island_test_case(_ut.TestCase):
         self.assertRaises(BaseException, lambda: isl.wait_check())
         isl.evolve(20)
         isl.wait()
-
-    def run_thread_safety_tests(self):
-        from .core import island, de, rosenbrock
-        from . import thread_safety as ts
-        isl = island(algo=de(), prob=rosenbrock(), size=25)
-        self.assertEqual(isl.get_thread_safety(), (ts.basic, ts.constant))
-
-        class prob(object):
-
-            def fitness(self, x):
-                return [0]
-
-            def get_bounds(self):
-                return ([0.], [1.])
-
-        isl = island(algo=de(), prob=prob(), size=25)
-        self.assertEqual(isl.get_thread_safety(), (ts.basic, ts.none))
-
-        class algo(object):
-
-            def evolve(self, algo, pop):
-                return pop
-
-        isl = island(algo=algo(), prob=rosenbrock(), size=25)
-        self.assertEqual(isl.get_thread_safety(), (ts.none, ts.constant))
-        isl = island(algo=algo(), prob=prob(), size=25)
-        self.assertEqual(isl.get_thread_safety(), (ts.none, ts.none))
-        isl.evolve(20)
-        self.assertRaises(BaseException, lambda: isl.wait_check())
 
     def run_io_tests(self):
         from .core import island, de, rosenbrock

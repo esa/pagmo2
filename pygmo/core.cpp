@@ -80,6 +80,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
@@ -154,6 +155,7 @@ std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 
 // Exposed pagmo::bfe.
 std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
+
 } // namespace pygmo
 
 // The cleanup function.
@@ -278,8 +280,8 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 }
 
 // NOTE: we need to provide a custom raii waiter in the island. The reason is the following.
-// Boost.Python locks the GIL when crossing the boundary from Python into C++. So, if we call wait() from Python,
-// BP will lock the GIL and then we will be waiting for evolutions in the island to finish. During this time, no
+// When we call wait() from Python, the calling thread will be holding the GIL and then we will be waiting
+// for evolutions in the island to finish. During this time, no
 // Python code will be executed because the GIL is locked. This means that if we have a Python thread doing background
 // work (e.g., managing the task queue in pythonic islands), it will have to wait before doing any progress. By
 // unlocking the GIL before calling thread_island::wait(), we give the chance to other Python threads to continue
@@ -386,6 +388,9 @@ BOOST_PYTHON_MODULE(core)
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
     // destroyed at the end of island::wait().
     detail::wait_raii_getter = []() { return std::make_shared<py_wait_locks>(); };
+
+    // NOTE: set the gte getter.
+    detail::gte_getter = []() { return std::make_shared<pygmo::gil_thread_ensurer>(); };
 
     // Setup doc options
     bp::docstring_options doc_options;
@@ -884,11 +889,6 @@ BOOST_PYTHON_MODULE(core)
         .def("set_population", &island::set_population, pygmo::island_set_population_docstring().c_str(),
              bp::arg("pop"))
         .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
-        .def("get_thread_safety", lcast([](const island &isl) -> bp::tuple {
-                 const auto ts = isl.get_thread_safety();
-                 return bp::make_tuple(ts[0], ts[1]);
-             }),
-             pygmo::island_get_thread_safety_docstring().c_str())
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
         .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
     pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());
