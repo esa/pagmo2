@@ -40,18 +40,19 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-//\image html nspso.jpg "The NSGA-II flowchart" width=3cm
+//\image html nspso.jpg "" width=3cm
 /// Non-dominated Sorting Particle Swarm Optimizer (NSPSO)
 /**
  *
  * Non-dominated Sorting Particle Swarm Optimizer (NSPSO) is a modified version of PSO for multi-objective optimization.
- * It extends the basic ideas of PSO by making a better use of personal bests and offspring for non-dominated comparison.
- * In order to increase the diversity of the pareto front it is possible to choose between 3 different niching methods:
- * crowding distance, niche count and maxmin.
+ * It extends the basic ideas of PSO by making a better use of personal bests and offspring for non-dominated
+ *comparison. In order to increase the diversity of the pareto front it is possible to choose between 3 different
+ *niching methods: crowding distance, niche count and maxmin.
  *
  * See: "Xiaodong Li - A Non-dominated Sorting Particle Swarm Optimizer for Multiobjective Optimization"
- * See: "Xiaodong Li - Better Spread and Convergence: Particle Swarm Multiobjective Optimization Using the Maximin Fitness Function"
- * See: "Carlos M. Fonseca, Peter J. Fleming - Genetic Algorithms for Multiobjective Optimization: Formulation, Discussion and Generalization"
+ * See: "Xiaodong Li - Better Spread and Convergence: Particle Swarm Multiobjective Optimization Using the Maximin
+ *Fitness Function" See: "Carlos M. Fonseca, Peter J. Fleming - Genetic Algorithms for Multiobjective Optimization:
+ *Formulation, Discussion and Generalization"
  **/
 
 class PAGMO_DLL_PUBLIC nspso
@@ -67,20 +68,25 @@ public:
      * Constructs the NSPSO user defined algorithm (multi objective PSO).
      *
      * @param[in] gen Number of generations to evolve.
-     * @param[in] min_w Minimum particles' inertia weight (the inertia weight is decreased throughout the run between max_w and min_w).
-     * @param[in] max_w Maximum particles' inertia weight (the inertia weight is decreased throughout the run between max_w and min_w).
-     * @param[in] c1 Magnitude of the force, applied to the particle's velocity, in the direction of its previous best position.
-     * @param[in] c2 Magnitude of the force, applied to the particle's velocity, in the direction of its global best (i.e., leader).
+     * @param[in] min_w Minimum particles' inertia weight (the inertia weight is decreased throughout the run between
+     * max_w and min_w).
+     * @param[in] max_w Maximum particles' inertia weight (the inertia weight is decreased throughout the run between
+     * max_w and min_w).
+     * @param[in] c1 Magnitude of the force, applied to the particle's velocity, in the direction of its previous best
+     * position.
+     * @param[in] c2 Magnitude of the force, applied to the particle's velocity, in the direction of its global best
+     * (i.e., leader).
      * @param[in] chi Velocity scaling factor.
      * @param[in] v_coeff Velocity coefficient (determining the maximum allowed particle velocity).
-     * @param[in] leader_selection_range The leader of each particle is selected among the best leader_selection_range%individuals.
+     * @param[in] leader_selection_range The leader of each particle is selected among the best
+     * leader_selection_range%individuals.
      * @param[in] diversity_mechanism The diversity mechanism used to mantain diversity on the Pareto front.
      * @param seed seed used by the internal random number generator (default is random)
      * @throws std::invalid_argument if .
      */
-    nspso(unsigned gen = 1u, double min_w = 0.95, double max_w = 10., double c1 = 0.01, double c2 = 0.5, double chi=0.5,
-          double v_coeff=0.5, unsigned leader_selection_range = 2u, std::string diversity_mechanism = "crowding distance",
-          unsigned seed = pagmo::random_device::next());
+    nspso(unsigned gen = 1u, double min_w = 0.95, double max_w = 10., double c1 = 0.01, double c2 = 0.5,
+          double chi = 0.5, double v_coeff = 0.5, unsigned leader_selection_range = 2u,
+          std::string diversity_mechanism = "crowding distance", unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -153,9 +159,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a nsga2::log_line_type containing: Gen, Fevals, ideal_point
-     * as described in nsga2::set_verbosity
-     * @return an <tt>std::vector</tt> of nsga2::log_line_type containing the logged values Gen, Fevals,
+     * <tt>std::vector</tt> is a nspso::log_line_type containing: Gen, Fevals, ideal_point
+     * as described in nspso::set_verbosity
+     * @return an <tt>std::vector</tt> of nspso::log_line_type containing the logged values Gen, Fevals,
      * ideal_point
      */
     const log_type &get_log() const
@@ -168,9 +174,11 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    PAGMO_DLL_LOCAL double minfit(vector_double::size_type, vector_double::size_type, const std::vector<vector_double> &) const;
+    PAGMO_DLL_LOCAL double minfit(vector_double::size_type, vector_double::size_type,
+                                  const std::vector<vector_double> &) const;
     PAGMO_DLL_LOCAL void compute_maxmin(vector_double &, const std::vector<vector_double> &) const;
-    PAGMO_DLL_LOCAL void compute_niche_count(std::vector<vector_double::size_type> &, const std::vector<vector_double> &, double) const;
+    PAGMO_DLL_LOCAL void compute_niche_count(std::vector<vector_double::size_type> &,
+                                             const std::vector<vector_double> &, double) const;
     PAGMO_DLL_LOCAL double euclidian_distance(const vector_double &, const vector_double &) const;
 
     struct nspso_individual {
