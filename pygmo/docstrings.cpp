@@ -2384,6 +2384,23 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::sade::get_log()`.
 )";
 }
 
+std::string nsga2_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+
+Set the batch function evaluation scheme.
+
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.nsga2`.
+
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
 std::string nsga2_docstring()
 {
     return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, seed = random)

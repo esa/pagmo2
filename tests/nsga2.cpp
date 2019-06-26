@@ -199,3 +199,34 @@ BOOST_AUTO_TEST_CASE(nsga2_serialization_test)
         }
     }
 }
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+    // 1 - Algorithm with bfe disabled
+    problem prob{dtlz(1, 10, 2)};
+    nsga2 uda1{nsga2{100}};
+    uda1.set_verbosity(1u);
+    uda1.set_seed(23u);
+    // 2 - Instantiate
+    algorithm algo1{uda1};
+
+    // 3 - Instantiate populations
+    population pop{prob, 24};
+    population pop1{prob, 24};
+    population pop2{prob, 24};
+
+    // 4 - Evolve the population
+    pop1 = algo1.evolve(pop);
+
+    // 5 new algorithm that is bfe enabled
+    nsga2 uda2{nsga2{100}};
+    uda2.set_verbosity(1u);
+    uda2.set_seed(23u);
+    uda2.set_bfe(bfe{}); // This will use the default bfe.
+    // 6 - Instantiate a pagmo algorithm
+    algorithm algo2{uda2};
+
+    // 7 - Evolve the population
+    pop2 = algo2.evolve(pop);
+    BOOST_CHECK(algo1.extract<nsga2>()->get_log() == algo2.extract<nsga2>()->get_log() );
+}
