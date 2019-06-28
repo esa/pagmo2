@@ -36,7 +36,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/variant/variant.hpp>
 
 #include <pagmo/detail/visibility.hpp>
-#include <pagmo/population.hpp>
 #include <pagmo/r_policy.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
@@ -56,7 +55,7 @@ class PAGMO_DLL_PUBLIC fair_replace
     };
     // Absolute migration rate.
     template <typename T, enable_if_t<std::is_integral<T>::value, int> = 0>
-    explicit fair_replace(ptag, T n) : m_migr_rate(boost::numeric_cast<population::size_type>(n))
+    explicit fair_replace(ptag, T n) : m_migr_rate(boost::numeric_cast<pop_size_t>(n))
     {
     }
     // Fractional migration rate.
@@ -91,7 +90,7 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    boost::variant<population::size_type, double> m_migr_rate;
+    boost::variant<pop_size_t, double> m_migr_rate;
 };
 
 } // namespace pagmo

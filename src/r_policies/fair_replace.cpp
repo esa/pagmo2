@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/variant/get.hpp>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/population.hpp>
 #include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
 #include <pagmo/s11n.hpp>
@@ -78,16 +77,15 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
                                            "multiobjective constrained optimisation problems");
     }
 
-    // Define the size type we'll be using for sorting/indexing.
-    using size_type = decltype(std::get<0>(inds).size());
-
     // Cache the sizes of the input pop and the migrants.
-    const auto inds_size = std::get<0>(inds).size();
-    const auto mig_size = std::get<0>(mig).size();
+    // NOTE: use the size type of the dvs, which is the same
+    // as pop_size_t.
+    const auto inds_size = std::get<1>(inds).size();
+    const auto mig_size = std::get<1>(mig).size();
 
     // Establish how many individuals we want to migrate from mig into inds.
-    const auto n_migr = [this, inds_size, mig_size]() -> size_type {
-        size_type candidate;
+    const auto n_migr = [this, inds_size, mig_size]() -> pop_size_t {
+        pop_size_t candidate;
 
         if (this->m_migr_rate.which()) {
             // Fractional migration rate: scale it by the number
@@ -95,12 +93,11 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
             // NOTE: use std::min() to make absolutely sure we don't exceed inds_size
             // due to FP shenanigans.
             candidate = std::min(
-                boost::numeric_cast<size_type>(boost::get<double>(m_migr_rate) * static_cast<double>(inds_size)),
+                boost::numeric_cast<pop_size_t>(boost::get<double>(m_migr_rate) * static_cast<double>(inds_size)),
                 inds_size);
         } else {
-            // Absolute migration rate: convert to the proper type,
-            // and check that it's not higher than the input population size.
-            candidate = boost::numeric_cast<size_type>(boost::get<population::size_type>(m_migr_rate));
+            // Absolute migration rate: check that it's not higher than the input population size.
+            candidate = boost::get<pop_size_t>(m_migr_rate);
             if (candidate > inds_size) {
                 pagmo_throw(
                     std::invalid_argument,
@@ -115,6 +112,10 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         return std::min(candidate, mig_size);
     }();
 
+    // Make extra sure that the number of individuals selected
+    // for migration is not larger than mig_size.
+    assert(n_migr <= mig_size);
+
     // NOTE: currently this replacement policy can handle:
     // - single-ojective (un)constrained optimisation,
     // - multiobjective unconstrained optimisation.
@@ -124,28 +125,28 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         // Single-objective, unconstrained.
 
         // Sort (indirectly) the migrants according to their fitness.
-        std::vector<size_type> mig_ind_sort;
+        std::vector<pop_size_t> mig_ind_sort;
         mig_ind_sort.resize(boost::numeric_cast<decltype(mig_ind_sort.size())>(mig_size));
-        std::iota(mig_ind_sort.begin(), mig_ind_sort.end(), size_type(0));
+        std::iota(mig_ind_sort.begin(), mig_ind_sort.end(), pop_size_t(0));
         std::sort(mig_ind_sort.begin(), mig_ind_sort.end(),
-                  [&mig](size_type idx1, size_type idx2) { return std::get<2>(mig)[idx1] < std::get<2>(mig)[idx2]; });
+                  [&mig](pop_size_t idx1, pop_size_t idx2) { return std::get<2>(mig)[idx1] < std::get<2>(mig)[idx2]; });
 
         // Build the merged population from the original individuals plus the
         // top n_migr migrants.
         auto merged_pop(inds);
-        for (size_type i = 0; i < n_migr; ++i) {
+        for (pop_size_t i = 0; i < n_migr; ++i) {
             std::get<0>(merged_pop).push_back(std::get<0>(mig)[mig_ind_sort[i]]);
             std::get<1>(merged_pop).push_back(std::get<1>(mig)[mig_ind_sort[i]]);
             std::get<2>(merged_pop).push_back(std::get<2>(mig)[mig_ind_sort[i]]);
         }
 
         // Sort (indirectly) the merged population.
-        std::vector<size_type> merged_pop_ind_sort;
+        std::vector<pop_size_t> merged_pop_ind_sort;
         merged_pop_ind_sort.resize(
             boost::numeric_cast<decltype(merged_pop_ind_sort.size())>(std::get<0>(merged_pop).size()));
-        std::iota(merged_pop_ind_sort.begin(), merged_pop_ind_sort.end(), size_type(0));
+        std::iota(merged_pop_ind_sort.begin(), merged_pop_ind_sort.end(), pop_size_t(0));
         std::sort(merged_pop_ind_sort.begin(), merged_pop_ind_sort.end(),
-                  [&merged_pop](size_type idx1, size_type idx2) {
+                  [&merged_pop](pop_size_t idx1, pop_size_t idx2) {
                       return std::get<2>(merged_pop)[idx1] < std::get<2>(merged_pop)[idx2];
                   });
 
@@ -154,7 +155,7 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         std::get<0>(retval).reserve(std::get<0>(inds).size());
         std::get<1>(retval).reserve(std::get<1>(inds).size());
         std::get<2>(retval).reserve(std::get<2>(inds).size());
-        for (size_type i = 0; i < inds_size; ++i) {
+        for (pop_size_t i = 0; i < inds_size; ++i) {
             std::get<0>(retval).push_back(std::get<0>(merged_pop)[merged_pop_ind_sort[i]]);
             std::get<1>(retval).push_back(std::get<1>(merged_pop)[merged_pop_ind_sort[i]]);
             std::get<2>(retval).push_back(std::get<2>(merged_pop)[merged_pop_ind_sort[i]]);
@@ -171,7 +172,7 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         // Build the merged population from the original individuals plus the
         // top n_migr migrants.
         auto merged_pop(inds);
-        for (size_type i = 0; i < n_migr; ++i) {
+        for (pop_size_t i = 0; i < n_migr; ++i) {
             std::get<0>(merged_pop).push_back(std::get<0>(mig)[mig_ind_sort[i]]);
             std::get<1>(merged_pop).push_back(std::get<1>(mig)[mig_ind_sort[i]]);
             std::get<2>(merged_pop).push_back(std::get<2>(mig)[mig_ind_sort[i]]);
@@ -185,7 +186,7 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         std::get<0>(retval).reserve(std::get<0>(inds).size());
         std::get<1>(retval).reserve(std::get<1>(inds).size());
         std::get<2>(retval).reserve(std::get<2>(inds).size());
-        for (size_type i = 0; i < inds_size; ++i) {
+        for (pop_size_t i = 0; i < inds_size; ++i) {
             std::get<0>(retval).push_back(std::get<0>(merged_pop)[merged_pop_ind_sort[i]]);
             std::get<1>(retval).push_back(std::get<1>(merged_pop)[merged_pop_ind_sort[i]]);
             std::get<2>(retval).push_back(std::get<2>(merged_pop)[merged_pop_ind_sort[i]]);
@@ -196,27 +197,27 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         // Multi-objective, unconstrained.
         assert(nobj > 1u && !nic && !nec);
 
-        // Sort indirectly the input migrants.
-        const auto mig_ind_sort = sort_population_mo(std::get<2>(mig));
+        // Get the best n_migr migrants.
+        const auto mig_ind_sort = select_best_N_mo(std::get<2>(mig), n_migr);
 
         // Build the merged population from the original individuals plus the
         // top n_migr migrants.
         auto merged_pop(inds);
-        for (size_type i = 0; i < n_migr; ++i) {
+        for (pop_size_t i = 0; i < n_migr; ++i) {
             std::get<0>(merged_pop).push_back(std::get<0>(mig)[mig_ind_sort[i]]);
             std::get<1>(merged_pop).push_back(std::get<1>(mig)[mig_ind_sort[i]]);
             std::get<2>(merged_pop).push_back(std::get<2>(mig)[mig_ind_sort[i]]);
         }
 
-        // Sort indirectly the merged population.
-        const auto merged_pop_ind_sort = sort_population_mo(std::get<2>(merged_pop));
+        // Get the best inds_size individuals from the merged population.
+        const auto merged_pop_ind_sort = select_best_N_mo(std::get<2>(merged_pop), inds_size);
 
         // Create and return the output pop.
         individuals_group_t retval;
         std::get<0>(retval).reserve(std::get<0>(inds).size());
         std::get<1>(retval).reserve(std::get<1>(inds).size());
         std::get<2>(retval).reserve(std::get<2>(inds).size());
-        for (size_type i = 0; i < inds_size; ++i) {
+        for (pop_size_t i = 0; i < inds_size; ++i) {
             std::get<0>(retval).push_back(std::get<0>(merged_pop)[merged_pop_ind_sort[i]]);
             std::get<1>(retval).push_back(std::get<1>(merged_pop)[merged_pop_ind_sort[i]]);
             std::get<2>(retval).push_back(std::get<2>(merged_pop)[merged_pop_ind_sort[i]]);
@@ -233,7 +234,7 @@ std::string fair_replace::get_extra_info() const
         const auto rate = boost::get<double>(m_migr_rate);
         return "\tFractional migration rate: " + std::to_string(rate);
     } else {
-        const auto rate = boost::get<population::size_type>(m_migr_rate);
+        const auto rate = boost::get<pop_size_t>(m_migr_rate);
         return "\tAbsolute migration rate: " + std::to_string(rate);
     }
 }
