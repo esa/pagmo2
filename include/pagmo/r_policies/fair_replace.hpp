@@ -74,7 +74,10 @@ public:
     {
     }
 
-    individuals_group_t replace(const individuals_group_t &, const individuals_group_t &) const;
+    individuals_group_t replace(const individuals_group_t &, const vector_double::size_type &,
+                                const vector_double::size_type &, const vector_double::size_type &,
+                                const vector_double::size_type &, const vector_double &,
+                                const individuals_group_t &) const;
 
     std::string get_name() const
     {

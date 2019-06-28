@@ -768,10 +768,6 @@ public:
     void set_algorithm(const algorithm &);
     // Get the population.
     population get_population() const;
-    // Get all the individuals in the population.
-    individuals_group_t get_individuals() const;
-    // Set all the individuals in the population.
-    void set_individuals(const individuals_group_t &);
     // Set the population.
     void set_population(const population &);
     // Island's name.
@@ -819,6 +815,12 @@ public:
         *this = std::move(tmp_island);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+private:
+    // Get all the individuals in the population.
+    PAGMO_DLL_LOCAL individuals_group_t get_individuals() const;
+    // Set all the individuals in the population.
+    PAGMO_DLL_LOCAL void set_individuals(const individuals_group_t &);
 
 private:
     std::unique_ptr<idata_t> m_ptr;

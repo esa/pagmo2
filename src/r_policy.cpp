@@ -26,7 +26,9 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <algorithm>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -73,10 +75,13 @@ r_policy &r_policy::operator=(const r_policy &other)
     return *this = r_policy(other);
 }
 
-// Replace individuals in inds with the input migrants mig.
-individuals_group_t r_policy::replace(const individuals_group_t &inds, const individuals_group_t &mig) const
+// Verify the input arguments for the replace() function.
+void r_policy::verify_replace_input(const individuals_group_t &inds, const vector_double::size_type &nobj,
+                                    const vector_double::size_type &nec, const vector_double::size_type &nic,
+                                    const vector_double::size_type &nix, const vector_double &tol,
+                                    const individuals_group_t &mig) const
 {
-    // Check the input individuals.
+    // 1 - verify that the elements of inds all have the same size.
     if (std::get<0>(inds).size() != std::get<1>(inds).size() || std::get<0>(inds).size() != std::get<2>(inds).size()) {
         pagmo_throw(std::invalid_argument,
                     "an invalid group of individuals was passed to a replacement policy of type '" + get_name()
@@ -86,7 +91,7 @@ individuals_group_t r_policy::replace(const individuals_group_t &inds, const ind
                         + " and " + std::to_string(std::get<2>(inds).size()));
     }
 
-    // Check the input migrants.
+    // 2 - same for mig.
     if (std::get<0>(mig).size() != std::get<1>(mig).size() || std::get<0>(mig).size() != std::get<2>(mig).size()) {
         pagmo_throw(std::invalid_argument,
                     "an invalid group of migrants was passed to a replacement policy of type '" + get_name()
@@ -96,10 +101,67 @@ individuals_group_t r_policy::replace(const individuals_group_t &inds, const ind
                         + " and " + std::to_string(std::get<2>(mig).size()));
     }
 
-    // Call the replace() method from the UDRP.
-    auto retval = ptr()->replace(inds, mig);
+    // 3 - make sure nobj/nec/nic/nix are sane and consistent.
+    if (!nobj) {
+        pagmo_throw(std::invalid_argument,
+                    "an invalid number of objectives (0) was passed to a replacement policy of type '" + get_name()
+                        + "'");
+    }
+    if (nobj > std::numeric_limits<vector_double::size_type>::max() / 3u) {
+        pagmo_throw(std::invalid_argument, "the number of objectives (" + std::to_string(nobj)
+                                               + ") passed to a replacement policy of type '" + get_name()
+                                               + "' is too large");
+    }
+    if (nec > std::numeric_limits<vector_double::size_type>::max() / 3u) {
+        pagmo_throw(std::invalid_argument, "the number of equality constraints (" + std::to_string(nec)
+                                               + ") passed to a replacement policy of type '" + get_name()
+                                               + "' is too large");
+    }
+    if (nic > std::numeric_limits<vector_double::size_type>::max() / 3u) {
+        pagmo_throw(std::invalid_argument, "the number of inequality constraints (" + std::to_string(nic)
+                                               + ") passed to a replacement policy of type '" + get_name()
+                                               + "' is too large");
+    }
+    // Determine the fitness dimension.
+    const auto nf = nobj + nec + nic;
+    // Fetch the problem dimension from the vector of tolerances.
+    const auto nx = tol.size();
+    // Verify that it is consistent with nix.
+    if (nix > nx) {
+        pagmo_throw(std::invalid_argument,
+                    "the integer dimension (" + std::to_string(nic) + ") passed to a replacement policy of type '"
+                        + get_name() + "' is larger than the detected problem dimension (" + std::to_string(nx) + ")");
+    }
 
-    // Check the return value.
+    // 4 - verify inds/migs.
+    auto dv_checker = [nx](const vector_double &dv) { return dv.size() != nx; };
+    auto fv_checker = [nf](const vector_double &fv) { return fv.size() != nf; };
+
+    if (std::any_of(std::get<1>(inds).begin(), std::get<1>(inds).end(), dv_checker)) {
+        pagmo_throw(std::invalid_argument, "not all the individuals passed to a replacement policy of type '"
+                                               + get_name() + "' have the expected dimension (" + std::to_string(nx)
+                                               + ")");
+    }
+    if (std::any_of(std::get<2>(inds).begin(), std::get<2>(inds).end(), fv_checker)) {
+        pagmo_throw(std::invalid_argument, "not all the individuals passed to a replacement policy of type '"
+                                               + get_name() + "' have the expected fitness dimension ("
+                                               + std::to_string(nf) + ")");
+    }
+    if (std::any_of(std::get<1>(mig).begin(), std::get<1>(mig).end(), dv_checker)) {
+        pagmo_throw(std::invalid_argument, "not all the migrants passed to a replacement policy of type '" + get_name()
+                                               + "' have the expected dimension (" + std::to_string(nx) + ")");
+    }
+    if (std::any_of(std::get<2>(mig).begin(), std::get<2>(mig).end(), fv_checker)) {
+        pagmo_throw(std::invalid_argument, "not all the migrants passed to a replacement policy of type '" + get_name()
+                                               + "' have the expected fitness dimension (" + std::to_string(nf) + ")");
+    }
+}
+
+// Verify the output of replace().
+void r_policy::verify_replace_output(const individuals_group_t &retval, vector_double::size_type nx,
+                                     vector_double::size_type nf) const
+{
+    // 1 - verify that the elements of retval all have the same size.
     if (std::get<0>(retval).size() != std::get<1>(retval).size()
         || std::get<0>(retval).size() != std::get<2>(retval).size()) {
         pagmo_throw(std::invalid_argument,
@@ -109,6 +171,39 @@ individuals_group_t r_policy::replace(const individuals_group_t &inds, const ind
                         + std::to_string(std::get<0>(retval).size()) + ", " + std::to_string(std::get<1>(retval).size())
                         + " and " + std::to_string(std::get<2>(retval).size()));
     }
+
+    // 2 - verify that the decision/fitness vectors in retval have all
+    // the expected dimensions.
+    if (std::any_of(std::get<1>(retval).begin(), std::get<1>(retval).end(),
+                    [nx](const vector_double &dv) { return dv.size() != nx; })) {
+        pagmo_throw(std::invalid_argument, "not all the individuals returned by a replacement policy of type '"
+                                               + get_name() + "' have the expected dimension (" + std::to_string(nx)
+                                               + ")");
+    }
+    if (std::any_of(std::get<2>(retval).begin(), std::get<2>(retval).end(),
+                    [nf](const vector_double &fv) { return fv.size() != nf; })) {
+        pagmo_throw(std::invalid_argument, "not all the individuals returned by a replacement policy of type '"
+                                               + get_name() + "' have the expected fitness dimension ("
+                                               + std::to_string(nf) + ")");
+    }
+}
+
+// Replace individuals in inds with the input migrants mig.
+individuals_group_t r_policy::replace(const individuals_group_t &inds, const vector_double::size_type &nobj,
+                                      const vector_double::size_type &nec, const vector_double::size_type &nic,
+                                      const vector_double::size_type &nix, const vector_double &tol,
+                                      const individuals_group_t &mig) const
+{
+    // Verify the input.
+    verify_replace_input(inds, nobj, nec, nic, nix, tol, mig);
+
+    // Call the replace() method from the UDRP.
+    auto retval = ptr()->replace(inds, nobj, nec, nic, nix, tol, mig);
+
+    // Verify the output.
+    // NOTE: we checked in verify_replace_input() that we can
+    // compute nobj + nec + nic safely.
+    verify_replace_output(retval, tol.size(), nobj + nec + nic);
 
     return retval;
 }

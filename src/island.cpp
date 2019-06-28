@@ -49,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -352,6 +353,7 @@ void island::evolve(unsigned n)
                             // Extract the candidate migrants from the archipelago.
                             const auto migrants = aptr->extract_migrants(idx);
 
+                            // Extract the individuals from the island.
                             const auto inds = this->get_individuals();
                             // auto new_inds = this->m_ptr->r_pol_ptr->replace(inds, migrants);
                             // Determine which individuals were migrated from migrants into new_inds,
@@ -686,6 +688,50 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
 bool island::is_valid() const
 {
     return static_cast<bool>(m_ptr);
+}
+
+// Get all the individuals in the population.
+individuals_group_t island::get_individuals() const
+{
+    individuals_group_t retval;
+
+    {
+        // NOTE: this helper is called from the separate
+        // thread of execution within pagmo::island. We need to protect
+        // with a gte.
+        auto gte = detail::gte_getter();
+        (void)gte;
+
+        auto tmp_pop(get_population());
+
+        std::get<0>(retval) = std::move(tmp_pop.m_ID);
+        std::get<1>(retval) = std::move(tmp_pop.m_x);
+        std::get<2>(retval) = std::move(tmp_pop.m_f);
+    }
+
+    return retval;
+}
+
+// Set all the individuals in the population.
+void island::set_individuals(const individuals_group_t &inds)
+{
+    auto tmp_inds(inds);
+
+    {
+        // NOTE: this helper is called from the separate
+        // thread of execution within pagmo::island. We need to protect
+        // with a gte.
+        auto gte = detail::gte_getter();
+        (void)gte;
+
+        auto tmp_pop(get_population());
+
+        tmp_pop.m_ID = std::move(std::get<0>(tmp_inds));
+        tmp_pop.m_x = std::move(std::get<1>(tmp_inds));
+        tmp_pop.m_f = std::move(std::get<2>(tmp_inds));
+
+        set_population(tmp_pop);
+    }
 }
 
 } // namespace pagmo
