@@ -35,7 +35,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
-#include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
@@ -178,8 +177,8 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  * @throws std::invalid_argument If the size of the \p tol is not \f$n - 1\f$
  *
  */
-std::vector<population::size_type> sort_population_con(const std::vector<vector_double> &input_f,
-                                                       vector_double::size_type neq, const vector_double &tol)
+std::vector<pop_size_t> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq,
+                                            const vector_double &tol)
 {
     auto N = input_f.size();
     // Corner cases
@@ -193,13 +192,12 @@ std::vector<population::size_type> sort_population_con(const std::vector<vector_
     }
 
     // Create the indexes 0....N-1
-    std::vector<population::size_type> retval(N);
-    std::iota(retval.begin(), retval.end(), population::size_type(0));
+    std::vector<pop_size_t> retval(N);
+    std::iota(retval.begin(), retval.end(), pop_size_t(0));
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(),
-              [&input_f, &neq, &tol](population::size_type idx1, population::size_type idx2) {
-                  return compare_fc(input_f[idx1], input_f[idx2], neq, tol);
-              });
+    std::sort(retval.begin(), retval.end(), [&input_f, &neq, &tol](pop_size_t idx1, pop_size_t idx2) {
+        return compare_fc(input_f[idx1], input_f[idx2], neq, tol);
+    });
     return retval;
 }
 
@@ -215,8 +213,8 @@ std::vector<population::size_type> sort_population_con(const std::vector<vector_
  * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n >=1\f$
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  */
-std::vector<population::size_type> sort_population_con(const std::vector<vector_double> &input_f,
-                                                       vector_double::size_type neq, double tol)
+std::vector<pop_size_t> sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq,
+                                            double tol)
 {
     auto N = input_f.size();
     // Corner cases

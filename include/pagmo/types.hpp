@@ -38,6 +38,15 @@ namespace pagmo
 
 /// Alias for an <tt>std::vector</tt> of <tt>double</tt>s.
 typedef std::vector<double> vector_double;
+
+/// Population size type.
+/**
+ * This unsigned integral types is used to represent the size
+ * of a pagmo::population, and, more generally, of collections
+ * of decision vectors, fitness vectors, etc.
+ */
+typedef std::vector<vector_double>::size_type pop_size_t;
+
 /// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
 typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
 
