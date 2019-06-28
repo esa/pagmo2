@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
 
@@ -177,12 +178,12 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  * @throws std::invalid_argument If the size of the \p tol is not \f$n - 1\f$
  *
  */
-std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
-                                                          vector_double::size_type neq, const vector_double &tol)
+std::vector<population::size_type> sort_population_con(const std::vector<vector_double> &input_f,
+                                                       vector_double::size_type neq, const vector_double &tol)
 {
     auto N = input_f.size();
-    /// Corner cases
-    if (N < 2u) { // corner cases
+    // Corner cases
+    if (N < 2u) {
         if (N == 0u) {
             return {};
         }
@@ -192,11 +193,11 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
     }
 
     // Create the indexes 0....N-1
-    std::vector<vector_double::size_type> retval(N);
-    std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+    std::vector<population::size_type> retval(N);
+    std::iota(retval.begin(), retval.end(), population::size_type(0));
     // Sort the indexes
     std::sort(retval.begin(), retval.end(),
-              [&input_f, &neq, &tol](vector_double::size_type idx1, vector_double::size_type idx2) {
+              [&input_f, &neq, &tol](population::size_type idx1, population::size_type idx2) {
                   return compare_fc(input_f[idx1], input_f[idx2], neq, tol);
               });
     return retval;
@@ -214,12 +215,12 @@ std::vector<vector_double::size_type> sort_population_con(const std::vector<vect
  * @throws std::invalid_argument If the input fitness vectors do not have all the same size \f$n >=1\f$
  * @throws std::invalid_argument If \p neq is larger than \f$n - 1\f$ (too many constraints)
  */
-std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &input_f,
-                                                          vector_double::size_type neq, double tol)
+std::vector<population::size_type> sort_population_con(const std::vector<vector_double> &input_f,
+                                                       vector_double::size_type neq, double tol)
 {
     auto N = input_f.size();
-    /// Corner cases
-    if (N < 2u) { // corner cases
+    // Corner cases
+    if (N < 2u) {
         if (N == 0u) {
             return {};
         }

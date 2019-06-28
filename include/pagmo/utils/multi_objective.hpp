@@ -63,12 +63,12 @@ PAGMO_DLL_PUBLIC void reksum(std::vector<std::vector<double>> &, const std::vect
 PAGMO_DLL_PUBLIC bool pareto_dominance(const vector_double &, const vector_double &);
 
 // Non dominated front 2D (Kung's algorithm)
-PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC std::vector<population::size_type> non_dominated_front_2d(const std::vector<vector_double> &);
 
 /// Return type for the fast_non_dominated_sorting algorithm
 using fnds_return_type
-    = std::tuple<std::vector<std::vector<vector_double::size_type>>, std::vector<std::vector<vector_double::size_type>>,
-                 std::vector<vector_double::size_type>, std::vector<vector_double::size_type>>;
+    = std::tuple<std::vector<std::vector<population::size_type>>, std::vector<std::vector<population::size_type>>,
+                 std::vector<population::size_type>, std::vector<population::size_type>>;
 
 // Fast non dominated sorting
 PAGMO_DLL_PUBLIC fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &);
@@ -77,11 +77,11 @@ PAGMO_DLL_PUBLIC fnds_return_type fast_non_dominated_sorting(const std::vector<v
 PAGMO_DLL_PUBLIC vector_double crowding_distance(const std::vector<vector_double> &);
 
 // Sorts a population in multi-objective optimization
-PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &);
+PAGMO_DLL_PUBLIC std::vector<population::size_type> sort_population_mo(const std::vector<vector_double> &);
 
 // Selects the best N individuals in multi-objective optimization
-PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &,
-                                                                        vector_double::size_type);
+PAGMO_DLL_PUBLIC std::vector<population::size_type> select_best_N_mo(const std::vector<vector_double> &,
+                                                                     population::size_type);
 
 // Ideal point
 PAGMO_DLL_PUBLIC vector_double ideal(const std::vector<vector_double> &);
@@ -92,9 +92,9 @@ PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
 /// Decomposition weights generation
 /**
  * Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are
- *available:
+ * available:
  * - "grid" generates weights on an uniform grid. This method may only be used when the number of requested weights to
- *be genrated is such that a uniform grid is indeed possible. In
+ * be genrated is such that a uniform grid is indeed possible. In
  * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
  * - "random" generates weights randomly distributing them uniformly on the simplex (weights are such that \f$\sum_i
  * \lambda_i = 1\f$)
@@ -110,9 +110,9 @@ PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
  *
  * \endverbatim
  *
- * Example: to generate 10 weights distributed somehow regularly to decompose a three dimensional problem:
+ * Example: to generate 10 weights distributed somewhat regularly to decompose a three dimensional problem:
  * @code{.unparsed}
- * detail::random_engine_type r_engine();
+ * std::mt19937 r_engine;
  * auto lambdas = decomposition_weights(3u, 10u, "low discrepancy", r_engine);
  * @endcode
  *
