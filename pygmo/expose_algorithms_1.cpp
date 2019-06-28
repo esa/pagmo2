@@ -199,6 +199,7 @@ void expose_algorithms_1()
                nsga2_get_log_docstring().c_str());
 
     nsga2_.def("get_seed", &nsga2::get_seed, generic_uda_get_seed_docstring().c_str());
+    nsga2_.def("set_bfe", &nsga2::set_bfe, nsga2_set_bfe_docstring().c_str(), bp::arg("b"));
 
     // GACO
     auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());

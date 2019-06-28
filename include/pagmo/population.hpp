@@ -81,7 +81,7 @@ class PAGMO_DLL_PUBLIC population
 
 public:
     /// The size type of the population.
-    typedef std::vector<vector_double>::size_type size_type;
+    typedef pop_size_t size_type;
     // Default constructor
     population();
 
