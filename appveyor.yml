@@ -35,6 +35,8 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_64_Python37] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
+# NOTE: temporary fix, keep an eye on this.
+- if [%BUILD_TYPE%]==[MSVC_64_Python37] conda update -y -n base -c defaults conda
 - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda config --add channels conda-forge --force
 # - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda clean --all -y
 # - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda update conda -y
