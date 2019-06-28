@@ -38,7 +38,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
-#include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/multi_objective.hpp>
 
@@ -58,8 +57,8 @@ namespace detail
 // can prevent this by limiting the recursion (e.g., via a function parameter that
 // gets increased each time the function is called from itself).
 // But for now I'd just put a note about this.
-void reksum(std::vector<std::vector<double>> &retval, const std::vector<population::size_type> &X,
-            population::size_type m, population::size_type s, std::vector<double> eggs)
+void reksum(std::vector<std::vector<double>> &retval, const std::vector<pop_size_t> &X, pop_size_t m, pop_size_t s,
+            std::vector<double> eggs)
 {
     if (m == 1u) {
         if (std::find(X.begin(), X.end(), s) == X.end()) { // not found
@@ -102,8 +101,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
                     "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) + " and "
                         + std::to_string(obj2.size()) + ". I cannot define dominance");
     }
-    vector_double::size_type count1 = 0u;
-    vector_double::size_type count2 = 0u;
+    vector_double::size_type count1 = 0, count2 = 0;
     for (decltype(obj1.size()) i = 0u; i < obj1.size(); ++i) {
         if (obj1[i] < obj2[i]) {
             ++count1;
@@ -130,7 +128,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
  *
  * @throws std::invalid_argument If the objective vectors are not all containing two-objectives
  */
-std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<vector_double> &input_objs)
+std::vector<pop_size_t> non_dominated_front_2d(const std::vector<vector_double> &input_objs)
 {
     // If the input is empty return an empty vector
     if (input_objs.size() == 0u) {
@@ -149,17 +147,16 @@ std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<v
                                                + ", while Kung's algorithm only works for two objectives.");
     }
     // Sanity checks are over. We may run Kung's algorithm.
-    std::vector<vector_double::size_type> front;
-    std::vector<vector_double::size_type> indexes(input_objs.size());
-    std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
+    std::vector<pop_size_t> front;
+    std::vector<pop_size_t> indexes(input_objs.size());
+    std::iota(indexes.begin(), indexes.end(), pop_size_t(0u));
     // Sort in ascending order with respect to the first component
-    std::sort(indexes.begin(), indexes.end(),
-              [&input_objs](vector_double::size_type idx1, vector_double::size_type idx2) {
-                  if (input_objs[idx1][0] == input_objs[idx2][0]) {
-                      return detail::less_than_f(input_objs[idx1][1], input_objs[idx2][1]);
-                  }
-                  return detail::less_than_f(input_objs[idx1][0], input_objs[idx2][0]);
-              });
+    std::sort(indexes.begin(), indexes.end(), [&input_objs](pop_size_t idx1, pop_size_t idx2) {
+        if (input_objs[idx1][0] == input_objs[idx2][0]) {
+            return detail::less_than_f(input_objs[idx1][1], input_objs[idx2][1]);
+        }
+        return detail::less_than_f(input_objs[idx1][0], input_objs[idx2][0]);
+    });
     for (auto i : indexes) {
         bool flag = false;
         for (auto j : front) {
@@ -189,14 +186,14 @@ std::vector<vector_double::size_type> non_dominated_front_2d(const std::vector<v
  * {{1,2,3},{-2,3,7},{-1,-2,-3},{0,0,0}}
  *
  * @return an std::tuple containing:
- *  - the non dominated fronts, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
+ *  - the non dominated fronts, an <tt>std::vector<std::vector<pop_size_t>></tt>
  * containing the non dominated fronts. Example {{1,2},{3},{0}}
- *  - the domination list, an <tt>std::vector<std::vector<vector_double::size_type>></tt>
+ *  - the domination list, an <tt>std::vector<std::vector<pop_size_t>></tt>
  * containing the domination list, i.e. the indexes of all individuals
  * dominated by the individual at position \f$i\f$. Example {{},{},{0,3},{0}}
- *  - the domination count, an <tt>std::vector<vector_double::size_type></tt> containing the number of individuals
+ *  - the domination count, an <tt>std::vector<pop_size_t></tt> containing the number of individuals
  * that dominate the individual at position \f$i\f$. Example {2, 0, 0, 1}
- *  - the non domination rank, an <tt>std::vector<vector_double::size_type></tt> containing the index of the non
+ *  - the non domination rank, an <tt>std::vector<pop_size_t></tt> containing the index of the non
  * dominated front to which the individual at position \f$i\f$ belongs. Example {2,0,0,1}
  *
  * @throws std::invalid_argument If the size of \p points is not at least 2
@@ -210,10 +207,10 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
                                                + std::to_string(N) + " detected.");
     }
     // Initialize the return values
-    std::vector<std::vector<vector_double::size_type>> non_dom_fronts(1u);
-    std::vector<std::vector<vector_double::size_type>> dom_list(N);
-    std::vector<vector_double::size_type> dom_count(N);
-    std::vector<vector_double::size_type> non_dom_rank(N);
+    std::vector<std::vector<pop_size_t>> non_dom_fronts(1u);
+    std::vector<std::vector<pop_size_t>> dom_list(N);
+    std::vector<pop_size_t> dom_count(N);
+    std::vector<pop_size_t> non_dom_rank(N);
 
     // Start the fast non dominated sort algorithm
     for (decltype(N) i = 0u; i < N; ++i) {
@@ -237,9 +234,9 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
     // we copy dom_count as we want to output its value at this point
     auto dom_count_copy(dom_count);
     auto current_front = non_dom_fronts[0];
-    std::vector<std::vector<vector_double::size_type>>::size_type front_counter(0u);
+    std::vector<std::vector<pop_size_t>>::size_type front_counter(0u);
     while (current_front.size() != 0u) {
-        std::vector<vector_double::size_type> next_front;
+        std::vector<pop_size_t> next_front;
         for (decltype(current_front.size()) p = 0u; p < current_front.size(); ++p) {
             for (decltype(dom_list[current_front[p]].size()) q = 0u; q < dom_list[current_front[p]].size(); ++q) {
                 --dom_count_copy[dom_list[current_front[p]][q]];
@@ -300,14 +297,13 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
         pagmo_throw(std::invalid_argument, "A non dominated front must contain points of uniform dimensionality. Some "
                                            "different sizes were instead detected.");
     }
-    std::vector<vector_double::size_type> indexes(N);
-    std::iota(indexes.begin(), indexes.end(), vector_double::size_type(0u));
+    std::vector<pop_size_t> indexes(N);
+    std::iota(indexes.begin(), indexes.end(), pop_size_t(0u));
     vector_double retval(N, 0.);
     for (decltype(M) i = 0u; i < M; ++i) {
-        std::sort(indexes.begin(), indexes.end(),
-                  [i, &non_dom_front](vector_double::size_type idx1, vector_double::size_type idx2) {
-                      return detail::less_than_f(non_dom_front[idx1][i], non_dom_front[idx2][i]);
-                  });
+        std::sort(indexes.begin(), indexes.end(), [i, &non_dom_front](pop_size_t idx1, pop_size_t idx2) {
+            return detail::less_than_f(non_dom_front[idx1][i], non_dom_front[idx2][i]);
+        });
         retval[indexes[0]] = std::numeric_limits<double>::infinity();
         retval[indexes[N - 1u]] = std::numeric_limits<double>::infinity();
         double df = non_dom_front[indexes[N - 1u]][i] - non_dom_front[indexes[0]][i];
@@ -344,8 +340,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  *
  * @throws unspecified all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
  */
-std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_double> &input_f,
-                                                       vector_double::size_type N)
+std::vector<pop_size_t> select_best_N_mo(const std::vector<vector_double> &input_f, pop_size_t N)
 {
     if (N < 1u) {
         pagmo_throw(std::invalid_argument,
@@ -358,12 +353,12 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
         return {0u};
     }
     if (N >= input_f.size()) { // corner case
-        std::vector<vector_double::size_type> retval(input_f.size());
-        std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+        std::vector<pop_size_t> retval(input_f.size());
+        std::iota(retval.begin(), retval.end(), pop_size_t(0u));
         return retval;
     }
-    std::vector<vector_double::size_type> retval;
-    std::vector<vector_double::size_type>::size_type front_id(0u);
+    std::vector<pop_size_t> retval;
+    std::vector<pop_size_t>::size_type front_id(0u);
     // Run fast-non-dominated sorting
     auto tuple = fast_non_dominated_sorting(input_f);
     // Insert all non dominated fronts if not more than N
@@ -388,9 +383,9 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
     }
     vector_double cds(crowding_distance(non_dom_fits));
     // We now have front and crowding distance, we sort the front w.r.t. the crowding
-    std::vector<vector_double::size_type> idxs(front.size());
-    std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
-    std::sort(idxs.begin(), idxs.end(), [&cds](vector_double::size_type idx1, vector_double::size_type idx2) {
+    std::vector<pop_size_t> idxs(front.size());
+    std::iota(idxs.begin(), idxs.end(), pop_size_t(0u));
+    std::sort(idxs.begin(), idxs.end(), [&cds](pop_size_t idx1, pop_size_t idx2) {
         return detail::greater_than_f(cds[idx1], cds[idx2]);
     }); // Descending order1
     auto remaining = N - retval.size();
@@ -416,8 +411,8 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  * std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] < b[0];});
  * @endcode
  * @code{.unparsed}
- * std::vector<vector_double::size_type> idx(input_f.size());
- * std::iota(idx.begin(), idx.end(), vector_double::size_type(0u));
+ * std::vector<pop_size_t> idx(input_f.size());
+ * std::iota(idx.begin(), idx.end(), pop_size_t(0u));
  * std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] < input_f[b][0];});
  * @endcode
  *
@@ -427,7 +422,7 @@ std::vector<vector_double::size_type> select_best_N_mo(const std::vector<vector_
  *
  * @throws unspecified all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
  */
-std::vector<vector_double::size_type> sort_population_mo(const std::vector<vector_double> &input_f)
+std::vector<pop_size_t> sort_population_mo(const std::vector<vector_double> &input_f)
 {
     if (input_f.size() < 2u) { // corner cases
         if (input_f.size() == 0u) {
@@ -438,8 +433,8 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
         }
     }
     // Create the indexes 0....N-1
-    std::vector<vector_double::size_type> retval(input_f.size());
-    std::iota(retval.begin(), retval.end(), vector_double::size_type(0u));
+    std::vector<pop_size_t> retval(input_f.size());
+    std::iota(retval.begin(), retval.end(), pop_size_t(0u));
     // Run fast-non-dominated sorting and compute the crowding distance for all input objectives vectors
     auto tuple = fast_non_dominated_sorting(input_f);
     vector_double crowding(input_f.size());
@@ -459,14 +454,13 @@ std::vector<vector_double::size_type> sort_population_mo(const std::vector<vecto
         }
     }
     // Sort the indexes
-    std::sort(retval.begin(), retval.end(),
-              [&tuple, &crowding](vector_double::size_type idx1, vector_double::size_type idx2) {
-                  if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {        // same non domination rank
-                      return detail::greater_than_f(crowding[idx1], crowding[idx2]); // crowding distance decides
-                  } else {                                                           // different non domination ranks
-                      return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2];    // non domination rank decides
-                  };
-              });
+    std::sort(retval.begin(), retval.end(), [&tuple, &crowding](pop_size_t idx1, pop_size_t idx2) {
+        if (std::get<3>(tuple)[idx1] == std::get<3>(tuple)[idx2]) {        // same non domination rank
+            return detail::greater_than_f(crowding[idx1], crowding[idx2]); // crowding distance decides
+        } else {                                                           // different non domination ranks
+            return std::get<3>(tuple)[idx1] < std::get<3>(tuple)[idx2];    // non domination rank decides
+        };
+    });
     return retval;
 }
 

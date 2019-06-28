@@ -89,12 +89,12 @@ PAGMO_DLL_PUBLIC bool compare_fc(const vector_double &, const vector_double &, v
 PAGMO_DLL_PUBLIC bool compare_fc(const vector_double &, const vector_double &, vector_double::size_type, double);
 
 // Sorts a population in a single-objective, constrained, case (from a vector of tolerances)
-PAGMO_DLL_PUBLIC std::vector<vector_double::size_type>
-sort_population_con(const std::vector<vector_double> &, vector_double::size_type, const vector_double &);
+PAGMO_DLL_PUBLIC std::vector<pop_size_t> sort_population_con(const std::vector<vector_double> &,
+                                                             vector_double::size_type, const vector_double &);
 
 // Sorts a population in a single-objective, constrained, case (from a scalar tolerance)
-PAGMO_DLL_PUBLIC std::vector<vector_double::size_type> sort_population_con(const std::vector<vector_double> &,
-                                                                           vector_double::size_type, double = 0.);
+PAGMO_DLL_PUBLIC std::vector<pop_size_t> sort_population_con(const std::vector<vector_double> &,
+                                                             vector_double::size_type, double = 0.);
 
 } // namespace pagmo
 #endif
