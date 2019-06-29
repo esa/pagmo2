@@ -1,27 +1,19 @@
 /* Copyright 2017-2018 PaGMO development team
-
 This file is part of the PaGMO library.
-
 The PaGMO library is free software; you can redistribute it and/or modify
 it under the terms of either:
-
   * the GNU Lesser General Public License as published by the Free
     Software Foundation; either version 3 of the License, or (at your
     option) any later version.
-
 or
-
   * the GNU General Public License as published by the Free Software
     Foundation; either version 3 of the License, or (at your option) any
     later version.
-
 or both in parallel, as here.
-
 The PaGMO library is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
-
 You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
@@ -97,9 +89,7 @@ population nspso::evolve(population pop) const
     // We store some useful variables
     auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                     // allowed
-    auto n_x = prob.get_nx();       // This getter does not return a const reference but a copy
-    auto n_ix = prob.get_nix();
-    auto n_cx = n_x - n_ix;
+    auto n_x = prob.get_nx();       // Sum of continuous+integer dimensions
     auto bounds = prob.get_bounds();
     auto &lb = bounds.first;
     auto &ub = bounds.second;
@@ -135,11 +125,15 @@ population nspso::evolve(population pop) const
     // No throws, all valid: we clear the logs
     m_log.clear();
 
-    vector_double dummy(n_x, 0.);       // used for initialisation purposes
+    vector_double dummy_vel(n_x, 0.);   // used for initialisation purposes
     vector_double minv(n_x), maxv(n_x); // Maximum and minimum velocity allowed
     std::uniform_real_distribution<double> drng_real(0.0, 1.0);
     std::vector<vector_double::size_type> sort_list_2(swarm_size);
-    std::vector<vector_double::size_type> sort_list_3(swarm_size);
+    std::vector<vector_double::size_type> sort_list_3(2 * swarm_size);
+    auto best_fit = pop.get_f();
+    auto best_dvs = pop.get_x();
+    std::vector<vector_double> next_pop_fit(2 * swarm_size);
+    std::vector<vector_double> next_pop_dvs(2 * swarm_size);
 
     double vwidth; // Temporary variable
     // Initialise the minimum and maximum velocity
@@ -148,10 +142,9 @@ population nspso::evolve(population pop) const
         minv[i] = -1. * vwidth;
         maxv[i] = vwidth;
     }
-
     // Initialize the particle velocities if necessary
-    if ((m_velocity.size() != swarm_size)) { // with memory, add: || (!m_memory)
-        m_velocity = std::vector<vector_double>(swarm_size, dummy);
+    if ((m_velocity.size() != swarm_size)) { // if with memory, add: || (!m_memory)
+        m_velocity = std::vector<vector_double>(swarm_size, dummy_vel);
         for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
             for (decltype(n_x) j = 0u; j < n_x; ++j) {
                 m_velocity[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
@@ -159,30 +152,20 @@ population nspso::evolve(population pop) const
         }
     }
 
-    // 0 - Copy the population into nextPopList
-    std::vector<nspso_individual> next_pop_list;
-    for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
-        next_pop_list[i] = nspso_individual();
-        next_pop_list[i].cur_x = pop.get_x()[i];
-        next_pop_list[i].best_x = pop.get_x()[i];
-        next_pop_list[i].cur_v = m_velocity[i];
-        next_pop_list[i].cur_f = pop.get_f()[i];
-        next_pop_list[i].best_f = pop.get_f()[i];
-    }
-
     // Main NSPSO loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
-
         std::vector<vector_double::size_type> best_non_dom_indices;
-        const auto &fit = pop.get_f();
+        auto fit = pop.get_f();
+        auto dvs = pop.get_x();
+        // This returns a std::tuple containing: -the non dominated fronts, -the domination list, -the domination
+        // count, -the non domination rank
         auto fnds_res = fast_non_dominated_sorting(fit);
-
         // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
         if (m_verbosity > 0u) {
             // Every m_verbosity generations print a log line
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                 // We compute the ideal point
-                vector_double ideal_point_verb = ideal(pop.get_f());
+                auto ideal_point_verb = ideal(best_fit);
                 // Every 50 lines print the column names
                 if (count_verb % 50u == 1u) {
                     print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:");
@@ -211,20 +194,28 @@ population nspso::evolve(population pop) const
 
         // 1 - Calculate non-dominated population
         if (m_diversity_mechanism == "crowding distance") {
-            // This returns a std::tuple containing: -the non dominated fronts, -the domination list, -the domination
-            // count, -the non domination rank
             auto ndf = std::get<0>(fnds_res);
-            vector_double pop_cd(swarm_size); // crowding distances of the whole population
-            best_non_dom_indices = sort_population_mo(fit);
-
-        } else if (m_diversity_mechanism == "niche count") {
-            std::vector<vector_double> non_dom_chromosomes;
-            auto ndf = std::get<0>(fnds_res);
-
-            for (decltype(non_dom_chromosomes.size()) i = 0; i < ndf[0].size(); ++i) {
-                non_dom_chromosomes[i] = next_pop_list[ndf[0][i]].best_x;
+            auto best_non_dom_indices_tmp = sort_population_mo(fit);
+            std::vector<vector_double::size_type> dummy(ndf[0].size());
+            for (decltype(dummy.size()) i = 0u; i < dummy.size(); ++i) {
+                dummy[i] = best_non_dom_indices_tmp[i];
+            }
+            if (ndf[0].size() > 1) {
+                best_non_dom_indices = std::vector<vector_double::size_type>(
+                    dummy.begin(), dummy.begin() + static_cast<vector_double::difference_type>(ndf[0].size()));
+            } else { // ensure the non-dom population has at least 2 individuals (to avoid convergence to a point)
+                best_non_dom_indices = std::vector<vector_double::size_type>(dummy.begin(), dummy.begin() + 2);
+                best_non_dom_indices[0] = best_non_dom_indices_tmp[0];
+                best_non_dom_indices[1] = best_non_dom_indices_tmp[1];
             }
 
+        } else if (m_diversity_mechanism == "niche count") {
+            auto ndf = std::get<0>(fnds_res);
+            std::vector<vector_double> non_dom_chromosomes(ndf[0].size());
+
+            for (decltype(ndf[0].size()) i = 0u; i < ndf[0].size(); ++i) {
+                non_dom_chromosomes[i] = dvs[ndf[0][i]];
+            }
             vector_double nadir_point = nadir(fit);
             vector_double ideal_point = ideal(fit);
 
@@ -250,7 +241,7 @@ population nspso::evolve(population pop) const
             }
 
             std::vector<vector_double::size_type> count(non_dom_chromosomes.size(), 0);
-            std::vector<vector_double::size_type> sort_list(count.size());
+            std::vector<vector_double::size_type> sort_list(non_dom_chromosomes.size());
             compute_niche_count(count, non_dom_chromosomes, delta);
             std::iota(std::begin(sort_list), std::end(sort_list), vector_double::size_type(0));
             std::sort(
@@ -259,19 +250,19 @@ population nspso::evolve(population pop) const
                 });
 
             if (ndf[0].size() > 1) {
-                for (unsigned int i = 0; i < sort_list.size(); ++i) {
-                    best_non_dom_indices[i] = ndf[0][sort_list[i]];
+                for (decltype(sort_list.size()) i = 0; i < sort_list.size(); ++i) {
+                    best_non_dom_indices.push_back(ndf[0][sort_list[i]]);
                 }
             } else { // ensure the non-dom population has at least 2 individuals (to avoid convergence to a point)
                 unsigned min_pop_size = 2;
                 for (decltype(ndf.size()) f = 0; min_pop_size > 0 && f < ndf.size(); ++f) {
-                    for (unsigned int i = 0; min_pop_size > 0 && i < ndf[f].size(); ++i) {
-                        best_non_dom_indices[i] = ndf[f][i];
-                        min_pop_size--;
+                    for (decltype(min_pop_size) i = 0; min_pop_size > 0 && i < ndf[f].size(); ++i) {
+                        best_non_dom_indices.push_back(ndf[f][i]);
+                        --min_pop_size;
                     }
                 }
             }
-        } else { // m_diversity_method == MAXMIN
+        } else { // m_diversity_method == max min
             vector_double maxmin(swarm_size, 0);
             compute_maxmin(maxmin, fit);
             std::iota(std::begin(sort_list_2), std::end(sort_list_2), vector_double::size_type(0));
@@ -279,6 +270,7 @@ population nspso::evolve(population pop) const
                       [&maxmin](decltype(maxmin.size()) idx1, decltype(maxmin.size()) idx2) {
                           return detail::less_than_f(maxmin[idx1], maxmin[idx2]);
                       });
+
             best_non_dom_indices = sort_list_2;
             vector_double::size_type i;
             for (i = 1u; i < best_non_dom_indices.size() && maxmin[best_non_dom_indices[i]] < 0; ++i)
@@ -293,60 +285,43 @@ population nspso::evolve(population pop) const
                     + static_cast<vector_double::difference_type>(i)); // keep just the non dominated
         }
 
-        // decrease W from maxW to minW troughout the run
-
-        const double w = m_max_w - (m_max_w - m_min_w) / m_gen * gen;
+        // Decrease w from m_max_w to m_min_w troughout the run
+        double w = m_max_w - (m_max_w - m_min_w) / m_gen * gen;
 
         // 2 - Move the points
-
-        for (vector_double::size_type idx = 0; idx < swarm_size; ++idx) {
-
-            const vector_double &best_dvs = next_pop_list[idx].best_x;
-            const vector_double &cur_dvs = next_pop_list[idx].cur_x;
-            const vector_double &cur_vel = next_pop_list[idx].cur_v;
-
-            // 2.1 - Calculate the leader
-
-            unsigned ext
-                = static_cast<unsigned>(ceil(best_non_dom_indices.size() * m_leader_selection_range / 100)) - 1;
+        for (decltype(swarm_size) idx = 0; idx < swarm_size; ++idx) {
+            vector_double cur_vel = m_velocity[idx];
+            // Calculate the leader
+            int ext = static_cast<int>(ceil(best_non_dom_indices.size() * m_leader_selection_range / 100.0) - 1);
 
             if (ext < 1) {
                 ext = 1;
             }
-
-            unsigned leader_idx;
-
+            vector_double::size_type(leader_idx);
             do {
-                std::uniform_int_distribution<unsigned> drng(0, ext);
-                leader_idx = drng(m_e); // to generate an integer number in [0, ext]
+                std::uniform_int_distribution<int> drng(0, ext);
+                leader_idx
+                    = static_cast<vector_double::size_type>(drng(m_e)); // to generate an integer number in [0, ext]
             } while (best_non_dom_indices[leader_idx] == idx);
-
-            vector_double leader = next_pop_list[best_non_dom_indices[leader_idx]].best_x;
+            vector_double leader = best_dvs[best_non_dom_indices[leader_idx]];
 
             // Calculate some random factors
-            const double r1 = drng_real(m_e);
-            const double r2 = drng_real(m_e);
+            double r1 = drng_real(m_e);
+            double r2 = drng_real(m_e);
 
             // Calculate new velocity and new position for each particle
-            vector_double new_dvs(n_cx);
-            vector_double new_vel(n_cx);
+            vector_double new_dvs(n_x);
+            vector_double new_vel(n_x);
 
-            for (decltype(cur_dvs.size()) i = 0; i < cur_dvs.size(); ++i) {
-
-                double v = w * cur_vel[i] +
-
-                           m_c1 * r1 * (best_dvs[i] - cur_dvs[i]) +
-
-                           m_c2 * r2 * (leader[i] - cur_dvs[i]);
-
+            for (decltype(dvs[idx].size()) i = 0; i < dvs[idx].size(); ++i) {
+                double v = w * cur_vel[i] + m_c1 * r1 * (best_dvs[idx][i] - dvs[idx][i])
+                           + m_c2 * r2 * (leader[i] - dvs[idx][i]);
                 if (v > maxv[i]) {
                     v = maxv[i];
                 } else if (v < minv[i]) {
                     v = minv[i];
                 }
-
-                double x = cur_dvs[i] + m_chi * v;
-
+                double x = dvs[idx][i] + m_chi * v;
                 if (x > ub[i]) {
                     x = ub[i];
                     v = 0;
@@ -355,65 +330,31 @@ population nspso::evolve(population pop) const
                     x = lb[i];
                     v = 0;
                 }
-
                 new_vel[i] = v;
                 new_dvs[i] = x;
             }
-
             // Add the moved particle to the population
-
-            next_pop_list.push_back(nspso_individual());
-            next_pop_list[idx + swarm_size].cur_x = new_dvs;
-            next_pop_list[idx + swarm_size].best_x = new_dvs;
-            next_pop_list[idx + swarm_size].cur_v = new_vel;
-            next_pop_list[idx + swarm_size].cur_f = prob.fitness(new_dvs);
-            next_pop_list[idx + swarm_size].best_f = next_pop_list[idx + swarm_size].cur_f;
+            dvs[idx] = new_dvs;
+            fit[idx] = prob.fitness(new_dvs);
+            m_velocity[idx] = new_vel;
+            next_pop_dvs[idx] = new_dvs;
+            next_pop_fit[idx] = fit[idx];
         }
-
         // 3 - Select the best swarm_size individuals in the new population (of size 2*swarm_size) according to pareto
         // dominance
-
-        std::vector<vector_double> next_pop_fit(next_pop_list.size());
-
-        for (decltype(next_pop_list.size()) i = 0; i < next_pop_list.size(); ++i) {
-            next_pop_fit[i] = next_pop_list[i].best_f;
+        for (decltype(swarm_size) i = swarm_size; i < 2 * swarm_size; ++i) {
+            next_pop_fit[i] = best_fit[i - swarm_size];
+            next_pop_dvs[i] = best_dvs[i - swarm_size];
         }
-
         std::vector<vector_double::size_type> best_next_pop_indices(swarm_size, 0);
-
         if (m_diversity_mechanism != "max min") {
-
             auto fnds_res_next = fast_non_dominated_sorting(next_pop_fit);
-            auto ndf_next = std::get<0>(fnds_res);
-            auto dl_next = std::get<1>(fnds_res);
-            auto dc_next = std::get<2>(fnds_res);
-            auto ndr_next = std::get<3>(fnds_res);
-
-            for (decltype(ndf_next.size()) f = 0, i = 0; i < swarm_size && f < ndf_next.size(); ++f) {
-
-                if (ndf_next[f].size() < swarm_size - i) { // then push the whole front in the population
-
-                    for (decltype(ndf_next[f].size()) j = 0; j < ndf_next[f].size(); ++j) {
-
-                        best_next_pop_indices[i] = ndf_next[f][j];
-                        ++i;
-                    }
-
-                } else {
-
-                    std::shuffle(ndf_next[f].begin(), ndf_next[f].end(), m_e);
-
-                    for (decltype(swarm_size) j = 0; i < swarm_size; ++j) {
-                        best_next_pop_indices[i] = ndf_next[f][j];
-                        ++i;
-                    }
-                }
+            auto best_next_pop_indices_tmp = sort_population_mo(next_pop_fit);
+            for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+                best_next_pop_indices[i] = best_next_pop_indices_tmp[i];
             }
-
-        } else {
-
+        } else { // "max min" diversity mechanism
             vector_double maxmin(2 * swarm_size, 0);
-
             compute_maxmin(maxmin, next_pop_fit);
             // I extract the index list of maxmin sorted:
             std::iota(std::begin(sort_list_3), std::end(sort_list_3), vector_double::size_type(0));
@@ -427,21 +368,16 @@ population nspso::evolve(population pop) const
 
         // The next_pop_list for the next generation will contain the best swarm_size individuals out of 2*swarm_size
         // according to pareto dominance
-
-        std::vector<nspso_individual> tmp_pop(swarm_size);
-
-        for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
-            tmp_pop[i] = next_pop_list[best_next_pop_indices[i]];
+        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+            best_dvs[i] = next_pop_dvs[best_next_pop_indices[i]];
+            best_fit[i] = next_pop_fit[best_next_pop_indices[i]];
         }
-        next_pop_list = tmp_pop;
         // 4 - I now copy insert the new population
-
         for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
-            pop.set_xf(i, next_pop_list[i].cur_x, next_pop_list[i].cur_f);
+            pop.set_xf(i, dvs[i], fit[i]);
         }
 
     } // end of main NSPSO loop
-
     return pop;
 }
 
@@ -500,7 +436,7 @@ double nspso::minfit(vector_double::size_type(i), vector_double::size_type(j),
 
     double min = fit[i][0] - fit[j][0];
 
-    for (decltype(fit[i].size()) f = 0; f < fit[i].size(); ++f) {
+    for (decltype(fit[0].size()) f = 0; f < fit[0].size(); ++f) {
 
         double tmp = fit[i][f] - fit[j][f];
 
@@ -516,14 +452,11 @@ double nspso::minfit(vector_double::size_type(i), vector_double::size_type(j),
 void nspso::compute_maxmin(vector_double &maxmin, const std::vector<vector_double> &fit) const
 
 {
+    for (decltype(fit.size()) i = 0; i < fit.size(); ++i) {
 
-    decltype(fit.size()) np = fit.size();
+        maxmin[i] = minfit(i, (i + 1) % fit.size(), fit);
 
-    for (decltype(np) i = 0; i < np; ++i) {
-
-        maxmin[i] = minfit(i, (i + 1) % np, fit);
-
-        for (decltype(np) j = 0; j < np; ++j) {
+        for (decltype(fit.size()) j = 0; j < fit.size(); ++j) {
 
             if (i != j) {
 
