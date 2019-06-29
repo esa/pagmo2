@@ -91,6 +91,8 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
     BOOST_CHECK_THROW((nspso{}.evolve(population{hock_schittkowsky_71{}, 5u, 23u})), std::invalid_argument);
     // single objective prob
     BOOST_CHECK_THROW((nspso{}.evolve(population{rosenbrock{}, 5u, 23u})), std::invalid_argument);
+    // wrong pop size
+    BOOST_CHECK_THROW((nspso{}.evolve(population{zdt{}, 1u, 23u})), std::invalid_argument);
     // and a clean exit for 0 generation
     population pop{zdt{2u}, 10u};
     BOOST_CHECK(nspso{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
@@ -122,6 +124,30 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
     wfg udp_2{4u, 16u, 15u, 14u};
     population pop4{udp_2, 52u, 23u};
     pop4 = user_algo2.evolve(pop4);
+
+    // The following evolutions are for coverage tests purposes
+    // Two individuals only for making the pareto front size = 1 for some iterations
+    wfg udp_3{4u, 2u, 2u, 1u};
+    population pop5{udp_3, 2u, 23u};
+    pop5 = user_algo2.evolve(pop5);
+    // Same as above, but with niche count as diversity mechanism
+    nspso user_algo3{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "niche count", 24u};
+    wfg udp_4{4u, 2u, 2u, 1u};
+    population pop6{udp_4, 2u, 23u};
+    pop6 = user_algo3.evolve(pop6);
+    // Niche count diversity mechanism with 3 objectives
+    wfg udp_5{4u, 3u, 3u, 2u};
+    population pop7{udp_5, 2u, 23u};
+    pop7 = user_algo3.evolve(pop7);
+    // Niche count method with >3 objectives
+    wfg udp_6{4u, 16u, 15u, 14u};
+    population pop8{udp_6, 2u, 23u};
+    pop8 = user_algo3.evolve(pop8);
+    // Also for max min as diversity mechanism, I make sure that pareto front size = 1 for some iteration
+    nspso user_algo4{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "max min", 24u};
+    wfg udp_7{4u, 2u, 2u, 1u};
+    population pop9{udp_7, 2u, 23u};
+    pop9 = user_algo4.evolve(pop9);
 }
 
 BOOST_AUTO_TEST_CASE(nspso_setters_getters_test)

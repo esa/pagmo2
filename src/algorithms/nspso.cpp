@@ -102,9 +102,6 @@ population nspso::evolve(population pop) const
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
     // particular algorithm.
-    if (prob.get_nx() == 0u) {
-        pagmo_throw(std::invalid_argument, get_name() + " cannot work on problems without continuous part.");
-    }
     if (prob.is_stochastic()) {
         pagmo_throw(std::invalid_argument,
                     "The problem appears to be stochastic " + get_name() + " cannot deal with it");
@@ -118,8 +115,9 @@ population nspso::evolve(population pop) const
                     "This is a multi-objective algortihm, while number of objectives detected in " + prob.get_name()
                         + " is " + std::to_string(prob.get_nf()));
     }
-    if (!pop.size()) {
-        pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
+    if (pop.size() <= 1u) {
+        pagmo_throw(std::invalid_argument, get_name() + " can only work with population sizes >=2, whereas "
+                                               + std::to_string(pop.size()) + " were detected.");
     }
     // Get out if there is nothing to do.
     if (m_gen == 0u) {
