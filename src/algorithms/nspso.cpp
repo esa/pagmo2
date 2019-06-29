@@ -31,8 +31,11 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/serialization/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nspso.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -87,9 +90,9 @@ nspso::nspso(unsigned gen, double min_w, double max_w, double c1, double c2, dou
 population nspso::evolve(population pop) const
 {
     // We store some useful variables
-    auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                    // allowed
-    auto n_x = prob.get_nx();       // Sum of continuous+integer dimensions
+    const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
+                                          // allowed
+    auto n_x = prob.get_nx();             // Sum of continuous+integer dimensions
     auto bounds = prob.get_bounds();
     auto &lb = bounds.first;
     auto &ub = bounds.second;
@@ -125,14 +128,15 @@ population nspso::evolve(population pop) const
     // No throws, all valid: we clear the logs
     m_log.clear();
 
-    vector_double dummy_vel(n_x, 0.);   // used for initialisation purposes
-    vector_double minv(n_x), maxv(n_x); // Maximum and minimum velocity allowed
+    vector_double dummy_vel(n_x, 0.);           // used for initialisation purposes
+    vector_double dummy_fit(prob.get_nf(), 0.); // used for initialisation purposes
+    vector_double minv(n_x), maxv(n_x);         // Maximum and minimum velocity allowed
     std::uniform_real_distribution<double> drng_real(0.0, 1.0);
     std::vector<vector_double::size_type> sort_list_2(swarm_size);
     std::vector<vector_double::size_type> sort_list_3(2 * swarm_size);
     auto best_fit = pop.get_f();
     auto best_dvs = pop.get_x();
-    std::vector<vector_double> next_pop_fit(2 * swarm_size);
+    std::vector<vector_double> next_pop_fit(2 * swarm_size, dummy_fit);
     std::vector<vector_double> next_pop_dvs(2 * swarm_size);
 
     double vwidth; // Temporary variable
@@ -335,10 +339,36 @@ population nspso::evolve(population pop) const
             }
             // Add the moved particle to the population
             dvs[idx] = new_dvs;
-            fit[idx] = prob.fitness(new_dvs);
             m_velocity[idx] = new_vel;
             next_pop_dvs[idx] = new_dvs;
-            next_pop_fit[idx] = fit[idx];
+            if (!m_bfe) {
+                // bfe not available
+                fit[idx] = prob.fitness(new_dvs);
+                next_pop_fit[idx] = fit[idx];
+            }
+        }
+        if (m_bfe) {
+            // bfe is available:
+            vector_double decision_vectors(swarm_size * dvs[0].size());
+            vector_double::size_type(pos) = 0u;
+            for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+                for (decltype(dvs[0].size()) ii = 0u; ii < dvs[0].size(); ++ii) {
+                    decision_vectors[pos] = dvs[i][ii];
+                    ++pos;
+                }
+            }
+            // run bfe.
+            auto fitnesses = (*m_bfe)(prob, decision_vectors);
+            vector_double::size_type(pos_fit) = 0u;
+            for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                for (decltype(fit[0].size()) ii_f = 0u; ii_f < fit[0].size(); ++ii_f) {
+                    fit[i][ii_f] = fitnesses[pos_fit];
+                    next_pop_fit[i][ii_f] = fitnesses[pos_fit];
+                    ++pos_fit;
+                }
+            }
+        }
+        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
         }
         // 3 - Select the best swarm_size individuals in the new population (of size 2*swarm_size) according to pareto
         // dominance
@@ -391,6 +421,15 @@ void nspso::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme
+/**
+ * @param b batch function evaluation object
+ */
+void nspso::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
 /// Extra info
 /**
  * Returns extra information on the algorithm.
@@ -426,7 +465,7 @@ template <typename Archive>
 void nspso::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_gen, m_min_w, m_max_w, m_c1, m_c2, m_chi, m_v_coeff, m_leader_selection_range,
-                    m_diversity_mechanism, m_e, m_seed, m_verbosity, m_log);
+                    m_diversity_mechanism, m_e, m_seed, m_verbosity, m_log, m_bfe);
 }
 
 double nspso::minfit(vector_double::size_type(i), vector_double::size_type(j),

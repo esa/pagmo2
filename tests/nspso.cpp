@@ -31,19 +31,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
-#include <cmath>
-#include <iomanip>
-#include <limits>
-#include <numeric>
-#include <random>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <tuple>
-#include <utility>
-#include <vector>
-
-#include <algorithm>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <iostream>
@@ -198,4 +185,35 @@ BOOST_AUTO_TEST_CASE(nspso_serialization_test)
             BOOST_CHECK_CLOSE(std::get<2>(before_log[i])[j], std::get<2>(after_log[i])[j], 1e-8);
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+    // 1 - Algorithm with bfe disabled
+    problem prob{wfg(5u, 16u, 15u, 14u)};
+    nspso uda1{nspso{10}};
+    uda1.set_verbosity(1u);
+    uda1.set_seed(23u);
+    // 2 - Instantiate
+    algorithm algo1{uda1};
+
+    // 3 - Instantiate populations
+    population pop{prob, 24};
+    population pop1{prob, 24};
+    population pop2{prob, 24};
+
+    // 4 - Evolve the population
+    pop1 = algo1.evolve(pop);
+
+    // 5 new algorithm that is bfe enabled
+    nspso uda2{nspso{10}};
+    uda2.set_verbosity(1u);
+    uda2.set_seed(23u);
+    uda2.set_bfe(bfe{}); // This will use the default bfe.
+    // 6 - Instantiate a pagmo algorithm
+    algorithm algo2{uda2};
+
+    // 7 - Evolve the population
+    pop2 = algo2.evolve(pop);
+    BOOST_CHECK(algo1.extract<nspso>()->get_log() == algo2.extract<nspso>()->get_log());
 }

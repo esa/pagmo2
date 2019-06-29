@@ -25,6 +25,8 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
@@ -134,6 +136,18 @@ public:
         return m_verbosity;
     }
 
+    /// Gets the generations
+    /**
+     * @return the number of generations to evolve for
+     */
+    unsigned get_gen() const
+    {
+        return m_gen;
+    }
+
+    // Sets the bfe
+    void set_bfe(const bfe &b);
+
     /// Algorithm name
     /**
      * Returns the name of the algorithm.
@@ -196,6 +210,7 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    boost::optional<bfe> m_bfe;
 };
 
 } // namespace pagmo
