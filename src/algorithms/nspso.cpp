@@ -202,7 +202,8 @@ population nspso::evolve(population pop) const
                 best_non_dom_indices = std::vector<vector_double::size_type>(
                     dummy.begin(), dummy.begin() + static_cast<vector_double::difference_type>(ndf[0].size()));
             } else { // ensure the non-dom population has at least 2 individuals (to avoid convergence to a point)
-                best_non_dom_indices = std::vector<vector_double::size_type>(dummy.begin(), dummy.begin() + 2);
+                best_non_dom_indices = std::vector<vector_double::size_type>(
+                    dummy.begin(), dummy.begin() + static_cast<vector_double::difference_type>(2));
                 best_non_dom_indices[0] = best_non_dom_indices_tmp[0];
                 best_non_dom_indices[1] = best_non_dom_indices_tmp[1];
             }
@@ -221,12 +222,12 @@ population nspso::evolve(population pop) const
             double delta = 1.0;
             if (prob.get_nf() == 2) {
                 delta = ((nadir_point[0] - ideal_point[0]) + (nadir_point[1] - ideal_point[1]))
-                        / (non_dom_chromosomes.size() - 1);
+                        / (static_cast<double>(non_dom_chromosomes.size()) - 1);
             } else if (prob.get_nf() == 3) {
                 double d1 = nadir_point[0] - ideal_point[0];
                 double d2 = nadir_point[1] - ideal_point[1];
                 double d3 = nadir_point[2] - ideal_point[2];
-                double ndc_size = non_dom_chromosomes.size();
+                double ndc_size = static_cast<double>(non_dom_chromosomes.size());
                 delta = std::sqrt(4 * d2 * d1 * ndc_size + 4 * d3 * d1 * ndc_size + 4 * d2 * d3 * ndc_size
                                   + std::pow(d1, 2) + std::pow(d2, 2) + std::pow(d3, 2) - 2 * d2 * d1 - 2 * d3 * d1
                                   - 2 * d2 * d3 + d1 + d2 + d3)
@@ -235,7 +236,8 @@ population nspso::evolve(population pop) const
                 for (decltype(nadir_point.size()) i = 0; i < nadir_point.size(); ++i) {
                     delta *= nadir_point[i] - ideal_point[i];
                 }
-                delta = pow(delta, 1.0 / nadir_point.size()) / non_dom_chromosomes.size();
+                delta = pow(delta, 1.0 / static_cast<double>(nadir_point.size()))
+                        / static_cast<double>(non_dom_chromosomes.size());
             }
 
             std::vector<vector_double::size_type> count(non_dom_chromosomes.size(), 0);
@@ -290,12 +292,14 @@ population nspso::evolve(population pop) const
         for (decltype(swarm_size) idx = 0; idx < swarm_size; ++idx) {
             vector_double cur_vel = m_velocity[idx];
             // Calculate the leader
-            int ext = static_cast<int>(ceil(best_non_dom_indices.size() * m_leader_selection_range / 100.0) - 1);
+            int ext = static_cast<int>(ceil(static_cast<double>(best_non_dom_indices.size())
+                                            * static_cast<double>(m_leader_selection_range) / 100.0)
+                                       - 1);
 
             if (ext < 1) {
                 ext = 1;
             }
-            vector_double::size_type(leader_idx);
+            vector_double::size_type leader_idx;
             do {
                 std::uniform_int_distribution<int> drng(0, ext);
                 leader_idx
@@ -344,7 +348,7 @@ population nspso::evolve(population pop) const
         if (m_bfe) {
             // bfe is available:
             vector_double decision_vectors(swarm_size * dvs[0].size());
-            vector_double::size_type(pos) = 0u;
+            vector_double::size_type pos = 0u;
             for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
                 for (decltype(dvs[0].size()) ii = 0u; ii < dvs[0].size(); ++ii) {
                     decision_vectors[pos] = dvs[i][ii];
@@ -353,7 +357,7 @@ population nspso::evolve(population pop) const
             }
             // run bfe.
             auto fitnesses = (*m_bfe)(prob, decision_vectors);
-            vector_double::size_type(pos_fit) = 0u;
+            vector_double::size_type pos_fit = 0u;
             for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
                 for (decltype(fit[0].size()) ii_f = 0u; ii_f < fit[0].size(); ++ii_f) {
                     fit[i][ii_f] = fitnesses[pos_fit];
