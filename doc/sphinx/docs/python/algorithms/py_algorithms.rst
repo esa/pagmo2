@@ -88,6 +88,11 @@ Algorithms exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.nspso
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.mbh
    :members:
 

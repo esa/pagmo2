@@ -39,6 +39,7 @@ Implemented algorithms
   algorithms/cstrs_self_adaptive
   algorithms/nlopt
   algorithms/nsga2
+  algorithms/nspso
   algorithms/pso
   algorithms/pso_gen
   algorithms/sade
