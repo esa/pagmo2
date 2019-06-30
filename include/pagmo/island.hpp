@@ -425,7 +425,7 @@ class PAGMO_DLL_PUBLIC island
     // NOTE: the idea in the move members and the dtor is that
     // we want to wait *and* erase any future in the island, before doing
     // the move/destruction. Thus we use this small wrapper.
-    void wait_check_ignore();
+    PAGMO_DLL_LOCAL void wait_check_ignore();
 
 public:
     // Default constructor.
