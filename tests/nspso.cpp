@@ -138,6 +138,7 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
     // Niche count diversity mechanism with 3 objectives
     wfg udp_5{4u, 3u, 3u, 2u};
     population pop7{udp_5, 2u, 23u};
+    user_algo3.set_verbosity(1);
     pop7 = user_algo3.evolve(pop7);
     // Niche count method with >3 objectives
     wfg udp_6{4u, 16u, 15u, 14u};
@@ -182,7 +183,6 @@ BOOST_AUTO_TEST_CASE(nspso_serialization_test)
     algorithm algo{nspso{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "niche count", 24u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
-
     // Store the string representation of p.
     std::stringstream ss;
     auto before_text = boost::lexical_cast<std::string>(algo);

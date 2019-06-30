@@ -141,12 +141,10 @@ population nspso::evolve(population pop) const
         maxv[i] = vwidth;
     }
     // Initialize the particle velocities if necessary
-    if ((m_velocity.size() != swarm_size)) { // if with memory, add: || (!m_memory)
-        m_velocity = std::vector<vector_double>(swarm_size, dummy_vel);
-        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
-            for (decltype(n_x) j = 0u; j < n_x; ++j) {
-                m_velocity[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
-            }
+    m_velocity = std::vector<vector_double>(swarm_size, dummy_vel);
+    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+        for (decltype(n_x) j = 0u; j < n_x; ++j) {
+            m_velocity[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
         }
     }
 
@@ -209,6 +207,7 @@ population nspso::evolve(population pop) const
 
         } else if (m_diversity_mechanism == "niche count") {
             auto ndf = std::get<0>(fnds_res);
+            auto best_ndi_tmp = sort_population_mo(fit);
             std::vector<vector_double> non_dom_chromosomes(ndf[0].size());
 
             for (decltype(ndf[0].size()) i = 0u; i < ndf[0].size(); ++i) {
@@ -219,14 +218,21 @@ population nspso::evolve(population pop) const
 
             // Fonseca-Fleming setting for delta
             double delta = 1.0;
-            if (prob.get_nf() == 2) {
+            if (prob.get_nobj() == 2) {
+                vector_double::size_type dummy_delta = non_dom_chromosomes.size();
+                if (non_dom_chromosomes.size() == 1) {
+                    dummy_delta = 2;
+                }
                 delta = ((nadir_point[0] - ideal_point[0]) + (nadir_point[1] - ideal_point[1]))
-                        / (static_cast<double>(non_dom_chromosomes.size()) - 1);
-            } else if (prob.get_nf() == 3) {
+                        / (static_cast<double>(dummy_delta) - 1);
+            } else if (prob.get_nobj() == 3) {
                 double d1 = nadir_point[0] - ideal_point[0];
                 double d2 = nadir_point[1] - ideal_point[1];
                 double d3 = nadir_point[2] - ideal_point[2];
                 double ndc_size = static_cast<double>(non_dom_chromosomes.size());
+                if (ndc_size < 2.0) {
+                    ndc_size = 2.0;
+                }
                 delta = std::sqrt(4 * d2 * d1 * ndc_size + 4 * d3 * d1 * ndc_size + 4 * d2 * d3 * ndc_size
                                   + std::pow(d1, 2) + std::pow(d2, 2) + std::pow(d3, 2) - 2 * d2 * d1 - 2 * d3 * d1
                                   - 2 * d2 * d3 + d1 + d2 + d3)
@@ -253,23 +259,18 @@ population nspso::evolve(population pop) const
                     best_non_dom_indices.push_back(ndf[0][sort_list[i]]);
                 }
             } else { // ensure the non-dom population has at least 2 individuals (to avoid convergence to a point)
-                unsigned min_pop_size = 2;
-                for (decltype(ndf.size()) f = 0; min_pop_size > 0 && f < ndf.size(); ++f) {
-                    for (decltype(min_pop_size) i = 0; min_pop_size > 0 && i < ndf[f].size(); ++i) {
-                        best_non_dom_indices.push_back(ndf[f][i]);
-                        --min_pop_size;
-                    }
-                }
+                best_non_dom_indices.push_back(ndf[0][0]);
+                best_non_dom_indices.push_back(ndf[1][0]);
             }
         } else { // m_diversity_method == max min
             vector_double maxmin(swarm_size, 0);
             compute_maxmin(maxmin, fit);
+
             std::iota(std::begin(sort_list_2), std::end(sort_list_2), vector_double::size_type(0));
             std::sort(sort_list_2.begin(), sort_list_2.end(),
                       [&maxmin](decltype(maxmin.size()) idx1, decltype(maxmin.size()) idx2) {
                           return detail::less_than_f(maxmin[idx1], maxmin[idx2]);
                       });
-
             best_non_dom_indices = sort_list_2;
             vector_double::size_type i;
             for (i = 1u; i < best_non_dom_indices.size() && maxmin[best_non_dom_indices[i]] < 0; ++i)
@@ -289,7 +290,6 @@ population nspso::evolve(population pop) const
 
         // 2 - Move the points
         for (decltype(swarm_size) idx = 0; idx < swarm_size; ++idx) {
-            vector_double cur_vel = m_velocity[idx];
             // Calculate the leader
             int ext = static_cast<int>(ceil(static_cast<double>(best_non_dom_indices.size())
                                             * static_cast<double>(m_leader_selection_range) / 100.0)
@@ -298,6 +298,7 @@ population nspso::evolve(population pop) const
             if (ext < 1) {
                 ext = 1;
             }
+
             vector_double::size_type leader_idx;
             do {
                 std::uniform_int_distribution<int> drng(0, ext);
@@ -313,9 +314,8 @@ population nspso::evolve(population pop) const
             // Calculate new velocity and new position for each particle
             vector_double new_dvs(n_x);
             vector_double new_vel(n_x);
-
-            for (decltype(dvs[idx].size()) i = 0; i < dvs[idx].size(); ++i) {
-                double v = w * cur_vel[i] + m_c1 * r1 * (best_dvs[idx][i] - dvs[idx][i])
+            for (decltype(n_x) i = 0; i < n_x; ++i) {
+                double v = w * m_velocity[idx][i] + m_c1 * r1 * (best_dvs[idx][i] - dvs[idx][i])
                            + m_c2 * r2 * (leader[i] - dvs[idx][i]);
                 if (v > maxv[i]) {
                     v = maxv[i];
@@ -325,11 +325,11 @@ population nspso::evolve(population pop) const
                 double x = dvs[idx][i] + m_chi * v;
                 if (x > ub[i]) {
                     x = ub[i];
-                    v = 0;
+                    v = 0.0;
 
                 } else if (x < lb[i]) {
                     x = lb[i];
-                    v = 0;
+                    v = 0.0;
                 }
                 new_vel[i] = v;
                 new_dvs[i] = x;
