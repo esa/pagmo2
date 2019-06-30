@@ -353,8 +353,8 @@ void island::evolve(unsigned n)
                             // Extract the candidate migrants from the archipelago.
                             const auto migrants = aptr->extract_migrants(idx);
 
-                            // Extract the individuals from the island.
-                            const auto inds = this->get_individuals();
+                            // Extract the migration data from the island.
+                            const auto mig_data = this->get_migration_data();
                             // auto new_inds = this->m_ptr->r_pol_ptr->replace(inds, migrants);
                             // Determine which individuals were migrated from migrants into new_inds,
                             // log them.
@@ -690,10 +690,10 @@ bool island::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
-// Get all the individuals in the population.
-individuals_group_t island::get_individuals() const
+// Get the migration data.
+island::migration_data_t island::get_migration_data() const
 {
-    individuals_group_t retval;
+    migration_data_t retval;
 
     {
         // NOTE: this helper is called from the separate
@@ -702,11 +702,22 @@ individuals_group_t island::get_individuals() const
         auto gte = detail::gte_getter();
         (void)gte;
 
+        // Get a copy of the population.
         auto tmp_pop(get_population());
 
-        std::get<0>(retval) = std::move(tmp_pop.m_ID);
-        std::get<1>(retval) = std::move(tmp_pop.m_x);
-        std::get<2>(retval) = std::move(tmp_pop.m_f);
+        // Move out the individuals.
+        std::get<0>(std::get<0>(retval)) = std::move(tmp_pop.m_ID);
+        std::get<1>(std::get<0>(retval)) = std::move(tmp_pop.m_x);
+        std::get<2>(std::get<0>(retval)) = std::move(tmp_pop.m_f);
+
+        // nobj, nec, nic, nix.
+        std::get<1>(retval) = tmp_pop.get_problem().get_nobj();
+        std::get<2>(retval) = tmp_pop.get_problem().get_nec();
+        std::get<3>(retval) = tmp_pop.get_problem().get_nic();
+        std::get<4>(retval) = tmp_pop.get_problem().get_nix();
+
+        // The vector of tolerances.
+        std::get<5>(retval) = tmp_pop.get_problem().get_c_tol();
     }
 
     return retval;

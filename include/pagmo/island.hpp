@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <mutex>
 #include <random>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
@@ -817,8 +818,13 @@ public:
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
-    // Get all the individuals in the population.
-    PAGMO_DLL_LOCAL individuals_group_t get_individuals() const;
+    // Data used in the migration machinery:
+    // - the island's population (represented via individuals_group_t),
+    // - the problem's nobj, nec, nic, nix and tolerances.
+    using migration_data_t = std::tuple<individuals_group_t, vector_double::size_type, vector_double::size_type,
+                                        vector_double::size_type, vector_double::size_type, vector_double>;
+    // Fetch the migration data.
+    PAGMO_DLL_LOCAL migration_data_t get_migration_data() const;
     // Set all the individuals in the population.
     PAGMO_DLL_LOCAL void set_individuals(const individuals_group_t &);
 

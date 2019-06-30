@@ -78,8 +78,7 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
     }
 
     // Cache the sizes of the input pop and the migrants.
-    // NOTE: use the size type of the dvs, which is the same
-    // as pop_size_t.
+    // NOTE: use the size type of the dvs, which is pop_size_t.
     const auto inds_size = std::get<1>(inds).size();
     const auto mig_size = std::get<1>(mig).size();
 
