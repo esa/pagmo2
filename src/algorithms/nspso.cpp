@@ -203,9 +203,8 @@ population nspso::evolve(population pop) const
                     dummy.begin(), dummy.begin() + static_cast<vector_double::difference_type>(ndf[0].size()));
             } else { // ensure the non-dom population has at least 2 individuals (to avoid convergence to a point)
                 best_non_dom_indices = std::vector<vector_double::size_type>(
-                    dummy.begin(), dummy.begin() + static_cast<vector_double::difference_type>(2));
-                best_non_dom_indices[0] = best_non_dom_indices_tmp[0];
-                best_non_dom_indices[1] = best_non_dom_indices_tmp[1];
+                    best_non_dom_indices_tmp.begin(),
+                    best_non_dom_indices_tmp.begin() + static_cast<vector_double::difference_type>(2));
             }
 
         } else if (m_diversity_mechanism == "niche count") {
