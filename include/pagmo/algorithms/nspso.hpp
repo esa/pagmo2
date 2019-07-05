@@ -55,8 +55,8 @@ public:
 
     // Constructor
     // Constructs the NSPSO user defined algorithm (multi objective PSO).
-    nspso(unsigned gen = 1u, double min_w = 0.95, double max_w = 10., double c1 = 0.01, double c2 = 0.5,
-          double chi = 0.5, double v_coeff = 0.5, unsigned leader_selection_range = 2u,
+    nspso(unsigned gen = 1u, double min_w = 0.4, double max_w = 1., double c1 = 2.0, double c2 = 2.0, double chi = 1.0,
+          double v_coeff = 0.5, unsigned leader_selection_range = 60u,
           std::string diversity_mechanism = "crowding distance", unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
