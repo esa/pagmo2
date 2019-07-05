@@ -29,10 +29,12 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_EIGEN_S11N_HPP
 #define PAGMO_DETAIL_EIGEN_S11N_HPP
 
+#include <boost/config.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/mpl/greater.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/integral_c.hpp>
+#include <boost/static_assert.hpp>
 
 #include <pagmo/detail/eigen.hpp>
 #include <pagmo/s11n.hpp>

@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
+#include <boost/config.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/mpl/greater.hpp>
 #include <boost/mpl/int.hpp>
@@ -48,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/static_assert.hpp>
 
 // Include the archives.
 #include <boost/archive/binary_iarchive.hpp>
