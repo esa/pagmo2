@@ -42,7 +42,7 @@ Non dominated sorting particle swarm optimization(NSPSO)
     
       :param pop: population to be evolved.
       :return: evolved population.
-      :throw ``std::invalid_argument``: if ``pop.get_problem()`` is stochastic, single objective or has non linear constraints. If the population size is smaller than 2.
+      :throw: ``std::invalid_argument`` if ``pop.get_problem()`` is stochastic, single objective or has non linear constraints. If the population size is smaller than 2.
 
    .. cpp:function:: void set_seed(unsigned seed)
 

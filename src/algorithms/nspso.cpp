@@ -65,9 +65,8 @@ nspso::nspso(unsigned gen, double min_w, double max_w, double c1, double c2, dou
                 + std::to_string(min_w) + "and" + std::to_string(max_w) + ", respectively, were detected");
     }
     if (v_coeff <= 0 || v_coeff > 1) {
-        pagmo_throw(std::invalid_argument,
-                    "velocity scaling factor should be in ]0,1] range, while a value of" + std::to_string(v_coeff)
-                        + " was detected");
+        pagmo_throw(std::invalid_argument, "velocity scaling factor should be in ]0,1] range, while a value of"
+                                               + std::to_string(v_coeff) + " was detected");
     }
     if (leader_selection_range > 100) {
         pagmo_throw(std::invalid_argument,
@@ -101,9 +100,8 @@ population nspso::evolve(population pop) const
                     "The problem appears to be stochastic " + get_name() + " cannot deal with it");
     }
     if (prob.get_nc() != 0u) {
-        pagmo_throw(std::invalid_argument,
-                    "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
-                        + " cannot deal with them.");
+        pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                               + get_name() + " cannot deal with them.");
     }
     if (prob.get_nf() < 2u) {
         pagmo_throw(std::invalid_argument,
@@ -111,9 +109,8 @@ population nspso::evolve(population pop) const
                         + " is " + std::to_string(prob.get_nf()));
     }
     if (pop.size() <= 1u) {
-        pagmo_throw(std::invalid_argument,
-                    get_name() + " can only work with population sizes >=2, whereas " + std::to_string(pop.size())
-                        + " were detected.");
+        pagmo_throw(std::invalid_argument, get_name() + " can only work with population sizes >=2, whereas "
+                                               + std::to_string(pop.size()) + " were detected.");
     }
     // Get out if there is nothing to do.
     if (m_gen == 0u) {
@@ -364,8 +361,6 @@ population nspso::evolve(population pop) const
                     ++pos_fit;
                 }
             }
-        }
-        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
         }
         // 3 - Select the best swarm_size individuals in the new population (of size 2*swarm_size) according to pareto
         // dominance
