@@ -1044,7 +1044,7 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  */
 class PAGMO_DLL_PUBLIC problem
 {
-    // Make friend with the streaming operator, which needs access
+    // Make friends with the streaming operator, which needs access
     // to the internals.
     friend PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
 

@@ -56,6 +56,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
@@ -75,6 +76,16 @@ namespace pagmo
 
 namespace detail
 {
+
+namespace
+{
+
+// This will contain the time point at which
+// the pagmo library is loaded. It is used in the migration
+// logging to record the migration time.
+const auto initial_timestamp = std::chrono::steady_clock::now();
+
+} // namespace
 
 // NOTE: this is just a simple wrapper to force noexcept behaviour on std::future::wait().
 // If f.wait() throws something, the program will terminate. A valid std::future should not
@@ -171,6 +182,16 @@ island_data::island_data()
 {
 }
 
+// This is used only in the copy ctor of island. The island will come from the clone()
+// method of an isl_inner, the algo/pop from the island's getters. The r_policy
+// will come directly from the island's data member, as the r_policy is supposed
+// to be thread-safe.
+island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, population &&p, const r_policy &r)
+    : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::move(a))),
+      pop(std::make_shared<population>(std::move(p))), r_pol(r)
+{
+}
+
 const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses
     = {{evolve_status::idle, "idle"},
        {evolve_status::busy, "busy"},
@@ -224,7 +245,8 @@ island::island() : m_ptr(detail::make_unique<idata_t>()) {}
  * - the copy constructors of pagmo::algorithm and pagmo::population.
  */
 island::island(const island &other)
-    : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population()))
+    : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population(),
+                                         other.m_ptr->r_pol))
 {
     // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
     assert(m_ptr->archi_ptr == nullptr);
@@ -327,6 +349,9 @@ void island::evolve(unsigned n)
                     // If the island is in an archi, before
                     // launching the evolution migrate the
                     // individuals from the connecting islands.
+
+                    // Get the indices of the islands with a connection
+                    // towards this.
                     const auto connections = aptr->get_island_connections(isl_idx);
                     assert(connections.first.size() == connections.second.size());
 
@@ -343,27 +368,63 @@ void island::evolve(unsigned n)
                         }
 
                         // Pick a random island index among the islands connecting to this.
-                        const auto idx
+                        const auto src_idx
                             = (*idist)(*migr_eng, std::uniform_int_distribution<archipelago::size_type>::param_type(
                                                       0, connections.first.size() - 1u));
 
                         // Throw the dice against the migration probability.
                         if ((*pdist)(*migr_eng)
-                            < connections.second[static_cast<decltype(connections.second.size())>(idx)]) {
+                            < connections.second[static_cast<decltype(connections.second.size())>(src_idx)]) {
                             // Extract the candidate migrants from the archipelago.
-                            const auto migrants = aptr->extract_migrants(idx);
+                            const auto migrants = aptr->extract_migrants(src_idx);
 
-                            // Extract the migration data from the island.
+                            // Extract the migration data from this island.
                             const auto mig_data = this->get_migration_data();
-                            // auto new_inds = this->m_ptr->r_pol_ptr->replace(inds, migrants);
-                            // Determine which individuals were migrated from migrants into new_inds,
-                            // log them.
-                            // this->set_individuals(new_inds);
+
+                            // Get the new individuals that will replace the current population.
+                            auto new_inds = this->m_ptr->r_pol.replace(
+                                std::get<0>(mig_data), std::get<1>(mig_data), std::get<2>(mig_data),
+                                std::get<3>(mig_data), std::get<4>(mig_data), std::get<5>(mig_data), migrants);
+
+                            // Set the new individuals.
+                            this->set_individuals(new_inds);
+
+                            // Compute the migration timestamp.
+                            const std::chrono::duration<double> mig_ts
+                                = std::chrono::steady_clock::now() - detail::initial_timestamp;
+
+                            // Turn new_inds into an ID -> (dv, fv) map.
+                            std::unordered_map<unsigned long long, std::pair<vector_double, vector_double>>
+                                new_inds_map;
+                            for (decltype(std::get<0>(new_inds).size()) i = 0; i < std::get<0>(new_inds).size(); ++i) {
+                                new_inds_map[std::get<0>(new_inds)[i]] = std::make_pair(
+                                    std::move(std::get<1>(new_inds)[i]), std::move(std::get<2>(new_inds)[i]));
+                            }
+
+                            // Build the migration log.
+                            archipelago::migration_log_t mlog;
+                            for (auto mig_ID : std::get<0>(migrants)) {
+                                auto it = new_inds_map.find(mig_ID);
+                                if (it != new_inds_map.end()) {
+                                    mlog.emplace_back(mig_ts.count(), mig_ID, it->second.first, it->second.second,
+                                                      src_idx, isl_idx);
+                                }
+                            }
+
+                            // TODO: merge mlog into the archi migration log.
+                            // aptr->append_new_migration_log(std::move(mlog));
                         }
                     }
                 }
 
+                // Run the evolution.
                 this->m_ptr->isl_ptr->run_evolve(*this);
+
+                if (aptr) {
+                    // If the island is in an archi, after evolution select
+                    // the migrating individuals and place them in the archi's migrants
+                    // database.
+                }
             }
         });
         // LCOV_EXCL_START
@@ -675,6 +736,7 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
     }
     stream(os, "Algorithm: " + isl.get_algorithm().get_name(), "\n\n");
     stream(os, "Problem: " + isl.get_population().get_problem().get_name(), "\n\n");
+    stream(os, "Replacement policy: " + isl.m_ptr->r_pol.get_name(), "\n\n");
     stream(os, "Population size: ", isl.get_population().size(), "\n");
     stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
     stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
@@ -726,6 +788,7 @@ island::migration_data_t island::get_migration_data() const
 // Set all the individuals in the population.
 void island::set_individuals(const individuals_group_t &inds)
 {
+    // Create copy for move semantics below.
     auto tmp_inds(inds);
 
     {
@@ -735,12 +798,15 @@ void island::set_individuals(const individuals_group_t &inds)
         auto gte = detail::gte_getter();
         (void)gte;
 
+        // Get out a copy of the population.
         auto tmp_pop(get_population());
 
+        // Move in the individuals.
         tmp_pop.m_ID = std::move(std::get<0>(tmp_inds));
         tmp_pop.m_x = std::move(std::get<1>(tmp_inds));
         tmp_pop.m_f = std::move(std::get<2>(tmp_inds));
 
+        // Set the new population.
         set_population(tmp_pop);
     }
 }
