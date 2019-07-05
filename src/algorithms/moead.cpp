@@ -86,6 +86,10 @@ moead::moead(unsigned gen, std::string weight_generation, std::string decomposit
                     "The chance of considering a neighbourhood (realb) needs to be in [0,1], while a value of "
                         + std::to_string(realb) + " was detected");
     }
+    if (neighbours < 2) {
+        pagmo_throw(std::invalid_argument, "The size of the weight's neighborhood needs to be >= 2, while a size of "
+                                               + std::to_string(neighbours) + " was detected");
+    }
 }
 
 /// Algorithm evolve method
@@ -378,6 +382,7 @@ moead::select_parents(population::size_type n, const std::vector<std::vector<pop
     std::vector<population::size_type> retval;
     auto ss = neigh_idx[n].size();
     decltype(ss) p;
+    assert(neigh_idx[n].size() > 1);
 
     std::uniform_int_distribution<vector_double::size_type> p_idx(
         0, neigh_idx.size() - 1u); // to generate a random index for the neighbourhood

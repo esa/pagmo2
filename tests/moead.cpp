@@ -76,6 +76,8 @@ BOOST_AUTO_TEST_CASE(moead_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., -0.34, 2u, true, 23u}),
                       std::invalid_argument);
+    // Wrong neighbours
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 1u, 1., 0.5, 20., 0.9, 2u, true, 23u}), std::invalid_argument);
 }
 
 struct mo_con {
@@ -191,7 +193,6 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     // Population size is too small for the neighbourhood specified
     BOOST_CHECK_THROW(moead(10u, "grid", "tchebycheff", 20u).evolve(population{problem{zdt{}}, 15u}),
                       std::invalid_argument);
-
     // And a clean exit for 0 generations
     population pop{zdt{}, 40u};
     BOOST_CHECK(moead{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
