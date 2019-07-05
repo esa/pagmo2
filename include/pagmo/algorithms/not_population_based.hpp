@@ -178,6 +178,10 @@ protected:
     /// Random engine for the <tt>"random"</tt> selection/replacement policies.
     mutable detail::random_engine_type m_e;
 };
+
 } // namespace pagmo
+
+// Disable tracking for the serialisation of not_population_based.
+BOOST_CLASS_TRACKING(pagmo::not_population_based, boost::serialization::track_never)
 
 #endif

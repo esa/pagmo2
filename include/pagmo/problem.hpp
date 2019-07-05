@@ -1691,4 +1691,7 @@ private:
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of problem.
+BOOST_CLASS_TRACKING(pagmo::problem, boost::serialization::track_never)
+
 #endif
