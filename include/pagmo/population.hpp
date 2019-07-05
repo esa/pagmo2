@@ -373,4 +373,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of population.
+BOOST_CLASS_TRACKING(pagmo::population, boost::serialization::track_never)
+
 #endif

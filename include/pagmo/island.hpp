@@ -837,4 +837,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of island.
+BOOST_CLASS_TRACKING(pagmo::island, boost::serialization::track_never)
+
 #endif

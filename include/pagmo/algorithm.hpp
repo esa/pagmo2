@@ -701,4 +701,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of algorithm.
+BOOST_CLASS_TRACKING(pagmo::algorithm, boost::serialization::track_never)
+
 #endif

@@ -357,4 +357,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of bfe.
+BOOST_CLASS_TRACKING(pagmo::bfe, boost::serialization::track_never)
+
 #endif
