@@ -2678,7 +2678,7 @@ Raises:
     OverflowError: if *gen*, *neighbours*, *seed* or *limit* are negative or greater than an implementation-defined value
     ValueError: if either *decomposition* is not one of 'tchebycheff', 'weighted' or 'bi',
       *weight_generation* is not one of 'random', 'low discrepancy' or 'grid',
-      *CR* or *F* or *realb* are not in [0.,1.] or *eta_m* is negative
+      *CR* or *F* or *realb* are not in [0.,1.] or *eta_m* is negative, if *neighbours* is not >=2
 
 See also the docs of the C++ class :cpp:class:`pagmo::moead`.
 
