@@ -414,9 +414,9 @@ void island::evolve(unsigned n)
                             // Turn new_inds into an ID -> (dv, fv) map.
                             std::unordered_map<unsigned long long, std::pair<vector_double, vector_double>>
                                 new_inds_map;
-                            for (decltype(std::get<0>(new_inds).size()) i = 0; i < std::get<0>(new_inds).size(); ++i) {
-                                new_inds_map[std::get<0>(new_inds)[i]] = std::make_pair(
-                                    std::move(std::get<1>(new_inds)[i]), std::move(std::get<2>(new_inds)[i]));
+                            for (decltype(std::get<0>(new_inds).size()) j = 0; j < std::get<0>(new_inds).size(); ++j) {
+                                new_inds_map[std::get<0>(new_inds)[j]] = std::make_pair(
+                                    std::move(std::get<1>(new_inds)[j]), std::move(std::get<2>(new_inds)[j]));
                             }
 
                             // Build the migration log.
