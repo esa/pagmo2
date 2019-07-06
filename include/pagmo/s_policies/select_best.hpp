@@ -26,39 +26,39 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_R_POLICIES_FAIR_REPLACE_HPP
-#define PAGMO_R_POLICIES_FAIR_REPLACE_HPP
+#ifndef PAGMO_S_POLICIES_SELECT_BEST_HPP
+#define PAGMO_S_POLICIES_SELECT_BEST_HPP
 
 #include <string>
 #include <type_traits>
 
 #include <pagmo/detail/base_sr_policy.hpp>
 #include <pagmo/detail/visibility.hpp>
-#include <pagmo/r_policy.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
 {
 
-class PAGMO_DLL_PUBLIC fair_replace : public detail::base_sr_policy
+class PAGMO_DLL_PUBLIC select_best : public detail::base_sr_policy
 {
 public:
-    fair_replace();
+    select_best();
     template <typename T,
               enable_if_t<detail::disjunction<std::is_integral<T>, std::is_floating_point<T>>::value, int> = 0>
-    explicit fair_replace(T x) : detail::base_sr_policy(x)
+    explicit select_best(T x) : detail::base_sr_policy(x)
     {
     }
 
-    individuals_group_t replace(const individuals_group_t &, const vector_double::size_type &,
-                                const vector_double::size_type &, const vector_double::size_type &,
-                                const vector_double::size_type &, const vector_double::size_type &,
-                                const vector_double &, const individuals_group_t &) const;
+    individuals_group_t select(const individuals_group_t &, const vector_double::size_type &,
+                               const vector_double::size_type &, const vector_double::size_type &,
+                               const vector_double::size_type &, const vector_double::size_type &,
+                               const vector_double &) const;
 
     std::string get_name() const
     {
-        return "Fair replace";
+        return "Select best";
     }
     std::string get_extra_info() const;
 
@@ -69,6 +69,6 @@ public:
 
 } // namespace pagmo
 
-PAGMO_S11N_R_POLICY_EXPORT_KEY(pagmo::fair_replace)
+PAGMO_S11N_S_POLICY_EXPORT_KEY(pagmo::select_best)
 
 #endif

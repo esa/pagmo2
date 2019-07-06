@@ -169,6 +169,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/threading.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topology.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policy.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/s_policy.cpp"
         # UDP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/null_problem.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2006.cpp"
@@ -222,12 +223,15 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
         # UDRP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/fair_replace.cpp"
+        # UDSP.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/s_policies/select_best.cpp"
         # Utils.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/generic.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/multi_objective.cpp"
         # Detail.
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"

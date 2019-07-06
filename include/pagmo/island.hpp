@@ -60,6 +60,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -273,14 +274,12 @@ struct PAGMO_DLL_PUBLIC island_data {
           pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
     }
-    // This is used only in the copy ctor of island. It's equivalent to the ctor from Algo + pop,
-    // the island will come from the clone() method of an isl_inner.
-    template <typename Algo, typename Pop>
-    explicit island_data(std::unique_ptr<isl_inner_base> &&ptr, Algo &&a, Pop &&p)
-        : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
-          pop(std::make_shared<population>(std::forward<Pop>(p)))
-    {
-    }
+    // This is used only in the copy ctor of island. The island will come from the clone()
+    // method of an isl_inner, the algo/pop from the island's getters. The r/s_policies
+    // will come directly from the island's data member, as they are supposed
+    // to be thread-safe.
+    explicit island_data(std::unique_ptr<isl_inner_base> &&, algorithm &&, population &&, const r_policy &,
+                         const s_policy &);
     // Delete all the rest, make sure we don't implicitly rely on any of this.
     island_data(const island_data &) = delete;
     island_data(island_data &&) = delete;
@@ -298,6 +297,11 @@ struct PAGMO_DLL_PUBLIC island_data {
     std::shared_ptr<algorithm> algo;
     std::mutex pop_mutex;
     std::shared_ptr<population> pop;
+    // The replacement/selection policies. Theyr are supposed to be thread-safe,
+    // thus no protection is needed.
+    r_policy r_pol;
+    s_policy s_pol;
+    // The vector of futures.
     std::vector<std::future<void>> futures;
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
@@ -351,6 +355,9 @@ PAGMO_DLL_PUBLIC extern const std::unordered_map<evolve_status, std::string, isl
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
 
 #endif
+
+// Stream operator for pagmo::island.
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
 
 /// Island class.
 /**
@@ -422,6 +429,8 @@ class PAGMO_DLL_PUBLIC island
     using idata_t = detail::island_data;
     // archi needs access to the internal of island.
     friend class PAGMO_DLL_PUBLIC archipelago;
+    // Make friends with the stream operator.
+    friend PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
     // NOTE: the idea in the move members and the dtor is that
     // we want to wait *and* erase any future in the island, before doing
     // the move/destruction. Thus we use this small wrapper.
@@ -793,7 +802,7 @@ public:
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
-        detail::to_archive(ar, m_ptr->isl_ptr, get_algorithm(), get_population());
+        detail::to_archive(ar, m_ptr->isl_ptr, get_algorithm(), get_population(), m_ptr->r_pol, m_ptr->s_pol);
     }
     /// Load from archive.
     /**
@@ -812,7 +821,8 @@ public:
         // Deserialize into tmp island, and then move assign it.
         island tmp_island;
         // NOTE: no need to lock access to these, as there is no evolution going on in tmp_island.
-        detail::from_archive(ar, tmp_island.m_ptr->isl_ptr, *tmp_island.m_ptr->algo, *tmp_island.m_ptr->pop);
+        detail::from_archive(ar, tmp_island.m_ptr->isl_ptr, *tmp_island.m_ptr->algo, *tmp_island.m_ptr->pop,
+                             tmp_island.m_ptr->r_pol, tmp_island.m_ptr->s_pol);
         *this = std::move(tmp_island);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -820,9 +830,10 @@ public:
 private:
     // Data used in the migration machinery:
     // - the island's population (represented via individuals_group_t),
-    // - the problem's nobj, nec, nic, nix and tolerances.
-    using migration_data_t = std::tuple<individuals_group_t, vector_double::size_type, vector_double::size_type,
-                                        vector_double::size_type, vector_double::size_type, vector_double>;
+    // - the problem's nx, nix, nobj, nec, nic, and tolerances.
+    using migration_data_t
+        = std::tuple<individuals_group_t, vector_double::size_type, vector_double::size_type, vector_double::size_type,
+                     vector_double::size_type, vector_double::size_type, vector_double>;
     // Fetch the migration data.
     PAGMO_DLL_LOCAL migration_data_t get_migration_data() const;
     // Set all the individuals in the population.
@@ -831,9 +842,6 @@ private:
 private:
     std::unique_ptr<idata_t> m_ptr;
 };
-
-// Stream operator for pagmo::island.
-PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
 
 } // namespace pagmo
 

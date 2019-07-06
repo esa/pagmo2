@@ -338,4 +338,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const topology &);
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of topology.
+BOOST_CLASS_TRACKING(pagmo::topology, boost::serialization::track_never)
+
 #endif

@@ -67,8 +67,8 @@ class has_replace
     using replace_t = decltype(std::declval<const U &>().replace(
         std::declval<const individuals_group_t &>(), std::declval<const vector_double::size_type &>(),
         std::declval<const vector_double::size_type &>(), std::declval<const vector_double::size_type &>(),
-        std::declval<const vector_double::size_type &>(), std::declval<const vector_double &>(),
-        std::declval<const individuals_group_t &>()));
+        std::declval<const vector_double::size_type &>(), std::declval<const vector_double::size_type &>(),
+        std::declval<const vector_double &>(), std::declval<const individuals_group_t &>()));
     static const bool implementation_defined = std::is_same<detected_t<replace_t, T>, individuals_group_t>::value;
 
 public:
@@ -117,8 +117,8 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner_base {
     virtual std::unique_ptr<r_pol_inner_base> clone() const = 0;
     virtual individuals_group_t replace(const individuals_group_t &, const vector_double::size_type &,
                                         const vector_double::size_type &, const vector_double::size_type &,
-                                        const vector_double::size_type &, const vector_double &,
-                                        const individuals_group_t &) const = 0;
+                                        const vector_double::size_type &, const vector_double::size_type &,
+                                        const vector_double &, const individuals_group_t &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     template <typename Archive>
@@ -144,12 +144,12 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner final : r_pol_inner_base {
         return detail::make_unique<r_pol_inner>(m_value);
     }
     // The mandatory replace() method.
-    virtual individuals_group_t replace(const individuals_group_t &inds, const vector_double::size_type &nobj,
+    virtual individuals_group_t replace(const individuals_group_t &inds, const vector_double::size_type &nx,
+                                        const vector_double::size_type &nix, const vector_double::size_type &nobj,
                                         const vector_double::size_type &nec, const vector_double::size_type &nic,
-                                        const vector_double::size_type &nix, const vector_double &tol,
-                                        const individuals_group_t &mig) const override final
+                                        const vector_double &tol, const individuals_group_t &mig) const override final
     {
-        return m_value.replace(inds, nobj, nec, nic, nix, tol, mig);
+        return m_value.replace(inds, nx, nix, nobj, nec, nic, tol, mig);
     }
     // Optional methods.
     virtual std::string get_name() const override final
@@ -262,8 +262,8 @@ public:
     // Replace.
     individuals_group_t replace(const individuals_group_t &, const vector_double::size_type &,
                                 const vector_double::size_type &, const vector_double::size_type &,
-                                const vector_double::size_type &, const vector_double &,
-                                const individuals_group_t &) const;
+                                const vector_double::size_type &, const vector_double::size_type &,
+                                const vector_double &, const individuals_group_t &) const;
 
     // Name.
     std::string get_name() const
@@ -308,8 +308,8 @@ private:
     // Helper to check the inputs and outputs of the replace() function.
     PAGMO_DLL_LOCAL void verify_replace_input(const individuals_group_t &, const vector_double::size_type &,
                                               const vector_double::size_type &, const vector_double::size_type &,
-                                              const vector_double::size_type &, const vector_double &,
-                                              const individuals_group_t &) const;
+                                              const vector_double::size_type &, const vector_double::size_type &,
+                                              const vector_double &, const individuals_group_t &) const;
     PAGMO_DLL_LOCAL void verify_replace_output(const individuals_group_t &, vector_double::size_type,
                                                vector_double::size_type) const;
 
@@ -331,5 +331,8 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const r_policy &);
 #endif
 
 } // namespace pagmo
+
+// Disable tracking for the serialisation of r_policy.
+BOOST_CLASS_TRACKING(pagmo::r_policy, boost::serialization::track_never)
 
 #endif

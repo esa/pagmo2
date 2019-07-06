@@ -58,6 +58,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -186,9 +187,10 @@ island_data::island_data()
 // method of an isl_inner, the algo/pop from the island's getters. The r_policy
 // will come directly from the island's data member, as the r_policy is supposed
 // to be thread-safe.
-island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, population &&p, const r_policy &r)
+island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, population &&p, const r_policy &r,
+                         const s_policy &s)
     : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::move(a))),
-      pop(std::make_shared<population>(std::move(p))), r_pol(r)
+      pop(std::make_shared<population>(std::move(p))), r_pol(r), s_pol(s)
 {
 }
 
@@ -246,7 +248,7 @@ island::island() : m_ptr(detail::make_unique<idata_t>()) {}
  */
 island::island(const island &other)
     : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population(),
-                                         other.m_ptr->r_pol))
+                                         other.m_ptr->r_pol, other.m_ptr->s_pol))
 {
     // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
     assert(m_ptr->archi_ptr == nullptr);
@@ -382,9 +384,10 @@ void island::evolve(unsigned n)
                             const auto mig_data = this->get_migration_data();
 
                             // Get the new individuals that will replace the current population.
-                            auto new_inds = this->m_ptr->r_pol.replace(
-                                std::get<0>(mig_data), std::get<1>(mig_data), std::get<2>(mig_data),
-                                std::get<3>(mig_data), std::get<4>(mig_data), std::get<5>(mig_data), migrants);
+                            auto new_inds = this->m_ptr->r_pol.replace(std::get<0>(mig_data), std::get<1>(mig_data),
+                                                                       std::get<2>(mig_data), std::get<3>(mig_data),
+                                                                       std::get<4>(mig_data), std::get<5>(mig_data),
+                                                                       std::get<6>(mig_data), migrants);
 
                             // Set the new individuals.
                             this->set_individuals(new_inds);
@@ -424,6 +427,18 @@ void island::evolve(unsigned n)
                     // If the island is in an archi, after evolution select
                     // the migrating individuals and place them in the archi's migrants
                     // database.
+
+                    // Extract the migration data from this island.
+                    const auto mig_data = this->get_migration_data();
+
+                    // Select the individuals to place into the archi's
+                    // migration database.
+                    auto mig_inds = this->m_ptr->s_pol.select(
+                        std::get<0>(mig_data), std::get<1>(mig_data), std::get<2>(mig_data), std::get<3>(mig_data),
+                        std::get<4>(mig_data), std::get<5>(mig_data), std::get<6>(mig_data));
+
+                    // Place them in the database.
+                    aptr->set_migrants(isl_idx, std::move(mig_inds));
                 }
             }
         });
@@ -772,14 +787,15 @@ island::migration_data_t island::get_migration_data() const
         std::get<1>(std::get<0>(retval)) = std::move(tmp_pop.m_x);
         std::get<2>(std::get<0>(retval)) = std::move(tmp_pop.m_f);
 
-        // nobj, nec, nic, nix.
-        std::get<1>(retval) = tmp_pop.get_problem().get_nobj();
-        std::get<2>(retval) = tmp_pop.get_problem().get_nec();
-        std::get<3>(retval) = tmp_pop.get_problem().get_nic();
-        std::get<4>(retval) = tmp_pop.get_problem().get_nix();
+        // nx, nix, nobj, nec, nic.
+        std::get<1>(retval) = tmp_pop.get_problem().get_nx();
+        std::get<2>(retval) = tmp_pop.get_problem().get_nix();
+        std::get<3>(retval) = tmp_pop.get_problem().get_nobj();
+        std::get<4>(retval) = tmp_pop.get_problem().get_nec();
+        std::get<5>(retval) = tmp_pop.get_problem().get_nic();
 
         // The vector of tolerances.
-        std::get<5>(retval) = tmp_pop.get_problem().get_c_tol();
+        std::get<6>(retval) = tmp_pop.get_problem().get_c_tol();
     }
 
     return retval;

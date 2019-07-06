@@ -537,6 +537,22 @@ individuals_group_t archipelago::extract_migrants(size_type i)
     return retval;
 }
 
+void archipelago::set_migrants(size_type i, individuals_group_t &&inds)
+{
+    std::lock_guard<std::mutex> lock(m_migrants_mutex);
+
+    if (i >= m_migrants.size()) {
+        pagmo_throw(std::out_of_range, "cannot access the migrants of the island at index " + std::to_string(i)
+                                           + ": the migrants database has a size of only "
+                                           + std::to_string(m_migrants.size()));
+    }
+
+    // Move in the new individuals.
+    std::get<0>(m_migrants[i]) = std::move(std::get<0>(inds));
+    std::get<1>(m_migrants[i]) = std::move(std::get<1>(inds));
+    std::get<2>(m_migrants[i]) = std::move(std::get<2>(inds));
+}
+
 topology archipelago::get_topology() const
 {
     // NOTE: topology is supposed to be thread-safe,

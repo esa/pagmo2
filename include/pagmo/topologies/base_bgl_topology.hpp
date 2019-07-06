@@ -129,4 +129,7 @@ private:
 
 } // namespace pagmo
 
+// Disable tracking for the serialisation of base_bgl_topology.
+BOOST_CLASS_TRACKING(pagmo::base_bgl_topology, boost::serialization::track_never)
+
 #endif

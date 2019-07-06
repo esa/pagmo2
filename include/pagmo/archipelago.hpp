@@ -84,6 +84,9 @@ namespace pagmo
  */
 class PAGMO_DLL_PUBLIC archipelago
 {
+    // Make friends with island.
+    friend class PAGMO_DLL_PUBLIC island;
+
     using container_t = std::vector<std::unique_ptr<island>>;
     using size_type_implementation = container_t::size_type;
     using iterator_implementation = boost::indirect_iterator<container_t::iterator>;
@@ -101,6 +104,14 @@ public:
      * archipelago.
      */
     using size_type = size_type_implementation;
+
+    // Entry for the migration log:
+    // - timestamp,
+    // - ID, dv, fv of the migrated individual,
+    // - indices of the source and destination islands.
+    using migration_entry_t
+        = std::tuple<double, unsigned long long, vector_double, vector_double, size_type, size_type>;
+    using migration_log_t = std::vector<migration_entry_t>;
 
 private:
     // A map to connect island pointers to an idx
@@ -409,7 +420,6 @@ public:
     // Get the index of an island.
     size_type get_island_idx(const island &) const;
     migrants_db_t get_migrants_db() const;
-    individuals_group_t extract_migrants(size_type);
     topology get_topology() const;
     void set_topology(topology);
     std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;
@@ -479,6 +489,12 @@ public:
         *this = std::move(tmp);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+private:
+    // Private utilities to interact with the migration db.
+    // For use by island only.
+    PAGMO_DLL_LOCAL individuals_group_t extract_migrants(size_type);
+    PAGMO_DLL_LOCAL void set_migrants(size_type, individuals_group_t &&);
 
 private:
     container_t m_islands;

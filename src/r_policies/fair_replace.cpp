@@ -28,16 +28,16 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/serialization/variant.hpp>
 #include <boost/variant/get.hpp>
 
+#include <pagmo/detail/base_sr_policy.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
@@ -52,25 +52,11 @@ namespace pagmo
 // Default constructor: fractional migration rate, 10%.
 fair_replace::fair_replace() : fair_replace(.1) {}
 
-// Helper to verify the ctor from a fractional rate.
-void fair_replace::verify_fp_ctor() const
-{
-    assert(m_migr_rate.which() == 1);
-
-    const auto rate = boost::get<double>(m_migr_rate);
-
-    if (!std::isfinite(rate) || rate < 0. || rate > 1.) {
-        pagmo_throw(std::invalid_argument,
-                    "Invalid fractional migration rate specified in the constructor of the fair_replace replacement "
-                    "policy: the rate must be in the [0., 1.] range, but it is "
-                        + std::to_string(rate) + " instead");
-    }
-}
-
-individuals_group_t fair_replace::replace(const individuals_group_t &inds, const vector_double::size_type &nobj,
+// Implementation of the replacement.
+individuals_group_t fair_replace::replace(const individuals_group_t &inds, const vector_double::size_type &,
+                                          const vector_double::size_type &, const vector_double::size_type &nobj,
                                           const vector_double::size_type &nec, const vector_double::size_type &nic,
-                                          const vector_double::size_type &, const vector_double &tol,
-                                          const individuals_group_t &mig) const
+                                          const vector_double &tol, const individuals_group_t &mig) const
 {
     if (nobj > 1u && (nic || nec)) {
         pagmo_throw(std::invalid_argument, "The 'fair_replace' replacement policy is unable to deal with "
@@ -242,7 +228,7 @@ std::string fair_replace::get_extra_info() const
 template <typename Archive>
 void fair_replace::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_migr_rate);
+    detail::archive(ar, boost::serialization::base_object<detail::base_sr_policy>(*this));
 }
 
 } // namespace pagmo
