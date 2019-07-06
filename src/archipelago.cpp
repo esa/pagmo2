@@ -90,6 +90,9 @@ archipelago::archipelago(const archipelago &other)
     // Set the migrants.
     m_migrants = other.get_migrants_db();
 
+    // Set the migration log.
+    m_migr_log = other.get_migration_log();
+
     // Set the topology.
     m_topology = other.get_topology();
 }
@@ -129,6 +132,10 @@ archipelago::archipelago(archipelago &&other) noexcept
     // Move over the migrants, clear other.
     m_migrants = std::move(other.m_migrants);
     other.m_migrants.clear();
+
+    // Move over the migration log, clear other.
+    m_migr_log = std::move(other.m_migr_log);
+    other.m_migr_log.clear();
 
     // Move over the topology. No need to clear here as we know
     // in which state the topology will be in after the move.
@@ -190,6 +197,10 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
         m_migrants = std::move(other.m_migrants);
         other.m_migrants.clear();
 
+        // Move over the migration log, clear other.
+        m_migr_log = std::move(other.m_migr_log);
+        other.m_migr_log.clear();
+
         // Move over the topology.
         m_topology = std::move(other.m_topology);
     }
@@ -203,8 +214,7 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
  */
 archipelago::~archipelago()
 {
-    // NOTE: this is not strictly necessary, but it will not hurt. And, if we add further
-    // sanity checks, we know the archi is stopped.
+    // NOTE: make sure we stop the archi before running checks below without locking.
     wait_check_ignore();
     // NOTE: we made sure in the move ctor/assignment that the island vector, the migrants and the indices
     // map are all cleared out after a move. Thus we can safely assert the following.
@@ -486,18 +496,9 @@ void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
     m_topology.push_back();
 }
 
-/// Get the index of an island.
-/**
- * This function will return the index of the island \p isl in the archipelago. If \p isl does
- * not belong to the archipelago, an error will be reaised.
- *
- * @param isl the island whose index will be returned.
- *
- * @return the index of \p isl in the archipelago.
- *
- * @throws std::invalid_argument if \p isl does not belong to the archipelago.
- * @throws unspecified any exception thrown by failures in threading primitives.
- */
+// Get the index of an island.
+// This function will return the index of the island \p isl in the archipelago. If \p isl does
+// not belong to the archipelago, an error will be reaised.
 archipelago::size_type archipelago::get_island_idx(const island &isl) const
 {
     std::lock_guard<std::mutex> lock(m_idx_map_mutex);
@@ -509,12 +510,35 @@ archipelago::size_type archipelago::get_island_idx(const island &isl) const
     return ret->second;
 }
 
+// Get the database of migrants.
 archipelago::migrants_db_t archipelago::get_migrants_db() const
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
     return m_migrants;
 }
 
+// Get the migration log.
+archipelago::migration_log_t archipelago::get_migration_log() const
+{
+    std::lock_guard<std::mutex> lock(m_migr_log_mutex);
+    return m_migr_log;
+}
+
+// Append entries to the migration log.
+void archipelago::append_migration_log(const migration_log_t &mlog)
+{
+    // Don't do anything if mlog is empty.
+    if (mlog.empty()) {
+        return;
+    }
+
+    // Lock & append.
+    std::lock_guard<std::mutex> lock(m_migr_log_mutex);
+    m_migr_log.insert(m_migr_log.end(), mlog.begin(), mlog.end());
+}
+
+// Extract the migrants in the db entry for island i.
+// After extraction, the db entry will be empty.
 individuals_group_t archipelago::extract_migrants(size_type i)
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
@@ -537,6 +561,7 @@ individuals_group_t archipelago::extract_migrants(size_type i)
     return retval;
 }
 
+// Move-insert in the db entry for island i a set of migrants.
 void archipelago::set_migrants(size_type i, individuals_group_t &&inds)
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
@@ -553,6 +578,7 @@ void archipelago::set_migrants(size_type i, individuals_group_t &&inds)
     std::get<2>(m_migrants[i]) = std::move(std::get<2>(inds));
 }
 
+// Get a copy of the topology.
 topology archipelago::get_topology() const
 {
     // NOTE: topology is supposed to be thread-safe,
@@ -560,6 +586,7 @@ topology archipelago::get_topology() const
     return m_topology;
 }
 
+// Set a new topology.
 void archipelago::set_topology(topology topo)
 {
     // NOTE: make sure we finish any ongoing evolution before setting the topology.
@@ -569,6 +596,10 @@ void archipelago::set_topology(topology topo)
     m_topology = std::move(topo);
 }
 
+// Get the list of connection to the island at index i.
+// The returned value is made of two vectors of equal size:
+// - the indicies of the connecting islands,
+// - the weights of the connections.
 std::pair<std::vector<archipelago::size_type>, vector_double> archipelago::get_island_connections(size_type i) const
 {
     // NOTE: get_connections() is required to be thread-safe.

@@ -96,14 +96,14 @@ class PAGMO_DLL_PUBLIC archipelago
     PAGMO_DLL_LOCAL void wait_check_ignore();
 
 public:
-    using migrants_db_t = std::vector<individuals_group_t>;
-
     /// The size type of the archipelago.
     /**
      * This is an unsigned integer type used to represent the number of islands in the
      * archipelago.
      */
     using size_type = size_type_implementation;
+
+    using migrants_db_t = std::vector<individuals_group_t>;
 
     // Entry for the migration log:
     // - timestamp,
@@ -417,9 +417,10 @@ public:
     std::vector<vector_double> get_champions_f() const;
     // Get the decision vectors of the islands' champions.
     std::vector<vector_double> get_champions_x() const;
-    // Get the index of an island.
-    size_type get_island_idx(const island &) const;
+
+    migration_log_t get_migration_log() const;
     migrants_db_t get_migrants_db() const;
+
     topology get_topology() const;
     void set_topology(topology);
     std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;
@@ -436,7 +437,7 @@ public:
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
-        detail::to_archive(ar, m_islands, get_migrants_db(), get_topology());
+        detail::to_archive(ar, m_islands, get_migrants_db(), get_migration_log(), get_topology());
     }
     /// Load from archive.
     /**
@@ -474,14 +475,21 @@ public:
         migrants_db_t tmp_migrants;
         ar >> tmp_migrants;
 
+        // The migration log.
+        migration_log_t tmp_migr_log;
+        ar >> tmp_migr_log;
+
         // The topology.
         topology tmp_topo;
         ar >> tmp_topo;
 
-        // From now on, everything is noexcept.
+        // From now on, everything is noexcept. Thus, there is
+        // no danger that tmp is destructed while in an inconsistent
+        // state.
         tmp.m_islands = std::move(tmp_islands);
         tmp.m_idx_map = std::move(tmp_idx_map);
         tmp.m_migrants = std::move(tmp_migrants);
+        tmp.m_migr_log = std::move(tmp_migr_log);
         tmp.m_topology = std::move(tmp_topo);
 
         // NOTE: this final assignment will take care of setting the islands' archi pointers
@@ -491,10 +499,14 @@ public:
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
-    // Private utilities to interact with the migration db.
-    // For use by island only.
+    // Private utilities for use only by island.
+    // Extract/set migrants for the island at the given index.
     PAGMO_DLL_LOCAL individuals_group_t extract_migrants(size_type);
     PAGMO_DLL_LOCAL void set_migrants(size_type, individuals_group_t &&);
+    // Helper to add entries to the migration log.
+    PAGMO_DLL_LOCAL void append_migration_log(const migration_log_t &);
+    // Get the index of an island.
+    PAGMO_DLL_LOCAL size_type get_island_idx(const island &) const;
 
 private:
     container_t m_islands;
@@ -505,6 +517,9 @@ private:
     // The migrants.
     mutable std::mutex m_migrants_mutex;
     migrants_db_t m_migrants;
+    // The migration log.
+    mutable std::mutex m_migr_log_mutex;
+    migration_log_t m_migr_log;
     // The topology.
     // NOTE: the topology does not need
     // an associated mutex as it is supposed

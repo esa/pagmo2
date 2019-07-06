@@ -429,8 +429,8 @@ void island::evolve(unsigned n)
                                 }
                             }
 
-                            // TODO: merge mlog into the archi migration log.
-                            // aptr->append_new_migration_log(std::move(mlog));
+                            // Append it.
+                            aptr->append_migration_log(mlog);
                         }
                     }
                 }
@@ -767,6 +767,7 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
     stream(os, "Algorithm: " + isl.get_algorithm().get_name(), "\n\n");
     stream(os, "Problem: " + isl.get_population().get_problem().get_name(), "\n\n");
     stream(os, "Replacement policy: " + isl.m_ptr->r_pol.get_name(), "\n\n");
+    stream(os, "Selection policy: " + isl.m_ptr->s_pol.get_name(), "\n\n");
     stream(os, "Population size: ", isl.get_population().size(), "\n");
     stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
     stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
