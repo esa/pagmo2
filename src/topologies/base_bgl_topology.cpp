@@ -36,27 +36,10 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#if defined(_MSC_VER)
-
-// Disable a warning from MSVC in the graph serialization code.
-#pragma warning(push)
-#pragma warning(disable : 4267)
-
-#endif
-
-#include <boost/graph/adj_list_serialize.hpp>
-
-#if defined(_MSC_VER)
-
-#pragma warning(pop)
-
-#endif
-
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/exceptions.hpp>
-#include <pagmo/s11n.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
 #include <pagmo/types.hpp>
 
@@ -253,30 +236,5 @@ std::pair<std::vector<std::size_t>, vector_double> base_bgl_topology::get_connec
     }
     return retval;
 }
-
-template <typename Archive>
-void base_bgl_topology::save(Archive &ar, unsigned) const
-{
-    detail::to_archive(ar, get_graph());
-}
-
-template <typename Archive>
-void base_bgl_topology::load(Archive &ar, unsigned)
-{
-    base_bgl_topology tmp;
-    // NOTE: no need to protect the
-    // access to the graph of the
-    // newly-constructed tmp topology.
-    detail::from_archive(ar, tmp.m_graph);
-    *this = std::move(tmp);
-}
-
-// NOTE: explicitly instantiate the specialisation of the serialize() member
-// function that we will be using. Note that if we add further archive types
-// in s11n.hpp, we'll have to add the specialisations here as well.
-template void base_bgl_topology::serialize(boost::archive::binary_iarchive &, unsigned);
-template void base_bgl_topology::serialize(boost::archive::binary_oarchive &, unsigned);
-template void base_bgl_topology::serialize(boost::archive::text_iarchive &, unsigned);
-template void base_bgl_topology::serialize(boost::archive::text_oarchive &, unsigned);
 
 } // namespace pagmo

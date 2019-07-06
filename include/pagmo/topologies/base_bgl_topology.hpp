@@ -36,6 +36,22 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/graph/adjacency_list.hpp>
 
+#if defined(_MSC_VER)
+
+// Disable a warning from MSVC in the graph serialization code.
+#pragma warning(push)
+#pragma warning(disable : 4267)
+
+#endif
+
+#include <boost/graph/adj_list_serialize.hpp>
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
+
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
@@ -105,9 +121,20 @@ public:
     void set_weight(std::size_t, std::size_t, double);
 
     template <typename Archive>
-    void save(Archive &, unsigned) const;
+    void save(Archive &ar, unsigned) const
+    {
+        detail::to_archive(ar, get_graph());
+    }
     template <typename Archive>
-    void load(Archive &, unsigned);
+    void load(Archive &ar, unsigned)
+    {
+        base_bgl_topology tmp;
+        // NOTE: no need to protect the
+        // access to the graph of the
+        // newly-constructed tmp topology.
+        detail::from_archive(ar, tmp.m_graph);
+        *this = std::move(tmp);
+    }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:

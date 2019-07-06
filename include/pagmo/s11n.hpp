@@ -52,11 +52,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/static_assert.hpp>
 
 // Include the archives.
-// NOTE: in some classes, we are explicitly instantiating
-// the specialisations of the serialization methods for these archives.
-// If we ever add other archives here, we will have to add the
-// corresponding specialisations wherever they are explicitly
-// enumerated (e.g., base_sr_policy.cpp, base_bgl_topology, etc.).
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>

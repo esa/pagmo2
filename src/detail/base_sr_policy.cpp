@@ -31,12 +31,10 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 
-#include <boost/serialization/variant.hpp>
 #include <boost/variant/get.hpp>
 
 #include <pagmo/detail/base_sr_policy.hpp>
 #include <pagmo/exceptions.hpp>
-#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -58,20 +56,6 @@ void base_sr_policy::verify_fp_ctor() const
                         + std::to_string(rate) + " instead");
     }
 }
-
-template <typename Archive>
-void base_sr_policy::serialize(Archive &ar, unsigned)
-{
-    detail::archive(ar, m_migr_rate);
-}
-
-// NOTE: explicitly instantiate the specialisation of the serialize() member
-// function that we will be using. Note that if we add further archive types
-// in s11n.hpp, we'll have to add the specialisations here as well.
-template void base_sr_policy::serialize(boost::archive::binary_iarchive &, unsigned);
-template void base_sr_policy::serialize(boost::archive::binary_oarchive &, unsigned);
-template void base_sr_policy::serialize(boost::archive::text_iarchive &, unsigned);
-template void base_sr_policy::serialize(boost::archive::text_oarchive &, unsigned);
 
 } // namespace detail
 

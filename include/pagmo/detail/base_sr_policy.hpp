@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <type_traits>
 
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/serialization/variant.hpp>
 #include <boost/variant/variant.hpp>
 
 #include <pagmo/detail/visibility.hpp>
@@ -76,7 +77,10 @@ public:
 
     // Serialization support.
     template <typename Archive>
-    void serialize(Archive &, unsigned);
+    void serialize(Archive &ar, unsigned)
+    {
+        detail::archive(ar, m_migr_rate);
+    }
 
 protected:
     boost::variant<pop_size_t, double> m_migr_rate;
