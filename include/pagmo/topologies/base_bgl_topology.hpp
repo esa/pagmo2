@@ -34,7 +34,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include <boost/graph/adj_list_serialize.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
 #include <pagmo/detail/visibility.hpp>
@@ -106,20 +105,9 @@ public:
     void set_weight(std::size_t, std::size_t, double);
 
     template <typename Archive>
-    void save(Archive &ar, unsigned) const
-    {
-        detail::to_archive(ar, get_graph());
-    }
+    void save(Archive &, unsigned) const;
     template <typename Archive>
-    void load(Archive &ar, unsigned)
-    {
-        base_bgl_topology tmp;
-        // NOTE: no need to protect the
-        // access to the graph of the
-        // newly-constructed tmp topology.
-        detail::from_archive(ar, tmp.m_graph);
-        *this = std::move(tmp);
-    }
+    void load(Archive &, unsigned);
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
