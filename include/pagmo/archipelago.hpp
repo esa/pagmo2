@@ -93,7 +93,7 @@ class PAGMO_DLL_PUBLIC archipelago
     using const_iterator_implementation = boost::indirect_iterator<container_t::const_iterator>;
 
     // NOTE: same utility method as in pagmo::island, see there.
-    void wait_check_ignore();
+    PAGMO_DLL_LOCAL void wait_check_ignore();
 
 public:
     using migrants_db_t = std::vector<individuals_group_t>;
