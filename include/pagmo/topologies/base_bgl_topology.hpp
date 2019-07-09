@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <cstddef>
 #include <mutex>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -119,6 +120,8 @@ public:
     void remove_edge(std::size_t, std::size_t);
     void set_all_weights(double);
     void set_weight(std::size_t, std::size_t, double);
+
+    std::string get_extra_info() const;
 
     template <typename Archive>
     void save(Archive &ar, unsigned) const

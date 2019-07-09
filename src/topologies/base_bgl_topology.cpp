@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <cmath>
 #include <cstddef>
 #include <mutex>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -235,6 +236,20 @@ std::pair<std::vector<std::size_t>, vector_double> base_bgl_topology::get_connec
         retval.second.emplace_back(m_graph[e.first]);
     }
     return retval;
+}
+
+std::string base_bgl_topology::get_extra_info() const
+{
+    std::ostringstream oss;
+
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
+        oss << "\tNumber of vertices: " << boost::num_vertices(m_graph) << '\n';
+        oss << "\tNumber of edges: " << boost::num_edges(m_graph) << '\n';
+    }
+
+    return oss.str();
 }
 
 } // namespace pagmo
