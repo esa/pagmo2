@@ -167,6 +167,10 @@ BOOST_AUTO_TEST_CASE(error_handling)
     });
     BOOST_CHECK_EXCEPTION(t0.set_weight(0, 2, std::numeric_limits<double>::infinity()), std::invalid_argument,
                           [](const std::invalid_argument &ia) { return boost::contains(ia.what(), " is not finite"); });
+    BOOST_CHECK_EXCEPTION(t0.set_weight(0, 1, .2), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "cannot set the weight of an edge in a BGL topology: the vertex 0 is not connected to vertex 1");
+    });
 }
 
 BOOST_AUTO_TEST_CASE(s11n_test)
