@@ -5,6 +5,8 @@ Unconnected topology
 
 *#include <pagmo/topologies/unconnected.hpp>*
 
+.. image:: ../../images/unconnected.png
+
 .. cpp:namespace-push:: pagmo
 
 .. cpp:class:: unconnected
