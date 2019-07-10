@@ -42,15 +42,21 @@ namespace pagmo
 class PAGMO_DLL_PUBLIC ring : public base_bgl_topology
 {
 public:
+    ring();
+    explicit ring(double);
     void push_back();
     std::string get_name() const
     {
         return "Ring";
     }
+    double get_weight() const;
 
     // Serialization.
     template <typename Archive>
     void serialize(Archive &, unsigned);
+
+private:
+    double m_weight;
 };
 
 } // namespace pagmo

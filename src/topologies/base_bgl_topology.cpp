@@ -50,6 +50,20 @@ namespace pagmo
 namespace detail
 {
 
+// Helper to check if w can be used as edge weight
+// in a bgl topology.
+void bbt_check_edge_weight(double w)
+{
+    if (!std::isfinite(w)) {
+        pagmo_throw(std::invalid_argument,
+                    "invalid weight for the edge of a BGL topology: the value " + std::to_string(w) + " is not finite");
+    }
+    if (w < 0. || w > 1.) {
+        pagmo_throw(std::invalid_argument, "invalid weight for the edge of a BGL topology: the value "
+                                               + std::to_string(w) + " is not in the [0., 1.] range");
+    }
+}
+
 namespace
 {
 
@@ -63,20 +77,6 @@ std::size_t scast(I n)
 bgl_topology_graph_t::vertices_size_type vcast(std::size_t n)
 {
     return boost::numeric_cast<bgl_topology_graph_t::vertices_size_type>(n);
-}
-
-// Helper to check if w can be used as edge weight
-// in a bgl topology.
-void check_edge_weight(double w)
-{
-    if (!std::isfinite(w)) {
-        pagmo_throw(std::invalid_argument,
-                    "invalid weight for the edge of a BGL topology: the value " + std::to_string(w) + " is not finite");
-    }
-    if (w < 0. || w > 1.) {
-        pagmo_throw(std::invalid_argument, "invalid weight for the edge of a BGL topology: the value "
-                                               + std::to_string(w) + " is not in the [0., 1.] range");
-    }
 }
 
 } // namespace
@@ -164,7 +164,7 @@ bool base_bgl_topology::are_adjacent(std::size_t i, std::size_t j) const
 
 void base_bgl_topology::add_edge(std::size_t i, std::size_t j, double w)
 {
-    detail::check_edge_weight(w);
+    detail::bbt_check_edge_weight(w);
 
     std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -192,7 +192,7 @@ void base_bgl_topology::remove_edge(std::size_t i, std::size_t j)
 
 void base_bgl_topology::set_all_weights(double w)
 {
-    detail::check_edge_weight(w);
+    detail::bbt_check_edge_weight(w);
 
     std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -203,7 +203,7 @@ void base_bgl_topology::set_all_weights(double w)
 
 void base_bgl_topology::set_weight(std::size_t i, std::size_t j, double w)
 {
-    detail::check_edge_weight(w);
+    detail::bbt_check_edge_weight(w);
 
     std::lock_guard<std::mutex> lock(m_mutex);
 

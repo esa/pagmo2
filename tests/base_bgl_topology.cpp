@@ -224,13 +224,13 @@ BOOST_AUTO_TEST_CASE(thread_torture_test)
     t0.set_weight(0, 1, .5);
 
     std::vector<std::thread> threads;
-    for (auto i = 0; i < 100; ++i) {
+    for (auto i = 0; i < 10; ++i) {
         threads.emplace_back([&barrier, &failures, &t0]() {
             ++barrier;
-            while (barrier.load() != 100) {
+            while (barrier.load() != 10) {
             }
 
-            for (int j = 0; j < 10; ++j) {
+            for (int j = 0; j < 100; ++j) {
                 auto t1(t0);
                 bbt t2;
                 t2 = t0;

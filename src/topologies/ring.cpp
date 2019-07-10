@@ -36,17 +36,26 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+ring::ring() : m_weight(1) {}
+
+ring::ring(double w) : m_weight(w)
+{
+    detail::bbt_check_edge_weight(m_weight);
+}
+
 // Serialization.
 template <typename Archive>
 void ring::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, boost::serialization::base_object<base_bgl_topology>(*this));
+    detail::archive(ar, boost::serialization::base_object<base_bgl_topology>(*this), m_weight);
 }
 
 void ring::push_back()
 {
+    // Add the new vertex.
     add_vertex();
 
+    // Connect it.
     const auto size = num_vertices();
     assert(size);
 
@@ -57,16 +66,16 @@ void ring::push_back()
         }
         case 2u: {
             // The two elements connect each other.
-            add_edge(0, 1);
-            add_edge(1, 0);
+            add_edge(0, 1, m_weight);
+            add_edge(1, 0, m_weight);
             break;
         }
         case 3u: {
             // A triangle of double links.
-            add_edge(1, 2);
-            add_edge(2, 1);
-            add_edge(2, 0);
-            add_edge(0, 2);
+            add_edge(1, 2, m_weight);
+            add_edge(2, 1, m_weight);
+            add_edge(2, 0, m_weight);
+            add_edge(0, 2, m_weight);
             break;
         }
         default: {
@@ -74,13 +83,18 @@ void ring::push_back()
             remove_edge(size - 2u, 0);
             remove_edge(0, size - 2u);
             // Connect the new "last" vertex to the previous "last" vertex.
-            add_edge(size - 2u, size - 1u);
-            add_edge(size - 1u, size - 2u);
+            add_edge(size - 2u, size - 1u, m_weight);
+            add_edge(size - 1u, size - 2u, m_weight);
             // Connect the new last vertex to the first.
-            add_edge(0, size - 1u);
-            add_edge(size - 1u, 0);
+            add_edge(0, size - 1u, m_weight);
+            add_edge(size - 1u, 0, m_weight);
         }
     }
+}
+
+double ring::get_weight() const
+{
+    return m_weight;
 }
 
 } // namespace pagmo
