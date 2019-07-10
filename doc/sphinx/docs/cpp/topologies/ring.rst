@@ -5,6 +5,8 @@ Ring
 
 *#include <pagmo/topologies/ring.hpp>*
 
+.. image:: ../../images/ring.png
+
 .. cpp:namespace-push:: pagmo
 
 .. cpp:class:: ring: public base_bgl_topology
