@@ -118,8 +118,8 @@ public:
     void add_vertex();
     void add_edge(std::size_t, std::size_t, double = 1.);
     void remove_edge(std::size_t, std::size_t);
-    void set_all_weights(double);
     void set_weight(std::size_t, std::size_t, double);
+    void set_all_weights(double);
 
     std::string get_extra_info() const;
 

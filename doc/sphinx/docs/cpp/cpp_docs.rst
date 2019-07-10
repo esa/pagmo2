@@ -103,6 +103,8 @@ Implemented topologies
   :maxdepth: 1
 
   topologies/unconnected
+  topologies/base_bgl_topology
+  topologies/ring
 
 Utilities
 ^^^^^^^^^
