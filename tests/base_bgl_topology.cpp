@@ -30,10 +30,12 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <atomic>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <utility>
 
 #include <boost/algorithm/string/predicate.hpp>
@@ -205,4 +207,61 @@ BOOST_AUTO_TEST_CASE(s11n_test)
         BOOST_CHECK(t1.get_connections(1).second.size() == 1u);
         BOOST_CHECK(t1.get_connections(1).second[0] == .5);
     }
+}
+
+BOOST_AUTO_TEST_CASE(thread_torture_test)
+{
+    std::atomic<int> barrier(0), failures(0);
+
+    bbt t0;
+    t0.add_vertex();
+    t0.add_vertex();
+    t0.add_vertex();
+    t0.add_vertex();
+    t0.add_edge(0, 1);
+    t0.add_edge(0, 2);
+    t0.add_edge(1, 0);
+    t0.set_weight(0, 1, .5);
+
+    std::vector<std::thread> threads;
+    for (auto i = 0; i < 100; ++i) {
+        threads.emplace_back([&barrier, &failures, &t0]() {
+            ++barrier;
+            while (barrier.load() != 100) {
+            }
+
+            for (int j = 0; j < 10; ++j) {
+                auto t1(t0);
+                bbt t2;
+                t2 = t0;
+
+                t0.add_vertex();
+                failures += t0.num_vertices() < 4u;
+                t0.add_vertex();
+                failures += !t0.are_adjacent(0, 1);
+                t0.add_vertex();
+                failures += t0.get_connections(0).first.size() == 0u;
+                t0.add_vertex();
+
+                try {
+                    t0.add_edge(0u, 4u);
+                    t0.set_weight(0u, 4u, .3);
+                    t0.remove_edge(0u, 4u);
+                } catch (const std::invalid_argument &) {
+                }
+
+                t0.set_all_weights(.1);
+
+                failures += t0.get_extra_info().empty();
+
+                t0 = std::move(t2);
+            }
+        });
+    }
+
+    for (auto &t : threads) {
+        t.join();
+    }
+
+    BOOST_CHECK(failures.load() == 0);
 }
