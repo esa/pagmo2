@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(basic_test)
         verify_ring_topology(r1);
     }
 
-    BOOST_CHECK_EXCEPTION(ring(-2), std::invalid_argument, [](const std::invalid_argument &ia) {
+    BOOST_CHECK_EXCEPTION(r0 = ring(-2), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(ia.what(), " is not in the [0., 1.] range");
     });
 }
