@@ -89,21 +89,21 @@ BOOST_AUTO_TEST_CASE(basic_test)
     }
 
     // Error handling.
-    BOOST_CHECK_EXCEPTION(bsrp(-1.), std::invalid_argument, [](const std::invalid_argument &ia) {
+    BOOST_CHECK_EXCEPTION(b0 = bsrp(-1.), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(
             ia.what(), "Invalid fractional migration rate specified in the constructor of a replacement/selection "
                        "policy: the rate must be in the [0., 1.] range, but it is ");
     });
-    BOOST_CHECK_EXCEPTION(bsrp(2.), std::invalid_argument, [](const std::invalid_argument &ia) {
+    BOOST_CHECK_EXCEPTION(b0 = bsrp(2.), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(
             ia.what(), "Invalid fractional migration rate specified in the constructor of a replacement/selection "
                        "policy: the rate must be in the [0., 1.] range, but it is ");
     });
     BOOST_CHECK_EXCEPTION(
-        bsrp(std::numeric_limits<double>::infinity()), std::invalid_argument, [](const std::invalid_argument &ia) {
+        b0 = bsrp(std::numeric_limits<double>::infinity()), std::invalid_argument, [](const std::invalid_argument &ia) {
             return boost::contains(
                 ia.what(), "Invalid fractional migration rate specified in the constructor of a replacement/selection "
                            "policy: the rate must be in the [0., 1.] range, but it is ");
         });
-    BOOST_CHECK_THROW(bsrp(-1), boost::numeric::negative_overflow);
+    BOOST_CHECK_THROW(b0 = bsrp(-1), boost::numeric::negative_overflow);
 }
