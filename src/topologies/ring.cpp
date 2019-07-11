@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <cassert>
+#include <string>
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
@@ -36,8 +37,10 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+// Default ctor.
 ring::ring() : m_weight(1) {}
 
+// Ctor from edge weight.
 ring::ring(double w) : m_weight(w)
 {
     detail::bbt_check_edge_weight(m_weight);
@@ -50,6 +53,7 @@ void ring::serialize(Archive &ar, unsigned)
     detail::archive(ar, boost::serialization::base_object<base_bgl_topology>(*this), m_weight);
 }
 
+// Add vertex.
 void ring::push_back()
 {
     // Add the new vertex.
@@ -92,9 +96,16 @@ void ring::push_back()
     }
 }
 
+// Get the edge weight used for construction.
 double ring::get_weight() const
 {
     return m_weight;
+}
+
+// Topology name.
+std::string ring::get_name() const
+{
+    return "Ring";
 }
 
 } // namespace pagmo
