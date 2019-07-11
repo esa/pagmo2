@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/ring.hpp>
+#include <pagmo/topology.hpp>
 
 using namespace pagmo;
 
@@ -130,19 +131,22 @@ BOOST_AUTO_TEST_CASE(basic_test)
 
     // Minimal serialization test.
     {
+        topology t0(r0);
         std::stringstream ss;
         {
             boost::archive::binary_oarchive oarchive(ss);
-            oarchive << r0;
+            oarchive << t0;
         }
-        ring r1;
+        topology t1;
+        BOOST_CHECK(!t1.is<ring>());
         {
             boost::archive::binary_iarchive iarchive(ss);
-            iarchive >> r1;
+            iarchive >> t1;
         }
-        BOOST_CHECK(r1.num_vertices() == 6u);
-        BOOST_CHECK(r1.get_weight() == .5);
-        verify_ring_topology(r1);
+        BOOST_CHECK(t1.is<ring>());
+        BOOST_CHECK(t1.extract<ring>()->num_vertices() == 6u);
+        BOOST_CHECK(t1.extract<ring>()->get_weight() == .5);
+        verify_ring_topology(*t1.extract<ring>());
     }
 
     BOOST_CHECK_EXCEPTION(r0 = ring(-2), std::invalid_argument, [](const std::invalid_argument &ia) {
