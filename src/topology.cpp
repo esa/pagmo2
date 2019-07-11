@@ -114,7 +114,7 @@ std::pair<std::vector<std::size_t>, vector_double> topology::get_connections(std
                 "An invalid migration probability of " + std::to_string(p)
                     + " was detected in the vector of migration probabilities returned by the 'get_connections()' "
                       "method of the '"
-                    + get_name() + "' topology: the value must be in the [0.,1.] range");
+                    + get_name() + "' topology: the value must be in the [0., 1.] range");
         }
     }
 
