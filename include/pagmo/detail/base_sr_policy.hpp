@@ -69,6 +69,7 @@ class PAGMO_DLL_PUBLIC base_sr_policy
     }
 
 public:
+    // Constructor from fractional or absolute migration policy.
     template <typename T,
               enable_if_t<detail::disjunction<std::is_integral<T>, std::is_floating_point<T>>::value, int> = 0>
     explicit base_sr_policy(T x) : base_sr_policy(ptag{}, x)
@@ -81,6 +82,8 @@ public:
     {
         detail::archive(ar, m_migr_rate);
     }
+
+    const boost::variant<pop_size_t, double> &get_migr_rate() const;
 
 protected:
     boost::variant<pop_size_t, double> m_migr_rate;

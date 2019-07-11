@@ -32,9 +32,11 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <boost/variant/get.hpp>
+#include <boost/variant/variant.hpp>
 
 #include <pagmo/detail/base_sr_policy.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {
@@ -55,6 +57,12 @@ void base_sr_policy::verify_fp_ctor() const
                     "policy: the rate must be in the [0., 1.] range, but it is "
                         + std::to_string(rate) + " instead");
     }
+}
+
+// Getter for the migration rate variant.
+const boost::variant<pop_size_t, double> &base_sr_policy::get_migr_rate() const
+{
+    return m_migr_rate;
 }
 
 } // namespace detail
