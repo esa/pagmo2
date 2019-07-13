@@ -65,11 +65,11 @@ Topology
    See the documentation of the corresponding member functions in this class for details on how the optional
    member functions in the UDT are used by :cpp:class:`~pagmo::topology`.
 
-   TODO FIXME Topologies are often used in asynchronous operations involving migration in archipelagos. pagmo
-   guarantees that only a single thread at a time is interacting with any topology, so there is no
-   need to protect UDTs against concurrent access. Topologies however are **required** to offer at
-   least the basic thread safety guarantee, in order to make it possible to use different
-   topologies from different threads.
+   Topologies are used in asynchronous operations involving migration in archipelagos,
+   and thus they need to provide a certain degree of thread safety. Specifically, the
+   :cpp:func:`~pagmo::topology::get_connections()` member function might be invoked
+   concurrently with any other member function. It is up to the authors of user-defined
+   topologies to ensure that this safety requirement is satisfied.
 
    .. warning::
 
