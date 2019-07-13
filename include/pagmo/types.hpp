@@ -40,6 +40,9 @@ namespace pagmo
 /// Alias for an <tt>std::vector</tt> of <tt>double</tt>s.
 typedef std::vector<double> vector_double;
 
+/// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
+typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
+
 /// Population size type.
 /**
  * This unsigned integral types is used to represent the size
@@ -48,12 +51,13 @@ typedef std::vector<double> vector_double;
  */
 typedef std::vector<vector_double>::size_type pop_size_t;
 
-/// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
-typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
+#if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // A group of individuals: IDs, dvs and fvs.
 using individuals_group_t
     = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
+
+#endif
 
 } // namespace pagmo
 
