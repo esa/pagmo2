@@ -18,6 +18,7 @@ we suggest to follow the tutorials / examples.
   archipelago
   bfe
   topology
+  r_policy
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^

@@ -21,7 +21,7 @@ Topology
 
    Following the same schema adopted for :cpp:class:`~pagmo::problem`, :cpp:class:`~pagmo::algorithm`, etc.,
    :cpp:class:`~pagmo::topology` exposes a type-erased generic
-   interface to *user-defined topologies* (or UDT for short). UDTs are classes implementing a certain set
+   interface to *user-defined topologies* (or UDT for short). UDTs are classes providing a certain set
    of member functions that describe the properties of (and allow to interact with) a topology. Once
    defined and instantiated, a UDT can then be used to construct an instance of this class,
    :cpp:class:`~pagmo::topology`, which
