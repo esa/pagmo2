@@ -107,6 +107,13 @@ Implemented topologies
   topologies/base_bgl_topology
   topologies/ring
 
+Implemented replacement policies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+  :maxdepth: 1
+
+  r_policies/fair_replace
+
 Utilities
 ^^^^^^^^^
 Various optimization utilities.
