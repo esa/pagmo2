@@ -2,9 +2,9 @@ environment:
   TWINE_PASSWORD:
     secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
   matrix:
-    # - BUILD_TYPE: "MSVC_64_Debug"
-    #   COMPILER: MSVC15
-    #   PLATFORM: "x64"
+    - BUILD_TYPE: "MSVC_64_Debug"
+      COMPILER: MSVC15
+      PLATFORM: "x64"
     - BUILD_TYPE: "MSVC_64_Python37"
       COMPILER: MSVC15
       PLATFORM: "x64"
@@ -34,8 +34,7 @@ install:
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
 
-#- if [%BUILD_TYPE%]==[MSVC_64_Python37] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
-- if [%BUILD_TYPE%]==[MSVC_64_Python37] CALL "C:\\Miniconda37-x64\\Scripts\\activate.bat"
+- if [%BUILD_TYPE%]==[MSVC_64_Python37] call "C:\\Miniconda37-x64\\Scripts\\activate.bat"
 - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda config --add channels conda-forge --force
 # - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda clean --all -y
 # - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda update conda -y
@@ -43,7 +42,7 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python37] conda create -y --name pagmo python=3.7 cmake boost boost-cpp eigen nlopt numpy cloudpickle dill ipyparallel tbb tbb-devel
 - if [%BUILD_TYPE%]==[MSVC_64_Python37] call activate pagmo
 
-- if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] call "C:\\Miniconda36-x64\\Scripts\\activate.bat"
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda config --add channels conda-forge --force
 # - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --all -y
 # - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update conda -y
