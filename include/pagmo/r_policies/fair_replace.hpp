@@ -44,13 +44,17 @@ namespace pagmo
 class PAGMO_DLL_PUBLIC fair_replace : public detail::base_sr_policy
 {
 public:
+    // Default ctor.
     fair_replace();
+
+    // Constructor from migration rate.
     template <typename T,
               enable_if_t<detail::disjunction<std::is_integral<T>, std::is_floating_point<T>>::value, int> = 0>
     explicit fair_replace(T x) : detail::base_sr_policy(x)
     {
     }
 
+    // Replacement.
     individuals_group_t replace(const individuals_group_t &, const vector_double::size_type &,
                                 const vector_double::size_type &, const vector_double::size_type &,
                                 const vector_double::size_type &, const vector_double::size_type &,
