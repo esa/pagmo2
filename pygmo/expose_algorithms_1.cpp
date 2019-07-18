@@ -229,14 +229,15 @@ void expose_algorithms_1()
 
     // NSPSO
     auto nspso_ = expose_algorithm_pygmo<nspso>("nspso", nspso_docstring().c_str());
-    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string>(
+    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool>(
         (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
          bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
-         bp::arg("diversity_mechanism") = "crowding distance")));
-    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, unsigned>(
+         bp::arg("diversity_mechanism") = "crowding distance"),
+        bp::arg("memory") = false));
+    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
          bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
-         bp::arg("diversity_mechanism") = "crowding distance", bp::arg("seed"))));
+         bp::arg("diversity_mechanism") = "crowding distance", bp::arg("memory") = false, bp::arg("seed"))));
     // nspso needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     nspso_.def("get_log", lcast([](const nspso &a) -> bp::list {
                    bp::list retval;

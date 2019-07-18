@@ -3245,7 +3245,7 @@ Raises:
 
 std::string nspso_docstring()
 {
-    return R"(__init__(gen = 1, omega = 0.6, c1 = 0.01, c2 = 0.5, chi = 0.5, v_coeff = 0.5, leader_selection_range = 2, diversity_mechanism = "crowding distance", seed = random)
+    return R"(__init__(gen = 1, omega = 0.6, c1 = 0.01, c2 = 0.5, chi = 0.5, v_coeff = 0.5, leader_selection_range = 2, diversity_mechanism = "crowding distance", memory = false, seed = random)
 
 Non dominated Sorting Particle Swarm Optimization (NSPSO).
 
@@ -3258,6 +3258,8 @@ Args:
     v_coeff (float): velocity coefficient.
     leader_selection_range (int): leader selection range.
     diversity_mechanism (str): leader selection range.
+    memory (bool): memory parameter.
+
 
 Raises:
     OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value

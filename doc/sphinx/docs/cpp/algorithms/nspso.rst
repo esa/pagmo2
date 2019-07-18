@@ -28,6 +28,7 @@ Non dominated sorting particle swarm optimization(NSPSO)
       :param `v_coeff`: velocity coefficient (determining the maximum allowed particle velocity).
       :param `leader_selection_range`: leader selection range parameter (i.e., the leader of each particle is selected among the best `leader_selection_range` % `individuals`).
       :param `diversity_mechanism`: the diversity mechanism used to maintain diversity on the Pareto front.
+      :param `memory`: memory parameter. If `true`, memory is activated in the algorithm for multiple calls.
       :param `seed`: seed used by the internal random number generator (default is random).
       :exception `std\:\:invalid_argument`: if  `c1` <= 0, or `c2` <= 0, or `chi` <= 0.
       :exception `std\:\:invalid_argument`: if `omega` < 0, or `omega` > 1,.
