@@ -232,8 +232,7 @@ void expose_algorithms_1()
     nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool>(
         (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
          bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
-         bp::arg("diversity_mechanism") = "crowding distance"),
-        bp::arg("memory") = false));
+         bp::arg("diversity_mechanism") = "crowding distance", bp::arg("memory") = false)));
     nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool, unsigned>(
         (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
          bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
