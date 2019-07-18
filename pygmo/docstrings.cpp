@@ -3245,14 +3245,13 @@ Raises:
 
 std::string nspso_docstring()
 {
-    return R"(__init__(gen = 1, min_w = 0.95, max_w = 10.0, c1 = 0.01, c2 = 0.5, chi = 0.5, v_coeff = 0.5, leader_selection_range = 2, diversity_mechanism = "crowding distance", seed = random)
+    return R"(__init__(gen = 1, omega = 0.6, c1 = 0.01, c2 = 0.5, chi = 0.5, v_coeff = 0.5, leader_selection_range = 2, diversity_mechanism = "crowding distance", seed = random)
 
 Non dominated Sorting Particle Swarm Optimization (NSPSO).
 
 Args:
     gen (int): number of generations to evolve
-    min_w (float): minimum particles' inertia weight
-    max_w (float): maximum particles' inertia weight
+    omega (float): particles' inertia weight
     c1 (float): magnitude of the force, applied to the particle's velocity, in the direction of its previous best position.
     c2 (float): magnitude of the force, applied to the particle's velocity, in the direction of its global best position.
     chi (float): velocity scaling factor.
@@ -3262,7 +3261,7 @@ Args:
 
 Raises:
     OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
-    ValueError: if either *min_w* <= 0 or *max_w* <= 0 or *c1* <= 0 or *c2* <= 0 or *chi* <= 0, if *min_w* > *max_w*,
+    ValueError: if either *omega* < 0 or *c1* <= 0 or *c2* <= 0 or *chi* <= 0, if *omega* > 1,
     if *v_coeff* <= 0 or *v_coeff* > 1, if *leader_selection_range* > 100, if *diversity_mechanism* != "crowding distance", or != "niche count", or != "max min"
 
 See also the docs of the C++ class :cpp:class:`pagmo::nspso`.

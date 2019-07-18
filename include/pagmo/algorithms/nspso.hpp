@@ -55,9 +55,10 @@ public:
 
     // Constructor
     // Constructs the NSPSO user defined algorithm (multi objective PSO).
-    nspso(unsigned gen = 1u, double min_w = 0.4, double max_w = 1., double c1 = 2.0, double c2 = 2.0, double chi = 1.0,
+    nspso(unsigned gen = 1u, double omega = 0.6, double c1 = 2.0, double c2 = 2.0, double chi = 1.0,
           double v_coeff = 0.5, unsigned leader_selection_range = 60u,
-          std::string diversity_mechanism = "crowding distance", unsigned seed = pagmo::random_device::next());
+          std::string diversity_mechanism = "crowding distance", bool memory = false,
+          unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -120,16 +121,18 @@ private:
     PAGMO_DLL_LOCAL double euclidian_distance(const vector_double &, const vector_double &) const;
 
     unsigned m_gen;
-    double m_min_w;
-    double m_max_w;
+    double m_omega;
     double m_c1;
     double m_c2;
     double m_chi;
     double m_v_coeff;
     unsigned m_leader_selection_range;
     std::string m_diversity_mechanism;
+    bool m_memory;
     // paricles' velocities
     mutable std::vector<vector_double> m_velocity;
+    mutable std::vector<vector_double> m_best_fit;
+    mutable std::vector<vector_double> m_best_dvs;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;

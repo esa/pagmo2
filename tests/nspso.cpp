@@ -52,34 +52,33 @@ using namespace pagmo;
 
 BOOST_AUTO_TEST_CASE(nspso_algorithm_construction)
 {
-    nspso user_algo{1u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u};
+    nspso user_algo{1u, 0.9, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u};
     BOOST_CHECK_NO_THROW(nspso{});
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 24u);
     // Check the throws
-    // Wrong max_w and min_w
-    BOOST_CHECK_THROW((nspso{1u, 0.95, -10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u}),
+    // Wrong omega
+    BOOST_CHECK_THROW((nspso{1u, -10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.94, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u}),
-                      std::invalid_argument);
-    BOOST_CHECK_THROW((nspso{1u, -0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u}),
+    BOOST_CHECK_THROW((nspso{1u, 10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u}),
                       std::invalid_argument);
     // Wrong c1, c2 and chi
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., -0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u}),
+    BOOST_CHECK_THROW((nspso{1u, 0.95, -0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., 0.01, -0.5, 0.5, 0.5, 2u, "crowding distance", 24u}),
+    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, -0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., 0.01, 0.5, -0.5, 0.5, 2u, "crowding distance", 24u}),
+    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, 0.5, -0.5, 0.5, 2u, "crowding distance", false, 24u}),
                       std::invalid_argument);
     // Wrong v_coeff
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., 0.01, 0.5, 0.5, -0.5, 2u, "crowding distance", 24u}),
+    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, 0.5, 0.5, -0.5, 2u, "crowding distance", false, 24u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., 0.01, 0.5, 0.5, 1.5, 2u, "crowding distance", 24u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, 0.5, 0.5, 1.5, 2u, "crowding distance", false, 24u}),
+                      std::invalid_argument);
     // Wrong leader_selection_range
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 101u, "crowding distance", 24u}),
+    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, 0.5, 0.5, 0.5, 101u, "crowding distance", false, 24u}),
                       std::invalid_argument);
     // Wrong eta_m
-    BOOST_CHECK_THROW((nspso{1u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "something else", 24u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "something else", false, 24u}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(nspso_evolve_test)
@@ -104,13 +103,13 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
     population pop2{udp, 50u, 23u};
     population pop3{udp, 50u, 23u};
 
-    nspso user_algo1{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u};
+    nspso user_algo1{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u};
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 
     BOOST_CHECK(user_algo1.get_log().size() > 0u);
 
-    nspso user_algo2{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u};
+    nspso user_algo2{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u};
     user_algo2.set_verbosity(1u);
     pop2 = user_algo2.evolve(pop2);
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
@@ -131,7 +130,7 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
     population pop5{udp_3, 2u, 23u};
     pop5 = user_algo2.evolve(pop5);
     // Same as above, but with niche count as diversity mechanism
-    nspso user_algo3{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "niche count", 24u};
+    nspso user_algo3{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "niche count", false, 24u};
     wfg udp_4{4u, 2u, 2u, 1u};
     population pop6{udp_4, 2u, 23u};
     pop6 = user_algo3.evolve(pop6);
@@ -145,7 +144,7 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
     population pop8{udp_6, 2u, 23u};
     pop8 = user_algo3.evolve(pop8);
     // Also for max min as diversity mechanism, I make sure that pareto front size = 1 for some iteration
-    nspso user_algo4{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "max min", 24u};
+    nspso user_algo4{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "max min", false, 24u};
     wfg udp_7{4u, 2u, 2u, 1u};
     population pop9{udp_7, 2u, 23u};
     pop9 = user_algo4.evolve(pop9);
@@ -153,7 +152,7 @@ BOOST_AUTO_TEST_CASE(nspso_evolve_test)
 
 BOOST_AUTO_TEST_CASE(nspso_setters_getters_test)
 {
-    nspso user_algo{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", 24u};
+    nspso user_algo{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u};
     user_algo.set_verbosity(200u);
     BOOST_CHECK(user_algo.get_verbosity() == 200u);
     user_algo.set_seed(23456u);
@@ -164,7 +163,7 @@ BOOST_AUTO_TEST_CASE(nspso_setters_getters_test)
 
 BOOST_AUTO_TEST_CASE(nspso_zdt5_test)
 {
-    algorithm algo{nspso(10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "max min", 24u)};
+    algorithm algo{nspso(10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "max min", false, 24u)};
     algo.set_verbosity(1u);
     algo.set_seed(23456u);
     population pop{zdt(5u, 10u), 20u, 24u};
@@ -180,7 +179,7 @@ BOOST_AUTO_TEST_CASE(nspso_serialization_test)
     // Make one evolution
     problem prob{zdt{1u, 30u}};
     population pop{prob, 40u, 23u};
-    algorithm algo{nspso{10u, 0.95, 10., 0.01, 0.5, 0.5, 0.5, 2u, "niche count", 24u}};
+    algorithm algo{nspso{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "niche count", false, 24u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
     // Store the string representation of p.
@@ -242,4 +241,22 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
     // 7 - Evolve the population
     pop2 = algo2.evolve(pop);
     BOOST_CHECK(algo1.extract<nspso>()->get_log() == algo2.extract<nspso>()->get_log());
+}
+
+BOOST_AUTO_TEST_CASE(memory_test)
+{
+    nspso uda{1u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", true, 24u};
+    nspso uda_2{10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "crowding distance", false, 24u};
+    uda.set_seed(23u);
+    uda_2.set_seed(23u);
+    uda.set_verbosity(1u);
+    uda_2.set_verbosity(1u);
+    problem prob{wfg{5u, 16u, 15u, 14u}};
+    population pop_1{prob, 20u, 23u};
+    population pop_2{prob, 20u, 23u};
+    for (int iter = 0u; iter < 10; ++iter) {
+        pop_1 = uda.evolve(pop_1);
+    }
+    pop_2 = uda_2.evolve(pop_2);
+    BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
 }

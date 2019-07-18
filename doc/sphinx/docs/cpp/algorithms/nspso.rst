@@ -21,8 +21,7 @@ Non dominated sorting particle swarm optimization(NSPSO)
    .. cpp:function:: nspso(unsigned gen = 1u, double min_w = 0.95, double max_w = 10., double c1 = 0.01, double c2 = 0.5, double chi = 0.5, double v_coeff = 0.5, unsigned leader_selection_range = 2u, std::string diversity_mechansim = "crowding distance", unsigned seed = pagmo::random_device::next())
 
       :param `gen`: number of generations to evolve.
-      :param `min_w`: minimum particles' inertia weight (the inertia weight is decreased throughout the run between `max_w` and `min_w`).
-      :param `max_w`: maximum particles' inertia weight (the inertia weight is decreased throughout the run between `max_w` and `min_w`).
+      :param `omega`: particles' inertia weight.
       :param `c1`: magnitude of the force, applied to the particle's velocity, in the direction of its previous best position.
       :param `c2`: magnitude of the force, applied to the particle's velocity, in the direction of its global best (i.e., leader).
       :param `chi`: velocity scaling factor.
@@ -30,8 +29,8 @@ Non dominated sorting particle swarm optimization(NSPSO)
       :param `leader_selection_range`: leader selection range parameter (i.e., the leader of each particle is selected among the best `leader_selection_range` % `individuals`).
       :param `diversity_mechanism`: the diversity mechanism used to maintain diversity on the Pareto front.
       :param `seed`: seed used by the internal random number generator (default is random).
-      :exception `std\:\:invalid_argument`: if `min_w` <= 0, or `max_w` <= 0, or `c1` <= 0, or `c2` <= 0, or `chi` <= 0.
-      :exception `std\:\:invalid_argument`: if `min_w` > `max_w`.
+      :exception `std\:\:invalid_argument`: if  `c1` <= 0, or `c2` <= 0, or `chi` <= 0.
+      :exception `std\:\:invalid_argument`: if `omega` < 0, or `omega` > 1,.
       :exception `std\:\:invalid_argument`: if `v_coeff` <= 0, or `v_coeff` > 1.
       :exception `std\:\:invalid_argument`: if `leader_selection_range` > 100.
       :exception `std\:\:invalid_argument`: if `diversity_mechanism` is not "*crowding distance*", or "*niche count*", or "*max min*".

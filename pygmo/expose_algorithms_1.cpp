@@ -229,16 +229,14 @@ void expose_algorithms_1()
 
     // NSPSO
     auto nspso_ = expose_algorithm_pygmo<nspso>("nspso", nspso_docstring().c_str());
-    nspso_.def(bp::init<unsigned, double, double, double, double, double, double, unsigned, std::string>((bp::arg("gen") = 1u, bp::arg("min_w") = 0.95,
-                                                                                                          bp::arg("max_w") = 10., bp::arg("c1") = 0.01,
-                                                                                                          bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
-                                                                                                          bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
-                                                                                                          bp::arg("diversity_mechanism") = "crowding distance")));
-    nspso_.def(bp::init<unsigned, double, double, double, double, double, double, unsigned, std::string, unsigned>((bp::arg("gen") = 1u, bp::arg("min_w") = 0.95,
-                                                                                                                    bp::arg("max_w") = 10., bp::arg("c1") = 0.01,
-                                                                                                                    bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
-                                                                                                                    bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
-                                                                                                                    bp::arg("diversity_mechanism") = "crowding distance", bp::arg("seed"))));
+    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
+         bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
+         bp::arg("diversity_mechanism") = "crowding distance")));
+    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
+         bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
+         bp::arg("diversity_mechanism") = "crowding distance", bp::arg("seed"))));
     // nspso needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     nspso_.def("get_log", lcast([](const nspso &a) -> bp::list {
                    bp::list retval;
@@ -269,17 +267,16 @@ void expose_algorithms_1()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(
-        nlopt_, "local_optimizer",
-        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
-        lcast([](nlopt &n, const nlopt *ptr) {
-            if (ptr) {
-                n.set_local_optimizer(*ptr);
-            } else {
-                n.unset_local_optimizer();
-            }
-        }),
-        nlopt_local_optimizer_docstring().c_str());
+    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
+                                                              bp::return_internal_reference<>()),
+                 lcast([](nlopt &n, const nlopt *ptr) {
+                     if (ptr) {
+                         n.set_local_optimizer(*ptr);
+                     } else {
+                         n.unset_local_optimizer();
+                     }
+                 }),
+                 nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 } // namespace pygmo

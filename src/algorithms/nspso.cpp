@@ -47,26 +47,25 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-nspso::nspso(unsigned gen, double min_w, double max_w, double c1, double c2, double chi, double v_coeff,
-             unsigned leader_selection_range, std::string diversity_mechanism, unsigned seed)
-    : m_gen(gen), m_min_w(min_w), m_max_w(max_w), m_c1(c1), m_c2(c2), m_chi(chi), m_v_coeff(v_coeff),
-      m_leader_selection_range(leader_selection_range), m_diversity_mechanism(diversity_mechanism), m_velocity(),
-      m_e(seed), m_seed(seed), m_verbosity(0u)
+nspso::nspso(unsigned gen, double omega, double c1, double c2, double chi, double v_coeff,
+             unsigned leader_selection_range, std::string diversity_mechanism, bool memory, unsigned seed)
+    : m_gen(gen), m_omega(omega), m_c1(c1), m_c2(c2), m_chi(chi), m_v_coeff(v_coeff),
+      m_leader_selection_range(leader_selection_range), m_diversity_mechanism(diversity_mechanism), m_memory(memory),
+      m_velocity(), m_e(seed), m_seed(seed), m_verbosity(0u)
 {
-    if (min_w <= 0 || max_w <= 0 || c1 <= 0 || c2 <= 0 || chi <= 0) {
+    if (omega < 0. || omega > 1.) {
         pagmo_throw(std::invalid_argument,
-                    "minimum and maximum particles' inertia weights, first and second magnitude of the force "
-                    "coefficients and velocity scaling factor should be greater than 0");
+                    "The particles' inertia weight must be in the [0,1] range, while a value of "
+                        + std::to_string(m_omega) + " was detected");
     }
-    if (min_w > max_w) {
-        pagmo_throw(
-            std::invalid_argument,
-            "minimum particles' inertia weight should be lower than maximum particles' inertia weight, while values of"
-                + std::to_string(min_w) + "and" + std::to_string(max_w) + ", respectively, were detected");
+    if (c1 <= 0 || c2 <= 0 || chi <= 0) {
+        pagmo_throw(std::invalid_argument, "first and second magnitude of the force "
+                                           "coefficients and velocity scaling factor should be greater than 0");
     }
     if (v_coeff <= 0 || v_coeff > 1) {
-        pagmo_throw(std::invalid_argument, "velocity scaling factor should be in ]0,1] range, while a value of"
-                                               + std::to_string(v_coeff) + " was detected");
+        pagmo_throw(std::invalid_argument,
+                    "velocity scaling factor should be in ]0,1] range, while a value of" + std::to_string(v_coeff)
+                        + " was detected");
     }
     if (leader_selection_range > 100) {
         pagmo_throw(std::invalid_argument,
@@ -100,8 +99,9 @@ population nspso::evolve(population pop) const
                     "The problem appears to be stochastic " + get_name() + " cannot deal with it");
     }
     if (prob.get_nc() != 0u) {
-        pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                               + get_name() + " cannot deal with them.");
+        pagmo_throw(std::invalid_argument,
+                    "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
+                        + " cannot deal with them.");
     }
     if (prob.get_nf() < 2u) {
         pagmo_throw(std::invalid_argument,
@@ -109,8 +109,9 @@ population nspso::evolve(population pop) const
                         + " is " + std::to_string(prob.get_nf()));
     }
     if (pop.size() <= 1u) {
-        pagmo_throw(std::invalid_argument, get_name() + " can only work with population sizes >=2, whereas "
-                                               + std::to_string(pop.size()) + " were detected.");
+        pagmo_throw(std::invalid_argument,
+                    get_name() + " can only work with population sizes >=2, whereas " + std::to_string(pop.size())
+                        + " were detected.");
     }
     // Get out if there is nothing to do.
     if (m_gen == 0u) {
@@ -125,8 +126,13 @@ population nspso::evolve(population pop) const
     std::uniform_real_distribution<double> drng_real(0.0, 1.0);
     std::vector<vector_double::size_type> sort_list_2(swarm_size);
     std::vector<vector_double::size_type> sort_list_3(2 * swarm_size);
-    auto best_fit = pop.get_f();
-    auto best_dvs = pop.get_x();
+    if (m_best_fit.size() != pop.get_f().size() && m_memory == true) {
+        m_best_fit = pop.get_f();
+        m_best_dvs = pop.get_x();
+    } else if (m_memory == false) {
+        m_best_fit = pop.get_f();
+        m_best_dvs = pop.get_x();
+    }
     std::vector<vector_double> next_pop_fit(2 * swarm_size, dummy_fit);
     std::vector<vector_double> next_pop_dvs(2 * swarm_size);
 
@@ -138,10 +144,12 @@ population nspso::evolve(population pop) const
         maxv[i] = vwidth;
     }
     // Initialize the particle velocities if necessary
-    m_velocity = std::vector<vector_double>(swarm_size, dummy_vel);
-    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
-        for (decltype(n_x) j = 0u; j < n_x; ++j) {
-            m_velocity[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
+    if ((m_velocity.size() != swarm_size) || (!m_memory)) {
+        m_velocity = std::vector<vector_double>(swarm_size, dummy_vel);
+        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+            for (decltype(n_x) j = 0u; j < n_x; ++j) {
+                m_velocity[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
+            }
         }
     }
 
@@ -158,7 +166,7 @@ population nspso::evolve(population pop) const
             // Every m_verbosity generations print a log line
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                 // We compute the ideal point
-                auto ideal_point_verb = ideal(best_fit);
+                auto ideal_point_verb = ideal(m_best_fit);
                 // Every 50 lines print the column names
                 if (count_verb % 50u == 1u) {
                     print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:");
@@ -282,9 +290,6 @@ population nspso::evolve(population pop) const
                     + static_cast<vector_double::difference_type>(i)); // keep just the non dominated
         }
 
-        // Decrease w from m_max_w to m_min_w troughout the run
-        double w = m_max_w - (m_max_w - m_min_w) / m_gen * gen;
-
         // 2 - Move the points
         for (decltype(swarm_size) idx = 0; idx < swarm_size; ++idx) {
             // Calculate the leader
@@ -302,7 +307,7 @@ population nspso::evolve(population pop) const
                 leader_idx
                     = static_cast<vector_double::size_type>(drng(m_e)); // to generate an integer number in [0, ext]
             } while (best_non_dom_indices[leader_idx] == idx);
-            vector_double leader = best_dvs[best_non_dom_indices[leader_idx]];
+            vector_double leader = m_best_dvs[best_non_dom_indices[leader_idx]];
 
             // Calculate some random factors
             double r1 = drng_real(m_e);
@@ -312,7 +317,7 @@ population nspso::evolve(population pop) const
             vector_double new_dvs(n_x);
             vector_double new_vel(n_x);
             for (decltype(n_x) i = 0; i < n_x; ++i) {
-                double v = w * m_velocity[idx][i] + m_c1 * r1 * (best_dvs[idx][i] - dvs[idx][i])
+                double v = m_omega * m_velocity[idx][i] + m_c1 * r1 * (m_best_dvs[idx][i] - dvs[idx][i])
                            + m_c2 * r2 * (leader[i] - dvs[idx][i]);
                 if (v > maxv[i]) {
                     v = maxv[i];
@@ -365,8 +370,8 @@ population nspso::evolve(population pop) const
         // 3 - Select the best swarm_size individuals in the new population (of size 2*swarm_size) according to pareto
         // dominance
         for (decltype(swarm_size) i = swarm_size; i < 2 * swarm_size; ++i) {
-            next_pop_fit[i] = best_fit[i - swarm_size];
-            next_pop_dvs[i] = best_dvs[i - swarm_size];
+            next_pop_fit[i] = m_best_fit[i - swarm_size];
+            next_pop_dvs[i] = m_best_dvs[i - swarm_size];
         }
         std::vector<vector_double::size_type> best_next_pop_indices(swarm_size, 0);
         if (m_diversity_mechanism != "max min") {
@@ -391,8 +396,8 @@ population nspso::evolve(population pop) const
         // The next_pop_list for the next generation will contain the best swarm_size individuals out of 2*swarm_size
         // according to pareto dominance
         for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
-            best_dvs[i] = next_pop_dvs[best_next_pop_indices[i]];
-            best_fit[i] = next_pop_fit[best_next_pop_indices[i]];
+            m_best_dvs[i] = next_pop_dvs[best_next_pop_indices[i]];
+            m_best_fit[i] = next_pop_fit[best_next_pop_indices[i]];
         }
         // 4 - I now copy insert the new population
         for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
@@ -421,8 +426,7 @@ std::string nspso::get_extra_info() const
 {
     std::ostringstream ss;
     stream(ss, "\tGenerations: ", m_gen);
-    stream(ss, "\n\tMinimum particles' inertia weight: ", m_min_w);
-    stream(ss, "\n\tMaximum particles' inertia weight: ", m_max_w);
+    stream(ss, "\n\tInertia weight: ", m_omega);
     stream(ss, "\n\tFirst magnitude of the force coefficients: ", m_c1);
     stream(ss, "\n\tSecond magnitude of the force coefficients: ", m_c2);
     stream(ss, "\n\tVelocity scaling factor: ", m_chi);
@@ -438,8 +442,8 @@ std::string nspso::get_extra_info() const
 template <typename Archive>
 void nspso::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_gen, m_min_w, m_max_w, m_c1, m_c2, m_chi, m_v_coeff, m_leader_selection_range,
-                    m_diversity_mechanism, m_e, m_seed, m_verbosity, m_log, m_bfe);
+    detail::archive(ar, m_gen, m_omega, m_c1, m_c2, m_chi, m_v_coeff, m_leader_selection_range, m_diversity_mechanism,
+                    m_e, m_seed, m_verbosity, m_log, m_bfe);
 }
 
 double nspso::minfit(vector_double::size_type(i), vector_double::size_type(j),
