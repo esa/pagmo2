@@ -3765,7 +3765,7 @@ The following strict ordering is used:
 
 - :math:`f_1 \prec f_2` if :math:`f_1` is feasible and :math:`f_2` is not.
 - :math:`f_1 \prec f_2` if :math:`f_1` is they are both infeasible, but :math:`f_1`
-  violates less constraints than :math:`f_2`, or in case they both violate the same
+  violates fewer constraints than :math:`f_2`, or in case they both violate the same
   number of constraints, if the :math:`L_2` norm of the overall constraint violation
   is smaller.
 - :math:`f_1 \prec f_2` if both fitness vectors are feasible and the objective value
@@ -3808,7 +3808,7 @@ The following strict ordering is used (same as the one used in :func:`pygmo.comp
 
 - :math:`f_1 \prec f_2` if :math:`f_1` is feasible and :math:`f_2` is not.
 - :math:`f_1 \prec f_2` if :math:`f_1` is they are both infeasible, but :math:`f_1`
-  violates less constraints than :math:`f_2`, or in case they both violate the same
+  violates fewer constraints than :math:`f_2`, or in case they both violate the same
   number of constraints, if the :math:`L_2` norm of the overall constraint violation
   is smaller.
 - :math:`f_1 \prec f_2` if both fitness vectors are feasible and the objective value
