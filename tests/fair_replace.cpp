@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <initializer_list>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
@@ -49,16 +50,16 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(fair_replace_basic)
 {
     fair_replace f00;
-    BOOST_REQUIRE(f00.get_migr_rate().which() == 1);
-    BOOST_REQUIRE(boost::get<double>(f00.get_migr_rate()) == .1);
+    BOOST_CHECK(f00.get_migr_rate().which() == 1);
+    BOOST_CHECK(boost::get<double>(f00.get_migr_rate()) == .1);
 
     fair_replace f01(.2);
-    BOOST_REQUIRE(f01.get_migr_rate().which() == 1);
-    BOOST_REQUIRE(boost::get<double>(f01.get_migr_rate()) == .2);
+    BOOST_CHECK(f01.get_migr_rate().which() == 1);
+    BOOST_CHECK(boost::get<double>(f01.get_migr_rate()) == .2);
 
     fair_replace f02(2);
-    BOOST_REQUIRE(f02.get_migr_rate().which() == 0);
-    BOOST_REQUIRE(boost::get<pop_size_t>(f02.get_migr_rate()) == 2u);
+    BOOST_CHECK(f02.get_migr_rate().which() == 0);
+    BOOST_CHECK(boost::get<pop_size_t>(f02.get_migr_rate()) == 2u);
 
     BOOST_CHECK_EXCEPTION(f02 = fair_replace(-1.), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(
@@ -80,24 +81,24 @@ BOOST_AUTO_TEST_CASE(fair_replace_basic)
     BOOST_CHECK_THROW(f02 = fair_replace(-1), boost::numeric::negative_overflow);
 
     auto f03(f02);
-    BOOST_REQUIRE(f03.get_migr_rate().which() == 0);
-    BOOST_REQUIRE(boost::get<pop_size_t>(f03.get_migr_rate()) == 2u);
+    BOOST_CHECK(f03.get_migr_rate().which() == 0);
+    BOOST_CHECK(boost::get<pop_size_t>(f03.get_migr_rate()) == 2u);
 
     auto f04(std::move(f01));
-    BOOST_REQUIRE(f04.get_migr_rate().which() == 1);
-    BOOST_REQUIRE(boost::get<double>(f04.get_migr_rate()) == .2);
+    BOOST_CHECK(f04.get_migr_rate().which() == 1);
+    BOOST_CHECK(boost::get<double>(f04.get_migr_rate()) == .2);
 
     f03 = f04;
-    BOOST_REQUIRE(f03.get_migr_rate().which() == 1);
-    BOOST_REQUIRE(boost::get<double>(f03.get_migr_rate()) == .2);
+    BOOST_CHECK(f03.get_migr_rate().which() == 1);
+    BOOST_CHECK(boost::get<double>(f03.get_migr_rate()) == .2);
 
     f04 = std::move(f02);
-    BOOST_REQUIRE(f04.get_migr_rate().which() == 0);
-    BOOST_REQUIRE(boost::get<pop_size_t>(f04.get_migr_rate()) == 2u);
+    BOOST_CHECK(f04.get_migr_rate().which() == 0);
+    BOOST_CHECK(boost::get<pop_size_t>(f04.get_migr_rate()) == 2u);
 
-    BOOST_REQUIRE(f04.get_name() == "Fair replace");
-    BOOST_REQUIRE(boost::contains(f04.get_extra_info(), "Absolute migration rate:"));
-    BOOST_REQUIRE(boost::contains(f03.get_extra_info(), "Fractional migration rate:"));
+    BOOST_CHECK(f04.get_name() == "Fair replace");
+    BOOST_CHECK(boost::contains(f04.get_extra_info(), "Absolute migration rate:"));
+    BOOST_CHECK(boost::contains(f03.get_extra_info(), "Fractional migration rate:"));
 
     // Minimal serialization test.
     {
@@ -113,9 +114,9 @@ BOOST_AUTO_TEST_CASE(fair_replace_basic)
             boost::archive::binary_iarchive iarchive(ss);
             iarchive >> r1;
         }
-        BOOST_REQUIRE(r1.is<fair_replace>());
-        BOOST_REQUIRE(r1.extract<fair_replace>()->get_migr_rate().which() == 0);
-        BOOST_REQUIRE(boost::get<pop_size_t>(r1.extract<fair_replace>()->get_migr_rate()) == 2u);
+        BOOST_CHECK(r1.is<fair_replace>());
+        BOOST_CHECK(r1.extract<fair_replace>()->get_migr_rate().which() == 0);
+        BOOST_CHECK(boost::get<pop_size_t>(r1.extract<fair_replace>()->get_migr_rate()) == 2u);
     }
 }
 
@@ -138,4 +139,90 @@ BOOST_AUTO_TEST_CASE(fair_replace_replace)
                                   ia.what(), "The absolute migration rate (100) in a 'fair_replace' replacement policy "
                                              "is larger than the number of input individuals (0)");
                           });
+
+    // Single-objective, unconstrained.
+    f00 = fair_replace();
+
+    individuals_group_t inds{{1, 2, 3}, {{0}, {0}, {0}}, {{1}, {2}, {3}}};
+    individuals_group_t mig{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1}, {0.2}, {0.3}}};
+
+    // Too few individuals in inds for fractional migration, no migration will happen.
+    auto new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+    BOOST_CHECK(new_inds == inds);
+
+    // Top mig replaces the worst in inds.
+    f00 = fair_replace(0.5);
+    new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+    BOOST_CHECK((new_inds == individuals_group_t{{4, 1, 2}, {{0}, {0}, {0}}, {{0.1}, {1}, {2}}}));
+
+    // All replaced.
+    f00 = fair_replace(1.);
+    new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+    BOOST_CHECK((new_inds == individuals_group_t{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1}, {0.2}, {0.3}}}));
+
+    // Absolute rate, no replacement.
+    f00 = fair_replace(0);
+    new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+    BOOST_CHECK(new_inds == inds);
+
+    // Absolute rate, replace 2.
+    f00 = fair_replace(2);
+    new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+    BOOST_CHECK((new_inds == individuals_group_t{{4, 5, 1}, {{0}, {0}, {0}}, {{0.1}, {0.2}, {1}}}));
+
+    // Absolute rate, replace all.
+    f00 = fair_replace(3);
+    new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+    BOOST_CHECK((new_inds == individuals_group_t{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1}, {0.2}, {0.3}}}));
+
+    // Single-objective, constrained.
+    inds = individuals_group_t{{1, 2, 3}, {{0}, {0}, {0}}, {{1, 1, 1}, {2, 2, 2}, {3, 3, 3}}};
+    mig = individuals_group_t{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1, 0.1, 0.1}, {0.2, 0.2, 0.2}, {0.3, 0.3, 0.3}}};
+    f00 = fair_replace();
+
+    // Too few individuals in inds for fractional migration, no migration will happen.
+    new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);
+    BOOST_CHECK(new_inds == inds);
+
+    // Top mig replaces the worst in inds.
+    f00 = fair_replace(0.5);
+    new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);
+    BOOST_CHECK((new_inds == individuals_group_t{{4, 1, 2}, {{0}, {0}, {0}}, {{0.1, 0.1, 0.1}, {1, 1, 1}, {2, 2, 2}}}));
+
+    // All replaced.
+    f00 = fair_replace(1.);
+    new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);
+    BOOST_CHECK(
+        (new_inds
+         == individuals_group_t{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1, 0.1, 0.1}, {0.2, 0.2, 0.2}, {0.3, 0.3, 0.3}}}));
+
+    // Absolute rate, no replacement.
+    f00 = fair_replace(0);
+    new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);
+    BOOST_CHECK(new_inds == inds);
+
+    // Absolute rate, replace 2.
+    f00 = fair_replace(2);
+    new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);
+    BOOST_CHECK(
+        (new_inds == individuals_group_t{{4, 5, 1}, {{0}, {0}, {0}}, {{0.1, 0.1, 0.1}, {0.2, 0.2, 0.2}, {1, 1, 1}}}));
+
+    // Absolute rate, replace all.
+    f00 = fair_replace(3);
+    new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);
+    BOOST_CHECK(
+        (new_inds
+         == individuals_group_t{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1, 0.1, 0.1}, {0.2, 0.2, 0.2}, {0.3, 0.3, 0.3}}}));
+
+    // Multi-objective, unconstrained.
+    // NOTE: these values are taken from a test in multi_objective.cpp.
+    inds = individuals_group_t{{1, 2, 3, 4, 5}, {{0}, {0}, {0}, {0}, {0}}, {{0, 7}, {1, 5}, {2, 3}, {4, 2}, {7, 1}}};
+    mig = individuals_group_t{
+        {6, 7, 8, 9, 10, 11}, {{0}, {0}, {0}, {0}, {0}, {0}}, {{10, 0}, {2, 6}, {4, 4}, {10, 2}, {6, 6}, {9, 5}}};
+    f00 = fair_replace(1.);
+
+    new_inds = f00.replace(inds, 1, 0, 2, 0, 0, {}, mig);
+    BOOST_CHECK((
+        new_inds
+        == individuals_group_t{{1, 6, 5, 4, 2}, {{0}, {0}, {0}, {0}, {0}}, {{0, 7}, {10, 0}, {7, 1}, {4, 2}, {1, 5}}}));
 }
