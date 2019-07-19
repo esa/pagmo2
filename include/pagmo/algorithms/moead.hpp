@@ -97,7 +97,7 @@ public:
      * and Qingfu Zhang paper
      * @param seed seed used by the internal random number generator (default is random)
      * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
-     * in [1.0] or m_eta is < 0
+     * in [1.0] or m_eta is < 0, if neighbours is <2
      */
     moead(unsigned gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,

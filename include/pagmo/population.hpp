@@ -78,7 +78,7 @@ class PAGMO_DLL_PUBLIC population
 {
 public:
     /// The size type of the population.
-    typedef std::vector<vector_double>::size_type size_type;
+    typedef pop_size_t size_type;
     // Default constructor
     population();
 
@@ -369,5 +369,8 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 } // namespace pagmo
+
+// Disable tracking for the serialisation of population.
+BOOST_CLASS_TRACKING(pagmo::population, boost::serialization::track_never)
 
 #endif
