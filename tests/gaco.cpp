@@ -94,13 +94,13 @@ BOOST_AUTO_TEST_CASE(evolve_test)
             gaco user_algo2{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo2.set_verbosity(1u);
             pop2 = user_algo2.evolve(pop2);
-
+            
             BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
-
+            
             gaco user_algo3{3u, 5u, 1.0, 1e9, 0.01, i, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u};
             user_algo3.set_verbosity(1u);
             pop3 = user_algo3.evolve(pop3);
-
+            
             BOOST_CHECK(user_algo2.get_log() == user_algo3.get_log());
         }
     }
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         pop = user_algo.evolve(pop);
         BOOST_CHECK(user_algo.get_log().size() < 200u);
     }
-
+    
     // We then check that the evolve throws if called on unsuitable problems
     // Integer variables problem
     //    BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{minlp_rastrigin{}}, 64u}), std::invalid_argument);
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     algorithm algo{gaco{10u, 13u, 1.0, 100.0, 0.01, 9u, 7u, 1000u, 1000u, 0.0, 10u, 0.9, false, 23u}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
-
+    
     // Store the string representation of p.
     std::stringstream ss;
     auto before_text = boost::lexical_cast<std::string>(algo);
@@ -247,7 +247,7 @@ BOOST_AUTO_TEST_CASE(construction_test_2)
 
 // Inf and NaN tests: we verify that the algo can handle NaN and inf has objectives w/o returning errors
 struct udp_inf {
-
+    
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -258,7 +258,7 @@ struct udp_inf {
     {
         return 1u;
     }
-
+    
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
@@ -269,7 +269,7 @@ struct udp_inf {
 };
 
 struct udp_nan {
-
+    
     /// Fitness
     vector_double fitness(const vector_double &) const
     {
@@ -280,7 +280,7 @@ struct udp_nan {
     {
         return 1u;
     }
-
+    
     /// Problem bounds
     std::pair<vector_double, vector_double> get_bounds() const
     {
