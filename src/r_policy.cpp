@@ -117,7 +117,7 @@ void r_policy::verify_replace_input(const individuals_group_t &inds, const vecto
     if (nix > nx) {
         pagmo_throw(std::invalid_argument,
                     "the integer dimension (" + std::to_string(nix) + ") passed to a replacement policy of type '"
-                        + get_name() + "' is larger than the detected problem dimension (" + std::to_string(nx) + ")");
+                        + get_name() + "' is larger than the supplied problem dimension (" + std::to_string(nx) + ")");
     }
     if (!nobj) {
         pagmo_throw(std::invalid_argument,
