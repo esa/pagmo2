@@ -19,6 +19,7 @@ we suggest to follow the tutorials / examples.
   bfe
   topology
   r_policy
+  s_policy
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -113,6 +114,13 @@ Implemented replacement policies
   :maxdepth: 1
 
   r_policies/fair_replace
+
+Implemented selection policies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+  :maxdepth: 1
+
+  s_policies/select_best
 
 Utilities
 ^^^^^^^^^

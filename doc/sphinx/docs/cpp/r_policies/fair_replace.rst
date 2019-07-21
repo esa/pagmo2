@@ -17,10 +17,10 @@ Fair replacement policy
 
    * in single-objective unconstrained problems, an individual is better
      than another one if its fitness is lower,
-   * in single-objective constrained problems, the ranking of individuals
-     is done via :cpp:func:`~pagmo::sort_population_con()`,
-   * in multi-objective unconstrained problems, the ranking of individuals
-     is done via :cpp:func:`~pagmo::sort_population_mo()`.
+   * in single-objective constrained problems, individuals are ranked
+     via :cpp:func:`~pagmo::sort_population_con()`,
+   * in multi-objective unconstrained problems, individuals are ranked
+     via :cpp:func:`~pagmo::sort_population_mo()`.
 
    See the documentation of :cpp:func:`~pagmo::fair_replace::replace()` for
    more details on the replacement algorithm implemented by this UDRP.
@@ -69,7 +69,7 @@ Fair replacement policy
       The replacement algorithm determines first how many individuals in *inds* can be replaced. This depends both on
       the migration rate specified upon construction, and on the size :math:`S` of *inds*.
 
-      After having established the number :math:`N` of individuals can be replaced in *inds*,
+      After having established the number :math:`N` of individuals that can be replaced in *inds*,
       the algorithm then selects the top :math:`N` individuals from *mig*, merges them
       with *inds* into a new population, and returns the top :math:`S` individuals
       from the new population. The ranking of individuals in *mig* and in the new population
