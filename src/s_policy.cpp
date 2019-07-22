@@ -110,7 +110,7 @@ void s_policy::verify_select_input(const individuals_group_t &inds, const vector
     if (nix > nx) {
         pagmo_throw(std::invalid_argument,
                     "the integer dimension (" + std::to_string(nix) + ") passed to a selection policy of type '"
-                        + get_name() + "' is larger than the detected problem dimension (" + std::to_string(nx) + ")");
+                        + get_name() + "' is larger than the supplied problem dimension (" + std::to_string(nx) + ")");
     }
     if (!nobj) {
         pagmo_throw(std::invalid_argument,

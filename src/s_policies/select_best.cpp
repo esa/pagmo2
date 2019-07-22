@@ -65,7 +65,7 @@ individuals_group_t select_best::select(const individuals_group_t &inds, const v
                                         const vector_double &tol) const
 {
     if (nobj > 1u && (nic || nec)) {
-        pagmo_throw(std::invalid_argument, "The 'select_best' selection policy is unable to deal with "
+        pagmo_throw(std::invalid_argument, "The 'Select best' selection policy is unable to deal with "
                                            "multiobjective constrained optimisation problems");
     }
 
@@ -90,7 +90,7 @@ individuals_group_t select_best::select(const individuals_group_t &inds, const v
                 pagmo_throw(
                     std::invalid_argument,
                     "The absolute migration rate (" + std::to_string(candidate)
-                        + ") in a 'select_best' selection policy is larger than the number of input individuals ("
+                        + ") in a 'Select best' selection policy is larger than the number of input individuals ("
                         + std::to_string(inds_size) + ")");
             }
             return candidate;
