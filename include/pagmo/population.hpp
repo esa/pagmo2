@@ -77,6 +77,9 @@ namespace pagmo
  */
 class PAGMO_DLL_PUBLIC population
 {
+    // Make friends with island for direct
+    // access to the population's members during
+    // evolution.
     friend class PAGMO_DLL_PUBLIC island;
 
 public:
