@@ -18,6 +18,11 @@ Algorithms exposed from C++
 
 -------------------------------------------------------------
 
+.. autoclass:: pygmo.maco
+   :members:
+
+-------------------------------------------------------------
+
 .. autoclass:: pygmo.gwo
    :members:
 

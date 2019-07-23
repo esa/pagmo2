@@ -2645,7 +2645,7 @@ Examples:
     >>> from pygmo import *
     >>> algo = algorithm(maco(gen=100))
     >>> algo.set_verbosity(20)
-    >>> pop = population(zdt(1), 40)
+    >>> pop = population(zdt(1), 63)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
     Gen:        Fevals:        ideal1:        ideal2:
        1              0      0.0422249        2.72416

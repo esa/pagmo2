@@ -34,6 +34,7 @@ Implemented algorithms
   algorithms/gwo
   algorithms/ihs
   algorithms/ipopt
+  algorithms/maco
   algorithms/moead
   algorithms/mbh
   algorithms/cstrs_self_adaptive
