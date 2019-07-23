@@ -295,7 +295,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     std::shared_ptr<algorithm> algo;
     std::mutex pop_mutex;
     std::shared_ptr<population> pop;
-    // The replacement/selection policies. Theyr are supposed to be thread-safe,
+    // The replacement/selection policies. They are supposed to be thread-safe,
     // thus no protection is needed.
     r_policy r_pol;
     s_policy s_pol;
