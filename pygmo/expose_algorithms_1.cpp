@@ -60,6 +60,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/algorithms/ihs.hpp>
+#include <pagmo/algorithms/maco.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/pso.hpp>
@@ -226,6 +227,28 @@ void expose_algorithms_1()
     expose_algo_log(gwo_, gwo_get_log_docstring().c_str());
     gwo_.def("get_seed", &gwo::get_seed, generic_uda_get_seed_docstring().c_str());
 
+    // MACO
+    auto maco_ = expose_algorithm_pygmo<maco>("maco", maco_docstring().c_str());
+    maco_.def(bp::init<unsigned, unsigned, double, unsigned, unsigned, unsigned, double, bool>(
+        (bp::arg("gen") = 1u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("threshold") = 1u,
+         bp::arg("n_gen_mark") = 7u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false)));
+    maco_.def(bp::init<unsigned, unsigned, double, unsigned, unsigned, unsigned, double, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("threshold") = 1u,
+         bp::arg("n_gen_mark") = 7u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false,
+         bp::arg("seed"))));
+    // maco needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    maco_.def("get_log", lcast([](const maco &a) -> bp::list {
+                  bp::list retval;
+                  for (const auto &t : a.get_log()) {
+                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
+                  }
+                  return retval;
+              }),
+              maco_get_log_docstring().c_str());
+
+    maco_.def("get_seed", &maco::get_seed, generic_uda_get_seed_docstring().c_str());
+    maco_.def("set_bfe", &maco::set_bfe, maco_set_bfe_docstring().c_str(), bp::arg("b"));
+
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
     auto nlopt_ = expose_algorithm_pygmo<nlopt>("nlopt", nlopt_docstring().c_str());
@@ -243,17 +266,16 @@ void expose_algorithms_1()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(
-        nlopt_, "local_optimizer",
-        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
-        lcast([](nlopt &n, const nlopt *ptr) {
-            if (ptr) {
-                n.set_local_optimizer(*ptr);
-            } else {
-                n.unset_local_optimizer();
-            }
-        }),
-        nlopt_local_optimizer_docstring().c_str());
+    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
+                                                              bp::return_internal_reference<>()),
+                 lcast([](nlopt &n, const nlopt *ptr) {
+                     if (ptr) {
+                         n.set_local_optimizer(*ptr);
+                     } else {
+                         n.unset_local_optimizer();
+                     }
+                 }),
+                 nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 } // namespace pygmo

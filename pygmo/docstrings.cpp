@@ -2583,6 +2583,85 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
 )";
 }
 
+std::string maco_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+
+Set the batch function evaluation scheme.
+
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.nsga2`.
+
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string maco_docstring()
+{
+    return R"(__init__(gen = 1, ker = 63, q = 1.0, threshold = 1, n_gen_mark = 7, evalstop = 100000, focus = 0., memory = False, seed = random)
+
+Non dominated Sorting Genetic Algorithm (NSGA-II).
+
+Args:
+    gen (int): number of generations
+    ker (int): kernel size
+    q (float): convergence speed parameter
+    threshold (int): threshold parameter
+    n_gen_mark (int): std convergence speed parameter
+    evalstop (int): evaluation stopping criterion
+    focus (float): focus parameter
+    memory (bool): memory parameter
+    seed (int): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either *focus* is < 0, *threshold* is not in [0,*gen*] when *gen* is > 0 and *memory* is *False*, or if *threshold* is not >=1 when *gen* is > 0 and *memory* is *True*
+
+See also the docs of the C++ class :cpp:class:`pagmo::maco`.
+
+)";
+}
+
+std::string maco_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.maco`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``ideal_point`` (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(maco(gen=100))
+    >>> algo.set_verbosity(20)
+    >>> pop = population(zdt(1), 40)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:        ideal1:        ideal2:
+       1              0      0.0422249        2.72416
+      21           1260    0.000622664        1.27304
+      41           2520    0.000100557       0.542994
+      61           3780    8.06766e-06       0.290677
+      81           5040    8.06766e-06       0.290677
+    >>> uda = algo.extract(maco)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 0, array([0.04222492, 2.72415949])), (21, 1260, array([6.22663991e-04, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::maco::get_log`.
+
+)";
+}
+
 std::string gwo_docstring()
 {
     return R"(__init__(gen = 1, seed = random)
