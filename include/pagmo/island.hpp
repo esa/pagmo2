@@ -272,6 +272,27 @@ struct PAGMO_DLL_PUBLIC island_data {
           pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
     }
+    // A tag to distinguish ctors with policy arguments.
+    struct ptag {
+    };
+    // Constructor from algo, pop and r/s policies.
+    template <typename Algo, typename Pop, typename RPol, typename SPol>
+    explicit island_data(ptag, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
+          s_pol(std::forward<SPol>(s))
+    {
+        island_factory(*algo, *pop, isl_ptr);
+    }
+    // As above, but the UDI is explicitly passed by the user.
+    template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol>
+    explicit island_data(ptag, Isl &&isl, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : isl_ptr(detail::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+          algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
+          s_pol(std::forward<SPol>(s))
+    {
+    }
     // This is used only in the copy ctor of island. The island will come from the clone()
     // method of an isl_inner, the algo/pop from the island's getters. The r/s_policies
     // will come directly from the island's data member, as they are supposed
@@ -466,6 +487,22 @@ public:
     template <typename Algo, typename Pop, algo_pop_enabler<Algo, Pop> = 0>
     explicit island(Algo &&a, Pop &&p)
         : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
+    {
+    }
+
+private:
+    template <typename Algo, typename Pop, typename RPol, typename SPol>
+    using algo_pop_pol_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_same<population, uncvref_t<Pop>>,
+                            std::is_constructible<r_policy, RPol &&>, std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    template <typename Algo, typename Pop, typename RPol, typename SPol,
+              algo_pop_pol_enabler<Algo, Pop, RPol, SPol> = 0>
+    explicit island(Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p), std::forward<RPol>(r),
+                                             std::forward<SPol>(s)))
     {
     }
 

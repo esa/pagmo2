@@ -58,7 +58,6 @@ namespace pagmo
 {
 
 // TODO
-// - move docs to sphinx.
 // - ctors with topology arguments.
 
 /// Archipelago.
