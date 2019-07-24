@@ -14,6 +14,12 @@ Ring
    This user-defined topology (UDT) represent a bidirectional ring (that is, a ring
    in which each node connects to both the previous and the following nodes).
 
+   .. cpp:function:: ring()
+
+      Default constructor.
+
+      Equivalent to the constructor from edge weight with *w* = 1.
+
    .. cpp:function:: explicit ring(double w)
 
       Constructor from edge weight.
@@ -23,11 +29,18 @@ Ring
 
       :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
-   .. cpp:function:: ring()
+   .. cpp:function:: explicit ring(std::size_t n, double w)
 
-      Default constructor.
+      Constructor from number of vertices and edge weight.
 
-      Equivalent to the constructor from edge weight with *w* = 1.
+      This constructor will initialise a ring topology with *n* vertices and whose
+      edges will have a weight of *w*.
+
+      New edges created via subsequent :cpp:func:`~pagmo::ring::push_back()` calls
+      will also have a weight of *w*.
+
+      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :except unspecified: any exception thrown by :cpp:func:`~pagmo::ring::push_back()`.
 
    .. cpp:function:: void push_back()
 

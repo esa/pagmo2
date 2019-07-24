@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_TOPOLOGIES_RING_HPP
 #define PAGMO_TOPOLOGIES_RING_HPP
 
+#include <cstddef>
 #include <string>
 
 #include <pagmo/detail/visibility.hpp>
@@ -44,6 +45,7 @@ class PAGMO_DLL_PUBLIC ring : public base_bgl_topology
 public:
     ring();
     explicit ring(double);
+    explicit ring(std::size_t, double);
 
     void push_back();
 

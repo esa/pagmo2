@@ -152,4 +152,35 @@ BOOST_AUTO_TEST_CASE(basic_test)
     BOOST_CHECK_EXCEPTION(r0 = ring(-2), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(ia.what(), " is not in the [0., 1.] range");
     });
+
+    // Ctor from number of vertices and edge weight.
+    BOOST_CHECK_EXCEPTION(r0 = ring(0, -2), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(ia.what(), " is not in the [0., 1.] range");
+    });
+
+    r0 = ring(0, 0);
+
+    BOOST_CHECK(r0.get_weight() == 0.);
+    BOOST_CHECK(r0.num_vertices() == 0u);
+    verify_ring_topology(r0);
+
+    r0 = ring(1, .2);
+    BOOST_CHECK(r0.get_weight() == .2);
+    BOOST_CHECK(r0.num_vertices() == 1u);
+    verify_ring_topology(r0);
+
+    r0 = ring(2, .3);
+    BOOST_CHECK(r0.get_weight() == .3);
+    BOOST_CHECK(r0.num_vertices() == 2u);
+    verify_ring_topology(r0);
+
+    r0 = ring(3, .4);
+    BOOST_CHECK(r0.get_weight() == .4);
+    BOOST_CHECK(r0.num_vertices() == 3u);
+    verify_ring_topology(r0);
+
+    r0 = ring(4, .5);
+    BOOST_CHECK(r0.get_weight() == .5);
+    BOOST_CHECK(r0.num_vertices() == 4u);
+    verify_ring_topology(r0);
 }

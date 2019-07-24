@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <cassert>
+#include <cstddef>
 #include <string>
 
 #include <pagmo/s11n.hpp>
@@ -50,6 +51,16 @@ ring::ring() : m_weight(1) {}
 ring::ring(double w) : m_weight(w)
 {
     detail::bbt_check_edge_weight(m_weight);
+}
+
+// Ctor from number of vertices and edge weight.
+ring::ring(std::size_t n, double w) : m_weight(w)
+{
+    detail::bbt_check_edge_weight(m_weight);
+
+    for (std::size_t i = 0; i < n; ++i) {
+        push_back();
+    }
 }
 
 // Serialization.
