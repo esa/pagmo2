@@ -385,13 +385,17 @@ void island::evolve(unsigned n)
                         }
 
                         // Pick a random island index among the islands connecting to this.
-                        const auto src_idx
+                        const auto conn_idx
                             = (*idist)(*migr_eng, std::uniform_int_distribution<archipelago::size_type>::param_type(
                                                       0, connections.first.size() - 1u));
 
                         // Throw the dice against the migration probability.
                         if ((*pdist)(*migr_eng)
-                            < connections.second[static_cast<decltype(connections.second.size())>(src_idx)]) {
+                            < connections.second[static_cast<decltype(connections.second.size())>(conn_idx)]) {
+                            // Get the source island's index.
+                            const auto src_idx
+                                = connections.first[static_cast<decltype(connections.first.size())>(conn_idx)];
+
                             // Extract the candidate migrants from the archipelago.
                             const auto migrants = aptr->extract_migrants(src_idx);
 
