@@ -126,6 +126,13 @@ void topology::push_back()
     ptr()->push_back();
 }
 
+void topology::push_back(unsigned n)
+{
+    for (auto i = 0u; i < n; ++i) {
+        push_back();
+    }
+}
+
 std::ostream &operator<<(std::ostream &os, const topology &t)
 {
     os << "Topology name: " << t.get_name();

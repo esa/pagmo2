@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/algorithm/string/predicate.hpp>
 
 #include <pagmo/s11n.hpp>
+#include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
 #include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
@@ -310,4 +311,25 @@ BOOST_AUTO_TEST_CASE(topology_stream_test)
 
         BOOST_CHECK(boost::contains(str, "Topology name: udt00"));
     }
+}
+
+BOOST_AUTO_TEST_CASE(topology_push_back_n_test)
+{
+    topology t0{ring{}};
+
+    t0.push_back(0);
+
+    BOOST_CHECK(t0.extract<ring>()->num_vertices() == 0u);
+
+    t0.push_back(2);
+
+    BOOST_CHECK(t0.extract<ring>()->num_vertices() == 2u);
+    BOOST_CHECK(t0.get_connections(0).first.size() == 1u);
+    BOOST_CHECK(t0.get_connections(0).first[0] == 1u);
+    BOOST_CHECK(t0.get_connections(1).first.size() == 1u);
+    BOOST_CHECK(t0.get_connections(1).first[0] == 0u);
+
+    t0.push_back(5);
+
+    BOOST_CHECK(t0.extract<ring>()->num_vertices() == 7u);
 }

@@ -182,6 +182,16 @@ Topology
 
       :exception unspecified: any exception thrown by the ``push_back()`` member function of the UDT.
 
+   .. cpp:function:: void push_back(unsigned n)
+
+      Add multiple vertices.
+
+      This member function will call :cpp:func:`~pagmo::topology::push_back()` *n* times.
+
+      :param n: the number of times :cpp:func:`~pagmo::topology::push_back()` will be called.
+
+      :exception unspecified: any exception thrown by :cpp:func:`~pagmo::topology::push_back()`.
+
    .. cpp:function:: std::string get_name() const
 
       Get the name of this topology.

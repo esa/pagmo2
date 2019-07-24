@@ -295,6 +295,8 @@ public:
 
     // Add a vertex.
     void push_back();
+    // Add multiple vertices.
+    void push_back(unsigned);
 
     // Serialization.
     template <typename Archive>
