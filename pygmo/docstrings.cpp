@@ -2604,7 +2604,7 @@ std::string maco_docstring()
 {
     return R"(__init__(gen = 1, ker = 63, q = 1.0, threshold = 1, n_gen_mark = 7, evalstop = 100000, focus = 0., memory = False, seed = random)
 
-Non dominated Sorting Genetic Algorithm (NSGA-II).
+Multi-objective Ant Colony Optimizer (MACO).
 
 Args:
     gen (int): number of generations

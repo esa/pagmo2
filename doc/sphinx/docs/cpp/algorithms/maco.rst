@@ -12,8 +12,7 @@ Multi-objective Ant Colony Optimizer (MACO)
 
    This constructor will construct MACO.
 
-   .. cpp:function:: maco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, unsigned threshold = 1u, unsigned n_gen_mark = 7u,
-         unsigned evalstop = 100000u, double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next())
+   .. cpp:function:: maco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned evalstop = 100000u, double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next())
 
       :param `gen`: number of generations to evolve.
       :param `ker`: number of solutions stored in the solution archive (which is maintained independently from the population).
@@ -56,17 +55,18 @@ Multi-objective Ant Colony Optimizer (MACO)
       Example (verbosity 1, where Gen, is the generation number, Fevals the number of function evaluations used; also, the ideal point of the current population follows cropped to its 5th component):
    .. code-block:: c++
       :linenos:
-      Gen:        Fevals:        ideal1:        ideal2:        ideal3:
-         1              0        3.77632       0.744903        4.09321
-         2             52        3.77632       0.744903        4.09321
-         3            104      0.0392531      0.0878801        4.09321
-         4            156      0.0392531      0.0878801       0.768869
-         5            208      0.0392531      0.0878801       0.768869
-         6            260      0.0392531      0.0878801       0.768869
-         7            312      0.0392531      0.0878801       0.768869
-         8            364      0.0392531      0.0878801       0.768869
-         9            416      0.0392531      0.0878801       0.768869
-        10            468       0.289062        0.26298       0.768869
+
+      Gen:        Fevals:        ideal1:        ideal2:        ideal3:        ideal4:        ideal5:          ... :
+         1              0       0.125887       0.125978       0.126125        0.13308       0.128715
+         2             20       0.125887       0.125978       0.126125        0.13308       0.128715
+         3             40       0.125887       0.125978       0.126125        0.13308       0.128715
+         4             60       0.125887       0.125978       0.126125        0.13308       0.128715
+         5             80       0.125887       0.125978       0.126125        0.13308       0.128715
+         6            100       0.125887       0.125978       0.126125        0.13308       0.128715
+         7            120      0.0994166       0.101595       0.106296       0.107823        0.11469
+         8            140       0.125887       0.125978       0.126125        0.13308       0.128715
+         9            160       0.125887       0.125978       0.126125        0.13308       0.128715
+        10            180      0.0837379      0.0837666      0.0837977      0.0839922      0.0845042
 
    .. cpp:function:: unsigned get_verbosity() const
 
