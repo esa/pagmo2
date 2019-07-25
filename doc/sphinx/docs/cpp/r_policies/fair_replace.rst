@@ -28,6 +28,13 @@ Fair replacement policy
    Note that this user-defined replacement policy currently does *not* support
    multi-objective constrained problems.
 
+   .. cpp:function:: fair_replace()
+
+      Default constructor.
+
+      The default constructor initialises a policy with an absolute migration rate of 1
+      (that is, 1 individual in the original population is considered for replacement).
+
    .. cpp:function:: template <typename T> explicit fair_replace(T x)
 
       Constructor from a migration rate.
@@ -52,12 +59,6 @@ Fair replacement policy
          or not in the :math:`\left[0,1\right]` range.
       :exception unspecified: any exception raised by ``boost::numeric_cast()`` while trying
          to convert the input absolute migration rate to :cpp:type:`~pagmo::pop_size_t`.
-
-   .. cpp:function:: fair_replace()
-
-      Default constructor.
-
-      The default constructor initialises a policy with a 10% fractional migration rate.
 
    .. cpp:function:: individuals_group_t replace(const individuals_group_t &inds, const vector_double::size_type &, \
                                                  const vector_double::size_type &, const vector_double::size_type &nobj, \

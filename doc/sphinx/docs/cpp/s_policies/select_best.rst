@@ -27,6 +27,13 @@ Best selection policy
    Note that this user-defined selection policy currently does *not* support
    multi-objective constrained problems.
 
+   .. cpp:function:: select_best()
+
+      Default constructor.
+
+      The default constructor initialises a policy with an absolute migration rate
+      of 1 (that is, 1 individual will be selected from the input population).
+
    .. cpp:function:: template <typename T> explicit select_best(T x)
 
       Constructor from a migration rate.
@@ -51,12 +58,6 @@ Best selection policy
          or not in the :math:`\left[0,1\right]` range.
       :exception unspecified: any exception raised by ``boost::numeric_cast()`` while trying
          to convert the input absolute migration rate to :cpp:type:`~pagmo::pop_size_t`.
-
-   .. cpp:function:: select_best()
-
-      Default constructor.
-
-      The default constructor initialises a policy with a 10% fractional migration rate.
 
    .. cpp:function:: individuals_group_t select(const individuals_group_t &inds, const vector_double::size_type &, \
                                                 const vector_double::size_type &, const vector_double::size_type &nobj, \

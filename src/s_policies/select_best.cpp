@@ -55,8 +55,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-// Default constructor: fractional migration rate, 10%.
-select_best::select_best() : select_best(.1) {}
+// Default constructor: absolute migration rate, 1 individual.
+select_best::select_best() : select_best(1) {}
 
 // Implementation of the selection.
 individuals_group_t select_best::select(const individuals_group_t &inds, const vector_double::size_type &,

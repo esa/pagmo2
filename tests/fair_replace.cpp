@@ -50,8 +50,8 @@ using namespace pagmo;
 BOOST_AUTO_TEST_CASE(fair_replace_basic)
 {
     fair_replace f00;
-    BOOST_CHECK(f00.get_migr_rate().which() == 1);
-    BOOST_CHECK(boost::get<double>(f00.get_migr_rate()) == .1);
+    BOOST_CHECK(f00.get_migr_rate().which() == 0);
+    BOOST_CHECK(boost::get<pop_size_t>(f00.get_migr_rate()) == 1u);
 
     fair_replace f01(.2);
     BOOST_CHECK(f01.get_migr_rate().which() == 1);
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(fair_replace_replace)
                           });
 
     // Single-objective, unconstrained.
-    f00 = fair_replace();
+    f00 = fair_replace(.1);
 
     individuals_group_t inds{{1, 2, 3}, {{0}, {0}, {0}}, {{1}, {2}, {3}}};
     individuals_group_t mig{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1}, {0.2}, {0.3}}};
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE(fair_replace_replace)
     // Single-objective, constrained.
     inds = individuals_group_t{{1, 2, 3}, {{0}, {0}, {0}}, {{1, 1, 1}, {2, 2, 2}, {3, 3, 3}}};
     mig = individuals_group_t{{4, 5, 6}, {{0}, {0}, {0}}, {{0.1, 0.1, 0.1}, {0.2, 0.2, 0.2}, {0.3, 0.3, 0.3}}};
-    f00 = fair_replace();
+    f00 = fair_replace(.1);
 
     // Too few individuals in inds for fractional migration, no migration will happen.
     new_inds = f00.replace(inds, 1, 0, 1, 1, 1, {0., 0.}, mig);

@@ -55,8 +55,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-// Default constructor: fractional migration rate, 10%.
-fair_replace::fair_replace() : fair_replace(.1) {}
+// Default constructor: absolute rate, 1 individual.
+fair_replace::fair_replace() : fair_replace(1) {}
 
 // Implementation of the replacement.
 individuals_group_t fair_replace::replace(const individuals_group_t &inds, const vector_double::size_type &,
