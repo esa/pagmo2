@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -68,7 +69,11 @@ void archipelago::wait_check_ignore()
  * The default constructor will initialise an empty archipelago with a
  * default-constructed topology.
  */
-archipelago::archipelago() {}
+archipelago::archipelago()
+    : m_migr_type(migration_type::p2p),           // Default: point-to-point migration type.
+      m_migr_handling(migrant_handling::preserve) // Default: preserve migrants.
+{
+}
 
 /// Copy constructor.
 /**
@@ -95,6 +100,10 @@ archipelago::archipelago(const archipelago &other)
 
     // Set the topology.
     m_topology = other.get_topology();
+
+    // Migration type and migrant handling policy.
+    m_migr_type.store(other.m_migr_type.load(std::memory_order_relaxed), std::memory_order_relaxed);
+    m_migr_handling.store(other.m_migr_handling.load(std::memory_order_relaxed), std::memory_order_relaxed);
 }
 
 /// Move constructor.
@@ -140,6 +149,10 @@ archipelago::archipelago(archipelago &&other) noexcept
     // Move over the topology. No need to clear here as we know
     // in which state the topology will be in after the move.
     m_topology = std::move(other.m_topology);
+
+    // Migration type and migrant handling policy.
+    m_migr_type.store(other.m_migr_type.load(std::memory_order_relaxed), std::memory_order_relaxed);
+    m_migr_handling.store(other.m_migr_handling.load(std::memory_order_relaxed), std::memory_order_relaxed);
 }
 
 /// Copy assignment.
@@ -203,6 +216,10 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
 
         // Move over the topology.
         m_topology = std::move(other.m_topology);
+
+        // Migration type and migrant handling policy.
+        m_migr_type.store(other.m_migr_type.load(std::memory_order_relaxed), std::memory_order_relaxed);
+        m_migr_handling.store(other.m_migr_handling.load(std::memory_order_relaxed), std::memory_order_relaxed);
     }
     return *this;
 }

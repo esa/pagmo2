@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ARCHIPELAGO_HPP
 #define PAGMO_ARCHIPELAGO_HPP
 
+#include <atomic>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -56,6 +57,10 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
+
+enum class migration_type { p2p, broadcast };
+
+enum class migrant_handling { preserve, evict };
 
 // TODO
 // - ctors with topology arguments.
@@ -436,7 +441,9 @@ public:
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
-        detail::to_archive(ar, m_islands, get_migrants_db(), get_migration_log(), get_topology());
+        detail::to_archive(ar, m_islands, get_migrants_db(), get_migration_log(), get_topology(),
+                           m_migr_type.load(std::memory_order_relaxed),
+                           m_migr_handling.load(std::memory_order_relaxed));
     }
     /// Load from archive.
     /**
@@ -482,6 +489,13 @@ public:
         topology tmp_topo;
         ar >> tmp_topo;
 
+        // Migration type and migrant handling policy.
+        migration_type tmp_migr_type;
+        migrant_handling tmp_migr_handling;
+
+        ar >> tmp_migr_type;
+        ar >> tmp_migr_handling;
+
         // From now on, everything is noexcept. Thus, there is
         // no danger that tmp is destructed while in an inconsistent
         // state.
@@ -490,6 +504,8 @@ public:
         tmp.m_migrants = std::move(tmp_migrants);
         tmp.m_migr_log = std::move(tmp_migr_log);
         tmp.m_topology = std::move(tmp_topo);
+        tmp.m_migr_type.store(tmp_migr_type, std::memory_order_relaxed);
+        tmp.m_migr_handling.store(tmp_migr_handling, std::memory_order_relaxed);
 
         // NOTE: this final assignment will take care of setting the islands' archi pointers
         // appropriately via archi's move assignment operator.
@@ -524,6 +540,9 @@ private:
     // an associated mutex as it is supposed
     // to be thread-safe already.
     topology m_topology;
+    // Migration type and migrant handling policy.
+    std::atomic<migration_type> m_migr_type;
+    std::atomic<migrant_handling> m_migr_handling;
 };
 
 // Stream operator.
