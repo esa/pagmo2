@@ -176,7 +176,7 @@
 <span id="py-plotting"></span><h1>Plotting utilities<a class="headerlink" href="#plotting-utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pygmo.plotting.plot_non_dominated_fronts">
-<code class="sig-prename descclassname">pygmo.plotting.</code><code class="sig-name descname">plot_non_dominated_fronts</code><span class="sig-paren">(</span><em class="sig-param">points, marker='o', comp=[0, 1]</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.plotting.plot_non_dominated_fronts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pygmo.plotting.</code><code class="sig-name descname">plot_non_dominated_fronts</code><span class="sig-paren">(</span><em class="sig-param">points, marker='o', comp=[0, 1], axes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.plotting.plot_non_dominated_fronts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the nondominated fronts of a set of points. Makes use of <a class="reference internal" href="py_mo_utils.html#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-class docutils literal notranslate"><span class="pre">fast_non_dominated_sorting</span></code></a> to
 compute the non dominated fronts.</p>
 <dl class="field-list simple">
@@ -185,6 +185,7 @@ compute the non dominated fronts.</p>
 <li><p><strong>points</strong> (<em>2d array-like</em>) – points to plot</p></li>
 <li><p><strong>marker</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – matplotlib marker used to plot the <em>points</em></p></li>
 <li><p><strong>comp</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – Components to be considered in the two dimensional plot (useful in many-objectives cases)</p></li>
+<li><p><strong>axes</strong> (<a class="reference external" href="https://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.1.1)"><em>matplotlib.axes.Axes</em></a>) – plot axes</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
