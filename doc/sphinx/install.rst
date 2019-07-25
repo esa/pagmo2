@@ -215,3 +215,19 @@ When done, type (in your build directory):
    make install
 
 To check that all went well fire-up your Python console and try the example in :ref:`quick-start example <getting_started_py>`.
+
+Installation on Arch Linux
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Pygmo is available on the `Arch User Repository
+<https://aur.archlinux.org>`__ (AUR) in Arch Linux. It is
+recommended to use an AUR helper like
+`yay <https://aur.archlinux.org/packages/yay/>`__ or
+`pikaur <https://aur.archlinux.org/packages/pikaur/>`__ for ease of installation.
+See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers>`__ page on
+the Arch Linux wiki for more info.
+
+Install ``python-pygmo``:
+
+.. code-block:: bash
+
+    yay -S python-pygmo
