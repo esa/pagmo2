@@ -34,7 +34,7 @@ from __future__ import absolute_import as _ai
 # Plotting functions
 
 
-def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
+def plot_non_dominated_fronts(points, marker='o', comp=[0, 1], axes = None):
     """
     Plots the nondominated fronts of a set of points. Makes use of :class:`~pygmo.fast_non_dominated_sorting` to
     compute the non dominated fronts.
@@ -65,7 +65,8 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
                   linspace(0.1, 0.9, len(fronts)),
                   linspace(0.1, 0.9, len(fronts))))
 
-    fig, ax = plt.subplots()
+    if axes is None:
+        ax = plt.axes()
 
     for ndr, front in enumerate(fronts):
         # We plot the points
@@ -74,8 +75,8 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
                 comp[1]], marker=marker, color=cl[ndr])
         # We plot the fronts
         # Frist compute the points coordinates
-        x = [points[idx][0] for idx in front]
-        y = [points[idx][1] for idx in front]
+        x = [points[idx][comp[0]] for idx in front] #<-----------------Line 77
+        y = [points[idx][comp[1]] for idx in front] #<-----------------Line 78
         # Then sort them by the first objective
         tmp = [(a, b) for a, b in zip(x, y)]
         tmp = sorted(tmp, key=lambda k: k[0])
@@ -83,7 +84,6 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1]):
         ax.step([c[0] for c in tmp], [c[1]
                                       for c in tmp], color=cl[ndr], where='post')
 
-    plt.show()
     return ax
 
 
