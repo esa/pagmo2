@@ -43,6 +43,7 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1], axes = None):
         points (2d array-like): points to plot
         marker (``str``): matplotlib marker used to plot the *points*
         comp (``list``): Components to be considered in the two dimensional plot (useful in many-objectives cases)
+        axes (matplotlib.axes.Axes): plot axes
 
     Returns:
         ``matplotlib.axes.Axes``: the current ``matplotlib.axes.Axes`` instance on the current figure
