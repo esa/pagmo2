@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/exceptions.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
 #include <pagmo/types.hpp>
 
@@ -247,6 +248,17 @@ std::string base_bgl_topology::get_extra_info() const
 
         oss << "\tNumber of vertices: " << boost::num_vertices(m_graph) << '\n';
         oss << "\tNumber of edges: " << boost::num_edges(m_graph) << '\n';
+        oss << "\tAdjacency list:\n\n";
+
+        for (auto vs = boost::vertices(m_graph); vs.first != vs.second; ++vs.first) {
+            // Get the list of vertices the current vertex connects to.
+            const auto arange = boost::adjacent_vertices(*vs.first, m_graph);
+
+            // Print the vertex and its adjacent vertices.
+            oss << "\t\t" << *vs.first << ": ";
+            detail::stream_range(oss, arange.first, arange.second);
+            oss << '\n';
+        }
     }
 
     return oss.str();

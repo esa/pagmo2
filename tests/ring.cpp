@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <cstddef>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -183,4 +184,11 @@ BOOST_AUTO_TEST_CASE(basic_test)
     BOOST_CHECK(r0.get_weight() == .5);
     BOOST_CHECK(r0.num_vertices() == 4u);
     verify_ring_topology(r0);
+
+    // Example of cout printing for ring.
+    r0.push_back();
+    r0.push_back();
+    r0.push_back();
+    r0.push_back();
+    std::cout << r0.get_extra_info() << '\n';
 }
