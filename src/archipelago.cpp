@@ -578,6 +578,22 @@ individuals_group_t archipelago::extract_migrants(size_type i)
     return retval;
 }
 
+// Get the migrants in the db entry for island i.
+// This function will *not* clear out the db entry.
+individuals_group_t archipelago::get_migrants(size_type i) const
+{
+    std::lock_guard<std::mutex> lock(m_migrants_mutex);
+
+    if (i >= m_migrants.size()) {
+        pagmo_throw(std::out_of_range, "cannot access the migrants of the island at index " + std::to_string(i)
+                                           + ": the migrants database has a size of only "
+                                           + std::to_string(m_migrants.size()));
+    }
+
+    // Return a copy of the migrants for island i.
+    return m_migrants[i];
+}
+
 // Move-insert in the db entry for island i a set of migrants.
 void archipelago::set_migrants(size_type i, individuals_group_t &&inds)
 {
@@ -613,29 +629,82 @@ void archipelago::set_topology(topology topo)
     m_topology = std::move(topo);
 }
 
+namespace detail
+{
+
+namespace
+{
+
+// Helpers to implement the archipelago::get_island_connections() function below.
+template <typename T>
+std::pair<std::vector<archipelago::size_type>, vector_double> get_island_connections_impl(const T &topo, std::size_t i,
+                                                                                          std::true_type)
+{
+    // NOTE: get_connections() is required to be thread-safe.
+    return topo.get_connections(i);
+}
+
+template <typename T>
+std::pair<std::vector<archipelago::size_type>, vector_double> get_island_connections_impl(const T &topo, std::size_t i,
+                                                                                          std::false_type)
+{
+    // NOTE: get_connections() is required to be thread-safe.
+    auto tmp = topo.get_connections(i);
+
+    std::pair<std::vector<archipelago::size_type>, vector_double> retval;
+    retval.first.reserve(boost::numeric_cast<decltype(retval.first.size())>(tmp.first.size()));
+
+    std::transform(tmp.first.begin(), tmp.first.end(), std::back_inserter(retval.first),
+                   [](const std::size_t &n) { return boost::numeric_cast<archipelago::size_type>(n); });
+    retval.second = std::move(tmp.second);
+
+    return retval;
+}
+
+} // namespace
+
+} // namespace detail
+
 // Get the list of connection to the island at index i.
 // The returned value is made of two vectors of equal size:
 // - the indicies of the connecting islands,
 // - the weights of the connections.
+// This function will take care of safely converting the topology
+// indices to island indices, if necessary.
 std::pair<std::vector<archipelago::size_type>, vector_double> archipelago::get_island_connections(size_type i) const
 {
-    // NOTE: get_connections() is required to be thread-safe.
-    auto tmp = m_topology.get_connections(boost::numeric_cast<std::size_t>(i));
-
     // NOTE: the get_connections() method of the topology
     // returns indices represented by std::size_t, but this method
     // returns indices represented by size_type. Hence, we formally
-    // need to go through a conversion. If this becomes a problem
-    // performance-wise, we can write some TMP to elide the
-    // conversion in the likely case the two types coincide
-    std::pair<std::vector<size_type>, vector_double> retval;
-    retval.first.reserve(boost::numeric_cast<decltype(retval.first.size())>(tmp.first.size()));
+    // need to go through a conversion. We do a bit of TMP to avoid
+    // the conversion in the likely case that std::size_t and size_type
+    // are the same type.
+    return detail::get_island_connections_impl(m_topology, boost::numeric_cast<std::size_t>(i),
+                                               std::is_same<std::size_t, size_type>{});
+}
 
-    std::transform(tmp.first.begin(), tmp.first.end(), std::back_inserter(retval.first),
-                   [](const std::size_t &n) { return boost::numeric_cast<size_type>(n); });
-    retval.second = std::move(tmp.second);
+// Get the migration type.
+migration_type archipelago::get_migration_type() const
+{
+    return m_migr_type.load(std::memory_order_relaxed);
+}
 
-    return retval;
+// Set the migration type.
+void archipelago::set_migration_type(migration_type mt)
+{
+    m_migr_type.store(mt, std::memory_order_relaxed);
+}
+
+// Get the migrant handling policy.
+migrant_handling archipelago::get_migrant_handling() const
+{
+    return m_migr_handling.load(std::memory_order_relaxed);
+}
+
+// Set the migrant handling policy.
+void archipelago::set_migrant_handling(migrant_handling mh)
+{
+    m_migr_handling.store(mh, std::memory_order_relaxed);
 }
 
 /// Stream operator.

@@ -427,7 +427,11 @@ public:
 
     topology get_topology() const;
     void set_topology(topology);
-    std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;
+
+    migration_type get_migration_type() const;
+    void set_migration_type(migration_type);
+    migrant_handling get_migrant_handling() const;
+    void set_migrant_handling(migrant_handling);
 
     /// Save to archive.
     /**
@@ -515,13 +519,16 @@ public:
 
 private:
     // Private utilities for use only by island.
-    // Extract/set migrants for the island at the given index.
+    // Extract/get/set migrants for the island at the given index.
     PAGMO_DLL_LOCAL individuals_group_t extract_migrants(size_type);
+    PAGMO_DLL_LOCAL individuals_group_t get_migrants(size_type) const;
     PAGMO_DLL_LOCAL void set_migrants(size_type, individuals_group_t &&);
     // Helper to add entries to the migration log.
     PAGMO_DLL_LOCAL void append_migration_log(const migration_log_t &);
     // Get the index of an island.
     PAGMO_DLL_LOCAL size_type get_island_idx(const island &) const;
+    // Get the connections to the island at the given index.
+    PAGMO_DLL_LOCAL std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;
 
 private:
     container_t m_islands;

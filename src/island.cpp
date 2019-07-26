@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
@@ -345,14 +346,10 @@ void island::evolve(unsigned n)
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
         m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
-            // Random bits for use in the migration logic.
-            // Wrap them in optionals so that, if we don't need
-            // them, we don't waste cycles initialising them.
+            // Random engine for use in the migration logic.
+            // Wrap it in an optional so that, if we don't need
+            // it, we don't waste CPU/memory.
             boost::optional<std::mt19937> migr_eng;
-            // Migration probability distribution.
-            boost::optional<std::uniform_real_distribution<double>> pdist;
-            // Distribution for selecting the connecting island.
-            boost::optional<std::uniform_int_distribution<archipelago::size_type>> idist;
 
             // Cache the archi pointer.
             const auto aptr = this->m_ptr->archi_ptr;
@@ -369,40 +366,134 @@ void island::evolve(unsigned n)
 
                     // Get the indices of the islands with a connection
                     // towards this.
+                    // NOTE: the get_island_connections() helper will take care
+                    // of converting topology indices to island indices.
                     const auto connections = aptr->get_island_connections(isl_idx);
                     assert(connections.first.size() == connections.second.size());
 
                     // Do something only if we actually have connections.
                     if (connections.first.size()) {
-                        // Init the rng bits, if necessary.
+                        // Init the rng engine, if necessary.
                         if (!migr_eng) {
-                            assert(!pdist);
-                            assert(!idist);
-
                             migr_eng.emplace(static_cast<std::mt19937::result_type>(random_device::next()));
-                            pdist.emplace(0., 1.);
-                            idist.emplace();
                         }
 
-                        // Pick a random island index among the islands connecting to this.
-                        const auto conn_idx
-                            = (*idist)(*migr_eng, std::uniform_int_distribution<archipelago::size_type>::param_type(
-                                                      0, connections.first.size() - 1u));
+                        // Fetch the migration type and the migrant handling policy
+                        // from the archipelago.
+                        const auto mt = aptr->get_migration_type();
+                        const auto mh = aptr->get_migrant_handling();
 
-                        // Throw the dice against the migration probability.
-                        if ((*pdist)(*migr_eng)
-                            < connections.second[static_cast<decltype(connections.second.size())>(conn_idx)]) {
-                            // Get the source island's index.
-                            const auto src_idx
-                                = connections.first[static_cast<decltype(connections.first.size())>(conn_idx)];
+                        // Small helper to turn a group of individuals into
+                        // an ID -> (dv, fv) map. inds will be destroyed
+                        // in the process.
+                        using inds_map_t
+                            = std::unordered_map<unsigned long long, std::pair<vector_double, vector_double>>;
+                        auto group_to_map = [](individuals_group_t &&inds) -> inds_map_t {
+                            inds_map_t retval;
 
-                            // Extract the candidate migrants from the archipelago.
-                            const auto migrants = aptr->extract_migrants(src_idx);
+                            for (decltype(std::get<0>(inds).size()) j = 0; j < std::get<0>(inds).size(); ++j) {
+                                retval[std::get<0>(inds)[j]]
+                                    = std::make_pair(std::move(std::get<1>(inds)[j]), std::move(std::get<2>(inds)[j]));
+                            }
+
+                            return retval;
+                        };
+
+                        if (mt == migration_type::p2p) {
+                            // Point-to-point migration.
+
+                            // Pick a random island among the islands connecting to this.
+                            const auto conn_idx = std::uniform_int_distribution<decltype(connections.first.size())>(
+                                0, connections.first.size() - 1u)(*migr_eng);
+
+                            // Throw the dice against the migration probability.
+                            if (std::uniform_real_distribution<>{}(*migr_eng) < connections.second[conn_idx]) {
+                                // Get the source island's index.
+                                const auto src_idx = connections.first[conn_idx];
+
+                                // Extract or copy the candidate migrants from the archipelago.
+                                const auto migrants = (mh == migrant_handling::preserve)
+                                                          ? aptr->get_migrants(src_idx)
+                                                          : aptr->extract_migrants(src_idx);
+
+                                // Extract the migration data from this island.
+                                const auto mig_data = this->get_migration_data();
+
+                                // Run the replacement policy.
+                                auto new_inds = this->m_ptr->r_pol.replace(std::get<0>(mig_data), std::get<1>(mig_data),
+                                                                           std::get<2>(mig_data), std::get<3>(mig_data),
+                                                                           std::get<4>(mig_data), std::get<5>(mig_data),
+                                                                           std::get<6>(mig_data), migrants);
+
+                                // Set the new individuals.
+                                this->set_individuals(new_inds);
+
+                                // Compute the migration timestamp.
+                                const std::chrono::duration<double> mig_ts
+                                    = std::chrono::steady_clock::now() - detail::initial_timestamp;
+
+                                // Turn new_inds into an ID -> (dv, fv) map in order to build the log.
+                                const auto new_inds_map = group_to_map(std::move(new_inds));
+
+                                // Build the migration log.
+                                archipelago::migration_log_t mlog;
+                                for (auto mig_ID : std::get<0>(migrants)) {
+                                    const auto it = new_inds_map.find(mig_ID);
+
+                                    if (it != new_inds_map.end()) {
+                                        mlog.emplace_back(mig_ts.count(), mig_ID, it->second.first, it->second.second,
+                                                          src_idx, isl_idx);
+                                    }
+                                }
+
+                                // Append it.
+                                aptr->append_migration_log(mlog);
+                            }
+                        } else {
+                            // Broadcast migration.
+
+                            // Group of candidate migrants from the all
+                            // the islands connecting to this.
+                            // We will build this below iteratively.
+                            individuals_group_t migrants;
+
+                            // Vector to pair source island indices to the corresponding
+                            // candidate migrants. This will contain the same set of individuals
+                            // as migrants, but split according to the source island. This is needed
+                            // to build the migration log.
+                            std::vector<std::pair<archipelago::size_type, individuals_group_t>> split_migrants;
+
+                            for (decltype(connections.first.size()) i = 0; i < connections.first.size(); ++i) {
+                                // Throw the dice against the migration probability.
+                                if (std::uniform_real_distribution<>{}(*migr_eng) < connections.second[i]) {
+                                    // Get the source island's index.
+                                    const auto src_idx = connections.first[i];
+
+                                    // Extract or copy the candidate migrants from the archipelago.
+                                    auto cur_migrants = (mh == migrant_handling::preserve)
+                                                            ? aptr->get_migrants(src_idx)
+                                                            : aptr->extract_migrants(src_idx);
+
+                                    // Add them to the global migrants vector.
+                                    std::get<0>(migrants).insert(std::get<0>(migrants).end(),
+                                                                 std::get<0>(cur_migrants).begin(),
+                                                                 std::get<0>(cur_migrants).end());
+                                    std::get<1>(migrants).insert(std::get<1>(migrants).end(),
+                                                                 std::get<1>(cur_migrants).begin(),
+                                                                 std::get<1>(cur_migrants).end());
+                                    std::get<2>(migrants).insert(std::get<2>(migrants).end(),
+                                                                 std::get<2>(cur_migrants).begin(),
+                                                                 std::get<2>(cur_migrants).end());
+
+                                    // Add them to split_migrants too.
+                                    split_migrants.emplace_back(src_idx, std::move(cur_migrants));
+                                }
+                            }
 
                             // Extract the migration data from this island.
                             const auto mig_data = this->get_migration_data();
 
-                            // Get the new individuals that will replace the current population.
+                            // Run the replacement policy.
                             auto new_inds = this->m_ptr->r_pol.replace(std::get<0>(mig_data), std::get<1>(mig_data),
                                                                        std::get<2>(mig_data), std::get<3>(mig_data),
                                                                        std::get<4>(mig_data), std::get<5>(mig_data),
@@ -415,21 +506,21 @@ void island::evolve(unsigned n)
                             const std::chrono::duration<double> mig_ts
                                 = std::chrono::steady_clock::now() - detail::initial_timestamp;
 
-                            // Turn new_inds into an ID -> (dv, fv) map.
-                            std::unordered_map<unsigned long long, std::pair<vector_double, vector_double>>
-                                new_inds_map;
-                            for (decltype(std::get<0>(new_inds).size()) j = 0; j < std::get<0>(new_inds).size(); ++j) {
-                                new_inds_map[std::get<0>(new_inds)[j]] = std::make_pair(
-                                    std::move(std::get<1>(new_inds)[j]), std::move(std::get<2>(new_inds)[j]));
-                            }
+                            // Turn new_inds into an ID -> (dv, fv) map in order to build the log.
+                            const auto new_inds_map = group_to_map(std::move(new_inds));
 
                             // Build the migration log.
                             archipelago::migration_log_t mlog;
-                            for (auto mig_ID : std::get<0>(migrants)) {
-                                auto it = new_inds_map.find(mig_ID);
-                                if (it != new_inds_map.end()) {
-                                    mlog.emplace_back(mig_ts.count(), mig_ID, it->second.first, it->second.second,
-                                                      src_idx, isl_idx);
+                            for (const auto &p : split_migrants) {
+                                const auto src_idx = p.first;
+
+                                for (auto mig_ID : std::get<0>(p.second)) {
+                                    const auto it = new_inds_map.find(mig_ID);
+
+                                    if (it != new_inds_map.end()) {
+                                        mlog.emplace_back(mig_ts.count(), mig_ID, it->second.first, it->second.second,
+                                                          src_idx, isl_idx);
+                                    }
                                 }
                             }
 
