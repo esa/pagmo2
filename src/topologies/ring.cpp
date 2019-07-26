@@ -50,13 +50,13 @@ ring::ring() : m_weight(1) {}
 // Ctor from edge weight.
 ring::ring(double w) : m_weight(w)
 {
-    detail::bbt_check_edge_weight(m_weight);
+    detail::topology_check_edge_weight(m_weight);
 }
 
 // Ctor from number of vertices and edge weight.
 ring::ring(std::size_t n, double w) : m_weight(w)
 {
-    detail::bbt_check_edge_weight(m_weight);
+    detail::topology_check_edge_weight(m_weight);
 
     for (std::size_t i = 0; i < n; ++i) {
         push_back();

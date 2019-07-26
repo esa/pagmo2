@@ -48,6 +48,25 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+namespace detail
+{
+
+// Helper to check if w can be used as edge weight
+// in a topology.
+void topology_check_edge_weight(double w)
+{
+    if (!std::isfinite(w)) {
+        pagmo_throw(std::invalid_argument,
+                    "invalid weight for the edge of a topology: the value " + std::to_string(w) + " is not finite");
+    }
+    if (w < 0. || w > 1.) {
+        pagmo_throw(std::invalid_argument, "invalid weight for the edge of a topology: the value " + std::to_string(w)
+                                               + " is not in the [0., 1.] range");
+    }
+}
+
+} // namespace detail
+
 topology::topology() : topology(unconnected{}) {}
 
 void topology::generic_ctor_impl()

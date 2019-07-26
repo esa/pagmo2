@@ -76,8 +76,6 @@ using bgl_topology_graph_t
                             boost::listS           // std::list for of the graph's edge list (EdgeList)
                             >;
 
-PAGMO_DLL_PUBLIC void bbt_check_edge_weight(double);
-
 } // namespace detail
 
 // Helper for the implementation of topologies

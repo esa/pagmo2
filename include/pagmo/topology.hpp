@@ -338,6 +338,14 @@ private:
 // Streaming operator for topology.
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const topology &);
 
+namespace detail
+{
+
+// A small helper for checking the weight of an edge in a topology.
+PAGMO_DLL_PUBLIC void topology_check_edge_weight(double);
+
+} // namespace detail
+
 } // namespace pagmo
 
 // Disable tracking for the serialisation of topology.

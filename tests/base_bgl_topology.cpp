@@ -167,7 +167,12 @@ BOOST_AUTO_TEST_CASE(error_handling)
     BOOST_CHECK_EXCEPTION(t0.set_weight(0, 2, -1.), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(ia.what(), " is not in the [0., 1.] range");
     });
+    BOOST_CHECK_EXCEPTION(t0.set_all_weights(-1.), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(ia.what(), " is not in the [0., 1.] range");
+    });
     BOOST_CHECK_EXCEPTION(t0.set_weight(0, 2, std::numeric_limits<double>::infinity()), std::invalid_argument,
+                          [](const std::invalid_argument &ia) { return boost::contains(ia.what(), " is not finite"); });
+    BOOST_CHECK_EXCEPTION(t0.set_all_weights(std::numeric_limits<double>::infinity()), std::invalid_argument,
                           [](const std::invalid_argument &ia) { return boost::contains(ia.what(), " is not finite"); });
     BOOST_CHECK_EXCEPTION(t0.set_weight(0, 1, .2), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(
