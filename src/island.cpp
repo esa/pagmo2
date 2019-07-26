@@ -463,11 +463,11 @@ void island::evolve(unsigned n)
                             // to build the migration log.
                             std::vector<std::pair<archipelago::size_type, individuals_group_t>> split_migrants;
 
-                            for (decltype(connections.first.size()) i = 0; i < connections.first.size(); ++i) {
+                            for (decltype(connections.first.size()) j = 0; j < connections.first.size(); ++j) {
                                 // Throw the dice against the migration probability.
-                                if (std::uniform_real_distribution<>{}(*migr_eng) < connections.second[i]) {
+                                if (std::uniform_real_distribution<>{}(*migr_eng) < connections.second[j]) {
                                     // Get the source island's index.
-                                    const auto src_idx = connections.first[i];
+                                    const auto src_idx = connections.first[j];
 
                                     // Extract or copy the candidate migrants from the archipelago.
                                     auto cur_migrants = (mh == migrant_handling::preserve)
