@@ -67,9 +67,10 @@ Topology
 
    Topologies are used in asynchronous operations involving migration in archipelagos,
    and thus they need to provide a certain degree of thread safety. Specifically, the
-   :cpp:func:`~pagmo::topology::get_connections()` member function might be invoked
-   concurrently with any other member function. It is up to the authors of user-defined
-   topologies to ensure that this safety requirement is satisfied.
+   ``get_connections()`` member function of the UDT might be invoked concurrently with
+   any other member function of the UDT interface (except for the destructor, the move
+   constructor, and, if implemented, the deserialisation function). It is up to the
+   authors of user-defined topologies to ensure that this safety requirement is satisfied.
 
    .. warning::
 

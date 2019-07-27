@@ -232,7 +232,10 @@ archipelago &archipelago::operator=(archipelago &&other) noexcept
 archipelago::~archipelago()
 {
     // NOTE: make sure we stop the archi before running checks below without locking.
+    // NOTE: this is also important to ensure everything is stopped before we start
+    // destroying things, so that the destruction order will not matter.
     wait_check_ignore();
+
     // NOTE: we made sure in the move ctor/assignment that the island vector, the migrants and the indices
     // map are all cleared out after a move. Thus we can safely assert the following.
     assert(std::all_of(m_islands.begin(), m_islands.end(),
