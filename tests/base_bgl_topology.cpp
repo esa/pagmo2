@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <atomic>
+#include <initializer_list>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
@@ -79,20 +80,34 @@ BOOST_AUTO_TEST_CASE(basic_test)
 
     t0.add_edge(1, 0);
     t0.add_edge(2, 0);
-    BOOST_CHECK(t0.get_connections(0).first.size() == 2u);
-    BOOST_CHECK(t0.get_connections(0).second.size() == 2u);
-    BOOST_CHECK(t0.get_connections(1).first.size() == 1u);
-    BOOST_CHECK(t0.get_connections(1).second.size() == 1u);
-    BOOST_CHECK(t0.get_connections(2).first.size() == 1u);
-    BOOST_CHECK(t0.get_connections(2).second.size() == 1u);
+
+    auto conns = t0.get_connections(0);
+    using c_vec = decltype(conns.first);
+    using w_vec = decltype(conns.second);
+
+    BOOST_CHECK((conns.first == c_vec{1, 2} || conns.first == c_vec{2, 1}));
+    BOOST_CHECK((conns.second == w_vec{1., 1.}));
+
+    conns = t0.get_connections(1);
+
+    BOOST_CHECK((conns.first == c_vec{0}));
+    BOOST_CHECK((conns.second == w_vec{1.}));
+
+    conns = t0.get_connections(2);
+
+    BOOST_CHECK((conns.first == c_vec{0}));
+    BOOST_CHECK((conns.second == w_vec{1.}));
 
     t0.remove_edge(0, 2);
     BOOST_CHECK(t0.get_connections(2).first.empty());
     BOOST_CHECK(t0.get_connections(2).second.empty());
 
     t0.set_weight(0, 1, .5);
-    BOOST_CHECK(t0.get_connections(1).second.size() == 1u);
-    BOOST_CHECK(t0.get_connections(1).second[0] == .5);
+
+    conns = t0.get_connections(1);
+
+    BOOST_CHECK((conns.first == c_vec{0}));
+    BOOST_CHECK((conns.second == w_vec{.5}));
 
     t0.set_all_weights(.25);
     BOOST_CHECK(t0.get_connections(0).second.size() == 2u);
