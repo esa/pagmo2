@@ -220,6 +220,7 @@ if(PAGMO_BUILD_PAGMO)
         # UDT.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/base_bgl_topology.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/fully_connected.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
         # UDRP.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/fair_replace.cpp"
