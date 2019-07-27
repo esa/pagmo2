@@ -264,8 +264,6 @@ struct udp_inf {
     {
         return {{0., 0.}, {1., 1.}};
     }
-    /// Problem dimensions
-    unsigned m_dim;
 };
 
 struct udp_nan {
@@ -286,8 +284,6 @@ struct udp_nan {
     {
         return {{0., 0.}, {1., 1.}};
     }
-    /// Problem dimensions
-    unsigned m_dim;
 };
 
 BOOST_AUTO_TEST_CASE(test_for_inf_and_nan)
