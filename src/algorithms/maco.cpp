@@ -305,8 +305,8 @@ population maco::evolve(population pop) const
                     }
                     // I set-up the hypervolume computation by passing the list of fitnesses:
                     hypervolume hv = hypervolume(list_of_fit, true);
-                    // I compute the reference point by offsetting it of 0.1 to ensure strict domination:
-                    auto ref_point = hv.refpoint(0.1);
+                    // I compute the reference point by offsetting it of 0.01 to ensure strict domination:
+                    auto ref_point = hv.refpoint(0.01);
                     // I can now compute the hypervolume values:
                     auto contrib = hv.contributions(ref_point);
 
@@ -431,7 +431,8 @@ population maco::evolve(population pop) const
             for (population::size_type i = 0; i < pop_size; ++i) {
                 // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
                 // function
-                for (decltype(new_ants[i].size()) ii = 0u; ii < new_ants[i].size(); ++ii) {
+
+                for (decltype(n_x) ii = 0u; ii < n_x; ++ii) {
                     ant[ii] = new_ants[i][ii];
                 }
 
@@ -442,6 +443,18 @@ population maco::evolve(population pop) const
         }
 
     } // end of main ACO loop
+    if (m_memory == false) {
+        for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
+            for (decltype(n_x) ii = 0u; ii < n_x; ++ii) {
+                ant[ii] = sol_archive[i][ii];
+            }
+            vector_double ftns(n_f);
+            for (decltype(n_f) ii = 0u; ii < n_f; ++ii) {
+                ftns[ii] = sol_archive[i][ii + n_x];
+            }
+            pop.set_xf(i, ant, ftns);
+        }
+    }
     return pop;
 }
 

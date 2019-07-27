@@ -110,3 +110,4 @@ Advanced Examples
   cec2013_comp
   solving_schwefel_20
   cmaes_vs_xnes
+  zdt3_maco_benchmark
