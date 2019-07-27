@@ -191,5 +191,9 @@ BOOST_AUTO_TEST_CASE(basic_test)
     r0.push_back();
     r0.push_back();
     r0.push_back();
+
+    r0.set_weight(0, 1, .1);
+    r0.set_weight(4, 5, .7);
+
     std::cout << r0.get_extra_info() << '\n';
 }

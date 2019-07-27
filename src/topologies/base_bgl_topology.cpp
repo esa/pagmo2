@@ -37,7 +37,11 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/iterator/transform_iterator.hpp>
+#include <boost/iterator/zip_iterator.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_io.hpp>
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -237,12 +241,28 @@ std::string base_bgl_topology::get_extra_info() const
         oss << "\tAdjacency list:\n\n";
 
         for (auto vs = boost::vertices(m_graph); vs.first != vs.second; ++vs.first) {
-            // Get the list of vertices the current vertex connects to.
-            const auto arange = boost::adjacent_vertices(*vs.first, m_graph);
+            // Get the list of outgoing edges from the current vertex.
+            const auto erange = boost::out_edges(*vs.first, m_graph);
 
-            // Print the vertex and its adjacent vertices.
+            // Helper to extract the target vertex from an edge descriptor (that is,
+            // the vertex a directed edge points to).
+            auto target_getter = [this](decltype(*erange.first) ed) { return boost::target(ed, m_graph); };
+
+            // Helper to extract the edge weight from an edge descriptor.
+            auto weight_getter = [this](decltype(*erange.first) ed) { return m_graph[ed]; };
+
+            // Make zip iterators for bundling together the target of an edge
+            // and its weight.
+            auto z_begin = boost::make_zip_iterator(
+                boost::make_tuple(boost::make_transform_iterator(erange.first, target_getter),
+                                  boost::make_transform_iterator(erange.first, weight_getter)));
+            auto z_end = boost::make_zip_iterator(
+                boost::make_tuple(boost::make_transform_iterator(erange.second, target_getter),
+                                  boost::make_transform_iterator(erange.second, weight_getter)));
+
+            // Print the vertex, and its adjacent vertices together with the edges' weights.
             oss << "\t\t" << *vs.first << ": ";
-            detail::stream_range(oss, arange.first, arange.second);
+            detail::stream_range(oss, z_begin, z_end);
             oss << '\n';
         }
     }
