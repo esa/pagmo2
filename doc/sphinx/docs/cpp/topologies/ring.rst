@@ -11,7 +11,7 @@ Ring
 
 .. cpp:class:: ring: public base_bgl_topology
 
-   This user-defined topology (UDT) represent a bidirectional ring (that is, a ring
+   This user-defined topology (UDT) represents a bidirectional ring (that is, a ring
    in which each node connects to both the previous and the following nodes).
 
    .. cpp:function:: ring()
