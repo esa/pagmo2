@@ -49,6 +49,7 @@ breathe_default_members = ('members',)
 # Intersphinx mappings.
 intersphinx_mapping = {'python': (
     'https://docs.python.org/3', None),
+    'matplotlib': ('https://matplotlib.org/', None),
     'ipyparallel': ('https://ipyparallel.readthedocs.io/en/latest/', None),
     'numpy': ('https://docs.scipy.org/doc/numpy/', None)}
 
