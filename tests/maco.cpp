@@ -222,6 +222,8 @@ BOOST_AUTO_TEST_CASE(miscellanea_tests)
     maco uda3{maco{5u, 3u, 1.0, 5u, 3u, 10000u, 0.0, false, 23u}};
     maco uda4{maco{1u, 5u, 1.0, 1u, 7u, 10000u, 2.0, true, 23u}};
 
+    uda.set_verbosity(1u);
+
     // 2 - Instantiate
     algorithm algo{uda};
     algorithm algo2{uda2};

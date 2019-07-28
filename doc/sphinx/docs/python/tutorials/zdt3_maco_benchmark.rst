@@ -25,229 +25,221 @@ In order to run the UDAs on these problems we can write the following piece of c
     >>> p_dist_moead=[0, 0, 0]
     >>> p_dist_maco=[0, 0, 0]
     >>> p_dist_nsga2=[0, 0, 0]
+    <BLANKLINE>
     >>> #We run the algos three times each, for 3 different pop-sizes
-    <BLANKLINE>
     >>> for j in pop_sizes:
-    ...    for i in range(0,3):
-    ...        pop_1 = population(prob = udp, size = j, seed = i)
-    ...        pop_2 = population(prob = udp, size = j, seed = i)
-    ...        pop_3 = population(prob = udp, size = j, seed = i)
+    ...       for i in range(0,3):
+    ...              pop_1 = population(prob = udp, size = j, seed = i)
+    ...              pop_2 = population(prob = udp, size = j, seed = i)
+    ...              pop_3 = population(prob = udp, size = j, seed = i)
     <BLANKLINE>
-    ...        hv=hypervolume(pop_1)
-    ...        ref_point=hv.refpoint(offset=0.01)
+    ...              hv=hypervolume(pop_1)
+    ...              ref_point=hv.refpoint(offset=0.01)
     <BLANKLINE>
-    ...        #I store all the pop-sizes results for all the runs:
-    ...        #1st seed:
-    ...        if j==pop_sizes[0] and i==0:
-    ...            first_pop_32_1=pop_1.get_f()
+    ...              #I store all the pop-sizes results for all the runs:
+    ...              #1st seed:
+    ...              if j==pop_sizes[0] and i==0:
+    ...                  first_pop_32_1=pop_1.get_f()
+    ...              if j==pop_sizes[1] and i==0:
+    ...                  first_pop_64_1=pop_1.get_f()
+    ...              if j==pop_sizes[2] and i==0:
+    ...                  first_pop_128_1=pop_1.get_f()
     <BLANKLINE>
-    ...        if j==pop_sizes[1] and i==0:
-    ...            first_pop_64_1=pop_1.get_f()
+    ...              #2nd seed:
+    ...              if j==pop_sizes[0] and i==1:
+    ...                  first_pop_32_2=pop_1.get_f()
+    ...              if j==pop_sizes[1] and i==1:
+    ...                  first_pop_64_2=pop_1.get_f()
+    ...              if j==pop_sizes[2] and i==1:
+    ...                  first_pop_128_2=pop_1.get_f()
     <BLANKLINE>
-    ...        if j==pop_sizes[2] and i==0:
-    ...            first_pop_128_1=pop_1.get_f()
+    ...              #3rd seed:
+    ...              if j==pop_sizes[0] and i==2:
+    ...                  first_pop_32_3=pop_1.get_f()
+    ...              if j==pop_sizes[1] and i==2:
+    ...                  first_pop_64_3=pop_1.get_f()
+    ...              if j==pop_sizes[2] and i==2:
+    ...                  first_pop_128_3=pop_1.get_f()
     <BLANKLINE>
-    ...        #2nd seed:
-    ...        if j==pop_sizes[0] and i==1:
-    ...            first_pop_32_2=pop_1.get_f()
+    ...              algo = algorithm(moead(250, 'random'))
+    ...              algo_2 = algorithm(maco(gen = 250, ker = j-20, q = 1.0, threshold = 250, n_gen_mark = 47, evalstop=10000, focus=0.0, memory=False))
+    ...              algo_3 = algorithm(nsga2(gen = 250))
+    ...              algo.set_seed(i+1)
+    ...              algo_2.set_seed(i+1)
+    ...              algo_3.set_seed(i+1)
+    ...              pop_1 = algo.evolve(pop_1)
+    ...              pop_2=algo_2.evolve(pop_2)
+    ...              pop_3 = algo_3.evolve(pop_3)
     <BLANKLINE>
-    ...        if j==pop_sizes[1] and i==1:
-    ...            first_pop_64_2=pop_1.get_f()
+    ...              #This returns a series of arrays: in each of them it is contained (in this order), the -non-dominated front, -domination list, 
+    ...              #-domination count, -non-domination rank
+    ...              fnds=fast_non_dominated_sorting(pop_1.get_f())
+    ...              fnds_2=fast_non_dominated_sorting(pop_2.get_f())
+    ...              fnds_3=fast_non_dominated_sorting(pop_3.get_f())
     <BLANKLINE>
-    ...        if j==pop_sizes[2] and i==1:
-    ...            first_pop_128_2=pop_1.get_f()
+    ...              #This returns the first (i.e., best) non-dominated front:
+    ...              first_ndf_moead=fnds[0][0]
+    ...              first_ndf_maco=fnds_2[0][0]
+    ...              first_ndf_nsga2=fnds_3[0][0]
     <BLANKLINE>
-    ...        #3rd seed:
-    ...        if j==pop_sizes[0] and i==2:
-    ...            first_pop_32_3=pop_1.get_f()
+    ...              #I store all the pop-sizes non-dominated fronts for all the runs:
+    ...              #1st seed:
+    ...              if j==pop_sizes[0] and i==0:
+    ...                  #MOEA/D
+    ...                  hv_moead[0]=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[0]=udp.p_distance(pop_1)
+    ...                  first_col_moead_32_1=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_32_1=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[0]=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[0]=udp.p_distance(pop_2)
+    ...                  first_col_maco_32_1=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_32_1=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[0]=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[0]=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_32_1=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_32_1=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        if j==pop_sizes[1] and i==2:
-    ...            first_pop_64_3=pop_1.get_f()
+    ...              if j==pop_sizes[1] and i==0:
+    ...                  #MOEA/D
+    ...                  hv_moead[1]=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[1]=udp.p_distance(pop_1)
+    ...                  hv_moead[1]=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[1]=udp.p_distance(pop_1)
+    ...                  first_col_moead_64_1=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_64_1=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[1]=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[1]=udp.p_distance(pop_2)
+    ...                  first_col_maco_64_1=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_64_1=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[1]=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[1]=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_64_1=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_64_1=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        if j==pop_sizes[2] and i==2:
-    ...            first_pop_128_3=pop_1.get_f()
+    ...              if j==pop_sizes[2] and i==0:
+    ...                  #MOEA/D
+    ...                  hv_moead[2]=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[2]=udp.p_distance(pop_1)
+    ...                  first_col_moead_128_1=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_128_1=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[2]=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[2]=udp.p_distance(pop_2)
+    ...                  first_col_maco_128_1=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_128_1=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[2]=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[2]=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_128_1=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_128_1=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        algo = algorithm(moead(250, 'random'))
-    ...        algo_2 = algorithm(maco(gen = 250, ker = j-20, q = 1.0, threshold = 250, n_gen_mark = 47, evalstop=10000, focus=0.0, memory=False))
-    ...        #algo_2 = algorithm(moead(250))
-    ...        algo_3 = algorithm(nsga2(gen = 250))
-    ...        algo.set_seed(i+1)
-    ...        algo_2.set_seed(i+1)
-    ...        algo_3.set_seed(i+1)
-    ...        pop_1 = algo.evolve(pop_1)
-    ...        pop_2=algo_2.evolve(pop_2)
-    ...        pop_3 = algo_3.evolve(pop_3)
+    ...              #2nd seed:
+    ...              if j==pop_sizes[0] and i==1:
+    ...                  #MOEA/D
+    ...                  hv_moead[0]+=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[0]+=udp.p_distance(pop_1)
+    ...                  first_col_moead_32_2=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_32_2=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[0]+=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[0]+=udp.p_distance(pop_2)
+    ...                  first_col_maco_32_2=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_32_2=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[0]+=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[0]+=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_32_2=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_32_2=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        #This returns a series of arrays: in each of them it is contained (in this order), the -non-dominated front, -domination list, 
-    ...        #-domination count, -non-domination rank
-    ...        fnds=fast_non_dominated_sorting(pop_1.get_f())
-    ...        fnds_2=fast_non_dominated_sorting(pop_2.get_f())
-    ...        fnds_3=fast_non_dominated_sorting(pop_3.get_f())
+    ...              if j==pop_sizes[1] and i==1:
+    ...                  #MOEA/D
+    ...                  hv_moead[1]+=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[1]+=udp.p_distance(pop_1)
+    ...                  first_col_moead_64_2=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_64_2=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[1]+=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[1]+=udp.p_distance(pop_2)
+    ...                  first_col_maco_64_2=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_64_2=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[1]+=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[1]+=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_64_2=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_64_2=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        #This returns the first (i.e., best) non-dominated front:
-    ...        first_ndf_moead=fnds[0][0]
-    ...        first_ndf_maco=fnds_2[0][0]
-    ...        first_ndf_nsga2=fnds_3[0][0]
+    ...              if j==pop_sizes[2] and i==1:
+    ...                  #MOEA/D
+    ...                  hv_moead[2]+=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[2]+=udp.p_distance(pop_1)
+    ...                  first_col_moead_128_2=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_128_2=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[2]+=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[2]+=udp.p_distance(pop_2)
+    ...                  first_col_maco_128_2=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_128_2=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[2]+=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[2]+=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_128_2=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_128_2=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        #I store all the pop-sizes non-dominated fronts for all the runs:
-    ...        #1st seed:
-    ...        if j==pop_sizes[0] and i==0:
-    ...            #MOEA/D
-    ...            hv_moead[0]=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[0]=udp.p_distance(pop_1)
-    ...            first_col_moead_32_1=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_32_1=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[0]=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[0]=udp.p_distance(pop_2)
-    ...           first_col_maco_32_1=pop_2.get_f()[first_ndf_maco,0]
-    ...           second_col_maco_32_1=pop_2.get_f()[first_ndf_maco,1]
-    ...           #NSGA2
-    ...            hv_nsga2[0]=hypervolume(pop_3).compute(ref_point)
-    ...            p_dist_nsga2[0]=udp.p_distance(pop_3)
-    ...            first_col_nsga2_32_1=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_32_1=pop_3.get_f()[first_ndf_nsga2,1]
+    ...                  #3rd seed:
+    ...              if j==pop_sizes[0] and i==2:
+    ...                  #MOEA/D
+    ...                  hv_moead[0]+=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[0]+=udp.p_distance(pop_1)
+    ...                  first_col_moead_32_3=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_32_3=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[0]+=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[0]+=udp.p_distance(pop_2)
+    ...                  first_col_maco_32_3=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_32_3=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[0]+=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[0]+=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_32_3=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_32_3=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        if j==pop_sizes[1] and i==0:
-    ...            #MOEA/D
-    ...            hv_moead[1]=hypervolume(pop_1).compute(ref_point)
-    ...          p_dist_moead[1]=udp.p_distance(pop_1)
-    ...            hv_moead[1]=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[1]=udp.p_distance(pop_1)
-    ...            first_col_moead_64_1=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_64_1=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[1]=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[1]=udp.p_distance(pop_2)
-    ...            first_col_maco_64_1=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_64_1=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[1]=hypervolume(pop_3).compute(ref_point)
-    ...            p_dist_nsga2[1]=udp.p_distance(pop_3)
-    ...            first_col_nsga2_64_1=pop_3.get_f()[first_ndf_nsga2,0]
-    ...           second_col_nsga2_64_1=pop_3.get_f()[first_ndf_nsga2,1]
+    ...              if j==pop_sizes[1] and i==2:
+    ...                  #MOEA/D
+    ...                  hv_moead[1]+=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[1]+=udp.p_distance(pop_1)
+    ...                  first_col_moead_64_3=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_64_3=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[1]+=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[1]+=udp.p_distance(pop_2)
+    ...                  first_col_maco_64_3=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_64_3=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[1]+=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[1]+=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_64_3=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_64_3=pop_3.get_f()[first_ndf_nsga2,1]
     <BLANKLINE>
-    ...        if j==pop_sizes[2] and i==0:
-    ...            #MOEA/D
-    ...           hv_moead[2]=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[2]=udp.p_distance(pop_1)
-    ...            first_col_moead_128_1=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_128_1=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[2]=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[2]=udp.p_distance(pop_2)
-    ...            first_col_maco_128_1=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_128_1=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[2]=hypervolume(pop_3).compute(ref_point)
-    ...            p_dist_nsga2[2]=udp.p_distance(pop_3)
-    ...           first_col_nsga2_128_1=pop_3.get_f()[first_ndf_nsga2,0]
-    ...           second_col_nsga2_128_1=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
-    ...        #2nd seed:
-    ...        if j==pop_sizes[0] and i==1:
-    ...            #MOEA/D
-    ...            hv_moead[0]+=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[0]+=udp.p_distance(pop_1)
-    ...            first_col_moead_32_2=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_32_2=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[0]+=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[0]+=udp.p_distance(pop_2)
-    ...            first_col_maco_32_2=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_32_2=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[0]+=hypervolume(pop_3).compute(ref_point)
-    ...           p_dist_nsga2[0]+=udp.p_distance(pop_3)
-    ...            first_col_nsga2_32_2=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_32_2=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
-    ...        if j==pop_sizes[1] and i==1:
-    ...            #MOEA/D
-    ...            hv_moead[1]+=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[1]+=udp.p_distance(pop_1)
-    ...            first_col_moead_64_2=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_64_2=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[1]+=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[1]+=udp.p_distance(pop_2)
-    ...            first_col_maco_64_2=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_64_2=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[1]+=hypervolume(pop_3).compute(ref_point)
-    ...            p_dist_nsga2[1]+=udp.p_distance(pop_3)
-    ...            first_col_nsga2_64_2=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_64_2=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
-    ...        if j==pop_sizes[2] and i==1:
-    ...            #MOEA/D
-    ...            hv_moead[2]+=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[2]+=udp.p_distance(pop_1)
-    ...            first_col_moead_128_2=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_128_2=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[2]+=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[2]+=udp.p_distance(pop_2)
-    ...           first_col_maco_128_2=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_128_2=pop_2.get_f()[first_ndf_maco,1]
-    ...           #NSGA2
-    ...            hv_nsga2[2]+=hypervolume(pop_3).compute(ref_point)
-    ...            p_dist_nsga2[2]+=udp.p_distance(pop_3)
-    ...            first_col_nsga2_128_2=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_128_2=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
-    ...        #3rd seed:
-    ...        if j==pop_sizes[0] and i==2:
-    ...            #MOEA/D
-    ...            hv_moead[0]+=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[0]+=udp.p_distance(pop_1)
-    ...            first_col_moead_32_3=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_32_3=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[0]+=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[0]+=udp.p_distance(pop_2)
-    ...            first_col_maco_32_3=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_32_3=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[0]+=hypervolume(pop_3).compute(ref_point)
-    ...           p_dist_nsga2[0]+=udp.p_distance(pop_3)
-    ...            first_col_nsga2_32_3=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_32_3=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
-    ...        if j==pop_sizes[1] and i==2:
-    ...            #MOEA/D
-    ...            hv_moead[1]+=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[1]+=udp.p_distance(pop_1)
-    ...            first_col_moead_64_3=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_64_3=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[1]+=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[1]+=udp.p_distance(pop_2)
-    ...            first_col_maco_64_3=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_64_3=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[1]+=hypervolume(pop_3).compute(ref_point)
-    ...           p_dist_nsga2[1]+=udp.p_distance(pop_3)
-    ...            first_col_nsga2_64_3=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_64_3=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
-
-    ...        if j==pop_sizes[2] and i==2:
-    ...            #MOEA/D
-    ...            hv_moead[2]+=hypervolume(pop_1).compute(ref_point)
-    ...            p_dist_moead[2]+=udp.p_distance(pop_1)
-    ...            first_col_moead_128_3=pop_1.get_f()[first_ndf_moead,0]
-    ...            second_col_moead_128_3=pop_1.get_f()[first_ndf_moead,1]
-    ...            #MACO
-    ...            hv_maco[2]+=hypervolume(pop_2).compute(ref_point)
-    ...            p_dist_maco[2]+=udp.p_distance(pop_2)
-    ...            first_col_maco_128_3=pop_2.get_f()[first_ndf_maco,0]
-    ...            second_col_maco_128_3=pop_2.get_f()[first_ndf_maco,1]
-    ...            #NSGA2
-    ...            hv_nsga2[2]+=hypervolume(pop_3).compute(ref_point)
-    ...            p_dist_nsga2[2]+=udp.p_distance(pop_3)
-    ...            first_col_nsga2_128_3=pop_3.get_f()[first_ndf_nsga2,0]
-    ...            second_col_nsga2_128_3=pop_3.get_f()[first_ndf_nsga2,1]
+    ...              if j==pop_sizes[2] and i==2:
+    ...                  #MOEA/D
+    ...                  hv_moead[2]+=hypervolume(pop_1).compute(ref_point)
+    ...                  p_dist_moead[2]+=udp.p_distance(pop_1)
+    ...                  first_col_moead_128_3=pop_1.get_f()[first_ndf_moead,0]
+    ...                  second_col_moead_128_3=pop_1.get_f()[first_ndf_moead,1]
+    ...                  #MACO
+    ...                  hv_maco[2]+=hypervolume(pop_2).compute(ref_point)
+    ...                  p_dist_maco[2]+=udp.p_distance(pop_2)
+    ...                  first_col_maco_128_3=pop_2.get_f()[first_ndf_maco,0]
+    ...                  second_col_maco_128_3=pop_2.get_f()[first_ndf_maco,1]
+    ...                  #NSGA2
+    ...                  hv_nsga2[2]+=hypervolume(pop_3).compute(ref_point)
+    ...                  p_dist_nsga2[2]+=udp.p_distance(pop_3)
+    ...                  first_col_nsga2_128_3=pop_3.get_f()[first_ndf_nsga2,0]
+    ...                  second_col_nsga2_128_3=pop_3.get_f()[first_ndf_nsga2,1]
 
 As we can observe from the python script, we are running the three algorithms for 250 generations using the three different population sizes (32, 64, 128) and storing the final non-dominated Pareto front together with the hypervolume and p-distance values of the final populations.
 We can now plot the results in the fitness space (i.e., by plotting in the y-axis the second fitness value and in the x-axis the first fitness value). Also, we will print the average over the three runs of the hypervolume and p-distance values for the three algorithms and for all the population sizes. In particular, the first element of the vector corresponds to the average over the three runs of the population size 32, whereas the second of the population size 64, and the third of 128. For doing this, we write the following piece of code:

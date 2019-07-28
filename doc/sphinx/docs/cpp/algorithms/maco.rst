@@ -7,8 +7,15 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
 
 .. cpp:class:: maco
 
+   .. image:: ../../images/maco.gif
+    :scale: 70 %
+    :alt: MACO-GIF
+    :align: center
+
    Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO) is a modified version of GACO for multi-objective optimization, based on the hypervolume measure.
-   It extends the basic ideas of GACO by making use of hypervolume computation for ranking the individuals and storing them inside a solution archive from which future generations of individuals will be generated. In particular, the algorithm combines the concept of non-dominated fronts and hypervolume computation for ranking the individuals.|
+   It extends the basic ideas of GACO by making use of hypervolume computation for ranking the individuals and storing them inside a solution archive from which future generations of individuals will be generated. In particular, the algorithm combines the concept of non-dominated fronts and hypervolume computation for ranking the individuals.
+
+   Image credit: https://sites.psu.edu/paretomusings/2015/02/27/generating-data-sets-of-arbitrary-dimension-with-known-hypervolume/.
 
    This constructor will construct MHACO.
 
@@ -112,6 +119,3 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
 
       :param ``ar``: target archive.
       :exception unspecified: unspecified any exception thrown by the serialization of the UDA and of primitive types.
-
-
-
