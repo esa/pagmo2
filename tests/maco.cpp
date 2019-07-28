@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(maco_setters_getters_test)
     BOOST_CHECK(user_algo.get_verbosity() == 200u);
     user_algo.set_seed(23456u);
     BOOST_CHECK(user_algo.get_seed() == 23456u);
-    BOOST_CHECK(user_algo.get_name().find("MACO: Multi-objective Ant Colony Optimization") != std::string::npos);
+    BOOST_CHECK(user_algo.get_name().find("MHACO: Multi-objective Hypervolume-based Ant Colony Optimization") != std::string::npos);
     BOOST_CHECK(user_algo.get_extra_info().find("Verbosity") != std::string::npos);
 }
 

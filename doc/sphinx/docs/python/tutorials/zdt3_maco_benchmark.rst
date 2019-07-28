@@ -1,7 +1,7 @@
 .. _py_tutorial_zdt3_maco_benchmark_comp:
 
-Benchmarking Multi-Objective Ant Colony Optimization on ZDT3 problem
-=====================================================================
+Benchmarking Multi-Objective Hypervolume-based Ant Colony Optimization on ZDT3 problem
+=======================================================================================
 
 In this tutorial we will show how to use pygmo to run :class:`~pygmo.maco` algorithm and benchmark it using the 3rd problem of the Zitzler, Deb and Thiele (ZDT) test problem suite which often used for benchmarking multi-objective algorithms on two objective problems.
 

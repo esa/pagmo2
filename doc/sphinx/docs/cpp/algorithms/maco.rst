@@ -1,5 +1,5 @@
-Multi-objective Ant Colony Optimizer (MACO)
-===========================================================
+Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+===============================================================
 
 .. versionadded:: 2.11
 
@@ -7,10 +7,10 @@ Multi-objective Ant Colony Optimizer (MACO)
 
 .. cpp:class:: maco
 
-   Hypervolume-based Multi-objective Ant Colony Optimizer (MACO) is a modified version of GACO for multi-objective optimization, based on the hypervolume measure.
+   Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO) is a modified version of GACO for multi-objective optimization, based on the hypervolume measure.
    It extends the basic ideas of GACO by making use of hypervolume computation for ranking the individuals and storing them inside a solution archive from which future generations of individuals will be generated. In particular, the algorithm combines the concept of non-dominated fronts and hypervolume computation for ranking the individuals.|
 
-   This constructor will construct MACO.
+   This constructor will construct MHACO.
 
    .. cpp:function:: maco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned evalstop = 100000u, double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next())
 
@@ -49,7 +49,7 @@ Multi-objective Ant Colony Optimizer (MACO)
 
    .. cpp:function:: void set_verbosity(unsigned level)
 
-      Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by ``get_log()`. *level* can be: 
+      Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by ``get_log()``. *level* can be: 
       - 0: no verbosity.
       - >0: will print and log one line each *level* generations.
       Example (verbosity 1, where Gen, is the generation number, Fevals the number of function evaluations used; also, the ideal point of the current population follows cropped to its 5th component):
@@ -102,7 +102,7 @@ Multi-objective Ant Colony Optimizer (MACO)
 
       Returns the problem name.
 
-      :return: a string containing the problem name: "MACO: Multi-objective Ant Colony Optimization".
+      :return: a string containing the problem name: "MHACO: Multi-objective Hypervolume-based Ant Colony Optimization".
 
    .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
 

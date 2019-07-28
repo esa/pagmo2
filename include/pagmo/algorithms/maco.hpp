@@ -44,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-// Multi-Objective Ant Colony Opitmization
+// Multi-objective Hypervolume-based Ant Colony Opitmization (MHACO)
 class PAGMO_DLL_PUBLIC maco
 {
 public:
@@ -94,7 +94,7 @@ public:
     // Algorithm name
     std::string get_name() const
     {
-        return "MACO: Multi-objective Ant Colony Optimization";
+        return "MHACO: Multi-objective Hypervolume-based Ant Colony Optimization";
     }
 
     // Extra info
