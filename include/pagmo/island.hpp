@@ -368,11 +368,13 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
  *
  * \verbatim embed:rst:leading-asterisk
  *
- * In the pagmo jargon, an island is a class that encapsulates three entities:
+ * In the pagmo jargon, an island is a class that encapsulates the following entities:
  *
  * - a user-defined island (UDI),
  * - an :cpp:class:`~pagmo::algorithm`,
- * - a :cpp:class:`~pagmo::population`.
+ * - a :cpp:class:`~pagmo::population`,
+ * - a replacement policy (of type :cpp:class:`~pagmo::r_policy`),
+ * - a selection policy (of type :cpp:class:`~pagmo::s_policy`).
  *
  * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
  * of its :cpp:class:`~pagmo::population` via the algorithm's :cpp:func:`~pagmo::algorithm::evolve()`
@@ -384,6 +386,11 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
  * and fetch its internal data members. The user can explicitly wait for pending evolutions
  * to conclude by calling the :cpp:func:`~pagmo::island::wait()` and :cpp:func:`~pagmo::island::wait_check()`
  * methods. The status of ongoing evolutions in the island can be queried via :cpp:func:`~pagmo::island::status()`.
+ *
+ * The replacement and selection policies are used when the island is part of an :cpp:class:`~pagmo::archipelago`.
+ * They establish how individuals are selected and replaced from the island when migration across islands occurs within
+ * the :cpp:class:`~pagmo::archipelago`. If the island is not part of an :cpp:class:`~pagmo::archipelago`,
+ * the replacement and selection policies play no role.
  *
  * \endverbatim
  *
@@ -460,7 +467,7 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    :cpp:class:`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm` and ``p`` is an instance of :cpp:class:`pagmo::population`.
      *
      * This constructor will use *a* to construct the internal algorithm, and *p* to construct
      * the internal population. The UDI type will be inferred from the :cpp:type:`~pagmo::thread_safety` properties
@@ -474,6 +481,8 @@ public:
      * Note that on non-POSIX platforms, :cpp:class:`~pagmo::thread_island` will always be selected as the UDI type,
      * but island evolutions will fail if the algorithm and/or problem do not provide at least the
      * basic :cpp:type:`~pagmo::thread_safety` guarantee.
+     *
+     * The replacement/selection policies will be default-constructed.
      *
      * \endverbatim
      *
@@ -498,11 +507,34 @@ private:
         int>;
 
 public:
+    /// Constructor from algorithm, population and replacement/selection policies.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` is an instance of :cpp:class:`pagmo::population`,
+     *    and ``r`` and ``s`` can be used to construct, respectively, a :cpp:class:`pagmo::r_policy`
+     *    and a :cpp:class:`pagmo::s_policy`.
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * \endverbatim
+     *
+     * @param a the input algorithm.
+     * @param p the input population.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
     template <typename Algo, typename Pop, typename RPol, typename SPol,
               algo_pop_pol_enabler<Algo, Pop, RPol, SPol> = 0>
     explicit island(Algo &&a, Pop &&p, RPol &&r, SPol &&s)
-        : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p), std::forward<RPol>(r),
-                                             std::forward<SPol>(s)))
+        : m_ptr(detail::make_unique<idata_t>(idata_t::ptag{}, std::forward<Algo>(a), std::forward<Pop>(p),
+                                             std::forward<RPol>(r), std::forward<SPol>(s)))
     {
     }
 
@@ -549,6 +581,50 @@ public:
     }
 
 private:
+    template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol>
+    using isl_algo_pop_pol_enabler = enable_if_t<
+        detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
+                            std::is_same<population, uncvref_t<Pop>>, std::is_constructible<r_policy, RPol &&>,
+                            std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from UDI, algorithm, population and replacement/selection policies.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if:
+     *
+     *    - ``Isl`` satisfies :cpp:class:`pagmo::is_udi`,
+     *    - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
+     *    - ``p`` is an instance of :cpp:class:`pagmo::population`,
+     *    - ``r`` and ``s`` can be used to construct, respectively, a
+     *      :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * \endverbatim
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input population.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol,
+              isl_algo_pop_pol_enabler<Isl, Algo, Pop, RPol, SPol> = 0>
+    explicit island(Isl &&isl, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : m_ptr(detail::make_unique<idata_t>(idata_t::ptag{}, std::forward<Isl>(isl), std::forward<Algo>(a),
+                                             std::forward<Pop>(p), std::forward<RPol>(r), std::forward<SPol>(s)))
+    {
+    }
+
+private:
     template <typename Algo, typename Prob>
     using algo_prob_enabler = enable_if_t<
         detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>>::value,
@@ -584,6 +660,48 @@ public:
     }
 
 private:
+    template <typename Algo, typename Prob, typename RPol, typename SPol>
+    using algo_prob_pol_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>,
+                            std::is_constructible<r_policy, RPol &&>, std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from algorithm, problem, size, replacement/selections policies and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * \endverbatim
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Algo, typename Prob, typename RPol, typename SPol,
+              algo_prob_pol_enabler<Algo, Prob, RPol, SPol> = 0>
+    explicit island(Algo &&a, Prob &&p, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed), std::forward<RPol>(r),
+                 std::forward<SPol>(s))
+    {
+    }
+
+private:
     template <typename Algo, typename Prob, typename Bfe>
     using algo_prob_bfe_enabler = enable_if_t<
         detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>,
@@ -594,7 +712,15 @@ public:
     /// Constructor from algorithm, problem, batch fitness evaluator, size and seed.
     /**
      * \verbatim embed:rst:leading-asterisk
-     * This constructor is equivalent to the previous one, the only difference being that
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``b`` can be used to construct a
+     *    :cpp:class:`pagmo::bfe`.
+     *
+     * This constructor is equivalent to the constructor from algorithm, problem, size and seed,
+     * the only difference being that
      * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
      * or UDBFE *b*.
      * \endverbatim
@@ -612,6 +738,50 @@ public:
     explicit island(Algo &&a, Prob &&p, Bfe &&b, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Algo>(a), population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
+    {
+    }
+
+private:
+    template <typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol>
+    using algo_prob_bfe_pol_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>,
+                            std::is_constructible<bfe, Bfe &&>, std::is_constructible<r_policy, RPol &&>,
+                            std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from algorithm, problem, batch fitness evaluator, size, replacement/selection policies and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, ``b`` can be used to construct a
+     *    :cpp:class:`pagmo::bfe`, and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     * \endverbatim
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input (user-defined) batch fitness evaluator.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol,
+              algo_prob_bfe_pol_enabler<Algo, Prob, Bfe, RPol, SPol> = 0>
+    explicit island(Algo &&a, Prob &&p, Bfe &&b, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed),
+                 std::forward<RPol>(r), std::forward<SPol>(s))
     {
     }
 
@@ -656,6 +826,50 @@ public:
     }
 
 private:
+    template <typename Isl, typename Algo, typename Prob, typename RPol, typename SPol>
+    using isl_algo_prob_pol_enabler = enable_if_t<
+        detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
+                            std::is_constructible<problem, Prob &&>, std::is_constructible<r_policy, RPol &&>,
+                            std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from UDI, algorithm, problem, size, replacement/selection policies and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * \endverbatim
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Isl, typename Algo, typename Prob, typename RPol, typename SPol,
+              isl_algo_prob_pol_enabler<Isl, Algo, Prob, RPol, SPol> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed),
+                 std::forward<RPol>(r), std::forward<SPol>(s))
+    {
+    }
+
+private:
     template <typename Isl, typename Algo, typename Prob, typename Bfe>
     using isl_algo_prob_bfe_enabler = enable_if_t<
         detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
@@ -666,7 +880,14 @@ public:
     /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size and seed.
     /**
      * \verbatim embed:rst:leading-asterisk
-     * This constructor is equivalent to the previous one, the only difference being that
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``b`` can be used to construct a :cpp:class:`pagmo::bfe`.
+     *
+     * This constructor is equivalent to the constructor from UDI, algorithm, problem, size and seed,
+     * the only difference being that
      * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
      * or UDBFE *b*.
      * \endverbatim
@@ -687,6 +908,54 @@ public:
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Isl>(isl), std::forward<Algo>(a),
                  population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
+    {
+    }
+
+private:
+    template <typename Isl, typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol>
+    using isl_algo_prob_bfe_pol_enabler = enable_if_t<
+        detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
+                            std::is_constructible<problem, Prob &&>, std::is_constructible<bfe, Bfe &&>,
+                            std::is_constructible<r_policy, RPol &&>, std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size, replacement/selection policies and
+    /// seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, ``b`` can be used to construct a :cpp:class:`pagmo::bfe`,
+     *    and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * This constructor is equivalent to the previous one, the only difference being that
+     * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
+     * or UDBFE *b*.
+     * \endverbatim
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input (user-defined) batch fitness evaluator.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Isl, typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol,
+              isl_algo_prob_bfe_pol_enabler<Isl, Algo, Prob, Bfe, RPol, SPol> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, Bfe &&b, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a),
+                 population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed), std::forward<RPol>(r),
+                 std::forward<SPol>(s))
     {
     }
     // Destructor.
@@ -799,6 +1068,10 @@ public:
     population get_population() const;
     // Set the population.
     void set_population(const population &);
+    // Get the replacement policy.
+    r_policy get_r_policy() const;
+    // Get the selection policy.
+    s_policy get_s_policy() const;
     // Island's name.
     std::string get_name() const;
     // Island's extra info.

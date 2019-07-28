@@ -244,7 +244,7 @@ void island::wait_check_ignore()
 /// Default constructor.
 /**
  * The default constructor will initialise an island containing a UDI of type pagmo::thread_island,
- * and default-constructed pagmo::algorithm and pagmo::population.
+ * and default-constructed algorithm, population and replacement/selection policies.
  *
  * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
  */
@@ -252,15 +252,15 @@ island::island() : m_ptr(detail::make_unique<idata_t>()) {}
 
 /// Copy constructor.
 /**
- * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population
- * and algorithm. It is safe to call this constructor while \p other is evolving.
+ * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population,
+ * algorithm and replacement/selection policies. It is safe to call this constructor while \p other is evolving.
  *
  * @param other the island tht will be copied.
  *
  * @throws unspecified any exception thrown by:
  * - get_population() and get_algorithm(),
  * - memory allocation errors,
- * - the copy constructors of pagmo::algorithm and pagmo::population.
+ * - copying the island's members.
  */
 island::island(const island &other)
     : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population(),
@@ -802,6 +802,33 @@ void island::set_population(const population &pop)
         old_ptr = m_ptr->pop;
         m_ptr->pop = new_pop_ptr;
     }
+}
+
+/// Get the replacement policy.
+/**
+ * @return a copy of the current replacement policy.
+ *
+ * @throws unspecified any exception thrown by the copy constructor
+ * of the replacement policy.
+ */
+r_policy island::get_r_policy() const
+{
+    // NOTE: replacement/selection policies
+    // are supposed to provide thread-safe
+    // copy constructors.
+    return m_ptr->r_pol;
+}
+
+/// Get the selection policy.
+/**
+ * @return a copy of the current selection policy.
+ *
+ * @throws unspecified any exception thrown by the copy constructor
+ * of the selection policy.
+ */
+s_policy island::get_s_policy() const
+{
+    return m_ptr->s_pol;
 }
 
 /// Island's name.
