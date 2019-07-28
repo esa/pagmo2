@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <atomic>
 #include <initializer_list>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -40,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
@@ -55,8 +57,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/r_policies/fair_replace.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/s_policies/select_best.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -106,7 +110,13 @@ struct udrp00 {
     {
         return individuals_group_t{};
     }
+    template <typename Archive>
+    void serialize(Archive &, unsigned)
+    {
+    }
 };
+
+PAGMO_S11N_R_POLICY_EXPORT(udrp00)
 
 struct udsp00 {
     individuals_group_t select(const individuals_group_t &, const vector_double::size_type &,
@@ -116,7 +126,13 @@ struct udsp00 {
     {
         return individuals_group_t{};
     }
+    template <typename Archive>
+    void serialize(Archive &, unsigned)
+    {
+    }
 };
+
+PAGMO_S11N_S_POLICY_EXPORT(udsp00)
 
 BOOST_AUTO_TEST_CASE(island_constructors)
 {
@@ -374,11 +390,14 @@ BOOST_AUTO_TEST_CASE(island_name_info_stream)
     BOOST_CHECK(!oss.str().empty());
     BOOST_CHECK(isl.get_name() == "udi_01");
     BOOST_CHECK(isl.get_extra_info() == "extra bits");
+    BOOST_CHECK(boost::contains(oss.str(), "Replacement policy: Fair replace"));
+    BOOST_CHECK(boost::contains(oss.str(), "Selection policy: Select best"));
+    std::cout << isl << '\n';
 }
 
 BOOST_AUTO_TEST_CASE(island_serialization)
 {
-    island isl{de{}, population{rosenbrock{}, 25}};
+    island isl{de{}, population{rosenbrock{}, 25}, udrp00{}, udsp00{}};
     isl.evolve();
     isl.wait_check();
     std::stringstream ss;
