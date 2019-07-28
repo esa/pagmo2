@@ -16,7 +16,7 @@ In order to run the UDAs on these problems we can write the following piece of c
  
     >>> from pygmo import *
     >>> import numpy as np
-    >>> from matplotlib import pyplot as plt 
+    >>> from matplotlib import pyplot as plt #doctest: +SKIP
     >>> pop_sizes=[32, 64, 128]
     >>> udp = zdt(prob_id = 3)
     >>> hv_moead=[0, 0, 0]
@@ -253,8 +253,6 @@ As we can observe from the python script, we are running the three algorithms fo
 We can now plot the results in the fitness space (i.e., by plotting in the y-axis the second fitness value and in the x-axis the first fitness value). Also, we will print the average over the three runs of the hypervolume and p-distance values for the three algorithms and for all the population sizes. In particular, the first element of the vector corresponds to the average over the three runs of the population size 32, whereas the second of the population size 64, and the third of 128. For doing this, we write the following piece of code:
 
 .. doctest::
-    
-    >>> import matplotlib as mlp #doctest: +SKIP
 
     >>> print('\n joint hypervolume MOEA/D :\n') #doctest: +SKIP
     >>> print(np.array(hv_moead)/3) #doctest: +SKIP
@@ -270,87 +268,87 @@ We can now plot the results in the fitness space (i.e., by plotting in the y-axi
     >>> print(np.array(p_dist_nsga2)/3) #doctest: +SKIP
      joint hypervolume MOEA/D: #doctest: +SKIP
     [4.68242751 5.2765971  5.57259658] #doctest: +SKIP
-
+    <BLANKLINE>
      joint hypervolume MACO: #doctest: +SKIP
     [4.74695083 5.38002359 5.49987744] #doctest: +SKIP
-
+    <BLANKLINE>
      joint hypervolume NSGA2: #doctest: +SKIP
     [5.45305456 5.58634807 5.65456127] #doctest: +SKIP
-
+    <BLANKLINE>
      p-distance MOEA/D: #doctest: +SKIP
     [0.98580786 0.43830665 0.11202489] #doctest: +SKIP
-
+    <BLANKLINE>
      p-distance MACO: #doctest: +SKIP
     [0.75737982 0.27526069 0.21809924] #doctest: +SKIP
-
+    <BLANKLINE>
      p-distance NSGA-II: #doctest: +SKIP
     [0.01847673 0.00465985 0.00137918] #doctest: +SKIP
-
+    <BLANKLINE>
     >>> fig, axes = plt.subplots(nrows=3, ncols=3, sharex='col', sharey='row', figsize=(15,15)) #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[0,0].plot(first_pop_32_1[:,0], first_pop_32_1[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[0,0].plot(first_col_moead_32_1, second_col_moead_32_1,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[0,0].plot(first_col_maco_32_1, second_col_maco_32_1,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[0,0].plot(first_col_nsga2_32_1, second_col_nsga2_32_1, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[0,0].legend(loc='upper right') #doctest: +SKIP
     >>> axes[0,0].set_title('ZDT3: final Pareto front (1st run, pop=32)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[0,1].plot(first_pop_64_1[:,0], first_pop_64_1[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[0,1].plot(first_col_moead_64_1, second_col_moead_64_1,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[0,1].plot(first_col_maco_64_1, second_col_maco_64_1,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[0,1].plot(first_col_nsga2_64_1, second_col_nsga2_64_1, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[0,1].legend(loc='upper right') #doctest: +SKIP
     >>> axes[0,1].set_title('ZDT3: final Pareto front (1st run, pop=64)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[0,2].plot(first_pop_128_1[:,0], first_pop_128_1[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[0,2].plot(first_col_moead_128_1, second_col_moead_128_1,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[0,2].plot(first_col_maco_128_1, second_col_maco_128_1,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[0,2].plot(first_col_nsga2_128_1, second_col_nsga2_128_1, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[0,2].legend(loc='upper right') #doctest: +SKIP
     >>> axes[0,2].set_title('ZDT3: final Pareto front (1st run, pop=128)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[1,0].plot(first_pop_32_2[:,0], first_pop_32_2[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[1,0].plot(first_col_moead_32_2, second_col_moead_32_2,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[1,0].plot(first_col_maco_32_2, second_col_maco_32_2,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[1,0].plot(first_col_nsga2_32_2, second_col_nsga2_32_2, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[1,0].legend(loc='upper right') #doctest: +SKIP
     >>> axes[1,0].set_title('ZDT3: final Pareto front (2nd run, pop=32)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[1,1].plot(first_pop_64_2[:,0], first_pop_64_2[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[1,1].plot(first_col_moead_64_2, second_col_moead_64_2,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[1,1].plot(first_col_maco_64_2, second_col_maco_64_2,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[1,1].plot(first_col_nsga2_64_2, second_col_nsga2_64_2, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[1,1].legend(loc='upper right') #doctest: +SKIP
     >>> axes[1,1].set_title('ZDT3: final Pareto front (2nd run, pop=64)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[1,2].plot(first_pop_128_2[:,0], first_pop_128_2[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[1,2].plot(first_col_moead_128_2, second_col_moead_128_2,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[1,2].plot(first_col_maco_128_2, second_col_maco_128_2,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[1,2].plot(first_col_nsga2_128_2, second_col_nsga2_128_2, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[1,2].legend(loc='upper right') #doctest: +SKIP
     >>> axes[1,2].set_title('ZDT3: final Pareto front (2nd run, pop=128)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[2,0].plot(first_pop_32_3[:,0], first_pop_32_3[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[2,0].plot(first_col_moead_32_3, second_col_moead_32_3,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[2,0].plot(first_col_maco_32_3, second_col_maco_32_3,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[2,0].plot(first_col_nsga2_32_3, second_col_nsga2_32_3, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[2,0].legend(loc='upper right') #doctest: +SKIP
     >>> axes[2,0].set_title('ZDT3: final Pareto front (3rd run, pop=32)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[2,1].plot(first_pop_64_3[:,0], first_pop_64_3[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[2,1].plot(first_col_moead_64_3, second_col_moead_64_3,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[2,1].plot(first_col_maco_64_3, second_col_maco_64_3,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[2,1].plot(first_col_nsga2_64_3, second_col_nsga2_64_3, 'b^', label = 'nsga2') #doctest: +SKIP
     >>> axes[2,1].legend(loc='upper right') #doctest: +SKIP
     >>> axes[2,1].set_title('ZDT3: final Pareto front (3rd run, pop=64)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> axes[2,2].plot(first_pop_128_3[:,0], first_pop_128_3[:,1], '.', label= 'initial population') #doctest: +SKIP
     >>> axes[2,2].plot(first_col_moead_128_3, second_col_moead_128_3,'k*', label = 'moead') #doctest: +SKIP
     >>> axes[2,2].plot(first_col_maco_128_3, second_col_maco_128_3,'ro', label = 'maco') #doctest: +SKIP
     >>> axes[2,2].plot(first_col_nsga2_128_3, second_col_nsga2_128_3, 'b^', label = 'nsga2') #doctest: +SKIP
-    >>> axes[2,2].legend(loc='upper right') 
+    >>> axes[2,2].legend(loc='upper right') #doctest: +SKIP
     >>> axes[2,2].set_title('ZDT3: final Pareto front (3rd run, pop=128)') #doctest: +SKIP
-
+    <BLANKLINE>
     >>> for ax in axes.flat: #doctest: +SKIP
     ...    ax.set(xlabel='f_1', ylabel='f_2') #doctest: +SKIP
     ...    ax.grid() #doctest: +SKIP

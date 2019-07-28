@@ -161,10 +161,10 @@ population maco::evolve(population pop) const
         // I retrieve the decision and fitness vectors:
         const auto &dvs = pop.get_x();
         const auto &fit = pop.get_f();
-
         if (m_memory == true && m_counter > 1) {
             sol_archive = m_sol_archive;
         }
+
         // I store the sol_archive fitness values together with the fitness of the current population
         //(except for the very first generation, in which they would be the same)
         if ((m_counter == 1 && m_memory == true) || (gen == 1 && m_memory == false)) {
@@ -373,7 +373,7 @@ population maco::evolve(population pop) const
                     print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
 
                 } else {
-                    print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
+                    print(std::setw(7), gen, std::setw(15), prob.get_fevals());
                 }
                 for (decltype(ideal_point_sol_arch.size()) i = 0u; i < ideal_point_sol_arch.size(); ++i) {
                     if (i >= 5u) {
@@ -384,7 +384,12 @@ population maco::evolve(population pop) const
                 print('\n');
                 ++count_screen;
                 // Logs
-                m_log.emplace_back(gen, prob.get_fevals() - fevals0, ideal_point_sol_arch);
+                if (m_memory == false) {
+                    m_log.emplace_back(gen, prob.get_fevals() - fevals0, ideal_point_sol_arch);
+
+                } else {
+                    m_log.emplace_back(gen, prob.get_fevals(), ideal_point_sol_arch);
+                }
             }
         }
 
@@ -431,7 +436,6 @@ population maco::evolve(population pop) const
             for (population::size_type i = 0; i < pop_size; ++i) {
                 // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
                 // function
-
                 for (decltype(n_x) ii = 0u; ii < n_x; ++ii) {
                     ant[ii] = new_ants[i][ii];
                 }
@@ -529,7 +533,7 @@ void maco::pheromone_computation(const unsigned gen, vector_double &prob_cumulat
             }
 
             for (decltype(m_ker) k = 0u; k < m_ker; ++k) {
-                double cumulative = 0;
+                double cumulative = 0.0;
                 for (decltype(m_ker) j = 0u; j <= k; ++j) {
                     cumulative += omega_vec[j] / sum_omega;
                 }

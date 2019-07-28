@@ -212,20 +212,52 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
     BOOST_CHECK(algo1.extract<maco>()->get_log() == algo2.extract<maco>()->get_log());
 }
 
-// BOOST_AUTO_TEST_CASE(memory_test)
-//{
-//    maco uda{1u, 13u, 1.0, 1u, 7u, 10000u, 0., true, 23u};
-//    maco uda_2{10u, 13u, 1.0, 1u, 7u, 10000u, 0., false, 23u};
-//    uda.set_seed(23u);
-//    uda_2.set_seed(23u);
-//    uda.set_verbosity(1u);
-//    uda_2.set_verbosity(1u);
-//    problem prob{wfg{5u, 16u, 15u, 14u}};
-//    population pop_1{prob, 20u, 23u};
-//    population pop_2{prob, 20u, 23u};
-//    for (int iter = 0u; iter < 10; ++iter) {
-//        pop_1 = uda.evolve(pop_1);
-//    }
-//    pop_2 = uda_2.evolve(pop_2);
-//    BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
-//}
+// We now introduce some tests for coverage purposes:
+BOOST_AUTO_TEST_CASE(miscellanea_tests)
+{
+    // 1 - Algorithm definition
+    problem prob{dtlz(1, 10, 2)};
+    maco uda{maco{10u, 43u, 1.0, 1u, 7u, 1u, 0., false, 23u}};
+    maco uda2{maco{10u, 5u, 1.0, 1u, 7u, 10000u, 2.0, false, 23u}};
+    maco uda3{maco{5u, 3u, 1.0, 5u, 3u, 10000u, 0.0, false, 23u}};
+    maco uda4{maco{1u, 5u, 1.0, 1u, 7u, 10000u, 2.0, true, 23u}};
+
+    // 2 - Instantiate
+    algorithm algo{uda};
+    algorithm algo2{uda2};
+    algorithm algo3{uda3};
+    algorithm algo4{uda4};
+
+    // 3 - Instantiate populations
+    population pop{prob, 43};
+    population pop2{prob, 6};
+    population pop3{prob, 50};
+    population pop4{prob, 6};
+
+    // 4 - Evolve the populations
+    pop = algo.evolve(pop);
+    pop2 = algo2.evolve(pop2);
+    pop3 = algo3.evolve(pop3);
+    pop4 = algo4.evolve(pop4);
+    for (int iter = 0u; iter < 10; ++iter) {
+        pop4 = uda4.evolve(pop4);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(memory_test)
+{
+    maco uda{1u, 13u, 1.0, 1u, 7u, 10000u, 0., true, 23u};
+    maco uda_2{10u, 13u, 1.0, 1u, 7u, 10000u, 0., false, 23u};
+    uda.set_seed(23u);
+    uda_2.set_seed(23u);
+    uda.set_verbosity(1u);
+    uda_2.set_verbosity(1u);
+    problem prob{wfg{5u, 16u, 15u, 14u}};
+    population pop_1{prob, 20u, 23u};
+    population pop_2{prob, 20u, 23u};
+    for (int iter = 0u; iter < 10; ++iter) {
+        pop_1 = uda.evolve(pop_1);
+    }
+    pop_2 = uda_2.evolve(pop_2);
+    // BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
+}
