@@ -152,6 +152,8 @@ void topology::push_back(unsigned n)
     }
 }
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
 std::ostream &operator<<(std::ostream &os, const topology &t)
 {
     os << "Topology name: " << t.get_name();
@@ -161,5 +163,7 @@ std::ostream &operator<<(std::ostream &os, const topology &t)
     }
     return os;
 }
+
+#endif
 
 } // namespace pagmo

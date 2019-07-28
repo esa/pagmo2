@@ -335,8 +335,12 @@ private:
     std::string m_name;
 };
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
 // Streaming operator for topology.
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const topology &);
+
+#endif
 
 namespace detail
 {
