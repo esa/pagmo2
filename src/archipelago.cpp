@@ -66,8 +66,10 @@ void archipelago::wait_check_ignore()
 
 /// Default constructor.
 /**
+ * \verbatim embed:rst:leading-asterisk
  * The default constructor will initialise an empty archipelago with a
- * default-constructed topology.
+ * default-constructed (i.e., :cpp:class:`~pagmo::unconnected`) topology.
+ * \endverbatim
  */
 archipelago::archipelago()
     : m_migr_type(migration_type::p2p),           // Default: point-to-point migration type.
@@ -728,6 +730,8 @@ std::ostream &operator<<(std::ostream &os, const archipelago &archi)
 {
     stream(os, "Number of islands: ", archi.size(), "\n");
     stream(os, "Topology: ", archi.get_topology().get_name(), "\n");
+    stream(os, "Migration type: ", archi.get_migration_type(), "\n");
+    stream(os, "Migrant handling policy: ", archi.get_migrant_handling(), "\n");
     stream(os, "Status: ", archi.status(), "\n\n");
     stream(os, "Islands summaries:\n\n");
     detail::table t({"#", "Type", "Algo", "Prob", "Size", "Status"}, "\t");
@@ -739,5 +743,22 @@ std::ostream &operator<<(std::ostream &os, const archipelago &archi)
     stream(os, t);
     return os;
 }
+
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Provide the stream operator overloads for migration_type and migrant_handling.
+std::ostream &operator<<(std::ostream &os, migration_type mt)
+{
+    os << (mt == migration_type::p2p ? "point-to-point" : "broadcast");
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, migrant_handling mh)
+{
+    os << (mh == migrant_handling::preserve ? "preserve" : "evict");
+    return os;
+}
+
+#endif
 
 } // namespace pagmo

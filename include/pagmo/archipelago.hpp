@@ -58,9 +58,55 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-enum class migration_type { p2p, broadcast };
+/// Migration type.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * This enumeration represents the available migration policies
+ * in an :cpp:class:`~pagmo::archipelago`:
+ *
+ * - with the point-to-point migration policy, during migration an island will
+ *   consider individuals from only one of the connecting islands;
+ * - with the broadcast migration policy, during migration an island will consider
+ *   individuals from *all* the connecting islands.
+ *
+ * \endverbatim
+ */
+enum class migration_type {
+    p2p,      ///< Point-to-point migration.
+    broadcast ///< Broadcast migration.
+};
 
-enum class migrant_handling { preserve, evict };
+/// Migrant handling policy.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * This enumeration represents the available migrant handling
+ * policies in an :cpp:class:`~pagmo::archipelago`.
+ *
+ * During migration,
+ * individuals are selected from the islands and copied into a migration
+ * database, from which they can be fetched by other islands.
+ * This policy establishes what happens to the migrants in the database
+ * after they have been fetched by a destination island:
+ *
+ * - with the preserve policy, a copy of the candidate migrants
+ *   remains in the database;
+ * - with the evict policy, the candidate migrants are
+ *   removed from the database.
+ *
+ * \endverbatim
+ */
+enum class migrant_handling {
+    preserve, ///< Perserve migrants in the database.
+    evict     ///< Evict migrants from the database.
+};
+
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Provide the stream operator overloads for migration_type and migrant_handling.
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, migration_type);
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, migrant_handling);
+
+#endif
 
 // TODO
 // - ctors with topology arguments.
@@ -69,16 +115,22 @@ enum class migrant_handling { preserve, evict };
 /**
  * \image html archi_no_text.png
  *
- * An archipelago is a collection of pagmo::island objects which provides a convenient way to perform
- * multiple optimisations in parallel.
- *
- * The interface of pagmo::archipelago mirrors partially the interface
- * of pagmo::island: the evolution is initiated by a call to evolve(), and at any time the user can query the
- * state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
- * to conclude by calling the wait() and wait_check() methods. The status of
- * ongoing evolutions in the archipelago can be queried via status().
- *
  * \verbatim embed:rst:leading-asterisk
+ * An archipelago is a collection of :cpp:class:`~pagmo::island` objects connected by a
+ * :cpp:class:`~pagmo::topology`. The islands in the archipelago can exchange individuals
+ * (i.e., candidate solutions) via a process called *migration*. The individuals migrate
+ * across the routes described by the topology, and the islands' replacement
+ * and selection policies (see :cpp:class:`~pagmo::r_policy` and :cpp:class:`~pagmo::s_policy`)
+ * establish how individuals are replaced in and selected from the islands' populations.
+ *
+ * The interface of :cpp:class:`~pagmo::archipelago` mirrors partially the interface
+ * of :cpp:class:`~pagmo::island`: the evolution is initiated by a call to :cpp:func:`~pagmo::archipelago::evolve()`,
+ * and at any time the user can query the
+ * state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
+ * to conclude by calling the :cpp:func:`~pagmo::archipelago::wait()` and :cpp:func:`~pagmo::archipelago::wait_check()`
+ * methods. The status of
+ * ongoing evolutions in the archipelago can be queried via :cpp:func:`~pagmo::archipelago::status()`.
+ *
  * .. warning::
  *
  *    The only operations allowed on a moved-from :cpp:class:`pagmo::archipelago` are destruction
@@ -107,14 +159,41 @@ public:
      */
     using size_type = size_type_implementation;
 
+    /// Database of migrants.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * During the evolution of an archipelago, islands will periodically
+     * store the individuals selected for migration in a *migrant database*.
+     * This is a vector of :cpp:type:`~pagmo::individuals_group_t` whose
+     * size is equal to the number of islands in the archipelago, and which
+     * contains the current candidate outgoing migrants for each island.
+     * \endverbatim
+     */
     using migrants_db_t = std::vector<individuals_group_t>;
 
-    // Entry for the migration log:
-    // - timestamp,
-    // - ID, dv, fv of the migrated individual,
-    // - indices of the source and destination islands.
+    /// Entry for the migration log.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * Each time an individual migrates from an island (the source) to another
+     * (the destination), an entry will be added to the migration log.
+     * The entry is a tuple containing:
+     *
+     * - a timestamp of the migration,
+     * - the ID of the individual that migrated,
+     * - the decision and fitness vectors of the individual that migrated,
+     * - the indices of the source and destination islands.
+     *
+     * \endverbatim
+     */
     using migration_entry_t
         = std::tuple<double, unsigned long long, vector_double, vector_double, size_type, size_type>;
+
+    /// Migration log.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * The migration log is a collection of :cpp:type:`~pagmo::archipelago::migration_entry_t` entries.
+     * \endverbatim
+     */
     using migration_log_t = std::vector<migration_entry_t>;
 
 private:

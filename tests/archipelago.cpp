@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <atomic>
 #include <initializer_list>
+#include <iostream>
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
@@ -73,6 +74,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
 
     using size_type = archipelago::size_type;
     archipelago archi;
+    std::cout << archi << '\n';
     BOOST_CHECK(archi.size() == 0u);
     archipelago archi2(0u, de{}, rosenbrock{}, 10u);
     BOOST_CHECK(archi2.size() == 0u);
