@@ -357,10 +357,10 @@ enum class evolve_status {
 // Provide the stream operator overload for evolve_status.
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
 
-#endif
-
 // Stream operator for pagmo::island.
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
+
+#endif
 
 /// Island class.
 /**
@@ -439,8 +439,10 @@ class PAGMO_DLL_PUBLIC island
     using idata_t = detail::island_data;
     // archi needs access to the internal of island.
     friend class PAGMO_DLL_PUBLIC archipelago;
+#if !defined(PAGMO_DOXYGEN_INVOKED)
     // Make friends with the stream operator.
     friend PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
+#endif
     // NOTE: the idea in the move members and the dtor is that
     // we want to wait *and* erase any future in the island, before doing
     // the move/destruction. Thus we use this small wrapper.
@@ -1039,18 +1041,36 @@ public:
      * invocation. Exceptions raised inside the
      * tasks are stored within the island object, and can be re-raised by calling wait_check().
      *
+     * If the island is part of a pagmo::archipelago, then migration of individuals to/from other
+     * islands might occur. The migration algorithm consists of the following steps:
+     *
+     * - before invoking <tt>run_evolve()</tt> on the UDI, the island will ask the
+     *   archipelago if there are candidate incoming individuals from other islands.
+     *   If so, the replacement policy is invoked and
+     *   the current population of the island is updated with the migrants;
+     * - <tt>run_evolve()</tt> is then invoked and the current population is evolved;
+     * - after <tt>run_evolve()</tt> has concluded, individuals are selected in the
+     *   evolved population and copied into the migration database of the archipelago
+     *   for future migrations.
+     *
      * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
      * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::wait_check()
      * to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
      * island::status() can be used to query the status of the asynchronous operations in the island.
      *
      * @param n the number of times the <tt>run_evolve()</tt> method of the UDI will be called
-     * within the evolution task.
+     * within the evolution task. This corresponds also to the number of times migration can
+     * happen, if the island belongs to an archipelago.
      *
+     * @throws std::out_of_range if the island is part of an archipelago and during migration
+     * an invalid island index is used (this can happen if the archipelago's topology is
+     * malformed).
      * @throws unspecified any exception thrown by:
      * - threading primitives,
      * - memory allocation errors,
-     * - the public interface of \p std::future.
+     * - the public interface of \p std::future,
+     * - the public interface of pagmo::archipelago,
+     * - the public interface of the replacement/selection policies.
      */
     void evolve(unsigned n = 1);
     // Block until evolution ends and re-raise the first stored exception.

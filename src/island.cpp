@@ -863,21 +863,9 @@ std::string island::get_extra_info() const
     return m_ptr->isl_ptr->get_extra_info();
 }
 
-/// Stream operator for pagmo::island.
-/**
- * This operator will stream to \p os a human-readable representation of \p isl.
- *
- * It is safe to call this method while the island is evolving.
- *
- * @param os the target stream.
- * @param isl the island.
- *
- * @return a reference to \p os.
- *
- * @throws unspecified any exception thrown by:
- * - the stream operators of fundamental types, pagmo::algorithm and pagmo::population,
- * - pagmo::island::get_extra_info(), pagmo::island::get_algorithm(), pagmo::island::get_population().
- */
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Stream operator for pagmo::island.
 std::ostream &operator<<(std::ostream &os, const island &isl)
 {
     stream(os, "Island name: ", isl.get_name());
@@ -895,6 +883,8 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
     stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
     return os;
 }
+
+#endif
 
 /// Check if the island is in a valid state.
 /**
