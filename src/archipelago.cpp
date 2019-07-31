@@ -313,6 +313,15 @@ const island &archipelago::operator[](size_type i) const
     return *m_islands[i];
 }
 
+/// Size.
+/**
+ * @return the number of islands in the archipelago.
+ */
+archipelago::size_type archipelago::size() const
+{
+    return m_islands.size();
+}
+
 void archipelago::evolve(unsigned n)
 {
     for (auto &iptr : m_islands) {
@@ -534,14 +543,46 @@ archipelago::size_type archipelago::get_island_idx(const island &isl) const
     return ret->second;
 }
 
-// Get the database of migrants.
+/// Get the database of migrants.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * During the evolution of an archipelago, islands will periodically
+ * store the individuals selected for migration in a *migrant database*.
+ * This is a vector of :cpp:type:`~pagmo::individuals_group_t` whose
+ * size is equal to the number of islands in the archipelago, and which
+ * contains the current candidate outgoing migrants for each island.
+ * \endverbatim
+ *
+ * @return a copy of the database of migrants.
+ *
+ * @throws unspecified any exception thrown by threading primitives or by memory allocation errors.
+ */
 archipelago::migrants_db_t archipelago::get_migrants_db() const
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
     return m_migrants;
 }
 
-// Get the migration log.
+/// Get the migration log.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * Each time an individual migrates from an island (the source) to another
+ * (the destination), an entry will be added to the migration log.
+ * The entry is a tuple containing:
+ *
+ * - a timestamp of the migration,
+ * - the ID of the individual that migrated,
+ * - the decision and fitness vectors of the individual that migrated,
+ * - the indices of the source and destination islands.
+ *
+ * The migration log is a collection of migration entries.
+ *
+ * \endverbatim
+ *
+ * @return a copy of the migration log.
+ *
+ * @throws unspecified any exception thrown by threading primitives or by memory allocation errors.
+ */
 archipelago::migration_log_t archipelago::get_migration_log() const
 {
     std::lock_guard<std::mutex> lock(m_migr_log_mutex);
@@ -618,7 +659,12 @@ void archipelago::set_migrants(size_type i, individuals_group_t &&inds)
     std::get<2>(m_migrants[i]) = std::move(std::get<2>(inds));
 }
 
-// Get a copy of the topology.
+/// Get a copy of the topology.
+/**
+ * @return a copy of the topology.
+ *
+ * @throws unspecified any exception thrown by copying the topology.
+ */
 topology archipelago::get_topology() const
 {
     // NOTE: topology is supposed to be thread-safe,
@@ -626,7 +672,18 @@ topology archipelago::get_topology() const
     return m_topology;
 }
 
-// Set a new topology.
+/// Set a new topology.
+/**
+ * This function will first wait for any ongoing evolution in the archipelago to conclude,
+ * and it will then set a new topology for the archipelago.
+ *
+ * Note that it is the user's responsibility to ensure that the new topology
+ * is consistent with the archipelago's properties.
+ *
+ * @param topo the new topology.
+ *
+ * @throws unspecified any exception thrown by copying the topology.
+ */
 void archipelago::set_topology(topology topo)
 {
     // NOTE: make sure we finish any ongoing evolution before setting the topology.
@@ -690,25 +747,37 @@ std::pair<std::vector<archipelago::size_type>, vector_double> archipelago::get_i
                                                std::is_same<std::size_t, size_type>{});
 }
 
-// Get the migration type.
+/// Get the migration type.
+/**
+ * @return the migration type for this archipelago.
+ */
 migration_type archipelago::get_migration_type() const
 {
     return m_migr_type.load(std::memory_order_relaxed);
 }
 
-// Set the migration type.
+/// Set a new migration type.
+/**
+ * @param mt a new migration type for this archipelago.
+ */
 void archipelago::set_migration_type(migration_type mt)
 {
     m_migr_type.store(mt, std::memory_order_relaxed);
 }
 
-// Get the migrant handling policy.
+/// Get the migrant handling policy.
+/**
+ * @return the migrant handling policy for this archipelago.
+ */
 migrant_handling archipelago::get_migrant_handling() const
 {
     return m_migr_handling.load(std::memory_order_relaxed);
 }
 
-// Set the migrant handling policy.
+/// Set a new migrant handling policy.
+/**
+ * @param mh a new migrant handling policy for this archipelago.
+ */
 void archipelago::set_migrant_handling(migrant_handling mh)
 {
     m_migr_handling.store(mh, std::memory_order_relaxed);

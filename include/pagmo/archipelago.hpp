@@ -50,7 +50,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
@@ -107,9 +109,6 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, migration_type);
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, migrant_handling);
 
 #endif
-
-// TODO
-// - ctors with topology arguments.
 
 /// Archipelago.
 /**
@@ -230,6 +229,35 @@ public:
     archipelago(archipelago &&) noexcept;
 
 private:
+    template <typename T>
+    using topo_ctor_enabler = enable_if_t<std::is_constructible<topology, T &&>::value, int>;
+
+public:
+    /// Constructor from a topology.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``t``
+     *    can be used to construct a :cpp:class:`pagmo::topology`.
+     *
+     * This constructor is equivalent to the default constructor, but it will additionally
+     * allow to select the archipelago's topology.
+     *
+     * \endverbatim
+     *
+     * @param t the desired (user-defined) topology.
+     *
+     * @throws unspecified any exception thrown by the invoked topology constructor.
+     */
+    template <typename Topo, topo_ctor_enabler<Topo> = 0>
+    explicit archipelago(Topo &&t)
+        : m_topology(std::forward<Topo>(t)), m_migr_type(migration_type::p2p),
+          m_migr_handling(migrant_handling::preserve)
+    {
+    }
+
+private:
 #if defined(_MSC_VER)
     template <typename...>
     using n_ctor_enabler = int;
@@ -250,9 +278,16 @@ private:
             push_back(args...);
         }
     }
-    // These implement the constructor which contains a seed argument.
-    // We need to constrain with enable_if otherwise, due to the default
-    // arguments in the island constructors, the wrong constructor would be called.
+    // The following functions are used to implement construction
+    // from n islands when a seed argument is used. In that case,
+    // we will reinterpret the meaning of the seed argument (as
+    // explained below). Thus, we need to provide one implementation
+    // of these functions for each island constructor that accepts a seed
+    // argument. There's repetition, and probably it could be improved
+    // with some metaprogramming, but then we would probably have
+    // to fight hard against older MSVC versions. Perhaps in the future?
+    //
+    // algo, prob.
     template <typename Algo, typename Prob, typename S1, typename S2,
               enable_if_t<detail::conjunction<std::is_constructible<algorithm, const Algo &>,
                                               std::is_constructible<problem, const Prob &>, std::is_integral<S1>,
@@ -266,7 +301,23 @@ private:
             push_back(a, p, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
-    // Same as previous, with bfe argument.
+    // algo, prob, rpol, spol.
+    template <
+        typename Algo, typename Prob, typename S1, typename RPol, typename SPol, typename S2,
+        enable_if_t<detail::conjunction<
+                        std::is_constructible<algorithm, const Algo &>, std::is_constructible<problem, const Prob &>,
+                        std::is_constructible<r_policy, const RPol &>, std::is_constructible<s_policy, const SPol &>,
+                        std::is_integral<S1>, std::is_integral<S2>>::value,
+                    int> = 0>
+    void n_ctor(size_type n, const Algo &a, const Prob &p, S1 size, const RPol &r_pol, const SPol &s_pol, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(a, p, boost::numeric_cast<population::size_type>(size), r_pol, s_pol, udist(eng));
+        }
+    }
+    // algo, prob, bfe.
     // NOTE: performance wise, it would be better for these constructors from bfe
     // to batch initialise *all* archi individuals
     // (whereas now we batch init n times, one for each island). Keep this in mind
@@ -285,7 +336,24 @@ private:
             push_back(a, p, b, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
-    // Constructor with UDI argument.
+    // algo, prob, bfe, rpol, spol.
+    template <typename Algo, typename Prob, typename Bfe, typename S1, typename RPol, typename SPol, typename S2,
+              enable_if_t<
+                  detail::conjunction<
+                      std::is_constructible<algorithm, const Algo &>, std::is_constructible<problem, const Prob &>,
+                      std::is_constructible<bfe, const Bfe &>, std::is_constructible<r_policy, const RPol &>,
+                      std::is_constructible<s_policy, const SPol &>, std::is_integral<S1>, std::is_integral<S2>>::value,
+                  int> = 0>
+    void n_ctor(size_type n, const Algo &a, const Prob &p, const Bfe &b, S1 size, const RPol &r_pol, const SPol &s_pol,
+                S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(a, p, b, boost::numeric_cast<population::size_type>(size), r_pol, s_pol, udist(eng));
+        }
+    }
+    // isl, algo, prob.
     template <typename Isl, typename Algo, typename Prob, typename S1, typename S2,
               enable_if_t<detail::conjunction<is_udi<Isl>, std::is_constructible<algorithm, const Algo &>,
                                               std::is_constructible<problem, const Prob &>, std::is_integral<S1>,
@@ -299,7 +367,24 @@ private:
             push_back(isl, a, p, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
-    // Same as previous, with bfe argument.
+    // isl, algo, prob, rpol, spol.
+    template <typename Isl, typename Algo, typename Prob, typename S1, typename RPol, typename SPol, typename S2,
+              enable_if_t<
+                  detail::conjunction<
+                      is_udi<Isl>, std::is_constructible<algorithm, const Algo &>,
+                      std::is_constructible<problem, const Prob &>, std::is_constructible<r_policy, const RPol &>,
+                      std::is_constructible<s_policy, const SPol &>, std::is_integral<S1>, std::is_integral<S2>>::value,
+                  int> = 0>
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, S1 size, const RPol &r_pol,
+                const SPol &s_pol, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(isl, a, p, boost::numeric_cast<population::size_type>(size), r_pol, s_pol, udist(eng));
+        }
+    }
+    // isl, algo, prob, bfe.
     template <typename Isl, typename Algo, typename Prob, typename Bfe, typename S1, typename S2,
               enable_if_t<detail::conjunction<is_udi<Isl>, std::is_constructible<algorithm, const Algo &>,
                                               std::is_constructible<problem, const Prob &>,
@@ -314,6 +399,25 @@ private:
             push_back(isl, a, p, b, boost::numeric_cast<population::size_type>(size), udist(eng));
         }
     }
+    // isl, algo, prob, bfe, rpol, spol.
+    template <
+        typename Isl, typename Algo, typename Prob, typename Bfe, typename S1, typename RPol, typename SPol,
+        typename S2,
+        enable_if_t<detail::conjunction<
+                        is_udi<Isl>, std::is_constructible<algorithm, const Algo &>,
+                        std::is_constructible<problem, const Prob &>, std::is_constructible<bfe, const Bfe &>,
+                        std::is_constructible<r_policy, const RPol &>, std::is_constructible<s_policy, const SPol &>,
+                        std::is_integral<S1>, std::is_integral<S2>>::value,
+                    int> = 0>
+    void n_ctor(size_type n, const Isl &isl, const Algo &a, const Prob &p, const Bfe &b, S1 size, const RPol &r_pol,
+                const SPol &s_pol, S2 seed)
+    {
+        std::mt19937 eng(static_cast<std::mt19937::result_type>(static_cast<unsigned>(seed)));
+        std::uniform_int_distribution<unsigned> udist;
+        for (size_type i = 0; i < n; ++i) {
+            push_back(isl, a, p, b, boost::numeric_cast<population::size_type>(size), r_pol, s_pol, udist(eng));
+        }
+    }
 
 public:
     /// Constructor from \p n islands.
@@ -321,14 +425,16 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    This constructor is enabled only if the parameter pack ``Args``
+     *    This constructor is enabled only if the parameter pack ``args``
      *    can be used to construct a :cpp:class:`pagmo::island`.
      *
      * \endverbatim
      *
      * This constructor will first initialise an empty archipelago with a default-constructed
      * topology, and then forward \p n times the input arguments \p args to the
-     * push_back() method. If, however, the parameter pack contains an argument which
+     * push_back() method, thus creating and inserting \p n new islands into the archipelago.
+     *
+     * If, however, the parameter pack \p args contains an argument which
      * would be interpreted as a seed by the invoked island constructor, then this seed
      * will be used to initialise a random number generator that in turn will be used to generate
      * the seeds of populations of the islands that will be created within the archipelago. In other words,
@@ -339,11 +445,47 @@ public:
      * @param n the desired number of islands.
      * @param args the arguments that will be used for the construction of each island.
      *
-     * @throws unspecified any exception thrown by the invoked pagmo::island constructor
-     * or by archipelago::push_back().
+     * @throws unspecified any exception thrown by archipelago::push_back().
      */
     template <typename... Args, n_ctor_enabler<const Args &...> = 0>
     explicit archipelago(size_type n, const Args &... args)
+        : // NOTE: explicitly delegate to the default constructor, so that
+          // we get the default migration type and migrant handling.
+          archipelago()
+    {
+        n_ctor(n, args...);
+    }
+
+private:
+    template <typename Topo, typename... Args>
+    using topo_n_ctor_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<topology, Topo &&>, std::is_constructible<island, Args...>>::value,
+        int>;
+
+public:
+    /// Constructor from a topology and \p n islands.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only  if ``t``
+     *    can be used to construct a :cpp:class:`~pagmo::topology` and if the parameter pack ``args``
+     *    can be used to construct a :cpp:class:`~pagmo::island`.
+     *
+     * This constructor is equivalent to the previous one, but it will additionally
+     * allow to select the archipelago's topology.
+     *
+     * \endverbatim
+     *
+     * @param t the desired (user-defined) topology.
+     * @param n the desired number of islands.
+     * @param args the arguments that will be used for the construction of each island.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the constructor from a topology.
+     */
+    template <typename Topo, typename... Args, topo_n_ctor_enabler<Topo, const Args &...> = 0>
+    explicit archipelago(Topo &&t, size_type n, const Args &... args) : archipelago(std::forward<Topo>(t))
     {
         n_ctor(n, args...);
     }
@@ -356,14 +498,8 @@ public:
     island &operator[](size_type);
     // Const island access.
     const island &operator[](size_type) const;
-    /// Size.
-    /**
-     * @return the number of islands in the archipelago.
-     */
-    size_type size() const
-    {
-        return m_islands.size();
-    }
+    // Size.
+    size_type size() const;
 
 private:
 #if defined(_MSC_VER)
@@ -378,20 +514,23 @@ private:
     void push_back_impl(std::unique_ptr<island> &&);
 
 public:
-    /// Add island.
+    /// Add a new island.
     /**
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    This method is enabled only if the parameter pack ``Args``
+     *    This method is enabled only if the parameter pack ``args``
      *    can be used to construct a :cpp:class:`pagmo::island`.
-     *
-     * \endverbatim
      *
      * This method will construct an island from the supplied arguments and add it to the archipelago.
      * Islands are added at the end of the archipelago (that is, the new island will have an index
-     * equal to the value of size() before the call to this method). pagmo::topology::push_back()
-     * will also be called on the pagmo::topology associated to this archipelago.
+     * equal to the value of :cpp:func:`~pagmo::archipelago::size()` before the call to this method).
+     * :cpp:func:`pagmo::topology::push_back()`
+     * will also be called on the :cpp:class:`~pagmo::topology` associated to this archipelago, so that
+     * the addition of a new island to the archipelago is mirrored by the addition of a new vertex
+     * to the topology.
+     *
+     * \endverbatim
      *
      * @param args the arguments that will be used for the construction of the island.
      *
@@ -501,12 +640,17 @@ public:
     // Get the decision vectors of the islands' champions.
     std::vector<vector_double> get_champions_x() const;
 
+    // Get the migration log.
     migration_log_t get_migration_log() const;
+    // Get the database of migrants.
     migrants_db_t get_migrants_db() const;
 
+    // Topology get/set.
     topology get_topology() const;
     void set_topology(topology);
 
+    // Getters/setters for the migration type and
+    // the migrant handling policy.
     migration_type get_migration_type() const;
     void set_migration_type(migration_type);
     migrant_handling get_migrant_handling() const;
