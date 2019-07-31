@@ -318,6 +318,11 @@ struct PAGMO_DLL_PUBLIC island_data {
     std::shared_ptr<population> pop;
     // The replacement/selection policies. They are supposed to be thread-safe,
     // thus no protection is needed.
+    // NOTE: additionally, contrary to algo/pop, we never need to copy
+    // r/s_pol during evolution, as all the replace/select logic
+    // is currently always happening within the thread of execution of the
+    // island. Thus, all the machinery above for safely copying out algo
+    // and pop is not necessary.
     r_policy r_pol;
     s_policy s_pol;
     // The vector of futures.
