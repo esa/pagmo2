@@ -68,7 +68,9 @@ void archipelago::wait_check_ignore()
 /**
  * \verbatim embed:rst:leading-asterisk
  * The default constructor will initialise an empty archipelago with a
- * default-constructed (i.e., :cpp:class:`~pagmo::unconnected`) topology.
+ * default-constructed (i.e., :cpp:class:`~pagmo::unconnected`) topology,
+ * a point-to-point :cpp:enum:`~pagmo::migration_type` and a
+ * preserve :cpp:enum:`~pagmo::migrant_handling` policy.
  * \endverbatim
  */
 archipelago::archipelago()
@@ -83,8 +85,8 @@ archipelago::archipelago()
  *
  * @param other the archipelago that will be copied.
  *
- * @throws unspecified any exception thrown by archipelago::push_back(),
- * archipelago::get_migrants_db() or get_topology().
+ * @throws unspecified any exception thrown by the public interface
+ * of pagmo::archipelago.
  */
 archipelago::archipelago(const archipelago &other)
 {

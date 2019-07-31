@@ -63,6 +63,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/topologies/ring.hpp>
+#include <pagmo/topologies/unconnected.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -74,8 +77,37 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
 
     using size_type = archipelago::size_type;
     archipelago archi;
+
     std::cout << archi << '\n';
+
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.get_topology().is<unconnected>());
     BOOST_CHECK(archi.size() == 0u);
+    BOOST_CHECK(archi.get_migration_log().empty());
+    BOOST_CHECK(archi.get_migrants_db().empty());
+
+    // Copy constructor.
+    archi.set_topology(topology{ring{}});
+    archi.set_migration_type(migration_type::broadcast);
+    archi.set_migrant_handling(migrant_handling::evict);
+    auto archi_copy(archi);
+    BOOST_CHECK(archi_copy.get_migration_type() == migration_type::broadcast);
+    BOOST_CHECK(archi_copy.get_migrant_handling() == migrant_handling::evict);
+    BOOST_CHECK(archi_copy.get_topology().is<ring>());
+    BOOST_CHECK(archi_copy.size() == 0u);
+    BOOST_CHECK(archi_copy.get_migration_log().empty());
+    BOOST_CHECK(archi_copy.get_migrants_db().empty());
+
+    // Move constructor.
+    auto archi_move(std::move(archi_copy));
+    BOOST_CHECK(archi_move.get_migration_type() == migration_type::broadcast);
+    BOOST_CHECK(archi_move.get_migrant_handling() == migrant_handling::evict);
+    BOOST_CHECK(archi_move.get_topology().is<ring>());
+    BOOST_CHECK(archi_move.size() == 0u);
+    BOOST_CHECK(archi_move.get_migration_log().empty());
+    BOOST_CHECK(archi_move.get_migrants_db().empty());
+
     archipelago archi2(0u, de{}, rosenbrock{}, 10u);
     BOOST_CHECK(archi2.size() == 0u);
     archipelago archi3(5u, de{}, rosenbrock{}, 10u);
