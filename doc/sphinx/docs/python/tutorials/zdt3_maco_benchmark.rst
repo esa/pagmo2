@@ -25,17 +25,16 @@ In order to run the UDAs on these problems we can write the following piece of c
     >>> p_dist_moead=[0, 0, 0]
     >>> p_dist_maco=[0, 0, 0]
     >>> p_dist_nsga2=[0, 0, 0]
-    <BLANKLINE>
     >>> #We run the algos three times each, for 3 different pop-sizes
     >>> for j in pop_sizes:
     ...       for i in range(0,3):
     ...              pop_1 = population(prob = udp, size = j, seed = i)
     ...              pop_2 = population(prob = udp, size = j, seed = i)
     ...              pop_3 = population(prob = udp, size = j, seed = i)
-    <BLANKLINE>
+    ...
     ...              hv=hypervolume(pop_1)
     ...              ref_point=hv.refpoint(offset=0.01)
-    <BLANKLINE>
+    ...
     ...              #I store all the pop-sizes results for all the runs:
     ...              #1st seed:
     ...              if j==pop_sizes[0] and i==0:
@@ -44,7 +43,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  first_pop_64_1=pop_1.get_f()
     ...              if j==pop_sizes[2] and i==0:
     ...                  first_pop_128_1=pop_1.get_f()
-    <BLANKLINE>
+    ...
     ...              #2nd seed:
     ...              if j==pop_sizes[0] and i==1:
     ...                  first_pop_32_2=pop_1.get_f()
@@ -52,7 +51,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  first_pop_64_2=pop_1.get_f()
     ...              if j==pop_sizes[2] and i==1:
     ...                  first_pop_128_2=pop_1.get_f()
-    <BLANKLINE>
+    ...
     ...              #3rd seed:
     ...              if j==pop_sizes[0] and i==2:
     ...                  first_pop_32_3=pop_1.get_f()
@@ -60,7 +59,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  first_pop_64_3=pop_1.get_f()
     ...              if j==pop_sizes[2] and i==2:
     ...                  first_pop_128_3=pop_1.get_f()
-    <BLANKLINE>
+    ...
     ...              algo = algorithm(moead(250, 'random'))
     ...              algo_2 = algorithm(maco(gen = 250, ker = j-20, q = 1.0, threshold = 250, n_gen_mark = 47, evalstop=10000, focus=0.0, memory=False))
     ...              algo_3 = algorithm(nsga2(gen = 250))
@@ -70,18 +69,18 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...              pop_1 = algo.evolve(pop_1)
     ...              pop_2=algo_2.evolve(pop_2)
     ...              pop_3 = algo_3.evolve(pop_3)
-    <BLANKLINE>
+    ...
     ...              #This returns a series of arrays: in each of them it is contained (in this order), the -non-dominated front, -domination list, 
     ...              #-domination count, -non-domination rank
     ...              fnds=fast_non_dominated_sorting(pop_1.get_f())
     ...              fnds_2=fast_non_dominated_sorting(pop_2.get_f())
     ...              fnds_3=fast_non_dominated_sorting(pop_3.get_f())
-    <BLANKLINE>
+    ...
     ...              #This returns the first (i.e., best) non-dominated front:
     ...              first_ndf_moead=fnds[0][0]
     ...              first_ndf_maco=fnds_2[0][0]
     ...              first_ndf_nsga2=fnds_3[0][0]
-    <BLANKLINE>
+    ...
     ...              #I store all the pop-sizes non-dominated fronts for all the runs:
     ...              #1st seed:
     ...              if j==pop_sizes[0] and i==0:
@@ -100,7 +99,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[0]=udp.p_distance(pop_3)
     ...                  first_col_nsga2_32_1=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_32_1=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              if j==pop_sizes[1] and i==0:
     ...                  #MOEA/D
     ...                  hv_moead[1]=hypervolume(pop_1).compute(ref_point)
@@ -119,7 +118,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[1]=udp.p_distance(pop_3)
     ...                  first_col_nsga2_64_1=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_64_1=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              if j==pop_sizes[2] and i==0:
     ...                  #MOEA/D
     ...                  hv_moead[2]=hypervolume(pop_1).compute(ref_point)
@@ -136,7 +135,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[2]=udp.p_distance(pop_3)
     ...                  first_col_nsga2_128_1=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_128_1=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              #2nd seed:
     ...              if j==pop_sizes[0] and i==1:
     ...                  #MOEA/D
@@ -154,7 +153,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[0]+=udp.p_distance(pop_3)
     ...                  first_col_nsga2_32_2=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_32_2=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              if j==pop_sizes[1] and i==1:
     ...                  #MOEA/D
     ...                  hv_moead[1]+=hypervolume(pop_1).compute(ref_point)
@@ -171,7 +170,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[1]+=udp.p_distance(pop_3)
     ...                  first_col_nsga2_64_2=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_64_2=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              if j==pop_sizes[2] and i==1:
     ...                  #MOEA/D
     ...                  hv_moead[2]+=hypervolume(pop_1).compute(ref_point)
@@ -188,7 +187,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[2]+=udp.p_distance(pop_3)
     ...                  first_col_nsga2_128_2=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_128_2=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...                  #3rd seed:
     ...              if j==pop_sizes[0] and i==2:
     ...                  #MOEA/D
@@ -206,7 +205,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[0]+=udp.p_distance(pop_3)
     ...                  first_col_nsga2_32_3=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_32_3=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              if j==pop_sizes[1] and i==2:
     ...                  #MOEA/D
     ...                  hv_moead[1]+=hypervolume(pop_1).compute(ref_point)
@@ -223,7 +222,7 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...                  p_dist_nsga2[1]+=udp.p_distance(pop_3)
     ...                  first_col_nsga2_64_3=pop_3.get_f()[first_ndf_nsga2,0]
     ...                  second_col_nsga2_64_3=pop_3.get_f()[first_ndf_nsga2,1]
-    <BLANKLINE>
+    ...
     ...              if j==pop_sizes[2] and i==2:
     ...                  #MOEA/D
     ...                  hv_moead[2]+=hypervolume(pop_1).compute(ref_point)
