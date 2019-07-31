@@ -52,6 +52,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
 
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#endif
+
 namespace pagmo
 {
 
