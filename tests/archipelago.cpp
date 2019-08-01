@@ -63,8 +63,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/zdt.hpp>
+#include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policies/select_best.hpp>
 #include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
@@ -135,6 +137,8 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
+        BOOST_CHECK(archi3[i].get_r_policy().is<fair_replace>());
+        BOOST_CHECK(archi3[i].get_s_policy().is<select_best>());
         seeds.push_back(archi3[i].get_population().get_seed());
     }
     // Check seeds are different (not guaranteed but very likely).
