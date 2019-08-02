@@ -6242,4 +6242,165 @@ Raises:
 )";
 }
 
+std::string topology_get_connections_docstring()
+{
+    return R"(get_connections(n)
+
+Get the connections to a vertex.
+
+This method will invoke the ``get_connections()`` method of the UDT, which is expected to return
+a pair of array-like objects containing respectively:
+
+* the indices of the vertices which are connecting to *n* (that is, the list of vertices for which a directed
+  edge towards *n* exists),
+* the weights (i.e., the migration probabilities) of the edges linking the connecting vertices to *n*.
+
+This method will also run sanity checks on the output of the ``get_connections()`` method of the UDT.
+
+Args:
+    n (int): the index of the vertex whose incoming connections' details will be returned
+
+Returns:
+    Pair of 1D NumPy arrays: a pair of arrays describing *n*'s incoming connections
+
+Raises:
+    ValueError: if the sizes of the returned arrays differ, or if any element of the second
+       array is not in the :math:`[0.,1.]` range
+    unspecified: any exception raised by the invocation of the method of the UDT, or by failures at the intersection
+       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string topology_push_back_docstring()
+{
+    return R"(push_back(n=1)
+
+Add vertices.
+
+This method will invoke the ``push_back()`` method of the UDT *n* times. The ``push_back()`` method
+of the UDT is expected to add a new vertex to the
+topology, assigning it the next available index and establishing connections to other vertices.
+
+Args:
+    n (int): the number of times the ``push_back()`` method of the UDT will be invoked
+
+Raises:
+    OverflowError: if *n* is negative or too large
+    unspecified: any exception thrown by the ``push_back()`` method of the UDT
+
+)";
+}
+
+std::string topology_get_name_docstring()
+{
+    return R"(get_name()
+
+Topology's name.
+
+If the UDT provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDT will be returned.
+
+Returns:
+    str: the topology's name
+
+)";
+}
+
+std::string topology_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Topology's extra info.
+
+If the UDT provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+Returns:
+  str: extra info about the UDT
+
+Raises:
+  unspecified: any exception thrown by the ``get_extra_info()`` method of the UDT
+
+)";
+}
+
+std::string unconnected_docstring()
+{
+    return R"(__init__()
+
+Unconnected topology.
+
+This user-defined topology (UDT) represents an unconnected graph. This is the default
+UDT used by :class:`pygmo.topology`.
+
+See also the docs of the C++ class :cpp:class:`pagmo::unconnected`.
+
+)";
+}
+
+std::string ring_docstring()
+{
+    return R"(__init__(n=0, w=1.)
+
+Ring topology.
+
+This user-defined topology (UDT) represents a bidirectional ring (that is, a ring in
+which each node connects to both the previous and the following nodes).
+
+See also the docs of the C++ class :cpp:class:`pagmo::ring`.
+
+Args:
+    n (int): the desired number of vertices
+    w (float): the weight of the edges
+
+Raises:
+    OverflowError: if *n* is negative or too large
+    ValueError: if *w* is not in the :math:`\left[0, 1\right]` range
+
+)";
+}
+
+std::string ring_get_weight_docstring()
+{
+    return R"(get_weight()
+
+Returns:
+  float: the weight *w* used in the construction of this topology
+
+)";
+}
+
+std::string base_bgl_num_vertices_docstring()
+{
+    return R"(num_vertices()
+
+Returns:
+    int: the number of vertices in the topology
+
+)";
+}
+
+std::string base_bgl_are_adjacent_docstring()
+{
+    return R"(are_adjacent(i, j)
+
+Check if two vertices are adjacent.
+
+Two vertices *i* and *j* are adjacent if there is a directed edge connecting *i* to *j*.
+
+Args:
+    i (int): the first vertex index
+    j (int): the second vertex index
+
+Returns:
+    bool: :data:`True` if *i* and *j* are adjacent, :data:`False` otherwise
+
+Raises:
+    ValueError: if *i* or *j* are not smaller than the number of vertices
+    OverflowError: if *i* or *j* are negative or too large
+
+)";
+}
+
 } // namespace pygmo

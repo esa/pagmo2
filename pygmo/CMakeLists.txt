@@ -60,6 +60,7 @@ YACMA_PYTHON_MODULE(core
     expose_problems_1.cpp
     expose_islands.cpp
     expose_bfes.cpp
+    expose_topologies.cpp
 )
 target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")

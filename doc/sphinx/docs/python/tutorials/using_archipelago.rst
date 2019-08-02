@@ -206,7 +206,7 @@ scope. To inspect what happened we can write:
     <ipython-input-22-d8562cc51573> in <module>()
     ----> 1 archi.wait_check()
     <BLANKLINE>
-    RuntimeError: The asynchronous evolution of a Pythonic island of type 'Multiprocessing island' raised an error:
+    RuntimeError: The asynchronous evolution of a pythonic island of type 'Multiprocessing island' raised an error:
     multiprocessing.pool.RemoteTraceback: 
     """
     Traceback (most recent call last):

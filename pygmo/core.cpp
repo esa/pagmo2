@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <limits>
 #include <memory>
 #include <sstream>
@@ -113,6 +114,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/expose_bfes.hpp>
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
+#include <pygmo/expose_topologies.hpp>
 #include <pygmo/island.hpp>
 #include <pygmo/object_serialization.hpp>
 #include <pygmo/problem.hpp>
@@ -1022,23 +1024,23 @@ BOOST_PYTHON_MODULE(core)
     auto &topology_class = pygmo::get_topology_class();
     topology_class.def(bp::init<const bp::object &>((bp::arg("udt"))))
         .def(repr(bp::self))
-        .def_pickle(pygmo::topology_pickle_suite());
-#if 0
+        .def_pickle(pygmo::topology_pickle_suite())
         // Copy and deepcopy.
-        .def("__copy__", &pygmo::generic_copy_wrapper<bfe>)
-        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<bfe>)
-        // UDBFE extraction.
-        .def("_py_extract", &pygmo::generic_py_extract<bfe>)
-        // Bfe methods.
-        .def("__call__", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
-                 return pygmo::v_to_a(b(prob, pygmo::to_vd(dvs)));
+        .def("__copy__", &pygmo::generic_copy_wrapper<topology>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<topology>)
+        // UDT extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<topology>)
+        // Topology methods.
+        .def("get_connections", lcast([](const topology &t, std::size_t n) -> bp::tuple {
+                 auto ret = t.get_connections(n);
+                 return bp::make_tuple(pygmo::v_to_a(ret.first), pygmo::v_to_a(ret.second));
              }),
-             pygmo::bfe_call_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
-        .def("get_name", &bfe::get_name, pygmo::bfe_get_name_docstring().c_str())
-        .def("get_extra_info", &bfe::get_extra_info, pygmo::bfe_get_extra_info_docstring().c_str())
-        .def("get_thread_safety", &bfe::get_thread_safety, pygmo::bfe_get_thread_safety_docstring().c_str());
+             pygmo::topology_get_connections_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+        .def("push_back", lcast([](topology &t, unsigned n) { t.push_back(n); }),
+             pygmo::topology_push_back_docstring().c_str(), (bp::arg("n") = std::size_t(1)))
+        .def("get_name", &topology::get_name, pygmo::topology_get_name_docstring().c_str())
+        .def("get_extra_info", &topology::get_extra_info, pygmo::topology_get_extra_info_docstring().c_str());
 
-    // Expose bfes.
-    pygmo::expose_bfes();
-#endif
+    // Expose topologies.
+    pygmo::expose_topologies();
 }

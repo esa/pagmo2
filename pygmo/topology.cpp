@@ -47,6 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/import.hpp>
 #include <boost/python/list.hpp>
 #include <boost/python/object.hpp>
+#include <boost/python/stl_iterator.hpp>
 #include <boost/python/tuple.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
@@ -97,7 +98,7 @@ std::unique_ptr<topo_inner_base> topo_inner<bp::object>::clone() const
 
 std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_connections(std::size_t n) const
 {
-    // NOTE: get_connections() is called from a separate thread in pagmo::island, need to construct a GTE before
+    // NOTE: get_connections() may be called from a separate thread in pagmo::island, need to construct a GTE before
     // doing anything with the interpreter (including the throws in the checks below).
     pygmo::gil_thread_ensurer gte;
 
@@ -107,34 +108,67 @@ std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_c
     try {
         topo_name = get_name();
     } catch (const bp::error_already_set &) {
-        pygmo::handle_thread_py_exception("Could not fetch the name of the pythonic topology. The error is:\n");
+        pygmo::handle_thread_py_exception("Could not fetch the name of a pythonic topology. The error is:\n");
     }
 
     try {
-        // return pygmo::to_vd(m_value.attr("__call__")(p, pygmo::v_to_a(dvs)));
+        // Fetch the connections in Python form.
+        bp::object o = m_value.attr("get_connections")(n);
+
+        // Prepare the return value.
+        std::pair<std::vector<std::size_t>, vector_double> retval;
+
+        // We will try to interpret o as a collection of generic python objects.
+        bp::stl_input_iterator<bp::object> begin(o), end;
+
+        if (begin == end) {
+            // Empty iteratable.
+            pygmo_throw(PyExc_ValueError, ("the iteratable returned by a topology of type '" + topo_name
+                                           + "' is empty (it should contain 2 elements)")
+                                              .c_str());
+        }
+
+        retval.first = pygmo::to_vuint<std::size_t>(*begin);
+
+        ++begin;
+
+        if (begin == end) {
+            // Only one element in the iteratable.
+            pygmo_throw(PyExc_ValueError, ("the iteratable returned by a topology of type '" + topo_name
+                                           + "' has only 1 element (it should contain 2 elements)")
+                                              .c_str());
+        }
+
+        retval.second = pygmo::to_vd(*begin);
+
+        if (begin != end) {
+            // Too many elements.
+            pygmo_throw(PyExc_ValueError, ("the iteratable returned by a topology of type '" + topo_name
+                                           + "' has more than 2 elements (it should contain 2 elements)")
+                                              .c_str());
+        }
+
+        return retval;
     } catch (const bp::error_already_set &) {
-        pygmo::handle_thread_py_exception("The asynchronous evolution of a Pythonic island of type '" + isl_name
+        pygmo::handle_thread_py_exception("The get_connections() method of a pythonic topology of type '" + topo_name
                                           + "' raised an error:\n");
     }
 }
 
-#if 0
-pagmo::thread_safety bfe_inner<bp::object>::get_thread_safety() const
+void topo_inner<bp::object>::push_back()
 {
-    return pagmo::thread_safety::none;
+    m_value.attr("push_back")();
 }
 
-std::string bfe_inner<bp::object>::get_name() const
+std::string topo_inner<bp::object>::get_name() const
 {
     return getter_wrapper<std::string>(m_value, "get_name", pygmo::str(pygmo::type(m_value)));
 }
 
-std::string bfe_inner<bp::object>::get_extra_info() const
+std::string topo_inner<bp::object>::get_extra_info() const
 {
     return getter_wrapper<std::string>(m_value, "get_extra_info", std::string{});
 }
-
-#endif
 
 } // namespace detail
 
