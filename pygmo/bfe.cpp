@@ -125,7 +125,7 @@ namespace bp = boost::python;
 bp::tuple bfe_pickle_suite::getstate(const pagmo::bfe &b)
 {
     // The idea here is that first we extract a char array
-    // into which bfe has been serialized, then we turn
+    // into which b has been serialized, then we turn
     // this object into a Python bytes object and return that.
     std::ostringstream oss;
     {
