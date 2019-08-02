@@ -6004,8 +6004,8 @@ UDBFEs can also implement the following (optional) methods:
    def get_extra_info(self):
      ...
 
-See the documentation of the corresponding member functions in this class for details on how the optional
-member functions in the UDBFE are used by :class:`~pygmo.bfe`.
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDBFE are used by :class:`~pygmo.bfe`.
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::bfe`.
 
@@ -6155,9 +6155,93 @@ This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
 construct a :class:`~pygmo.bfe`.
 
 :class:`~pygmo.member_bfe` is a simple wrapper which delegates batch fitness evaluations
-to the input problem's :func:`pygmo.problem.batch_fitness()` member function.
+to the input problem's :func:`pygmo.problem.batch_fitness()` method.
 
 See also the docs of the C++ class :cpp:class:`pagmo::member_bfe`.
+
+)";
+}
+
+std::string topology_docstring()
+{
+    return R"(__init__(udt = unconnected())
+
+Topology.
+
+In the jargon of pagmo, a topology is an object that represents connections among
+:class:`islands <pygmo.island>` in an :class:`~pygmo.archipelago`.
+In essence, a topology is a *weighted directed graph* in which
+
+* the *vertices* (or *nodes*) are islands,
+* the *edges* (or *arcs*) are directed connections between islands across which information flows during the
+  optimisation process (via the migration of individuals),
+* the *weights* of the edges (whose numerical values are the :math:`[0.,1.]` range) represent the migration
+  probability.
+
+Following the same schema adopted for :class:`~pygmo.problem`, :class:`~pygmo.algorithm`, etc.,
+:class:`~pygmo.topology` exposes a generic interface to *user-defined topologies* (or UDT for short).
+UDTs are classes providing a certain set
+of methods that describe the properties of (and allow to interact with) a topology. Once
+defined and instantiated, a UDT can then be used to construct an instance of this class,
+:class:`~pygmo.topology`, which provides a generic interface to topologies for use by
+:class:`~pygmo.archipelago`.
+
+In a :class:`~pygmo.topology`, vertices in the graph are identified by a zero-based unique
+integral index. This integral index corresponds to the index of an
+:class:`~pygmo.island` in an :class:`~pygmo.archipelago`.
+
+Every UDT must implement at least the following methods:
+
+.. code-block::
+
+    def get_connections(self, n):
+      ...
+    def push_back(self):
+      ...
+
+The ``get_connections()`` method takes as input a vertex index ``n``, and it is expected to return
+a pair of array-like values containing respectively:
+
+* the indices of the vertices which are connecting to ``n`` (that is, the list of vertices for which a directed edge
+  towards ``n`` exists),
+* the weights (i.e., the migration probabilities) of the edges linking the connecting vertices to ``n``.
+
+The ``push_back()`` method is expected to add a new vertex to the topology, assigning it the next
+available index and establishing connections to other vertices. The ``push_back()`` method is invoked
+by :func:`pygmo.archipelago.push_back()` upon the insertion of a new island into an archipelago,
+and it is meant to allow the incremental construction of a topology. That is, after ``N`` calls to ``push_back()``
+on an initially-empty topology, the topology should contain ``N`` vertices and any number of edges (depending
+on the specifics of the topology).
+
+Additional optional methods can be implemented in a UDT:
+
+.. code-block::
+
+    def get_name(self):
+      ...
+    def get_extra_info(self):
+      ...
+
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDT are used by :class:`~pygmo.topology`.
+
+Topologies are used in asynchronous operations involving migration in archipelagos,
+and thus they need to provide a certain degree of thread safety. Specifically, the
+``get_connections()`` method of the UDT might be invoked concurrently with
+any other method of the UDT interface. It is up to the
+authors of user-defined topologies to ensure that this safety requirement is satisfied.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::topology`.
+
+Args:
+    udt: a user-defined topology, either C++ or Python
+
+Raises:
+    NotImplementedError: if *udt* does not implement the mandatory methods detailed above
+    unspecified: any exception thrown by methods of the UDT invoked during construction,
+      the deep copy of the UDT, the constructor of the underlying C++ class, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
 
 )";
 }
