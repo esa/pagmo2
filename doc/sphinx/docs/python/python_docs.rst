@@ -17,6 +17,7 @@ These are the core PyGMO classes.
    py_island
    py_archipelago
    py_bfe
+   py_topology
    py_misc
 
 Implemented problems, algorithms, islands and bfes

@@ -281,6 +281,9 @@ std::string default_bfe_docstring();
 std::string thread_bfe_docstring();
 std::string member_bfe_docstring();
 
+// topology.
+std::string topology_docstring();
+
 } // namespace pygmo
 
 #endif
