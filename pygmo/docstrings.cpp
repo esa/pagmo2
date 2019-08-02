@@ -6024,7 +6024,7 @@ Raises:
 
 std::string bfe_call_docstring()
 {
-    return R"(__call__(self, prob, dvs)
+    return R"(__call__(prob, dvs)
 
 Call operator.
 
@@ -6065,10 +6065,8 @@ Bfe's name.
 If the UDBFE provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
 Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.
 
-The ``get_name()`` method of the UDBFE must return a ``str``.
-
 Returns:
-    ``str``: the bfe's name
+    str: the bfe's name
 
 )";
 }
@@ -6082,10 +6080,8 @@ Bfe's extra info.
 If the UDBFE provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
 method. Otherwise, an empty string will be returned.
 
-The ``get_extra_info()`` method of the UDBFE must return a ``str``.
-
 Returns:
-  ``str``: extra info about the UDBFE
+  str: extra info about the UDBFE
 
 Raises:
   unspecified: any exception thrown by the ``get_extra_info()`` method of the UDBFE
