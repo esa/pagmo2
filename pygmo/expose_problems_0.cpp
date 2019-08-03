@@ -86,6 +86,12 @@ namespace bp = boost::python;
 namespace pygmo
 {
 
+namespace detail
+{
+
+namespace
+{
+
 // A test problem.
 struct test_problem {
     test_problem(unsigned nobj = 1) : m_nobj(nobj) {}
@@ -130,16 +136,20 @@ struct tu_test_problem {
     }
 };
 
+} // namespace
+
+} // namespace detail
+
 void expose_problems_0()
 {
     // Exposition of C++ problems.
     // Test problem.
-    auto test_p = expose_problem_pygmo<test_problem>("_test_problem", "A test problem.");
+    auto test_p = expose_problem_pygmo<detail::test_problem>("_test_problem", "A test problem.");
     test_p.def(bp::init<unsigned>((bp::arg("nobj"))));
-    test_p.def("get_n", &test_problem::get_n);
-    test_p.def("set_n", &test_problem::set_n);
+    test_p.def("get_n", &detail::test_problem::get_n);
+    test_p.def("set_n", &detail::test_problem::set_n);
     // Thread unsafe test problem.
-    expose_problem_pygmo<tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
+    expose_problem_pygmo<detail::tu_test_problem>("_tu_test_problem", "A thread unsafe test problem.");
     // Null problem.
     auto np = expose_problem_pygmo<null_problem>("null_problem", null_problem_docstring().c_str());
     np.def(bp::init<vector_double::size_type, vector_double::size_type, vector_double::size_type>(

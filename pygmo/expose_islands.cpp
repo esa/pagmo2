@@ -56,6 +56,12 @@ using namespace pagmo;
 namespace pygmo
 {
 
+namespace detail
+{
+
+namespace
+{
+
 // A test island.
 struct test_island {
     void run_evolve(island &) const {}
@@ -71,12 +77,16 @@ struct test_island {
     int m_n = 1;
 };
 
+} // namespace
+
+} // namespace detail
+
 void expose_islands()
 {
     // Test island.
-    auto test_isl = expose_island_pygmo<test_island>("_test_island", "A test island.");
-    test_isl.def("get_n", &test_island::get_n);
-    test_isl.def("set_n", &test_island::set_n);
+    auto test_isl = expose_island_pygmo<detail::test_island>("_test_island", "A test island.");
+    test_isl.def("get_n", &detail::test_island::get_n);
+    test_isl.def("set_n", &detail::test_island::set_n);
     // Thread island.
     expose_island_pygmo<thread_island>("thread_island", thread_island_docstring().c_str());
 }
