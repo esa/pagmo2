@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PYGMO_EXPOSE_BFES_HPP
-#define PYGMO_EXPOSE_BFES_HPP
+#ifndef PYGMO_EXPOSE_TOPOLOGIES_HPP
+#define PYGMO_EXPOSE_TOPOLOGIES_HPP
 
 #include <pygmo/python_includes.hpp>
 
@@ -37,7 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/return_internal_reference.hpp>
 #include <boost/python/scope.hpp>
 
-#include <pagmo/bfe.hpp>
+#include <pagmo/topology.hpp>
 
 #include <pygmo/common_utils.hpp>
 #include <pygmo/pygmo_classes.hpp>
@@ -45,33 +45,33 @@ see https://www.gnu.org/licenses/. */
 namespace pygmo
 {
 
-// Bfes exposition function.
-void expose_bfes();
+// Topologies exposition function.
+void expose_topologies();
 
 namespace bp = boost::python;
 
-// Main bfe exposition function - for *internal* use by pygmo. The exposition function
+// Main topology exposition function - for *internal* use by pygmo. The exposition function
 // for APs needs to be different.
-template <typename Bfe>
-inline bp::class_<Bfe> expose_bfe_pygmo(const char *name, const char *descr)
+template <typename Topo>
+inline bp::class_<Topo> expose_topology_pygmo(const char *name, const char *descr)
 {
-    // We require all bfes to be def-ctible at the bare minimum.
-    bp::class_<Bfe> c(name, descr, bp::init<>());
+    // We require all topologies to be def-ctible at the bare minimum.
+    bp::class_<Topo> c(name, descr, bp::init<>());
 
-    // Mark it as a C++ bfe.
-    c.attr("_pygmo_cpp_bfe") = true;
+    // Mark it as a C++ topology.
+    c.attr("_pygmo_cpp_topology") = true;
 
-    // Get reference to the bfe class.
-    auto &b = get_bfe_class();
+    // Get reference to the topology class.
+    auto &t = get_topology_class();
 
-    // Expose the bfe constructor from Bfe.
-    b.def(bp::init<const Bfe &>((bp::arg("udbfe"))));
+    // Expose the topology constructor from Topo.
+    t.def(bp::init<const Topo &>((bp::arg("udt"))));
 
     // Expose extract.
-    b.def("_cpp_extract", &generic_cpp_extract<pagmo::bfe, Bfe>, bp::return_internal_reference<>());
+    t.def("_cpp_extract", &generic_cpp_extract<pagmo::topology, Topo>, bp::return_internal_reference<>());
 
-    // Add the bfe to the batch_evaluators submodule.
-    bp::scope().attr("batch_evaluators").attr(name) = c;
+    // Add the topology to the topologies submodule.
+    bp::scope().attr("topologies").attr(name) = c;
 
     return c;
 }

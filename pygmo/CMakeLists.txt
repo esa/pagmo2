@@ -46,10 +46,12 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pygmo/config.hpp" DESTINATION
 YACMA_PYTHON_MODULE(core
     algorithm.cpp
     bfe.cpp
+    topology.cpp
     island.cpp
     problem.cpp
     common_base.cpp
     object_serialization.cpp
+    handle_thread_py_exception.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp
@@ -58,6 +60,7 @@ YACMA_PYTHON_MODULE(core
     expose_problems_1.cpp
     expose_islands.cpp
     expose_bfes.cpp
+    expose_topologies.cpp
 )
 target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")

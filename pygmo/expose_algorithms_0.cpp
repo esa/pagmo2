@@ -219,7 +219,7 @@ void expose_algorithms_0()
     de1220_.def("__init__",
                 bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                               double ftol, double xtol, bool memory) -> de1220 * {
-                                         auto av = to_vu(allowed_variants);
+                                         auto av = to_vuint<unsigned>(allowed_variants);
                                          return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
                                      }),
                                      bp::default_call_policies(),
@@ -229,7 +229,7 @@ void expose_algorithms_0()
     de1220_.def("__init__",
                 bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                               double ftol, double xtol, bool memory, unsigned seed) -> de1220 * {
-                                         auto av = to_vu(allowed_variants);
+                                         auto av = to_vuint<unsigned>(allowed_variants);
                                          return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
                                      }),
                                      bp::default_call_policies(),

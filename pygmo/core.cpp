@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <limits>
 #include <memory>
 #include <sstream>
@@ -86,9 +87,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
@@ -110,10 +114,12 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/expose_bfes.hpp>
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
+#include <pygmo/expose_topologies.hpp>
 #include <pygmo/island.hpp>
 #include <pygmo/object_serialization.hpp>
 #include <pygmo/problem.hpp>
 #include <pygmo/pygmo_classes.hpp>
+#include <pygmo/topology.hpp>
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -156,6 +162,15 @@ std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 // Exposed pagmo::bfe.
 std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
 
+// Exposed pagmo::topology.
+std::unique_ptr<bp::class_<pagmo::topology>> topology_ptr;
+
+// Exposed pagmo::r_policy.
+std::unique_ptr<bp::class_<pagmo::r_policy>> r_policy_ptr;
+
+// Exposed pagmo::s_policy.
+std::unique_ptr<bp::class_<pagmo::s_policy>> s_policy_ptr;
+
 } // namespace pygmo
 
 // The cleanup function.
@@ -174,6 +189,12 @@ static inline void cleanup()
     pygmo::island_ptr.reset();
 
     pygmo::bfe_ptr.reset();
+
+    pygmo::topology_ptr.reset();
+
+    pygmo::r_policy_ptr.reset();
+
+    pygmo::s_policy_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -411,6 +432,16 @@ BOOST_PYTHON_MODULE(core)
         .value("idle_error", evolve_status::idle_error)
         .value("busy_error", evolve_status::busy_error);
 
+    // Migration type enum.
+    bp::enum_<migration_type>("_migration_type")
+        .value("p2p", migration_type::p2p)
+        .value("broadcast", migration_type::broadcast);
+
+    // Migrant handling policy enum.
+    bp::enum_<migrant_handling>("_migrant_handling")
+        .value("preserve", migrant_handling::preserve)
+        .value("evict", migrant_handling::evict);
+
     // Expose utility functions for testing purposes.
     bp::def("_builtin", &pygmo::builtin);
     bp::def("_type", &pygmo::type);
@@ -468,11 +499,41 @@ BOOST_PYTHON_MODULE(core)
     auto batch_evaluators_module = bp::object(bp::handle<>(bp::borrowed(batch_evaluators_module_ptr)));
     bp::scope().attr("batch_evaluators") = batch_evaluators_module;
 
+    // Create the topologies submodule.
+    std::string topologies_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".topologies");
+    PyObject *topologies_module_ptr = PyImport_AddModule(topologies_module_name.c_str());
+    if (!topologies_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'topologies' submodule");
+    }
+    auto topologies_module = bp::object(bp::handle<>(bp::borrowed(topologies_module_ptr)));
+    bp::scope().attr("topologies") = topologies_module;
+
+    // Create the r_policies submodule.
+    std::string r_policies_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".r_policies");
+    PyObject *r_policies_module_ptr = PyImport_AddModule(r_policies_module_name.c_str());
+    if (!r_policies_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'r_policies' submodule");
+    }
+    auto r_policies_module = bp::object(bp::handle<>(bp::borrowed(r_policies_module_ptr)));
+    bp::scope().attr("r_policies") = r_policies_module;
+
+    // Create the s_policies submodule.
+    std::string s_policies_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".s_policies");
+    PyObject *s_policies_module_ptr = PyImport_AddModule(s_policies_module_name.c_str());
+    if (!s_policies_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 's_policies' submodule");
+    }
+    auto s_policies_module = bp::object(bp::handle<>(bp::borrowed(s_policies_module_ptr)));
+    bp::scope().attr("s_policies") = s_policies_module;
+
     // Store the pointers to the classes that can be extended by APs.
     bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
     bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
     bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
     bp::scope().attr("_bfe_address") = reinterpret_cast<std::uintptr_t>(&pygmo::bfe_ptr);
+    bp::scope().attr("_topology_address") = reinterpret_cast<std::uintptr_t>(&pygmo::topology_ptr);
+    bp::scope().attr("_r_policy_address") = reinterpret_cast<std::uintptr_t>(&pygmo::r_policy_ptr);
+    bp::scope().attr("_s_policy_address") = reinterpret_cast<std::uintptr_t>(&pygmo::s_policy_ptr);
 
     // Store the address to the list of registered APs.
     bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&ap_set);
@@ -956,4 +1017,30 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose bfes.
     pygmo::expose_bfes();
+
+    // Topology class.
+    pygmo::topology_ptr
+        = detail::make_unique<bp::class_<topology>>("topology", pygmo::topology_docstring().c_str(), bp::init<>());
+    auto &topology_class = pygmo::get_topology_class();
+    topology_class.def(bp::init<const bp::object &>((bp::arg("udt"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::topology_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<topology>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<topology>)
+        // UDT extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<topology>)
+        // Topology methods.
+        .def("get_connections", lcast([](const topology &t, std::size_t n) -> bp::tuple {
+                 auto ret = t.get_connections(n);
+                 return bp::make_tuple(pygmo::v_to_a(ret.first), pygmo::v_to_a(ret.second));
+             }),
+             pygmo::topology_get_connections_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+        .def("push_back", lcast([](topology &t, unsigned n) { t.push_back(n); }),
+             pygmo::topology_push_back_docstring().c_str(), (bp::arg("n") = std::size_t(1)))
+        .def("get_name", &topology::get_name, pygmo::topology_get_name_docstring().c_str())
+        .def("get_extra_info", &topology::get_extra_info, pygmo::topology_get_extra_info_docstring().c_str());
+
+    // Expose topologies.
+    pygmo::expose_topologies();
 }

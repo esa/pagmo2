@@ -75,7 +75,7 @@ void thread_island::run_evolve(island &isl) const
         (void)gte;
 
         // Get copies of algo/pop from isl.
-        // NOTE: in case of exceptions, any Pythonic object
+        // NOTE: in case of exceptions, any pythonic object
         // existing within this scope will be destroyed before the gte,
         // while it is still safe to call into Python.
         auto tmp_algo(isl.get_algorithm());
@@ -97,7 +97,7 @@ void thread_island::run_evolve(island &isl) const
         }
 
         // Move the copies into algo/pop. At this point, we know
-        // that algo and pop are not Pythonic, as Pythonic entities are never
+        // that algo and pop are not pythonic, as pythonic entities are never
         // marked as thread-safe.
         algo = std::move(tmp_algo);
         pop = std::move(tmp_pop);

@@ -6004,8 +6004,8 @@ UDBFEs can also implement the following (optional) methods:
    def get_extra_info(self):
      ...
 
-See the documentation of the corresponding member functions in this class for details on how the optional
-member functions in the UDBFE are used by :class:`~pygmo.bfe`.
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDBFE are used by :class:`~pygmo.bfe`.
 
 This class is the Python counterpart of the C++ class :cpp:class:`pagmo::bfe`.
 
@@ -6024,7 +6024,7 @@ Raises:
 
 std::string bfe_call_docstring()
 {
-    return R"(__call__(self, prob, dvs)
+    return R"(__call__(prob, dvs)
 
 Call operator.
 
@@ -6065,10 +6065,8 @@ Bfe's name.
 If the UDBFE provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
 Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.
 
-The ``get_name()`` method of the UDBFE must return a ``str``.
-
 Returns:
-    ``str``: the bfe's name
+    str: the bfe's name
 
 )";
 }
@@ -6082,10 +6080,8 @@ Bfe's extra info.
 If the UDBFE provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
 method. Otherwise, an empty string will be returned.
 
-The ``get_extra_info()`` method of the UDBFE must return a ``str``.
-
 Returns:
-  ``str``: extra info about the UDBFE
+  str: extra info about the UDBFE
 
 Raises:
   unspecified: any exception thrown by the ``get_extra_info()`` method of the UDBFE
@@ -6155,9 +6151,254 @@ This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
 construct a :class:`~pygmo.bfe`.
 
 :class:`~pygmo.member_bfe` is a simple wrapper which delegates batch fitness evaluations
-to the input problem's :func:`pygmo.problem.batch_fitness()` member function.
+to the input problem's :func:`pygmo.problem.batch_fitness()` method.
 
 See also the docs of the C++ class :cpp:class:`pagmo::member_bfe`.
+
+)";
+}
+
+std::string topology_docstring()
+{
+    return R"(__init__(udt = unconnected())
+
+Topology.
+
+In the jargon of pagmo, a topology is an object that represents connections among
+:class:`islands <pygmo.island>` in an :class:`~pygmo.archipelago`.
+In essence, a topology is a *weighted directed graph* in which
+
+* the *vertices* (or *nodes*) are islands,
+* the *edges* (or *arcs*) are directed connections between islands across which information flows during the
+  optimisation process (via the migration of individuals),
+* the *weights* of the edges (whose numerical values are the :math:`[0.,1.]` range) represent the migration
+  probability.
+
+Following the same schema adopted for :class:`~pygmo.problem`, :class:`~pygmo.algorithm`, etc.,
+:class:`~pygmo.topology` exposes a generic interface to *user-defined topologies* (or UDT for short).
+UDTs are classes providing a certain set
+of methods that describe the properties of (and allow to interact with) a topology. Once
+defined and instantiated, a UDT can then be used to construct an instance of this class,
+:class:`~pygmo.topology`, which provides a generic interface to topologies for use by
+:class:`~pygmo.archipelago`.
+
+In a :class:`~pygmo.topology`, vertices in the graph are identified by a zero-based unique
+integral index. This integral index corresponds to the index of an
+:class:`~pygmo.island` in an :class:`~pygmo.archipelago`.
+
+Every UDT must implement at least the following methods:
+
+.. code-block::
+
+    def get_connections(self, n):
+      ...
+    def push_back(self):
+      ...
+
+The ``get_connections()`` method takes as input a vertex index ``n``, and it is expected to return
+a pair of array-like values containing respectively:
+
+* the indices of the vertices which are connecting to ``n`` (that is, the list of vertices for which a directed edge
+  towards ``n`` exists),
+* the weights (i.e., the migration probabilities) of the edges linking the connecting vertices to ``n``.
+
+The ``push_back()`` method is expected to add a new vertex to the topology, assigning it the next
+available index and establishing connections to other vertices. The ``push_back()`` method is invoked
+by :func:`pygmo.archipelago.push_back()` upon the insertion of a new island into an archipelago,
+and it is meant to allow the incremental construction of a topology. That is, after ``N`` calls to ``push_back()``
+on an initially-empty topology, the topology should contain ``N`` vertices and any number of edges (depending
+on the specifics of the topology).
+
+Additional optional methods can be implemented in a UDT:
+
+.. code-block::
+
+    def get_name(self):
+      ...
+    def get_extra_info(self):
+      ...
+
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDT are used by :class:`~pygmo.topology`.
+
+Topologies are used in asynchronous operations involving migration in archipelagos,
+and thus they need to provide a certain degree of thread safety. Specifically, the
+``get_connections()`` method of the UDT might be invoked concurrently with
+any other method of the UDT interface. It is up to the
+authors of user-defined topologies to ensure that this safety requirement is satisfied.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::topology`.
+
+Args:
+    udt: a user-defined topology, either C++ or Python
+
+Raises:
+    NotImplementedError: if *udt* does not implement the mandatory methods detailed above
+    unspecified: any exception thrown by methods of the UDT invoked during construction,
+      the deep copy of the UDT, the constructor of the underlying C++ class, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
+
+)";
+}
+
+std::string topology_get_connections_docstring()
+{
+    return R"(get_connections(n)
+
+Get the connections to a vertex.
+
+This method will invoke the ``get_connections()`` method of the UDT, which is expected to return
+a pair of array-like objects containing respectively:
+
+* the indices of the vertices which are connecting to *n* (that is, the list of vertices for which a directed
+  edge towards *n* exists),
+* the weights (i.e., the migration probabilities) of the edges linking the connecting vertices to *n*.
+
+This method will also run sanity checks on the output of the ``get_connections()`` method of the UDT.
+
+Args:
+    n (int): the index of the vertex whose incoming connections' details will be returned
+
+Returns:
+    Pair of 1D NumPy arrays: a pair of arrays describing *n*'s incoming connections
+
+Raises:
+    ValueError: if the sizes of the returned arrays differ, or if any element of the second
+       array is not in the :math:`[0.,1.]` range
+    unspecified: any exception raised by the invocation of the method of the UDT, or by failures at the intersection
+       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string topology_push_back_docstring()
+{
+    return R"(push_back(n=1)
+
+Add vertices.
+
+This method will invoke the ``push_back()`` method of the UDT *n* times. The ``push_back()`` method
+of the UDT is expected to add a new vertex to the
+topology, assigning it the next available index and establishing connections to other vertices.
+
+Args:
+    n (int): the number of times the ``push_back()`` method of the UDT will be invoked
+
+Raises:
+    OverflowError: if *n* is negative or too large
+    unspecified: any exception thrown by the ``push_back()`` method of the UDT
+
+)";
+}
+
+std::string topology_get_name_docstring()
+{
+    return R"(get_name()
+
+Topology's name.
+
+If the UDT provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDT will be returned.
+
+Returns:
+    str: the topology's name
+
+)";
+}
+
+std::string topology_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Topology's extra info.
+
+If the UDT provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+Returns:
+  str: extra info about the UDT
+
+Raises:
+  unspecified: any exception thrown by the ``get_extra_info()`` method of the UDT
+
+)";
+}
+
+std::string unconnected_docstring()
+{
+    return R"(__init__()
+
+Unconnected topology.
+
+This user-defined topology (UDT) represents an unconnected graph. This is the default
+UDT used by :class:`pygmo.topology`.
+
+See also the docs of the C++ class :cpp:class:`pagmo::unconnected`.
+
+)";
+}
+
+std::string ring_docstring()
+{
+    return R"(__init__(n=0, w=1.)
+
+Ring topology.
+
+This user-defined topology (UDT) represents a bidirectional ring (that is, a ring in
+which each node connects to both the previous and the following nodes).
+
+See also the docs of the C++ class :cpp:class:`pagmo::ring`.
+
+Args:
+    n (int): the desired number of vertices
+    w (float): the weight of the edges
+
+Raises:
+    OverflowError: if *n* is negative or too large
+    ValueError: if *w* is not in the :math:`\left[0, 1\right]` range
+
+)";
+}
+
+std::string ring_get_weight_docstring()
+{
+    return R"(get_weight()
+
+Returns:
+  float: the weight *w* used in the construction of this topology
+
+)";
+}
+
+std::string base_bgl_num_vertices_docstring()
+{
+    return R"(num_vertices()
+
+Returns:
+    int: the number of vertices in the topology
+
+)";
+}
+
+std::string base_bgl_are_adjacent_docstring()
+{
+    return R"(are_adjacent(i, j)
+
+Check if two vertices are adjacent.
+
+Two vertices *i* and *j* are adjacent if there is a directed edge connecting *i* to *j*.
+
+Args:
+    i (int): the first vertex index
+    j (int): the second vertex index
+
+Returns:
+    bool: :data:`True` if *i* and *j* are adjacent, :data:`False` otherwise
+
+Raises:
+    ValueError: if *i* or *j* are not smaller than the number of vertices
+    OverflowError: if *i* or *j* are negative or too large
 
 )";
 }

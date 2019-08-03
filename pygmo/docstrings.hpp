@@ -281,6 +281,20 @@ std::string default_bfe_docstring();
 std::string thread_bfe_docstring();
 std::string member_bfe_docstring();
 
+// topology.
+std::string topology_docstring();
+std::string topology_get_connections_docstring();
+std::string topology_push_back_docstring();
+std::string topology_get_name_docstring();
+std::string topology_get_extra_info_docstring();
+
+// udt.
+std::string unconnected_docstring();
+std::string base_bgl_num_vertices_docstring();
+std::string base_bgl_are_adjacent_docstring();
+std::string ring_docstring();
+std::string ring_get_weight_docstring();
+
 } // namespace pygmo
 
 #endif

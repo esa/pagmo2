@@ -45,14 +45,16 @@ see https://www.gnu.org/licenses/. */
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include <pygmo/numpy.hpp>
 
-#include <pagmo/batch_evaluators/default_bfe.hpp>
-#include <pagmo/batch_evaluators/member_bfe.hpp>
-#include <pagmo/batch_evaluators/thread_bfe.hpp>
-#include <pagmo/problem.hpp>
+#include <cstddef>
+#include <utility>
+#include <vector>
+
+#include <pagmo/topologies/ring.hpp>
+#include <pagmo/topologies/unconnected.hpp>
 #include <pagmo/types.hpp>
 
 #include <pygmo/docstrings.hpp>
-#include <pygmo/expose_bfes.hpp>
+#include <pygmo/expose_topologies.hpp>
 
 using namespace pagmo;
 
@@ -65,19 +67,13 @@ namespace detail
 namespace
 {
 
-// A test bfe.
-struct test_bfe {
-    vector_double operator()(const problem &p, const vector_double &dvs) const
+// A test topology.
+struct test_topology {
+    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const
     {
-        vector_double retval;
-        const auto nx = p.get_nx();
-        const auto n_dvs = dvs.size() / nx;
-        for (decltype(dvs.size()) i = 0; i < n_dvs; ++i) {
-            const auto f = p.fitness(vector_double(dvs.data() + i * nx, dvs.data() + (i + 1u) * nx));
-            retval.insert(retval.end(), f.begin(), f.end());
-        }
-        return retval;
+        return std::pair<std::vector<std::size_t>, vector_double>{};
     }
+    void push_back() {}
     // Set/get an internal value to test extraction semantics.
     void set_n(int n)
     {
@@ -90,25 +86,33 @@ struct test_bfe {
     int m_n = 1;
 };
 
+// Expose the methods from the base BGL topology.
+template <typename Topo>
+void expose_base_bgl_topo(bp::class_<Topo> &c)
+{
+    c.def("num_vertices", &Topo::num_vertices, pygmo::base_bgl_num_vertices_docstring().c_str());
+    c.def("are_adjacent", &Topo::are_adjacent, pygmo::base_bgl_are_adjacent_docstring().c_str());
+}
+
 } // namespace
 
 } // namespace detail
 
-void expose_bfes()
+void expose_topologies()
 {
-    // Test bfe.
-    auto t_bfe = expose_bfe_pygmo<detail::test_bfe>("_test_bfe", "A test bfe.");
-    t_bfe.def("get_n", &detail::test_bfe::get_n);
-    t_bfe.def("set_n", &detail::test_bfe::set_n);
+    // Test topology.
+    auto t_topology = expose_topology_pygmo<detail::test_topology>("_test_topology", "A test topology.");
+    t_topology.def("get_n", &detail::test_topology::get_n);
+    t_topology.def("set_n", &detail::test_topology::set_n);
 
-    // Default bfe.
-    expose_bfe_pygmo<default_bfe>("default_bfe", default_bfe_docstring().c_str());
+    // Unconnected topology.
+    expose_topology_pygmo<unconnected>("unconnected", unconnected_docstring().c_str());
 
-    // Thread bfe.
-    expose_bfe_pygmo<thread_bfe>("thread_bfe", thread_bfe_docstring().c_str());
-
-    // Member bfe.
-    expose_bfe_pygmo<member_bfe>("member_bfe", member_bfe_docstring().c_str());
+    // Ring.
+    auto ring_ = expose_topology_pygmo<ring>("ring", ring_docstring().c_str());
+    ring_.def(bp::init<std::size_t, double>((bp::arg("n") = std::size_t(0), bp::arg("w") = 1.)))
+        .def("get_weight", &ring::get_weight, pygmo::ring_get_weight_docstring().c_str());
+    detail::expose_base_bgl_topo(ring_);
 }
 
 } // namespace pygmo

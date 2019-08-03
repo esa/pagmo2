@@ -153,7 +153,7 @@ What has happened? I need to retrieve that message!
         compileflags, 1), test.globs)
       File "<doctest default[0]>", line 1, in <module>
         isl.wait_check()
-    RuntimeError: The asynchronous evolution of a Pythonic island of type 'Ipyparallel island' raised an error:
+    RuntimeError: The asynchronous evolution of a pythonic island of type 'Ipyparallel island' raised an error:
     Traceback (most recent call last):
       File "/Users/darioizzo/.local/lib/python3.6/site-packages/pygmo/_py_islands.py", line 403, in run_evolve
         return ret.get()
