@@ -236,7 +236,7 @@ member functions in the UDBFE are used by <a class="reference internal" href="#p
 </dl>
 <dl class="method">
 <dt id="pygmo.bfe.__call__">
-<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">prob</em>, <em class="sig-param">dvs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">prob</em>, <em class="sig-param">dvs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
 of the decision vectors stored in <em>dvs</em> using the input problem <em>prob</em>, and it will return the corresponding
@@ -323,13 +323,12 @@ UDBFE will be returned (this allows to extract a Python UDBFE without knowing it
 <dd><p>Bfe’s extra info.</p>
 <p>If the UDBFE provides a <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code>
 method. Otherwise, an empty string will be returned.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDBFE must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>extra info about the UDBFE</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDBFE</p>
@@ -343,13 +342,12 @@ method. Otherwise, an empty string will be returned.</p>
 <dd><p>Bfe’s name.</p>
 <p>If the UDBFE provides a <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method.
 Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method of the UDBFE must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the bfe’s name</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
