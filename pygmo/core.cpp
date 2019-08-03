@@ -124,29 +124,6 @@ see https://www.gnu.org/licenses/. */
 namespace bp = boost::python;
 using namespace pagmo;
 
-// Test that the serialization of BP objects works as expected.
-// The object returned by this function should be identical to the input
-// object.
-static inline bp::object test_object_serialization(const bp::object &o)
-{
-    std::ostringstream oss;
-    {
-        boost::archive::binary_oarchive oarchive(oss);
-        oarchive << pygmo::object_to_vchar(o);
-    }
-    const std::string tmp_str = oss.str();
-    std::istringstream iss;
-    iss.str(tmp_str);
-    bp::object retval;
-    {
-        boost::archive::binary_iarchive iarchive(iss);
-        std::vector<char> tmp;
-        iarchive >> tmp;
-        retval = pygmo::vchar_to_object(tmp);
-    }
-    return retval;
-}
-
 namespace pygmo
 {
 
@@ -171,7 +148,34 @@ std::unique_ptr<bp::class_<pagmo::r_policy>> r_policy_ptr;
 // Exposed pagmo::s_policy.
 std::unique_ptr<bp::class_<pagmo::s_policy>> s_policy_ptr;
 
-} // namespace pygmo
+namespace detail
+{
+
+namespace
+{
+
+// Test that the serialization of BP objects works as expected.
+// The object returned by this function should be identical to the input
+// object.
+bp::object test_object_serialization(const bp::object &o)
+{
+    std::ostringstream oss;
+    {
+        boost::archive::binary_oarchive oarchive(oss);
+        oarchive << object_to_vchar(o);
+    }
+    const std::string tmp_str = oss.str();
+    std::istringstream iss;
+    iss.str(tmp_str);
+    bp::object retval;
+    {
+        boost::archive::binary_iarchive iarchive(iss);
+        std::vector<char> tmp;
+        iarchive >> tmp;
+        retval = vchar_to_object(tmp);
+    }
+    return retval;
+}
 
 // The cleanup function.
 // This function will be registered to be called when the pygmo core module is unloaded
@@ -180,21 +184,21 @@ std::unique_ptr<bp::class_<pagmo::s_policy>> s_policy_ptr;
 // NOTE: probably it would be better to register the cleanup function directly in core.cpp,
 // to be executed when the compiled module gets unloaded (now it is executed when the pygmo
 // supermodule gets unloaded).
-static inline void cleanup()
+void cleanup()
 {
-    pygmo::problem_ptr.reset();
+    problem_ptr.reset();
 
-    pygmo::algorithm_ptr.reset();
+    algorithm_ptr.reset();
 
-    pygmo::island_ptr.reset();
+    island_ptr.reset();
 
-    pygmo::bfe_ptr.reset();
+    bfe_ptr.reset();
 
-    pygmo::topology_ptr.reset();
+    topology_ptr.reset();
 
-    pygmo::r_policy_ptr.reset();
+    r_policy_ptr.reset();
 
-    pygmo::s_policy_ptr.reset();
+    s_policy_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -207,8 +211,7 @@ struct population_pickle_suite : bp::pickle_suite {
             oarchive << pop;
         }
         auto s = oss.str();
-        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
-                              pygmo::get_ap_list());
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())), get_ap_list());
     }
     static void setstate(population &pop, bp::tuple state)
     {
@@ -220,7 +223,7 @@ struct population_pickle_suite : bp::pickle_suite {
         }
 
         // Make sure we import all the aps specified in the archive.
-        pygmo::import_aps(bp::list(state[1]));
+        import_aps(bp::list(state[1]));
 
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
@@ -247,8 +250,7 @@ struct archipelago_pickle_suite : bp::pickle_suite {
             oarchive << archi;
         }
         auto s = oss.str();
-        return bp::make_tuple(pygmo::make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())),
-                              pygmo::get_ap_list());
+        return bp::make_tuple(make_bytes(s.data(), boost::numeric_cast<Py_ssize_t>(s.size())), get_ap_list());
     }
     static void setstate(archipelago &archi, bp::tuple state)
     {
@@ -260,7 +262,7 @@ struct archipelago_pickle_suite : bp::pickle_suite {
         }
 
         // Make sure we import all the aps specified in the archive.
-        pygmo::import_aps(bp::list(state[1]));
+        import_aps(bp::list(state[1]));
 
         auto ptr = PyBytes_AsString(bp::object(state[0]).ptr());
         if (!ptr) {
@@ -278,9 +280,9 @@ struct archipelago_pickle_suite : bp::pickle_suite {
 };
 
 // Helper function to test the to_vd functionality.
-static inline bool test_to_vd(const bp::object &o, unsigned n)
+bool test_to_vd(const bp::object &o, unsigned n)
 {
-    auto res = pygmo::to_vd(o);
+    auto res = to_vd(o);
     if (res.size() != n) {
         return false;
     }
@@ -293,9 +295,9 @@ static inline bool test_to_vd(const bp::object &o, unsigned n)
 }
 
 // Helper function to test the to_vvd functionality.
-static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
+bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 {
-    auto res = pygmo::to_vvd(o);
+    auto res = to_vvd(o);
     return res.size() == n
            && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
@@ -320,25 +322,31 @@ static inline bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 // (otherwise we might be calling into the interpreter with a releaser before informing Python we are calling
 // from a separate thread).
 struct py_wait_locks {
-    pygmo::gil_thread_ensurer gte;
-    pygmo::gil_releaser gr;
+    gil_thread_ensurer gte;
+    gil_releaser gr;
 };
 
 // Small helper function to get the max value of unsigned.
-static inline constexpr unsigned max_unsigned()
+constexpr unsigned max_unsigned()
 {
     return std::numeric_limits<unsigned>::max();
 }
 
 // Small helper to return the next random unsigned
 // from the global pagmo rng.
-static inline unsigned random_device_next()
+unsigned random_device_next()
 {
     return pagmo::random_device::next();
 }
 
 // The set containing the list of registered APs.
-static std::unordered_set<std::string> ap_set;
+std::unordered_set<std::string> ap_set;
+
+} // namespace
+
+} // namespace detail
+
+} // namespace pygmo
 
 // Detect if pygmo can use the multiprocessing module.
 // NOTE: the mp machinery is supported since Python 3.4 or on Windows.
@@ -408,7 +416,7 @@ BOOST_PYTHON_MODULE(core)
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
     // destroyed at the end of island::wait().
-    detail::wait_raii_getter = []() { return std::make_shared<py_wait_locks>(); };
+    detail::wait_raii_getter = []() { return std::make_shared<pygmo::detail::py_wait_locks>(); };
 
     // NOTE: set the gte getter.
     detail::gte_getter = []() { return std::make_shared<pygmo::gil_thread_ensurer>(); };
@@ -449,18 +457,18 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_callable", &pygmo::callable);
     bp::def("_deepcopy", &pygmo::deepcopy);
     bp::def("_to_sp", &pygmo::to_sp);
-    bp::def("_test_object_serialization", &test_object_serialization);
-    bp::def("_test_to_vd", &test_to_vd);
-    bp::def("_test_to_vvd", &test_to_vvd);
+    bp::def("_test_object_serialization", &pygmo::detail::test_object_serialization);
+    bp::def("_test_to_vd", &pygmo::detail::test_to_vd);
+    bp::def("_test_to_vvd", &pygmo::detail::test_to_vvd);
 
     // Expose cleanup function.
-    bp::def("_cleanup", &cleanup);
+    bp::def("_cleanup", &pygmo::detail::cleanup);
 
     // The max_unsigned() helper.
-    bp::def("_max_unsigned", &max_unsigned);
+    bp::def("_max_unsigned", &pygmo::detail::max_unsigned);
 
     // The random_device_next() helper.
-    bp::def("_random_device_next", &random_device_next);
+    bp::def("_random_device_next", &pygmo::detail::random_device_next);
 
     // Create the problems submodule.
     std::string problems_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".problems");
@@ -536,7 +544,7 @@ BOOST_PYTHON_MODULE(core)
     bp::scope().attr("_s_policy_address") = reinterpret_cast<std::uintptr_t>(&pygmo::s_policy_ptr);
 
     // Store the address to the list of registered APs.
-    bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&ap_set);
+    bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&pygmo::detail::ap_set);
 
     // Population class.
     bp::class_<population> pop_class("population", pygmo::population_docstring().c_str(), bp::no_init);
@@ -552,7 +560,7 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<population>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<population>)
-        .def_pickle(population_pickle_suite())
+        .def_pickle(pygmo::detail::population_pickle_suite())
         .def("push_back", lcast([](population &pop, const bp::object &x, const bp::object &f) {
                  if (f.is_none()) {
                      pop.push_back(pygmo::to_vd(x));
@@ -960,7 +968,7 @@ BOOST_PYTHON_MODULE(core)
     // Archi.
     bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(), bp::init<>());
     archi_class.def(repr(bp::self))
-        .def_pickle(archipelago_pickle_suite())
+        .def_pickle(pygmo::detail::archipelago_pickle_suite())
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<archipelago>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<archipelago>)
