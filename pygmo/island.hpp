@@ -69,7 +69,6 @@ struct isl_inner<bp::object> final : isl_inner_base, pygmo::common_base {
     isl_inner &operator=(isl_inner &&) = delete;
     explicit isl_inner(const bp::object &);
     virtual std::unique_ptr<isl_inner_base> clone() const override final;
-    [[noreturn]] static void handle_thread_py_exception(const std::string &);
     // Mandatory methods.
     virtual void run_evolve(island &) const override final;
     // Optional methods.

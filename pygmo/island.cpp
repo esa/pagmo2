@@ -35,7 +35,6 @@ see https://www.gnu.org/licenses/. */
 #define PY_ARRAY_UNIQUE_SYMBOL pygmo_ARRAY_API
 #include <pygmo/numpy.hpp>
 
-#include <cassert>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -44,11 +43,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/extract.hpp>
-#include <boost/python/handle.hpp>
-#include <boost/python/import.hpp>
 #include <boost/python/list.hpp>
 #include <boost/python/object.hpp>
-#include <boost/python/str.hpp>
 #include <boost/python/tuple.hpp>
 
 #include <pagmo/algorithm.hpp>
@@ -58,6 +54,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 
 #include <pygmo/common_utils.hpp>
+#include <pygmo/handle_thread_py_exception.hpp>
 #include <pygmo/island.hpp>
 
 namespace pagmo
@@ -86,52 +83,6 @@ std::unique_ptr<isl_inner_base> isl_inner<bp::object>::clone() const
     return detail::make_unique<isl_inner>(m_value);
 }
 
-void isl_inner<bp::object>::handle_thread_py_exception(const std::string &err)
-{
-    // NOTE: my understanding is that this assert should never fail, if we are handling a bp::error_already_set
-    // exception it means a Python exception was generated. However, I have seen snippets of code on the
-    // internet where people do check this flag. Keep this in mind, it should be easy to transform this assert()
-    // in an if/else.
-    assert(::PyErr_Occurred());
-
-    // Small helper to build a bp::object from a raw PyObject ptr.
-    // It assumes that ptr is a new reference, or null. If null, we
-    // return None.
-    auto new_ptr_to_obj = [](::PyObject *ptr) { return ptr ? bp::object(bp::handle<>(ptr)) : bp::object(); };
-
-    // Fetch the error data that was set by Python: exception type, value and the traceback.
-    ::PyObject *type, *value, *traceback;
-    // PyErr_Fetch() creates new references, and it also clears the error indicator.
-    ::PyErr_Fetch(&type, &value, &traceback);
-    assert(!::PyErr_Occurred());
-    // This normalisation step is apparently needed because sometimes, for some Python-internal reasons,
-    // the values returned by PyErr_Fetch() are “unnormalized” (see the Python documentation for this function).
-    ::PyErr_NormalizeException(&type, &value, &traceback);
-    // Move them into bp::object, so that they are cleaned up at the end of the scope. These are all new
-    // objects.
-    auto tp = new_ptr_to_obj(type);
-    auto v = new_ptr_to_obj(value);
-    auto tb = new_ptr_to_obj(traceback);
-
-    // Try to extract a string description of the exception using the "traceback" module.
-    std::string tmp(err);
-    try {
-        // NOTE: we are about to go back into the Python interpreter. Here Python could throw an exception
-        // and set again the error indicator, which was reset above by PyErr_Fetch(). In case of any issue,
-        // we will give up any attempt of producing a meaningful error message, reset the error indicator,
-        // and throw a pure C++ exception with a generic error message.
-        tmp += bp::extract<std::string>(
-            bp::str("").attr("join")(bp::import("traceback").attr("format_exception")(tp, v, tb)));
-    } catch (const bp::error_already_set &) {
-        // The block above threw from Python. There's not much we can do.
-        ::PyErr_Clear();
-        throw std::runtime_error("While trying to analyze the error message of a Python exception raised in a "
-                                 "separate thread, another Python exception was raised. Giving up now.");
-    }
-    // Throw the C++ exception.
-    throw std::runtime_error(tmp);
-}
-
 void isl_inner<bp::object>::run_evolve(island &isl) const
 {
     // NOTE: run_evolve() is called from a separate thread in pagmo::island, need to construct a GTE before
@@ -144,7 +95,7 @@ void isl_inner<bp::object>::run_evolve(island &isl) const
     try {
         isl_name = get_name();
     } catch (const bp::error_already_set &) {
-        handle_thread_py_exception("Could not fetch the name of the pythonic island. The error is:\n");
+        pygmo::handle_thread_py_exception("Could not fetch the name of the pythonic island. The error is:\n");
     }
 
     try {
@@ -182,8 +133,8 @@ void isl_inner<bp::object>::run_evolve(island &isl) const
         isl.set_algorithm(ret_algo);
         isl.set_population(ret_pop);
     } catch (const bp::error_already_set &) {
-        handle_thread_py_exception("The asynchronous evolution of a Pythonic island of type '" + isl_name
-                                   + "' raised an error:\n");
+        pygmo::handle_thread_py_exception("The asynchronous evolution of a Pythonic island of type '" + isl_name
+                                          + "' raised an error:\n");
     }
 }
 

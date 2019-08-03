@@ -1,12 +1,12 @@
 .. _py_bfes:
 
-List of bfes available in pygmo
-===============================
+List of batch evaluators available in pygmo
+===========================================
 
 .. _py_bfes_cpp:
 
-Bfes exposed from C++
----------------------
+Batch evaluators exposed from C++
+---------------------------------
 
 .. autoclass:: pygmo.default_bfe
    :members:

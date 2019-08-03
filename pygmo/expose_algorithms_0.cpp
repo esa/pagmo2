@@ -95,6 +95,12 @@ namespace bp = boost::python;
 namespace pygmo
 {
 
+namespace detail
+{
+
+namespace
+{
+
 // A test algo.
 struct test_algorithm {
     population evolve(const population &pop) const
@@ -124,6 +130,10 @@ struct tu_test_algorithm {
         return thread_safety::none;
     }
 };
+
+} // namespace
+
+} // namespace detail
 
 void expose_algorithms_0()
 {
@@ -170,11 +180,11 @@ void expose_algorithms_0()
         generic_uda_inner_algorithm_docstring().c_str());
 
     // Test algo.
-    auto test_a = expose_algorithm_pygmo<test_algorithm>("_test_algorithm", "A test algorithm.");
-    test_a.def("get_n", &test_algorithm::get_n);
-    test_a.def("set_n", &test_algorithm::set_n);
+    auto test_a = expose_algorithm_pygmo<detail::test_algorithm>("_test_algorithm", "A test algorithm.");
+    test_a.def("get_n", &detail::test_algorithm::get_n);
+    test_a.def("set_n", &detail::test_algorithm::set_n);
     // Thread unsafe test algo.
-    expose_algorithm_pygmo<tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
+    expose_algorithm_pygmo<detail::tu_test_algorithm>("_tu_test_algorithm", "A thread unsafe test algorithm.");
 
     // ARTIFICIAL BEE COLONY
     auto bee_colony_ = expose_algorithm_pygmo<bee_colony>("bee_colony", bee_colony_docstring().c_str());
@@ -219,7 +229,7 @@ void expose_algorithms_0()
     de1220_.def("__init__",
                 bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                               double ftol, double xtol, bool memory) -> de1220 * {
-                                         auto av = to_vu(allowed_variants);
+                                         auto av = to_vuint<unsigned>(allowed_variants);
                                          return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
                                      }),
                                      bp::default_call_policies(),
@@ -229,7 +239,7 @@ void expose_algorithms_0()
     de1220_.def("__init__",
                 bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                               double ftol, double xtol, bool memory, unsigned seed) -> de1220 * {
-                                         auto av = to_vu(allowed_variants);
+                                         auto av = to_vuint<unsigned>(allowed_variants);
                                          return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
                                      }),
                                      bp::default_call_policies(),

@@ -48,7 +48,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
-#include <pagmo/bfe.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
@@ -58,6 +57,12 @@ see https://www.gnu.org/licenses/. */
 using namespace pagmo;
 
 namespace pygmo
+{
+
+namespace detail
+{
+
+namespace
 {
 
 // A test bfe.
@@ -85,17 +90,25 @@ struct test_bfe {
     int m_n = 1;
 };
 
+} // namespace
+
+} // namespace detail
+
 void expose_bfes()
 {
     // Test bfe.
-    auto t_bfe = expose_bfe_pygmo<test_bfe>("_test_bfe", "A test bfe.");
-    t_bfe.def("get_n", &test_bfe::get_n);
-    t_bfe.def("set_n", &test_bfe::set_n);
-    // Deault bfe.
+    auto t_bfe = expose_bfe_pygmo<detail::test_bfe>("_test_bfe", "A test bfe.");
+    t_bfe.def("get_n", &detail::test_bfe::get_n);
+    t_bfe.def("set_n", &detail::test_bfe::set_n);
+
+    // Default bfe.
     expose_bfe_pygmo<default_bfe>("default_bfe", default_bfe_docstring().c_str());
+
     // Thread bfe.
     expose_bfe_pygmo<thread_bfe>("thread_bfe", thread_bfe_docstring().c_str());
+
     // Member bfe.
     expose_bfe_pygmo<member_bfe>("member_bfe", member_bfe_docstring().c_str());
 }
+
 } // namespace pygmo

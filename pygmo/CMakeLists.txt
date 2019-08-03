@@ -50,6 +50,7 @@ YACMA_PYTHON_MODULE(core
     problem.cpp
     common_base.cpp
     object_serialization.cpp
+    handle_thread_py_exception.cpp
     core.cpp
     docstrings.cpp
     expose_algorithms_0.cpp
