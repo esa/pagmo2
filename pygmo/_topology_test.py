@@ -111,7 +111,7 @@ class topology_test_case(_ut.TestCase):
         self.assertTrue(topo.is_(t))
         self.assertTrue(isinstance(topo.get_connections(0), tuple))
         self.assertTrue(isinstance(topo.get_connections(0)[0], ndarray))
-        self.assertTrue(topo.get_connections(0)[0].dtype == dtype(int))
+        self.assertEqual(topo.get_connections(0)[0].dtype, dtype(int))
         self.assertTrue(isinstance(topo.get_connections(0)[1], ndarray))
         self.assertTrue(topo.get_connections(0)[1].dtype == dtype(float))
         # Assert that t_inst was deep-copied into topo:
