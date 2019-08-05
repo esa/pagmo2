@@ -99,6 +99,9 @@ class topology_test_case(_ut.TestCase):
         t_inst = t(glob)
         topo = topology(t_inst)
 
+        with self.assertRaises(OverflowError) as cm:
+            topo.push_back(n=-1)
+
         # Test the keyword arg.
         topo = topology(udt=ring())
         topo = topology(udt=t_inst)
@@ -161,6 +164,48 @@ class topology_test_case(_ut.TestCase):
                 return [1, 2, 3]
         topo = topology(t())
         self.assertRaises(RuntimeError, lambda: topo.get_connections(0))
+
+        class t(object):
+
+            def push_back(self):
+                pass
+
+            def get_connections(self, n):
+                return [[1, 2, 3], [.5]]
+        topo = topology(t())
+        with self.assertRaises(ValueError) as cm:
+            topo.get_connections(0)
+        err = cm.exception
+        self.assertTrue(
+            "while the vector of migration probabilities has a size of" in str(err))
+
+        class t(object):
+
+            def push_back(self):
+                pass
+
+            def get_connections(self, n):
+                return [[1, 2, 3], [.5, .6, 1.4]]
+        topo = topology(t())
+        with self.assertRaises(ValueError) as cm:
+            topo.get_connections(0)
+        err = cm.exception
+        self.assertTrue(
+            "An invalid migration probability of " in str(err))
+
+        class t(object):
+
+            def push_back(self):
+                pass
+
+            def get_connections(self, n):
+                return [[1, 2, 3], [.5, .6, float("inf")]]
+        topo = topology(t())
+        with self.assertRaises(ValueError) as cm:
+            topo.get_connections(0)
+        err = cm.exception
+        self.assertTrue(
+            "An invalid non-finite migration probability of " in str(err))
 
         # Test that construction from another pygmo.topology fails.
         with self.assertRaises(TypeError) as cm:

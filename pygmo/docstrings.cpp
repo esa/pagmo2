@@ -6264,7 +6264,10 @@ Returns:
     Pair of 1D NumPy arrays: a pair of arrays describing *n*'s incoming connections
 
 Raises:
-    RuntimeError: if the sizes of the returned arrays differ, or if any element of the second
+    RuntimeError: if the object returned by a pythonic UDT is not iteratable, or it is an iteratable
+       whose number of elements is not exactly 2, or if the invocation of the ``get_connections()``
+       method of the UDT raises an exception
+    ValueError: if the sizes of the returned arrays differ, or if any element of the second
        array is not in the :math:`[0.,1.]` range
     unspecified: any exception raised by the invocation of the method of the UDT, or by failures at the intersection
        between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
