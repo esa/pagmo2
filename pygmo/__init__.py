@@ -43,6 +43,8 @@ from . import _patch_algorithm
 from . import _patch_problem
 # Patch the bfe class.
 from . import _patch_bfe
+# Patch the topology class.
+from . import _patch_topology
 # And we explicitly import the test submodule
 from . import test
 
