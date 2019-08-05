@@ -111,17 +111,16 @@ class topology_test_case(_ut.TestCase):
         self.assertTrue(topo.is_(t))
         self.assertTrue(isinstance(topo.get_connections(0), tuple))
         self.assertTrue(isinstance(topo.get_connections(0)[0], ndarray))
-        self.assertEqual(topo.get_connections(0)[0].dtype, dtype(int))
         self.assertTrue(isinstance(topo.get_connections(0)[1], ndarray))
         self.assertTrue(topo.get_connections(0)[1].dtype == dtype(float))
         # Assert that t_inst was deep-copied into topo:
         # the instance in topo will have its own copy of glob
         # and it will not be a reference the outside object.
         self.assertEqual(len(glob), 0)
-        self.assertEqual(len(topo.extract(t).g), 5)
-        self.assertEqual(topo.extract(t).g, [2]*5)
+        self.assertEqual(len(topo.extract(t).g), 4)
+        self.assertEqual(topo.extract(t).g, [2]*4)
         self.assertTrue(topo.push_back() is None)
-        self.assertEqual(topo.extract(t).g, [2]*5 + [1])
+        self.assertEqual(topo.extract(t).g, [2]*4 + [1])
 
         topo = topology(ring())
         self.assertTrue(topo.get_extra_info() != "")
