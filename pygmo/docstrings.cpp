@@ -3512,7 +3512,7 @@ Returns:
 Examples:
     >>> import pygmo as pg
     >>> pg.non_dominated_front_2d(points = [[0,5],[1,4],[2,3],[3,2],[4,1],[2,2]])
-    array([0, 1, 5, 4], dtype=uint64)
+    array([0, 1, 5, 4])
 )";
 }
 
@@ -3575,7 +3575,7 @@ Examples:
     >>> import pygmo as pg
     >>> pop = pg.population(prob = pg.dtlz(prob_id = 3, dim=10, fdim=4), size = 20)
     >>> pg.sort_population_mo(points = pop.get_f()) # doctest: +SKIP
-    array([ 4,  7, 14, 15, 16, 18,  9, 13,  5,  3,  6,  2, 12,  0,  1, 19, 17, 8, 10, 11], dtype=uint64)
+    array([ 4,  7, 14, 15, 16, 18,  9, 13,  5,  3,  6,  2, 12,  0,  1, 19, 17, 8, 10, 11])
 )";
 }
 
@@ -3608,7 +3608,7 @@ Examples:
     >>> import pygmo as pg
     >>> pop = pg.population(prob = pg.dtlz(prob_id = 3, dim=10, fdim=4), size = 20)
     >>> pg.select_best_N_mo(points = pop.get_f(), N = 13) # doctest: +SKIP
-    array([ 2,  3,  4,  5,  6,  7,  9, 12, 13, 14, 15, 16, 18], dtype=uint64)
+    array([ 2,  3,  4,  5,  6,  7,  9, 12, 13, 14, 15, 16, 18])
 )";
 }
 
