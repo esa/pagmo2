@@ -168,10 +168,14 @@ inline bp::object callable_attribute(const bp::object &o, const char *s)
 }
 
 // Convert a vector of arithmetic types into a 1D numpy array.
-template <typename T>
-using v_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
-
-template <typename T, v_to_a_enabler<T> = 0>
+// NOTE: provide two overloads, one for unsigned integral types and the
+// other for the other arithmetic types. The idea is that we may not want
+// to produce numpy arrays of unsigned integrals, as they are more painful
+// to deal with in Python than just plain signed integrals.
+template <typename T, pagmo::enable_if_t<pagmo::detail::disjunction<
+                                             std::is_floating_point<T>,
+                                             pagmo::detail::conjunction<std::is_integral<T>, std::is_signed<T>>>::value,
+                                         int> = 0>
 inline bp::object v_to_a(const std::vector<T> &v)
 {
     // The dimensions of the array to be created.
@@ -191,11 +195,42 @@ inline bp::object v_to_a(const std::vector<T> &v)
     return retval;
 }
 
-// Convert a vector of vectors of arithmetic types into a 2D numpy array.
-template <typename T>
-using vv_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
+template <typename T,
+          pagmo::enable_if_t<pagmo::detail::conjunction<std::is_integral<T>, std::is_unsigned<T>>::value, int> = 0>
+inline bp::object v_to_a(const std::vector<T> &v, bool keep_unsigned = false)
+{
+    // The dimensions of the array to be created.
+    npy_intp dims[] = {boost::numeric_cast<npy_intp>(v.size())};
+    // Attempt creating the array. The ndtype will be the signed counterpart of T,
+    // if keep_unsigned is false.
+    using int_type = typename std::make_signed<T>::type;
+    PyObject *ret = PyArray_SimpleNew(1, dims, keep_unsigned ? cpp_npy<T>::value : cpp_npy<int_type>::value);
+    if (!ret) {
+        pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
+    }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
+    if (v.size()) {
+        if (keep_unsigned) {
+            // Copy over the data.
+            std::copy(v.begin(), v.end(), static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret))));
+        } else {
+            // Copy over the data, transforming from unsigned to signed on the fly.
+            std::transform(v.begin(), v.end(),
+                           static_cast<int_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret))),
+                           [](const T &n) { return boost::numeric_cast<int_type>(n); });
+        }
+    }
+    // Hand over to boost python.
+    return retval;
+}
 
-template <typename T, vv_to_a_enabler<T> = 0>
+// Convert a vector of vectors of arithmetic types into a 2D numpy array.
+// NOTE: same scheme as above.
+template <typename T, pagmo::enable_if_t<pagmo::detail::disjunction<
+                                             std::is_floating_point<T>,
+                                             pagmo::detail::conjunction<std::is_integral<T>, std::is_signed<T>>>::value,
+                                         int> = 0>
 inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
 {
     // The dimensions of the array to be created.
@@ -221,6 +256,49 @@ inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
         }
     }
     return retval;
+}
+
+template <typename T,
+          pagmo::enable_if_t<pagmo::detail::conjunction<std::is_integral<T>, std::is_unsigned<T>>::value, int> = 0>
+inline bp::object vv_to_a(const std::vector<std::vector<T>> &v, bool keep_unsigned = false)
+{
+    // The dimensions of the array to be created.
+    const auto nrows = v.size();
+    const auto ncols = nrows ? v[0].size() : 0u;
+    npy_intp dims[] = {boost::numeric_cast<npy_intp>(nrows), boost::numeric_cast<npy_intp>(ncols)};
+    // Attempt creating the array. The ndtype will be the signed counterpart of T,
+    // if keep_unsigned is false.
+    using int_type = typename std::make_signed<T>::type;
+    PyObject *ret = PyArray_SimpleNew(2, dims, keep_unsigned ? cpp_npy<T>::value : cpp_npy<int_type>::value);
+    if (!ret) {
+        pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
+    }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
+    if (nrows) {
+        if (keep_unsigned) {
+            auto data = static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
+            for (const auto &i : v) {
+                if (i.size() != ncols) {
+                    pygmo_throw(PyExc_ValueError, "cannot convert a vector of vectors to a NumPy 2D array "
+                                                  "if the vector instances don't have all the same size");
+                }
+                std::copy(i.begin(), i.end(), data);
+                data += ncols;
+            }
+        } else {
+            auto data = static_cast<int_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
+            for (const auto &i : v) {
+                if (i.size() != ncols) {
+                    pygmo_throw(PyExc_ValueError, "cannot convert a vector of vectors to a NumPy 2D array "
+                                                  "if the vector instances don't have all the same size");
+                }
+                std::transform(i.begin(), i.end(), data, [](const T &n) { return boost::numeric_cast<int_type>(n); });
+                data += ncols;
+            }
+        }
+        return retval;
+    }
 }
 
 // isinstance wrapper.
@@ -355,6 +433,7 @@ inline std::vector<UInt> a_to_vuint(PyArrayObject *o)
                   "This function must be used only with unsigned integral types.");
 
     using size_type = typename std::vector<UInt>::size_type;
+    // NOTE: see note in the next function on why we use std::size_t here.
     using int_type = std::make_signed<std::size_t>::type;
 
     if (!PyArray_ISCARRAY_RO(o)) {
@@ -408,6 +487,13 @@ inline std::vector<UInt> to_vuint(const bp::object &o)
     } else if (isinstance(o, a)) {
         // NOTE: as usual, we try first to create an array of signed ints,
         // and we convert to unsigned in a_to_vuint().
+        // NOTE: the idea here is that we expect in input a numpy array of
+        // the "natural sized" signed int type for the platform, which we
+        // heuristically assume to be the signed counterpart of size_t. The idea
+        // is that we basically want the users to use signed integral arrays
+        // when talking to pygmo, because they are the easiest to work with
+        // and I don't see much benefit in making the distinction between signed/unsigned
+        // in Python. We can rework this approach if it turns out to be too restrictive.
         using int_type = std::make_signed<std::size_t>::type;
 
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<int_type>::value, NPY_ARRAY_IN_ARRAY);
@@ -536,8 +622,8 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         // vector_double::size_type (most likely long or long long) from whatever type of NumPy array was passed as
         // input, and then we will convert the elements to the appropriate size_type inside the a_to_sp routine. The
         // reason for doing this is that in typical usage Python integers are converted to signed integers when used
-        // inside NumPy arrays, so we want to work with signed ints here as well in order no to force the user to create
-        // sparsity patterns like array(...,dtype='ulonglong').
+        // inside NumPy arrays, so we want to work with signed ints here as well in order no to force the user to
+        // create sparsity patterns like array(...,dtype='ulonglong').
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<std::make_signed<size_type>::type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             // NOTE: PyArray_FROM_OTF already sets the exception at the Python level with an appropriate message,
@@ -745,11 +831,11 @@ inline auto lcast(T func) -> decltype(+func)
 
 // NOTE: these are alternative implementations of BP's add_property() functionality for classes.
 // The reason they exist (and why they should be used instead of the BP implementation) is because
-// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which seems
-// to be somehow related to BP's add_property() (at least judging from the limited stacktrace
-// I could obtain on windows). These alternative wrappers seem to sidestep the issue, at least so far.
-// They can be used exactly like BP's add_property(), the only difference being that they are functions
-// rather than methods, and they thus require the BP class to be passed in as first argument.
+// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which
+// seems to be somehow related to BP's add_property() (at least judging from the limited stacktrace I could obtain
+// on windows). These alternative wrappers seem to sidestep the issue, at least so far. They can be used exactly
+// like BP's add_property(), the only difference being that they are functions rather than methods, and they thus
+// require the BP class to be passed in as first argument.
 template <typename T>
 inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const char *doc = "")
 {

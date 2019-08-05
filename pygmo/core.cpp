@@ -597,7 +597,7 @@ BOOST_PYTHON_MODULE(core)
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_x()); }),
              pygmo::population_get_x_docstring().c_str())
-        .def("get_ID", lcast([](const population &pop) { return pygmo::v_to_a(pop.get_ID()); }),
+        .def("get_ID", lcast([](const population &pop) { return pygmo::v_to_a(pop.get_ID(), true); }),
              pygmo::population_get_ID_docstring().c_str())
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
     pygmo::add_property(pop_class, "champion_x",
