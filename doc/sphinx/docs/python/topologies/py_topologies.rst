@@ -15,3 +15,8 @@ Topologies exposed from C++
 
 .. autoclass:: pygmo.ring
    :members:
+
+-------------------------------------------------------------
+
+.. autoclass:: pygmo.fully_connected
+   :members:

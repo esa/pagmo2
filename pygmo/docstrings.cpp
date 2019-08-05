@@ -6492,4 +6492,37 @@ Raises:
 )";
 }
 
+std::string fully_connected_docstring()
+{
+    return R"(__init__(n=0, w=1.)
+
+Fully connected topology.
+
+This user-defined topology (UDT) represents a *complete graph* (that is, a topology
+in which all vertices connect to all other vertices). The edge weight is configurable
+at construction, and it will be the same for all the edges in the topology.
+
+See also the docs of the C++ class :cpp:class:`pagmo::fully_connected`.
+
+Args:
+    n (int): the desired number of vertices
+    w (float): the weight of the edges
+
+Raises:
+    OverflowError: if *n* is negative or too large
+    ValueError: if *w* is not in the :math:`\left[0, 1\right]` range
+
+)";
+}
+
+std::string fully_connected_get_weight_docstring()
+{
+    return ring_get_weight_docstring();
+}
+
+std::string fully_connected_num_vertices_docstring()
+{
+    return base_bgl_num_vertices_docstring();
+}
+
 } // namespace pygmo

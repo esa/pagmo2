@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/python/args.hpp>
 
+#include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
 #include <pagmo/types.hpp>
@@ -125,6 +126,13 @@ void expose_topologies()
     ring_.def(bp::init<std::size_t, double>((bp::arg("n") = std::size_t(0), bp::arg("w") = 1.)))
         .def("get_weight", &ring::get_weight, pygmo::ring_get_weight_docstring().c_str());
     detail::expose_base_bgl_topo(ring_);
+
+    // Fully connected.
+    auto fully_connected_
+        = expose_topology_pygmo<fully_connected>("fully_connected", fully_connected_docstring().c_str());
+    fully_connected_.def(bp::init<std::size_t, double>((bp::arg("n") = std::size_t(0), bp::arg("w") = 1.)))
+        .def("get_weight", &fully_connected::get_weight, pygmo::fully_connected_get_weight_docstring().c_str())
+        .def("num_vertices", &fully_connected::num_vertices, pygmo::fully_connected_num_vertices_docstring().c_str());
 }
 
 } // namespace pygmo

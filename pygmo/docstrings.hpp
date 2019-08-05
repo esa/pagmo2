@@ -299,6 +299,9 @@ std::string base_bgl_set_weight_docstring();
 std::string base_bgl_set_all_weights_docstring();
 std::string ring_docstring();
 std::string ring_get_weight_docstring();
+std::string fully_connected_docstring();
+std::string fully_connected_get_weight_docstring();
+std::string fully_connected_num_vertices_docstring();
 
 } // namespace pygmo
 
