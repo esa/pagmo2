@@ -141,6 +141,8 @@ std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_c
 
         retval.second = pygmo::to_vd(*begin);
 
+        ++begin;
+
         if (begin != end) {
             // Too many elements.
             pygmo_throw(PyExc_ValueError, ("the iteratable returned by a topology of type '" + topo_name
