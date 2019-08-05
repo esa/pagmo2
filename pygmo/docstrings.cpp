@@ -6264,7 +6264,7 @@ Returns:
     Pair of 1D NumPy arrays: a pair of arrays describing *n*'s incoming connections
 
 Raises:
-    ValueError: if the sizes of the returned arrays differ, or if any element of the second
+    RuntimeError: if the sizes of the returned arrays differ, or if any element of the second
        array is not in the :math:`[0.,1.]` range
     unspecified: any exception raised by the invocation of the method of the UDT, or by failures at the intersection
        between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
@@ -6409,7 +6409,7 @@ std::string base_bgl_add_vertex_docstring()
 
 Add a vertex.
 
-This function will add a new vertex to the topology.
+This method will add a new vertex to the topology.
 
 The newly-added vertex will be disjoint from any other vertex in the topology (i.e., there are no connections to/from the new vertex).
 
@@ -6422,7 +6422,7 @@ std::string base_bgl_add_edge_docstring()
 
 Add a new edge.
 
-This function will add a new edge of weight *w* connecting *i* to *j*.
+This method will add a new edge of weight *w* connecting *i* to *j*.
 
 Args:
     i (int): the first vertex index
@@ -6443,7 +6443,7 @@ std::string base_bgl_remove_edge_docstring()
 
 Remove an existing edge.
 
-This function will remove the edge connecting *i* to *j*.
+This method will remove the edge connecting *i* to *j*.
 
 Args:
     i (int): the first vertex index
@@ -6462,7 +6462,7 @@ std::string base_bgl_set_weight_docstring()
 
 Set the weight of an edge.
 
-This function will set to *w* the weight of the edge connecting *i* to *j*.
+This method will set to *w* the weight of the edge connecting *i* to *j*.
 
 Args:
     i (int): the first vertex index
@@ -6481,7 +6481,7 @@ std::string base_bgl_set_all_weights_docstring()
 {
     return R"(set_all_weights(w)
 
-This function will set the weights of all edges in the topology to *w*.
+This method will set the weights of all edges in the topology to *w*.
 
 Args:
     w (float): the edges' weight

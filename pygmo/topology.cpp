@@ -130,9 +130,7 @@ std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_c
 
         retval.first = pygmo::to_vuint<std::size_t>(*begin);
 
-        ++begin;
-
-        if (begin == end) {
+        if (++begin == end) {
             // Only one element in the iteratable.
             pygmo_throw(PyExc_ValueError, ("the iteratable returned by a topology of type '" + topo_name
                                            + "' has only 1 element (it should contain 2 elements)")
@@ -141,9 +139,7 @@ std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_c
 
         retval.second = pygmo::to_vd(*begin);
 
-        ++begin;
-
-        if (begin != end) {
+        if (++begin != end) {
             // Too many elements.
             pygmo_throw(PyExc_ValueError, ("the iteratable returned by a topology of type '" + topo_name
                                            + "' has more than 2 elements (it should contain 2 elements)")
