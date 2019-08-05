@@ -49,6 +49,8 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/python/args.hpp>
+
 #include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
 #include <pagmo/types.hpp>
@@ -91,7 +93,17 @@ template <typename Topo>
 void expose_base_bgl_topo(bp::class_<Topo> &c)
 {
     c.def("num_vertices", &Topo::num_vertices, pygmo::base_bgl_num_vertices_docstring().c_str());
-    c.def("are_adjacent", &Topo::are_adjacent, pygmo::base_bgl_are_adjacent_docstring().c_str());
+    c.def("are_adjacent", &Topo::are_adjacent, pygmo::base_bgl_are_adjacent_docstring().c_str(),
+          (bp::arg("i"), bp::arg("j")));
+    c.def("add_vertex", &Topo::add_vertex, pygmo::base_bgl_add_vertex_docstring().c_str());
+    c.def("add_edge", &Topo::add_edge, pygmo::base_bgl_add_edge_docstring().c_str(),
+          (bp::arg("i"), bp::arg("j"), bp::arg("w") = 1.));
+    c.def("remove_edge", &Topo::remove_edge, pygmo::base_bgl_remove_edge_docstring().c_str(),
+          (bp::arg("i"), bp::arg("j")));
+    c.def("set_weight", &Topo::set_weight, pygmo::base_bgl_set_weight_docstring().c_str(),
+          (bp::arg("i"), bp::arg("j"), bp::arg("w")));
+    c.def("set_all_weights", &Topo::set_all_weights, pygmo::base_bgl_set_all_weights_docstring().c_str(),
+          (bp::arg("w")));
 }
 
 } // namespace

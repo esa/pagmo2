@@ -85,7 +85,7 @@ std::string population_random_decision_vector_docstring()
 This method will create a random decision vector within the problem's bounds.
 
 Returns:
-    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+    :class:`numpy.ndarray`: a random decision vector within the problem's bounds
 
 Raises:
     unspecified: any exception thrown by :func:`pygmo.random_decision_vector()`
@@ -201,7 +201,7 @@ Sets simultaneously the :math:`i`-th individual decision vector and fitness thus
    The user must make sure that the input fitness *f* makes sense as pygmo will only check its dimension.
 
 Args:
-    i (``int``): individual’s index in the population
+    i (``int``): individual's index in the population
     x (array-like object): a decision vector (chromosome)
     f (array-like object): a fitness vector
 
@@ -228,7 +228,7 @@ individual's ID remains the same.
    A call to this method triggers one fitness function evaluation.
 
 Args:
-    i (``int``): individual’s index in the population
+    i (``int``): individual's index in the population
     x (array-like object): a decision vector (chromosome)
 
 Raises:
@@ -3245,7 +3245,7 @@ Args:
     prob (:class:`~pygmo.problem`): the input problem
 
 Returns:
-    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+    :class:`numpy.ndarray`: a random decision vector within the problem's bounds
 
 Raises:
     ValueError: if the problem's bounds are not finite or larger than an implementation-defined limit
@@ -3278,7 +3278,7 @@ Args:
     n (int): the number of decision vectors that will be generated
 
 Returns:
-    :class:`numpy.ndarray`: a random decision vector within the problem’s bounds
+    :class:`numpy.ndarray`: a random decision vector within the problem's bounds
 
 Raises:
     OverflowError: in case of (unlikely) overflows
@@ -4353,7 +4353,7 @@ std::string island_evolve_docstring()
 
 Launch evolution.
 
-This method will evolve the island’s :class:`~pygmo.population` using the island’s :class:`~pygmo.algorithm`.
+This method will evolve the island's :class:`~pygmo.population` using the island's :class:`~pygmo.algorithm`.
 The evolution happens asynchronously: a call to :func:`~pygmo.island.evolve()` will create an evolution task that
 will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution
 managed by the :class:`~pygmo.island` object. Each task will invoke the ``run_evolve()`` method of the UDI *n*
@@ -6399,6 +6399,95 @@ Returns:
 Raises:
     ValueError: if *i* or *j* are not smaller than the number of vertices
     OverflowError: if *i* or *j* are negative or too large
+
+)";
+}
+
+std::string base_bgl_add_vertex_docstring()
+{
+    return R"(add_vertex()
+
+Add a vertex.
+
+This function will add a new vertex to the topology.
+
+The newly-added vertex will be disjoint from any other vertex in the topology (i.e., there are no connections to/from the new vertex).
+
+)";
+}
+
+std::string base_bgl_add_edge_docstring()
+{
+    return R"(add_edge(i, j, w=1.)
+
+Add a new edge.
+
+This function will add a new edge of weight *w* connecting *i* to *j*.
+
+Args:
+    i (int): the first vertex index
+    j (int): the second vertex index
+    w (float): the edge's weight
+
+Raises:
+    OverflowError: if *i* or *j* are negative or too large
+    ValueError: if *i* or *j* are not smaller than the number of vertices, *i* and *j* are already adjacent, or
+       if *w* is not in the :math:`\left[0, 1\right]` range
+
+)";
+}
+
+std::string base_bgl_remove_edge_docstring()
+{
+    return R"(remove_edge(i, j)
+
+Remove an existing edge.
+
+This function will remove the edge connecting *i* to *j*.
+
+Args:
+    i (int): the first vertex index
+    j (int): the second vertex index
+
+Raises:
+    ValueError: if *i* or *j* are not smaller than the number of vertices, or *i* and *j* are not adjacent
+    OverflowError: if *i* or *j* are negative or too large
+
+)";
+}
+
+std::string base_bgl_set_weight_docstring()
+{
+    return R"(set_weight(i, j, w)
+
+Set the weight of an edge.
+
+This function will set to *w* the weight of the edge connecting *i* to *j*.
+
+Args:
+    i (int): the first vertex index
+    j (int): the second vertex index
+    w (float): the desired weight
+
+Raises:
+    OverflowError: if *i* or *j* are negative or too large
+    ValueError: if *i* or *j* are not smaller than the number of vertices, *i* and *j* are not adjacent, or
+       if *w* is not in the :math:`\left[0, 1\right]` range
+
+)";
+}
+
+std::string base_bgl_set_all_weights_docstring()
+{
+    return R"(set_all_weights(w)
+
+This function will set the weights of all edges in the topology to *w*.
+
+Args:
+    w (float): the edges' weight
+
+Raises:
+    ValueError: if *w* is not in the :math:`\left[0, 1\right]` range
 
 )";
 }

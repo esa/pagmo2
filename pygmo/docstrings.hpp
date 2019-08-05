@@ -292,6 +292,11 @@ std::string topology_get_extra_info_docstring();
 std::string unconnected_docstring();
 std::string base_bgl_num_vertices_docstring();
 std::string base_bgl_are_adjacent_docstring();
+std::string base_bgl_add_vertex_docstring();
+std::string base_bgl_add_edge_docstring();
+std::string base_bgl_remove_edge_docstring();
+std::string base_bgl_set_weight_docstring();
+std::string base_bgl_set_all_weights_docstring();
 std::string ring_docstring();
 std::string ring_get_weight_docstring();
 
