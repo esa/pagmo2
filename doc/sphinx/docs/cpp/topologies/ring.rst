@@ -27,6 +27,8 @@ Ring
       New edges created via :cpp:func:`~pagmo::ring::push_back()` will have
       a weight of *w*.
 
+      :param w: the weight of the edges.
+
       :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: explicit ring(std::size_t n, double w)
@@ -38,6 +40,9 @@ Ring
 
       New edges created via subsequent :cpp:func:`~pagmo::ring::push_back()` calls
       will also have a weight of *w*.
+
+      :param n: the desired number of vertices.
+      :param w: the weight of the edges.
 
       :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
       :except unspecified: any exception thrown by :cpp:func:`~pagmo::ring::push_back()`.

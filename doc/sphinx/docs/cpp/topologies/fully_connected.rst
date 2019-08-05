@@ -28,6 +28,8 @@ Fully connected
       Equivalent to the constructor from number of vertices *n* = 0 and edge
       weight *w*.
 
+      :param w: the weight of the edges.
+
       :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: explicit fully_connected(std::size_t n, double w)
@@ -36,6 +38,9 @@ Fully connected
 
       This constructor will initialise a :cpp:class:`~pagmo::fully_connected` topology
       with *n* vertices and whose edges will all have a weight of *w*.
+
+      :param n: the desired number of vertices.
+      :param w: the weight of the edges.
 
       :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
