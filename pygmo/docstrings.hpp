@@ -303,6 +303,15 @@ std::string fully_connected_docstring();
 std::string fully_connected_get_weight_docstring();
 std::string fully_connected_num_vertices_docstring();
 
+// r_policy.
+std::string r_policy_docstring();
+std::string r_policy_replace_docstring();
+std::string r_policy_get_name_docstring();
+std::string r_policy_get_extra_info_docstring();
+
+// udrp.
+std::string fair_replace_docstring();
+
 } // namespace pygmo
 
 #endif

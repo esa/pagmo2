@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/python/args.hpp>
+#include <boost/python/init.hpp>
 
 #include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/topologies/ring.hpp>
@@ -60,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/expose_topologies.hpp>
 
 using namespace pagmo;
+namespace bp = boost::python;
 
 namespace pygmo
 {

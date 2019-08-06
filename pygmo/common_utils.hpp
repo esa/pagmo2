@@ -425,53 +425,65 @@ inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
                                      .c_str());
 }
 
-// Convert a numpy array to an std::vector of unsigned integral type.
-template <typename UInt>
+// Convert a 1D numpy array of input integral type SourceInt to an std::vector of
+// unsigned integral type UInt.
+template <typename UInt, typename SourceInt>
 inline std::vector<UInt> a_to_vuint(PyArrayObject *o)
 {
     static_assert(std::is_integral<UInt>::value && std::is_unsigned<UInt>::value,
-                  "This function must be used only with unsigned integral types.");
+                  "The UInt type must be an unsigned integral type.");
+
+    static_assert(std::is_integral<SourceInt>::value, "The SourceInt type must be an integral type.");
 
     using size_type = typename std::vector<UInt>::size_type;
-    // NOTE: see note in the next function on why we use std::size_t here.
-    using int_type = std::make_signed<std::size_t>::type;
 
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of unsigned integrals: "
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a vector of unsigned integrals: "
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of unsigned integrals: "
+        pygmo_throw(PyExc_ValueError, "cannot convert a NumPy array to a vector of unsigned integrals: "
                                       "the array must be unidimensional");
     }
-    if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
-        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of unsigned integrals: "
-                                     "invalid scalar type");
+    if (PyArray_TYPE(o) != cpp_npy<SourceInt>::value) {
+        pygmo_throw(PyExc_TypeError, "cannot convert a NumPy array to a vector of unsigned integrals: "
+                                     "the input scalar type is inconsistent with the expected integral type");
     }
-    if (PyArray_STRIDES(o)[0] != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned integrals: "
+    if (PyArray_STRIDES(o)[0] != sizeof(SourceInt)) {
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert a NumPy array to a vector of unsigned integrals: "
                                          "the stride value must be "
-                                         + std::to_string(sizeof(int_type)))
+                                         + std::to_string(sizeof(SourceInt)))
                                             .c_str());
     }
-    if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned integrals: "
+    if (PyArray_ITEMSIZE(o) != sizeof(SourceInt)) {
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert a NumPy array to a vector of unsigned integrals: "
                                          "the size of the scalar type must be "
-                                         + std::to_string(sizeof(int_type)))
+                                         + std::to_string(sizeof(SourceInt)))
                                             .c_str());
     }
 
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
     std::vector<UInt> retval;
+    retval.resize(boost::numeric_cast<decltype(retval.size())>(size));
+
     if (size) {
-        auto data = static_cast<int_type *>(PyArray_DATA(o));
-        std::transform(data, data + size, std::back_inserter(retval),
-                       [](int_type n) { return boost::numeric_cast<UInt>(n); });
+        auto data = static_cast<SourceInt *>(PyArray_DATA(o));
+        std::transform(data, data + size, retval.data(), [](SourceInt n) { return boost::numeric_cast<UInt>(n); });
     }
+
     return retval;
 }
 
 // Convert an arbitrary python object to a vector of unsigned integrals.
+// This function expects in input either a list of something convertible
+// to UInt, or a NumPy array of *signed* integrals. The point of expecting
+// signed integrals is that, except in rare occasions, we just want to
+// deal with signed integral types on the Python side and convert back
+// to unsigned only when crossing over to C++. This is much more natural
+// for the user, who does not have to deal with the creation of NumPy
+// arrays with a non-default dtype, etc. The only exception to this
+// rule is when we are dealing with individual IDs, which must be kept
+// unsigned.
 template <typename UInt>
 inline std::vector<UInt> to_vuint(const bp::object &o)
 {
@@ -485,8 +497,6 @@ inline std::vector<UInt> to_vuint(const bp::object &o)
         bp::stl_input_iterator<UInt> begin(o), end;
         return std::vector<UInt>(begin, end);
     } else if (isinstance(o, a)) {
-        // NOTE: as usual, we try first to create an array of signed ints,
-        // and we convert to unsigned in a_to_vuint().
         // NOTE: the idea here is that we expect in input a numpy array of
         // the "natural sized" signed int type for the platform, which we
         // heuristically assume to be the signed counterpart of size_t. The idea
@@ -501,7 +511,7 @@ inline std::vector<UInt> to_vuint(const bp::object &o)
             bp::throw_error_already_set();
         }
 
-        return a_to_vuint<UInt>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+        return a_to_vuint<UInt, int_type>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
     pygmo_throw(PyExc_TypeError,
                 ("cannot convert the type '" + str(type(o))
@@ -903,6 +913,94 @@ inline void import_aps(const bp::list &l)
             }
         }
     }
+}
+
+// Convert an individuals_group_t into a Python tuple of:
+// - 1D integral array of IDs,
+// - 2D float array of dvs,
+// - 2D float array of fvs.
+inline bp::tuple inds_to_tuple(const pagmo::individuals_group_t &inds)
+{
+    // Do the IDs.
+    // NOTE: as usual, keep the IDs as unsigned values.
+    auto ID_arr = v_to_a(std::get<0>(inds), true);
+
+    // Decision vectors.
+    auto dv_arr = vv_to_a(std::get<1>(inds));
+
+    // Fitness vectors.
+    auto fv_arr = vv_to_a(std::get<2>(inds));
+
+    return bp::make_tuple(ID_arr, dv_arr, fv_arr);
+}
+
+// Convert a generic Python object into a vector of individual IDs.
+// NOTE: this is very similar to to_vuint(), but with the difference
+// that we want to keep the unsignedness of the IDs. Perhaps
+// in the future we can refactor these functions to have less code
+// duplication.
+inline std::vector<unsigned long long> to_ID_vector(const bp::object &o)
+{
+    bp::object l = builtin().attr("list");
+    bp::object a = bp::import("numpy").attr("ndarray");
+
+    if (isinstance(o, l)) {
+        bp::stl_input_iterator<unsigned long long> begin(o), end;
+        return std::vector<unsigned long long>(begin, end);
+    } else if (isinstance(o, a)) {
+        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<unsigned long long>::value, NPY_ARRAY_IN_ARRAY);
+        if (!n) {
+            bp::throw_error_already_set();
+        }
+
+        return a_to_vuint<unsigned long long, unsigned long long>(
+            reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+    }
+    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
+                                  + "' to a vector of individual IDs: only lists of unsigned ints and NumPy arrays of "
+                                    "unsigned ints are supported")
+                                     .c_str());
+}
+
+// Convert a generic Python object into an individuals_group_t.
+inline pagmo::individuals_group_t to_inds(const bp::object &o)
+{
+    // We assume we receive in input something we can iterate over.
+    bp::stl_input_iterator<bp::object> begin(o), end;
+
+    if (begin == end) {
+        // Empty iteratable.
+        pygmo_throw(PyExc_ValueError, "cannot convert an empty iteratable into a pagmo::individuals_group_t");
+    }
+
+    // Try fetching the IDs.
+    auto ID_vec = to_ID_vector(*begin);
+
+    if (++begin == end) {
+        // Iteratable with only 1 element.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with only 1 element into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    // Try fetching the decision vectors.
+    auto dvs_vec = to_vvd(*begin);
+
+    if (++begin == end) {
+        // Iteratable with only 2 elements.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with only 2 elements into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    // Try fetching the fitness vectors.
+    auto fvs_vec = to_vvd(*begin);
+
+    if (++begin != end) {
+        // Iteratable with too many elements.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with more than 3 elements into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    return pagmo::individuals_group_t(std::move(ID_vec), std::move(dvs_vec), std::move(fvs_vec));
 }
 
 } // namespace pygmo

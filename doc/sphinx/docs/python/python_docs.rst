@@ -18,6 +18,7 @@ These are the core PyGMO classes.
    py_archipelago
    py_bfe
    py_topology
+   py_r_policy
    py_misc
 
 Implemented user-defined classes
@@ -33,6 +34,7 @@ batch evaluators and topologies implemented in PyGMO.
    islands/py_islands
    bfes/py_bfes
    topologies/py_topologies
+   r_policies/py_r_policies
 
 Utilities
 ^^^^^^^^^

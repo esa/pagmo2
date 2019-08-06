@@ -67,9 +67,10 @@ Replacement policy
 
    Replacement policies are used in asynchronous operations involving migration in archipelagos,
    and thus they need to provide a certain degree of thread safety. Specifically, the
-   :cpp:func:`~pagmo::r_policy::replace()` member function might be invoked
-   concurrently with any other member function. It is up to the authors of user-defined
-   replacement policies to ensure that this safety requirement is satisfied.
+   ``replace()`` member function of the UDRP might be invoked concurrently with
+   any other member function of the UDRP interface (except for the destructor, the move
+   constructor, and, if implemented, the deserialisation function). It is up to the
+   authors of user-defined replacement policies to ensure that this safety requirement is satisfied.
 
    .. warning::
 

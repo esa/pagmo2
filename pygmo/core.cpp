@@ -114,11 +114,13 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/expose_bfes.hpp>
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
+#include <pygmo/expose_r_policies.hpp>
 #include <pygmo/expose_topologies.hpp>
 #include <pygmo/island.hpp>
 #include <pygmo/object_serialization.hpp>
 #include <pygmo/problem.hpp>
 #include <pygmo/pygmo_classes.hpp>
+#include <pygmo/r_policy.hpp>
 #include <pygmo/topology.hpp>
 
 namespace bp = boost::python;
@@ -1051,4 +1053,35 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose topologies.
     pygmo::expose_topologies();
+
+    // Replacement policy class.
+    pygmo::r_policy_ptr
+        = detail::make_unique<bp::class_<r_policy>>("r_policy", pygmo::r_policy_docstring().c_str(), bp::init<>());
+    auto &r_policy_class = pygmo::get_r_policy_class();
+    r_policy_class.def(bp::init<const bp::object &>((bp::arg("udrp"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::r_policy_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<r_policy>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<r_policy>)
+        // UDT extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<r_policy>)
+        // r_policy methods.
+        .def("replace",
+             lcast([](const r_policy &r, const bp::object &inds, const vector_double::size_type &nx,
+                      const vector_double::size_type &nix, const vector_double::size_type &nobj,
+                      const vector_double::size_type &nec, const vector_double::size_type &nic, const bp::object &tol,
+                      const bp::object &mig) -> bp::tuple {
+                 auto ret
+                     = r.replace(pygmo::to_inds(inds), nx, nix, nobj, nec, nic, pygmo::to_vd(tol), pygmo::to_inds(mig));
+                 return pygmo::inds_to_tuple(ret);
+             }),
+             pygmo::r_policy_replace_docstring().c_str(),
+             (bp::arg("inds"), bp::arg("nx"), bp::arg("nix"), bp::arg("nobj"), bp::arg("nec"), bp::arg("nic"),
+              bp::arg("tol"), bp::arg("mig")))
+        .def("get_name", &r_policy::get_name, pygmo::r_policy_get_name_docstring().c_str())
+        .def("get_extra_info", &r_policy::get_extra_info, pygmo::r_policy_get_extra_info_docstring().c_str());
+
+    // Expose r_policies.
+    pygmo::expose_r_policies();
 }
