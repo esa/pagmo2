@@ -47,6 +47,8 @@ from . import _patch_bfe
 from . import _patch_topology
 # Patch the r_policy class.
 from . import _patch_r_policy
+# Patch the s_policy class.
+from . import _patch_s_policy
 # And we explicitly import the test submodule
 from . import test
 

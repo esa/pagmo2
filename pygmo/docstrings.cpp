@@ -6747,4 +6747,214 @@ Raises:
 )";
 }
 
+std::string s_policy_docstring()
+{
+    return R"(__init__(udsp = select_best())
+
+Selection policy.
+
+A selection policy establishes
+how, during migration within an :class:`~pygmo.archipelago`,
+candidate migrants are selected from an :class:`~pygmo.island`.
+
+Following the same schema adopted for :class:`~pygmo.problem`, :class:`~pygmo.algorithm`, etc.,
+:class:`~pygmo.s_policy` exposes a generic
+interface to *user-defined selection policies* (or UDSP for short).
+UDSPs are classes providing a certain set of methods that implement the logic of the selection policy. Once
+defined and instantiated, a UDSP can then be used to construct an instance of this class,
+:class:`~pygmo.s_policy`, which
+provides a generic interface to selection policies for use by :class:`~pygmo.island`.
+
+Every UDSP must implement at least the following method:
+
+.. code-block::
+
+   def select(self, inds, nx, nix, nobj, nec, nic, tol):
+     ...
+
+The ``select()`` method takes in input the following parameters:
+
+* a group of individuals *inds*,
+* a set of arguments describing the properties of the :class:`~pygmo.problem` the individuals refer to:
+
+  * the total dimension *nx*,
+  * the integral dimension *nix*,
+  * the number of objectives *nobj*,
+  * the number of equality constraints *nec*,
+  * the number of inequality constraints *nic*,
+  * the problem's constraint tolerances *tol*,
+
+and it produces in output another set of individuals resulting from selecting individuals in *inds*
+(following some logic established by the UDSP). The sets of individuals *inds*
+and the return value of the ``select()`` method are represented as tuples of 3 elements containing:
+
+* a 1D NumPy array of individual IDs (represented as 64-bit unsigned integrals),
+* a 2D NumPy array of decision vectors (i.e., the decision vectors of each individual,
+  stored in row-major order),
+* a 2D NumPy array of fitness vectors (i.e., the fitness vectors of each individual,
+  stored in row-major order).
+
+Additional optional methods can be implemented in a UDSP:
+
+.. code-block::
+
+   def get_name(self):
+     ...
+   def get_extra_info(self):
+     ...
+
+See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDSP are used by :class:`~pygmo.s_policy`.
+
+Selection policies are used in asynchronous operations involving migration in archipelagos,
+and thus they need to provide a certain degree of thread safety. Specifically, the
+``select()`` method of the UDSP might be invoked concurrently with
+any other method of the UDSP interface. It is up to the
+authors of user-defined selection policies to ensure that this safety requirement is satisfied.
+
+This class is the Python counterpart of the C++ class :cpp:class:`pagmo::s_policy`.
+
+Args:
+    udsp: a user-defined selection policy, either C++ or Python
+
+Raises:
+    NotImplementedError: if *udsp* does not implement the mandatory methods detailed above
+    unspecified: any exception thrown by methods of the UDSP invoked during construction,
+      the deep copy of the UDSP, the constructor of the underlying C++ class, or
+      failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+      signatures, etc.)
+
+)";
+}
+
+std::string s_policy_select_docstring()
+{
+    return R"(select(inds, nx, nix, nobj, nec, nic, tol)
+
+Select individuals from a group.
+
+This method will invoke the ``select()`` method of the UDSP.
+Given a set of individuals, *inds*, the ``select()`` method of the UDSP
+is expected to return a new set of individuals selected from *inds*.
+The other arguments of this method describe the properties of the :class:`~pygmo.problem`
+that the individuals in *inds* refer to.
+
+The set of individuals *inds* and the return value of this method are
+represented as tuples of 3 elements containing:
+
+* a 1D NumPy array of individual IDs (represented as 64-bit unsigned integrals),
+* a 2D NumPy array of decision vectors (i.e., the decision vectors of each individual,
+  stored in row-major order),
+* a 2D NumPy array of fitness vectors (i.e., the fitness vectors of each individual,
+  stored in row-major order).
+
+In addition to invoking the ``select()`` method of the UDSP, this function will also
+perform a variety of sanity checks on both the input arguments and on the output produced by the
+UDSP.
+
+Args:
+    inds (tuple): the original group of individuals
+    nx (int): the dimension of the problem *inds* refers to
+    nix (int): the integral dimension of the problem *inds* refers to
+    nobj (int): the number of objectives of the problem *inds* refers to
+    nec (int): the number of equality constraints of the problem *inds* refers to
+    nic (int): the number of inequality constraints of the problem *inds* refers to
+    tol (array-like object): the vector of constraints tolerances of the problem *inds* refers to
+
+Returns:
+    tuple: a new set of individuals resulting from selecting individuals in *inds*.
+
+Raises:
+    RuntimeError: if the object returned by a pythonic UDSP is not iteratable, or it is an iteratable
+       whose number of elements is not exactly 3, or if the invocation of the ``select()``
+       method of the UDSP raises an exception
+    ValueError: if *inds* or the return value are not consistent with the problem properties,
+       or the ID, decision and fitness vectors in *inds* or the return value have inconsistent sizes,
+       or the problem properties are invalid (e.g., *nobj* is zero, *nix* > *nx*, etc.)
+    unspecified: any exception raised by failures at the intersection
+       between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
+std::string s_policy_get_name_docstring()
+{
+    return R"(get_name()
+
+Name of the selection policy.
+
+If the UDSP provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
+Otherwise, an implementation-defined name based on the type of the UDSP will be returned.
+
+Returns:
+    str: the name of the selection policy
+
+)";
+}
+
+std::string s_policy_get_extra_info_docstring()
+{
+    return R"(get_extra_info()
+
+Selection policy's extra info.
+
+If the UDSP provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
+method. Otherwise, an empty string will be returned.
+
+Returns:
+  str: extra info about the UDSP
+
+Raises:
+  unspecified: any exception thrown by the ``get_extra_info()`` method of the UDSP
+
+)";
+}
+
+std::string select_best_docstring()
+{
+    return R"(__init__(rate=1)
+
+Select best selection policy.
+
+This user-defined selection policy (UDSP) will select the *best*
+individuals from a group.
+
+In this context, *best* means the following:
+
+* in single-objective unconstrained problems, individuals are ranked
+  according to their fitness function,
+* in single-objective constrained problems, individuals are ranked
+  via :func:`~pygmo.sort_population_con()`,
+* in multi-objective unconstrained problems, individuals are ranked
+  via :func:`~pygmo.sort_population_mo()`.
+
+Note that this user-defined selection policy currently does *not* support
+multi-objective constrained problems.
+
+A select best policy is constructed from a *rate* argument, which
+can be either an integral or a floating-point value.
+
+If *rate* is a floating point value in the :math:`\left[0,1\right]` range,
+then it represents a *fractional* migration rate. That is, it indicates,
+the fraction of individuals that will be selected from the input population:
+a value of 0 means that no individuals will be selected, a value of 1 means that
+all individuals will be selected.
+
+If *rate* is an integral value, then it represents an *absolute* migration rate, that is,
+the exact number of individuals that will be selected from the input population.
+
+See also the docs of the C++ class :cpp:class:`pagmo::select_best`.
+
+Args:
+    rate (int, float): the desired migration rate
+
+Raises:
+    ValueError: if the supplied fractional migration rate is not finite
+      or not in the :math:`\left[0,1\right]` range
+    TypeError: if *rate* is not an instance of :class:`int` or :class:`float`
+    unspecified: any exception raised by the invoked C++ constructor
+
+)";
+}
+
 } // namespace pygmo

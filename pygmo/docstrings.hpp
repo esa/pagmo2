@@ -312,6 +312,15 @@ std::string r_policy_get_extra_info_docstring();
 // udrp.
 std::string fair_replace_docstring();
 
+// s_policy
+std::string s_policy_docstring();
+std::string s_policy_select_docstring();
+std::string s_policy_get_name_docstring();
+std::string s_policy_get_extra_info_docstring();
+
+// udsp.
+std::string select_best_docstring();
+
 } // namespace pygmo
 
 #endif

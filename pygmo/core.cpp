@@ -115,12 +115,14 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
 #include <pygmo/expose_r_policies.hpp>
+#include <pygmo/expose_s_policies.hpp>
 #include <pygmo/expose_topologies.hpp>
 #include <pygmo/island.hpp>
 #include <pygmo/object_serialization.hpp>
 #include <pygmo/problem.hpp>
 #include <pygmo/pygmo_classes.hpp>
 #include <pygmo/r_policy.hpp>
+#include <pygmo/s_policy.hpp>
 #include <pygmo/topology.hpp>
 
 namespace bp = boost::python;
@@ -1064,7 +1066,7 @@ BOOST_PYTHON_MODULE(core)
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<r_policy>)
         .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<r_policy>)
-        // UDT extraction.
+        // UDRP extraction.
         .def("_py_extract", &pygmo::generic_py_extract<r_policy>)
         // r_policy methods.
         .def("replace",
@@ -1084,4 +1086,34 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose r_policies.
     pygmo::expose_r_policies();
+
+    // Selection policy class.
+    pygmo::s_policy_ptr
+        = detail::make_unique<bp::class_<s_policy>>("s_policy", pygmo::s_policy_docstring().c_str(), bp::init<>());
+    auto &s_policy_class = pygmo::get_s_policy_class();
+    s_policy_class.def(bp::init<const bp::object &>((bp::arg("udsp"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::s_policy_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<s_policy>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<s_policy>)
+        // UDSP extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<s_policy>)
+        // s_policy methods.
+        .def("select",
+             lcast([](const s_policy &s, const bp::object &inds, const vector_double::size_type &nx,
+                      const vector_double::size_type &nix, const vector_double::size_type &nobj,
+                      const vector_double::size_type &nec, const vector_double::size_type &nic,
+                      const bp::object &tol) -> bp::tuple {
+                 auto ret = s.select(pygmo::to_inds(inds), nx, nix, nobj, nec, nic, pygmo::to_vd(tol));
+                 return pygmo::inds_to_tuple(ret);
+             }),
+             pygmo::s_policy_select_docstring().c_str(),
+             (bp::arg("inds"), bp::arg("nx"), bp::arg("nix"), bp::arg("nobj"), bp::arg("nec"), bp::arg("nic"),
+              bp::arg("tol")))
+        .def("get_name", &s_policy::get_name, pygmo::s_policy_get_name_docstring().c_str())
+        .def("get_extra_info", &s_policy::get_extra_info, pygmo::s_policy_get_extra_info_docstring().c_str());
+
+    // Expose s_policies.
+    pygmo::expose_s_policies();
 }

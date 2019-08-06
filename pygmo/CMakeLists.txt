@@ -50,6 +50,7 @@ YACMA_PYTHON_MODULE(core
     island.cpp
     problem.cpp
     r_policy.cpp
+    s_policy.cpp
     common_base.cpp
     object_serialization.cpp
     handle_thread_py_exception.cpp
@@ -63,6 +64,7 @@ YACMA_PYTHON_MODULE(core
     expose_bfes.cpp
     expose_topologies.cpp
     expose_r_policies.cpp
+    expose_s_policies.cpp
 )
 target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
@@ -94,7 +96,8 @@ add_subdirectory(plotting)
 
 # Add the Python files.
 install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _patch_bfe.py _patch_island.py _patch_topology.py _patch_r_policy.py
-     _problem_test.py _algorithm_test.py _island_test.py _topology_test.py _r_policy_test.py _py_islands.py _py_problems.py _mp_utils.py
+     _patch_s_policy.py _problem_test.py _algorithm_test.py _island_test.py _topology_test.py _r_policy_test.py _py_islands.py
+     _py_problems.py _mp_utils.py
      "${CMAKE_CURRENT_BINARY_DIR}/_version.py" DESTINATION ${PYGMO_INSTALL_PATH})
 
 # pygmo's public headers, to be installed.
