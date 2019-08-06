@@ -62,9 +62,10 @@ Selection policy
 
    Selection policies are used in asynchronous operations involving migration in archipelagos,
    and thus they need to provide a certain degree of thread safety. Specifically, the
-   :cpp:func:`~pagmo::s_policy::select()` member function might be invoked
-   concurrently with any other member function. It is up to the authors of user-defined
-   selection policies to ensure that this safety requirement is satisfied.
+   ``select()`` member function of the UDSP might be invoked concurrently with
+   any other member function of the UDSP interface (except for the destructor, the move
+   constructor, and, if implemented, the deserialisation function). It is up to the
+   authors of user-defined selection policies to ensure that this safety requirement is satisfied.
 
    .. warning::
 
