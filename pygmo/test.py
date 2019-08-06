@@ -2269,7 +2269,7 @@ def run_test_suite(level=0):
         level(``int``): the test level (higher values run longer tests)
 
     """
-    from . import _problem_test, _algorithm_test, _island_test, _topology_test, set_global_rng_seed
+    from . import _problem_test, _algorithm_test, _island_test, _topology_test, _r_policy_test, set_global_rng_seed
 
     # Make test runs deterministic.
     # NOTE: we'll need to place the async/migration tests at the end, so that at
@@ -2278,6 +2278,7 @@ def run_test_suite(level=0):
 
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
+    suite.addTest(_r_policy_test.r_policy_test_case())
     suite.addTest(_topology_test.topology_test_case())
     suite.addTest(unconnected_test_case())
     suite.addTest(ring_test_case())

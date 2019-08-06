@@ -76,8 +76,8 @@ r_pol_inner<bp::object>::r_pol_inner(const bp::object &o)
     // for creating a copy of the input r_policy.
     if (pygmo::type(o) == bp::import("pygmo").attr("r_policy")) {
         pygmo_throw(PyExc_TypeError,
-                    ("a pygmo.r_policy cannot be used as a UDRP for another pygmo.r_policy (if you need to copy an "
-                     "r_policy please use the standard Python copy()/deepcopy() functions)"));
+                    ("a pygmo.r_policy cannot be used as a UDRP for another pygmo.r_policy (if you need to copy a "
+                     "replacement policy please use the standard Python copy()/deepcopy() functions)"));
     }
     // Check that o is an instance of a class, and not a type.
     check_not_type(o, "r_policy");
