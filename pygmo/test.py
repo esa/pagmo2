@@ -2124,6 +2124,37 @@ class unconnected_test_case(_ut.TestCase):
         self.assertEqual(topo.get_name(), "Unconnected")
 
 
+class fair_replace_test_case(_ut.TestCase):
+    """Test case for the fair replace UDRP
+
+    """
+
+    def runTest(self):
+        from .core import fair_replace, r_policy
+        udrp = fair_replace()
+        r_pol = r_policy(udrp=udrp)
+        self.assertEqual(r_pol.get_name(), "Fair replace")
+        self.assertTrue("Absolute migration rate: 1" in repr(r_pol))
+        r_pol = r_policy(udrp=fair_replace(rate=0))
+        self.assertTrue("Absolute migration rate: 0" in repr(r_pol))
+        r_pol = r_policy(udrp=fair_replace(2))
+        self.assertTrue("Absolute migration rate: 2" in repr(r_pol))
+        r_pol = r_policy(udrp=fair_replace(rate=.5))
+        self.assertTrue("Fractional migration rate: 0.5" in repr(r_pol))
+
+        with self.assertRaises(ValueError) as cm:
+            r_policy(udrp=fair_replace(-1.2))
+        err = cm.exception
+        self.assertTrue(
+            "Invalid fractional migration rate " in str(err))
+
+        with self.assertRaises(TypeError) as cm:
+            r_policy(udrp=fair_replace(rate="dsadasdas"))
+        err = cm.exception
+        self.assertTrue(
+            "the migration rate must be an integral or floating-point value" in str(err))
+
+
 class ring_test_case(_ut.TestCase):
     """Test case for the ring UDT
 
@@ -2280,6 +2311,7 @@ def run_test_suite(level=0):
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
     suite.addTest(_r_policy_test.r_policy_test_case())
     suite.addTest(_topology_test.topology_test_case())
+    suite.addTest(fair_replace_test_case())
     suite.addTest(unconnected_test_case())
     suite.addTest(ring_test_case())
     suite.addTest(fully_connected_test_case())
