@@ -2155,6 +2155,37 @@ class fair_replace_test_case(_ut.TestCase):
             "the migration rate must be an integral or floating-point value" in str(err))
 
 
+class select_best_test_case(_ut.TestCase):
+    """Test case for the select best UDSP
+
+    """
+
+    def runTest(self):
+        from .core import select_best, s_policy
+        udsp = select_best()
+        s_pol = s_policy(udsp=udsp)
+        self.assertEqual(s_pol.get_name(), "Select best")
+        self.assertTrue("Absolute migration rate: 1" in repr(s_pol))
+        s_pol = s_policy(udsp=select_best(rate=0))
+        self.assertTrue("Absolute migration rate: 0" in repr(s_pol))
+        s_pol = s_policy(udsp=select_best(2))
+        self.assertTrue("Absolute migration rate: 2" in repr(s_pol))
+        s_pol = s_policy(udsp=select_best(rate=.5))
+        self.assertTrue("Fractional migration rate: 0.5" in repr(s_pol))
+
+        with self.assertRaises(ValueError) as cm:
+            s_policy(udsp=select_best(-1.2))
+        err = cm.exception
+        self.assertTrue(
+            "Invalid fractional migration rate " in str(err))
+
+        with self.assertRaises(TypeError) as cm:
+            s_policy(udsp=select_best(rate="dsadasdas"))
+        err = cm.exception
+        self.assertTrue(
+            "the migration rate must be an integral or floating-point value" in str(err))
+
+
 class ring_test_case(_ut.TestCase):
     """Test case for the ring UDT
 
@@ -2300,7 +2331,7 @@ def run_test_suite(level=0):
         level(``int``): the test level (higher values run longer tests)
 
     """
-    from . import _problem_test, _algorithm_test, _island_test, _topology_test, _r_policy_test, set_global_rng_seed
+    from . import _problem_test, _algorithm_test, _island_test, _topology_test, _r_policy_test, _s_policy_test, set_global_rng_seed
 
     # Make test runs deterministic.
     # NOTE: we'll need to place the async/migration tests at the end, so that at
@@ -2309,9 +2340,11 @@ def run_test_suite(level=0):
 
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
+    suite.addTest(_s_policy_test.s_policy_test_case())
     suite.addTest(_r_policy_test.r_policy_test_case())
     suite.addTest(_topology_test.topology_test_case())
     suite.addTest(fair_replace_test_case())
+    suite.addTest(select_best_test_case())
     suite.addTest(unconnected_test_case())
     suite.addTest(ring_test_case())
     suite.addTest(fully_connected_test_case())
