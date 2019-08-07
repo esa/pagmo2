@@ -205,17 +205,15 @@ void expose_algorithms_1()
     // GACO
     auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());
     gaco_.def(
-        bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, unsigned,
-                 double, bool>((bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0.,
-                                bp::arg("acc") = 0.01, bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u,
-                                bp::arg("impstop") = 100000u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0.,
-                                bp::arg("paretomax") = 10u, bp::arg("epsilon") = 0.9, bp::arg("memory") = false)));
-    gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double,
-                       unsigned, double, bool, unsigned>(
+        bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, bool>(
+            (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0.,
+             bp::arg("acc") = 0.01, bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u, bp::arg("impstop") = 100000u,
+             bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false)));
+    gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, bool,
+                       unsigned>(
         (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0., bp::arg("acc") = 0.01,
          bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u, bp::arg("impstop") = 100000u,
-         bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("paretomax") = 10u, bp::arg("epsilon") = 0.9,
-         bp::arg("memory") = false, bp::arg("seed"))));
+         bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
     gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
     gaco_.def("set_bfe", &gaco::set_bfe, gaco_set_bfe_docstring().c_str(), bp::arg("b"));

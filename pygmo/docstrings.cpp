@@ -2480,7 +2480,7 @@ Raises:
 
 std::string gaco_docstring()
 {
-    return R"(__init__(gen = 100, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0., paretomax = 10u, epsilon = 0.9, memory = false, seed = random)
+    return R"(__init__(gen = 1, ker = 63, q = 1.0, oracle = 0., acc = 0.01, threshold = 1u, n_gen_mark = 7u, impstop = 100000u, evalstop = 100000u, focus = 0., memory = false, seed = random)
 
 Extended Ant Colony Optimization algorithm (gaco).
 
@@ -2521,14 +2521,12 @@ Args:
     impstop (``int``): improvement stopping criterion
     evalstop (``int``): evaluation stopping criterion
     focus (``float``): focus parameter
-    paretomax (``int``): max number of non-dominated solutions
-    epsilon (``float``): pareto decision parameter
     memory (``bool``): memory parameter
     seed (``int``): seed used by the internal random number generator (default is random)
 
 Raises:
     OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
-    ValueError: if either *acc* is not >=0, *focus* is not >=0, *epsilon* is not in [0,1],
+    ValueError: if either *acc* is not >=0, *focus* is not >=0 or *q* is not >=0,
       *threshold* is not in [1,gen] when gen!=0 and memory==false, or
       *threshold* is not in >=1 when gen!=0 and memory==true
 
@@ -2560,7 +2558,7 @@ Examples:
     >>> import pygmo as pg
     >>> prob = pg.problem(pg.rosenbrock(dim = 2))
     >>> pop = pg.population(prob, size=13, seed=23)
-    >>> algo = pg.algorithm(pg.gaco(10, 13, 1.0, 1e9, 0.0, 1, 7, 100000, 100000, 0.0, 10, 0.9, False, 23))
+    >>> algo = pg.algorithm(pg.gaco(10, 13, 1.0, 1e9, 0.0, 1, 7, 100000, 100000, 0.0, False, 23))
     >>> algo.set_verbosity(1)
     >>> pop = algo.evolve(pop) # doctest: +SKIP
      Gen:        Fevals:          Best:        Kernel:        Oracle:            dx:            dp:
@@ -6105,7 +6103,7 @@ Raises:
 
 std::string bfe_call_docstring()
 {
-    return R"(__call__(self, prob, dvs)
+    return R"(__call__(prob, dvs)
 
 Call operator.
 
@@ -6146,10 +6144,8 @@ Bfe's name.
 If the UDBFE provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
 Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.
 
-The ``get_name()`` method of the UDBFE must return a ``str``.
-
 Returns:
-    ``str``: the bfe's name
+    str: the bfe's name
 
 )";
 }
@@ -6163,10 +6159,8 @@ Bfe's extra info.
 If the UDBFE provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
 method. Otherwise, an empty string will be returned.
 
-The ``get_extra_info()`` method of the UDBFE must return a ``str``.
-
 Returns:
-  ``str``: extra info about the UDBFE
+  str: extra info about the UDBFE
 
 Raises:
   unspecified: any exception thrown by the ``get_extra_info()`` method of the UDBFE

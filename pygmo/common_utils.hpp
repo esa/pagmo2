@@ -347,66 +347,80 @@ inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
                                      .c_str());
 }
 
-// Convert a numpy array to an std::vector<unsigned>.
-inline std::vector<unsigned> a_to_vu(PyArrayObject *o)
+// Convert a numpy array to an std::vector of unsigned integral type.
+template <typename UInt>
+inline std::vector<UInt> a_to_vuint(PyArrayObject *o)
 {
-    using size_type = std::vector<unsigned>::size_type;
+    static_assert(std::is_integral<UInt>::value && std::is_unsigned<UInt>::value,
+                  "This function must be used only with unsigned integral types.");
+
+    using size_type = typename std::vector<UInt>::size_type;
     using int_type = std::make_signed<std::size_t>::type;
+
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of unsigned: "
+        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of unsigned integrals: "
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of unsigned: "
+        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of unsigned integrals: "
                                       "the array must be unidimensional");
     }
     if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
-        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of unsigned: "
+        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of unsigned integrals: "
                                      "invalid scalar type");
     }
     if (PyArray_STRIDES(o)[0] != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned: "
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned integrals: "
                                          "the stride value must be "
                                          + std::to_string(sizeof(int_type)))
                                             .c_str());
     }
     if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned: "
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned integrals: "
                                          "the size of the scalar type must be "
                                          + std::to_string(sizeof(int_type)))
                                             .c_str());
     }
+
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
-    std::vector<unsigned> retval;
+    std::vector<UInt> retval;
     if (size) {
         auto data = static_cast<int_type *>(PyArray_DATA(o));
         std::transform(data, data + size, std::back_inserter(retval),
-                       [](int_type n) { return boost::numeric_cast<unsigned>(n); });
+                       [](int_type n) { return boost::numeric_cast<UInt>(n); });
     }
     return retval;
 }
 
-// Convert an arbitrary python object to a vector of unsigned.
-inline std::vector<unsigned> to_vu(const bp::object &o)
+// Convert an arbitrary python object to a vector of unsigned integrals.
+template <typename UInt>
+inline std::vector<UInt> to_vuint(const bp::object &o)
 {
+    static_assert(std::is_integral<UInt>::value && std::is_unsigned<UInt>::value,
+                  "This function must be used only with unsigned integral types.");
+
     bp::object l = builtin().attr("list");
     bp::object a = bp::import("numpy").attr("ndarray");
+
     if (isinstance(o, l)) {
-        bp::stl_input_iterator<unsigned> begin(o), end;
-        return std::vector<unsigned>(begin, end);
+        bp::stl_input_iterator<UInt> begin(o), end;
+        return std::vector<UInt>(begin, end);
     } else if (isinstance(o, a)) {
         // NOTE: as usual, we try first to create an array of signed ints,
-        // and we convert to unsigned in a_to_vu().
+        // and we convert to unsigned in a_to_vuint().
         using int_type = std::make_signed<std::size_t>::type;
+
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<int_type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             bp::throw_error_already_set();
         }
-        return a_to_vu(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+
+        return a_to_vuint<UInt>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
-    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a vector of ints: only lists of ints and NumPy arrays of ints are supported")
-                                     .c_str());
+    pygmo_throw(PyExc_TypeError,
+                ("cannot convert the type '" + str(type(o))
+                 + "' to a vector of unsigned integrals: only lists of ints and NumPy arrays of ints are supported")
+                    .c_str());
 }
 
 // Convert a sparsity pattern into a numpy array.
