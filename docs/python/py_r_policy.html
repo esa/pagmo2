@@ -1,0 +1,421 @@
+ <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Replacement policy &#8212; pagmo 2.11 documentation</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Selection policy" href="py_s_policy.html" />
+    <link rel="prev" title="Topology" href="py_topology.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.11</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../install.html">Install</a></li>
+                <li><a href="../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cpp/cpp_docs.html">C++ Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp/tutorials/cpp_tut.html">C++ tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/tutorials/cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="python_docs.html">Python Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">2.11 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id15">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id17">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id19">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id23">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id26">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Replacement policy</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="replacement-policy">
+<h1>Replacement policy<a class="headerlink" href="#replacement-policy" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pygmo.r_policy">
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">r_policy</code><span class="sig-paren">(</span><em class="sig-param">udrp = fair_replace()</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.r_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replacement policy.</p>
+<p>A replacement policy establishes
+how, during migration within an <a class="reference internal" href="py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>,
+a group of migrants replaces individuals in an existing
+<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>. In other words, a replacement
+policy is tasked with producing a new set of individuals from
+an original set of individuals and a set of candidate migrants.</p>
+<p>Following the same schema adopted for <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>, <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>, etc.,
+<a class="reference internal" href="#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a> exposes a generic
+interface to <em>user-defined replacement policies</em> (or UDRP for short).
+UDRPs are classes providing a certain set
+of methods that implement the logic of the replacement policy. Once
+defined and instantiated, a UDRP can then be used to construct an instance of this class,
+<a class="reference internal" href="#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a>, which
+provides a generic interface to replacement policies for use by <a class="reference internal" href="py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a>.</p>
+<p>Every UDRP must implement at least the following method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nix</span><span class="p">,</span> <span class="n">nobj</span><span class="p">,</span> <span class="n">nec</span><span class="p">,</span> <span class="n">nic</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">mig</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">replace()</span></code> method takes in input the following parameters:</p>
+<ul class="simple">
+<li><p>a group of individuals <em>inds</em>,</p></li>
+<li><p>a set of arguments describing the properties of the <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> the individuals refer to:</p>
+<ul>
+<li><p>the total dimension <em>nx</em>,</p></li>
+<li><p>the integral dimension <em>nix</em>,</p></li>
+<li><p>the number of objectives <em>nobj</em>,</p></li>
+<li><p>the number of equality constraints <em>nec</em>,</p></li>
+<li><p>the number of inequality constraints <em>nic</em>,</p></li>
+<li><p>the problem’s constraint tolerances <em>tol</em>,</p></li>
+</ul>
+</li>
+<li><p>a set of migrants <em>mig</em>,</p></li>
+</ul>
+<p>and it produces in output another set of individuals resulting from replacing individuals in <em>inds</em> with
+individuals from <em>mig</em> (following some logic established by the UDRP). The sets of individuals <em>inds</em> and
+<em>mig</em>, and the return value of the <code class="docutils literal notranslate"><span class="pre">replace()</span></code> method are represented as tuples of 3 elements containing:</p>
+<ul class="simple">
+<li><p>a 1D NumPy array of individual IDs (represented as 64-bit unsigned integrals),</p></li>
+<li><p>a 2D NumPy array of decision vectors (i.e., the decision vectors of each individual,
+stored in row-major order),</p></li>
+<li><p>a 2D NumPy array of fitness vectors (i.e., the fitness vectors of each individual,
+stored in row-major order).</p></li>
+</ul>
+<p>Additional optional methods can be implemented in a UDRP:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">def</span> <span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>See the documentation of the corresponding methods in this class for details on how the optional
+methods in the UDRP are used by <a class="reference internal" href="#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a>.</p>
+<p>Replacement policies are used in asynchronous operations involving migration in archipelagos,
+and thus they need to provide a certain degree of thread safety. Specifically, the
+<code class="docutils literal notranslate"><span class="pre">replace()</span></code> method of the UDRP might be invoked concurrently with
+any other method of the UDRP interface. It is up to the
+authors of user-defined replacement policies to ensure that this safety requirement is satisfied.</p>
+<p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>udrp</strong> – a user-defined replacement policy, either C++ or Python</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><strong>NotImplementedError</strong></a> – if <em>udrp</em> does not implement the mandatory methods detailed above</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by methods of the UDRP invoked during construction,
+    the deep copy of the UDRP, the constructor of the underlying C++ class, or
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pygmo.r_policy.extract">
+<code class="sig-name descname">extract</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.r_policy.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the user-defined replacement policy.</p>
+<p>This method allows to extract a reference to the user-defined replacement policy (UDRP) stored within this
+<a class="reference internal" href="#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a> instance. The behaviour of this function depends on the value
+of <em>t</em> (which must be a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) and on the type of the internal UDRP:</p>
+<ul class="simple">
+<li><p>if the type of the UDRP is <em>t</em>, then a reference to the UDRP will be returned
+(this mirrors the behaviour of the corresponding C++ method
+<a class="reference internal" href="../cpp/r_policy.html#_CPPv4I0ENK5pagmo8r_policy7extractEPK1Tv" title="pagmo::r_policy::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::r_policy::extract()</span></code></a>),</p></li>
+<li><p>if <em>t</em> is <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a> and the UDRP is a Python object (as opposed to an
+<a class="reference internal" href="r_policies/py_r_policies.html#py-r-policies-cpp"><span class="std std-ref">exposed C++ replacement policy</span></a>), then a reference to the
+UDRP will be returned (this allows to extract a Python UDRP without knowing its type),</p></li>
+<li><p>otherwise, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> will be returned.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type of the user-defined replacement policy to extract</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to the internal user-defined replacement policy, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if the extraction fails</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>t</em> is not a <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.r_policy.get_extra_info">
+<code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.r_policy.get_extra_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replacement policy’s extra info.</p>
+<p>If the UDRP provides a <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code>
+method. Otherwise, an empty string will be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>extra info about the UDRP</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDRP</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.r_policy.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.r_policy.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the replacement policy.</p>
+<p>If the UDRP provides a <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method.
+Otherwise, an implementation-defined name based on the type of the UDRP will be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the name of the replacement policy</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.r_policy.is_">
+<code class="sig-name descname">is_</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.r_policy.is_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the type of the user-defined replacement policy.</p>
+<p>This method returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a> if <a class="reference internal" href="#pygmo.r_policy.extract" title="pygmo.r_policy.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract(t)</span></code></a> returns
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, and <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – the type that will be compared to the type of the UDRP</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether the UDRP is of type <em>t</em> or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#pygmo.r_policy.extract" title="pygmo.r_policy.extract"><code class="xref py py-func docutils literal notranslate"><span class="pre">extract()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.r_policy.replace">
+<code class="sig-name descname">replace</code><span class="sig-paren">(</span><em class="sig-param">inds</em>, <em class="sig-param">nx</em>, <em class="sig-param">nix</em>, <em class="sig-param">nobj</em>, <em class="sig-param">nec</em>, <em class="sig-param">nic</em>, <em class="sig-param">tol</em>, <em class="sig-param">mig</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.r_policy.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace individuals in a group with migrants from another group.</p>
+<p>This method will invoke the <code class="docutils literal notranslate"><span class="pre">replace()</span></code> method of the UDRP.
+Given a set of individuals, <em>inds</em>, and a set of migrants, <em>mig</em>, the <code class="docutils literal notranslate"><span class="pre">replace()</span></code> method of the UDRP
+is expected to replace individuals in <em>inds</em>
+with individuals from <em>mig</em>, and return the new set of individuals resulting from the replacement.
+The other arguments of this method describe the properties of the <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
+that the individuals in <em>inds</em> and <em>mig</em> refer to.</p>
+<p>The sets of individuals <em>inds</em> and <em>mig</em>, and the return value of this method are
+represented as tuples of 3 elements containing:</p>
+<ul class="simple">
+<li><p>a 1D NumPy array of individual IDs (represented as 64-bit unsigned integrals),</p></li>
+<li><p>a 2D NumPy array of decision vectors (i.e., the decision vectors of each individual,
+stored in row-major order),</p></li>
+<li><p>a 2D NumPy array of fitness vectors (i.e., the fitness vectors of each individual,
+stored in row-major order).</p></li>
+</ul>
+<p>In addition to invoking the <code class="docutils literal notranslate"><span class="pre">replace()</span></code> method of the UDRP, this method will also
+perform a variety of sanity checks on both the input arguments and on the output produced by the
+UDRP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the original group of individuals</p></li>
+<li><p><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the dimension of the problem <em>inds</em> and <em>mig</em> refer to</p></li>
+<li><p><strong>nix</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the integral dimension of the problem <em>inds</em> and <em>mig</em> refer to</p></li>
+<li><p><strong>nobj</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of objectives of the problem <em>inds</em> and <em>mig</em> refer to</p></li>
+<li><p><strong>nec</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of equality constraints of the problem <em>inds</em> and <em>mig</em> refer to</p></li>
+<li><p><strong>nic</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of inequality constraints of the problem <em>inds</em> and <em>mig</em> refer to</p></li>
+<li><p><strong>tol</strong> (<em>array-like object</em>) – the vector of constraints tolerances of the problem <em>inds</em> and <em>mig</em> refer to</p></li>
+<li><p><strong>mig</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – the group of migrants</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a new set of individuals resulting from replacing individuals in <em>inds</em> with individuals from <em>mig</em></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><strong>RuntimeError</strong></a> – if the object returned by a pythonic UDRP is not iteratable, or it is an iteratable
+    whose number of elements is not exactly 3, or if the invocation of the <code class="docutils literal notranslate"><span class="pre">replace()</span></code>
+    method of the UDRP raises an exception</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>inds</em>, <em>mig</em> or the return value are not consistent with the problem properties,
+    or the ID, decision and fitness vectors in <em>inds</em>, <em>mig</em> or the return value have inconsistent sizes,
+    or the problem properties are invalid (e.g., <em>nobj</em> is zero, <em>nix</em> &gt; <em>nx</em>, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception raised by failures at the intersection
+    between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-2018, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

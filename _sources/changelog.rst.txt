@@ -7,6 +7,15 @@ Changelog
 New
 ~~~
 
+- NSGA2 can optionally use the batch fitness evaluation framework
+  (`#308 <https://github.com/esa/pagmo2/pull/308>`__).
+
+- Implement the WFG test suite
+  (`#298 <https://github.com/esa/pagmo2/pull/298>`__).
+
+- Migration framework
+  (`#296 <https://github.com/esa/pagmo2/pull/296>`__).
+
 - Various additions to the C++ API of user-defined classes
   (`#294 <https://github.com/esa/pagmo2/pull/294>`__).
 
@@ -23,6 +32,8 @@ New
 
 - Implement the Lennard-Jones and Golomb ruler problems (`#247 <https://github.com/esa/pagmo2/pull/247>`__).
 
+- Batch fitness evaluation framework (`#226 <https://github.com/esa/pagmo2/pull/226>`__).
+
 Changes
 ~~~~~~~
 
@@ -34,6 +45,21 @@ Changes
   OSX and MinGW, as they cause build
   issues (`#266 <https://github.com/esa/pagmo2/pull/266>`__, `#292 <https://github.com/esa/pagmo2/pull/292>`__).
 
+- **BREAKING**: the serialization backend was switched from the
+  Cereal library to the Boost.serialization library. This change has
+  no consequences
+  for Python users, nor for C++ users who use pagmo's CMake machinery.
+  For those C++ users who don't use CMake,
+  this means that in order to use pagmo it is now necessary to link
+  to the Boost.serialization library (`#278 <https://github.com/esa/pagmo2/pull/278>`__).
+
+- **BREAKING**: pagmo is not any more a header-only library, it has now
+  a compiled component. This change has no consequences
+  for Python users, nor for C++ users who use pagmo's CMake machinery.
+  For those C++ users who don't use CMake,
+  this means that in order to use pagmo it is now necessary to link
+  to a compiled library (`#278 <https://github.com/esa/pagmo2/pull/278>`__).
+
 - Various performance improvements in the :cpp:class:`~pagmo::population` API (`#250 <https://github.com/esa/pagmo2/pull/250>`__).
 
 - **BREAKING**: :class:`pygmo.problem` and :class:`pygmo.algorithm`
@@ -42,6 +68,17 @@ Changes
 
 Fix
 ~~~
+
+- Fix a bug in pygmo's plotting utils (`#330 <https://github.com/esa/pagmo2/pull/330>`__).
+
+- Fix a bug in PSO's error handling (`#323 <https://github.com/esa/pagmo2/pull/323>`__).
+
+- Fix a bug in MOEA/D when ``m_neighbours<2`` (`#320 <https://github.com/esa/pagmo2/pull/320>`__).
+
+- Fix type mismatches in the constrained/MO utils (`#315 <https://github.com/esa/pagmo2/pull/315>`__).
+
+- Fix a potential deadlock when setting/getting an island's
+  population/algorithm (`#309 <https://github.com/esa/pagmo2/pull/309>`__).
 
 - Fix a build failure when pagmo is configured without Eigen3 (`#281 <https://github.com/esa/pagmo2/pull/281>`__).
 
@@ -56,7 +93,8 @@ Fix
   `#257 <https://github.com/esa/pagmo2/pull/257>`__, `#262 <https://github.com/esa/pagmo2/pull/262>`__,
   `#265 <https://github.com/esa/pagmo2/pull/265>`__, `#266 <https://github.com/esa/pagmo2/pull/266>`__,
   `#279 <https://github.com/esa/pagmo2/pull/279>`__, `#287 <https://github.com/esa/pagmo2/pull/287>`__,
-  `#288 <https://github.com/esa/pagmo2/pull/288>`__).
+  `#288 <https://github.com/esa/pagmo2/pull/288>`__, `#327 <https://github.com/esa/pagmo2/pull/327>`__,
+  `#328 <https://github.com/esa/pagmo2/pull/328>`__).
 
 - The :cpp:class:`~pagmo::fork_island` UDI now properly cleans up zombie processes (`#242 <https://github.com/esa/pagmo2/pull/242>`__).
 

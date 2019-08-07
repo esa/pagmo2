@@ -1,0 +1,347 @@
+ <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Best selection policy &#8212; pagmo 2.11 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Multi-objective optimization utilities" href="../utils/multi_objective.html" />
+    <link rel="prev" title="Fair replacement policy" href="../r_policies/fair_replace.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.11</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.11 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id8">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id19">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id23">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Best selection policy</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="best-selection-policy">
+<h1>Best selection policy<a class="headerlink" href="#best-selection-policy" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.11.</span></p>
+</div>
+<p><em>#include &lt;pagmo/s_policies/select_best.hpp&gt;</em></p>
+<dl class="class">
+<dt id="_CPPv4N5pagmo11select_bestE">
+<span id="_CPPv3N5pagmo11select_bestE"></span><span id="_CPPv2N5pagmo11select_bestE"></span><span id="pagmo::select_best"></span><em class="property">class </em><code class="sig-name descname">select_best</code><a class="headerlink" href="#_CPPv4N5pagmo11select_bestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This user-defined selection policy (UDSP) will select the <em>best</em>
+individuals from a group.</p>
+<p>In this context, <em>best</em> means the following:</p>
+<ul class="simple">
+<li><p>in single-objective unconstrained problems, individuals are ranked
+according to their fitness function,</p></li>
+<li><p>in single-objective constrained problems, individuals are ranked
+via <a class="reference internal" href="../utils/constrained.html#_CPPv4N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">sort_population_con()</span></code></a>,</p></li>
+<li><p>in multi-objective unconstrained problems, individuals are ranked
+via <a class="reference internal" href="../utils/multi_objective.html#_CPPv4N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE" title="pagmo::sort_population_mo"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">sort_population_mo()</span></code></a>.</p></li>
+</ul>
+<p>See the documentation of <a class="reference internal" href="#_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double" title="pagmo::select_best::select"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">select()</span></code></a> for
+more details on the selection algorithm implemented by this UDSP.</p>
+<p>Note that this user-defined selection policy currently does <em>not</em> support
+multi-objective constrained problems.</p>
+<dl class="function">
+<dt id="_CPPv4N5pagmo11select_best11select_bestEv">
+<span id="_CPPv3N5pagmo11select_best11select_bestEv"></span><span id="_CPPv2N5pagmo11select_best11select_bestEv"></span><span id="pagmo::select_best::select_best"></span><code class="sig-name descname">select_best</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11select_best11select_bestEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor.</p>
+<p>The default constructor initialises a policy with an absolute migration rate
+of 1 (that is, 1 individual will be selected from the input population).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo11select_best11select_bestE1T">
+<span id="_CPPv3I0EN5pagmo11select_best11select_bestE1T"></span><span id="_CPPv2I0EN5pagmo11select_best11select_bestE1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">explicit</em> <code class="sig-name descname">select_best</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11select_best11select_bestE1T" title="pagmo::select_best::select_best::T">T</a> <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11select_best11select_bestE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from a migration rate.</p>
+<p>This constructor participates in overload resolution only if <code class="docutils literal notranslate"><span class="pre">T</span></code> is a C++
+integral or a floating-point type. The input migration rate, <em>x</em>, is used to indicate
+how many individuals will be selected from an input population by the
+<a class="reference internal" href="#_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double" title="pagmo::select_best::select"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">select()</span></code></a> member function.</p>
+<p>If <em>x</em> is a floating point value in the <span class="math notranslate nohighlight">\(\left[0,1\right]\)</span> range,
+then it represents a <em>fractional</em> migration rate. That is, it indicates,
+the fraction of individuals that will be selected from the input population:
+a value of 0 means that no individuals will be selected, a value of 1 means that
+all individuals will be selected.</p>
+<p>If <em>x</em> is an integral value, then it represents an <em>absolute</em> migration rate, that is,
+the exact number of individuals that will be selected from the input population.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the fractional or absolute migration rate.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if the supplied fractional migration rate is not finite
+or not in the <span class="math notranslate nohighlight">\(\left[0,1\right]\)</span> range.</p></li>
+<li><p><strong>unspecified</strong> – any exception raised by <code class="docutils literal notranslate"><span class="pre">boost::numeric_cast()</span></code> while trying
+to convert the input absolute migration rate to <a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">pop_size_t</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double">
+<span id="_CPPv3NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double"></span><span id="_CPPv2NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double"></span><span id="pagmo::select_best::select__individuals_group_tCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> <code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> &amp;<em>inds</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&amp;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&amp;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nobj</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nec</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nic</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This member function will select individuals from <em>inds</em>.</p>
+<p>The selection algorithm determines first how many individuals in <em>inds</em> will be selected. This depends both on
+the migration rate specified upon construction, and on the size of <em>inds</em>.</p>
+<p>After having established the number <span class="math notranslate nohighlight">\(N\)</span> of individuals to be selected from <em>inds</em>,
+the algorithm then ranks the individuals in <em>inds</em> and selects the top <span class="math notranslate nohighlight">\(N\)</span> individuals.
+The ranking method depends on the problem’s properties:</p>
+<ul class="simple">
+<li><p>in single-objective unconstrained problems, the individuals are ranked according to their
+(scalar) fitnesses,</p></li>
+<li><p>in single-objective constrained problems, the ranking of individuals
+is done via <a class="reference internal" href="../utils/constrained.html#_CPPv4N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeERK13vector_double" title="pagmo::sort_population_con"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">sort_population_con()</span></code></a>,</p></li>
+<li><p>in multi-objective unconstrained problems, the ranking of individuals
+is done via <a class="reference internal" href="../utils/multi_objective.html#_CPPv4N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE" title="pagmo::sort_population_mo"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">sort_population_mo()</span></code></a>.</p></li>
+</ul>
+<p>Note that this user-defined selection policy currently does <em>not</em> support
+multi-objective constrained problems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inds</strong> – the input individuals.</p></li>
+<li><p><strong>nobj</strong> – the number of objectives of the problem the individuals in <em>inds</em> refer to.</p></li>
+<li><p><strong>nec</strong> – the number of equality constraints of the problem the individuals in <em>inds</em> refer to.</p></li>
+<li><p><strong>nic</strong> – the number of inequality constraints of the problem the individuals in <em>inds</em> refer to.</p></li>
+<li><p><strong>tol</strong> – the vector of constraint tolerances of the problem the individuals in <em>inds</em> refer to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the group of top <span class="math notranslate nohighlight">\(N\)</span> individuals from <em>inds</em>.</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – <p>in the following cases:</p>
+<ul>
+<li><p>the problem the individuals in <em>inds</em> refer to is
+multi-objective and constrained,</p></li>
+<li><p>an absolute migration rate larger than the number of input individuals
+was specified.</p></li>
+</ul>
+</p></li>
+<li><p><strong>unspecified</strong> – any exception raised by one of the invoked ranking functions or by memory
+allocation errors in standard containers.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo11select_best8get_nameEv">
+<span id="_CPPv3NK5pagmo11select_best8get_nameEv"></span><span id="_CPPv2NK5pagmo11select_best8get_nameEv"></span><span id="pagmo::select_best::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11select_best8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the name of the policy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Select</span> <span class="pre">best&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo11select_best14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo11select_best14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11select_best14get_extra_infoEv"></span><span id="pagmo::select_best::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11select_best14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Human-readable extra info about this selection policy.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo11select_best9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo11select_best9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej" title="pagmo::select_best::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Serialisation support.</p>
+<p>This member function is used to implement the (de)serialisation of this selection policy to/from an archive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – the input/output archive.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception raised by the (de)serialisation of primitive types.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-2018, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

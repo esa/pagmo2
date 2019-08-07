@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Generic optimization utilities" href="../utils/py_generic_utils.html" />
+    <link rel="next" title="List of topologies available in pygmo" href="../topologies/py_topologies.html" />
     <link rel="prev" title="List of islands available in pygmo" href="../islands/py_islands.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head><body>
@@ -85,6 +85,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -95,7 +98,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -211,7 +214,7 @@ the evaluation of the fitnesses of a batch of input decision vectors.</p>
 <p>This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
 construct a <a class="reference internal" href="../py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.</p>
 <p><a class="reference internal" href="#pygmo.member_bfe" title="pygmo.member_bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> is a simple wrapper which delegates batch fitness evaluations
-to the input problem’s <a class="reference internal" href="../py_problem.html#pygmo.problem.batch_fitness" title="pygmo.problem.batch_fitness"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.problem.batch_fitness()</span></code></a> member function.</p>
+to the input problem’s <a class="reference internal" href="../py_problem.html#pygmo.problem.batch_fitness" title="pygmo.problem.batch_fitness"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.problem.batch_fitness()</span></code></a> method.</p>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/batch_evaluators/member_bfe.html#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::member_bfe</span></code></a>.</p>
 </dd></dl>
 

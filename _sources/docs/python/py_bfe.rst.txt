@@ -1,5 +1,5 @@
-Bfe class
-=========
+Batch fitness evaluator
+=======================
 
 .. autoclass:: pygmo.bfe
    :members:

@@ -85,6 +85,9 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -95,7 +98,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -142,7 +145,11 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Island</a></li>
+<li><a class="reference internal" href="#">Island</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#types">Types</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -174,16 +181,19 @@
       
   <div class="section" id="island">
 <h1>Island<a class="headerlink" href="#island" title="Permalink to this headline">¶</a></h1>
+<p><em>#include &lt;pagmo/island.hpp&gt;</em></p>
 <dl class="class">
 <dt id="_CPPv4N5pagmo6islandE">
 <span id="_CPPv3N5pagmo6islandE"></span><span id="_CPPv2N5pagmo6islandE"></span><span id="pagmo::island"></span><span class="target" id="classpagmo_1_1island"></span><em class="property">class </em><code class="sig-name descname">island</code><a class="headerlink" href="#_CPPv4N5pagmo6islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Island class. </p>
 <p><img alt="../../_images/island_no_text.png" src="../../_images/island_no_text.png" /></p>
-<p><p>In the pagmo jargon, an island is a class that encapsulates three entities:</p>
+<p><p>In the pagmo jargon, an island is a class that encapsulates the following entities:</p>
 <ul class="simple">
 <li><p>a user-defined island (UDI),</p></li>
 <li><p>an <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>,</p></li>
-<li><p>a <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a>.</p></li>
+<li><p>a <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a>,</p></li>
+<li><p>a replacement policy (of type <a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">r_policy</span></code></a>),</p></li>
+<li><p>a selection policy (of type <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">s_policy</span></code></a>).</p></li>
 </ul>
 <p>Through the UDI, the island class manages the asynchronous evolution (or optimisation)
 of its <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a> via the algorithm’s <a class="reference internal" href="algorithm.html#_CPPv4NK5pagmo9algorithm6evolveERK10population" title="pagmo::algorithm::evolve"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">evolve()</span></code></a>
@@ -195,6 +205,10 @@ to the <a class="reference internal" href="#_CPPv4N5pagmo6island6evolveEj" title
 and fetch its internal data members. The user can explicitly wait for pending evolutions
 to conclude by calling the <a class="reference internal" href="#_CPPv4N5pagmo6island4waitEv" title="pagmo::island::wait"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">wait()</span></code></a> and <a class="reference internal" href="#_CPPv4N5pagmo6island10wait_checkEv" title="pagmo::island::wait_check"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>
 methods. The status of ongoing evolutions in the island can be queried via <a class="reference internal" href="#_CPPv4NK5pagmo6island6statusEv" title="pagmo::island::status"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">status()</span></code></a>.</p>
+<p>The replacement and selection policies are used when the island is part of an <a class="reference internal" href="archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>.
+They establish how individuals are selected and replaced from the island when migration across islands occurs within
+the <a class="reference internal" href="archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>. If the island is not part of an <a class="reference internal" href="archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>,
+the replacement and selection policies play no role.</p>
 </p>
 <p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>) in conjunction with this class, but advanced users can implement their own UDI types. A user-defined island must implement the following method: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
 </pre></div>
@@ -225,7 +239,7 @@ Any other operation will result in undefined behaviour.</p>
 <dt id="_CPPv4N5pagmo6island6islandEv">
 <span id="_CPPv3N5pagmo6island6islandEv"></span><span id="_CPPv2N5pagmo6island6islandEv"></span><span id="pagmo::island::island"></span><span class="target" id="classpagmo_1_1island_1a716b2228d12ffeeaadbc6471cfded0e3"></span><code class="sig-name descname">island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
-<p>The default constructor will initialise an island containing a UDI of type <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>, and default-constructed <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>.</p>
+<p>The default constructor will initialise an island containing a UDI of type <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>, and default-constructed algorithm, population and replacement/selection policies.</p>
 <p><dl class="simple">
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by any invoked constructor or by memory allocation failures. </p></li>
@@ -239,7 +253,7 @@ Any other operation will result in undefined behaviour.</p>
 <dt id="_CPPv4N5pagmo6island6islandERK6island">
 <span id="_CPPv3N5pagmo6island6islandERK6island"></span><span id="_CPPv2N5pagmo6island6islandERK6island"></span><span id="pagmo::island::island__islandCR"></span><span class="target" id="classpagmo_1_1island_1a63de9c42e1450059504e9d32fbcd7c5b"></span><code class="sig-name descname">island</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6island6islandEv" title="pagmo::island::island">island</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandERK6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy constructor. </p>
-<p>The copy constructor will initialise an island containing a copy of <code class="docutils literal notranslate"><span class="pre">other</span></code>’s UDI, population and algorithm. It is safe to call this constructor while <code class="docutils literal notranslate"><span class="pre">other</span></code> is evolving.</p>
+<p>The copy constructor will initialise an island containing a copy of <code class="docutils literal notranslate"><span class="pre">other</span></code>’s UDI, population, algorithm and replacement/selection policies. It is safe to call this constructor while <code class="docutils literal notranslate"><span class="pre">other</span></code> is evolving.</p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: the island tht will be copied.</p></li>
@@ -249,7 +263,7 @@ Any other operation will result in undefined behaviour.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
 <li><p><a class="reference internal" href="#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">get_population()</span></a> and <a class="reference internal" href="#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">get_algorithm()</span></a>,</p></li>
 <li><p>memory allocation errors,</p></li>
-<li><p>the copy constructors of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </p></li>
+<li><p>copying the island’s members. </p></li>
 </ul>
 </p></li>
 </ul>
@@ -279,7 +293,7 @@ Any other operation will result in undefined behaviour.</p>
 <p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to construct a
-<a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> and <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::population</span></code></a>.</p>
+<a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a> and <code class="docutils literal notranslate"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::population</span></code></a>.</p>
 </div>
 <p>This constructor will use <em>a</em> to construct the internal algorithm, and <em>p</em> to construct
 the internal population. The UDI type will be inferred from the <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">thread_safety</span></code></a> properties
@@ -293,6 +307,7 @@ guarantee, or if the current platform is <em>not</em> POSIX, then the UDI type w
 <p>Note that on non-POSIX platforms, <a class="reference internal" href="islands/thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> will always be selected as the UDI type,
 but island evolutions will fail if the algorithm and/or problem do not provide at least the
 basic <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">thread_safety</span></code></a> guarantee.</p>
+<p>The replacement/selection policies will be default-constructed.</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -306,6 +321,36 @@ basic <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5p
 <li><p>the constructors of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. </p></li>
 </ul>
 </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol">
+<span id="_CPPv3I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol"></span><span id="_CPPv2I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol"></span><span class="target" id="classpagmo_1_1island_1ac6c44bc78dcac67cd12172fd898f722f"></span>template&lt;typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Pop</code>, typename <code class="sig-name descname">RPol</code>, typename <code class="sig-name descname">SPol</code>, algo_pop_pol_enabler&lt;<a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Pop">Pop</a>, <a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::RPol">RPol</a>, <a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::SPol">SPol</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Pop">Pop</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::RPol">RPol</a> &amp;&amp;<em>r</em>, <a class="reference internal" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::SPol">SPol</a> &amp;&amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from algorithm, population and replacement/selection policies. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to construct a
+<a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::population</span></code></a>,
+and <code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">s</span></code> can be used to construct, respectively, a <a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a>
+and a <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::s_policy</span></code></a>.</p>
+</div>
+<p>This constructor is equivalent to the previous one, but it additionally allows
+to specify the replacement and selection policies for the island.</p>
+</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: the input algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input population. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: the input replacement policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: the input selection policy.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the previous constructor or by the construction of the replacement/selection policies. </p></li>
 </ul>
 </dd>
 </dl>
@@ -347,6 +392,40 @@ basic <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5p
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol">
+<span id="_CPPv3I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol"></span><span id="_CPPv2I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol"></span><span class="target" id="classpagmo_1_1island_1a1b62f0a783aa9bf264e75ae369f2cbe2"></span>template&lt;typename <code class="sig-name descname">Isl</code>, typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Pop</code>, typename <code class="sig-name descname">RPol</code>, typename <code class="sig-name descname">SPol</code>, isl_algo_pop_pol_enabler&lt;<a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Isl">Isl</a>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Pop">Pop</a>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::RPol">RPol</a>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::SPol">SPol</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Isl">Isl</a> &amp;&amp;<em>isl</em>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::Pop">Pop</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::RPol">RPol</a> &amp;&amp;<em>r</em>, <a class="reference internal" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="pagmo::island::island::SPol">SPol</a> &amp;&amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from UDI, algorithm, population and replacement/selection policies. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Isl</span></code> satisfies <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udi</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to construct a <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> is an instance of <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::population</span></code></a>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">s</span></code> can be used to construct, respectively, a
+<a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a> and a <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::s_policy</span></code></a>.</p></li>
+</ul>
+</div>
+</p>
+<p>This constructor is equivalent to the previous one, but it additionally allows to specify the replacement and selection policies for the island.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isl</span></code>: the input UDI. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: the input algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input population. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: the input replacement policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: the input selection policy.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the previous constructor or by the construction of the replacement/selection policies. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj">
 <span id="_CPPv3I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj"></span><span id="_CPPv2I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj"></span><span class="target" id="classpagmo_1_1island_1aa81988f971e7e9f55f04c278ea10b095"></span>template&lt;typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, algo_prob_enabler&lt;<a class="reference internal" href="#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="pagmo::island::island::Prob">Prob</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from algorithm, problem, size and seed. </p>
@@ -375,10 +454,49 @@ basic <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5p
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj">
+<span id="_CPPv3I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj"></span><span id="_CPPv2I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj"></span><span class="target" id="classpagmo_1_1island_1ae59448ea340d8dfc932d90b69954bb14"></span>template&lt;typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, typename <code class="sig-name descname">RPol</code>, typename <code class="sig-name descname">SPol</code>, algo_prob_pol_enabler&lt;<a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a>, <a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a>, <a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, <a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a> &amp;&amp;<em>r</em>, <a class="reference internal" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a> &amp;&amp;<em>s</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from algorithm, problem, size, replacement/selections policies and seed. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to construct a
+<a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> can be used to construct a
+<a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>, and <code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">s</span></code> can be used to construct, respectively, a
+<a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a> and a <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::s_policy</span></code></a>.</p>
+</div>
+</p>
+<p>This constructor is equivalent to the previous one, but it additionally allows to specify the replacement and selection policies for the island.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: the input algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input problem. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: the population size. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: the input replacement policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: the input selection policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the population seed.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the previous constructor or by the construction of the replacement/selection policies. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj">
 <span id="_CPPv3I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj"></span><span id="_CPPv2I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj"></span><span class="target" id="classpagmo_1_1island_1a0e8cb9199d03551e847836fd51476f34"></span>template&lt;typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, typename <code class="sig-name descname">Bfe</code>, algo_prob_bfe_enabler&lt;<a class="reference internal" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Prob">Prob</a>, <a class="reference internal" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Bfe">Bfe</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Bfe">Bfe</a> &amp;&amp;<em>b</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from algorithm, problem, batch fitness evaluator, size and seed. </p>
-<p><p>This constructor is equivalent to the previous one, the only difference being that
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to construct a
+<a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> can be used to construct a
+<a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>, and <code class="docutils literal notranslate"><span class="pre">b</span></code> can be used to construct a
+<a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a>.</p>
+</div>
+<p>This constructor is equivalent to the constructor from algorithm, problem, size and seed,
+the only difference being that
 the population’s individuals will be initialised using the input <a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>
 or UDBFE <em>b</em>.</p>
 </p>
@@ -393,6 +511,40 @@ or UDBFE <em>b</em>.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the invoked <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> constructor or by <a class="reference internal" href="#classpagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj">
+<span id="_CPPv3I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj"></span><span id="_CPPv2I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj"></span><span class="target" id="classpagmo_1_1island_1a803220a05c0f36e44683ec1e7c35a9a0"></span>template&lt;typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, typename <code class="sig-name descname">Bfe</code>, typename <code class="sig-name descname">RPol</code>, typename <code class="sig-name descname">SPol</code>, algo_prob_bfe_pol_enabler&lt;<a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Bfe">Bfe</a>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Bfe">Bfe</a> &amp;&amp;<em>b</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a> &amp;&amp;<em>r</em>, <a class="reference internal" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a> &amp;&amp;<em>s</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from algorithm, problem, batch fitness evaluator, size, replacement/selection policies and seed. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to construct a
+<a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> can be used to construct a
+<a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>, <code class="docutils literal notranslate"><span class="pre">b</span></code> can be used to construct a
+<a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a>, and <code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">s</span></code> can be used to construct, respectively, a
+<a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a> and a <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::s_policy</span></code></a>.</p>
+</div>
+<p>This constructor is equivalent to the previous one, but it additionally allows
+to specify the replacement and selection policies for the island.</p>
+</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: the input algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input problem. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: the input (user-defined) batch fitness evaluator. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: the population size. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: the input replacement policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: the input selection policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the population seed.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the previous constructor or by the construction of the replacement/selection policies. </p></li>
 </ul>
 </dd>
 </dl>
@@ -434,10 +586,49 @@ construct a <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9alg
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj">
+<span id="_CPPv3I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj"></span><span id="_CPPv2I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj"></span><span class="target" id="classpagmo_1_1island_1ac4bf35104e459215bbccc43d07e0b9f9"></span>template&lt;typename <code class="sig-name descname">Isl</code>, typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, typename <code class="sig-name descname">RPol</code>, typename <code class="sig-name descname">SPol</code>, isl_algo_prob_pol_enabler&lt;<a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Isl">Isl</a>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Isl">Isl</a> &amp;&amp;<em>isl</em>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a> &amp;&amp;<em>r</em>, <a class="reference internal" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a> &amp;&amp;<em>s</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from UDI, algorithm, problem, size, replacement/selection policies and seed. </p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">Isl</span></code> satisfies <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udi</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to
+construct a <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> can be used to construct a
+<a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>, and <code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">s</span></code> can be used to construct, respectively, a
+<a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a> and a <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::s_policy</span></code></a>.</p>
+</div>
+</p>
+<p>This constructor is equivalent to the previous one, but it additionally allows to specify the replacement and selection policies for the island.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isl</span></code>: the input UDI. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: the input algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input problem. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: the population size. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: the input replacement policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: the input selection policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the population seed.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the previous constructor or by the construction of the replacement/selection policies. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj">
 <span id="_CPPv3I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj"></span><span id="_CPPv2I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj"></span><span class="target" id="classpagmo_1_1island_1afea5a89c12852076aa42939dc1aebeaf"></span>template&lt;typename <code class="sig-name descname">Isl</code>, typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, typename <code class="sig-name descname">Bfe</code>, isl_algo_prob_bfe_enabler&lt;<a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Isl">Isl</a>, <a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Prob">Prob</a>, <a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Bfe">Bfe</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Isl">Isl</a> &amp;&amp;<em>isl</em>, <a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="pagmo::island::island::Bfe">Bfe</a> &amp;&amp;<em>b</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from UDI, algorithm, problem, batch fitness evaluator, size and seed. </p>
-<p><p>This constructor is equivalent to the previous one, the only difference being that
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">Isl</span></code> satisfies <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udi</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to
+construct a <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> can be used to construct a
+<a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>, and <code class="docutils literal notranslate"><span class="pre">b</span></code> can be used to construct a <a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a>.</p>
+</div>
+<p>This constructor is equivalent to the constructor from UDI, algorithm, problem, size and seed,
+the only difference being that
 the population’s individuals will be initialised using the input <a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>
 or UDBFE <em>b</em>.</p>
 </p>
@@ -453,6 +644,41 @@ or UDBFE <em>b</em>.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the invoked <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> constructor or by <a class="reference internal" href="#classpagmo_1_1island_1a1a8e64ead1a6f700e1518b8d4efb30fc"><span class="std std-ref">island(Algo &amp;&amp;, Pop &amp;&amp;)</span></a>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj">
+<span id="_CPPv3I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj"></span><span id="_CPPv2I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj"></span><span class="target" id="classpagmo_1_1island_1ab8e66dd72cc562c2fea4e88c4fea5bf6"></span>template&lt;typename <code class="sig-name descname">Isl</code>, typename <code class="sig-name descname">Algo</code>, typename <code class="sig-name descname">Prob</code>, typename <code class="sig-name descname">Bfe</code>, typename <code class="sig-name descname">RPol</code>, typename <code class="sig-name descname">SPol</code>, isl_algo_prob_bfe_pol_enabler&lt;<a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Isl">Isl</a>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Bfe">Bfe</a>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a>&gt; = 0&gt;<br /><code class="sig-name descname">island</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Isl">Isl</a> &amp;&amp;<em>isl</em>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Algo">Algo</a> &amp;&amp;<em>a</em>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Prob">Prob</a> &amp;&amp;<em>p</em>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::Bfe">Bfe</a> &amp;&amp;<em>b</em>, <a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <em>size</em>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::RPol">RPol</a> &amp;&amp;<em>r</em>, <a class="reference internal" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="pagmo::island::island::SPol">SPol</a> &amp;&amp;<em>s</em>, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from UDI, algorithm, problem, batch fitness evaluator, size, replacement/selection policies and seed. <div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">Isl</span></code> satisfies <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udi</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code> can be used to
+construct a <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, <code class="docutils literal notranslate"><span class="pre">p</span></code> can be used to construct a
+<a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>, <code class="docutils literal notranslate"><span class="pre">b</span></code> can be used to construct a <a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a>,
+and <code class="docutils literal notranslate"><span class="pre">r</span></code> and <code class="docutils literal notranslate"><span class="pre">s</span></code> can be used to construct, respectively, a
+<a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::r_policy</span></code></a> and a <a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::s_policy</span></code></a>.</p>
+</div>
+<p>This constructor is equivalent to the previous one, the only difference being that
+the population’s individuals will be initialised using the input <a class="reference internal" href="bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>
+or UDBFE <em>b</em>.</p>
+</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isl</span></code>: the input UDI. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: the input algorithm. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input problem. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: the input (user-defined) batch fitness evaluator. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: the population size. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>: the input replacement policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: the input selection policy. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the population seed.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the previous constructor or by the construction of the replacement/selection policies. </p></li>
 </ul>
 </dd>
 </dl>
@@ -559,17 +785,27 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 <span id="_CPPv3N5pagmo6island6evolveEj"></span><span id="_CPPv2N5pagmo6island6evolveEj"></span><span id="pagmo::island::evolve__unsigned"></span><span class="target" id="classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"></span>void <code class="sig-name descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Launch evolution. </p>
 <p>This method will evolve the island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using the island’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The evolution happens asynchronously: a call to <a class="reference internal" href="#classpagmo_1_1island_1a3eb7090a0f7174761c7de36ae5799e95"><span class="std std-ref">island::evolve()</span></a> will create an evolution task that will be pushed to a queue, and then return immediately. The tasks in the queue are consumed by a separate thread of execution managed by the <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> object. Each task will invoke the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI <code class="docutils literal notranslate"><span class="pre">n</span></code> times consecutively to perform the actual evolution. The island’s population will be updated at the end of each <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object, and can be re-raised by calling <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">wait_check()</span></a>.</p>
+<p>If the island is part of a <a class="reference internal" href="archipelago.html#classpagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a>, then migration of individuals to/from other islands might occur. The migration algorithm consists of the following steps:</p>
+<p><ul class="simple">
+<li><p>before invoking <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> on the UDI, the island will ask the archipelago if there are candidate incoming individuals from other islands. If so, the replacement policy is invoked and the current population of the island is updated with the migrants;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> is then invoked and the current population is evolved;</p></li>
+<li><p>after <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> has concluded, individuals are selected in the evolved population and copied into the migration database of the archipelago for future migrations.</p></li>
+</ul>
+</p>
 <p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in first-out) fashion. The user may call <a class="reference internal" href="#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> or <a class="reference internal" href="#classpagmo_1_1island_1a95ac6757ad5495532ad8809654285cc8"><span class="std std-ref">island::wait_check()</span></a> to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks. <a class="reference internal" href="#classpagmo_1_1island_1a018b9454bf08df13cbda06d40301ed9b"><span class="std std-ref">island::status()</span></a> can be used to query the status of the asynchronous operations in the island.</p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: the number of times the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will be called within the evolution task.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: the number of times the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will be called within the evolution task. This corresponds also to the number of times migration can happen, if the island belongs to an archipelago.</p></li>
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::out_of_range</span></code>: if the island is part of an archipelago and during migration an invalid island index is used (this can happen if the archipelago’s topology is malformed). </p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by:<ul>
 <li><p>threading primitives,</p></li>
 <li><p>memory allocation errors,</p></li>
-<li><p>the public interface of <code class="docutils literal notranslate"><span class="pre">std::future</span></code>. </p></li>
+<li><p>the public interface of <code class="docutils literal notranslate"><span class="pre">std::future</span></code>,</p></li>
+<li><p>the public interface of <a class="reference internal" href="archipelago.html#classpagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a>,</p></li>
+<li><p>the public interface of the replacement/selection policies. </p></li>
 </ul>
 </p></li>
 </ul>
@@ -689,6 +925,36 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4NK5pagmo6island12get_r_policyEv">
+<span id="_CPPv3NK5pagmo6island12get_r_policyEv"></span><span id="_CPPv2NK5pagmo6island12get_r_policyEv"></span><span id="pagmo::island::get_r_policyC"></span><span class="target" id="classpagmo_1_1island_1a9d3ca08b07bd47e3d5febd0e51e06bc3"></span><a class="reference internal" href="r_policy.html#_CPPv4N5pagmo8r_policyE" title="pagmo::r_policy">r_policy</a> <code class="sig-name descname">get_r_policy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island12get_r_policyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the replacement policy. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a copy of the current replacement policy.</p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor of the replacement policy. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo6island12get_s_policyEv">
+<span id="_CPPv3NK5pagmo6island12get_s_policyEv"></span><span id="_CPPv2NK5pagmo6island12get_s_policyEv"></span><span id="pagmo::island::get_s_policyC"></span><span class="target" id="classpagmo_1_1island_1ac588d9eef6cf1acabdae01eec1fa742f"></span><a class="reference internal" href="s_policy.html#_CPPv4N5pagmo8s_policyE" title="pagmo::s_policy">s_policy</a> <code class="sig-name descname">get_s_policy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island12get_s_policyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the selection policy. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a copy of the current selection policy.</p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the copy constructor of the selection policy. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4NK5pagmo6island8get_nameEv">
 <span id="_CPPv3NK5pagmo6island8get_nameEv"></span><span id="_CPPv2NK5pagmo6island8get_nameEv"></span><span id="pagmo::island::get_nameC"></span><span class="target" id="classpagmo_1_1island_1a2bb0d85b664867d7f53d2f2c804aa4e0"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Island’s name. </p>
@@ -777,6 +1043,34 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 </div>
 </dd></dl>
 
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv4N5pagmolsERNSt7ostreamERK6island">
+<span id="_CPPv3N5pagmolsERNSt7ostreamERK6island"></span><span id="_CPPv2N5pagmolsERNSt7ostreamERK6island"></span><span id="pagmo::lshift-operator__osR.islandCR"></span>std::ostream &amp;<code class="sig-name descname">operator&lt;&lt;</code><span class="sig-paren">(</span>std::ostream &amp;<em>os</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamERK6island" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Stream operator for <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a>.</p>
+<p>This operator will stream to <em>os</em> a human-readable representation of <em>isl</em>.</p>
+<p>It is safe to call this method while the island is evolving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>os</strong> – the target stream.</p></li>
+<li><p><strong>isl</strong> – the input island.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to <em>os</em>.</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception trown by the stream operators of fundamental types or by
+the public interface of <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a> and of all its members.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
 <dl class="enum">
 <dt id="_CPPv4N5pagmo13evolve_statusE">
 <span id="_CPPv3N5pagmo13evolve_statusE"></span><span id="_CPPv2N5pagmo13evolve_statusE"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43af"></span><em class="property">enum </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">evolve_status</code><a class="headerlink" href="#_CPPv4N5pagmo13evolve_statusE" title="Permalink to this definition">¶</a><br /></dt>
@@ -814,6 +1108,7 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 
 </dd></dl>
 
+</div>
 </div>
 
 

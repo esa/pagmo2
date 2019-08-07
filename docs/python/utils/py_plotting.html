@@ -85,6 +85,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -95,7 +98,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -183,16 +186,16 @@ compute the non dominated fronts.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> (<em>2d array-like</em>) – points to plot</p></li>
-<li><p><strong>marker</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – matplotlib marker used to plot the <em>points</em></p></li>
-<li><p><strong>comp</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – Components to be considered in the two dimensional plot (useful in many-objectives cases)</p></li>
-<li><p><strong>axes</strong> (<a class="reference external" href="https://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.1.1)"><em>matplotlib.axes.Axes</em></a>) – plot axes</p></li>
+<li><p><strong>marker</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – matplotlib marker used to plot the <em>points</em></p></li>
+<li><p><strong>comp</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – Components to be considered in the two dimensional plot (useful in many-objectives cases)</p></li>
+<li><p><strong>axes</strong> (<a class="reference external" href="https://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.1.1)"><em>matplotlib.axes.Axes</em></a>) – plot axes (if <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, new axes will be created)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the current <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> instance on the current figure</p>
+<dd class="field-even"><p>the input <em>axes</em> or a new <a class="reference external" href="https://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> instance</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.1.1)">matplotlib.axes.Axes</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>

@@ -84,6 +84,9 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -94,7 +97,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -233,6 +236,12 @@
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>NSGA2 can optionally use the batch fitness evaluation framework
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/308">#308</a>).</p></li>
+<li><p>Implement the WFG test suite
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/298">#298</a>).</p></li>
+<li><p>Migration framework
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/296">#296</a>).</p></li>
 <li><p>Various additions to the C++ API of user-defined classes
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/294">#294</a>).</p></li>
 <li><p>Ipopt is now included in the linux pip packages (<a class="reference external" href="https://github.com/esa/pagmo2/pull/293">#293</a>).</p></li>
@@ -242,6 +251,7 @@
 <li><p>Add CircleCI to the continuous integration pipeline (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
 <li><p>Implement the Extended Ant Colony Optimization algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/249">#249</a>).</p></li>
 <li><p>Implement the Lennard-Jones and Golomb ruler problems (<a class="reference external" href="https://github.com/esa/pagmo2/pull/247">#247</a>).</p></li>
+<li><p>Batch fitness evaluation framework (<a class="reference external" href="https://github.com/esa/pagmo2/pull/226">#226</a>).</p></li>
 </ul>
 </div>
 <div class="section" id="changes">
@@ -253,6 +263,19 @@ been updated, support for Python 3.7 has been added (<a class="reference externa
 <li><p><strong>BREAKING</strong>: unconditionally disable the CEC2013/CEC2014 problem suites on
 OSX and MinGW, as they cause build
 issues (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/292">#292</a>).</p></li>
+<li><p><strong>BREAKING</strong>: the serialization backend was switched from the
+Cereal library to the Boost.serialization library. This change has
+no consequences
+for Python users, nor for C++ users who use pagmo’s CMake machinery.
+For those C++ users who don’t use CMake,
+this means that in order to use pagmo it is now necessary to link
+to the Boost.serialization library (<a class="reference external" href="https://github.com/esa/pagmo2/pull/278">#278</a>).</p></li>
+<li><p><strong>BREAKING</strong>: pagmo is not any more a header-only library, it has now
+a compiled component. This change has no consequences
+for Python users, nor for C++ users who use pagmo’s CMake machinery.
+For those C++ users who don’t use CMake,
+this means that in order to use pagmo it is now necessary to link
+to a compiled library (<a class="reference external" href="https://github.com/esa/pagmo2/pull/278">#278</a>).</p></li>
 <li><p>Various performance improvements in the <a class="reference internal" href="docs/cpp/population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a> API (<a class="reference external" href="https://github.com/esa/pagmo2/pull/250">#250</a>).</p></li>
 <li><p><strong>BREAKING</strong>: <a class="reference internal" href="docs/python/py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a> and <a class="reference internal" href="docs/python/py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.algorithm</span></code></a>
 cannot be used as UDPs and UDAs any more.
@@ -262,6 +285,12 @@ This change makes the behaviour of pygmo consistent with the behaviour of pagmo 
 <div class="section" id="fix">
 <h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Fix a bug in pygmo’s plotting utils (<a class="reference external" href="https://github.com/esa/pagmo2/pull/330">#330</a>).</p></li>
+<li><p>Fix a bug in PSO’s error handling (<a class="reference external" href="https://github.com/esa/pagmo2/pull/323">#323</a>).</p></li>
+<li><p>Fix a bug in MOEA/D when <code class="docutils literal notranslate"><span class="pre">m_neighbours&lt;2</span></code> (<a class="reference external" href="https://github.com/esa/pagmo2/pull/320">#320</a>).</p></li>
+<li><p>Fix type mismatches in the constrained/MO utils (<a class="reference external" href="https://github.com/esa/pagmo2/pull/315">#315</a>).</p></li>
+<li><p>Fix a potential deadlock when setting/getting an island’s
+population/algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/309">#309</a>).</p></li>
 <li><p>Fix a build failure when pagmo is configured without Eigen3 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/281">#281</a>).</p></li>
 <li><p>Fix a build failure in the Ipopt algorithm wrapper when using the Debian/Ubuntu Ipopt packages (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
 <li><p>Fix a few test suite build failures in debug mode when using recent Clang versions (<a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>).</p></li>
@@ -271,7 +300,8 @@ This change makes the behaviour of pygmo consistent with the behaviour of pagmo 
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/257">#257</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/262">#262</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/265">#265</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/266">#266</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/279">#279</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/287">#287</a>,
-<a class="reference external" href="https://github.com/esa/pagmo2/pull/288">#288</a>).</p></li>
+<a class="reference external" href="https://github.com/esa/pagmo2/pull/288">#288</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/327">#327</a>,
+<a class="reference external" href="https://github.com/esa/pagmo2/pull/328">#328</a>).</p></li>
 <li><p>The <a class="reference internal" href="docs/cpp/islands/fork_island.html#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> UDI now properly cleans up zombie processes (<a class="reference external" href="https://github.com/esa/pagmo2/pull/242">#242</a>).</p></li>
 </ul>
 </div>

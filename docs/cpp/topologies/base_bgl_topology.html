@@ -1,0 +1,460 @@
+ <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Base BGL topology &#8212; pagmo 2.11 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Ring" href="ring.html" />
+    <link rel="prev" title="Fully connected" href="fully_connected.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.11</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.11 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id8">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id19">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id23">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Base BGL topology</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="base-bgl-topology">
+<h1>Base BGL topology<a class="headerlink" href="#base-bgl-topology" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.11.</span></p>
+</div>
+<p><em>#include &lt;pagmo/topologies/base_bgl_topology.hpp&gt;</em></p>
+<dl class="class">
+<dt id="_CPPv4N5pagmo17base_bgl_topologyE">
+<span id="_CPPv3N5pagmo17base_bgl_topologyE"></span><span id="_CPPv2N5pagmo17base_bgl_topologyE"></span><span id="pagmo::base_bgl_topology"></span><em class="property">class </em><code class="sig-name descname">base_bgl_topology</code><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This class provides the basic building blocks to implement
+user-defined topologies (UDTs) based on the Boost Graph Library (BGL).</p>
+<p>Note that, by itself, this class does <strong>not</strong> satisfy all the requirements
+of a UDT. Specifically, this class is missing the mandatory <code class="docutils literal notranslate"><span class="pre">push_back()</span></code> member function,
+which has to be implemented in a derived class (see <a class="reference internal" href="../topology.html#_CPPv4I0EN5pagmo6is_udtE" title="pagmo::is_udt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">is_udt</span></code></a> for the
+full list of requirements a UDT must satisfy).</p>
+<p>This class provides a strong thread safety guarantee: any member function can be invoked
+concurrently with any other member function.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/index.html">https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/index.html</a></p>
+</div>
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv">
+<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyEv"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyEv"></span><span id="pagmo::base_bgl_topology::base_bgl_topology"></span><code class="sig-name descname">base_bgl_topology</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor.</p>
+<p>The default constructor will initialize an empty graph with no vertices and no edges.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::base_bgl_topology__base_bgl_topologyCR"></span><code class="sig-name descname">base_bgl_topology</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv" title="pagmo::base_bgl_topology::base_bgl_topology">base_bgl_topology</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::base_bgl_topology__base_bgl_topologyRR"></span><code class="sig-name descname">base_bgl_topology</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv" title="pagmo::base_bgl_topology::base_bgl_topology">base_bgl_topology</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topologyaSERK17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topologyaSERK17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::assign-operator__base_bgl_topologyCR"></span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology">base_bgl_topology</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology">base_bgl_topology</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topologyaSERR17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topologyaSERR17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::assign-operator__base_bgl_topologyRR"></span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology">base_bgl_topology</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology">base_bgl_topology</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a> is copy/move constructible, and copy/move assignable.
+Copy construction/assignment will perform deep copies, move operations will leave the moved-from object in
+an unspecified but valid state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – when performing copy operations, any exception raised by the copy of the underlying graph object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv">
+<span id="_CPPv3NK5pagmo17base_bgl_topology12num_verticesEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology12num_verticesEv"></span><span id="pagmo::base_bgl_topology::num_verticesC"></span>std::size_t <code class="sig-name descname">num_vertices</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of vertices in the topology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE">
+<span id="_CPPv3NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::are_adjacent__std::s.std::sC"></span>bool <code class="sig-name descname">are_adjacent</code><span class="sig-paren">(</span>std::size_t <em>i</em>, std::size_t <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if two vertices are adjacent.</p>
+<p>Two vertices <em>i</em> and <em>j</em> are adjacent if there is a directed edge connecting <em>i</em> to <em>j</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – the first vertex index.</p></li>
+<li><p><strong>j</strong> – the second vertex index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <em>i</em> and <em>j</em> are adjacent, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if <em>i</em> or <em>j</em> are not smaller than the number of vertices.</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE">
+<span id="_CPPv3NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE"></span><span id="pagmo::base_bgl_topology::get_connections__std::sC"></span>std::pair&lt;std::vector&lt;std::size_t&gt;, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_connections</code><span class="sig-paren">(</span>std::size_t <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Fetch the edges connecting to <em>i</em>.</p>
+<p>This function will return a pair of vectors of equal size, containing:</p>
+<ul class="simple">
+<li><p>the list of all vertices connecting to <em>i</em>,</p></li>
+<li><p>the weights of the edges.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> – the vertex index.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the list of connections to <em>i</em>.</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if <em>i</em> is not smaller than the number of vertices.</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology10add_vertexEv">
+<span id="_CPPv3N5pagmo17base_bgl_topology10add_vertexEv"></span><span id="_CPPv2N5pagmo17base_bgl_topology10add_vertexEv"></span><span id="pagmo::base_bgl_topology::add_vertex"></span>void <code class="sig-name descname">add_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology10add_vertexEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add a vertex.</p>
+<p>This function will add a new vertex to the topology. The newly-added vertex
+will be disjoint from any other vertex in the topology (i.e., there are no
+connections to/from the new vertex).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd">
+<span id="_CPPv3N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd"></span><span id="pagmo::base_bgl_topology::add_edge__std::s.std::s.double"></span>void <code class="sig-name descname">add_edge</code><span class="sig-paren">(</span>std::size_t <em>i</em>, std::size_t <em>j</em>, double <em>w</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add a new edge.</p>
+<p>This function will add a new edge of weight <em>w</em> connecting <em>i</em> to <em>j</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – the first vertex index.</p></li>
+<li><p><strong>j</strong> – the second vertex index.</p></li>
+<li><p><strong>w</strong> – the edge’s weight.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – <p>if either:</p>
+<ul>
+<li><p><em>i</em> or <em>j</em> are not smaller than the number of vertices,</p></li>
+<li><p><em>i</em> and <em>j</em> are already adjacent,</p></li>
+<li><p><em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p></li>
+</ul>
+</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE">
+<span id="_CPPv3N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE"></span><span id="_CPPv2N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::remove_edge__std::s.std::s"></span>void <code class="sig-name descname">remove_edge</code><span class="sig-paren">(</span>std::size_t <em>i</em>, std::size_t <em>j</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove an existing edge.</p>
+<p>This function will remove the edge connecting <em>i</em> to <em>j</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – the first vertex index.</p></li>
+<li><p><strong>j</strong> – the second vertex index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – <p>if either:</p>
+<ul>
+<li><p><em>i</em> or <em>j</em> are not smaller than the number of vertices,</p></li>
+<li><p><em>i</em> and <em>j</em> are not adjacent.</p></li>
+</ul>
+</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd">
+<span id="_CPPv3N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd"></span><span id="pagmo::base_bgl_topology::set_weight__std::s.std::s.double"></span>void <code class="sig-name descname">set_weight</code><span class="sig-paren">(</span>std::size_t <em>i</em>, std::size_t <em>j</em>, double <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the weight of an edge.</p>
+<p>This function will set to <em>w</em> the weight of the edge connecting <em>i</em> to <em>j</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – the first vertex index.</p></li>
+<li><p><strong>j</strong> – the second vertex index.</p></li>
+<li><p><strong>w</strong> – the desired weight.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – <p>if either:</p>
+<ul>
+<li><p><em>i</em> or <em>j</em> are not smaller than the number of vertices,</p></li>
+<li><p><em>i</em> and <em>j</em> are not adjacent,</p></li>
+<li><p><em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p></li>
+</ul>
+</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd">
+<span id="_CPPv3N5pagmo17base_bgl_topology15set_all_weightsEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology15set_all_weightsEd"></span><span id="pagmo::base_bgl_topology::set_all_weights__double"></span>void <code class="sig-name descname">set_all_weights</code><span class="sig-paren">(</span>double <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This function will set the weights of all edges in the topology to <em>w</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w</strong> – the edges’ weight.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo17base_bgl_topology14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology14get_extra_infoEv"></span><span id="pagmo::base_bgl_topology::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing human-readable information about the topology.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo17base_bgl_topology4loadEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo17base_bgl_topology4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo17base_bgl_topology4loadER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo17base_bgl_topology4loadEvR7Archivej" title="pagmo::base_bgl_topology::load::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo17base_bgl_topology4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0ENK5pagmo17base_bgl_topology4saveEvR7Archivej">
+<span id="_CPPv3I0ENK5pagmo17base_bgl_topology4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo17base_bgl_topology4saveER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo17base_bgl_topology4saveEvR7Archivej" title="pagmo::base_bgl_topology::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo17base_bgl_topology4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These functions implement the serialisation of a <a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – the input/output archive.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-2018, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

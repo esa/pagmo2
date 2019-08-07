@@ -85,6 +85,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -95,7 +98,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -182,7 +185,7 @@
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is feasible and <span class="math notranslate nohighlight">\(f_2\)</span> is not.</p></li>
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is they are both infeasible, but <span class="math notranslate nohighlight">\(f_1\)</span>
-violates less constraints than <span class="math notranslate nohighlight">\(f_2\)</span>, or in case they both violate the same
+violates fewer constraints than <span class="math notranslate nohighlight">\(f_2\)</span>, or in case they both violate the same
 number of constraints, if the <span class="math notranslate nohighlight">\(L_2\)</span> norm of the overall constraint violation
 is smaller.</p></li>
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value
@@ -234,7 +237,7 @@ containing fitness vectors) assuming a single-objective, constrained case.</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is feasible and <span class="math notranslate nohighlight">\(f_2\)</span> is not.</p></li>
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if <span class="math notranslate nohighlight">\(f_1\)</span> is they are both infeasible, but <span class="math notranslate nohighlight">\(f_1\)</span>
-violates less constraints than <span class="math notranslate nohighlight">\(f_2\)</span>, or in case they both violate the same
+violates fewer constraints than <span class="math notranslate nohighlight">\(f_2\)</span>, or in case they both violate the same
 number of constraints, if the <span class="math notranslate nohighlight">\(L_2\)</span> norm of the overall constraint violation
 is smaller.</p></li>
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if both fitness vectors are feasible and the objective value

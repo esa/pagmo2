@@ -85,6 +85,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -95,7 +98,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="python_docs.html">Python Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -179,11 +182,13 @@
 <dt id="pygmo.island">
 <em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">island</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Island class.</p>
-<p>In the pygmo jargon, an island is a class that encapsulates three entities:</p>
+<p>In the pygmo jargon, an island is a class that encapsulates the following entities:</p>
 <ul class="simple">
 <li><p>a user-defined island (<strong>UDI</strong>),</p></li>
 <li><p>an <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>,</p></li>
-<li><p>a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>.</p></li>
+<li><p>a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>,</p></li>
+<li><p>a replacement policy (of type <a class="reference internal" href="py_r_policy.html#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a>),</p></li>
+<li><p>a selection policy (of type <a class="reference internal" href="py_s_policy.html#pygmo.s_policy" title="pygmo.s_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">s_policy</span></code></a>).</p></li>
 </ul>
 <p>Through the UDI, the island class manages the asynchronous evolution (or optimisation)
 of its <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> via the algorithm’s <a class="reference internal" href="py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a>
@@ -196,10 +201,14 @@ time the user can query the state of the island and fetch its internal data memb
 wait for pending evolutions to conclude by calling the <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait()</span></code></a> and
 <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a> methods. The status of ongoing evolutions in the island can be queried via
 the <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a> attribute.</p>
+<p>The replacement and selection policies are used when the island is part of an <a class="reference internal" href="py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>.
+They establish how individuals are selected and replaced from the island when migration across islands occurs within
+the <a class="reference internal" href="py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>. If the island is not part of an <a class="reference internal" href="py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>,
+the replacement and selection policies play no role.</p>
 <p>Typically, pygmo users will employ an already-available UDI in conjunction with this class (see <a class="reference internal" href="islands/py_islands.html#py-islands"><span class="std std-ref">here</span></a>
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
 the following method:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
   <span class="o">...</span>
 </pre></div>
 </div>
@@ -207,7 +216,7 @@ the following method:</p>
 <a class="reference internal" href="py_algorithm.html#pygmo.algorithm.evolve" title="pygmo.algorithm.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a> method to evolve the input <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> and, once the evolution
 is finished, it will return the algorithm used for the evolution and the evolved <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>.</p>
 <p>In addition to the mandatory <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
   <span class="o">...</span>
 <span class="k">def</span> <span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
   <span class="o">...</span>
@@ -227,12 +236,14 @@ is evolving.</p></li>
 <p>An island can be initialised in a variety of ways using keyword arguments:</p>
 <ul class="simple">
 <li><p>if the arguments list is empty, a default <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> is constructed, containing a
-<a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> UDI, a <a class="reference internal" href="algorithms/py_algorithms.html#pygmo.null_algorithm" title="pygmo.null_algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_algorithm</span></code></a> algorithm and an empty
-population with problem type <a class="reference internal" href="problems/py_problems.html#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a>;</p></li>
-<li><p>if the arguments list contains <em>algo</em>, <em>pop</em> and, optionally, <em>udi</em>, then the constructor will initialise
-an <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> containing the specified algorithm, population and UDI. If the <em>udi</em> parameter
-is not supplied, the UDI type is chosen according to a heuristic which depends on the platform, the
-Python version and the supplied <em>algo</em> and <em>pop</em> parameters:</p>
+<a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> UDI, a <a class="reference internal" href="algorithms/py_algorithms.html#pygmo.null_algorithm" title="pygmo.null_algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_algorithm</span></code></a> algorithm, an empty
+population with problem type <a class="reference internal" href="problems/py_problems.html#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a>, and default-constructed
+<a class="reference internal" href="py_r_policy.html#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a> and <a class="reference internal" href="py_s_policy.html#pygmo.s_policy" title="pygmo.s_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">s_policy</span></code></a>;</p></li>
+<li><p>if the arguments list contains <em>algo</em>, <em>pop</em> and, optionally, <em>udi</em>, <em>r_pol</em> and <em>s_pol</em>, then the constructor will
+initialise an <a class="reference internal" href="#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code></a> containing the specified algorithm, population, UDI and replacement/selection
+policies. If <em>r_pol</em> and/or <em>s_pol</em> are not supplied, the replacement/selection policies will be default-constructed.
+If the <em>udi</em> parameter is not supplied, the UDI type is chosen according to a heuristic which depends
+on the platform, the Python version and the supplied <em>algo</em> and <em>pop</em> parameters:</p>
 <ul>
 <li><p>if <em>algo</em> and <em>pop</em>’s problem provide at least the <a class="reference internal" href="py_misc.html#pygmo.thread_safety.basic" title="pygmo.thread_safety.basic"><code class="xref py py-attr docutils literal notranslate"><span class="pre">basic</span></code></a> thread safety guarantee,
 then <a class="reference internal" href="islands/py_islands.html#pygmo.thread_island" title="pygmo.thread_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> will be selected as UDI type;</p></li>
@@ -240,10 +251,11 @@ then <a class="reference internal" href="islands/py_islands.html#pygmo.thread_is
 will be selected as UDI type, else <a class="reference internal" href="islands/py_islands.html#pygmo.ipyparallel_island" title="pygmo.ipyparallel_island"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel_island</span></code></a> will be chosen;</p></li>
 </ul>
 </li>
-<li><p>if the arguments list contains <em>algo</em>, <em>prob</em>, <em>size</em> and, optionally, <em>udi</em>, <em>b</em> and <em>seed</em>, then a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>
-will be constructed from <em>prob</em>, <em>size</em>, <em>b</em> and <em>seed</em>, and the construction will then proceed in the same way detailed
-above (i.e., <em>algo</em> and the newly-created population are used to initialise the island’s algorithm and population,
-and the UDI, if not specified, will be chosen according to the heuristic detailed above).</p></li>
+<li><p>if the arguments list contains <em>algo</em>, <em>prob</em>, <em>size</em> and, optionally, <em>udi</em>, <em>b</em>, <em>seed</em>, <em>r_pol</em> and <em>s_pol</em>,
+then a <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> will be constructed from <em>prob</em>, <em>size</em>, <em>b</em> and <em>seed</em>, and the construction will
+then proceed in the same way detailed above (i.e., <em>algo</em> and the newly-created population are used to initialise the
+island’s algorithm and population, the UDI, if not specified, will be chosen according to the heuristic detailed above,
+and the replacement/selection policies are given by <em>r_pol</em> and <em>s_pol</em>).</p></li>
 </ul>
 <p>If the keyword arguments list is invalid, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> exception will be raised.</p>
 <p>This class is the Python counterpart of the C++ class <a class="reference internal" href="../cpp/island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a>.</p>
@@ -254,21 +266,20 @@ and the UDI, if not specified, will be chosen according to the heuristic detaile
 <li><p><strong>algo</strong> – a user-defined algorithm (either Python or C++), or an instance of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a></p></li>
 <li><p><strong>pop</strong> (<a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>) – a population</p></li>
 <li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a></p></li>
-<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of individuals</p></li>
 <li><p><strong>b</strong> – a user-defined batch fitness evaluator (either Python or C++), or an instance of <a class="reference internal" href="py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a></p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of individuals</p></li>
+<li><p><strong>r_pol</strong> – a user-defined replacement policy (either Python or C++), or an instance of <a class="reference internal" href="py_r_policy.html#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a></p></li>
+<li><p><strong>s_pol</strong> – a user-defined selection policy (either Python or C++), or an instance of <a class="reference internal" href="py_s_policy.html#pygmo.s_policy" title="pygmo.s_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">s_policy</span></code></a></p></li>
 <li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the random seed (if not specified, it will be randomly-generated)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><strong>KeyError</strong></a> – if the set of keyword arguments is invalid</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by:
-    
-    * the invoked C++ constructors,
-    * the deep copy of the UDI,
-    * the constructors of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> and <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>,
-    * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-      signatures, etc.)</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the invoked C++ constructors,
+    the deep copy of the UDI, the constructors of <a class="reference internal" href="py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> and <a class="reference internal" href="py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a>,
+    failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+    signatures, etc.)</p></li>
 </ul>
 </dd>
 </dl>
@@ -283,18 +294,33 @@ managed by the <a class="reference internal" href="#pygmo.island" title="pygmo.i
 times consecutively to perform the actual evolution. The island’s algorithm and population will be updated at the
 end of each <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> invocation. Exceptions raised inside the tasks are stored within the island object,
 and can be re-raised by calling <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>.</p>
+<p>If the island is part of an <a class="reference internal" href="py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>, then migration of individuals to/from other
+islands might occur. The migration algorithm consists of the following steps:</p>
+<ul class="simple">
+<li><p>before invoking <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> on the UDI, the island will ask the
+archipelago if there are candidate incoming individuals from other islands
+If so, the replacement policy is invoked and the current population of the island is updated with the migrants;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> is then invoked and the current population is evolved;</p></li>
+<li><p>after <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> has concluded, individuals are selected in the
+evolved population and copied into the migration database of the archipelago
+for future migrations.</p></li>
+</ul>
 <p>It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
 first-out) fashion. The user may call <a class="reference internal" href="#pygmo.island.wait" title="pygmo.island.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait()</span></code></a> or <a class="reference internal" href="#pygmo.island.wait_check" title="pygmo.island.wait_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a> to block until all
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks. The <a class="reference internal" href="#pygmo.island.status" title="pygmo.island.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">status</span></code></a>
 attribute can be used to query the status of the asynchronous operations in the island.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – the number of times the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will be called within the evolution task</p>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of times the <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will be called within the evolution task
+(this corresponds also to the number of times migration can happen, if the island belongs to an archipelago)</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.7)"><strong>IndexError</strong></a> – if the island is part of an archipelago and during migration an invalid island index is used (this can
+    happen if the archipelago’s topology is malformed)</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>n</em> is negative or larger than an implementation-defined value</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
+<li><p><strong>unspecified</strong> – any exception thrown by the public interface of <a class="reference internal" href="py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>, the public interface of
+    the replacement/selection policies, the underlying C++ method, or by failures at the intersection between C++ and
     Python (e.g., type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
 </dd>
@@ -374,13 +400,12 @@ UDI will be returned (this allows to extract a Python UDI without knowing its ty
 <p>If the UDI provides a <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code>
 method. Otherwise, an empty string will be returned.</p>
 <p>It is safe to call this method while the island is evolving.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDI must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>extra info about the UDI</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDI</p>
@@ -395,13 +420,12 @@ method. Otherwise, an empty string will be returned.</p>
 <p>If the UDI provides a <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method.
 Otherwise, an implementation-defined name based on the type of the UDI will be returned.</p>
 <p>It is safe to call this method while the island is evolving.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method of the UDI must return a <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the name of the UDI</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method of the UDI</p>
@@ -423,6 +447,34 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.island.get_r_policy">
+<code class="sig-name descname">get_r_policy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.get_r_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the replacement policy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a copy of the current replacement policy</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="py_r_policy.html#pygmo.r_policy" title="pygmo.r_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">r_policy</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.island.get_s_policy">
+<code class="sig-name descname">get_s_policy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.island.get_s_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the selection policy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a copy of the current selection policy</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="py_s_policy.html#pygmo.s_policy" title="pygmo.s_policy"><code class="xref py py-class docutils literal notranslate"><span class="pre">s_policy</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

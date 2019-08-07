@@ -1,0 +1,349 @@
+ <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fully connected &#8212; pagmo 2.11 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Base BGL topology" href="base_bgl_topology.html" />
+    <link rel="prev" title="Unconnected topology" href="unconnected.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>2.11</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../index.html">Home</a></li>
+                <li><a href="../../../install.html">Install</a></li>
+                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">All <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.11 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id8">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id12">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id19">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id23">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">This Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Fully connected</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="fully-connected">
+<h1>Fully connected<a class="headerlink" href="#fully-connected" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.11.</span></p>
+</div>
+<p><em>#include &lt;pagmo/topologies/fully_connected.hpp&gt;</em></p>
+<img alt="../../../_images/fully_connected.png" src="../../../_images/fully_connected.png" />
+<dl class="class">
+<dt id="_CPPv4N5pagmo15fully_connectedE">
+<span id="_CPPv3N5pagmo15fully_connectedE"></span><span id="_CPPv2N5pagmo15fully_connectedE"></span><span id="pagmo::fully_connected"></span><em class="property">class </em><code class="sig-name descname">fully_connected</code><a class="headerlink" href="#_CPPv4N5pagmo15fully_connectedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This user-defined topology (UDT) represents a <em>complete graph</em> (that is, a topology in which
+all vertices connect to all other vertices). The edge weight is configurable at construction,
+and it will be the same for all the edges in the topology.</p>
+<dl class="function">
+<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedEv">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedEv"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedEv"></span><span id="pagmo::fully_connected::fully_connected"></span><code class="sig-name descname">fully_connected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor.</p>
+<p>Equivalent to the constructor from edge weight with <em>w</em> = 1.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedEd">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedEd"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedEd"></span><span id="pagmo::fully_connected::fully_connected__double"></span><em class="property">explicit</em> <code class="sig-name descname">fully_connected</code><span class="sig-paren">(</span>double <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from edge weight.</p>
+<p>Equivalent to the constructor from number of vertices <em>n</em> = 0 and edge
+weight <em>w</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w</strong> – the weight of the edges.</p>
+</dd>
+<dt class="field-even">Except std::invalid_argument</dt>
+<dd class="field-even"><p>if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedENSt6size_tEd"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedENSt6size_tEd"></span><span id="pagmo::fully_connected::fully_connected__std::s.double"></span><em class="property">explicit</em> <code class="sig-name descname">fully_connected</code><span class="sig-paren">(</span>std::size_t <em>n</em>, double <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from number of vertices and edge weight.</p>
+<p>This constructor will initialise a <a class="reference internal" href="#_CPPv4N5pagmo15fully_connectedE" title="pagmo::fully_connected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fully_connected</span></code></a> topology
+with <em>n</em> vertices and whose edges will all have a weight of <em>w</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – the desired number of vertices.</p></li>
+<li><p><strong>w</strong> – the weight of the edges.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Except std::invalid_argument</dt>
+<dd class="field-even"><p>if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedERK15fully_connected"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedERK15fully_connected"></span><span id="pagmo::fully_connected::fully_connected__fully_connectedCR"></span><code class="sig-name descname">fully_connected</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEv" title="pagmo::fully_connected::fully_connected">fully_connected</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedERR15fully_connected"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedERR15fully_connected"></span><span id="pagmo::fully_connected::fully_connected__fully_connectedRR"></span><code class="sig-name descname">fully_connected</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEv" title="pagmo::fully_connected::fully_connected">fully_connected</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#_CPPv4N5pagmo15fully_connectedE" title="pagmo::fully_connected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fully_connected</span></code></a> is copy and move constructible.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo15fully_connected9push_backEv">
+<span id="_CPPv3N5pagmo15fully_connected9push_backEv"></span><span id="_CPPv2N5pagmo15fully_connected9push_backEv"></span><span id="pagmo::fully_connected::push_back"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add a new vertex.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE">
+<span id="_CPPv3NK5pagmo15fully_connected15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo15fully_connected15get_connectionsENSt6size_tE"></span><span id="pagmo::fully_connected::get_connections__std::sC"></span>std::pair&lt;std::vector&lt;std::size_t&gt;, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_connections</code><span class="sig-paren">(</span>std::size_t <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the list of connections to the <em>i</em>-th vertex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> – the index of the vertex whose connections will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the list of vertices connecting to the <em>i</em>-th vertex (that is, all vertices apart from <em>i</em>
+itself) and the corresponding edge weights.</p>
+</dd>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>std::invalid_argument</strong> – if <em>i</em> is not smaller than the current size of the topology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo15fully_connected8get_nameEv">
+<span id="_CPPv3NK5pagmo15fully_connected8get_nameEv"></span><span id="_CPPv2NK5pagmo15fully_connected8get_nameEv"></span><span id="pagmo::fully_connected::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Fully</span> <span class="pre">connected&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo15fully_connected14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo15fully_connected14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo15fully_connected14get_extra_infoEv"></span><span id="pagmo::fully_connected::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a human-readable string containing additional info about this topology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo15fully_connected10get_weightEv">
+<span id="_CPPv3NK5pagmo15fully_connected10get_weightEv"></span><span id="_CPPv2NK5pagmo15fully_connected10get_weightEv"></span><span id="pagmo::fully_connected::get_weightC"></span>double <code class="sig-name descname">get_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected10get_weightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the weight <em>w</em> used when constructing this topology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo15fully_connected12num_verticesEv">
+<span id="_CPPv3NK5pagmo15fully_connected12num_verticesEv"></span><span id="_CPPv2NK5pagmo15fully_connected12num_verticesEv"></span><span id="pagmo::fully_connected::num_verticesC"></span>std::size_t <code class="sig-name descname">num_vertices</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected12num_verticesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of vertices in the topology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0ENK5pagmo15fully_connected4saveEvR7Archivej">
+<span id="_CPPv3I0ENK5pagmo15fully_connected4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo15fully_connected4saveER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo15fully_connected4saveEvR7Archivej" title="pagmo::fully_connected::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo15fully_connected4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo15fully_connected4loadEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo15fully_connected4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo15fully_connected4loadER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo15fully_connected4loadEvR7Archivej" title="pagmo::fully_connected::load::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo15fully_connected4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>These functions implement the (de)serialisation of a <a class="reference internal" href="#_CPPv4N5pagmo15fully_connectedE" title="pagmo::fully_connected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fully_connected</span></code></a> topology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – the input/output archive.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the (de)serialisation of primitive types.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-2018, pagmo development team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -84,6 +84,9 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#utilities">Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
@@ -94,7 +97,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-problems-algorithms-islands-and-bfes">Implemented problems, algorithms, islands and bfes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -209,11 +212,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/problems/py_problems.html#pygmo.ackley">ackley (class in pygmo)</a>
 </li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.add_edge">add_edge() (pygmo.ring method)</a>
+</li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.add_vertex">add_vertex() (pygmo.ring method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm">algorithm (class in pygmo)</a>
 </li>
       <li><a href="docs/python/py_archipelago.html#pygmo.archipelago">archipelago (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.are_adjacent">are_adjacent() (pygmo.ring method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -254,6 +263,8 @@
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.bf_fpras">bf_fpras (class in pygmo)</a>
 </li>
       <li><a href="docs/python/py_bfe.html#pygmo.bfe">bfe (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/py_misc.html#pygmo.migration_type.broadcast">broadcast (pygmo.migration_type attribute)</a>
 </li>
       <li><a href="docs/python/py_misc.html#pygmo.evolve_status.busy">busy (pygmo.evolve_status attribute)</a>
 </li>
@@ -331,6 +342,8 @@
 </li>
       <li><a href="docs/python/utils/py_gh_utils.html#pygmo.estimate_sparsity">estimate_sparsity() (in module pygmo)</a>
 </li>
+      <li><a href="docs/python/py_misc.html#pygmo.migrant_handling.evict">evict (pygmo.migrant_handling attribute)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.evolve">evolve() (pygmo.algorithm method)</a>
 
       <ul>
@@ -339,10 +352,10 @@
         <li><a href="docs/python/py_island.html#pygmo.island.evolve">(pygmo.island method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_misc.html#pygmo.evolve_status">evolve_status (class in pygmo)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.exclusive">exclusive() (pygmo.hypervolume method)</a>
 </li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.extract">extract() (pygmo.algorithm method)</a>
@@ -354,6 +367,12 @@
 </li>
         <li><a href="docs/python/py_problem.html#pygmo.problem.extract">(pygmo.problem method)</a>
 </li>
+        <li><a href="docs/python/py_r_policy.html#pygmo.r_policy.extract">(pygmo.r_policy method)</a>
+</li>
+        <li><a href="docs/python/py_s_policy.html#pygmo.s_policy.extract">(pygmo.s_policy method)</a>
+</li>
+        <li><a href="docs/python/py_topology.html#pygmo.topology.extract">(pygmo.topology method)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -361,6 +380,8 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/r_policies/py_r_policies.html#pygmo.fair_replace">fair_replace (class in pygmo)</a>
+</li>
       <li><a href="docs/python/utils/py_mo_utils.html#pygmo.fast_non_dominated_sorting">fast_non_dominated_sorting() (in module pygmo)</a>
 </li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.feasibility_f">feasibility_f() (pygmo.problem method)</a>
@@ -374,6 +395,8 @@
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.ftol_abs">ftol_abs() (pygmo.nlopt property)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nlopt.ftol_rel">ftol_rel() (pygmo.nlopt property)</a>
+</li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.fully_connected">fully_connected (class in pygmo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -391,6 +414,8 @@
 </li>
       <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_champions_x">get_champions_x() (pygmo.archipelago method)</a>
 </li>
+      <li><a href="docs/python/py_topology.html#pygmo.topology.get_connections">get_connections() (pygmo.topology method)</a>
+</li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.decorator_problem.get_decorator">get_decorator() (pygmo.decorator_problem method)</a>
 </li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_extra_info">get_extra_info() (pygmo.algorithm method)</a>
@@ -405,6 +430,12 @@
         <li><a href="docs/python/islands/py_islands.html#pygmo.mp_island.get_extra_info">(pygmo.mp_island method)</a>
 </li>
         <li><a href="docs/python/py_problem.html#pygmo.problem.get_extra_info">(pygmo.problem method)</a>
+</li>
+        <li><a href="docs/python/py_r_policy.html#pygmo.r_policy.get_extra_info">(pygmo.r_policy method)</a>
+</li>
+        <li><a href="docs/python/py_s_policy.html#pygmo.s_policy.get_extra_info">(pygmo.s_policy method)</a>
+</li>
+        <li><a href="docs/python/py_topology.html#pygmo.topology.get_extra_info">(pygmo.topology method)</a>
 </li>
       </ul></li>
       <li><a href="docs/python/py_population.html#pygmo.population.get_f">get_f() (pygmo.population method)</a>
@@ -471,6 +502,14 @@
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.xnes.get_log">(pygmo.xnes method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_migrant_handling">get_migrant_handling() (pygmo.archipelago method)</a>
+</li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_migrants_db">get_migrants_db() (pygmo.archipelago method)</a>
+</li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_migration_log">get_migration_log() (pygmo.archipelago method)</a>
+</li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_migration_type">get_migration_type() (pygmo.archipelago method)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.get_name">get_name() (pygmo.algorithm method)</a>
 
       <ul>
@@ -483,6 +522,12 @@
         <li><a href="docs/python/islands/py_islands.html#pygmo.mp_island.get_name">(pygmo.mp_island method)</a>
 </li>
         <li><a href="docs/python/py_problem.html#pygmo.problem.get_name">(pygmo.problem method)</a>
+</li>
+        <li><a href="docs/python/py_r_policy.html#pygmo.r_policy.get_name">(pygmo.r_policy method)</a>
+</li>
+        <li><a href="docs/python/py_s_policy.html#pygmo.s_policy.get_name">(pygmo.s_policy method)</a>
+</li>
+        <li><a href="docs/python/py_topology.html#pygmo.topology.get_name">(pygmo.topology method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -510,6 +555,10 @@
       <li><a href="docs/python/islands/py_islands.html#pygmo.mp_island.get_pool_size">get_pool_size() (pygmo.mp_island static method)</a>
 </li>
       <li><a href="docs/python/py_island.html#pygmo.island.get_population">get_population() (pygmo.island method)</a>
+</li>
+      <li><a href="docs/python/py_island.html#pygmo.island.get_r_policy">get_r_policy() (pygmo.island method)</a>
+</li>
+      <li><a href="docs/python/py_island.html#pygmo.island.get_s_policy">get_s_policy() (pygmo.island method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.bee_colony.get_seed">get_seed() (pygmo.bee_colony method)</a>
 
@@ -563,10 +612,18 @@
         <li><a href="docs/python/py_problem.html#pygmo.problem.get_thread_safety">(pygmo.problem method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.get_topology">get_topology() (pygmo.archipelago method)</a>
+</li>
       <li><a href="docs/python/py_problem.html#pygmo.problem.get_ub">get_ub() (pygmo.problem method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.get_verbosity">get_verbosity() (pygmo.mbh method)</a>
 </li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.fully_connected.get_weight">get_weight() (pygmo.fully_connected method)</a>
+
+      <ul>
+        <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.get_weight">(pygmo.ring method)</a>
+</li>
+      </ul></li>
       <li><a href="docs/python/py_population.html#pygmo.population.get_x">get_x() (pygmo.population method)</a>
 </li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.golomb_ruler">golomb_ruler (class in pygmo)</a>
@@ -653,10 +710,10 @@
         <li><a href="docs/python/problems/py_problems.html#pygmo.unconstrain.inner_problem">(pygmo.unconstrain property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/problems/py_problems.html#pygmo.inventory">inventory (class in pygmo)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt">ipopt (class in pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.ipyparallel_island">ipyparallel_island (class in pygmo)</a>
@@ -669,6 +726,12 @@
         <li><a href="docs/python/py_island.html#pygmo.island.is_">(pygmo.island method)</a>
 </li>
         <li><a href="docs/python/py_problem.html#pygmo.problem.is_">(pygmo.problem method)</a>
+</li>
+        <li><a href="docs/python/py_r_policy.html#pygmo.r_policy.is_">(pygmo.r_policy method)</a>
+</li>
+        <li><a href="docs/python/py_s_policy.html#pygmo.s_policy.is_">(pygmo.s_policy method)</a>
+</li>
+        <li><a href="docs/python/py_topology.html#pygmo.topology.is_">(pygmo.topology method)</a>
 </li>
       </ul></li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.is_stochastic">is_stochastic() (pygmo.algorithm method)</a>
@@ -707,9 +770,13 @@
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh">mbh (class in pygmo)</a>
 </li>
+      <li><a href="docs/python/bfes/py_bfes.html#pygmo.member_bfe">member_bfe (class in pygmo)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/bfes/py_bfes.html#pygmo.member_bfe">member_bfe (class in pygmo)</a>
+      <li><a href="docs/python/py_misc.html#pygmo.migrant_handling">migrant_handling (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/py_misc.html#pygmo.migration_type">migration_type (class in pygmo)</a>
 </li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.minlp_rastrigin">minlp_rastrigin (class in pygmo)</a>
 </li>
@@ -729,16 +796,22 @@
 </li>
       <li><a href="docs/python/utils/py_mo_utils.html#pygmo.non_dominated_front_2d">non_dominated_front_2d() (in module pygmo)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_misc.html#pygmo.thread_safety.none">none (pygmo.thread_safety attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.nsga2">nsga2 (class in pygmo)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.null_algorithm">null_algorithm (class in pygmo)</a>
 </li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.null_problem">null_problem (class in pygmo)</a>
 </li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.fully_connected.num_vertices">num_vertices() (pygmo.fully_connected method)</a>
+
+      <ul>
+        <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.num_vertices">(pygmo.ring method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -753,6 +826,8 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/py_misc.html#pygmo.migration_type.p2p">p2p (pygmo.migration_type attribute)</a>
+</li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.dtlz.p_distance">p_distance() (pygmo.dtlz method)</a>
 
       <ul>
@@ -811,7 +886,7 @@
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelagoE">pagmo::archipelago (C++ class)</a>
 </li>
-      <li><a href="docs/cpp/archipelago.html#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args">pagmo::archipelago::archipelago (C++ function)</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago11archipelagoERK11archipelago">[1]</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago11archipelagoERR11archipelago">[2]</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago11archipelagoEv">[3]</a>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args">pagmo::archipelago::archipelago (C++ function)</a>, <a href="docs/cpp/archipelago.html#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo">[1]</a>, <a href="docs/cpp/archipelago.html#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args">[2]</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago11archipelagoERK11archipelago">[3]</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago11archipelagoERR11archipelago">[4]</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago11archipelagoEv">[5]</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago5beginEv">pagmo::archipelago::begin (C++ function)</a>, <a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago5beginEv">[1]</a>
 </li>
@@ -825,9 +900,25 @@
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago15get_champions_xEv">pagmo::archipelago::get_champions_x (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago20get_migrant_handlingEv">pagmo::archipelago::get_migrant_handling (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago15get_migrants_dbEv">pagmo::archipelago::get_migrants_db (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago17get_migration_logEv">pagmo::archipelago::get_migration_log (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago18get_migration_typeEv">pagmo::archipelago::get_migration_type (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago12get_topologyEv">pagmo::archipelago::get_topology (C++ function)</a>
+</li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago8iteratorE">pagmo::archipelago::iterator (C++ type)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4I0EN5pagmo11archipelago4loadEvR7Archivej">pagmo::archipelago::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago13migrants_db_tE">pagmo::archipelago::migrants_db_t (C++ type)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago17migration_entry_tE">pagmo::archipelago::migration_entry_t (C++ type)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago15migration_log_tE">pagmo::archipelago::migration_log_t (C++ type)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelagoaSERK11archipelago">pagmo::archipelago::operator= (C++ function)</a>, <a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelagoaSERR11archipelago">[1]</a>
 </li>
@@ -836,6 +927,12 @@
       <li><a href="docs/cpp/archipelago.html#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args">pagmo::archipelago::push_back (C++ function)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4I0ENK5pagmo11archipelago4saveEvR7Archivej">pagmo::archipelago::save (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago20set_migrant_handlingE16migrant_handling">pagmo::archipelago::set_migrant_handling (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago18set_migration_typeE14migration_type">pagmo::archipelago::set_migration_type (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago12set_topologyE8topology">pagmo::archipelago::set_topology (C++ function)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4NK5pagmo11archipelago4sizeEv">pagmo::archipelago::size (C++ function)</a>
 </li>
@@ -848,6 +945,34 @@
       <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago10wait_checkEv">pagmo::archipelago::wait_check (C++ function)</a>
 </li>
       <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelagoD0Ev">pagmo::archipelago::~archipelago (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE">pagmo::base_bgl_topology (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd">pagmo::base_bgl_topology::add_edge (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology10add_vertexEv">pagmo::base_bgl_topology::add_vertex (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE">pagmo::base_bgl_topology::are_adjacent (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology">pagmo::base_bgl_topology::base_bgl_topology (C++ function)</a>, <a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology">[1]</a>, <a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv">[2]</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE">pagmo::base_bgl_topology::get_connections (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv">pagmo::base_bgl_topology::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4I0EN5pagmo17base_bgl_topology4loadEvR7Archivej">pagmo::base_bgl_topology::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv">pagmo::base_bgl_topology::num_vertices (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology">pagmo::base_bgl_topology::operator= (C++ function)</a>, <a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology">[1]</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE">pagmo::base_bgl_topology::remove_edge (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4I0ENK5pagmo17base_bgl_topology4saveEvR7Archivej">pagmo::base_bgl_topology::save (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd">pagmo::base_bgl_topology::set_all_weights (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd">pagmo::base_bgl_topology::set_weight (C++ function)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/generic.html#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng">pagmo::batch_random_decision_vector (C++ function)</a>
 </li>
@@ -904,6 +1029,8 @@
       <li><a href="docs/cpp/bfe.html#_CPPv4I0ENK5pagmo3bfe4saveEvR7Archivej">pagmo::bfe::save (C++ function)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/generic.html#_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">pagmo::binomial_coefficient (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo9broadcastE">pagmo::broadcast (C++ enumerator)</a>
 </li>
       <li><a href="docs/cpp/island.html#_CPPv4N5pagmo4busyE">pagmo::busy (C++ enumerator)</a>
 </li>
@@ -1185,7 +1312,21 @@
 </li>
       <li><a href="docs/cpp/utils/gradient_and_hessians.html#_CPPv4I0EN5pagmo17estimate_sparsityE16sparsity_pattern4FuncRK13vector_doubled">pagmo::estimate_sparsity (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo5evictE">pagmo::evict (C++ enumerator)</a>
+</li>
       <li><a href="docs/cpp/island.html#_CPPv4N5pagmo13evolve_statusE">pagmo::evolve_status (C++ enum)</a>
+</li>
+      <li><a href="docs/cpp/r_policies/fair_replace.html#_CPPv4N5pagmo12fair_replaceE">pagmo::fair_replace (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/r_policies/fair_replace.html#_CPPv4I0EN5pagmo12fair_replace12fair_replaceE1T">pagmo::fair_replace::fair_replace (C++ function)</a>, <a href="docs/cpp/r_policies/fair_replace.html#_CPPv4N5pagmo12fair_replace12fair_replaceEv">[1]</a>
+</li>
+      <li><a href="docs/cpp/r_policies/fair_replace.html#_CPPv4NK5pagmo12fair_replace14get_extra_infoEv">pagmo::fair_replace::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policies/fair_replace.html#_CPPv4NK5pagmo12fair_replace8get_nameEv">pagmo::fair_replace::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policies/fair_replace.html#_CPPv4NK5pagmo12fair_replace7replaceERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_doubleRK19individuals_group_t">pagmo::fair_replace::replace (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policies/fair_replace.html#_CPPv4I0EN5pagmo12fair_replace9serializeEvR7Archivej">pagmo::fair_replace::serialize (C++ function)</a>
 </li>
       <li><a href="docs/cpp/utils/multi_objective.html#_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE">pagmo::fast_non_dominated_sorting (C++ function)</a>
 </li>
@@ -1202,6 +1343,26 @@
       <li><a href="docs/cpp/islands/fork_island.html#_CPPv4NK5pagmo11fork_island10run_evolveER6island">pagmo::fork_island::run_evolve (C++ function)</a>
 </li>
       <li><a href="docs/cpp/islands/fork_island.html#_CPPv4I0EN5pagmo11fork_island9serializeEvR7Archivej">pagmo::fork_island::serialize (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connectedE">pagmo::fully_connected (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd">pagmo::fully_connected::fully_connected (C++ function)</a>, <a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected">[1]</a>, <a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected">[2]</a>, <a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connected15fully_connectedEd">[3]</a>, <a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connected15fully_connectedEv">[4]</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE">pagmo::fully_connected::get_connections (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4NK5pagmo15fully_connected14get_extra_infoEv">pagmo::fully_connected::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4NK5pagmo15fully_connected8get_nameEv">pagmo::fully_connected::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4NK5pagmo15fully_connected10get_weightEv">pagmo::fully_connected::get_weight (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4I0EN5pagmo15fully_connected4loadEvR7Archivej">pagmo::fully_connected::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4NK5pagmo15fully_connected12num_verticesEv">pagmo::fully_connected::num_vertices (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4N5pagmo15fully_connected9push_backEv">pagmo::fully_connected::push_back (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/fully_connected.html#_CPPv4I0ENK5pagmo15fully_connected4saveEvR7Archivej">pagmo::fully_connected::save (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/gaco.html#_CPPv4N5pagmo4gacoE">pagmo::gaco (C++ class)</a>
 </li>
@@ -1329,6 +1490,10 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo11has_fitness5valueE">pagmo::has_fitness::value (C++ member)</a>
 </li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo19has_get_connectionsE">pagmo::has_get_connections (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4N5pagmo19has_get_connections5valueE">pagmo::has_get_connections::value (C++ member)</a>
+</li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4I0EN5pagmo12has_get_nobjE">pagmo::has_get_nobj (C++ class)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo12has_get_nobj5valueE">pagmo::has_get_nobj::value (C++ member)</a>
@@ -1365,9 +1530,21 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo8has_name5valueE">pagmo::has_name::value (C++ member)</a>
 </li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo13has_push_backE">pagmo::has_push_back (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4N5pagmo13has_push_back5valueE">pagmo::has_push_back::value (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0EN5pagmo11has_replaceE">pagmo::has_replace (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4N5pagmo11has_replace5valueE">pagmo::has_replace::value (C++ member)</a>
+</li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4I0EN5pagmo14has_run_evolveE">pagmo::has_run_evolve (C++ class)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo14has_run_evolve5valueE">pagmo::has_run_evolve::value (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0EN5pagmo10has_selectE">pagmo::has_select (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4N5pagmo10has_select5valueE">pagmo::has_select::value (C++ member)</a>
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4I0EN5pagmo12has_set_seedE">pagmo::has_set_seed (C++ class)</a>
 </li>
@@ -1469,6 +1646,8 @@
 </li>
       <li><a href="docs/cpp/algorithms/ihs.html#_CPPv4N5pagmo3ihs13set_verbosityEj">pagmo::ihs::set_verbosity (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/types.html#_CPPv4N5pagmo19individuals_group_tE">pagmo::individuals_group_t (C++ type)</a>
+</li>
       <li><a href="docs/cpp/problems/inventory.html#_CPPv4N5pagmo9inventoryE">pagmo::inventory (C++ class)</a>
 </li>
       <li><a href="docs/cpp/problems/inventory.html#_CPPv4NK5pagmo9inventory7fitnessERK13vector_double">pagmo::inventory::fitness (C++ function)</a>
@@ -1549,6 +1728,18 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo6is_udp5valueE">pagmo::is_udp::value (C++ member)</a>
 </li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0EN5pagmo7is_udrpE">pagmo::is_udrp (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4N5pagmo7is_udrp5valueE">pagmo::is_udrp::value (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0EN5pagmo7is_udspE">pagmo::is_udsp (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4N5pagmo7is_udsp5valueE">pagmo::is_udsp::value (C++ member)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo6is_udtE">pagmo::is_udt (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4N5pagmo6is_udt5valueE">pagmo::is_udt::value (C++ member)</a>
+</li>
       <li><a href="docs/cpp/island.html#_CPPv4N5pagmo6islandE">pagmo::island (C++ class)</a>
 </li>
       <li><a href="docs/cpp/island.html#_CPPv4N5pagmo6island6evolveEj">pagmo::island::evolve (C++ function)</a>
@@ -1563,11 +1754,15 @@
 </li>
       <li><a href="docs/cpp/island.html#_CPPv4NK5pagmo6island14get_populationEv">pagmo::island::get_population (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/island.html#_CPPv4NK5pagmo6island12get_r_policyEv">pagmo::island::get_r_policy (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/island.html#_CPPv4NK5pagmo6island12get_s_policyEv">pagmo::island::get_s_policy (C++ function)</a>
+</li>
       <li><a href="docs/cpp/island.html#_CPPv4I0ENK5pagmo6island2isEbv">pagmo::island::is (C++ function)</a>
 </li>
       <li><a href="docs/cpp/island.html#_CPPv4NK5pagmo6island8is_validEv">pagmo::island::is_valid (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/island.html#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj">pagmo::island::island (C++ function)</a>, <a href="docs/cpp/island.html#_CPPv4I000_20isl_algo_pop_enablerI3Isl4Algo3PopEEN5pagmo6island6islandERR3IslRR4AlgoRR3Pop">[1]</a>, <a href="docs/cpp/island.html#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj">[2]</a>, <a href="docs/cpp/island.html#_CPPv4I000_21isl_algo_prob_enablerI3Isl4Algo4ProbEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeEj">[3]</a>, <a href="docs/cpp/island.html#_CPPv4I00_16algo_pop_enablerI4Algo3PopEEN5pagmo6island6islandERR4AlgoRR3Pop">[4]</a>, <a href="docs/cpp/island.html#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj">[5]</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmo6island6islandERK6island">[6]</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmo6island6islandERR6island">[7]</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmo6island6islandEv">[8]</a>
+      <li><a href="docs/cpp/island.html#_CPPv4I000000_29isl_algo_prob_bfe_pol_enablerI3Isl4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj">pagmo::island::island (C++ function)</a>, <a href="docs/cpp/island.html#_CPPv4I00000_24isl_algo_pop_pol_enablerI3Isl4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR3PopRR4RPolRR4SPol">[1]</a>, <a href="docs/cpp/island.html#_CPPv4I00000_25algo_prob_bfe_pol_enablerI4Algo4Prob3Bfe4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeERR4RPolRR4SPolj">[2]</a>, <a href="docs/cpp/island.html#_CPPv4I00000_25isl_algo_prob_pol_enablerI3Isl4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj">[3]</a>, <a href="docs/cpp/island.html#_CPPv4I0000_20algo_pop_pol_enablerI4Algo3Pop4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR3PopRR4RPolRR4SPol">[4]</a>, <a href="docs/cpp/island.html#_CPPv4I0000_21algo_prob_pol_enablerI4Algo4Prob4RPol4SPolEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeERR4RPolRR4SPolj">[5]</a>, <a href="docs/cpp/island.html#_CPPv4I0000_25isl_algo_prob_bfe_enablerI3Isl4Algo4Prob3BfeEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbRR3BfeN10population9size_typeEj">[6]</a>, <a href="docs/cpp/island.html#_CPPv4I000_20isl_algo_pop_enablerI3Isl4Algo3PopEEN5pagmo6island6islandERR3IslRR4AlgoRR3Pop">[7]</a>, <a href="docs/cpp/island.html#_CPPv4I000_21algo_prob_bfe_enablerI4Algo4Prob3BfeEEN5pagmo6island6islandERR4AlgoRR4ProbRR3BfeN10population9size_typeEj">[8]</a>, <a href="docs/cpp/island.html#_CPPv4I000_21isl_algo_prob_enablerI3Isl4Algo4ProbEEN5pagmo6island6islandERR3IslRR4AlgoRR4ProbN10population9size_typeEj">[9]</a>, <a href="docs/cpp/island.html#_CPPv4I00_16algo_pop_enablerI4Algo3PopEEN5pagmo6island6islandERR4AlgoRR3Pop">[10]</a>, <a href="docs/cpp/island.html#_CPPv4I00_17algo_prob_enablerI4Algo4ProbEEN5pagmo6island6islandERR4AlgoRR4ProbN10population9size_typeEj">[11]</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmo6island6islandERK6island">[12]</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmo6island6islandERR6island">[13]</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmo6island6islandEv">[14]</a>
 </li>
       <li><a href="docs/cpp/island.html#_CPPv4I0EN5pagmo6island4loadEvR7Archivej">pagmo::island::load (C++ function)</a>
 </li>
@@ -1601,10 +1796,10 @@
 </li>
       <li><a href="docs/cpp/problems/lennard_jones.html#_CPPv4I0EN5pagmo13lennard_jones9serializeEvR7Archivej">pagmo::lennard_jones::serialize (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/problems/luksan_vlcek1.html#_CPPv4N5pagmo13luksan_vlcek1E">pagmo::luksan_vlcek1 (C++ class)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/cpp/problems/luksan_vlcek1.html#_CPPv4N5pagmo13luksan_vlcek1E">pagmo::luksan_vlcek1 (C++ class)</a>
+</li>
       <li><a href="docs/cpp/problems/luksan_vlcek1.html#_CPPv4NK5pagmo13luksan_vlcek17fitnessERK13vector_double">pagmo::luksan_vlcek1::fitness (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/luksan_vlcek1.html#_CPPv4NK5pagmo13luksan_vlcek110get_boundsEv">pagmo::luksan_vlcek1::get_bounds (C++ function)</a>
@@ -1664,6 +1859,10 @@
       <li><a href="docs/cpp/batch_evaluators/member_bfe.html#_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double">pagmo::member_bfe::operator() (C++ function)</a>
 </li>
       <li><a href="docs/cpp/batch_evaluators/member_bfe.html#_CPPv4I0EN5pagmo10member_bfe9serializeEvR7Archivej">pagmo::member_bfe::serialize (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo16migrant_handlingE">pagmo::migrant_handling (C++ enum)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo14migration_typeE">pagmo::migration_type (C++ enum)</a>
 </li>
       <li><a href="docs/cpp/problems/minlp_rastrigin.html#_CPPv4N5pagmo15minlp_rastriginE">pagmo::minlp_rastrigin (C++ class)</a>
 </li>
@@ -1869,7 +2068,7 @@
 </li>
       <li><a href="docs/cpp/problems/null.html#_CPPv4I0EN5pagmo12null_problem9serializeEvR7Archivej">pagmo::null_problem::serialize (C++ function)</a>
 </li>
-      <li><a href="docs/cpp/bfe.html#_CPPv4N5pagmolsERNSt7ostreamERK3bfe">pagmo::operator&lt;&lt; (C++ function)</a>, <a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmolsERNSt7ostreamE13thread_safety">[1]</a>
+      <li><a href="docs/cpp/bfe.html#_CPPv4N5pagmolsERNSt7ostreamERK3bfe">pagmo::operator&lt;&lt; (C++ function)</a>, <a href="docs/cpp/island.html#_CPPv4N5pagmolsERNSt7ostreamERK6island">[1]</a>, <a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmolsERNSt7ostreamE13thread_safety">[2]</a>, <a href="docs/cpp/r_policy.html#_CPPv4N5pagmolsERNSt7ostreamERK8r_policy">[3]</a>, <a href="docs/cpp/s_policy.html#_CPPv4N5pagmolsERNSt7ostreamERK8s_policy">[4]</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmolsERNSt7ostreamERK8topology">[5]</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv4I0EN5pagmo26override_has_batch_fitnessE">pagmo::override_has_batch_fitness (C++ class)</a>
 </li>
@@ -1899,7 +2098,11 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo26override_has_set_verbosity5valueE">pagmo::override_has_set_verbosity::value (C++ member)</a>
 </li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo3p2pE">pagmo::p2p (C++ enumerator)</a>
+</li>
       <li><a href="docs/cpp/utils/multi_objective.html#_CPPv4N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double">pagmo::pareto_dominance (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/types.html#_CPPv4N5pagmo10pop_size_tE">pagmo::pop_size_t (C++ type)</a>
 </li>
       <li><a href="docs/cpp/population.html#_CPPv4N5pagmo10populationE">pagmo::population (C++ class)</a>
 </li>
@@ -1942,6 +2145,8 @@
       <li><a href="docs/cpp/population.html#_CPPv4NK5pagmo10population9worst_idxERK13vector_double">pagmo::population::worst_idx (C++ function)</a>, <a href="docs/cpp/population.html#_CPPv4NK5pagmo10population9worst_idxEd">[1]</a>, <a href="docs/cpp/population.html#_CPPv4NK5pagmo10population9worst_idxEv">[2]</a>
 </li>
       <li><a href="docs/cpp/population.html#_CPPv4N5pagmo10populationD0Ev">pagmo::population::~population (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/archipelago.html#_CPPv4N5pagmo8preserveE">pagmo::preserve (C++ enumerator)</a>
 </li>
       <li><a href="docs/cpp/problem.html#_CPPv4N5pagmo7problemE">pagmo::problem (C++ class)</a>
 </li>
@@ -2083,6 +2288,28 @@
 </li>
       <li><a href="docs/cpp/algorithms/pso_gen.html#_CPPv4N5pagmo7pso_gen13set_verbosityEj">pagmo::pso_gen::set_verbosity (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4N5pagmo8r_policyE">pagmo::r_policy (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0EN5pagmo8r_policy7extractEP1Tv">pagmo::r_policy::extract (C++ function)</a>, <a href="docs/cpp/r_policy.html#_CPPv4I0ENK5pagmo8r_policy7extractEPK1Tv">[1]</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4NK5pagmo8r_policy14get_extra_infoEv">pagmo::r_policy::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4NK5pagmo8r_policy8get_nameEv">pagmo::r_policy::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0ENK5pagmo8r_policy2isEbv">pagmo::r_policy::is (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4NK5pagmo8r_policy8is_validEv">pagmo::r_policy::is_valid (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0EN5pagmo8r_policy4loadEvR7Archivej">pagmo::r_policy::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0EN5pagmo8r_policyaSER8r_policyRR1T">pagmo::r_policy::operator= (C++ function)</a>, <a href="docs/cpp/r_policy.html#_CPPv4N5pagmo8r_policyaSERK8r_policy">[1]</a>, <a href="docs/cpp/r_policy.html#_CPPv4N5pagmo8r_policyaSERR8r_policy">[2]</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0EN5pagmo8r_policy8r_policyERR1T">pagmo::r_policy::r_policy (C++ function)</a>, <a href="docs/cpp/r_policy.html#_CPPv4N5pagmo8r_policy8r_policyERK8r_policy">[1]</a>, <a href="docs/cpp/r_policy.html#_CPPv4N5pagmo8r_policy8r_policyERR8r_policy">[2]</a>, <a href="docs/cpp/r_policy.html#_CPPv4N5pagmo8r_policy8r_policyEv">[3]</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4NK5pagmo8r_policy7replaceERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_doubleRK19individuals_group_t">pagmo::r_policy::replace (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/r_policy.html#_CPPv4I0ENK5pagmo8r_policy4saveEvR7Archivej">pagmo::r_policy::save (C++ function)</a>
+</li>
       <li><a href="docs/cpp/miscellanea/generic.html#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng">pagmo::random_decision_vector (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/rastrigin.html#_CPPv4N5pagmo9rastriginE">pagmo::rastrigin (C++ class)</a>
@@ -2107,6 +2334,18 @@
 </li>
       <li><a href="docs/cpp/problems/rastrigin.html#_CPPv4I0EN5pagmo9rastrigin9serializeEvR7Archivej">pagmo::rastrigin::serialize (C++ function)</a>
 </li>
+      <li><a href="docs/cpp/topologies/ring.html#_CPPv4N5pagmo4ringE">pagmo::ring (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topologies/ring.html#_CPPv4NK5pagmo4ring8get_nameEv">pagmo::ring::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/ring.html#_CPPv4NK5pagmo4ring10get_weightEv">pagmo::ring::get_weight (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/ring.html#_CPPv4N5pagmo4ring9push_backEv">pagmo::ring::push_back (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/ring.html#_CPPv4N5pagmo4ring4ringENSt6size_tEd">pagmo::ring::ring (C++ function)</a>, <a href="docs/cpp/topologies/ring.html#_CPPv4N5pagmo4ring4ringEd">[1]</a>, <a href="docs/cpp/topologies/ring.html#_CPPv4N5pagmo4ring4ringEv">[2]</a>
+</li>
+      <li><a href="docs/cpp/topologies/ring.html#_CPPv4I0EN5pagmo4ring9serializeEvR7Archivej">pagmo::ring::serialize (C++ function)</a>
+</li>
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv4N5pagmo10rosenbrockE">pagmo::rosenbrock (C++ class)</a>
 </li>
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv4NK5pagmo10rosenbrock10best_knownEv">pagmo::rosenbrock::best_known (C++ function)</a>
@@ -2126,6 +2365,28 @@
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE">pagmo::rosenbrock::rosenbrock (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/rosenbrock.html#_CPPv4I0EN5pagmo10rosenbrock9serializeEvR7Archivej">pagmo::rosenbrock::serialize (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4N5pagmo8s_policyE">pagmo::s_policy (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0EN5pagmo8s_policy7extractEP1Tv">pagmo::s_policy::extract (C++ function)</a>, <a href="docs/cpp/s_policy.html#_CPPv4I0ENK5pagmo8s_policy7extractEPK1Tv">[1]</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4NK5pagmo8s_policy14get_extra_infoEv">pagmo::s_policy::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4NK5pagmo8s_policy8get_nameEv">pagmo::s_policy::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0ENK5pagmo8s_policy2isEbv">pagmo::s_policy::is (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4NK5pagmo8s_policy8is_validEv">pagmo::s_policy::is_valid (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0EN5pagmo8s_policy4loadEvR7Archivej">pagmo::s_policy::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0EN5pagmo8s_policyaSER8s_policyRR1T">pagmo::s_policy::operator= (C++ function)</a>, <a href="docs/cpp/s_policy.html#_CPPv4N5pagmo8s_policyaSERK8s_policy">[1]</a>, <a href="docs/cpp/s_policy.html#_CPPv4N5pagmo8s_policyaSERR8s_policy">[2]</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0EN5pagmo8s_policy8s_policyERR1T">pagmo::s_policy::s_policy (C++ function)</a>, <a href="docs/cpp/s_policy.html#_CPPv4N5pagmo8s_policy8s_policyERK8s_policy">[1]</a>, <a href="docs/cpp/s_policy.html#_CPPv4N5pagmo8s_policy8s_policyERR8s_policy">[2]</a>, <a href="docs/cpp/s_policy.html#_CPPv4N5pagmo8s_policy8s_policyEv">[3]</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4I0ENK5pagmo8s_policy4saveEvR7Archivej">pagmo::s_policy::save (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policy.html#_CPPv4NK5pagmo8s_policy6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double">pagmo::s_policy::select (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/sade.html#_CPPv4N5pagmo4sadeE">pagmo::sade (C++ class)</a>
 </li>
@@ -2198,6 +2459,18 @@
       <li><a href="docs/cpp/algorithms/sea.html#_CPPv4N5pagmo3sea8set_seedEj">pagmo::sea::set_seed (C++ function)</a>
 </li>
       <li><a href="docs/cpp/algorithms/sea.html#_CPPv4N5pagmo3sea13set_verbosityEj">pagmo::sea::set_verbosity (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policies/select_best.html#_CPPv4N5pagmo11select_bestE">pagmo::select_best (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/s_policies/select_best.html#_CPPv4NK5pagmo11select_best14get_extra_infoEv">pagmo::select_best::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policies/select_best.html#_CPPv4NK5pagmo11select_best8get_nameEv">pagmo::select_best::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policies/select_best.html#_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double">pagmo::select_best::select (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/s_policies/select_best.html#_CPPv4I0EN5pagmo11select_best11select_bestE1T">pagmo::select_best::select_best (C++ function)</a>, <a href="docs/cpp/s_policies/select_best.html#_CPPv4N5pagmo11select_best11select_bestEv">[1]</a>
+</li>
+      <li><a href="docs/cpp/s_policies/select_best.html#_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej">pagmo::select_best::serialize (C++ function)</a>
 </li>
       <li><a href="docs/cpp/utils/multi_objective.html#_CPPv4N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t">pagmo::select_best_N_mo (C++ function)</a>
 </li>
@@ -2283,6 +2556,30 @@
 </li>
       <li><a href="docs/cpp/miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safety4noneE">pagmo::thread_safety::none (C++ enumerator)</a>
 </li>
+      <li><a href="docs/cpp/topology.html#_CPPv4N5pagmo8topologyE">pagmo::topology (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo8topology7extractEP1Tv">pagmo::topology::extract (C++ function)</a>, <a href="docs/cpp/topology.html#_CPPv4I0ENK5pagmo8topology7extractEPK1Tv">[1]</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4NK5pagmo8topology15get_connectionsENSt6size_tE">pagmo::topology::get_connections (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4NK5pagmo8topology14get_extra_infoEv">pagmo::topology::get_extra_info (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4NK5pagmo8topology8get_nameEv">pagmo::topology::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0ENK5pagmo8topology2isEbv">pagmo::topology::is (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4NK5pagmo8topology8is_validEv">pagmo::topology::is_valid (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo8topology4loadEvR7Archivej">pagmo::topology::load (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo8topologyaSER8topologyRR1T">pagmo::topology::operator= (C++ function)</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmo8topologyaSERK8topology">[1]</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmo8topologyaSERR8topology">[2]</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4N5pagmo8topology9push_backEj">pagmo::topology::push_back (C++ function)</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmo8topology9push_backEv">[1]</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0ENK5pagmo8topology4saveEvR7Archivej">pagmo::topology::save (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topology.html#_CPPv4I0EN5pagmo8topology8topologyERR1T">pagmo::topology::topology (C++ function)</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmo8topology8topologyERK8topology">[1]</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmo8topology8topologyERR8topology">[2]</a>, <a href="docs/cpp/topology.html#_CPPv4N5pagmo8topology8topologyEv">[3]</a>
+</li>
       <li><a href="docs/cpp/problems/translate.html#_CPPv4N5pagmo9translateE">pagmo::translate (C++ class)</a>
 </li>
       <li><a href="docs/cpp/problems/translate.html#_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double">pagmo::translate::batch_fitness (C++ function)</a>
@@ -2334,6 +2631,16 @@
       <li><a href="docs/cpp/problems/translate.html#_CPPv4N5pagmo9translate8set_seedEj">pagmo::translate::set_seed (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/translate.html#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double">pagmo::translate::translate (C++ function)</a>, <a href="docs/cpp/problems/translate.html#_CPPv4N5pagmo9translate9translateEv">[1]</a>
+</li>
+      <li><a href="docs/cpp/topologies/unconnected.html#_CPPv4N5pagmo11unconnectedE">pagmo::unconnected (C++ class)</a>
+</li>
+      <li><a href="docs/cpp/topologies/unconnected.html#_CPPv4NK5pagmo11unconnected15get_connectionsENSt6size_tE">pagmo::unconnected::get_connections (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/unconnected.html#_CPPv4NK5pagmo11unconnected8get_nameEv">pagmo::unconnected::get_name (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/unconnected.html#_CPPv4N5pagmo11unconnected9push_backEv">pagmo::unconnected::push_back (C++ function)</a>
+</li>
+      <li><a href="docs/cpp/topologies/unconnected.html#_CPPv4I0EN5pagmo11unconnected9serializeEvR7Archivej">pagmo::unconnected::serialize (C++ function)</a>
 </li>
       <li><a href="docs/cpp/problems/unconstrain.html#_CPPv4N5pagmo11unconstrainE">pagmo::unconstrain (C++ class)</a>
 </li>
@@ -2443,6 +2750,8 @@
 </li>
       <li><a href="docs/python/py_population.html#pygmo.population">population (class in pygmo)</a>
 </li>
+      <li><a href="docs/python/py_misc.html#pygmo.migrant_handling.preserve">preserve (pygmo.migrant_handling attribute)</a>
+</li>
       <li><a href="docs/python/py_problem.html#pygmo.problem">problem (class in pygmo)</a>
 </li>
       <li><a href="docs/python/py_population.html#pygmo.population.problem">problem() (pygmo.population property)</a>
@@ -2456,6 +2765,8 @@
       <ul>
         <li><a href="docs/python/py_population.html#pygmo.population.push_back">(pygmo.population method)</a>
 </li>
+        <li><a href="docs/python/py_topology.html#pygmo.topology.push_back">(pygmo.topology method)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -2463,6 +2774,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/py_r_policy.html#pygmo.r_policy">r_policy (class in pygmo)</a>
+</li>
       <li><a href="docs/python/utils/py_generic_utils.html#pygmo.random_decision_vector">random_decision_vector() (in module pygmo)</a>
 
       <ul>
@@ -2472,6 +2785,10 @@
       <li><a href="docs/python/problems/py_problems.html#pygmo.rastrigin">rastrigin (class in pygmo)</a>
 </li>
       <li><a href="docs/python/utils/py_hv_utils.html#pygmo.hypervolume.refpoint">refpoint() (pygmo.hypervolume method)</a>
+</li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.remove_edge">remove_edge() (pygmo.ring method)</a>
+</li>
+      <li><a href="docs/python/py_r_policy.html#pygmo.r_policy.replace">replace() (pygmo.r_policy method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.compass_search.replacement">replacement() (pygmo.compass_search property)</a>
 
@@ -2493,6 +2810,8 @@
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.mp_island.resize_pool">resize_pool() (pygmo.mp_island static method)</a>
 </li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring">ring (class in pygmo)</a>
+</li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.rosenbrock">rosenbrock (class in pygmo)</a>
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.ipyparallel_island.run_evolve">run_evolve() (pygmo.ipyparallel_island method)</a>
@@ -2507,11 +2826,17 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/py_s_policy.html#pygmo.s_policy">s_policy (class in pygmo)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sade">sade (class in pygmo)</a>
 </li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.schwefel">schwefel (class in pygmo)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.sea">sea (class in pygmo)</a>
+</li>
+      <li><a href="docs/python/py_s_policy.html#pygmo.s_policy.select">select() (pygmo.s_policy method)</a>
+</li>
+      <li><a href="docs/python/s_policies/py_s_policies.html#pygmo.select_best">select_best (class in pygmo)</a>
 </li>
       <li><a href="docs/python/utils/py_mo_utils.html#pygmo.select_best_N_mo">select_best_N_mo() (in module pygmo)</a>
 </li>
@@ -2527,6 +2852,8 @@
       </ul></li>
       <li><a href="docs/python/py_island.html#pygmo.island.set_algorithm">set_algorithm() (pygmo.island method)</a>
 </li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.set_all_weights">set_all_weights() (pygmo.ring method)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.gaco.set_bfe">set_bfe() (pygmo.gaco method)</a>
 
       <ul>
@@ -2539,12 +2866,18 @@
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_integer_options">set_integer_options() (pygmo.ipopt method)</a>
 </li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.set_migrant_handling">set_migrant_handling() (pygmo.archipelago method)</a>
+</li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.set_migration_type">set_migration_type() (pygmo.archipelago method)</a>
+</li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_numeric_option">set_numeric_option() (pygmo.ipopt method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_numeric_options">set_numeric_options() (pygmo.ipopt method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.mbh.set_perturb">set_perturb() (pygmo.mbh method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_island.html#pygmo.island.set_population">set_population() (pygmo.island method)</a>
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.compass_search.set_random_sr_seed">set_random_sr_seed() (pygmo.compass_search method)</a>
@@ -2557,8 +2890,6 @@
         <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.simulated_annealing.set_random_sr_seed">(pygmo.simulated_annealing method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.set_seed">set_seed() (pygmo.algorithm method)</a>
 
       <ul>
@@ -2571,7 +2902,11 @@
 </li>
       <li><a href="docs/python/algorithms/py_algorithms.html#pygmo.ipopt.set_string_options">set_string_options() (pygmo.ipopt method)</a>
 </li>
+      <li><a href="docs/python/py_archipelago.html#pygmo.archipelago.set_topology">set_topology() (pygmo.archipelago method)</a>
+</li>
       <li><a href="docs/python/py_algorithm.html#pygmo.algorithm.set_verbosity">set_verbosity() (pygmo.algorithm method)</a>
+</li>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.ring.set_weight">set_weight() (pygmo.ring method)</a>
 </li>
       <li><a href="docs/python/py_population.html#pygmo.population.set_x">set_x() (pygmo.population method)</a>
 </li>
@@ -2605,9 +2940,11 @@
 </li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.thread_island">thread_island (class in pygmo)</a>
 </li>
+      <li><a href="docs/python/py_misc.html#pygmo.thread_safety">thread_safety (class in pygmo)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/py_misc.html#pygmo.thread_safety">thread_safety (class in pygmo)</a>
+      <li><a href="docs/python/py_topology.html#pygmo.topology">topology (class in pygmo)</a>
 </li>
       <li><a href="docs/python/problems/py_problems.html#pygmo.translate">translate (class in pygmo)</a>
 </li>
@@ -2619,10 +2956,12 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/python/problems/py_problems.html#pygmo.unconstrain">unconstrain (class in pygmo)</a>
+      <li><a href="docs/python/topologies/py_topologies.html#pygmo.unconnected">unconnected (class in pygmo)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/python/problems/py_problems.html#pygmo.unconstrain">unconstrain (class in pygmo)</a>
+</li>
       <li><a href="docs/python/islands/py_islands.html#pygmo.mp_island.use_pool">use_pool() (pygmo.mp_island property)</a>
 </li>
   </ul></td>
