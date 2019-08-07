@@ -193,8 +193,8 @@ if is_python_build:
     run_command(pinterp + r' setup.py bdist_wheel')
     os.environ['PATH'] = ORIGINAL_PATH
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
-    # run_command(
-    #     pinterp + r' -c "import pygmo; pygmo.test.run_test_suite(1)"', directory=r'c:\\')
+    run_command(
+        pinterp + r' -c "import pygmo; pygmo.test.run_test_suite(1)"', directory=r'c:\\')
     if is_release_build:
         run_command(twine + r' upload -u ci4esa dist\\' +
                     os.listdir('dist')[0])
