@@ -164,7 +164,7 @@ class migrant_handling(object):
     preserve = core._migrant_handling.preserve
     #: Evict migrants from the database
     #: (value = 1)
-    broadcast = core._migrant_handling.evict
+    evict = core._migrant_handling.evict
 
 
 # Override of the translate meta-problem constructor.
