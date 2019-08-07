@@ -1203,8 +1203,6 @@ Problem's name.
 If the UDP provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
 Otherwise, an implementation-defined name based on the type of the UDP will be returned.
 
-The ``get_name()`` method of the UDP must return a ``str``.
-
 Returns:
     ``str``: the problem's name
 
@@ -1219,8 +1217,6 @@ Problem's extra info.
 
 If the UDP provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
 method. Otherwise, an empty string will be returned.
-
-The ``get_extra_info()`` method of the UDP must return a ``str``.
 
 Returns:
   ``str``: extra info about the UDP
@@ -1478,8 +1474,6 @@ Algorithm's name.
 If the UDA provides a ``get_name()`` method, then this method will return the output of its ``get_name()`` method.
 Otherwise, an implementation-defined name based on the type of the UDA will be returned.
 
-The ``get_name()`` method of the UDA must return a ``str``.
-
 Returns:
     ``str``: the algorithm's name
 
@@ -1494,8 +1488,6 @@ Algorithm's extra info.
 
 If the UDA provides a ``get_extra_info()`` method, then this method will return the output of its ``get_extra_info()``
 method. Otherwise, an empty string will be returned.
-
-The ``get_extra_info()`` method of the UDA must return a ``str``.
 
 Returns:
   ``str``: extra info about the UDA
@@ -4269,11 +4261,13 @@ std::string island_docstring()
 {
     return R"(Island class.
 
-In the pygmo jargon, an island is a class that encapsulates three entities:
+In the pygmo jargon, an island is a class that encapsulates the following entities:
 
 * a user-defined island (**UDI**),
 * an :class:`~pygmo.algorithm`,
-* a :class:`~pygmo.population`.
+* a :class:`~pygmo.population`,
+* a replacement policy (of type :class:`~pygmo.r_policy`),
+* a selection policy (of type :class:`~pygmo.s_policy`).
 
 Through the UDI, the island class manages the asynchronous evolution (or optimisation)
 of its :class:`~pygmo.population` via the algorithm's :func:`~pygmo.algorithm.evolve()`
@@ -4286,6 +4280,11 @@ time the user can query the state of the island and fetch its internal data memb
 wait for pending evolutions to conclude by calling the :func:`~pygmo.island.wait()` and
 :func:`~pygmo.island.wait_check()` methods. The status of ongoing evolutions in the island can be queried via
 the :attr:`~pygmo.island.status` attribute.
+
+The replacement and selection policies are used when the island is part of an :class:`~pygmo.archipelago`.
+They establish how individuals are selected and replaced from the island when migration across islands occurs within
+the :class:`~pygmo.archipelago`. If the island is not part of an :class:`~pygmo.archipelago`,
+the replacement and selection policies play no role.
 
 Typically, pygmo users will employ an already-available UDI in conjunction with this class (see :ref:`here <py_islands>`
 for a full list), but advanced users can implement their own UDI types. A user-defined island must implement
@@ -4324,21 +4323,24 @@ thread safety. Specifically, ``run_evolve()`` is always called in a separate thr
 An island can be initialised in a variety of ways using keyword arguments:
 
 * if the arguments list is empty, a default :class:`~pygmo.island` is constructed, containing a
-  :class:`~pygmo.thread_island` UDI, a :class:`~pygmo.null_algorithm` algorithm and an empty
-  population with problem type :class:`~pygmo.null_problem`;
-* if the arguments list contains *algo*, *pop* and, optionally, *udi*, then the constructor will initialise
-  an :class:`~pygmo.island` containing the specified algorithm, population and UDI. If the *udi* parameter
-  is not supplied, the UDI type is chosen according to a heuristic which depends on the platform, the
-  Python version and the supplied *algo* and *pop* parameters:
+  :class:`~pygmo.thread_island` UDI, a :class:`~pygmo.null_algorithm` algorithm, an empty
+  population with problem type :class:`~pygmo.null_problem`, and default-constructed
+  :class:`~pygmo.r_policy` and :class:`~pygmo.s_policy`;
+* if the arguments list contains *algo*, *pop* and, optionally, *udi*, *r_pol* and *s_pol*, then the constructor will
+  initialise an :class:`~pygmo.island` containing the specified algorithm, population, UDI and replacement/selection
+  policies. If *r_pol* and/or *s_pol* are not supplied, the replacement/selection policies will be default-constructed.
+  If the *udi* parameter is not supplied, the UDI type is chosen according to a heuristic which depends
+  on the platform, the Python version and the supplied *algo* and *pop* parameters:
 
   * if *algo* and *pop*'s problem provide at least the :attr:`~pygmo.thread_safety.basic` thread safety guarantee,
     then :class:`~pygmo.thread_island` will be selected as UDI type;
   * otherwise, if the current platform is Windows or the Python version is at least 3.4, then :class:`~pygmo.mp_island`
     will be selected as UDI type, else :class:`~pygmo.ipyparallel_island` will be chosen;
-* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi*, *b* and *seed*, then a :class:`~pygmo.population`
-  will be constructed from *prob*, *size*, *b* and *seed*, and the construction will then proceed in the same way detailed
-  above (i.e., *algo* and the newly-created population are used to initialise the island's algorithm and population,
-  and the UDI, if not specified, will be chosen according to the heuristic detailed above).
+* if the arguments list contains *algo*, *prob*, *size* and, optionally, *udi*, *b*, *seed*, *r_pol* and *s_pol*,
+  then a :class:`~pygmo.population` will be constructed from *prob*, *size*, *b* and *seed*, and the construction will
+  then proceed in the same way detailed above (i.e., *algo* and the newly-created population are used to initialise the
+  island's algorithm and population, the UDI, if not specified, will be chosen according to the heuristic detailed above,
+  and the replacement/selection policies are given by *r_pol* and *s_pol*).
 
 If the keyword arguments list is invalid, a :exc:`KeyError` exception will be raised.
 
@@ -4361,18 +4363,33 @@ times consecutively to perform the actual evolution. The island's algorithm and 
 end of each ``run_evolve()`` invocation. Exceptions raised inside the tasks are stored within the island object,
 and can be re-raised by calling :func:`~pygmo.island.wait_check()`.
 
+If the island is part of an :class:`~pygmo.archipelago`, then migration of individuals to/from other
+islands might occur. The migration algorithm consists of the following steps:
+
+* before invoking ``run_evolve()`` on the UDI, the island will ask the
+  archipelago if there are candidate incoming individuals from other islands
+  If so, the replacement policy is invoked and the current population of the island is updated with the migrants;
+* ``run_evolve()`` is then invoked and the current population is evolved;
+* after ``run_evolve()`` has concluded, individuals are selected in the
+  evolved population and copied into the migration database of the archipelago
+  for future migrations.
+
 It is possible to call this method multiple times to enqueue multiple evolution tasks, which will be consumed in a FIFO (first-in
 first-out) fashion. The user may call :func:`~pygmo.island.wait()` or :func:`~pygmo.island.wait_check()` to block until all
 tasks have been completed, and to fetch exceptions raised during the execution of the tasks. The :attr:`~pygmo.island.status`
 attribute can be used to query the status of the asynchronous operations in the island.
 
 Args:
-     n (``int``): the number of times the ``run_evolve()`` method of the UDI will be called within the evolution task
+     n (int): the number of times the ``run_evolve()`` method of the UDI will be called within the evolution task
+        (this corresponds also to the number of times migration can happen, if the island belongs to an archipelago)
 
 Raises:
+    IndexError: if the island is part of an archipelago and during migration an invalid island index is used (this can
+       happen if the archipelago's topology is malformed)
     OverflowError: if *n* is negative or larger than an implementation-defined value
-    unspecified: any exception thrown by the underlying C++ method, or by failures at the intersection between C++ and
-      Python (e.g., type conversion errors, mismatched function signatures, etc.)
+    unspecified: any exception thrown by the public interface of :class:`~pygmo.archipelago`, the public interface of
+       the replacement/selection policies, the underlying C++ method, or by failures at the intersection between C++ and
+       Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
 )";
 }
@@ -4515,10 +4532,8 @@ Otherwise, an implementation-defined name based on the type of the UDI will be r
 
 It is safe to call this method while the island is evolving.
 
-The ``get_name()`` method of the UDI must return a ``str``.
-
 Returns:
-    ``str``: the name of the UDI
+    str: the name of the UDI
 
 Raises:
     unspecified: any exception thrown by the ``get_name()`` method of the UDI
@@ -4537,13 +4552,35 @@ method. Otherwise, an empty string will be returned.
 
 It is safe to call this method while the island is evolving.
 
-The ``get_extra_info()`` method of the UDI must return a ``str``.
-
 Returns:
-    ``str``: extra info about the UDI
+    str: extra info about the UDI
 
 Raises:
     unspecified: any exception thrown by the ``get_extra_info()`` method of the UDI
+
+)";
+}
+
+std::string island_get_r_policy_docstring()
+{
+    return R"(get_r_policy()
+
+Get the replacement policy.
+
+Returns:
+    :class:`~pygmo.r_policy`: a copy of the current replacement policy
+
+)";
+}
+
+std::string island_get_s_policy_docstring()
+{
+    return R"(get_s_policy()
+
+Get the selection policy.
+
+Returns:
+    :class:`~pygmo.s_policy`: a copy of the current selection policy
 
 )";
 }
@@ -4572,14 +4609,20 @@ std::string archipelago_docstring()
 {
     return R"(Archipelago.
 
-An archipelago is a collection of :class:`~pygmo.island` objects which provides a convenient way to perform
-multiple optimisations in parallel.
+An archipelago is a collection of :class:`~pygmo.island` objects connected by a
+:class:`~pygmo.topology`. The islands in the archipelago can exchange individuals
+(i.e., candidate solutions) via a process called *migration*. The individuals migrate
+across the routes described by the topology, and the islands' replacement
+and selection policies (see :class:`~pygmo.r_policy` and :class:`~pygmo.s_policy`)
+establish how individuals are replaced in and selected from the islands' populations.
 
-The interface of :class:`~pygmo.archipelago` mirrors partially the interface of :class:`~pygmo.island`: the
-evolution is initiated by a call to :func:`~pygmo.archipelago.evolve()`, and at any time the user can query the
+The interface of :class:`~pygmo.archipelago` mirrors partially the interface
+of :class:`~pygmo.island`: the evolution is initiated by a call to :func:`~pygmo.archipelago.evolve()`,
+and at any time the user can query the
 state of the archipelago and access its island members. The user can explicitly wait for pending evolutions
-to conclude by calling the :func:`~pygmo.archipelago.wait()` and :func:`~pygmo.archipelago.wait_check()` methods.
-The status of ongoing evolutions in the archipelago can be queried via the :attr:`~pygmo.archipelago.status` attribute.
+to conclude by calling the :func:`~pygmo.archipelago.wait()` and :func:`~pygmo.archipelago.wait_check()`
+methods. The status of ongoing evolutions in the archipelago can be queried via
+:func:`~pygmo.archipelago.status()`.
 
 )";
 }
@@ -4708,6 +4751,113 @@ Returns:
 Raises:
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
       mismatched function signatures, etc.)
+
+)";
+}
+
+std::string archipelago_get_migrants_db_docstring()
+{
+    return R"(get_migrants_db()
+
+During the evolution of an archipelago, islands will periodically
+store the individuals selected for migration in a *migrant database*.
+This is a :class:`list` of :class:`tuple` objects whose
+size is equal to the number of islands in the archipelago, and which
+contains the current candidate outgoing migrants for each island.
+
+The migrants tuples consist of 3 values each:
+
+* a 1D NumPy array of individual IDs (represented as 64-bit unsigned integrals),
+* a 2D NumPy array of decision vectors (i.e., the decision vectors of each individual,
+  stored in row-major order),
+* a 2D NumPy array of fitness vectors (i.e., the fitness vectors of each individual,
+  stored in row-major order).
+
+Returns:
+    list: a copy of the database of migrants
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
+std::string archipelago_get_migration_log_docstring()
+{
+    return R"(get_migration_log()
+
+Each time an individual migrates from an island (the source) to another
+(the destination), an entry will be added to the migration log.
+The entry is a :class:`tuple` of 6 elements containing:
+
+* a timestamp of the migration,
+* the ID of the individual that migrated,
+* the decision and fitness vectors of the individual that migrated,
+* the indices of the source and destination islands.
+
+The migration log is a :class:`list` of migration entries.
+
+Returns:
+    list: a copy of the migration log
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g., type conversion errors,
+      mismatched function signatures, etc.)
+
+)";
+}
+
+std::string archipelago_get_topology_docstring()
+{
+    return R"(get_topology()
+
+Returns:
+    :class:`~pygmo.tyopology`: a copy of the current topology
+
+)";
+}
+
+std::string archipelago_get_migration_type_docstring()
+{
+    return R"(get_migration_type()
+
+Returns:
+    :class:`~pygmo.migration_type`: the current migration type for this archipelago
+
+)";
+}
+
+std::string archipelago_set_migration_type_docstring()
+{
+    return R"(set_migration_type(mt)
+
+Set a new migration type for this archipelago.
+
+Args:
+    mt (:class:`~pygmo.migration_type`): the desired migration type for this archipelago
+
+)";
+}
+
+std::string archipelago_get_migrant_handling_docstring()
+{
+    return R"(get_migrant_handling()
+
+Returns:
+    :class:`~pygmo.migrant_handling`: the current migrant handling policy for this archipelago
+
+)";
+}
+
+std::string archipelago_set_migrant_handling_docstring()
+{
+    return R"(set_migrant_handling(mh)
+
+Set a new migrant handling policy for this archipelago.
+
+Args:
+    mh (:class:`~pygmo.migrant_handling`): the desired migrant handling policy for this archipelago
 
 )";
 }

@@ -255,6 +255,8 @@ std::string island_get_population_docstring();
 std::string island_set_population_docstring();
 std::string island_get_name_docstring();
 std::string island_get_extra_info_docstring();
+std::string island_get_r_policy_docstring();
+std::string island_get_s_policy_docstring();
 
 // udi.
 std::string thread_island_docstring();
@@ -268,6 +270,13 @@ std::string archipelago_wait_check_docstring();
 std::string archipelago_getitem_docstring();
 std::string archipelago_get_champions_f_docstring();
 std::string archipelago_get_champions_x_docstring();
+std::string archipelago_get_migrants_db_docstring();
+std::string archipelago_get_migration_log_docstring();
+std::string archipelago_get_topology_docstring();
+std::string archipelago_get_migration_type_docstring();
+std::string archipelago_set_migration_type_docstring();
+std::string archipelago_get_migrant_handling_docstring();
+std::string archipelago_set_migrant_handling_docstring();
 
 // bfe.
 std::string bfe_docstring();

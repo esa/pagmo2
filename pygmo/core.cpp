@@ -944,8 +944,8 @@ BOOST_PYTHON_MODULE(core)
     pygmo::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
     auto &island_class = pygmo::get_island_class();
-    island_class.def(bp::init<const algorithm &, const population &>())
-        .def(bp::init<const bp::object &, const algorithm &, const population &>())
+    island_class.def(bp::init<const algorithm &, const population &, const r_policy &, const s_policy &>())
+        .def(bp::init<const bp::object &, const algorithm &, const population &, const r_policy &, const s_policy &>())
         .def(repr(bp::self))
         .def_pickle(pygmo::island_pickle_suite())
         // Copy and deepcopy.
@@ -963,7 +963,9 @@ BOOST_PYTHON_MODULE(core)
              bp::arg("pop"))
         .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
-        .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
+        .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str())
+        .def("get_r_policy", &island::get_r_policy, pygmo::island_get_r_policy_docstring().c_str())
+        .def("get_s_policy", &island::get_s_policy, pygmo::island_get_s_policy_docstring().c_str());
     pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());
 
     // Expose islands.
@@ -971,7 +973,8 @@ BOOST_PYTHON_MODULE(core)
 
     // Archi.
     bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(), bp::init<>());
-    archi_class.def(repr(bp::self))
+    archi_class.def(bp::init<const topology &>())
+        .def(repr(bp::self))
         .def_pickle(pygmo::detail::archipelago_pickle_suite())
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<archipelago>)
@@ -1004,7 +1007,36 @@ BOOST_PYTHON_MODULE(core)
                  }
                  return retval;
              }),
-             pygmo::archipelago_get_champions_x_docstring().c_str());
+             pygmo::archipelago_get_champions_x_docstring().c_str())
+        .def("get_migrants_db", lcast([](const archipelago &archi) -> bp::list {
+                 bp::list retval;
+                 const auto tmp = archi.get_migrants_db();
+                 for (const auto &ig : tmp) {
+                     retval.append(pygmo::inds_to_tuple(ig));
+                 }
+                 return retval;
+             }),
+             pygmo::archipelago_get_migrants_db_docstring().c_str())
+        .def("get_migration_log", lcast([](const archipelago &archi) -> bp::list {
+                 bp::list retval;
+                 const auto tmp = archi.get_migration_log();
+                 for (const auto &le : tmp) {
+                     retval.append(bp::make_tuple(std::get<0>(le), std::get<1>(le), pygmo::v_to_a(std::get<2>(le)),
+                                                  pygmo::v_to_a(std::get<3>(le)), std::get<4>(le), std::get<5>(le)));
+                 }
+                 return retval;
+             }),
+             pygmo::archipelago_get_migration_log_docstring().c_str())
+        .def("get_topology", &archipelago::get_topology, pygmo::archipelago_get_topology_docstring().c_str())
+        .def("_set_topology", &archipelago::set_topology)
+        .def("set_migration_type", &archipelago::set_migration_type,
+             pygmo::archipelago_set_migration_type_docstring().c_str(), (bp::arg("mt")))
+        .def("set_migrant_handling", &archipelago::set_migrant_handling,
+             pygmo::archipelago_set_migrant_handling_docstring().c_str(), (bp::arg("mh")))
+        .def("get_migration_type", &archipelago::get_migration_type,
+             pygmo::archipelago_get_migration_type_docstring().c_str())
+        .def("get_migrant_handling", &archipelago::get_migrant_handling,
+             pygmo::archipelago_get_migrant_handling_docstring().c_str());
     pygmo::add_property(archi_class, "status", &archipelago::status, pygmo::archipelago_status_docstring().c_str());
 
     // Bfe class.

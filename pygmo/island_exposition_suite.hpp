@@ -42,6 +42,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/r_policy.hpp>
+#include <pagmo/s_policy.hpp>
 
 #include <pygmo/common_utils.hpp>
 
@@ -65,7 +67,8 @@ inline bp::class_<Isl> expose_island(const char *name, const char *descr)
         bp::extract<std::uintptr_t>(bp::import("pygmo").attr("core").attr("_island_address"))());
 
     // Expose the island constructor from Isl.
-    isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &>());
+    isl.def(bp::init<const Isl &, const pagmo::algorithm &, const pagmo::population &, const pagmo::r_policy &,
+                     const pagmo::s_policy &>());
 
     // Expose extract.
     isl.def("_cpp_extract", &generic_cpp_extract<pagmo::island, Isl>, bp::return_internal_reference<>());

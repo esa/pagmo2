@@ -467,19 +467,18 @@ def _island_init(self, **kwargs):
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-        size (int): the number of individuals
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
+        size (int): the number of individuals
+        r_pol: a user-defined replacement policy (either Python or C++), or an instance of :class:`~pygmo.r_policy`
+        s_pol: a user-defined selection policy (either Python or C++), or an instance of :class:`~pygmo.s_policy`
         seed (int): the random seed (if not specified, it will be randomly-generated)
 
     Raises:
         KeyError: if the set of keyword arguments is invalid
-        unspecified: any exception thrown by:
-
-          * the invoked C++ constructors,
-          * the deep copy of the UDI,
-          * the constructors of :class:`~pygmo.algorithm` and :class:`~pygmo.population`,
-          * failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
-            signatures, etc.)
+        unspecified: any exception thrown by the invoked C++ constructors,
+          the deep copy of the UDI, the constructors of :class:`~pygmo.algorithm` and :class:`~pygmo.population`,
+          failures at the intersection between C++ and Python (e.g., type conversion errors, mismatched function
+          signatures, etc.)
 
     """
     if len(kwargs) == 0:
@@ -520,6 +519,21 @@ def _island_init(self, **kwargs):
     else:
         args = [algo, pop]
 
+    # Replace/selection policies, if any.
+    if 'r_pol' in kwargs:
+        r_pol = kwargs.pop('r_pol')
+        r_pol = r_pol if type(r_pol) == r_policy else r_policy(r_pol)
+        args.append(r_pol)
+    else:
+        args.append(r_policy())
+
+    if 's_pol' in kwargs:
+        s_pol = kwargs.pop('s_pol')
+        s_pol = s_pol if type(s_pol) == s_policy else s_policy(s_pol)
+        args.append(s_pol)
+    else:
+        args.append(s_policy())
+
     if len(kwargs) != 0:
         raise KeyError(
             'unrecognised keyword arguments: {}'.format(list(kwargs.keys())))
@@ -533,9 +547,11 @@ setattr(island, "__init__", _island_init)
 __original_archi_init = archipelago.__init__
 
 
-def _archi_init(self, n=0, **kwargs):
-    """
-    The constructor will initialise an archipelago with *n* islands built from *kwargs*.
+def _archi_init(self, n=0, t=topology(), **kwargs):
+    """__init__(self, n=0, t=topology(), **kwargs)
+
+    The constructor will initialise an archipelago with a topology *t* and
+    *n* islands built from *kwargs*.
     The keyword arguments accept the same format as explained in the constructor of
     :class:`~pygmo.island`, with the following differences:
 
@@ -550,21 +566,25 @@ def _archi_init(self, n=0, **kwargs):
 
     Args:
         n (int): the number of islands in the archipelago
+        t: a user-defined topology (either Python or C++), or an instance of :class:`~pygmo.topology`
 
     Keyword Args:
         udi: a user-defined island, either Python or C++
         algo: a user-defined algorithm (either Python or C++), or an instance of :class:`~pygmo.algorithm`
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
-        pop_size (int): the number of individuals for each island
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
+        pop_size (int): the number of individuals for each island
+        r_pol: a user-defined replacement policy (either Python or C++), or an instance of :class:`~pygmo.r_policy`
+        s_pol: a user-defined selection policy (either Python or C++), or an instance of :class:`~pygmo.s_policy`
         seed (int): the random seed
 
     Raises:
         TypeError: if *n* is not an integral type
         ValueError: if *n* is negative
-        unspecified: any exception thrown by the constructor of :class:`~pygmo.island`
-          or by the underlying C++ constructor
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.island`,
+          by the underlying C++ constructor, :func:`~pygmo.archipelago.push_back()` or
+          by the public interface of :class:`~pygmo.topology`
 
     Examples:
         >>> from pygmo import *
@@ -638,8 +658,9 @@ def _archi_init(self, n=0, **kwargs):
         ps_val = kwargs.pop('pop_size')
         kwargs['size'] = ps_val
 
-    # Call the original init, which constructs an empty archi.
-    __original_archi_init(self)
+    # Call the original init, which constructs an empty archi from a topology.
+    t = t if type(t) == topology else topology(t)
+    __original_archi_init(self, t)
 
     if 'seed' in kwargs:
         # Special handling of the 'seed' argument.
@@ -669,24 +690,49 @@ setattr(archipelago, "__init__", _archi_init)
 
 
 def _archi_push_back(self, **kwargs):
-    """Add island.
+    """Add an island.
 
     This method will construct an island from the supplied arguments and add it to the archipelago.
     Islands are added at the end of the archipelago (that is, the new island will have an index
-    equal to the size of the archipelago before the call to this method).
+    equal to the size of the archipelago before the call to this method). :func:`pygmo.topology.push_back()`
+    will also be called on the :class:`~pygmo.topology` associated to this archipelago, so that
+    the addition of a new island to the archipelago is mirrored by the addition of a new vertex
+    to the topology.
 
     The keyword arguments accept the same format as explained in the constructor of
     :class:`~pygmo.island`.
 
     Raises:
-        unspecified: any exception thrown by the constructor of :class:`~pygmo.island` or by
-          the underlying C++ method
+        unspecified: any exception thrown by the constructor of :class:`~pygmo.island`,
+          :func:`pygmo.topology.push_back()` or by the underlying C++ method
 
     """
     self._push_back(island(**kwargs))
 
 
 setattr(archipelago, "push_back", _archi_push_back)
+
+
+def _archi_set_topology(self, t):
+    """This method will wait for any ongoing evolution in the archipelago to finish,
+    and it will then set the topology of the archipelago to *t*.
+
+    Note that it is the user's responsibility to ensure that the new topology is
+    consistent with the archipelago's properties.
+
+    Args:
+        t: a user-defined topology (either Python or C++), or an instance of :class:`~pygmo.topology`
+
+    Raises:
+        unspecified: any exception thrown by copying the topology
+
+    """
+    t = t if type(t) == topology else topology(t)
+    self._set_topology(t)
+
+
+setattr(archipelago, "set_topology", _archi_set_topology)
+
 
 # Machinery for the setup of the serialization backend.
 _serialization_backend = _cloudpickle
