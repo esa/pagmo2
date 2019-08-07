@@ -204,17 +204,15 @@ void expose_algorithms_1()
     // GACO
     auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());
     gaco_.def(
-        bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, unsigned,
-                 double, bool>((bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0.,
-                                bp::arg("acc") = 0.01, bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u,
-                                bp::arg("impstop") = 100000u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0.,
-                                bp::arg("paretomax") = 10u, bp::arg("epsilon") = 0.9, bp::arg("memory") = false)));
-    gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double,
-                       unsigned, double, bool, unsigned>(
+        bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, bool>(
+            (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0.,
+             bp::arg("acc") = 0.01, bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u, bp::arg("impstop") = 100000u,
+             bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false)));
+    gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, bool,
+                       unsigned>(
         (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0., bp::arg("acc") = 0.01,
          bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u, bp::arg("impstop") = 100000u,
-         bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("paretomax") = 10u, bp::arg("epsilon") = 0.9,
-         bp::arg("memory") = false, bp::arg("seed"))));
+         bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
     gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
     gaco_.def("set_bfe", &gaco::set_bfe, gaco_set_bfe_docstring().c_str(), bp::arg("b"));
@@ -243,17 +241,16 @@ void expose_algorithms_1()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(
-        nlopt_, "local_optimizer",
-        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
-        lcast([](nlopt &n, const nlopt *ptr) {
-            if (ptr) {
-                n.set_local_optimizer(*ptr);
-            } else {
-                n.unset_local_optimizer();
-            }
-        }),
-        nlopt_local_optimizer_docstring().c_str());
+    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
+                                                              bp::return_internal_reference<>()),
+                 lcast([](nlopt &n, const nlopt *ptr) {
+                     if (ptr) {
+                         n.set_local_optimizer(*ptr);
+                     } else {
+                         n.unset_local_optimizer();
+                     }
+                 }),
+                 nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 } // namespace pygmo
