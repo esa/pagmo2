@@ -30,9 +30,9 @@ In order to run the UDAs on these problems we can write the following piece of c
     ...       udp = problems[index]
     ...       prob = pg.problem(udp)
     ...       #Instantiate pagmo algorithms:
-    ...       uda_gaco = pg.gaco(550, 100, 1.0, real_minima[index], 0.0, 200, 7, 10000, 10000, 0.0, 10, 0.9, False, 23)
+    ...       uda_gaco = pg.gaco(550, 100, 1.0, real_minima[index], 0.0, 200, 7, 10000, 10000, 0.0, False, 23)
     ...       uda_cstrs_sade=pg.cstrs_self_adaptive(40,pg.sade(10, 2, 1, 1e-6, 1e-6, False, 23))
-    ...       uda_cstrs_gaco=pg.cstrs_self_adaptive(40,pg.gaco(10, 125, 1.0, real_minima[index], 0.0, 8, 7, 10000, 10000, 0.0, 10, 0.9, False, 23))
+    ...       uda_cstrs_gaco=pg.cstrs_self_adaptive(40,pg.gaco(10, 125, 1.0, real_minima[index], 0.0, 8, 7, 10000, 10000, 0.0, False, 23))
     ...       algo_gaco=pg.algorithm(uda_gaco)
     ...       algo_cstrs_sade=pg.algorithm(uda_cstrs_sade)
     ...       algo_cstrs_gaco=pg.algorithm(uda_cstrs_gaco)
