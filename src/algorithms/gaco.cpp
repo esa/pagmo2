@@ -55,12 +55,11 @@ namespace pagmo
 {
 
 gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsigned threshold, unsigned n_gen_mark,
-           unsigned impstop, unsigned evalstop, double focus, unsigned paretomax, double epsilon, bool memory,
-           unsigned seed)
+           unsigned impstop, unsigned evalstop, double focus, bool memory, unsigned seed)
     : m_gen(gen), m_acc(acc), m_impstop(impstop), m_evalstop(evalstop), m_focus(focus), m_ker(ker), m_oracle(oracle),
-      m_paretomax(paretomax), m_epsilon(epsilon), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(), m_res(),
-      m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(),
-      m_n_evalstop(1u), m_n_impstop(1u), m_gen_mark(1u), m_fevals(0u)
+      m_e(seed), m_seed(seed), m_verbosity(0u), m_log(), m_res(), m_threshold(threshold), m_q(q),
+      m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(), m_n_evalstop(1u), m_n_impstop(1u),
+      m_gen_mark(1u), m_fevals(0u)
 {
     if (acc < 0.) {
         pagmo_throw(std::invalid_argument,
@@ -69,12 +68,6 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
     if (focus < 0.) {
         pagmo_throw(std::invalid_argument,
                     "The focus parameter must be >=0  while a value of " + std::to_string(focus) + " was detected");
-    }
-
-    if (epsilon >= 1. || epsilon < 0.) {
-        pagmo_throw(std::invalid_argument,
-                    "The Pareto precision parameter must be in [0, 1[, while a value of " + std::to_string(epsilon)
-                        + " was detected");
     }
     if ((threshold < 1 || threshold > gen) && gen != 0 && memory == false) {
         pagmo_throw(std::invalid_argument,
@@ -85,6 +78,11 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
         pagmo_throw(std::invalid_argument,
                     "If memory is active, the threshold parameter must be >=1 while a value of "
                         + std::to_string(threshold) + " was detected");
+    }
+    if (q < 0.) {
+        pagmo_throw(std::invalid_argument,
+                    "The convergence speed parameter must be >=0  while a value of " + std::to_string(q)
+                        + " was detected");
     }
 }
 
@@ -468,8 +466,6 @@ std::string gaco::get_extra_info() const
     stream(ss, "\n\tFocus parameter: ", m_focus);
     stream(ss, "\n\tKernel: ", m_ker);
     stream(ss, "\n\tOracle parameter: ", m_oracle);
-    stream(ss, "\n\tMax number of non-dominated solutions: ", m_paretomax);
-    stream(ss, "\n\tPareto precision: ", m_epsilon);
     stream(ss, "\n\tPseudo-random number generator (Marsenne Twister 19937): ", m_e);
     stream(ss, "\n\tSeed: ", m_seed);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
@@ -488,9 +484,9 @@ std::string gaco::get_extra_info() const
 template <typename Archive>
 void gaco::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_paretomax, m_epsilon, m_e,
-                    m_seed, m_verbosity, m_log, m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter,
-                    m_sol_archive, m_n_evalstop, m_n_impstop, m_gen_mark, m_fevals, m_bfe);
+    detail::archive(ar, m_gen, m_acc, m_impstop, m_evalstop, m_focus, m_ker, m_oracle, m_e, m_seed, m_verbosity, m_log,
+                    m_res, m_threshold, m_q, m_n_gen_mark, m_memory, m_counter, m_sol_archive, m_n_evalstop,
+                    m_n_impstop, m_gen_mark, m_fevals, m_bfe);
 }
 
 /**
