@@ -79,6 +79,7 @@ class _raise_exception_2:
     def get_bounds(self):
         return ([0], [1])
 
+
 class _r_pol(object):
 
     def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
@@ -1916,8 +1917,10 @@ class archipelago_test_case(_ut.TestCase):
         a = archipelago(5, t=topology(), algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5)
         self.assertTrue(a.get_topology().is_(unconnected))
-        self.assertTrue(all([isl.get_r_policy().is_(fair_replace) for isl in a]))
-        self.assertTrue(all([isl.get_s_policy().is_(select_best) for isl in a]))
+        self.assertTrue(
+            all([isl.get_r_policy().is_(fair_replace) for isl in a]))
+        self.assertTrue(
+            all([isl.get_s_policy().is_(select_best) for isl in a]))
 
         a = archipelago(5, t=topology(ring()), algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5)
@@ -1929,13 +1932,17 @@ class archipelago_test_case(_ut.TestCase):
 
         a = archipelago(5, t=ring(), algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5, r_pol=r_policy())
-        self.assertTrue(all([isl.get_r_policy().is_(fair_replace) for isl in a]))
-        self.assertTrue(all([isl.get_s_policy().is_(select_best) for isl in a]))
+        self.assertTrue(
+            all([isl.get_r_policy().is_(fair_replace) for isl in a]))
+        self.assertTrue(
+            all([isl.get_s_policy().is_(select_best) for isl in a]))
 
         a = archipelago(5, t=ring(), algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5, r_pol=r_policy(), s_pol=s_policy())
-        self.assertTrue(all([isl.get_r_policy().is_(fair_replace) for isl in a]))
-        self.assertTrue(all([isl.get_s_policy().is_(select_best) for isl in a]))
+        self.assertTrue(
+            all([isl.get_r_policy().is_(fair_replace) for isl in a]))
+        self.assertTrue(
+            all([isl.get_s_policy().is_(select_best) for isl in a]))
 
         a = archipelago(5, t=ring(), algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5, r_pol=_r_pol(), s_pol=_s_pol())
@@ -2068,7 +2075,8 @@ class archipelago_test_case(_ut.TestCase):
         del i0, i1, i2, i3
 
     def run_push_back_tests(self):
-        from . import (archipelago, de, rosenbrock, r_policy, s_policy, fair_replace, select_best)
+        from . import (archipelago, de, rosenbrock, r_policy,
+                       s_policy, fair_replace, select_best)
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         # Push back while evolving.
         a.evolve(10)
@@ -2100,18 +2108,27 @@ class archipelago_test_case(_ut.TestCase):
 
         # Push back with custom policies.
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
-        self.assertTrue(all([isl.get_r_policy().is_(fair_replace) for isl in a]))
-        self.assertTrue(all([isl.get_s_policy().is_(select_best) for isl in a]))
+        self.assertTrue(
+            all([isl.get_r_policy().is_(fair_replace) for isl in a]))
+        self.assertTrue(
+            all([isl.get_s_policy().is_(select_best) for isl in a]))
 
         a.push_back(algo=de(), prob=rosenbrock(), size=11, r_pol=r_policy())
-        a.push_back(algo=de(), prob=rosenbrock(), size=11, r_pol=r_policy(), s_pol=s_policy())
-        self.assertTrue(all([isl.get_r_policy().is_(fair_replace) for isl in a]))
-        self.assertTrue(all([isl.get_s_policy().is_(select_best) for isl in a]))
+        a.push_back(algo=de(), prob=rosenbrock(), size=11,
+                    r_pol=r_policy(), s_pol=s_policy())
+        self.assertTrue(
+            all([isl.get_r_policy().is_(fair_replace) for isl in a]))
+        self.assertTrue(
+            all([isl.get_s_policy().is_(select_best) for isl in a]))
 
-        a.push_back(algo=de(), prob=rosenbrock(), size=11, r_pol=_r_pol(), s_pol=_s_pol())
-        a.push_back(algo=de(), prob=rosenbrock(), size=11, r_pol=_r_pol(), s_pol=_s_pol())
-        self.assertTrue(all([a[i].get_r_policy().is_(_r_pol) for i in range(7, 9)]))
-        self.assertTrue(all([a[i].get_s_policy().is_(_s_pol) for i in range(7, 9)]))
+        a.push_back(algo=de(), prob=rosenbrock(), size=11,
+                    r_pol=_r_pol(), s_pol=_s_pol())
+        a.push_back(algo=de(), prob=rosenbrock(), size=11,
+                    r_pol=_r_pol(), s_pol=_s_pol())
+        self.assertTrue(all([a[i].get_r_policy().is_(_r_pol)
+                             for i in range(7, 9)]))
+        self.assertTrue(all([a[i].get_s_policy().is_(_s_pol)
+                             for i in range(7, 9)]))
 
     def run_io_tests(self):
         from . import archipelago, de, rosenbrock
@@ -2133,13 +2150,16 @@ class archipelago_test_case(_ut.TestCase):
         self.assertEqual(repr(a), repr(loads(dumps(a))))
 
         # Test also with custom topology, mh and mt.
-        a = archipelago(n=5, t=ring(), algo=de(), prob=rosenbrock(), pop_size=10)
+        a = archipelago(n=5, t=ring(), algo=de(),
+                        prob=rosenbrock(), pop_size=10)
         a.set_migration_type(migration_type.broadcast)
         a.set_migrant_handling(migrant_handling.evict)
         self.assertEqual(repr(a), repr(loads(dumps(a))))
         self.assertTrue(loads(dumps(a)).get_topology().is_(ring))
-        self.assertEqual(loads(dumps(a)).get_migration_type(), migration_type.broadcast)
-        self.assertEqual(loads(dumps(a)).get_migrant_handling(), migrant_handling.evict)
+        self.assertEqual(loads(dumps(a)).get_migration_type(),
+                         migration_type.broadcast)
+        self.assertEqual(loads(dumps(a)).get_migrant_handling(),
+                         migrant_handling.evict)
 
     def run_champions_tests(self):
         from . import archipelago, de, rosenbrock, zdt
@@ -2233,21 +2253,26 @@ class archipelago_test_case(_ut.TestCase):
             def __init__(self, n=0):
                 self._n = n
                 self._lock = threading.Lock()
+
             def get_n(self):
                 with self._lock:
                     n = self._n
                 return n
+
             def __copy__(self):
                 return udt(self.get_n())
+
             def __deepcopy__(self, d):
                 return self.__copy__()
+
             def push_back(self):
                 with self._lock:
                     self._n = self._n + 1
+
             def get_connections(self, i):
                 with self._lock:
                     n = self._n
-                return (list(range(0,i)) + list(range(i+1,n)), [1.]*(n-1))
+                return (list(range(0, i)) + list(range(i+1, n)), [1.]*(n-1))
 
         # NOTE: these two will just re-use fair_replace/select_best internally.
         class udrp(object):
@@ -2255,13 +2280,13 @@ class archipelago_test_case(_ut.TestCase):
             def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
                 return r_policy(fair_replace()).replace(inds, nx, nix, nobj, nec, nic, tol, mig)
 
-
         class udsp(object):
 
             def select(self, inds, nx, nix, nobj, nec, nic, tol):
                 return s_policy(select_best()).select(inds, nx, nix, nobj, nec, nic, tol)
 
-        archi = archipelago(n=100, t=udt(), algo=de(1), prob=rosenbrock(), pop_size=10, seed=32, r_pol=udrp(), s_pol=udsp())
+        archi = archipelago(n=100, t=udt(), algo=de(
+            1), prob=rosenbrock(), pop_size=10, seed=32, r_pol=udrp(), s_pol=udsp())
 
         archi.evolve(100)
         archi.wait_check()
