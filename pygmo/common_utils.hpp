@@ -168,10 +168,14 @@ inline bp::object callable_attribute(const bp::object &o, const char *s)
 }
 
 // Convert a vector of arithmetic types into a 1D numpy array.
-template <typename T>
-using v_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
-
-template <typename T, v_to_a_enabler<T> = 0>
+// NOTE: provide two overloads, one for unsigned integral types and the
+// other for the other arithmetic types. The idea is that we may not want
+// to produce numpy arrays of unsigned integrals, as they are more painful
+// to deal with in Python than just plain signed integrals.
+template <typename T, pagmo::enable_if_t<pagmo::detail::disjunction<
+                                             std::is_floating_point<T>,
+                                             pagmo::detail::conjunction<std::is_integral<T>, std::is_signed<T>>>::value,
+                                         int> = 0>
 inline bp::object v_to_a(const std::vector<T> &v)
 {
     // The dimensions of the array to be created.
@@ -191,11 +195,42 @@ inline bp::object v_to_a(const std::vector<T> &v)
     return retval;
 }
 
-// Convert a vector of vectors of arithmetic types into a 2D numpy array.
-template <typename T>
-using vv_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
+template <typename T,
+          pagmo::enable_if_t<pagmo::detail::conjunction<std::is_integral<T>, std::is_unsigned<T>>::value, int> = 0>
+inline bp::object v_to_a(const std::vector<T> &v, bool keep_unsigned = false)
+{
+    // The dimensions of the array to be created.
+    npy_intp dims[] = {boost::numeric_cast<npy_intp>(v.size())};
+    // Attempt creating the array. The ndtype will be the signed counterpart of T,
+    // if keep_unsigned is false.
+    using int_type = typename std::make_signed<T>::type;
+    PyObject *ret = PyArray_SimpleNew(1, dims, keep_unsigned ? cpp_npy<T>::value : cpp_npy<int_type>::value);
+    if (!ret) {
+        pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
+    }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
+    if (v.size()) {
+        if (keep_unsigned) {
+            // Copy over the data.
+            std::copy(v.begin(), v.end(), static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret))));
+        } else {
+            // Copy over the data, transforming from unsigned to signed on the fly.
+            std::transform(v.begin(), v.end(),
+                           static_cast<int_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret))),
+                           [](const T &n) { return boost::numeric_cast<int_type>(n); });
+        }
+    }
+    // Hand over to boost python.
+    return retval;
+}
 
-template <typename T, vv_to_a_enabler<T> = 0>
+// Convert a vector of vectors of arithmetic types into a 2D numpy array.
+// NOTE: same scheme as above.
+template <typename T, pagmo::enable_if_t<pagmo::detail::disjunction<
+                                             std::is_floating_point<T>,
+                                             pagmo::detail::conjunction<std::is_integral<T>, std::is_signed<T>>>::value,
+                                         int> = 0>
 inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
 {
     // The dimensions of the array to be created.
@@ -221,6 +256,49 @@ inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
         }
     }
     return retval;
+}
+
+template <typename T,
+          pagmo::enable_if_t<pagmo::detail::conjunction<std::is_integral<T>, std::is_unsigned<T>>::value, int> = 0>
+inline bp::object vv_to_a(const std::vector<std::vector<T>> &v, bool keep_unsigned = false)
+{
+    // The dimensions of the array to be created.
+    const auto nrows = v.size();
+    const auto ncols = nrows ? v[0].size() : 0u;
+    npy_intp dims[] = {boost::numeric_cast<npy_intp>(nrows), boost::numeric_cast<npy_intp>(ncols)};
+    // Attempt creating the array. The ndtype will be the signed counterpart of T,
+    // if keep_unsigned is false.
+    using int_type = typename std::make_signed<T>::type;
+    PyObject *ret = PyArray_SimpleNew(2, dims, keep_unsigned ? cpp_npy<T>::value : cpp_npy<int_type>::value);
+    if (!ret) {
+        pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
+    }
+    // Hand over to BP for exception-safe behaviour.
+    bp::object retval{bp::handle<>(ret)};
+    if (nrows) {
+        if (keep_unsigned) {
+            auto data = static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
+            for (const auto &i : v) {
+                if (i.size() != ncols) {
+                    pygmo_throw(PyExc_ValueError, "cannot convert a vector of vectors to a NumPy 2D array "
+                                                  "if the vector instances don't have all the same size");
+                }
+                std::copy(i.begin(), i.end(), data);
+                data += ncols;
+            }
+        } else {
+            auto data = static_cast<int_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
+            for (const auto &i : v) {
+                if (i.size() != ncols) {
+                    pygmo_throw(PyExc_ValueError, "cannot convert a vector of vectors to a NumPy 2D array "
+                                                  "if the vector instances don't have all the same size");
+                }
+                std::transform(i.begin(), i.end(), data, [](const T &n) { return boost::numeric_cast<int_type>(n); });
+                data += ncols;
+            }
+        }
+        return retval;
+    }
 }
 
 // isinstance wrapper.
@@ -347,52 +425,65 @@ inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
                                      .c_str());
 }
 
-// Convert a numpy array to an std::vector of unsigned integral type.
-template <typename UInt>
+// Convert a 1D numpy array of input integral type SourceInt to an std::vector of
+// unsigned integral type UInt.
+template <typename UInt, typename SourceInt>
 inline std::vector<UInt> a_to_vuint(PyArrayObject *o)
 {
     static_assert(std::is_integral<UInt>::value && std::is_unsigned<UInt>::value,
-                  "This function must be used only with unsigned integral types.");
+                  "The UInt type must be an unsigned integral type.");
+
+    static_assert(std::is_integral<SourceInt>::value, "The SourceInt type must be an integral type.");
 
     using size_type = typename std::vector<UInt>::size_type;
-    using int_type = std::make_signed<std::size_t>::type;
 
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of unsigned integrals: "
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a vector of unsigned integrals: "
                                         "data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of unsigned integrals: "
+        pygmo_throw(PyExc_ValueError, "cannot convert a NumPy array to a vector of unsigned integrals: "
                                       "the array must be unidimensional");
     }
-    if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
-        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of unsigned integrals: "
-                                     "invalid scalar type");
+    if (PyArray_TYPE(o) != cpp_npy<SourceInt>::value) {
+        pygmo_throw(PyExc_TypeError, "cannot convert a NumPy array to a vector of unsigned integrals: "
+                                     "the input scalar type is inconsistent with the expected integral type");
     }
-    if (PyArray_STRIDES(o)[0] != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned integrals: "
+    if (PyArray_STRIDES(o)[0] != sizeof(SourceInt)) {
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert a NumPy array to a vector of unsigned integrals: "
                                          "the stride value must be "
-                                         + std::to_string(sizeof(int_type)))
+                                         + std::to_string(sizeof(SourceInt)))
                                             .c_str());
     }
-    if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned integrals: "
+    if (PyArray_ITEMSIZE(o) != sizeof(SourceInt)) {
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert a NumPy array to a vector of unsigned integrals: "
                                          "the size of the scalar type must be "
-                                         + std::to_string(sizeof(int_type)))
+                                         + std::to_string(sizeof(SourceInt)))
                                             .c_str());
     }
 
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
     std::vector<UInt> retval;
+    retval.resize(boost::numeric_cast<decltype(retval.size())>(size));
+
     if (size) {
-        auto data = static_cast<int_type *>(PyArray_DATA(o));
-        std::transform(data, data + size, std::back_inserter(retval),
-                       [](int_type n) { return boost::numeric_cast<UInt>(n); });
+        auto data = static_cast<SourceInt *>(PyArray_DATA(o));
+        std::transform(data, data + size, retval.data(), [](SourceInt n) { return boost::numeric_cast<UInt>(n); });
     }
+
     return retval;
 }
 
 // Convert an arbitrary python object to a vector of unsigned integrals.
+// This function expects in input either a list of something convertible
+// to UInt, or a NumPy array of *signed* integrals. The point of expecting
+// signed integrals is that, except in rare occasions, we just want to
+// deal with signed integral types on the Python side and convert back
+// to unsigned only when crossing over to C++. This is much more natural
+// for the user, who does not have to deal with the creation of NumPy
+// arrays with a non-default dtype, etc. The only exception to this
+// rule is when we are dealing with individual IDs, which must be kept
+// unsigned.
 template <typename UInt>
 inline std::vector<UInt> to_vuint(const bp::object &o)
 {
@@ -406,8 +497,13 @@ inline std::vector<UInt> to_vuint(const bp::object &o)
         bp::stl_input_iterator<UInt> begin(o), end;
         return std::vector<UInt>(begin, end);
     } else if (isinstance(o, a)) {
-        // NOTE: as usual, we try first to create an array of signed ints,
-        // and we convert to unsigned in a_to_vuint().
+        // NOTE: the idea here is that we expect in input a numpy array of
+        // the "natural sized" signed int type for the platform, which we
+        // heuristically assume to be the signed counterpart of size_t. The idea
+        // is that we basically want the users to use signed integral arrays
+        // when talking to pygmo, because they are the easiest to work with
+        // and I don't see much benefit in making the distinction between signed/unsigned
+        // in Python. We can rework this approach if it turns out to be too restrictive.
         using int_type = std::make_signed<std::size_t>::type;
 
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<int_type>::value, NPY_ARRAY_IN_ARRAY);
@@ -415,7 +511,7 @@ inline std::vector<UInt> to_vuint(const bp::object &o)
             bp::throw_error_already_set();
         }
 
-        return a_to_vuint<UInt>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+        return a_to_vuint<UInt, int_type>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
     pygmo_throw(PyExc_TypeError,
                 ("cannot convert the type '" + str(type(o))
@@ -536,8 +632,8 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         // vector_double::size_type (most likely long or long long) from whatever type of NumPy array was passed as
         // input, and then we will convert the elements to the appropriate size_type inside the a_to_sp routine. The
         // reason for doing this is that in typical usage Python integers are converted to signed integers when used
-        // inside NumPy arrays, so we want to work with signed ints here as well in order no to force the user to create
-        // sparsity patterns like array(...,dtype='ulonglong').
+        // inside NumPy arrays, so we want to work with signed ints here as well in order no to force the user to
+        // create sparsity patterns like array(...,dtype='ulonglong').
         auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<std::make_signed<size_type>::type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             // NOTE: PyArray_FROM_OTF already sets the exception at the Python level with an appropriate message,
@@ -745,11 +841,11 @@ inline auto lcast(T func) -> decltype(+func)
 
 // NOTE: these are alternative implementations of BP's add_property() functionality for classes.
 // The reason they exist (and why they should be used instead of the BP implementation) is because
-// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which seems
-// to be somehow related to BP's add_property() (at least judging from the limited stacktrace
-// I could obtain on windows). These alternative wrappers seem to sidestep the issue, at least so far.
-// They can be used exactly like BP's add_property(), the only difference being that they are functions
-// rather than methods, and they thus require the BP class to be passed in as first argument.
+// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which
+// seems to be somehow related to BP's add_property() (at least judging from the limited stacktrace I could obtain
+// on windows). These alternative wrappers seem to sidestep the issue, at least so far. They can be used exactly
+// like BP's add_property(), the only difference being that they are functions rather than methods, and they thus
+// require the BP class to be passed in as first argument.
 template <typename T>
 inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const char *doc = "")
 {
@@ -817,6 +913,94 @@ inline void import_aps(const bp::list &l)
             }
         }
     }
+}
+
+// Convert an individuals_group_t into a Python tuple of:
+// - 1D integral array of IDs,
+// - 2D float array of dvs,
+// - 2D float array of fvs.
+inline bp::tuple inds_to_tuple(const pagmo::individuals_group_t &inds)
+{
+    // Do the IDs.
+    // NOTE: as usual, keep the IDs as unsigned values.
+    auto ID_arr = v_to_a(std::get<0>(inds), true);
+
+    // Decision vectors.
+    auto dv_arr = vv_to_a(std::get<1>(inds));
+
+    // Fitness vectors.
+    auto fv_arr = vv_to_a(std::get<2>(inds));
+
+    return bp::make_tuple(ID_arr, dv_arr, fv_arr);
+}
+
+// Convert a generic Python object into a vector of individual IDs.
+// NOTE: this is very similar to to_vuint(), but with the difference
+// that we want to keep the unsignedness of the IDs. Perhaps
+// in the future we can refactor these functions to have less code
+// duplication.
+inline std::vector<unsigned long long> to_ID_vector(const bp::object &o)
+{
+    bp::object l = builtin().attr("list");
+    bp::object a = bp::import("numpy").attr("ndarray");
+
+    if (isinstance(o, l)) {
+        bp::stl_input_iterator<unsigned long long> begin(o), end;
+        return std::vector<unsigned long long>(begin, end);
+    } else if (isinstance(o, a)) {
+        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<unsigned long long>::value, NPY_ARRAY_IN_ARRAY);
+        if (!n) {
+            bp::throw_error_already_set();
+        }
+
+        return a_to_vuint<unsigned long long, unsigned long long>(
+            reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+    }
+    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
+                                  + "' to a vector of individual IDs: only lists of unsigned ints and NumPy arrays of "
+                                    "unsigned ints are supported")
+                                     .c_str());
+}
+
+// Convert a generic Python object into an individuals_group_t.
+inline pagmo::individuals_group_t to_inds(const bp::object &o)
+{
+    // We assume we receive in input something we can iterate over.
+    bp::stl_input_iterator<bp::object> begin(o), end;
+
+    if (begin == end) {
+        // Empty iteratable.
+        pygmo_throw(PyExc_ValueError, "cannot convert an empty iteratable into a pagmo::individuals_group_t");
+    }
+
+    // Try fetching the IDs.
+    auto ID_vec = to_ID_vector(*begin);
+
+    if (++begin == end) {
+        // Iteratable with only 1 element.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with only 1 element into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    // Try fetching the decision vectors.
+    auto dvs_vec = to_vvd(*begin);
+
+    if (++begin == end) {
+        // Iteratable with only 2 elements.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with only 2 elements into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    // Try fetching the fitness vectors.
+    auto fvs_vec = to_vvd(*begin);
+
+    if (++begin != end) {
+        // Iteratable with too many elements.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with more than 3 elements into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    return pagmo::individuals_group_t(std::move(ID_vec), std::move(dvs_vec), std::move(fvs_vec));
 }
 
 } // namespace pygmo

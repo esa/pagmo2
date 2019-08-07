@@ -30,23 +30,24 @@
 
 # for python 2.0 compatibility
 from __future__ import absolute_import as _ai
+from ..core import dtlz
 
 # Plotting functions
 
 
-def plot_non_dominated_fronts(points, marker='o', comp=[0, 1], axes = None):
+def plot_non_dominated_fronts(points, marker='o', comp=[0, 1], axes=None):
     """
     Plots the nondominated fronts of a set of points. Makes use of :class:`~pygmo.fast_non_dominated_sorting` to
     compute the non dominated fronts.
 
     Args:
         points (2d array-like): points to plot
-        marker (``str``): matplotlib marker used to plot the *points*
-        comp (``list``): Components to be considered in the two dimensional plot (useful in many-objectives cases)
-        axes (matplotlib.axes.Axes): plot axes
+        marker (str): matplotlib marker used to plot the *points*
+        comp (list): Components to be considered in the two dimensional plot (useful in many-objectives cases)
+        axes (matplotlib.axes.Axes): plot axes (if :data:`None`, new axes will be created)
 
     Returns:
-        ``matplotlib.axes.Axes``: the current ``matplotlib.axes.Axes`` instance on the current figure
+        matplotlib.axes.Axes: the input *axes* or a new :class:`matplotlib.axes.Axes` instance
 
     Examples:
         >>> from pygmo import *
@@ -54,6 +55,7 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1], axes = None):
         >>> pop = population(prob, 40)
         >>> ax = plot_non_dominated_fronts(pop.get_f()) # doctest: +SKIP
     """
+
     from matplotlib import pyplot as plt
     from ..core import fast_non_dominated_sorting, population
     from numpy import linspace
@@ -76,14 +78,14 @@ def plot_non_dominated_fronts(points, marker='o', comp=[0, 1], axes = None):
                 comp[1]], marker=marker, color=cl[ndr])
         # We plot the fronts
         # Frist compute the points coordinates
-        x = [points[idx][comp[0]] for idx in front] 
+        x = [points[idx][comp[0]] for idx in front]
         y = [points[idx][comp[1]] for idx in front]
         # Then sort them by the first objective
         tmp = [(a, b) for a, b in zip(x, y)]
         tmp = sorted(tmp, key=lambda k: k[0])
         # Now plot using step
         axes.step([c[0] for c in tmp], [c[1]
-                                      for c in tmp], color=cl[ndr], where='post')
+                                        for c in tmp], color=cl[ndr], where='post')
 
     return axes
 
@@ -175,5 +177,4 @@ def _dtlz_plot(self, pop, az=40, comp=[0, 1, 2]):
     return ax
 
 
-from ..core import dtlz
 dtlz.plot = _dtlz_plot

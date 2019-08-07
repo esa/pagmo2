@@ -38,7 +38,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <atomic>
+#include <cstddef>
 #include <initializer_list>
+#include <iostream>
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
@@ -47,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
@@ -60,8 +63,14 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/zdt.hpp>
+#include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policies/select_best.hpp>
+#include <pagmo/topologies/fully_connected.hpp>
+#include <pagmo/topologies/ring.hpp>
+#include <pagmo/topologies/unconnected.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -73,11 +82,45 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
 
     using size_type = archipelago::size_type;
     archipelago archi;
+
+    std::cout << archi << '\n';
+
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.get_topology().is<unconnected>());
     BOOST_CHECK(archi.size() == 0u);
+    BOOST_CHECK(archi.get_migration_log().empty());
+    BOOST_CHECK(archi.get_migrants_db().empty());
+
+    // Copy constructor.
+    archi.set_topology(topology{ring{}});
+    archi.set_migration_type(migration_type::broadcast);
+    archi.set_migrant_handling(migrant_handling::evict);
+    auto archi_copy(archi);
+    BOOST_CHECK(archi_copy.get_migration_type() == migration_type::broadcast);
+    BOOST_CHECK(archi_copy.get_migrant_handling() == migrant_handling::evict);
+    BOOST_CHECK(archi_copy.get_topology().is<ring>());
+    BOOST_CHECK(archi_copy.size() == 0u);
+    BOOST_CHECK(archi_copy.get_migration_log().empty());
+    BOOST_CHECK(archi_copy.get_migrants_db().empty());
+
+    // Move constructor.
+    auto archi_move(std::move(archi_copy));
+    BOOST_CHECK(archi_move.get_migration_type() == migration_type::broadcast);
+    BOOST_CHECK(archi_move.get_migrant_handling() == migrant_handling::evict);
+    BOOST_CHECK(archi_move.get_topology().is<ring>());
+    BOOST_CHECK(archi_move.size() == 0u);
+    BOOST_CHECK(archi_move.get_migration_log().empty());
+    BOOST_CHECK(archi_move.get_migrants_db().empty());
+
     archipelago archi2(0u, de{}, rosenbrock{}, 10u);
     BOOST_CHECK(archi2.size() == 0u);
+    BOOST_CHECK(archi2.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi2.get_migrant_handling() == migrant_handling::preserve);
     archipelago archi3(5u, de{}, rosenbrock{}, 10u);
     BOOST_CHECK(archi3.size() == 5u);
+    BOOST_CHECK(archi3.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3.get_migrant_handling() == migrant_handling::preserve);
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
@@ -86,19 +129,25 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     }
     archi3 = archipelago{5u, thread_island{}, de{}, rosenbrock{}, 10u};
     BOOST_CHECK(archi3.size() == 5u);
+    BOOST_CHECK(archi3.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3.get_migrant_handling() == migrant_handling::preserve);
     std::vector<unsigned> seeds;
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
         BOOST_CHECK(archi3[i].get_population().size() == 10u);
         BOOST_CHECK(archi3[i].get_population().get_problem().is<rosenbrock>());
+        BOOST_CHECK(archi3[i].get_r_policy().is<fair_replace>());
+        BOOST_CHECK(archi3[i].get_s_policy().is<select_best>());
         seeds.push_back(archi3[i].get_population().get_seed());
     }
-    // Check seeds are different.
+    // Check seeds are different (not guaranteed but very likely).
     std::sort(seeds.begin(), seeds.end());
     BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
     archi3 = archipelago{5u, thread_island{}, de{}, population{rosenbrock{}, 10u}};
     BOOST_CHECK(archi3.size() == 5u);
+    BOOST_CHECK(archi3.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3.get_migrant_handling() == migrant_handling::preserve);
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
@@ -107,6 +156,8 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     }
     archi3 = archipelago{5u, thread_island{}, de{}, population{rosenbrock{}, 10u, 123u}};
     BOOST_CHECK(archi3.size() == 5u);
+    BOOST_CHECK(archi3.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3.get_migrant_handling() == migrant_handling::preserve);
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(archi3[i].status() != evolve_status::busy);
         BOOST_CHECK(archi3[i].get_algorithm().is<de>());
@@ -115,6 +166,8 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     }
     // A couple of tests for the constructor which contains a seed argument.
     archipelago archi3a{5u, thread_island{}, de{}, rosenbrock{}, 10u, 123u};
+    BOOST_CHECK(archi3a.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3a.get_migrant_handling() == migrant_handling::preserve);
     seeds.clear();
     std::transform(archi3a.begin(), archi3a.end(), std::back_inserter(seeds),
                    [](const island &isl) { return isl.get_population().get_seed(); });
@@ -122,6 +175,8 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
     std::vector<unsigned> seeds2;
     archipelago archi3b{5u, de{}, rosenbrock{}, 10u, 123u};
+    BOOST_CHECK(archi3b.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3b.get_migrant_handling() == migrant_handling::preserve);
     std::transform(archi3b.begin(), archi3b.end(), std::back_inserter(seeds2),
                    [](const island &isl) { return isl.get_population().get_seed(); });
     std::sort(seeds2.begin(), seeds2.end());
@@ -155,6 +210,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
         }));
     auto archi4 = archi3;
     BOOST_CHECK(archi4.size() == 5u);
+    BOOST_CHECK(archi4.get_migrants_db().size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(archi4[i].status() != evolve_status::busy);
         BOOST_CHECK(archi4[i].get_algorithm().is<de>());
@@ -164,6 +220,7 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
     archi4.evolve(10);
     auto archi5 = archi4;
     BOOST_CHECK(archi5.size() == 5u);
+    BOOST_CHECK(archi5.get_migrants_db().size() == 5u);
     for (size_type i = 0; i < 5u; ++i) {
         BOOST_CHECK(archi5[i].status() != evolve_status::busy);
         BOOST_CHECK(archi5[i].get_algorithm().is<de>());
@@ -220,6 +277,251 @@ BOOST_AUTO_TEST_CASE(archipelago_construction)
         BOOST_CHECK(archi4[i].get_population().get_problem().is<rosenbrock>());
     }
 #endif
+}
+
+struct udrp00 {
+    individuals_group_t replace(const individuals_group_t &, const vector_double::size_type &,
+                                const vector_double::size_type &, const vector_double::size_type &,
+                                const vector_double::size_type &, const vector_double::size_type &,
+                                const vector_double &, const individuals_group_t &) const
+    {
+        return individuals_group_t{};
+    }
+};
+
+struct udsp00 {
+    individuals_group_t select(const individuals_group_t &, const vector_double::size_type &,
+                               const vector_double::size_type &, const vector_double::size_type &,
+                               const vector_double::size_type &, const vector_double::size_type &,
+                               const vector_double &) const
+    {
+        return individuals_group_t{};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(archipelago_policy_constructors)
+{
+    // algo, prob, size, policies, no seed.
+    archipelago archi{5u, de{}, rosenbrock{}, 10u, udrp00{}, udsp00{}};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+    }
+
+    // algo, prob, size, policies, seed.
+    std::vector<unsigned> seeds;
+    archi = archipelago{5u, de{}, rosenbrock{}, 10u, udrp00{}, udsp00{}, 5};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    BOOST_CHECK(archi.get_migrants_db().size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+        seeds.push_back(isl.get_population().get_seed());
+    }
+    // Check seeds are different (not guaranteed but very likely).
+    std::sort(seeds.begin(), seeds.end());
+    BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
+
+    // algo, prob, bfe, rpol, spol, no seed.
+    archi = archipelago{5u, de{}, rosenbrock{}, bfe{}, 10u, udrp00{}, udsp00{}};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+    }
+
+    // algo, prob, bfe, rpol, spol, seed.
+    seeds.clear();
+    archi = archipelago{5u, de{}, rosenbrock{}, bfe{}, 10u, udrp00{}, udsp00{}, 5};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+        seeds.push_back(isl.get_population().get_seed());
+    }
+    std::sort(seeds.begin(), seeds.end());
+    BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
+
+    // isl, algo, prob, rpol, spol, no seed.
+    archi = archipelago{5u, thread_island{}, de{}, rosenbrock{}, 10u, udrp00{}, udsp00{}};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+    }
+
+    // isl, algo, prob, rpol, spol, seed.
+    seeds.clear();
+    archi = archipelago{5u, thread_island{}, de{}, rosenbrock{}, 10u, udrp00{}, udsp00{}, 5};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    BOOST_CHECK(archi.get_migrants_db().size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+        seeds.push_back(isl.get_population().get_seed());
+    }
+    std::sort(seeds.begin(), seeds.end());
+    BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
+
+    // isl, algo, prob, bfe, rpol, spol, no seed.
+    archi = archipelago{5u, thread_island{}, de{}, rosenbrock{}, bfe{}, 10u, udrp00{}, udsp00{}};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+    }
+
+    // isl, algo, prob, bfe, rpol, spol, seed.
+    seeds.clear();
+    archi = archipelago{5u, thread_island{}, de{}, rosenbrock{}, bfe{}, 10u, udrp00{}, udsp00{}, 5};
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    BOOST_CHECK(archi.size() == 5u);
+    BOOST_CHECK(archi.get_migrants_db().size() == 5u);
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+        seeds.push_back(isl.get_population().get_seed());
+    }
+    std::sort(seeds.begin(), seeds.end());
+    BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_topology_constructors)
+{
+    archipelago archi{topology{}};
+
+    BOOST_CHECK(archi.get_topology().is<unconnected>());
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+
+    archi = archipelago{ring{}};
+    BOOST_CHECK(archi.get_topology().is<ring>());
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+
+    // Check that the topology is preserved in copy/move ops.
+    auto archi2(archi);
+    BOOST_CHECK(archi2.get_topology().is<ring>());
+    BOOST_CHECK(archi2.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi2.get_migrant_handling() == migrant_handling::preserve);
+
+    auto archi3(std::move(archi2));
+    BOOST_CHECK(archi3.get_topology().is<ring>());
+    BOOST_CHECK(archi3.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi3.get_migrant_handling() == migrant_handling::preserve);
+
+    archipelago archi4;
+    archi4 = archi3;
+    BOOST_CHECK(archi4.get_topology().is<ring>());
+    BOOST_CHECK(archi4.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi4.get_migrant_handling() == migrant_handling::preserve);
+
+    archipelago archi5;
+    archi5 = std::move(archi4);
+    BOOST_CHECK(archi5.get_topology().is<ring>());
+    BOOST_CHECK(archi5.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi5.get_migrant_handling() == migrant_handling::preserve);
+
+    // Ctors from topology and number of islands.
+    archi = archipelago{topology{}, 5};
+    BOOST_CHECK(archi.size() == 5u);
+    BOOST_CHECK(archi.get_topology().is<unconnected>());
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+
+    // Invoke one of the complicated ctors
+    archi = archipelago{ring{}, 5u, thread_island{}, de{}, rosenbrock{}, bfe{}, 10u, udrp00{}, udsp00{}, 5};
+    BOOST_CHECK(archi.size() == 5u);
+    BOOST_CHECK(archi.get_topology().is<ring>());
+    BOOST_CHECK(archi.get_migration_type() == migration_type::p2p);
+    BOOST_CHECK(archi.get_migrant_handling() == migrant_handling::preserve);
+    std::vector<unsigned> seeds;
+    for (const auto &isl : archi) {
+        BOOST_CHECK(isl.is<thread_island>());
+        BOOST_CHECK(isl.get_algorithm().is<de>());
+        BOOST_CHECK(isl.get_population().get_problem().is<rosenbrock>());
+        BOOST_CHECK(isl.get_population().size() == 10u);
+        BOOST_CHECK(isl.get_r_policy().is<udrp00>());
+        BOOST_CHECK(isl.get_s_policy().is<udsp00>());
+        seeds.push_back(isl.get_population().get_seed());
+    }
+    std::sort(seeds.begin(), seeds.end());
+    BOOST_CHECK(std::unique(seeds.begin(), seeds.end()) == seeds.end());
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_push_back_migr)
+{
+    // Verify that push_back() also calls the topology's push_back() and adds
+    // entrie to the migrants db.
+    archipelago archi{ring{}};
+
+    BOOST_CHECK(archi.get_topology().extract<ring>()->num_vertices() == 0u);
+    BOOST_CHECK(archi.get_migrants_db().size() == 0u);
+
+    archi.push_back();
+
+    BOOST_CHECK(archi.get_topology().extract<ring>()->num_vertices() == 1u);
+    BOOST_CHECK(!archi.get_topology().extract<ring>()->are_adjacent(0, 0));
+    BOOST_CHECK(archi.get_migrants_db().size() == 1u);
+
+    archi.push_back();
+    BOOST_CHECK(archi.get_topology().extract<ring>()->num_vertices() == 2u);
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(1, 0));
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(0, 1));
+    BOOST_CHECK(archi.get_migrants_db().size() == 2u);
+
+    archi.push_back();
+    BOOST_CHECK(archi.get_topology().extract<ring>()->num_vertices() == 3u);
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(0, 1));
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(1, 0));
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(1, 2));
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(2, 1));
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(0, 2));
+    BOOST_CHECK(archi.get_topology().extract<ring>()->are_adjacent(2, 0));
+    BOOST_CHECK(archi.get_migrants_db().size() == 3u);
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_topology_setter)
+{
+    archipelago archi{ring{}};
+
+    archi.push_back();
+    archi.push_back();
+    archi.push_back();
+    archi.push_back();
+
+    BOOST_CHECK(archi.get_topology().is<ring>());
+
+    topology new_top{fully_connected{}};
+    new_top.push_back();
+    new_top.push_back();
+    new_top.push_back();
+    new_top.push_back();
+
+    archi.set_topology(new_top);
+
+    BOOST_CHECK(archi.get_topology().is<fully_connected>());
+
+    BOOST_CHECK((archi.get_topology().get_connections(0).first == std::vector<std::size_t>{1, 2, 3}));
+    BOOST_CHECK((archi.get_topology().get_connections(1).first == std::vector<std::size_t>{0, 2, 3}));
+    BOOST_CHECK((archi.get_topology().get_connections(2).first == std::vector<std::size_t>{0, 1, 3}));
+    BOOST_CHECK((archi.get_topology().get_connections(3).first == std::vector<std::size_t>{0, 1, 2}));
 }
 
 BOOST_AUTO_TEST_CASE(archipelago_island_access)
@@ -335,28 +637,41 @@ BOOST_AUTO_TEST_CASE(archipelago_stream)
     std::ostringstream oss;
     oss << a;
     BOOST_CHECK(!oss.str().empty());
+    BOOST_CHECK(boost::contains(oss.str(), "Topology:"));
+    BOOST_CHECK(boost::contains(oss.str(), "Migration type:"));
+    BOOST_CHECK(boost::contains(oss.str(), "Migrant handling policy:"));
 }
 
 BOOST_AUTO_TEST_CASE(archipelago_serialization)
 {
-    archipelago a{10, de{}, population{rosenbrock{}, 25}};
-    a.evolve();
+    archipelago a{ring{}, 10, de{}, population{rosenbrock{}, 25}};
+    a.evolve(10);
     a.wait_check();
     BOOST_CHECK(a.status() == evolve_status::idle);
+    a.set_migration_type(migration_type::broadcast);
+    a.set_migrant_handling(migrant_handling::evict);
     std::stringstream ss;
     auto before = boost::lexical_cast<std::string>(a);
+    const auto mig_db_before = a.get_migrants_db();
+    const auto mig_log_before = a.get_migration_log();
     // Now serialize, deserialize and compare the result.
     {
         boost::archive::binary_oarchive oarchive(ss);
         oarchive << a;
     }
-    a = archipelago{10, de{}, population{rosenbrock{}, 25}};
+    a = archipelago{};
     {
         boost::archive::binary_iarchive iarchive(ss);
         iarchive >> a;
     }
     auto after = boost::lexical_cast<std::string>(a);
     BOOST_CHECK_EQUAL(before, after);
+    BOOST_CHECK(a.get_migration_type() == migration_type::broadcast);
+    BOOST_CHECK(a.get_migrant_handling() == migrant_handling::evict);
+    BOOST_CHECK(a.get_migrants_db() == mig_db_before);
+    BOOST_CHECK(a.get_migration_log() == mig_log_before);
+    BOOST_CHECK(a.get_topology().is<ring>());
+    BOOST_CHECK(a.get_topology().extract<ring>()->num_vertices() == 10u);
 }
 
 BOOST_AUTO_TEST_CASE(archipelago_iterator_tests)

@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
@@ -76,6 +77,11 @@ namespace pagmo
  */
 class PAGMO_DLL_PUBLIC population
 {
+    // Make friends with island for direct
+    // access to the population's members during
+    // evolution.
+    friend class PAGMO_DLL_PUBLIC island;
+
 public:
     /// The size type of the population.
     typedef pop_size_t size_type;

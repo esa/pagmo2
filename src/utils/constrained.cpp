@@ -47,7 +47,7 @@ namespace pagmo
  * with respect to the following strict ordering:
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
- * violates less constraints than \f$f_2\f$, or in case they both violate the same
+ * violates fewer constraints than \f$f_2\f$, or in case they both violate the same
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
@@ -152,7 +152,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  * with respect to the following strict ordering:
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is feasible and \f$f_2\f$ is not.
  * - \f$f_1 \prec f_2\f$ if \f$f_1\f$ is they are both infeasible, but \f$f_1\f$
- * violates less constraints than \f$f_2\f$, or in case they both violate the same
+ * violates fewer constraints than \f$f_2\f$, or in case they both violate the same
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  * is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value

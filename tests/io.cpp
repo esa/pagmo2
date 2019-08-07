@@ -78,11 +78,25 @@ BOOST_AUTO_TEST_CASE(stream_print_test_00)
     BOOST_CHECK_EQUAL(ss1.str(), "true false");
     ss1.str("");
     // Vectors.
+    // Empty vector.
     stream(ss1, std::vector<int>{});
     BOOST_CHECK_EQUAL(ss1.str(), "[]");
     ss1.str("");
+    // Single element.
+    stream(ss1, std::vector<int>{1});
+    ss2 << "[" << 1 << "]";
+    BOOST_CHECK_EQUAL(ss1.str(), ss2.str());
+    ss1.str("");
+    ss2.str("");
+    // Multiple elements.
     stream(ss1, std::vector<int>{1, 2, 3});
     ss2 << "[" << 1 << ", " << 2 << ", " << 3 << "]";
+    BOOST_CHECK_EQUAL(ss1.str(), ss2.str());
+    ss1.str("");
+    ss2.str("");
+    // Vector equal to the print limit.
+    stream(ss1, std::vector<int>{1, 2, 3, 4, 5});
+    ss2 << "[" << 1 << ", " << 2 << ", " << 3 << ", " << 4 << ", " << 5 << "]";
     BOOST_CHECK_EQUAL(ss1.str(), ss2.str());
     ss1.str("");
     ss2.str("");

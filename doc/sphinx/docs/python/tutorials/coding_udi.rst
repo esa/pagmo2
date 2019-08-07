@@ -38,6 +38,10 @@ on some pygmo classes. The above UDI can then be used to construct a :class:`~py
     <BLANKLINE>
     Problem: Ackley Function
     <BLANKLINE>
+    Replacement policy: Fair replace
+    <BLANKLINE>
+    Selection policy: Select best
+    <BLANKLINE>
     Population size: 20
         Champion decision vector: [...
         Champion fitness: [...

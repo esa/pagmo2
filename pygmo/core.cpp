@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/numpy.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <limits>
 #include <memory>
 #include <sstream>
@@ -86,9 +87,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
@@ -110,10 +114,16 @@ see https://www.gnu.org/licenses/. */
 #include <pygmo/expose_bfes.hpp>
 #include <pygmo/expose_islands.hpp>
 #include <pygmo/expose_problems.hpp>
+#include <pygmo/expose_r_policies.hpp>
+#include <pygmo/expose_s_policies.hpp>
+#include <pygmo/expose_topologies.hpp>
 #include <pygmo/island.hpp>
 #include <pygmo/object_serialization.hpp>
 #include <pygmo/problem.hpp>
 #include <pygmo/pygmo_classes.hpp>
+#include <pygmo/r_policy.hpp>
+#include <pygmo/s_policy.hpp>
+#include <pygmo/topology.hpp>
 
 namespace bp = boost::python;
 using namespace pagmo;
@@ -132,6 +142,15 @@ std::unique_ptr<bp::class_<pagmo::island>> island_ptr;
 
 // Exposed pagmo::bfe.
 std::unique_ptr<bp::class_<pagmo::bfe>> bfe_ptr;
+
+// Exposed pagmo::topology.
+std::unique_ptr<bp::class_<pagmo::topology>> topology_ptr;
+
+// Exposed pagmo::r_policy.
+std::unique_ptr<bp::class_<pagmo::r_policy>> r_policy_ptr;
+
+// Exposed pagmo::s_policy.
+std::unique_ptr<bp::class_<pagmo::s_policy>> s_policy_ptr;
 
 namespace detail
 {
@@ -178,6 +197,12 @@ void cleanup()
     island_ptr.reset();
 
     bfe_ptr.reset();
+
+    topology_ptr.reset();
+
+    r_policy_ptr.reset();
+
+    s_policy_ptr.reset();
 }
 
 // Serialization support for the population class.
@@ -419,6 +444,16 @@ BOOST_PYTHON_MODULE(core)
         .value("idle_error", evolve_status::idle_error)
         .value("busy_error", evolve_status::busy_error);
 
+    // Migration type enum.
+    bp::enum_<migration_type>("_migration_type")
+        .value("p2p", migration_type::p2p)
+        .value("broadcast", migration_type::broadcast);
+
+    // Migrant handling policy enum.
+    bp::enum_<migrant_handling>("_migrant_handling")
+        .value("preserve", migrant_handling::preserve)
+        .value("evict", migrant_handling::evict);
+
     // Expose utility functions for testing purposes.
     bp::def("_builtin", &pygmo::builtin);
     bp::def("_type", &pygmo::type);
@@ -476,11 +511,41 @@ BOOST_PYTHON_MODULE(core)
     auto batch_evaluators_module = bp::object(bp::handle<>(bp::borrowed(batch_evaluators_module_ptr)));
     bp::scope().attr("batch_evaluators") = batch_evaluators_module;
 
+    // Create the topologies submodule.
+    std::string topologies_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".topologies");
+    PyObject *topologies_module_ptr = PyImport_AddModule(topologies_module_name.c_str());
+    if (!topologies_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'topologies' submodule");
+    }
+    auto topologies_module = bp::object(bp::handle<>(bp::borrowed(topologies_module_ptr)));
+    bp::scope().attr("topologies") = topologies_module;
+
+    // Create the r_policies submodule.
+    std::string r_policies_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".r_policies");
+    PyObject *r_policies_module_ptr = PyImport_AddModule(r_policies_module_name.c_str());
+    if (!r_policies_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 'r_policies' submodule");
+    }
+    auto r_policies_module = bp::object(bp::handle<>(bp::borrowed(r_policies_module_ptr)));
+    bp::scope().attr("r_policies") = r_policies_module;
+
+    // Create the s_policies submodule.
+    std::string s_policies_module_name = bp::extract<std::string>(bp::scope().attr("__name__") + ".s_policies");
+    PyObject *s_policies_module_ptr = PyImport_AddModule(s_policies_module_name.c_str());
+    if (!s_policies_module_ptr) {
+        pygmo_throw(PyExc_RuntimeError, "error while creating the 's_policies' submodule");
+    }
+    auto s_policies_module = bp::object(bp::handle<>(bp::borrowed(s_policies_module_ptr)));
+    bp::scope().attr("s_policies") = s_policies_module;
+
     // Store the pointers to the classes that can be extended by APs.
     bp::scope().attr("_problem_address") = reinterpret_cast<std::uintptr_t>(&pygmo::problem_ptr);
     bp::scope().attr("_algorithm_address") = reinterpret_cast<std::uintptr_t>(&pygmo::algorithm_ptr);
     bp::scope().attr("_island_address") = reinterpret_cast<std::uintptr_t>(&pygmo::island_ptr);
     bp::scope().attr("_bfe_address") = reinterpret_cast<std::uintptr_t>(&pygmo::bfe_ptr);
+    bp::scope().attr("_topology_address") = reinterpret_cast<std::uintptr_t>(&pygmo::topology_ptr);
+    bp::scope().attr("_r_policy_address") = reinterpret_cast<std::uintptr_t>(&pygmo::r_policy_ptr);
+    bp::scope().attr("_s_policy_address") = reinterpret_cast<std::uintptr_t>(&pygmo::s_policy_ptr);
 
     // Store the address to the list of registered APs.
     bp::scope().attr("_ap_set_address") = reinterpret_cast<std::uintptr_t>(&pygmo::detail::ap_set);
@@ -536,7 +601,7 @@ BOOST_PYTHON_MODULE(core)
              pygmo::population_get_f_docstring().c_str())
         .def("get_x", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_x()); }),
              pygmo::population_get_x_docstring().c_str())
-        .def("get_ID", lcast([](const population &pop) { return pygmo::v_to_a(pop.get_ID()); }),
+        .def("get_ID", lcast([](const population &pop) { return pygmo::v_to_a(pop.get_ID(), true); }),
              pygmo::population_get_ID_docstring().c_str())
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
     pygmo::add_property(pop_class, "champion_x",
@@ -879,8 +944,8 @@ BOOST_PYTHON_MODULE(core)
     pygmo::island_ptr
         = detail::make_unique<bp::class_<island>>("island", pygmo::island_docstring().c_str(), bp::init<>());
     auto &island_class = pygmo::get_island_class();
-    island_class.def(bp::init<const algorithm &, const population &>())
-        .def(bp::init<const bp::object &, const algorithm &, const population &>())
+    island_class.def(bp::init<const algorithm &, const population &, const r_policy &, const s_policy &>())
+        .def(bp::init<const bp::object &, const algorithm &, const population &, const r_policy &, const s_policy &>())
         .def(repr(bp::self))
         .def_pickle(pygmo::island_pickle_suite())
         // Copy and deepcopy.
@@ -898,7 +963,9 @@ BOOST_PYTHON_MODULE(core)
              bp::arg("pop"))
         .def("set_algorithm", &island::set_algorithm, pygmo::island_set_algorithm_docstring().c_str(), bp::arg("algo"))
         .def("get_name", &island::get_name, pygmo::island_get_name_docstring().c_str())
-        .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str());
+        .def("get_extra_info", &island::get_extra_info, pygmo::island_get_extra_info_docstring().c_str())
+        .def("get_r_policy", &island::get_r_policy, pygmo::island_get_r_policy_docstring().c_str())
+        .def("get_s_policy", &island::get_s_policy, pygmo::island_get_s_policy_docstring().c_str());
     pygmo::add_property(island_class, "status", &island::status, pygmo::island_status_docstring().c_str());
 
     // Expose islands.
@@ -906,7 +973,8 @@ BOOST_PYTHON_MODULE(core)
 
     // Archi.
     bp::class_<archipelago> archi_class("archipelago", pygmo::archipelago_docstring().c_str(), bp::init<>());
-    archi_class.def(repr(bp::self))
+    archi_class.def(bp::init<const topology &>())
+        .def(repr(bp::self))
         .def_pickle(pygmo::detail::archipelago_pickle_suite())
         // Copy and deepcopy.
         .def("__copy__", &pygmo::generic_copy_wrapper<archipelago>)
@@ -939,7 +1007,36 @@ BOOST_PYTHON_MODULE(core)
                  }
                  return retval;
              }),
-             pygmo::archipelago_get_champions_x_docstring().c_str());
+             pygmo::archipelago_get_champions_x_docstring().c_str())
+        .def("get_migrants_db", lcast([](const archipelago &archi) -> bp::list {
+                 bp::list retval;
+                 const auto tmp = archi.get_migrants_db();
+                 for (const auto &ig : tmp) {
+                     retval.append(pygmo::inds_to_tuple(ig));
+                 }
+                 return retval;
+             }),
+             pygmo::archipelago_get_migrants_db_docstring().c_str())
+        .def("get_migration_log", lcast([](const archipelago &archi) -> bp::list {
+                 bp::list retval;
+                 const auto tmp = archi.get_migration_log();
+                 for (const auto &le : tmp) {
+                     retval.append(bp::make_tuple(std::get<0>(le), std::get<1>(le), pygmo::v_to_a(std::get<2>(le)),
+                                                  pygmo::v_to_a(std::get<3>(le)), std::get<4>(le), std::get<5>(le)));
+                 }
+                 return retval;
+             }),
+             pygmo::archipelago_get_migration_log_docstring().c_str())
+        .def("get_topology", &archipelago::get_topology, pygmo::archipelago_get_topology_docstring().c_str())
+        .def("_set_topology", &archipelago::set_topology)
+        .def("set_migration_type", &archipelago::set_migration_type,
+             pygmo::archipelago_set_migration_type_docstring().c_str(), (bp::arg("mt")))
+        .def("set_migrant_handling", &archipelago::set_migrant_handling,
+             pygmo::archipelago_set_migrant_handling_docstring().c_str(), (bp::arg("mh")))
+        .def("get_migration_type", &archipelago::get_migration_type,
+             pygmo::archipelago_get_migration_type_docstring().c_str())
+        .def("get_migrant_handling", &archipelago::get_migrant_handling,
+             pygmo::archipelago_get_migrant_handling_docstring().c_str());
     pygmo::add_property(archi_class, "status", &archipelago::status, pygmo::archipelago_status_docstring().c_str());
 
     // Bfe class.
@@ -964,4 +1061,91 @@ BOOST_PYTHON_MODULE(core)
 
     // Expose bfes.
     pygmo::expose_bfes();
+
+    // Topology class.
+    pygmo::topology_ptr
+        = detail::make_unique<bp::class_<topology>>("topology", pygmo::topology_docstring().c_str(), bp::init<>());
+    auto &topology_class = pygmo::get_topology_class();
+    topology_class.def(bp::init<const bp::object &>((bp::arg("udt"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::topology_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<topology>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<topology>)
+        // UDT extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<topology>)
+        // Topology methods.
+        .def("get_connections", lcast([](const topology &t, std::size_t n) -> bp::tuple {
+                 auto ret = t.get_connections(n);
+                 return bp::make_tuple(pygmo::v_to_a(ret.first), pygmo::v_to_a(ret.second));
+             }),
+             pygmo::topology_get_connections_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+        .def("push_back", lcast([](topology &t, unsigned n) { t.push_back(n); }),
+             pygmo::topology_push_back_docstring().c_str(), (bp::arg("n") = std::size_t(1)))
+        .def("get_name", &topology::get_name, pygmo::topology_get_name_docstring().c_str())
+        .def("get_extra_info", &topology::get_extra_info, pygmo::topology_get_extra_info_docstring().c_str());
+
+    // Expose topologies.
+    pygmo::expose_topologies();
+
+    // Replacement policy class.
+    pygmo::r_policy_ptr
+        = detail::make_unique<bp::class_<r_policy>>("r_policy", pygmo::r_policy_docstring().c_str(), bp::init<>());
+    auto &r_policy_class = pygmo::get_r_policy_class();
+    r_policy_class.def(bp::init<const bp::object &>((bp::arg("udrp"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::r_policy_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<r_policy>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<r_policy>)
+        // UDRP extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<r_policy>)
+        // r_policy methods.
+        .def("replace",
+             lcast([](const r_policy &r, const bp::object &inds, const vector_double::size_type &nx,
+                      const vector_double::size_type &nix, const vector_double::size_type &nobj,
+                      const vector_double::size_type &nec, const vector_double::size_type &nic, const bp::object &tol,
+                      const bp::object &mig) -> bp::tuple {
+                 auto ret
+                     = r.replace(pygmo::to_inds(inds), nx, nix, nobj, nec, nic, pygmo::to_vd(tol), pygmo::to_inds(mig));
+                 return pygmo::inds_to_tuple(ret);
+             }),
+             pygmo::r_policy_replace_docstring().c_str(),
+             (bp::arg("inds"), bp::arg("nx"), bp::arg("nix"), bp::arg("nobj"), bp::arg("nec"), bp::arg("nic"),
+              bp::arg("tol"), bp::arg("mig")))
+        .def("get_name", &r_policy::get_name, pygmo::r_policy_get_name_docstring().c_str())
+        .def("get_extra_info", &r_policy::get_extra_info, pygmo::r_policy_get_extra_info_docstring().c_str());
+
+    // Expose r_policies.
+    pygmo::expose_r_policies();
+
+    // Selection policy class.
+    pygmo::s_policy_ptr
+        = detail::make_unique<bp::class_<s_policy>>("s_policy", pygmo::s_policy_docstring().c_str(), bp::init<>());
+    auto &s_policy_class = pygmo::get_s_policy_class();
+    s_policy_class.def(bp::init<const bp::object &>((bp::arg("udsp"))))
+        .def(repr(bp::self))
+        .def_pickle(pygmo::s_policy_pickle_suite())
+        // Copy and deepcopy.
+        .def("__copy__", &pygmo::generic_copy_wrapper<s_policy>)
+        .def("__deepcopy__", &pygmo::generic_deepcopy_wrapper<s_policy>)
+        // UDSP extraction.
+        .def("_py_extract", &pygmo::generic_py_extract<s_policy>)
+        // s_policy methods.
+        .def("select",
+             lcast([](const s_policy &s, const bp::object &inds, const vector_double::size_type &nx,
+                      const vector_double::size_type &nix, const vector_double::size_type &nobj,
+                      const vector_double::size_type &nec, const vector_double::size_type &nic,
+                      const bp::object &tol) -> bp::tuple {
+                 auto ret = s.select(pygmo::to_inds(inds), nx, nix, nobj, nec, nic, pygmo::to_vd(tol));
+                 return pygmo::inds_to_tuple(ret);
+             }),
+             pygmo::s_policy_select_docstring().c_str(),
+             (bp::arg("inds"), bp::arg("nx"), bp::arg("nix"), bp::arg("nobj"), bp::arg("nec"), bp::arg("nic"),
+              bp::arg("tol")))
+        .def("get_name", &s_policy::get_name, pygmo::s_policy_get_name_docstring().c_str())
+        .def("get_extra_info", &s_policy::get_extra_info, pygmo::s_policy_get_extra_info_docstring().c_str());
+
+    // Expose s_policies.
+    pygmo::expose_s_policies();
 }

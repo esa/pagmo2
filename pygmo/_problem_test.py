@@ -1969,7 +1969,8 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
         self.assertTrue(problem(p()).get_thread_safety() == ts.none)
-        self.assertTrue(problem(rosenbrock()).get_thread_safety() == ts.constant)
+        self.assertTrue(
+            problem(rosenbrock()).get_thread_safety() == ts.constant)
         self.assertTrue(
             problem(_tu_test_problem()).get_thread_safety() == ts.none)
         self.assertTrue(

@@ -17,6 +17,9 @@ we suggest to follow the tutorials / examples.
   island
   archipelago
   bfe
+  topology
+  r_policy
+  s_policy
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -95,6 +98,30 @@ Implemented batch evaluators
   batch_evaluators/default_bfe
   batch_evaluators/thread_bfe
   batch_evaluators/member_bfe
+
+Implemented topologies
+^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+  :maxdepth: 1
+
+  topologies/unconnected
+  topologies/fully_connected
+  topologies/base_bgl_topology
+  topologies/ring
+
+Implemented replacement policies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+  :maxdepth: 1
+
+  r_policies/fair_replace
+
+Implemented selection policies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+  :maxdepth: 1
+
+  s_policies/select_best
 
 Utilities
 ^^^^^^^^^
