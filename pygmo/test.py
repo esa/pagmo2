@@ -1841,6 +1841,7 @@ class archipelago_test_case(_ut.TestCase):
             # investigate further if we ever want to
             # turn it back on.
             # self.run_torture_test_1()
+            self.run_migration_torture_test()
 
     def run_init_tests(self):
         from . import (archipelago, de, rosenbrock, population, null_problem, thread_island,
@@ -2219,6 +2220,51 @@ class archipelago_test_case(_ut.TestCase):
         archi = archipelago(n=1100, algo=sade(
             500), prob=ackley(50), pop_size=50)
         archi.evolve()
+
+    def run_migration_torture_test(self):
+        from . import archipelago, de, rosenbrock, fair_replace, select_best, r_policy, s_policy
+        import threading
+
+        # Use custom UDT, UDRP and UDSP for the torture test.
+
+        # NOTE: re-implementation of a fully_connected
+        # topology.
+        class udt(object):
+            def __init__(self, n=0):
+                self._n = n
+                self._lock = threading.Lock()
+            def get_n(self):
+                with self._lock:
+                    n = self._n
+                return n
+            def __copy__(self):
+                return udt(self.get_n())
+            def __deepcopy__(self, d):
+                return self.__copy__()
+            def push_back(self):
+                with self._lock:
+                    self._n = self._n + 1
+            def get_connections(self, i):
+                with self._lock:
+                    n = self._n
+                return (list(range(0,i)) + list(range(i+1,n)), [1.]*(n-1))
+
+        # NOTE: these two will just re-use fair_replace/select_best internally.
+        class udrp(object):
+
+            def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
+                return r_policy(fair_replace()).replace(inds, nx, nix, nobj, nec, nic, tol, mig)
+
+
+        class udsp(object):
+
+            def select(self, inds, nx, nix, nobj, nec, nic, tol):
+                return s_policy(select_best()).select(inds, nx, nix, nobj, nec, nic, tol)
+
+        archi = archipelago(n=100, t=udt(), algo=de(1), prob=rosenbrock(), pop_size=10, seed=32, r_pol=udrp(), s_pol=udsp())
+
+        archi.evolve(100)
+        archi.wait_check()
 
 
 class unconnected_test_case(_ut.TestCase):
