@@ -258,6 +258,8 @@ std::string island_get_population_docstring();
 std::string island_set_population_docstring();
 std::string island_get_name_docstring();
 std::string island_get_extra_info_docstring();
+std::string island_get_r_policy_docstring();
+std::string island_get_s_policy_docstring();
 
 // udi.
 std::string thread_island_docstring();
@@ -271,6 +273,13 @@ std::string archipelago_wait_check_docstring();
 std::string archipelago_getitem_docstring();
 std::string archipelago_get_champions_f_docstring();
 std::string archipelago_get_champions_x_docstring();
+std::string archipelago_get_migrants_db_docstring();
+std::string archipelago_get_migration_log_docstring();
+std::string archipelago_get_topology_docstring();
+std::string archipelago_get_migration_type_docstring();
+std::string archipelago_set_migration_type_docstring();
+std::string archipelago_get_migrant_handling_docstring();
+std::string archipelago_set_migrant_handling_docstring();
 
 // bfe.
 std::string bfe_docstring();
@@ -283,6 +292,46 @@ std::string bfe_get_thread_safety_docstring();
 std::string default_bfe_docstring();
 std::string thread_bfe_docstring();
 std::string member_bfe_docstring();
+
+// topology.
+std::string topology_docstring();
+std::string topology_get_connections_docstring();
+std::string topology_push_back_docstring();
+std::string topology_get_name_docstring();
+std::string topology_get_extra_info_docstring();
+
+// udt.
+std::string unconnected_docstring();
+std::string base_bgl_num_vertices_docstring();
+std::string base_bgl_are_adjacent_docstring();
+std::string base_bgl_add_vertex_docstring();
+std::string base_bgl_add_edge_docstring();
+std::string base_bgl_remove_edge_docstring();
+std::string base_bgl_set_weight_docstring();
+std::string base_bgl_set_all_weights_docstring();
+std::string ring_docstring();
+std::string ring_get_weight_docstring();
+std::string fully_connected_docstring();
+std::string fully_connected_get_weight_docstring();
+std::string fully_connected_num_vertices_docstring();
+
+// r_policy.
+std::string r_policy_docstring();
+std::string r_policy_replace_docstring();
+std::string r_policy_get_name_docstring();
+std::string r_policy_get_extra_info_docstring();
+
+// udrp.
+std::string fair_replace_docstring();
+
+// s_policy
+std::string s_policy_docstring();
+std::string s_policy_select_docstring();
+std::string s_policy_get_name_docstring();
+std::string s_policy_get_extra_info_docstring();
+
+// udsp.
+std::string select_best_docstring();
 
 } // namespace pygmo
 
