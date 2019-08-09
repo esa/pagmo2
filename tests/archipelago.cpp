@@ -918,7 +918,7 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
 // Test case for a bug in multi-objective migration in pagmo 2.11.
 BOOST_AUTO_TEST_CASE(archipelago_mo_migration_bug)
 {
-    archipelago a{ring{}, 10, nsga2{100}, dtlz{2, 50}, 100};
+    archipelago a{ring{}, 10u, nsga2{100}, dtlz{2, 50}, 100u};
 
     a.evolve(4);
     BOOST_CHECK_NO_THROW(a.wait_check());
