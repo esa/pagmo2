@@ -7,7 +7,7 @@ Changelog
 Fix
 ~~~
 
-- Fix a bug involving migration when multi-objective problems are involved (`#334 <https://github.com/esa/pagmo2/pull/334>`__).
+- Fix a migration issue when multi-objective problems are involved (`#334 <https://github.com/esa/pagmo2/pull/334>`__).
 
 - Various docstring fixes (`#334 <https://github.com/esa/pagmo2/pull/334>`__).
 
