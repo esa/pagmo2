@@ -3508,7 +3508,7 @@ Examples:
 
 std::string crowding_distance_docstring()
 {
-    return R"(non_dominated_front_2d(points)
+    return R"(crowding_distance(points)
 
 An implementation of the crowding distance. Complexity is :math:`O(M N \log N)` where :math:`M` is the number of
 objectives and :math:`N` is the number of individuals. The function assumes *points* contain a non-dominated front. 
