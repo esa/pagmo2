@@ -983,6 +983,7 @@ class mo_utils_test_case(_ut.TestCase):
         decomposition_weights(n_f=2, n_w=6, method="low discrepancy", seed=33)
         nadir(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
         ideal(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
+        sefl.assertEqual(len(select_best_N_mo(points=pop.get_f(), N=0)), 0)
 
 
 class con_utils_test_case(_ut.TestCase):

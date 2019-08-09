@@ -3583,6 +3583,8 @@ While the complexity is the same as that of :func:`~pygmo.sort_population_mo()`,
 possible in that it avoids to compute the crowidng distance for all individuals and only computes it for the last
 non-dominated front containing individuals included in the best N.
 
+If N is zero, an empty array will be returned.
+
 Args:
     points (2d-array-like object): the input objective vectors
     N (int): The size of the returned list of bests.

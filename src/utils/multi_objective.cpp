@@ -330,8 +330,9 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  * @endcode
  *
  * but it is faster than the above code: it avoids to compute the crowidng distance for all individuals and only
- * computes
- * it for the last non-dominated front that contains individuals included in the best N.
+ * computes it for the last non-dominated front that contains individuals included in the best N.
+ *
+ * If N is zero, an empty vector will be returned.
  *
  * @param input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
  * @param N Number of best individuals to return
@@ -342,9 +343,8 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  */
 std::vector<pop_size_t> select_best_N_mo(const std::vector<vector_double> &input_f, pop_size_t N)
 {
-    if (N < 1u) {
-        pagmo_throw(std::invalid_argument,
-                    "The best: " + std::to_string(N) + " individuals were requested, while 1 is the minimum");
+    if (N == 0u) { // corner case
+        return {};
     }
     if (input_f.size() == 0u) { // corner case
         return {};
