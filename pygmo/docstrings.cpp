@@ -3436,7 +3436,7 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    ``tuple``: (*ndf*, *dl*, *dc*, *ndr*), where:
+    tuple: (*ndf*, *dl*, *dc*, *ndr*), where:
 
     * *ndf* (``list`` of 1D NumPy int array): the non dominated fronts
     * *dl* (``list`` of 1D NumPy int array): the domination list
@@ -3469,7 +3469,7 @@ Raises:
     TypeError: if *obj1* or *obj2* cannot be converted to a vector of vector floats
 
 Returns:
-    ``bool``: ``True`` if *obj1* is dominating *obj2*, ``False`` otherwise.
+    bool: :data:`True` if *obj1* is dominating *obj2*, :data:`False` otherwise.
 
 Examples:
     >>> import pygmo as pg
@@ -3497,7 +3497,7 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``list`` of 1D NumPy int array): the non dominated fronts
+    1D NumPy int array: the non dominated fronts
 
 Examples:
     >>> import pygmo as pg
@@ -3508,7 +3508,7 @@ Examples:
 
 std::string crowding_distance_docstring()
 {
-    return R"(non_dominated_front_2d(points)
+    return R"(crowding_distance(points)
 
 An implementation of the crowding distance. Complexity is :math:`O(M N \log N)` where :math:`M` is the number of
 objectives and :math:`N` is the number of individuals. The function assumes *points* contain a non-dominated front. 
@@ -3525,12 +3525,12 @@ Raises:
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``list`` of 1D NumPy int array): the non dominated fronts
+    1D NumPy float array: the crowding distances
 
 Examples:
     >>> import pygmo as pg
     >>> pg.crowding_distance(points = [[0,5],[1,4],[2,3],[3,2],[4,1]])
-    array([ inf,   1.,   1.,   1.,  inf])
+    array([inf,  1.,  1.,  1., inf])
 )";
 }
 
@@ -3555,11 +3555,11 @@ Args:
     points (2d-array-like object): the input objective vectors
 
 Raises:
-    unspecified: all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance
+    unspecified: all exceptions thrown by :func:`pygmo.fast_non_dominated_sorting()` and :func:`pygmo.crowding_distance()`
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``list`` of 1D NumPy int array): the indexes of the sorted objectives vectors.
+    1D NumPy int array: the indexes of the sorted objectives vectors.
 
 Examples:
     >>> import pygmo as pg
@@ -3583,16 +3583,18 @@ While the complexity is the same as that of :func:`~pygmo.sort_population_mo()`,
 possible in that it avoids to compute the crowidng distance for all individuals and only computes it for the last
 non-dominated front containing individuals included in the best N.
 
+If N is zero, an empty array will be returned.
+
 Args:
     points (2d-array-like object): the input objective vectors
-    N (``int``): The size of the returned list of bests.
+    N (int): The size of the returned list of bests.
 
 Raises:
-    unspecified: all exceptions thrown by :cpp:func:`pagmo::fast_non_dominated_sorting()` and :cpp:func:`pagmo::crowding_distance()`
+    unspecified: all exceptions thrown by :func:`pygmo.fast_non_dominated_sorting()` and :func:`pygmo.crowding_distance()`
     TypeError: if *points* cannot be converted to a vector of vector floats
 
 Returns:
-    (``list`` of 1D NumPy int array): the indexes of the *N* best objectives vectors.
+    1D NumPy int array: the indexes of the *N* best objectives vectors.
 
 Examples:
     >>> import pygmo as pg
@@ -3645,7 +3647,7 @@ Raises:
     TypeError: if *weights* or *ref_point* or *objs* cannot be converted to a vector of floats.
 
 Returns:
-    1D NumPy float array:  a one dimensional array containing the decomposed objective.
+    1D NumPy float array: a one dimensional array containing the decomposed objective.
 
 Examples:
     >>> import pygmo as pg

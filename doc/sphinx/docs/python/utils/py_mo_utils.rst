@@ -23,6 +23,10 @@ Multi-objective optimization utilities
 
 -------------------------------------------------------
 
+.. autofunction:: pygmo.crowding_distance
+
+-------------------------------------------------------
+
 .. autofunction:: pygmo.sort_population_mo
 
 -------------------------------------------------------

@@ -53,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/archipelago.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
@@ -60,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -911,4 +913,13 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
             BOOST_CHECK(pop.get_f()[i] == pop.get_problem().fitness(pop.get_x()[i]));
         }
     }
+}
+
+// Test case for a bug in multi-objective migration in pagmo 2.11.
+BOOST_AUTO_TEST_CASE(archipelago_mo_migration_bug)
+{
+    archipelago a{ring{}, 10u, nsga2{100}, dtlz{2, 50}, 100u};
+
+    a.evolve(4);
+    BOOST_CHECK_NO_THROW(a.wait_check());
 }
