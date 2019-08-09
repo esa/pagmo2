@@ -983,7 +983,7 @@ class mo_utils_test_case(_ut.TestCase):
         decomposition_weights(n_f=2, n_w=6, method="low discrepancy", seed=33)
         nadir(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
         ideal(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
-        sefl.assertEqual(len(select_best_N_mo(points=pop.get_f(), N=0)), 0)
+        self.assertEqual(len(select_best_N_mo(points=pop.get_f(), N=0)), 0)
 
 
 class con_utils_test_case(_ut.TestCase):
@@ -1844,6 +1844,7 @@ class archipelago_test_case(_ut.TestCase):
             # turn it back on.
             # self.run_torture_test_1()
             self.run_migration_torture_test()
+            self.run_mo_migration_bug_test()
 
     def run_init_tests(self):
         from . import (archipelago, de, rosenbrock, population, null_problem, thread_island,
@@ -1996,6 +1997,20 @@ class archipelago_test_case(_ut.TestCase):
         a.set_migrant_handling(migrant_handling.evict)
         self.assertEqual(a.get_migrant_handling(), migrant_handling.evict)
         a.wait_check()
+
+    def run_mo_migration_bug_test(self):
+        from . import dtlz, nsga2, ring, archipelago
+
+        udp = dtlz(2, dim = 50)
+        uda = nsga2(gen = 100)
+        topo = ring()
+
+        archi = archipelago(n=10, t=topo, prob=udp, algo=uda, pop_size=100)
+        archi.evolve(4)
+        try:
+            archi.wait_check()
+        except:
+            self.fail("The MO migration bug test failed")
 
     def run_evolve_tests(self):
         from . import archipelago, de, rosenbrock, mp_island, evolve_status
