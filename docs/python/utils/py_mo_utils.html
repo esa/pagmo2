@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Multi-objective optimization utilities &#8212; pagmo 2.11 documentation</title>
+    <title>Multi-objective optimization utilities &#8212; pagmo 2.11.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
@@ -32,7 +32,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.11.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -120,16 +120,17 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">2.11.1 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id5">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id16">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id18">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id27">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id3">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id10">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id14">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id19">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id21">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id25">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -202,7 +203,7 @@
 </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -287,10 +288,10 @@ but at least one is different, <code class="docutils literal notranslate"><span 
 </ul>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>obj1</em> is dominating <em>obj2</em>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a> if <em>obj1</em> is dominating <em>obj2</em>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code></a> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -323,13 +324,47 @@ IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.</p>
 <dd class="field-odd"><p>the non dominated fronts</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
+<dd class="field-even"><p>1D NumPy int array</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">non_dominated_front_2d</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
 <span class="go">array([0, 1, 5, 4])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="pygmo.crowding_distance">
+<code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">crowding_distance</code><span class="sig-paren">(</span><em class="sig-param">points</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.crowding_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>An implementation of the crowding distance. Complexity is <span class="math notranslate nohighlight">\(O(M N \log N)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of
+objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals. The function assumes <em>points</em> contain a non-dominated front.
+Failiure to meet this condition will result in undefined behaviour.</p>
+<p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm for multi-objective
+optimization: NSGA-II.” Parallel problem solving from nature PPSN VI. Springer Berlin Heidelberg, 2000.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>points</strong> (<em>2d-array-like object</em>) – the input points</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>points</em> does not contain at least two points, or is malformed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the crowding distances</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>1D NumPy float array</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span><span class="o">.</span><span class="n">crowding_distance</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+<span class="go">array([inf,  1.,  1.,  1., inf])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -359,7 +394,7 @@ of size 1, in which case, though, it is more efficient to sort using python buil
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>unspecified</strong> – all exceptions thrown by pagmo::fast_non_dominated_sorting and pagmo::crowding_distance</p></li>
+<li><p><strong>unspecified</strong> – all exceptions thrown by <a class="reference internal" href="#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="#pygmo.crowding_distance" title="pygmo.crowding_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.crowding_distance()</span></code></a></p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
 </ul>
 </dd>
@@ -367,7 +402,7 @@ of size 1, in which case, though, it is more efficient to sort using python buil
 <dd class="field-odd"><p>the indexes of the sorted objectives vectors.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
+<dd class="field-even"><p>1D NumPy int array</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -390,16 +425,17 @@ in <a class="reference internal" href="#pygmo.sort_population_mo" title="pygmo.s
 <p>While the complexity is the same as that of <a class="reference internal" href="#pygmo.sort_population_mo" title="pygmo.sort_population_mo"><code class="xref py py-func docutils literal notranslate"><span class="pre">sort_population_mo()</span></code></a>, this function is to be preferred when
 possible in that it avoids to compute the crowidng distance for all individuals and only computes it for the last
 non-dominated front containing individuals included in the best N.</p>
+<p>If N is zero, an empty array will be returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> (<em>2d-array-like object</em>) – the input objective vectors</p></li>
-<li><p><strong>N</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The size of the returned list of bests.</p></li>
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The size of the returned list of bests.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>unspecified</strong> – all exceptions thrown by <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="pagmo::fast_non_dominated_sorting"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="../../cpp/utils/multi_objective.html#_CPPv4N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="pagmo::crowding_distance"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::crowding_distance()</span></code></a></p></li>
+<li><p><strong>unspecified</strong> – all exceptions thrown by <a class="reference internal" href="#pygmo.fast_non_dominated_sorting" title="pygmo.fast_non_dominated_sorting"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.fast_non_dominated_sorting()</span></code></a> and <a class="reference internal" href="#pygmo.crowding_distance" title="pygmo.crowding_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.crowding_distance()</span></code></a></p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>points</em> cannot be converted to a vector of vector floats</p></li>
 </ul>
 </dd>
@@ -407,7 +443,7 @@ non-dominated front containing individuals included in the best N.</p>
 <dd class="field-odd"><p>the indexes of the <em>N</em> best objectives vectors.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">list</span></code> of 1D NumPy int array)</p>
+<dd class="field-even"><p>1D NumPy int array</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>

@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.11.1 (unreleased)
+-------------------
+
+Fix
+~~~
+
+- Fix a migration issue when multi-objective problems are involved (`#334 <https://github.com/esa/pagmo2/pull/334>`__).
+
+- Various docstring fixes (`#334 <https://github.com/esa/pagmo2/pull/334>`__).
+
 2.11 (2019-08-07)
 -----------------
 
