@@ -3530,7 +3530,7 @@ Returns:
 Examples:
     >>> import pygmo as pg
     >>> pg.crowding_distance(points = [[0,5],[1,4],[2,3],[3,2],[4,1]])
-    array([ inf,   1.,   1.,   1.,  inf])
+    array([inf,  1.,  1.,  1., inf])
 )";
 }
 
