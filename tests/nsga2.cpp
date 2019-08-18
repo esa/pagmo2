@@ -38,13 +38,16 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/archipelago.hpp>
 #include <pagmo/io.hpp>
+#include <pagmo/population.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/hock_schittkowsky_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/topologies/ring.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
@@ -228,5 +231,16 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
 
     // 7 - Evolve the population
     pop2 = algo2.evolve(pop);
-    BOOST_CHECK(algo1.extract<nsga2>()->get_log() == algo2.extract<nsga2>()->get_log() );
+    BOOST_CHECK(algo1.extract<nsga2>()->get_log() == algo2.extract<nsga2>()->get_log());
+}
+
+BOOST_AUTO_TEST_CASE(nsga2_dtlz_test)
+{
+    algorithm algo{nsga2{100}};
+    population pop{dtlz{2, 50}, 100u};
+    pop = algo.evolve(pop);
+
+    archipelago a{ring{}, 10u, nsga2{100}, dtlz{2, 50}, 100u};
+    a.evolve(5);
+    BOOST_CHECK_NO_THROW(a.wait_check());
 }
