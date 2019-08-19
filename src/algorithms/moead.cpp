@@ -205,7 +205,18 @@ population moead::evolve(population pop) const
             }
         }
         // 1 - Shuffle the population indexes
+#if defined(__GNUC__) && defined(__MINGW32__)
+        // NOTE: on MinGW there seems to be an issue
+        // which makes std::shuffle crash if we use it directly
+        // with m_e. As a workaround, we create a new rng seeding
+        // it with m_e, and use std::shuffle with the new rng instead. This
+        // issue seems to affect only pygmo (not pagmo), and may
+        // be present elsewhere where we use std::shuffle.
+        std::minstd_rand rng(static_cast<std::minstd_rand::result_type>(m_e()));
+        std::shuffle(shuffle.begin(), shuffle.end(), rng);
+#else
         std::shuffle(shuffle.begin(), shuffle.end(), m_e);
+#endif
         // 2 - Loop over the shuffled NP decomposed problems
         for (auto n : shuffle) {
             // 3 - if the diversity preservation mechanism is active we select at random whether to consider the
@@ -264,7 +275,11 @@ population moead::evolve(population pop) const
             }
             std::vector<population::size_type> shuffle2(size);
             std::iota(shuffle2.begin(), shuffle2.end(), std::vector<population::size_type>::size_type(0u));
+#if defined(__GNUC__) && defined(__MINGW32__)
+            std::shuffle(shuffle2.begin(), shuffle2.end(), rng);
+#else
             std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
+#endif
             for (decltype(size) k = 0u; k < size; ++k) {
                 population::size_type pick;
                 if (whole_population) {
