@@ -2395,7 +2395,7 @@ Raises:
 
 std::string nsga2_docstring()
 {
-    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10, m = 0.01, eta_m = 10, seed = random)
+    return R"(__init__(gen = 1, cr = 0.95, eta_c = 10., m = 0.01, eta_m = 50., seed = random)
 
 Non dominated Sorting Genetic Algorithm (NSGA-II).
 
