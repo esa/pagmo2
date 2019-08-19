@@ -1830,6 +1830,7 @@ class archipelago_test_case(_ut.TestCase):
         self.run_mig_log_db_tests()
         self.run_get_set_topo_tests()
         self.run_mt_mh_tests()
+        self.run_mingw_issues_test()
         if self._level > 0:
             self.run_torture_test_0()
             # NOTE: skip this test for the time being.
@@ -1997,6 +1998,14 @@ class archipelago_test_case(_ut.TestCase):
         a.set_migrant_handling(migrant_handling.evict)
         self.assertEqual(a.get_migrant_handling(), migrant_handling.evict)
         a.wait_check()
+
+    def run_mingw_issues_test(self):
+        from . import dtlz, population, moead, algorithm
+
+        udp = dtlz(prob_id = 1)
+        pop = population(prob = udp, size = 105)
+        algo = algorithm(moead(gen = 100))
+        pop = algo.evolve(pop)
 
     def run_mo_migration_bug_test(self):
         from . import dtlz, nsga2, ring, archipelago
