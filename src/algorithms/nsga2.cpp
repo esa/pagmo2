@@ -51,30 +51,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/multi_objective.hpp>
 
-#include <iterator>
-
 namespace pagmo
 {
-
-namespace
-{
-
-template <class RandomIt, class URBG>
-inline void new_shuffle(RandomIt first, RandomIt last, URBG &&g)
-{
-    typedef typename std::iterator_traits<RandomIt>::difference_type diff_t;
-    typedef std::uniform_int_distribution<diff_t> distr_t;
-    typedef typename distr_t::param_type param_t;
-
-    distr_t D;
-    diff_t n = last - first;
-    for (diff_t i = n - 1; i > 0; --i) {
-        using std::swap;
-        swap(first[i], first[D(g, param_t(0, i))]);
-    }
-}
-
-} // namespace
 
 nsga2::nsga2(unsigned gen, double cr, double eta_c, double m, double eta_m, unsigned seed)
     : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed), m_verbosity(0u)
@@ -194,10 +172,17 @@ population nsga2::evolve(population pop) const
         // At each generation we make a copy of the population into popnew
         population popnew(pop);
 
-        // We create some pseudo-random permutation of the poulation indexes
-        std::minstd_rand rng;
-        new_shuffle(shuffle1.begin(), shuffle1.end(), rng);
-        new_shuffle(shuffle2.begin(), shuffle2.end(), rng);
+        // We create some pseudo-random permutation of the population indices.
+#if defined(__GNUC__) && defined(__MINGW32__)
+        {
+            std::minstd_rand tmp_rng(static_cast<std::minstd_rand::result_type>(m_e()));
+            std::shuffle(shuffle1.begin(), shuffle1.end(), tmp_rng);
+            std::shuffle(shuffle2.begin(), shuffle2.end(), tmp_rng);
+        }
+#else
+        std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
+        std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
+#endif
 
         // 1 - We compute crowding distance and non dominated rank for the current population
         auto fnds_res = fast_non_dominated_sorting(pop.get_f());
