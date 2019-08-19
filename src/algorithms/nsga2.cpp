@@ -154,8 +154,8 @@ population nsga2::evolve(population pop) const
     vector_double::size_type parent1_idx, parent2_idx;
     vector_double child1(dim), child2(dim);
 
-    std::iota(shuffle1.begin(), shuffle1.end(), 0u);
-    std::iota(shuffle2.begin(), shuffle2.end(), 0u);
+    std::iota(shuffle1.begin(), shuffle1.end(), vector_double::size_type(0));
+    std::iota(shuffle2.begin(), shuffle2.end(), vector_double::size_type(0));
 
     // Main NSGA-II loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
