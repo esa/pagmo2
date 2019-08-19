@@ -173,8 +173,8 @@ population nsga2::evolve(population pop) const
         population popnew(pop);
 
         // We create some pseudo-random permutation of the poulation indexes
-        std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
-        std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
+        //std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
+        //std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
 
         // 1 - We compute crowding distance and non dominated rank for the current population
         auto fnds_res = fast_non_dominated_sorting(pop.get_f());
