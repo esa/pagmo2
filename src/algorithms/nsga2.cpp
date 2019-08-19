@@ -195,7 +195,7 @@ population nsga2::evolve(population pop) const
         population popnew(pop);
 
         // We create some pseudo-random permutation of the poulation indexes
-        std::mt19937 rng;
+        std::minstd_rand rng;
         new_shuffle(shuffle1.begin(), shuffle1.end(), rng);
         new_shuffle(shuffle2.begin(), shuffle2.end(), rng);
 
