@@ -174,6 +174,12 @@ population nsga2::evolve(population pop) const
 
         // We create some pseudo-random permutation of the population indices.
 #if defined(__GNUC__) && defined(__MINGW32__)
+        // NOTE: on MinGW there seems to be an issue
+        // which makes std::shuffle crash if we use it directly
+        // with m_e. As a workaround, we create a new rng seeding
+        // it with m_e, and use std::shuffle with the new rng instead. This
+        // issue seems to affect only pygmo (not pagmo), and may
+        // be present elsewhere where we use std::shuffle.
         {
             std::minstd_rand tmp_rng(static_cast<std::minstd_rand::result_type>(m_e()));
             std::shuffle(shuffle1.begin(), shuffle1.end(), tmp_rng);
