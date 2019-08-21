@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Use of the class island &#8212; pagmo 2.11.1 documentation</title>
+    <title>Use of the class island &#8212; pagmo 2.11.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
@@ -32,7 +32,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -120,17 +120,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id7">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id11">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id18">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id29">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.2 (2019-08-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11.1 (2019-08-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.11 (2019-08-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id31">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -216,7 +217,7 @@ the execution of the <a class="reference internal" href="../py_algorithm.html#py
 is not affected so that we can run other things in the meantime.</p>
 <p>Consider the following script, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">islands</span> <span class="o">=</span> <span class="p">[</span><span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(</span><span class="n">gen</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">effe</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="n">cross</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">effe</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]</span> <span class="k">for</span> <span class="n">cross</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.9</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span> <span class="c1">#doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">islands</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -285,13 +286,13 @@ This requires that a cluster is started typing, for example, the command <code c
 </pre></div>
 </div>
 <p>Everything looks fine: in our thread nothing really happened nor threw. But if we, for example inspect the island we get:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">isl</span><span class="p">)</span> 
 <span class="go">Island name: Ipyparallel island</span>
 <span class="go">    Status: idle - **error occurred**</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">    Queue status:</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">    (unassigned, 0)</span>
 <span class="go">    (0, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 <span class="go">    (1, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
@@ -301,15 +302,14 @@ This requires that a cluster is started typing, for example, the command <code c
 <span class="go">    (5, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 <span class="go">    (6, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
 <span class="go">    (7, {&#39;queue&#39;: 0, &#39;completed&#39;: ..., &#39;tasks&#39;: 0})</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Algorithm: Differential Evolution</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Problem: A throwing UDP</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Population size: 20</span>
 <span class="go">    Champion decision vector: ...</span>
 <span class="go">    Champion fitness: ...</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
 </pre></div>
 </div>
 <p>What has happened? I need to retrieve that message!</p>
@@ -346,7 +346,7 @@ This requires that a cluster is started typing, for example, the command <code c
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

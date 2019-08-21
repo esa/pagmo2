@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Coding a User Defined Problem with an integer part (MINLP) &#8212; pagmo 2.11.1 documentation</title>
+    <title>Coding a User Defined Problem with an integer part (MINLP) &#8212; pagmo 2.11.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
@@ -32,7 +32,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -120,17 +120,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id7">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id11">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id18">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id29">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.2 (2019-08-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11.1 (2019-08-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.11 (2019-08-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id31">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -302,9 +303,9 @@ returning a population with decision vectors that violate the integer constraint
 <span class="gp">&gt;&gt;&gt; </span><span class="n">best_isl_idx</span> <span class="o">=</span> <span class="p">[(</span><span class="n">el</span> <span class="o">==</span> <span class="n">a2</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x_best</span> <span class="o">=</span> <span class="n">archi</span><span class="o">.</span><span class="n">get_champions_x</span><span class="p">()[</span><span class="n">best_isl_idx</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f_best</span> <span class="o">=</span> <span class="n">archi</span><span class="o">.</span><span class="n">get_champions_f</span><span class="p">()[</span><span class="n">best_isl_idx</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best relaxed solution, x: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_best</span><span class="p">))</span> <span class="c1"># doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best relaxed solution, x: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_best</span><span class="p">))</span> 
 <span class="go">Best relaxed solution, x:  [...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best relaxed solution, f: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f_best</span><span class="p">))</span> <span class="c1"># doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best relaxed solution, f: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f_best</span><span class="p">))</span> 
 <span class="go">Best relaxed solution, f:  [...</span>
 </pre></div>
 </div>
@@ -324,9 +325,9 @@ possible cases we thus fix the box bounds on the last two variables. In case <sp
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">x_best</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best objective: &quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best objective: &quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> 
 <span class="go">Best objective:  134.065695174</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best decision vector: &quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best decision vector: &quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span> 
 <span class="go">Best decision vector:  [ 0.4378605   0.33368365 -0.75844494 -1.          0.          0.        ]</span>
 </pre></div>
 </div>
@@ -354,7 +355,7 @@ to then feedback the optimal decision vector into a MINLP solution strategy.</p>
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Use of the class archipelago &#8212; pagmo 2.11.1 documentation</title>
+    <title>Use of the class archipelago &#8212; pagmo 2.11.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
@@ -32,7 +32,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -120,17 +120,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id7">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id11">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id18">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id29">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.2 (2019-08-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11.1 (2019-08-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.11 (2019-08-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id31">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -342,14 +343,14 @@ here we will overlap with part of that tutorial, exploring exceptions thrown in 
 </div>
 <p>Let us now instantiate and run a <a class="reference internal" href="../py_archipelago.html#pygmo.archipelago" title="pygmo.archipelago"><code class="xref py py-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">simulated_annealing</span><span class="p">(</span><span class="n">Ts</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">Tf</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">n_T_adj</span>  <span class="o">=</span> <span class="mi">40</span><span class="p">),</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">raise_exception</span><span class="p">(),</span> <span class="n">pop_size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> <span class="c1">#doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> <span class="c1">#doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">archi</span><span class="p">)</span> 
 <span class="go">Number of islands: 5</span>
 <span class="go">Status: idle - **error occurred**</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Islands summaries:</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">    #  Type                    Algo                            Prob            Size  Status</span>
 <span class="go">    ------------------------------------------------------------------------------------------------------------</span>
 <span class="go">    0  Multiprocessing island  Simulated Annealing (Corana&#39;s)  A throwing UDP  20    idle - **error occurred**</span>
@@ -363,11 +364,11 @@ here we will overlap with part of that tutorial, exploring exceptions thrown in 
 starts at 0 fitness evaluations to then hit the 300 fevals triggering the <code class="docutils literal notranslate"><span class="pre">raise</span></code> statement).
 We do not know at this stage what happened exactly as the exception is thrown on a separate thread/process and thus its hidden from our main
 scope. To inspect what happened we can write:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; archi.wait_check() #doctest: +SKIP
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; archi.wait_check() 
 RuntimeError                              Traceback (most recent call last)
 &lt;ipython-input-22-d8562cc51573&gt; in &lt;module&gt;()
 ----&gt; 1 archi.wait_check()
-&lt;BLANKLINE&gt;
+
 RuntimeError: The asynchronous evolution of a pythonic island of type &#39;Multiprocessing island&#39; raised an error:
 multiprocessing.pool.RemoteTraceback:
 &quot;&quot;&quot;
@@ -379,9 +380,9 @@ File &quot;/home/dario/miniconda3/envs/pagmo/lib/python3.6/site-packages/pygmo/_
 File &quot;&lt;ipython-input-19-f5ede4c63180&gt;&quot;, line 6, in fitness
 RuntimeError: No active exception to reraise
 &quot;&quot;&quot;
-&lt;BLANKLINE&gt;
+
 The above exception was the direct cause of the following exception:
-&lt;BLANKLINE&gt;
+
 Traceback (most recent call last):
 File &quot;/home/dario/miniconda3/envs/pagmo/lib/python3.6/site-packages/pygmo/_py_islands.py&quot;, line 128, in run_evolve
     return res.get()
@@ -407,7 +408,7 @@ RuntimeError: No active exception to reraise
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

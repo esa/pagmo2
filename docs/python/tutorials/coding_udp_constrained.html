@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Coding a User Defined Problem with constraints (NLP) &#8212; pagmo 2.11.1 documentation</title>
+    <title>Coding a User Defined Problem with constraints (NLP) &#8212; pagmo 2.11.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
@@ -32,7 +32,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -120,17 +120,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id7">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id11">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id18">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id29">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.2 (2019-08-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11.1 (2019-08-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.11 (2019-08-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id31">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -304,7 +305,7 @@ to estimate the gradient numerically.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># in this case this correspond to logs each 1 call to slsqp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">my_constrained_udp</span><span class="p">(),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          Best:      Violated:    Viol. Norm:         Trial:</span>
 <span class="go">    14    3.59547e+36              6        501.393              0 i</span>
 <span class="go">    19    1.89716e+38              5        432.423              0 i</span>
@@ -332,9 +333,9 @@ to estimate the gradient numerically.</p>
 <span class="go">   2184        2.25966             0              0             18</span>
 <span class="go">   2189        2.25966             0              0             19</span>
 <span class="go">   2194        2.25966             0              0             20</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> 
 <span class="go">2195</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> 
 <span class="go">1320</span>
 </pre></div>
 </div>
@@ -374,13 +375,13 @@ Consider here only one case: the problem <code class="docutils literal notransla
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">mbh</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s2">&quot;slsqp&quot;</span><span class="p">),</span> <span class="mi">20</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Solve the problem</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Collect information</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> 
 <span class="go">24.306209068189599</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_fevals</span><span class="p">()</span> 
 <span class="go">1155</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_gevals</span><span class="p">()</span> 
 <span class="go">1022</span>
 </pre></div>
 </div>
@@ -405,7 +406,7 @@ for constrained real-parameter optimization.” Evolutionary Computation, 2006. 
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

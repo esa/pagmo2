@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>List of algorithms available in pygmo &#8212; pagmo 2.11.1 documentation</title>
+    <title>List of algorithms available in pygmo &#8212; pagmo 2.11.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
@@ -32,7 +32,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -120,17 +120,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id7">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id11">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id15">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id18">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id26">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id29">2.2 (2017-05-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.2 (2019-08-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11.1 (2019-08-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.11 (2019-08-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id31">2.2 (2017-05-12)</a></li>
 </ul>
 </li>
 </ul>
@@ -277,7 +278,7 @@ constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">gaco</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1e9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">23</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go"> Gen:        Fevals:          Best:        Kernel:        Oracle:            dx:            dp:</span>
 <span class="go">    1              0        179.464             13          1e+09        13.1007         649155</span>
 <span class="go">    2             13        166.317             13        179.464        5.11695        15654.1</span>
@@ -290,7 +291,7 @@ constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo
 <span class="go">    9            104        1.17205             13        1.17205       0.806727        12.0702</span>
 <span class="go">   10            130       0.586187             13       0.586187       0.806727        12.0702</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">gaco</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, 179.464, 13, 1e+09, 13.1007, 649155), (2, 15, 166.317, 13, 179.464, ...</span>
 </pre></div>
 </div>
@@ -387,7 +388,7 @@ constructed with a <a class="reference internal" href="#pygmo.gwo" title="pygmo.
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:         Alpha:          Beta:         Delta:</span>
 <span class="go">  1        179.464        3502.82        3964.75</span>
 <span class="go">  3        6.82024        30.2149        61.1906</span>
@@ -395,7 +396,7 @@ constructed with a <a class="reference internal" href="#pygmo.gwo" title="pygmo.
 <span class="go">  7       0.134441       0.342357       0.439651</span>
 <span class="go">  9       0.100281       0.211849       0.297448</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">gwo</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 179.46420983829944, 3502.8158822203472, 3964.7542658046486), ...</span>
 </pre></div>
 </div>
@@ -466,7 +467,7 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best: Current Best:</span>
 <span class="go">   1             40         261363         261363</span>
 <span class="go"> 101           4040        112.237        267.969</span>
@@ -474,7 +475,7 @@ constructed with a <a class="reference internal" href="#pygmo.bee_colony" title=
 <span class="go"> 301          12040        20.6076        20.6076</span>
 <span class="go"> 401          16040         18.252        140.079</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">bee_colony</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 40, 183727.83934515435, 183727.83934515435), ...</span>
 </pre></div>
 </div>
@@ -574,7 +575,7 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:            dx:            df:</span>
 <span class="go">  1             20         162446        65.2891    1.78686e+06</span>
 <span class="go">101           2020        198.402         8.4454        572.161</span>
@@ -583,7 +584,7 @@ constructed with a <a class="reference internal" href="#pygmo.de" title="pygmo.d
 <span class="go">401           8020        3.60022       0.583444       0.554511</span>
 <span class="go">Exit condition -- generations = 500</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 20, 162446.0185265718, 65.28911664703388, 1786857.8926660626), ...</span>
 </pre></div>
 </div>
@@ -658,7 +659,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">schwefel</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:   Improvement:     Mutations:</span>
 <span class="go">   1              1        6363.44        2890.49              2</span>
 <span class="go">1001           1001        1039.92       -562.407              3</span>
@@ -671,7 +672,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <span class="go">8001           8001        20.9452        -450.75              1</span>
 <span class="go">9001           9001        17.9193       -270.679              1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sea</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...</span>
 </pre></div>
 </div>
@@ -796,7 +797,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">schwefel</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:   Improvement:     Mutations:</span>
 <span class="go">   1              1        6363.44        2890.49              2</span>
 <span class="go">1001           1001        1039.92       -562.407              3</span>
@@ -809,7 +810,7 @@ A verbosity equal to 1 will produce a log with one entry at each improvement of 
 <span class="go">8001           8001        20.9452        -450.75              1</span>
 <span class="go">9001           9001        17.9193       -270.679              1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sea</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 1, 6363.442036625835, 2890.4854414320716, 2), (1001, 1001, ...</span>
 </pre></div>
 </div>
@@ -935,7 +936,7 @@ constructed with a <a class="reference internal" href="#pygmo.sade" title="pygmo
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problems</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:             F:            CR:            dx:            df:</span>
 <span class="go">  1             20         297060       0.690031       0.294769        44.1494    2.30584e+06</span>
 <span class="go">101           2020        97.4258        0.58354       0.591527        13.3115        441.545</span>
@@ -944,7 +945,7 @@ constructed with a <a class="reference internal" href="#pygmo.sade" title="pygmo
 <span class="go">401           8020         4.7861       0.428741       0.743813        12.2938        39.7791</span>
 <span class="go">Exit condition -- generations = 500</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">sade</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 20, 297059.6296130389, 0.690031071850855, 0.29476914701127666, 44.14940516578547, 2305836.7422693395), ...</span>
 </pre></div>
 </div>
@@ -1072,7 +1073,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:             F:            CR:       Variant:            dx:            df:</span>
 <span class="go">    1             20         285653        0.55135       0.441551             16        43.9719    2.02379e+06</span>
 <span class="go">101           2020        12.2721       0.127285      0.0792493             14        3.22986        106.764</span>
@@ -1081,7 +1082,7 @@ constructed with a <a class="reference internal" href="#pygmo.de1220" title="pyg
 <span class="go">401           8020        4.20638       0.235997       0.996259              3        3.60338        4.49432</span>
 <span class="go">Exit condition -- generations = 500</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">de1220</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 20, 285652.7928977573, 0.551350234239449, 0.4415510963067054, 16, 43.97185788345982, 2023791.5123259544), ...</span>
 </pre></div>
 </div>
@@ -1162,7 +1163,7 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:            dx:            df:         sigma:</span>
 <span class="go">  1              0         173924        33.6872    3.06519e+06            0.5</span>
 <span class="go">101           2000        92.9612       0.583942        156.921      0.0382078</span>
@@ -1171,7 +1172,7 @@ constructed with a <a class="reference internal" href="#pygmo.cmaes" title="pygm
 <span class="go">401           8000        1.04445      0.0568541       0.514459      0.0649836</span>
 <span class="go">Exit condition -- generations = 500</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">cmaes</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...</span>
 </pre></div>
 </div>
@@ -1252,7 +1253,7 @@ constructed with a <a class="reference internal" href="#pygmo.moead" title="pygm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">zdt</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:           ADF:        ideal1:        ideal2:</span>
 <span class="go">  1              0        32.5747     0.00190532        2.65685</span>
 <span class="go">101           4000        5.67751    2.56736e-09       0.468789</span>
@@ -1260,7 +1261,7 @@ constructed with a <a class="reference internal" href="#pygmo.moead" title="pygm
 <span class="go">301          12000        5.05509    9.76581e-10      0.0574796</span>
 <span class="go">401          16000        5.13126    9.76581e-10      0.0242256</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">moead</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, 32.574745630075874, array([  1.90532430e-03,   2.65684834e+00])), ...</span>
 </pre></div>
 </div>
@@ -1332,7 +1333,7 @@ change in the search range.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">hock_schittkowsky_71</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          Best:      Violated:    Viol. Norm:         Range:</span>
 <span class="go">      4        110.785              1        2.40583            0.5</span>
 <span class="go">     12        110.785              1        2.40583           0.25</span>
@@ -1361,7 +1362,7 @@ change in the search range.</p>
 <span class="go">    159        95.4502              0              0    7.62939e-06</span>
 <span class="go">Exit condition -- range: 7.62939e-06 &lt;= 1e-05</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">compass_search</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(4, 110.785345345, 1, 2.405833534534, 0.5), (12, 110.785345345, 1, 2.405833534534, 0.25) ...</span>
 </pre></div>
 </div>
@@ -1516,7 +1517,7 @@ each verbosity fitness evaluations.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          Best:       Current:    Mean range:   Temperature:</span>
 <span class="go">     57           5937           5937           0.48             10</span>
 <span class="go">  10033        9.50937        28.6775      0.0325519        2.51189</span>
@@ -1539,7 +1540,7 @@ each verbosity fitness evaluations.</p>
 <span class="go">  95033    5.35153e-05    9.10958e-05    3.18624e-05    1.99526e-05</span>
 <span class="go">  99933    2.34849e-05    8.72206e-05    2.59215e-05    1.14815e-05</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">simulated_annealing</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...</span>
 </pre></div>
 </div>
@@ -1744,7 +1745,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:</span>
 <span class="go">   1             40        72473.3       0.173892         677427       0.281744</span>
 <span class="go">  51           1040        135.867      0.0183806        748.001       0.065826</span>
@@ -1757,7 +1758,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <span class="go"> 401           8040        5.78415    0.000524536        16.5073     0.00234197</span>
 <span class="go"> 451           9040         5.4662     0.00018305        16.2339    0.000958182</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pso</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...</span>
 </pre></div>
 </div>
@@ -1874,7 +1875,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:</span>
 <span class="go">   1             40        72473.3       0.173892         677427       0.281744</span>
 <span class="go">  51           1040        135.867      0.0183806        748.001       0.065826</span>
@@ -1887,7 +1888,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <span class="go"> 401           8040        5.78415    0.000524536        16.5073     0.00234197</span>
 <span class="go"> 451           9040         5.4662     0.00018305        16.2339    0.000958182</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pso</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1,40,72473.32713790605,0.1738915144248373,677427.3504996448,0.2817443174278134), (51,1040,...</span>
 </pre></div>
 </div>
@@ -1913,7 +1914,7 @@ constructed with a <a class="reference internal" href="#pygmo.pso" title="pygmo.
 <hr class="docutils" />
 <dl class="class">
 <dt id="pygmo.nsga2">
-<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">nsga2</code><span class="sig-paren">(</span><em class="sig-param">gen = 1</em>, <em class="sig-param">cr = 0.95</em>, <em class="sig-param">eta_c = 10</em>, <em class="sig-param">m = 0.01</em>, <em class="sig-param">eta_m = 10</em>, <em class="sig-param">seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">nsga2</code><span class="sig-paren">(</span><em class="sig-param">gen = 1</em>, <em class="sig-param">cr = 0.95</em>, <em class="sig-param">eta_c = 10.</em>, <em class="sig-param">m = 0.01</em>, <em class="sig-param">eta_m = 50.</em>, <em class="sig-param">seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nsga2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Non dominated Sorting Genetic Algorithm (NSGA-II).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1960,7 +1961,7 @@ constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">nsga2</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">zdt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">40</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:        ideal1:        ideal2:</span>
 <span class="go">   1              0      0.0033062        2.44966</span>
 <span class="go">  21            800    0.000275601       0.893137</span>
@@ -1968,7 +1969,7 @@ constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygm
 <span class="go">  61           2400     2.3664e-05       0.206365</span>
 <span class="go">  81           3200     2.3664e-05       0.133305</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">nsga2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, array([ 0.0033062 ,  2.44965599])), (21, 800, array([  2.75601086e-04 ...</span>
 </pre></div>
 </div>
@@ -2087,7 +2088,7 @@ with an <a class="reference internal" href="#pygmo.mbh" title="pygmo.mbh"><code 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">cec2013</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          Best:      Violated:    Viol. Norm:         Trial:</span>
 <span class="go">    440        25162.3              0              0              0</span>
 <span class="go">    880          14318              0              0              0</span>
@@ -2286,7 +2287,7 @@ with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="p
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">cec2006</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:</span>
 <span class="go">    1              0       -96.5435        0.34607              4        177.705              0 i</span>
 <span class="go">    4            600       -96.5435       0.360913              4        177.705              0 i</span>
@@ -2296,7 +2297,7 @@ with an <a class="reference internal" href="#pygmo.cstrs_self_adaptive" title="p
 <span class="go">   16           3000       -23.2502       0.071571              4        37.1092              0 i</span>
 <span class="go">   19           3600       -23.2502       0.257604              4        37.1092              0 i</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">moead</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, -96.54346700540063, 0.34606950943401493, 4, 177.70482046341274, 0), (4, 600, ...</span>
 </pre></div>
 </div>
@@ -2466,14 +2467,14 @@ description of each supported solver.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span> <span class="o">=</span> <span class="n">nlopt</span><span class="p">(</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span><span class="o">.</span><span class="n">xtol_rel</span> <span class="o">=</span> <span class="mf">1E-6</span> <span class="c1"># Change the default value of the xtol_rel stopping criterion</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span><span class="o">.</span><span class="n">xtol_rel</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span><span class="o">.</span><span class="n">xtol_rel</span> 
 <span class="go">1E-6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">18</span> <span class="c1"># Set constraints tolerance to 1E-6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">   objevals:       objval:      violated:    viol. norm:</span>
 <span class="go">           1       95959.4             18        538.227 i</span>
 <span class="go">           2       89282.7             18        5177.42 i</span>
@@ -2505,9 +2506,8 @@ description of each supported solver.</p>
 <span class="go">          28       6.23246              0              0</span>
 <span class="go">          29       6.23246              0              0</span>
 <span class="go">          30       6.23246              0              0</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Optimisation return status: NLOPT_XTOL_REACHED (value = 4, Optimization stopped because xtol_rel or xtol_abs was reached)</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -2923,22 +2923,22 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-9</span><span class="p">)</span> <span class="c1"># Change the relative convergence tolerance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> 
 <span class="go">{&#39;tol&#39;: 1e-09}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">luksan_vlcek1</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1E-6</span><span class="p">]</span> <span class="o">*</span> <span class="mi">18</span> <span class="c1"># Set constraints tolerance to 1E-6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+
 <span class="go">******************************************************************************</span>
 <span class="go">This program contains Ipopt, a library for large-scale nonlinear optimization.</span>
 <span class="go">Ipopt is released as open source code under the Eclipse Public License (EPL).</span>
 <span class="go">        For more information visit http://projects.coin-or.org/Ipopt</span>
 <span class="go">******************************************************************************</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
+
 <span class="go">objevals:        objval:      violated:    viol. norm:</span>
 <span class="go">        1         201174             18         1075.3 i</span>
 <span class="go">        2         209320             18        691.814 i</span>
@@ -2956,9 +2956,8 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 <span class="go">       14    3.71925e-10              0              0</span>
 <span class="go">       15    3.54406e-13              0              0</span>
 <span class="go">       16    2.37071e-18              0              0</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Optimisation return status: Solve_Succeeded (value = 0)</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -3063,7 +3062,7 @@ Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity setti
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> 
 <span class="go">{&#39;tol&#39;: 1E-4}</span>
 </pre></div>
 </div>
@@ -3151,7 +3150,7 @@ replaced by the optimised individual.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span> 
 <span class="go">{&#39;tol&#39;: 1E-4}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">reset_numeric_options</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">get_numeric_options</span><span class="p">()</span>
@@ -3234,10 +3233,10 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
 <span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
 <span class="go">        Verbosity: 0</span>
@@ -3268,10 +3267,10 @@ as arguments.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_integer_options</span><span class="p">({</span><span class="s2">&quot;filter_reset_trigger&quot;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;print_level&quot;</span><span class="p">:</span><span class="mi">3</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
 <span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
 <span class="go">        Verbosity: 0</span>
@@ -3304,10 +3303,10 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span><span class="mf">1E-6</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
 <span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
 <span class="go">        Verbosity: 0</span>
@@ -3338,10 +3337,10 @@ as arguments.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_options</span><span class="p">({</span><span class="s2">&quot;tol&quot;</span><span class="p">:</span><span class="mf">1E-4</span><span class="p">,</span> <span class="s2">&quot;constr_viol_tol&quot;</span><span class="p">:</span><span class="mf">1E-3</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
 <span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
 <span class="go">        Verbosity: 0</span>
@@ -3394,17 +3393,16 @@ The optimisation options are passed to the Ipopt API when calling the <code clas
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">,</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
 <span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">    Thread safety: none</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">    Last optimisation return code: Solve_Succeeded (value = 0)</span>
 <span class="go">    Verbosity: 0</span>
 <span class="go">    Individual selection policy: best</span>
 <span class="go">    Individual replacement policy: best</span>
 <span class="go">    String options: {hessian_approximation : limited-memory}</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -3429,10 +3427,10 @@ as arguments.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">ipopt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">set_string_options</span><span class="p">({</span><span class="s2">&quot;hessian_approximation&quot;</span><span class="p">:</span><span class="s2">&quot;limited-memory&quot;</span><span class="p">,</span> <span class="s2">&quot;limited_memory_initialization&quot;</span><span class="p">:</span><span class="s2">&quot;scalar1&quot;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="c1"># doctest: +NORMALIZE_WHITESPACE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 
 <span class="go">Algorithm name: Ipopt: Interior Point Optimization [deterministic]</span>
 <span class="go">        Thread safety: none</span>
-<span class="go">&lt;BLANKLINE&gt;</span>
+
 <span class="go">Extra info:</span>
 <span class="go">        Last optimisation return code: Solve_Succeeded (value = 0)</span>
 <span class="go">        Verbosity: 0</span>
@@ -3530,7 +3528,7 @@ A verbosity larger than 1 will produce a log with one entry each verbosity fitne
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">hock_schittkowsky_71</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-1</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Fevals:          ppar:            bw:            dx:            df:      Violated:    Viol. Norm:        ideal1:</span>
 <span class="go">      1       0.350032       0.999425        4.88642        14.0397              0              0        43.2982</span>
 <span class="go">   2001       0.414032       0.316046        5.56101        25.7009              0              0        33.4251</span>
@@ -3543,7 +3541,7 @@ A verbosity larger than 1 will produce a log with one entry each verbosity fitne
 <span class="go">  16001       0.862032    9.99425e-05     0.00270865     0.00155563              0              0        17.5766</span>
 <span class="go">  18001       0.926032    3.16046e-05     0.00186637     0.00167523              0              0        17.5748</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">ihs</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0.35003234534534, 0.9994245193792801, 4.886415773459253, 14.0397487316794, ...</span>
 </pre></div>
 </div>
@@ -3623,7 +3621,7 @@ constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo
 <span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
 <span class="go">Gen:        Fevals:          Best:            dx:            df:         sigma:</span>
 <span class="go">  1              0         173924        33.6872    3.06519e+06            0.5</span>
 <span class="go">101           2000        92.9612       0.583942        156.921      0.0382078</span>
@@ -3632,7 +3630,7 @@ constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo
 <span class="go">401           8000        1.04445      0.0568541       0.514459      0.0649836</span>
 <span class="go">Exit condition -- generations = 500</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">xnes</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
 <span class="go">[(1, 0, 173924.2840042722, 33.68717961390855, 3065192.3843070837, 0.5), ...</span>
 </pre></div>
 </div>
@@ -3671,7 +3669,7 @@ constructed with a <a class="reference internal" href="#pygmo.xnes" title="pygmo
     </p>
     <p>
         &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>
