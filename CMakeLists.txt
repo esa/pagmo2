@@ -26,7 +26,7 @@ if((NOT PAGMO_BUILD_PAGMO) AND (NOT PAGMO_BUILD_PYGMO))
 endif()
 
 # Main pagmo/pygmo project version.
-set(PAGMO_PROJECT_VERSION 2.11.1)
+set(PAGMO_PROJECT_VERSION 2.11.2)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
