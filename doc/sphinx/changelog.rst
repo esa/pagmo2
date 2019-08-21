@@ -7,9 +7,9 @@ Changelog
 Fix
 ~~~
 
-- Fix the MinGW pip builds (`#336 <https://github.com/esa/pagmo2/pull/336>`__).
+- Fix the MinGW pip builds (`#338 <https://github.com/esa/pagmo2/pull/338>`__).
 
-- Fix the default value for the NSGA2 ``eta_m`` parameter in the Python exposition (`#336 <https://github.com/esa/pagmo2/pull/336>`__).
+- Fix the default value for the NSGA2 ``eta_m`` parameter in the Python exposition (`#338 <https://github.com/esa/pagmo2/pull/338>`__).
 
 2.11.1 (2019-08-09)
 -------------------
