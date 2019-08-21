@@ -1844,7 +1844,8 @@ class archipelago_test_case(_ut.TestCase):
             # turn it back on.
             # self.run_torture_test_1()
             self.run_migration_torture_test()
-            self.run_mo_migration_bug_test()
+            # NOTE: temporarily disable this test due to the mingw failures.
+            # self.run_mo_migration_bug_test()
 
     def run_init_tests(self):
         from . import (archipelago, de, rosenbrock, population, null_problem, thread_island,
