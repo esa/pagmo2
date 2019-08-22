@@ -3,9 +3,6 @@
 Quick start 
 ============
 
-.. contents::
-
-
 C++
 ---
 

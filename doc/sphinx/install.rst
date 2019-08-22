@@ -8,63 +8,147 @@ Installation guide
 C++
 ---
 
-pagmo has the following third-party dependencies:
+Requirements
+^^^^^^^^^^^^
 
-* `Boost <https://www.boost.org/>`__, **mandatory**, header-only
-* `Eigen <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__, optional, header-only
-  (enabled via the ``PAGMO_WITH_EIGEN3`` CMake option)
-* `NLopt <https://nlopt.readthedocs.io/en/latest/>`__, optional, requires linking
-  (enabled via the ``PAGMO_WITH_NLOPT`` CMake option)
-* `Ipopt <https://projects.coin-or.org/Ipopt>`__, optional, requires linking
-  (enabled via the ``PAGMO_WITH_IPOPT`` CMake option)
+The pagmo C++ library has the following **mandatory** dependencies:
 
+* the `Boost <https://www.boost.org/>`__ C++ libraries,
+* the `Intel TBB <https://www.threadingbuildingblocks.org/>`__ library.
+
+Additionally, pagmo has the following **optional** dependencies:
+
+* `Eigen3 <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__ (which is required
+  by some algorithms, e.g., :cpp:class:`pagmo::cmaes`),
+* `NLopt <https://nlopt.readthedocs.io/en/latest/>`__ (which is required by
+  the :cpp:class:`pagmo::nlopt` wrapper),
+* `Ipopt <https://projects.coin-or.org/Ipopt>`__ (which is required by
+  the :cpp:class:`pagmo::ipopt` wrapper).
 
 Installation from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
-After making sure the dependencies above are installed in your system, you can download the
-pagmo source code from the `GitHub release page <https://github.com/esa/pagmo2/releases>`__. Alternatively,
-and if you like living on the bleeding edge, you can get the very latest version of pagmo via the ``git``
-command:
 
-.. code-block:: bash
+After making sure the dependencies are installed on your system, you can
+download the pagmo source code from the
+`GitHub release page <https://github.com/esa/pagmo2/releases>`__. Alternatively,
+and if you like living on the bleeding edge, you can get the very latest
+version of pagmo via ``git``:
 
-   git clone https://github.com/esa/pagmo2.git
+.. code-block:: console
 
-Once you are in pagmo's source tree, you must configure your build using ``cmake``. This will allow
-you to enable support for optional dependencies, configure the install destination, etc. For example,
+   $ git clone https://github.com/esa/pagmo2.git
 
-.. code-block:: bash
+We follow the usual PR-based development workflow, thus pagmo's ``master``
+branch is normally kept in a working state.
 
-   cmake -DCMAKE_INSTALL_PREFIX=~/.local .
+After downloading and/or unpacking pagmo's
+source code, go to pagmo's
+source tree, create a ``build`` directory and ``cd`` into it. E.g.,
+on a Unix-like system:
 
-The headers will be installed in the ``CMAKE_INSTALL_PREFIX/include`` directory.
-When done, you can install pagmo via the command:
+.. code-block:: console
 
-.. code-block:: bash
+   $ cd /path/to/pagmo
+   $ mkdir build
+   $ cd build
 
-   make install
+Once you are in the ``build`` directory, you must configure your build
+using ``cmake``. This will allow you to enable support for optional
+dependencies, configure the install destination, etc.
 
-To check that all went well compile the :ref:`quick-start example <getting_started_c++>`.
+The following options are currently recognised by pagmo’s build system:
+
+* ``PAGMO_BUILD_TESTS``: build the test suite (defaults to ``OFF``),
+* ``PAGMO_WITH_EIGEN3``: enable features depending on `Eigen3 <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__
+  (defaults to ``OFF``),
+* ``PAGMO_WITH_NLOPT``: enable the `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
+  wrappers (defaults to ``OFF``),
+* ``PAGMO_WITH_IPOPT``: enable the `Ipopt <https://projects.coin-or.org/Ipopt>`__
+  wrapper (defaults to ``OFF``).
+
+Additionally, there are various useful CMake variables you can set, such as:
+
+* ``CMAKE_BUILD_TYPE``: the build type (``Release``, ``Debug``, etc.),
+  defaults to ``Release``.
+* ``CMAKE_INSTALL_PREFIX``: the path into which pagmo will be installed
+  (e.g., this defaults to ``/usr/local`` on Unix-like platforms).
+* ``CMAKE_PREFIX_PATH``: additional paths that will be searched by CMake
+  when looking for dependencies.
+
+Please consult `CMake's documentation <https://cmake.org/cmake/help/latest/>`_
+for more details about CMake's variables and options.
+
+A typical CMake invocation for pagmo may look something like this:
+
+.. code-block:: console
+
+   $ cmake ../ -DPAGMO_BUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=~/.local
+
+That is, we build the test suite and we
+will be installing pagmo into our home directory into the ``.local``
+subdirectory. If CMake runs without errors, we can then proceed to actually
+building pagmo:
+
+.. code-block:: console
+
+   $ cmake --build .
+
+This command will build the pagmo library and, if requested, the test suite.
+Next, we can install pagmo with the command:
+
+.. code-block:: console
+
+   $ cmake  --build . --target install
+
+This command will install the pagmo library and header files to
+the directory tree indicated by the ``CMAKE_INSTALL_PREFIX`` variable.
+
+If enabled, the test suite can be executed with the command:
+
+.. code-block:: console
+
+   $ cmake  --build . --target test
+
+.. note::
+
+   On Windows, in order to execute the test suite you have to ensure that the
+   ``PATH`` variable includes the directory that contains the pagmo
+   DLL (otherwise the tests will fail to run).
+
+To check that all went well, compile the
+:ref:`quick-start example <getting_started_c++>`.
 
 
-Installation with conda
-^^^^^^^^^^^^^^^^^^^^^^^
-pagmo is also available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows.
-In order to install pagmo via conda, you just need to add ``conda-forge`` to the channels,
-and then we can immediately install pagmo:
+Packages
+^^^^^^^^
 
-.. code-block:: bash
+pagmo is also available from a variety of package managers on
+various platforms.
 
-   conda config --add channels conda-forge
-   conda install pagmo
+Conda
+"""""
+
+pagmo is available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows
+thanks to the infrastructure provided by `conda-forge <https://conda-forge.org/>`__.
+In order to install pagmo via conda, you just need to add ``conda-forge``
+to the channels, and then we can immediately install pagmo:
+
+.. code-block:: console
+
+   $ conda config --add channels conda-forge
+   $ conda install pagmo
+
+The conda packages for pagmo are maintained by the core development team,
+and they are regularly updated when new pagmo versions are released.
 
 Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
 
 
-Installation on Arch Linux
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Pagmo is also available on the `Arch User Repository
+Arch Linux
+""""""""""
+
+pagmo is also available on the `Arch User Repository
 <https://aur.archlinux.org>`__ (AUR) in Arch Linux. It is
 recommended to use an AUR helper like
 `yay <https://aur.archlinux.org/packages/yay/>`__ or
@@ -72,42 +156,46 @@ recommended to use an AUR helper like
 See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers>`__ page on
 the Arch Linux wiki for more info.
 
-Note: To install pagmo with optional dependency support like nlopt or ipopt,
-make sure to install the optional dependencies before installing the pagmo
-package.
+.. note::
+
+   To install pagmo with optional dependency support like nlopt or ipopt,
+   make sure to install the optional dependencies before installing the pagmo
+   package.
 
 Install optional dependencies:
 
-.. code-block:: bash
+.. code-block:: console
 
-    yay -S coin-or-ipopt eigen nlopt
+    $ yay -S coin-or-ipopt eigen nlopt
 
-Install `pagmo`:
+Install pagmo:
 
-.. code-block:: bash
+.. code-block:: console
 
-    yay -S pagmo
+    $ yay -S pagmo
 
 
-Installation on FreeBSD
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+FreeBSD
+"""""""
+
 A FreeBSD port via `pkg
 <https://www.freebsd.org/doc/handbook/pkgng-intro.html>`__ has been created for
 pagmo. In order to install pagmo using pkg, execute the following command:
 
-.. code-block:: bash
+.. code-block:: console
 
-   pkg install pagmo2
+   $ pkg install pagmo2
 
 
-Installation with homebrew
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-A `Homebrew <https://brew.sh/>`__ recipe for pagmo has been generously contributed by the community. In order to install
+Homebrew
+""""""""
+
+A `Homebrew <https://brew.sh/>`__ recipe for pagmo is also available. In order to install
 pagmo on OSX with Homebrew, it is sufficient to execute the following command:
 
-.. code-block:: bash
+.. code-block:: console
 
-   brew install pagmo
+   $ brew install pagmo
 
 
 .. _py_install:
@@ -115,7 +203,8 @@ pagmo on OSX with Homebrew, it is sufficient to execute the following command:
 Python
 ------
 
-The Python module corresponding to pagmo is called pygmo. pygmo has two mandatory runtime Python dependencies:
+The Python module corresponding to pagmo is called pygmo.
+pygmo has two mandatory runtime Python dependencies:
 
 * `NumPy <http://www.numpy.org/>`__, the standard Python array library
 * `cloudpickle <https://github.com/cloudpipe/cloudpickle>`__, a package that extends Python's serialization
@@ -129,13 +218,13 @@ There are various options for the installation of pygmo:
 
 The following table summarizes the pros and cons of the various installation methods:
 
-========= ============ ============ ========== ========== ================ ==========
-Method    Linux Py 2.7 Linux Py 3.x OSX Py 2.7 OSX Py 3.x Win Py 2.7       Win Py 3.x
-========= ============ ============ ========== ========== ================ ==========
-conda     64bit        64bit        64bit      64bit      ✘                64bit
-pip       64bit        64bit        ✘          ✘          64bit (MinGW)    64bit (MinGW)
-source    32/64bit     32/64bit     32/64bit   32/64bit   32/64bit (MinGW) 32/64bit
-========= ============ ============ ========== ========== ================ ==========
+========= ============ ============ ========== ========== ============== ==============
+Method    Linux Py 2.7 Linux Py 3.x OSX Py 2.7 OSX Py 3.x Win Py 2.7     Win Py 3.x
+========= ============ ============ ========== ========== ============== ==============
+*conda*   ✔             ✔            ✔         ✔           ✘             ✔ 
+*pip*     ✔             ✔            ✘         ✘           ✔ (MinGW)     ✔ (MinGW)
+*source*  ✔             ✔            ✔         ✔           ✔ (MinGW)     ✔ 
+========= ============ ============ ========== ========== ============== ==============
 
 In general, we recommend the use of `conda <https://conda.io/docs/>`__: in addition to making the installation
 of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific Python
@@ -157,7 +246,12 @@ Finally, it is always possible to compile pygmo from source. This is the most fl
 also the least user-friendly.
 
 .. note::
+
    As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.
+
+.. note::
+
+   All the binary packages are compiled in 64-bit mode.
 
 
 Installation with conda
@@ -165,10 +259,10 @@ Installation with conda
 The installation of pygmo with conda is straightforward. We just need to add ``conda-forge`` to the channels,
 and then we can immediately install pygmo:
 
-.. code-block:: bash
+.. code-block:: console
 
-   conda config --add channels conda-forge
-   conda install pygmo
+   $ conda config --add channels conda-forge
+   $ conda install pygmo
 
 conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`__
 for instructions on how to setup and manage your conda installation.
@@ -178,16 +272,16 @@ Installation with pip
 ^^^^^^^^^^^^^^^^^^^^^
 The installation of pygmo with pip is also straightforward:
 
-.. code-block:: bash
+.. code-block:: console
 
-   pip install pygmo
+   $ pip install pygmo
 
 Like conda, also pip will automatically install all of pygmo's dependencies for you. If you want to install pygmo for a single user instead of
 system-wide, which is in general a good idea, you can do:
 
-.. code-block:: bash
+.. code-block:: console
 
-   pip install --user pygmo
+   $ pip install --user pygmo
 
 
 Installation from source
@@ -210,9 +304,9 @@ The ``CMAKE_INSTALL_PREFIX`` variable will be used to construct the final locati
 
 When done, type (in your build directory):
 
-.. code-block:: bash
+.. code-block:: console
 
-   make install
+   $ make install
 
 To check that all went well fire-up your Python console and try the example in :ref:`quick-start example <getting_started_py>`.
 
@@ -228,6 +322,6 @@ the Arch Linux wiki for more info.
 
 Install ``python-pygmo``:
 
-.. code-block:: bash
+.. code-block:: console
 
-    yay -S python-pygmo
+   $ yay -S python-pygmo
