@@ -3,12 +3,12 @@
 Quick start 
 ============
 
+.. _getting_started_c++:
+
 C++
 ---
 
 After following the :ref:`install` you will be able to compile and run your first C++ pagmo program:
-
-.. _getting_started_c++:
 
 .. literalinclude:: docs/examples/getting_started.cpp
    :language: c++
@@ -29,14 +29,12 @@ if you enabled the optional NLopt support, you will have to link your executable
 
    g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lnlopt
 
------------------------------------------------------------------------
+.. _getting_started_py:
 
 Python
 ------
 
 If you have successfully installed pygmo following the :ref:`install` you can try the following script:
-
-.. _getting_started_py:
 
 .. literalinclude:: docs/examples/getting_started.py
    :language: python

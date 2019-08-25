@@ -118,7 +118,6 @@ If enabled, the test suite can be executed with the command:
 To check that all went well, compile the
 :ref:`quick-start example <getting_started_c++>`.
 
-
 Packages
 ^^^^^^^^
 
@@ -143,7 +142,6 @@ and they are regularly updated when new pagmo versions are released.
 
 Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
-
 
 Arch Linux
 """"""""""
@@ -174,7 +172,6 @@ Install pagmo:
 
     $ yay -S pagmo
 
-
 FreeBSD
 """""""
 
@@ -186,7 +183,6 @@ pagmo. In order to install pagmo using pkg, execute the following command:
 
    $ pkg install pagmo2
 
-
 Homebrew
 """"""""
 
@@ -197,18 +193,123 @@ pagmo on OSX with Homebrew, it is sufficient to execute the following command:
 
    $ brew install pagmo
 
-
 .. _py_install:
 
 Python
 ------
 
-The Python module corresponding to pagmo is called pygmo.
-pygmo has two mandatory runtime Python dependencies:
+Requirements
+^^^^^^^^^^^^
 
+The Python module corresponding to pagmo is called pygmo.
+pygmo has the following **mandatory** dependencies:
+
+* Python TODO,
+* the pagmo C++ library,
+* the `Boost.Python <https://www.boost.org/>`__ library, TODO
 * `NumPy <http://www.numpy.org/>`__, the standard Python array library
-* `cloudpickle <https://github.com/cloudpipe/cloudpickle>`__, a package that extends Python's serialization
+* `cloudpickle <https://github.com/cloudpipe/cloudpickle>`__, a
+  package that extends Python's serialization
   capabilities.
+
+Additionally, pygmo has the following **optional** dependencies:
+
+* dill TODO,
+* matplotlib TODO.
+
+The presence of dill and/or matplotlib will be detected at runtime
+by pygmo, thus they need not to be present when installing/compiling
+pygmo.
+
+.. note::
+
+   Currently, pygmo must always be installed and upgraded in lockstep
+   with pagmo. That is, the versions of pagmo and pygmo must match
+   *exactly*, and if you want to upgrade pagmo, you will have to upgrade
+   pygmo as well to the exact same version. In the future we may
+   relax this requirement.
+
+Installation from source
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Currently, pagmo and pygmo reside in the same source tree. Thus,
+the instructions to install pygmo from source are largely
+similar to the instrcution for a pagmo installation TODO link:
+
+* install the required dependencies (including the pagmo
+  C++ library),
+* download/checkout the source code,
+* use CMake to configure and build pygmo.
+
+In order to build pygmo, you will have to **disable** the
+``PAGMO_BUILD_PAGMO`` option (which is ``ON`` by default)
+and **enable** the ``PAGMO_BUILD_PYGMO`` option (which is
+``OFF`` by default). There are no other pygmo-specific
+CMake options to set. pygmo will detect automatically from the
+pagmo C++ installation in use which optional features
+were enabled (e.g., Eigen3, Ipopt, etc.).
+
+A critical setting for a pygmo installation is the
+value of the ``CMAKE_INSTALL_PREFIX`` variable. The pygmo
+build system will attempt to construct an appropriate
+installation path for the Python module by combining
+the value of ``CMAKE_INSTALL_PREFIX`` with the directory
+paths of the Python installation in use in a platform-dependent
+manner.
+
+For instance, on a typical Linux installation
+of Python 3.6,
+``CMAKE_INSTALL_PREFIX`` will be set by default to
+``/usr/local``, and the pygmo build system will
+append ``lib/python3.6/site-packages`` to the install prefix.
+Thus, the overall install path for the pygmo module will be
+``/usr/local/lib/python3.6/site-packages``. If you want
+to avoid system-wide installations (which require root
+privileges), on Unix-like system it is possible to set
+the ``CMAKE_INSTALL_PREFIX`` variable to the directory
+``.local`` in your ``$HOME`` (e.g., ``/home/username/.local``).
+The pygmo install path will then be, in this case,
+``/home/username/.local/lib/python3.6/site-packages``,
+a path which is normally recognised by Python installations
+without the need to modify the ``PYTHONPATH`` variable.
+If you install pygmo in non-standard prefixes, you may
+have to tweak your Python installation in order for the
+Python interpreter to find the pygmo module.
+
+To check that all went well, try running the
+:ref:`quick-start example <getting_started_py>`.
+
+Packages
+^^^^^^^^
+
+pygmo is also available from a variety of package managers on
+various platforms.
+
+Conda
+"""""
+
+pygmo is available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows
+thanks to the infrastructure provided by `conda-forge <https://conda-forge.org/>`__.
+In order to install pygmo via conda, you just need to add ``conda-forge``
+to the channels, and then we can immediately install pygmo:
+
+.. code-block:: console
+
+   $ conda config --add channels conda-forge
+   $ conda install pygmo
+
+The conda packages for pygmo are maintained by the core development team,
+and they are regularly updated when new pygmo versions are released.
+Note however that, due to various technical issues, the Python 2.7
+conda packages for Windows are **not** available. If you need pygmo
+on Windows on a Python 2.7 installation, the pip packages can be used
+(see below).
+
+Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
+your conda installation.
+
+Pip
+"""
 
 There are various options for the installation of pygmo:
 
