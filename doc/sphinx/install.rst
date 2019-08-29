@@ -279,7 +279,13 @@ have to tweak your Python installation in order for the
 Python interpreter to find the pygmo module.
 
 To check that all went well, try running the
-:ref:`quick-start example <getting_started_py>`.
+:ref:`quick-start example <getting_started_py>`. You can also
+test the pygmo installation by running the test suite:
+
+.. code-block:: python
+
+   >>> import pygmo
+   >>> pygmo.test.run_test_suite(1)
 
 Packages
 ^^^^^^^^

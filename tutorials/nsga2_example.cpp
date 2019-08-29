@@ -1,4 +1,9 @@
+#include <iostream>
+
+#include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/dtlz.hpp>
 
 using namespace pagmo;
@@ -19,6 +24,5 @@ int main()
     pop = algo.evolve(pop);
 
     // 5 - Output the population
-    print("The population: \n", pop);
+    std::cout << "The population: \n" << pop;
 }
-
