@@ -1291,7 +1291,7 @@ This class represents an optimization algorithm. An algorithm can be
 stochastic, deterministic, population based, derivative-free, using hessians,
 using gradients, a meta-heuristic, evolutionary, etc.. Via this class pygmo offers
 a common interface to all types of algorithms that can be applied to find solution
-to a generic matematical programming problem as represented by the
+to a generic mathematical programming problem as represented by the
 :class:`~pygmo.problem` class.
 
 In order to define an optimizaztion algorithm in pygmo, the user must first define a class

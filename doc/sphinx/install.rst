@@ -13,7 +13,7 @@ Requirements
 
 The pagmo C++ library has the following **mandatory** dependencies:
 
-* the `Boost <https://www.boost.org/>`__ C++ libraries,
+* the `Boost <https://www.boost.org/>`__ C++ libraries (at least version 1.60),
 * the `Intel TBB <https://www.threadingbuildingblocks.org/>`__ library.
 
 Additionally, pagmo has the following **optional** dependencies:
