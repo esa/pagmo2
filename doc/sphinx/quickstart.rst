@@ -20,7 +20,16 @@ Place it into a ``getting_started.cpp`` text file and compile it
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lboost_serialization -ltbb
+   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
+
+If you installed pagmo in a non-standard path, such as the ``.local`` directory
+in your ``$HOME`` on a Unix installation (e.g., ``/home/username/.local``),
+the compiler will need assistance to locate the pagmo headers and libraries.
+E.g., you may need a command such as:
+
+.. code-block:: console
+
+   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
 
 If you installed pagmo with support for optional 3rd party libraries,
 you might need to add additional switches to the command-line invocation
@@ -30,7 +39,10 @@ you will have to link your executable to the
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lboost_serialization -ltbb -lnlopt
+   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -lnlopt
+
+We recommend to use pagmo's CMake support in order to simplify
+the build process of code depending on pagmo (see next section).
 
 Using pagmo with CMake
 ^^^^^^^^^^^^^^^^^^^^^^
