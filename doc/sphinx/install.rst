@@ -204,9 +204,9 @@ Requirements
 The Python module corresponding to pagmo is called pygmo.
 pygmo has the following **mandatory** dependencies:
 
-* Python TODO,
+* `Python <https://www.python.org/>`__,
 * the pagmo C++ library,
-* the `Boost.Python <https://www.boost.org/>`__ library, TODO
+* the `Boost.Python <https://github.com/boostorg/python>`__ library,
 * `NumPy <http://www.numpy.org/>`__, the standard Python array library
 * `cloudpickle <https://github.com/cloudpipe/cloudpickle>`__, a
   package that extends Python's serialization
@@ -214,8 +214,10 @@ pygmo has the following **mandatory** dependencies:
 
 Additionally, pygmo has the following **optional** dependencies:
 
-* dill TODO,
-* matplotlib TODO.
+* `dill <https://dill.readthedocs.io>`__, which can be used as an
+  alternative serialization backend,
+* `Matplotlib <https://matplotlib.org/>`__, which is used by a few
+  plotting utilities.
 
 The presence of dill and/or matplotlib will be detected at runtime
 by pygmo, thus they need not to be present when installing/compiling
@@ -234,12 +236,12 @@ Installation from source
 
 Currently, pagmo and pygmo reside in the same source tree. Thus,
 the instructions to install pygmo from source are largely
-similar to the instrcution for a pagmo installation TODO link:
+similar to the instrcution for a :ref:`pagmo installation <cpp_install>`:
 
 * install the required dependencies (including the pagmo
   C++ library),
 * download/checkout the source code,
-* use CMake to configure and build pygmo.
+* use CMake to configure, build and install pygmo.
 
 In order to build pygmo, you will have to **disable** the
 ``PAGMO_BUILD_PAGMO`` option (which is ``ON`` by default)
@@ -308,111 +310,36 @@ on Windows on a Python 2.7 installation, the pip packages can be used
 Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
 
-Pip
+pip
 """
 
-There are various options for the installation of pygmo:
-
-* `conda <https://conda.io/docs/>`__
-* `pip <https://pip.pypa.io/en/stable/>`__
-* installation from source.
-
-The following table summarizes the pros and cons of the various installation methods:
-
-========= ============ ============ ========== ========== ============== ==============
-Method    Linux Py 2.7 Linux Py 3.x OSX Py 2.7 OSX Py 3.x Win Py 2.7     Win Py 3.x
-========= ============ ============ ========== ========== ============== ==============
-*conda*   ✔             ✔            ✔         ✔           ✘             ✔ 
-*pip*     ✔             ✔            ✘         ✘           ✔ (MinGW)     ✔ (MinGW)
-*source*  ✔             ✔            ✔         ✔           ✔ (MinGW)     ✔ 
-========= ============ ============ ========== ========== ============== ==============
-
-In general, we recommend the use of `conda <https://conda.io/docs/>`__: in addition to making the installation
-of pygmo easy, it also provides user-friendly access to a wealth of packages from the scientific Python
-ecosystem. Conda is a good default choice in Linux and OSX.
-
-In Windows, the situation is a bit more complicated. The first issue is that the compiler used by conda
-for Python 2.7 is too old to compile pygmo, and thus we cannot provide conda packages for Python 2.7
-(however, we do provide conda packages for Python 3.x). The second issue is that the Windows platform
-lacks a free Fortran compiler that can interoperate with Visual C++ (the compiler used by conda on Windows).
-Thus, the pygmo packages for conda on Windows might lack some Fortran-based features available on Linux and OSX
-(e.g., the wrapper for the Ipopt solver).
-
-Thus, in order to provide a better experience to our Windows users, we publish `pip <https://pip.pypa.io/en/stable/>`__
-packages for pygmo built with `MinGW <http://mingw-w64.org/doku.php>`__. These packages allow us both to support Python 2.7
-and to provide a full-featured pygmo on Windows, thanks to the ``gfortran`` compiler. The pip packages are also available on
-Linux for those users who might prefer pip to conda, but they are **not** available on OSX.
-
-Finally, it is always possible to compile pygmo from source. This is the most flexible and powerful option, but of course
-also the least user-friendly.
-
-.. note::
-
-   As a general policy, we are committed to providing packages for Python 2.7 and for the latest two versions of Python 3.x.
-
-.. note::
-
-   All the binary packages are compiled in 64-bit mode.
-
-
-Installation with conda
-^^^^^^^^^^^^^^^^^^^^^^^
-The installation of pygmo with conda is straightforward. We just need to add ``conda-forge`` to the channels,
-and then we can immediately install pygmo:
-
-.. code-block:: console
-
-   $ conda config --add channels conda-forge
-   $ conda install pygmo
-
-conda will automatically install all of pygmo's dependencies for you. Please refer to the `conda documentation <https://conda.io/docs/>`__
-for instructions on how to setup and manage your conda installation.
-
-
-Installation with pip
-^^^^^^^^^^^^^^^^^^^^^
-The installation of pygmo with pip is also straightforward:
+pygmo is also available via the `pip <https://pip.pypa.io/en/stable/>`__ package
+installer. The installation of pygmo with pip is straightforward:
 
 .. code-block:: console
 
    $ pip install pygmo
 
-Like conda, also pip will automatically install all of pygmo's dependencies for you. If you want to install pygmo for a single user instead of
+Like conda, also pip will automatically install all of pygmo's
+dependencies for you.
+If you want to install pygmo for a single user instead of
 system-wide, which is in general a good idea, you can do:
 
 .. code-block:: console
 
    $ pip install --user pygmo
 
+An even better idea is to make use of Python's
+`virtual environments <https://virtualenv.pypa.io/en/latest/>`__.
 
-Installation from source
-^^^^^^^^^^^^^^^^^^^^^^^^
-For an installation from source, pygmo has the following dependencies:
+The pip packages for pygmo are maintained by the core development team,
+and they are regularly updated when new pygmo versions are released.
+We provide pip packages for Linux and Windows (both Python 2.7 and 3.x),
+but **not** for OSX.
 
-* pagmo (i.e., the C++ headers of the pagmo library need to be installed before attempting
-  to compile pygmo),
-* `Boost.Python <https://www.boost.org/doc/libs/1_63_0/libs/python/doc/html/index.html>`__
-* `NumPy <http://www.numpy.org/>`__ (note that NumPy's development headers must be installed as well).
+Arch Linux
+""""""""""
 
-Note that, at the present time, the versions of pygmo and pagmo must be exactly identical for the compilation of pygmo
-to be successful, otherwise the build process will error out. If you are updating pagmo/pygmo to a later version,
-make sure to install the new pagmo version before compiling the new pygmo version.
-
-To build the module from source you need to **activate** the ``PAGMO_BUILD_PYGMO`` cmake option and **deactivate** the ``PAGMO_BUILD_PAGMO`` option.
-Check carefully what Python version and what libraries/include paths are detected (in particular, on systems with multiple Python versions
-it can happen that CMake detects the headers from a Python version and the Python library from another version).
-The ``CMAKE_INSTALL_PREFIX`` variable will be used to construct the final location of headers and Python module after install.
-
-When done, type (in your build directory):
-
-.. code-block:: console
-
-   $ make install
-
-To check that all went well fire-up your Python console and try the example in :ref:`quick-start example <getting_started_py>`.
-
-Installation on Arch Linux
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Pygmo is available on the `Arch User Repository
 <https://aur.archlinux.org>`__ (AUR) in Arch Linux. It is
 recommended to use an AUR helper like
