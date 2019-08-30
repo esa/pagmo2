@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.11.3 (unreleased)
+-------------------
+
+Fix
+~~~
+
+- Various doc improvements and fixes (`#340 <https://github.com/esa/pagmo2/pull/340>`__).
+
 2.11.2 (2019-08-21)
 -------------------
 

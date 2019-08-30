@@ -1,87 +1,130 @@
- <!DOCTYPE html>
+ 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>Ipopt &#8212; pagmo 2.11.2 documentation</title>
-    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pagmo.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ipopt &mdash; pagmo 2.11.3 documentation</title>
+  
+
+  
+  
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)" href="moead.html" />
     <link rel="prev" title="Improved Harmony Search (IHS)" href="ihs.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head><body>
+</head>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo_small_html.png"></span>
-           </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
-      </div>
+<body class="wy-body-for-nav">
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
             
-                <li><a href="../../../index.html">Home</a></li>
-                <li><a href="../../../install.html">Install</a></li>
-                <li><a href="../../../quickstart.html">Quickstart</a></li>
+            
+              <div class="version">
+                2.11.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../../../index.html">All <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../install.html#c">C++</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../install.html#python">Python</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#c">C++</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#python">Python</a></li>
-</ul>
-</li>
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#local-optimization">Local optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#scalable-problems">Scalable problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#problem-suites">Problem suites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../problem_list.html#meta-problems">Meta-problems</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="null.html">Null algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bee_colony.html">Artificial Bee Colony</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cmaes.html">Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compass_search.html">Compass Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="de.html">Differential Evolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="de1220.html">Self-adaptive Differential Evolution (DE 1220 aka pDE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaco.html">Extended Ant Colony Optimization (gaco)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (gwo)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ihs.html">Improved Harmony Search (IHS)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ipopt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moead.html">Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mbh.html">Monotonic Basin Hopping (MBH) - Generalized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cstrs_self_adaptive.html">Self-adaptive constraints handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlopt.html">NLopt solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nsga2.html">Non dominated sorting genetic algorithm (NSGA-II)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pso.html">Particle Swarm Optimization (PSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pso_gen.html">Particle Swarm Optimization Generational (GPSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sade.html">Self-adaptive Differential Evolution (jDE and iDE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sea.html">(N+1)-ES Simple Evolutionary Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sga.html">Simple Genetic Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulated_annealing.html">Simulated Annealing (Corana’s version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (xNES)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
@@ -92,93 +135,82 @@
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut.html#basics">Basics</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/python_docs.html#utilities">Utilities</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../credits.html#main-developers">Main developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id1">2.11.2 (2019-08-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id2">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id4">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id6">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id9">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id13">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id17">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id20">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id22">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id24">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id28">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#id31">2.2 (2017-05-12)</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">This Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Ipopt</a></li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
 
-          
             
-<form class="navbar-form navbar-right" action="../../../search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
           
         </div>
-    </div>
-  </div>
+      </div>
+    </nav>
 
-<div class="container">
-  <div class="row">
-    <div class="body col-md-12 content" role="main">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
       
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../cpp_docs.html">C++ Documentation</a> &raquo;</li>
+        
+      <li>Ipopt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/docs/cpp/algorithms/ipopt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
   <div class="section" id="ipopt">
 <h1>Ipopt<a class="headerlink" href="#ipopt" title="Permalink to this headline">¶</a></h1>
+<p><em>#include &lt;pagmo/algorithms/ipopt.hpp&gt;</em></p>
 <dl class="class">
 <dt id="_CPPv4N5pagmo5ipoptE">
 <span id="_CPPv3N5pagmo5ipoptE"></span><span id="_CPPv2N5pagmo5ipoptE"></span><span id="pagmo::ipopt"></span><span class="target" id="classpagmo_1_1ipopt"></span><em class="property">class </em><code class="sig-name descname">ipopt</code> : <em class="property">public</em> pagmo::<a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based">not_population_based</a><a class="headerlink" href="#_CPPv4N5pagmo5ipoptE" title="Permalink to this definition">¶</a><br /></dt>
@@ -191,35 +223,6 @@
 <p>This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver, a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.</p>
 <p>Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt can estimate numerically the Hessians if needed).</p>
 <p>In order to support pagmo’s population-based optimisation model, <a class="reference internal" href="#classpagmo_1_1ipopt_1aa0a70c0c153949cf6e217cdb23776402"><span class="std std-ref">ipopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#namespacepagmo_1a5933d992cb780a189f50728594e81345"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><em>Configuring the optimsation run </em></p>
-<p>Ipopt supports a large amount of options for the configuration of the optimisation run. The options are divided into three categories:<ul class="simple">
-<li><p><em>string</em> options (i.e., the type of the option is <code class="docutils literal notranslate"><span class="pre">std::string</span></code>),</p></li>
-<li><p><em>integer</em> options (i.e., the type of the option is <code class="docutils literal notranslate"><span class="pre">Ipopt::Index</span></code> - an alias for some integer type, typically <code class="docutils literal notranslate"><span class="pre">int</span></code>),</p></li>
-<li><p><em>numeric</em> options (i.e., the type of the option is <code class="docutils literal notranslate"><span class="pre">double</span></code>).</p></li>
-</ul>
-</p>
-<p>The full list of options is available on the <a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">Ipopt website</a>. <a class="reference internal" href="#classpagmo_1_1ipopt"><span class="std std-ref">pagmo::ipopt</span></a> allows to configure any Ipopt option via methods such as <a class="reference internal" href="#classpagmo_1_1ipopt_1aee7d3399c0bbf817f9682d95161e8c7c"><span class="std std-ref">ipopt::set_string_options()</span></a>, <a class="reference internal" href="#classpagmo_1_1ipopt_1a722f0d2d89ce0668c94609188f0c624b"><span class="std std-ref">ipopt::set_string_option()</span></a>, <a class="reference internal" href="#classpagmo_1_1ipopt_1adafd021849a25fbf01631c77a622b554"><span class="std std-ref">ipopt::set_integer_options()</span></a>, etc., which need to be used before invoking <a class="reference internal" href="#classpagmo_1_1ipopt_1aa0a70c0c153949cf6e217cdb23776402"><span class="std std-ref">ipopt::evolve()</span></a>.</p>
-<p>If the user does not set any option, <a class="reference internal" href="#classpagmo_1_1ipopt"><span class="std std-ref">pagmo::ipopt</span></a> will use Ipopt’s default values for the options (see the <a class="reference external" href="https://www.coin-or.org/Ipopt/documentation/node40.html">documentation</a>), with the following modifications:<ul class="simple">
-<li><p>if the <code class="docutils literal notranslate"><span class="pre">&quot;print_level&quot;</span></code> integer option is <strong>not</strong> set by the user, it will be set to 0 by <a class="reference internal" href="#classpagmo_1_1ipopt"><span class="std std-ref">pagmo::ipopt</span></a> (this will suppress most screen output produced by the solver - note that we support an alternative form of logging via the <a class="reference internal" href="#classpagmo_1_1ipopt_1a758ec78a12b9903b555e2c1cb55c14ab"><span class="std std-ref">ipopt::set_verbosity()</span></a> method);</p></li>
-<li><p>if the <code class="docutils literal notranslate"><span class="pre">&quot;hessian_approximation&quot;</span></code> string option is <strong>not</strong> set by the user and the optimisation problem does <strong>not</strong> provide the Hessians, then the option will be set to <code class="docutils literal notranslate"><span class="pre">&quot;limited-memory&quot;</span></code> by <a class="reference internal" href="#classpagmo_1_1ipopt"><span class="std std-ref">pagmo::ipopt</span></a>. This makes it possible to optimise problems without Hessians out-of-the-box (i.e., Ipopt will approximate numerically the Hessians for you);</p></li>
-<li><p>if the <code class="docutils literal notranslate"><span class="pre">&quot;constr_viol_tol&quot;</span></code> numeric option is <strong>not</strong> set by the user and the optimisation problem is constrained, then <a class="reference internal" href="#classpagmo_1_1ipopt"><span class="std std-ref">pagmo::ipopt</span></a> will compute the minimum value <code class="docutils literal notranslate"><span class="pre">min_tol</span></code> in the vector returned by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">pagmo::problem::get_c_tol()</span></a> for the optimisation problem at hand. If <code class="docutils literal notranslate"><span class="pre">min_tol</span></code> is nonzero, then the <code class="docutils literal notranslate"><span class="pre">&quot;constr_viol_tol&quot;</span></code> Ipopt option will be set to <code class="docutils literal notranslate"><span class="pre">min_tol</span></code>, otherwise the default Ipopt value (1E-4) will be used for the option. This ensures that, if the constraint tolerance is not explicitly set by the user, a solution deemed feasible by Ipopt is also deemed feasible by pagmo (but the opposite is not necessarily true).</p></li>
-</ul>
-</p>
-<p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>A moved-from <a class="reference internal" href="#_CPPv4N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ipopt</span></code></a> is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_IPOPT</span></code> option
-enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference external" href="https://projects.coin-or.org/Ipopt">https://projects.coin-or.org/Ipopt</a>.</p>
-</div>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="type">
@@ -676,21 +679,52 @@ file. Ipopt’s screen logging is disabled by default (i.e., the Ipopt verbosity
 </div>
 
 
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="moead.html" class="btn btn-neutral float-right" title="Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ihs.html" class="btn btn-neutral float-left" title="Improved Harmony Search (IHS)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-      
-  </div>
-</div>
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
-      
-    </p>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+        &copy; Copyright 2017-2018, pagmo development team
+
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
 </footer>
-  </body>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>

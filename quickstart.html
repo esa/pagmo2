@@ -1,203 +1,189 @@
- <!DOCTYPE html>
+ 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>Quick start &#8212; pagmo 2.11.2 documentation</title>
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/pagmo.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick start &mdash; pagmo 2.11.3 documentation</title>
+  
+
+  
+  
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="List of algorithms (UDAs) available in pagmo/pygmo" href="docs/algorithm_list.html" />
     <link rel="prev" title="Installation guide" href="install.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-  </head><body>
+</head>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="index.html"><span><img src="_static/logo_small_html.png"></span>
-           </a>
-        <span class="navbar-text navbar-version pull-left"><b>2.11.2</b></span>
-      </div>
+<body class="wy-body-for-nav">
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
             
-                <li><a href="index.html">Home</a></li>
-                <li><a href="install.html">Install</a></li>
-                <li><a href="#">Quickstart</a></li>
+            
+              <div class="version">
+                2.11.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
             
             
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="index.html">All <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install.html#c">C++</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#python">Python</a></li>
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#c">C++</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-pagmo-with-cmake">Using pagmo with CMake</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#c">C++</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#python">Python</a></li>
 </ul>
 </li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/algorithm_list.html#heuristic-global-optimization">Heuristic Global Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/algorithm_list.html#local-optimization">Local optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/algorithm_list.html#meta-algorithms">Meta-algorithms</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/problem_list.html#scalable-problems">Scalable problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/problem_list.html#problem-suites">Problem suites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/problem_list.html#meta-problems">Meta-problems</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html#basics">Basics</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#implemented-user-defined-classes">Implemented user-defined classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/python_docs.html#utilities">Utilities</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#coding-your-own-problem-udp">Coding your own problem (UDP)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#meta-problems">Meta-problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#coding-your-own-island-udi">Coding your own island (UDI)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#local-optimization">Local optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#multi-objective-optimization">Multi-objective optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#hypervolumes">Hypervolumes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/python/tutorials/python_tut.html#advanced-examples">Advanced Examples</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="credits.html#main-developers">Main developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">2.11.2 (2019-08-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">2.11.1 (2019-08-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">2.11 (2019-08-07)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">2.10 (2019-01-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id9">2.9 (2018-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id13">2.8 (2018-07-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id17">2.7 (2018-04-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id20">2.6 (2017-11-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id22">2.5 (2017-11-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id24">2.4 (2017-06-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id28">2.3 (2017-05-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id31">2.2 (2017-05-12)</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">This Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Quick start</a><ul>
-<li><a class="reference internal" href="#c">C++</a></li>
-<li><a class="reference internal" href="#python">Python</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
 
-          
             
-<form class="navbar-form navbar-right" action="search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
           
         </div>
-    </div>
-  </div>
+      </div>
+    </nav>
 
-<div class="container">
-  <div class="row">
-    <div class="body col-md-12 content" role="main">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
       
-  <div class="section" id="quick-start">
-<span id="quickstart"></span><h1><a class="toc-backref" href="#id1">Quick start</a><a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
-<div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#quick-start" id="id1">Quick start</a></p>
-<ul>
-<li><p><a class="reference internal" href="#c" id="id2">C++</a></p></li>
-<li><p><a class="reference internal" href="#python" id="id3">Python</a></p></li>
-</ul>
-</li>
-</ul>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quick start</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
 </div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start">
+<span id="quickstart"></span><h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="c">
-<h2><a class="toc-backref" href="#id2">C++</a><a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
-<p>After following the <a class="reference internal" href="install.html#install"><span class="std std-ref">Installation guide</span></a> you will be able to compile and run your first C++ pagmo program:</p>
-<div class="highlight-c++ notranslate" id="getting-started-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<span id="getting-started-c"></span><h2>C++<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
+<p>After following the <a class="reference internal" href="install.html#install"><span class="std std-ref">installation guide</span></a>,
+you will be able to compile and run your first C++ pagmo program:</p>
+<div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -249,7 +235,7 @@
     <span class="n">algorithm</span> <span class="n">algo</span><span class="p">{</span><span class="n">sade</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
 
     <span class="c1">// 3 - Instantiate an archipelago with 16 islands having each 20 individuals</span>
-    <span class="n">archipelago</span> <span class="n">archi</span><span class="p">{</span><span class="mi">16</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="mi">20</span><span class="p">};</span>
+    <span class="n">archipelago</span> <span class="n">archi</span><span class="p">{</span><span class="mi">16u</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="mi">20u</span><span class="p">};</span>
 
     <span class="c1">// 4 - Run the evolution in parallel on the 16 separate islands 10 times.</span>
     <span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
@@ -264,23 +250,73 @@
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
-<p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> text file and compile it (for example) with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread
+<p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> text file and compile it
+(for example) with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
 </pre></div>
 </div>
-<p>If you installed pagmo with support for optional 3rd party libraries, you might need to
-add additional switches to the command-line invocation of the compiler. For instance,
-if you enabled the optional NLopt support, you will have to link your executable to the
+<p>If you installed pagmo in a non-standard path, such as the <code class="docutils literal notranslate"><span class="pre">.local</span></code> directory
+in your <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> on a Unix installation (e.g., <code class="docutils literal notranslate"><span class="pre">/home/username/.local</span></code>),
+the compiler will need assistance to locate the pagmo headers and libraries.
+E.g., you may need a command such as:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
+</pre></div>
+</div>
+<p>If you installed pagmo with support for optional 3rd party libraries,
+you might need to add additional switches to the command-line invocation
+of the compiler. For instance, if you enabled the optional NLopt support,
+you will have to link your executable to the
 <code class="docutils literal notranslate"><span class="pre">nlopt</span></code> library:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lnlopt
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -lnlopt
+</pre></div>
+</div>
+<p>We recommend to use pagmo’s CMake support in order to simplify
+the build process of code depending on pagmo (see next section).</p>
+<div class="section" id="using-pagmo-with-cmake">
+<h3>Using pagmo with CMake<a class="headerlink" href="#using-pagmo-with-cmake" title="Permalink to this headline">¶</a></h3>
+<p>As a part of the pagmo installation, a group of CMake files is installed into
+<code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX/lib/cmake/pagmo</span></code>.
+This bundle, which is known in the CMake lingo as a
+<a class="reference external" href="https://cmake.org/cmake/help/v3.3/manual/cmake-packages.7.html">config-file package</a>,
+facilitates the detection and use of pagmo from other CMake-based projects.
+pagmo’s config-file package, once loaded, provides
+an imported target called <code class="docutils literal notranslate"><span class="pre">Pagmo::pagmo</span></code> which encapsulates all the information
+necessary to use pagmo. That is, linking to
+<code class="docutils literal notranslate"><span class="pre">Pagmo::pagmo</span></code> ensures that pagmo’s include directories are added to
+the include
+path of the compiler, and that the libraries
+on which pagmo depends are brought into the link chain.</p>
+<p>For instance, a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file for the simple <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code>
+program presented earlier may look like this:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># pagmo needs at least CMake 3.2.</span>
+<span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.2.0</span><span class="p">)</span>
+
+<span class="c"># The name of our project.</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">sample_project</span><span class="p">)</span>
+
+<span class="c"># Look for an installation of pagmo in the system.</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">Pagmo</span> <span class="s">REQUIRED</span><span class="p">)</span>
+
+<span class="c"># Create an executable, and link it to the Pagmo::pagmo imported target.</span>
+<span class="c"># This ensures that, in the compilation of &#39;getting_started&#39;, pagmo&#39;s include</span>
+<span class="c"># dirs are added to the include path of the compiler and that pagmo&#39;s</span>
+<span class="c"># dependencies are transitively linked to &#39;getting_started&#39;.</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">getting_started</span> <span class="s">getting_started.cpp</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">getting_started</span> <span class="s">Pagmo::pagmo</span><span class="p">)</span>
+
+<span class="c"># This line indicates to your compiler</span>
+<span class="c"># that C++11 is needed for the compilation.</span>
+<span class="c"># Not strictly necessary with a recent-enough compiler.</span>
+<span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">getting_started</span> <span class="s">PROPERTY</span> <span class="s">CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<hr class="docutils" />
+</div>
 <div class="section" id="python">
-<h2><a class="toc-backref" href="#id3">Python</a><a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
-<p>If you have successfully installed pygmo following the <a class="reference internal" href="install.html#install"><span class="std std-ref">Installation guide</span></a> you can try the following script:</p>
-<div class="highlight-python notranslate" id="getting-started-py"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<span id="getting-started-py"></span><h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>If you have successfully installed pygmo following the
+<a class="reference internal" href="install.html#install"><span class="std std-ref">installation guide</span></a>, you can try the following script:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -324,29 +360,61 @@ if you enabled the optional NLopt support, you will have to link your executable
 </pre></div>
 </td></tr></table></div>
 <p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.py</span></code> text file and run it with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python getting_started.py
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python getting_started.py
 </pre></div>
 </div>
-<p>We recommend the use of Jupyter or Ipython to enjoy pygmo the most.</p>
+<p>We recommend the use of <a class="reference external" href="https://jupyter.org/">Jupyter</a> or
+<a class="reference external" href="https://ipython.org/">IPython</a> to enjoy pygmo the most.</p>
 </div>
 </div>
 
 
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="docs/algorithm_list.html" class="btn btn-neutral float-right" title="List of algorithms (UDAs) available in pagmo/pygmo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-      
-  </div>
-</div>
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
-      
-    </p>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, pagmo development team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+        &copy; Copyright 2017-2018, pagmo development team
+
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
 </footer>
-  </body>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>
