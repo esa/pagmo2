@@ -18,7 +18,7 @@ int main()
     algorithm algo{sade(100)};
 
     // 3 - Instantiate an archipelago with 16 islands having each 20 individuals
-    archipelago archi{16, algo, prob, 20};
+    archipelago archi{16u, algo, prob, 20u};
 
     // 4 - Run the evolution in parallel on the 16 separate islands 10 times.
     archi.evolve(10);
