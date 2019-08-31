@@ -80,8 +80,6 @@ Augmented Lagrangian algorithm (from NLopt) [#auglag]_ :cpp:class:`pagmo::nlopt`
 
 .. rubric:: Footnotes
 
-.. [#null_algo] The null algorithm is used only for initialisation purposes. It will not actually run any optimisation if invoked.
-
 .. [#meta_capa] The capabilities of the meta-algorithms depend also on the capabilities of the algorithms they wrap. If, for instance,
    a meta-algorithm supporting constrained problems is constructed from an algorithm which does *not* support constrained problems, the
    resulting meta-algorithms will *not* be able to solve constrained problems.

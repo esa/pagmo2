@@ -1,7 +1,12 @@
-.. _cpp_tutorials:
+.. _cpp_tutorial:
 
-C++ tutorials
-================
+C++ tutorial
+============
+
+.. toctree::
+  :maxdepth: 1
+
+  cpp_tut_preliminaries
 
 Basics
 ^^^^^^
@@ -10,6 +15,3 @@ Basics
   :maxdepth: 2
 
   evolving_a_population
-  
-
-  

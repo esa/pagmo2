@@ -1,11 +1,10 @@
-C++ Documentation
-=================
+C++ API documentation
+=====================
+
 The full, stand-alone, detailed, documentation of the c++ code.
 
 Core classes
 ^^^^^^^^^^^^
-These are the core PaGMO classes. In order to learn how to use them
-we suggest to follow the tutorials / examples.
 
 .. toctree::
   :maxdepth: 1
@@ -101,6 +100,7 @@ Implemented batch evaluators
 
 Implemented topologies
 ^^^^^^^^^^^^^^^^^^^^^^
+
 .. toctree::
   :maxdepth: 1
 
@@ -111,6 +111,7 @@ Implemented topologies
 
 Implemented replacement policies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. toctree::
   :maxdepth: 1
 
@@ -118,6 +119,7 @@ Implemented replacement policies
 
 Implemented selection policies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. toctree::
   :maxdepth: 1
 
@@ -125,7 +127,6 @@ Implemented selection policies
 
 Utilities
 ^^^^^^^^^
-Various optimization utilities.
 
 .. toctree::
   :maxdepth: 1
@@ -138,7 +139,6 @@ Various optimization utilities.
 
 Miscellanea
 ^^^^^^^^^^^
-Various coding utilities.
 
 .. toctree::
   :maxdepth: 1
