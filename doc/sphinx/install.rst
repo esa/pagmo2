@@ -8,6 +8,17 @@ Installation guide
 C++
 ---
 
+pagmo is written in modern C++, and it requires a compiler able to understand
+at least C++11. pagmo is known to run on the following setups:
+
+* GCC 4.8 and later versions on GNU/Linux,
+* Clang 3.8 and later versions on GNU/Linux,
+* MSVC 2015 and later versions on Windows,
+* Clang 4 and later versions on Windows
+  (with the ``clang-cl`` driver for MSVC),
+* MinGW GCC 8 on Windows,
+* Clang on OSX (Xcode 6.4 and later).
+
 Requirements
 ^^^^^^^^^^^^
 
@@ -24,6 +35,10 @@ Additionally, pagmo has the following **optional** dependencies:
   the :cpp:class:`pagmo::nlopt` wrapper),
 * `Ipopt <https://projects.coin-or.org/Ipopt>`__ (which is required by
   the :cpp:class:`pagmo::ipopt` wrapper).
+
+Additionally, `CMake <https://cmake.org/>`__ is the build system used by
+pagmo and it must also be available when
+installing from source (the minimum required version is 3.2).
 
 Installation from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -217,9 +232,11 @@ Additionally, pygmo has the following **optional** dependencies:
 * `dill <https://dill.readthedocs.io>`__, which can be used as an
   alternative serialization backend,
 * `Matplotlib <https://matplotlib.org/>`__, which is used by a few
-  plotting utilities.
+  plotting utilities,
+* `ipyparallel <https://ipyparallel.readthedocs.io/en/latest/>`__,
+  for using pygmo on clusters.
 
-The presence of dill and/or matplotlib will be detected at runtime
+The presence of the optional dependencies will be detected at runtime
 by pygmo, thus they need not to be present when installing/compiling
 pygmo.
 
