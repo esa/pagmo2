@@ -26,8 +26,7 @@ Heuristic Global Optimization
 ========================================================== ========================================= ========================================= =========================
 Common Name                                                Docs of the C++ class                     Docs of the python class                  Capabilities
 ========================================================== ========================================= ========================================= =========================
-The null algorithm [#null_algo]_                           :cpp:class:`pagmo::null_algorithm`        :class:`pygmo.null_algorithm`             SM-CU-I-sto
-Extended Ant Colony Optimization (ACOmi)                   :cpp:class:`pagmo::gaco`                  :class:`pygmo.gaco`                       S-CU-I
+Extended Ant Colony Optimization (GACO)                    :cpp:class:`pagmo::gaco`                  :class:`pygmo.gaco`                       S-CU-I
 Differential Evolution (DE)                                :cpp:class:`pagmo::de`                    :class:`pygmo.de`                         S-U
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U
