@@ -17,7 +17,8 @@ at least C++11. pagmo is known to run on the following setups:
 * Clang 4 and later versions on Windows
   (with the ``clang-cl`` driver for MSVC),
 * MinGW GCC 8 on Windows,
-* Clang on OSX (Xcode 6.4 and later).
+* Clang on OSX (Xcode 6.4 and later),
+* Clang on FreeBSD.
 
 Requirements
 ^^^^^^^^^^^^
