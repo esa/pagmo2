@@ -54,8 +54,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/zdt.hpp>
 #include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
 #include <pagmo/s11n.hpp>
@@ -392,7 +394,23 @@ BOOST_AUTO_TEST_CASE(island_name_info_stream)
     BOOST_CHECK(isl.get_extra_info() == "extra bits");
     BOOST_CHECK(boost::contains(oss.str(), "Replacement policy: Fair replace"));
     BOOST_CHECK(boost::contains(oss.str(), "Selection policy: Select best"));
+    // Make sure champion info is printed.
+    BOOST_CHECK(boost::contains(oss.str(), "Champion decision vector"));
+    BOOST_CHECK(boost::contains(oss.str(), "Champion fitness"));
     std::cout << isl << '\n';
+
+    // Make sure champion info is skipped for MO/sto problems.
+    isl = island{udi_01{}, de{}, population{zdt{}, 25}};
+    oss.str("");
+    oss << isl;
+    BOOST_CHECK(!boost::contains(oss.str(), "Champion decision vector"));
+    BOOST_CHECK(!boost::contains(oss.str(), "Champion fitness"));
+
+    isl = island{udi_01{}, de{}, population{inventory{}, 25}};
+    oss.str("");
+    oss << isl;
+    BOOST_CHECK(!boost::contains(oss.str(), "Champion decision vector"));
+    BOOST_CHECK(!boost::contains(oss.str(), "Champion fitness"));
 }
 
 BOOST_AUTO_TEST_CASE(island_serialization)

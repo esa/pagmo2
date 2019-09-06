@@ -111,6 +111,7 @@ class island_test_case(_ut.TestCase):
         self.run_io_tests()
         self.run_status_tests()
         self.run_stateful_algo_tests()
+        self.run_mo_sto_repr_bug()
 
     def run_basic_tests(self):
         from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock, r_policy, s_policy, fair_replace, select_best, population
@@ -398,6 +399,24 @@ class island_test_case(_ut.TestCase):
                      prob=null_problem(), size=1)
         self.assertTrue(isl.extract(object) is None)
         self.assertTrue(not isl.extract(thread_island) is None)
+
+    def run_mo_sto_repr_bug(self):
+        # Old bug: printing islands containing MO/sto
+        # problems would throw due to an error being raised
+        # when accessing the champion.
+        from .core import island, de, rosenbrock, zdt, inventory
+
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        self.assertTrue("Champion decision vector" in repr(isl))
+        self.assertTrue("Champion fitness" in repr(isl))
+
+        isl = island(algo=de(), prob=zdt(), size=25)
+        self.assertFalse("Champion decision vector" in repr(isl))
+        self.assertFalse("Champion fitness" in repr(isl))
+
+        isl = island(algo=de(), prob=inventory(), size=25)
+        self.assertFalse("Champion decision vector" in repr(isl))
+        self.assertFalse("Champion fitness" in repr(isl))
 
 
 class mp_island_test_case(_ut.TestCase):
