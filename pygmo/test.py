@@ -2093,7 +2093,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_push_back_tests(self):
         from . import (archipelago, de, rosenbrock, r_policy,
-                       s_policy, fair_replace, select_best)
+                       s_policy, fair_replace, select_best, island)
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         # Push back while evolving.
         a.evolve(10)
@@ -2146,6 +2146,37 @@ class archipelago_test_case(_ut.TestCase):
                              for i in range(7, 9)]))
         self.assertTrue(all([a[i].get_s_policy().is_(_s_pol)
                              for i in range(7, 9)]))
+
+        # push_back() with positional argument.
+        a = archipelago()
+        a.push_back(island(algo=de(), prob=rosenbrock(), size=10))
+        a.push_back(island(algo=de(), prob=rosenbrock(), size=10))
+        a.push_back(island(algo=de(), prob=rosenbrock(), size=10))
+
+        self.assertEqual(len(a), 3)
+        for i in range(3):
+            self.assertTrue(a[i].get_algorithm().is_(de))
+            self.assertTrue(a[i].get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(a[i].get_population()), 10)
+
+        # Error handling.
+        with self.assertRaises(ValueError) as cm:
+            a.push_back(island(algo=de(), prob=rosenbrock(), size=10), a=5, b=6)
+        err = cm.exception
+        self.assertTrue(
+            "if a positional argument is passed to this method, then no keyword arguments must be passed, but 2 keyword arguments were passed instead" in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            a.push_back(island(algo=de(), prob=rosenbrock(), size=10), 1)
+        err = cm.exception
+        self.assertTrue(
+            "2 positional arguments were provided, but this method accepts only a single positional argument" in str(err))
+
+        with self.assertRaises(TypeError) as cm:
+            a.push_back(42)
+        err = cm.exception
+        self.assertTrue(
+            "the positional argument passed to this method must be an island, but the type of the argument is '{}' instead".format(type(42)) in str(err))
 
     def run_io_tests(self):
         from . import archipelago, de, rosenbrock
