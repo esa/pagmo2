@@ -75,6 +75,8 @@ dependencies, configure the install destination, etc.
 The following options are currently recognised by pagmo’s build system:
 
 * ``PAGMO_BUILD_TESTS``: build the test suite (defaults to ``OFF``),
+* ``PAGMO_BUILD_TUTORIALS``: build the C++
+  :ref:`tutorials <cpp_tutorial>` (defaults to ``OFF``),
 * ``PAGMO_WITH_EIGEN3``: enable features depending on `Eigen3 <http://eigen.tuxfamily.org/index.php?title=Main_Page>`__
   (defaults to ``OFF``),
 * ``PAGMO_WITH_NLOPT``: enable the `NLopt <https://nlopt.readthedocs.io/en/latest/>`__

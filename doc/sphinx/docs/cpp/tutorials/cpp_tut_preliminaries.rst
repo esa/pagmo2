@@ -1,6 +1,9 @@
 Preliminaries
 =============
 
+Compiling the tutorials
+-----------------------
+
 Organization of the library
 ---------------------------
 
