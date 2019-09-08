@@ -125,8 +125,7 @@ class core_test_case(_ut.TestCase):
         self.assert_(_test_to_vd(array([0, 1]), 2))
         self.assert_(_test_to_vvd([[1., 2, 3], [4, 5, 6]], 2, 3))
         self.assert_(_test_to_vvd(array([[1., 2, 3], [4, 5, 6]]), 2, 3))
-        self.assertRaises(TypeError, lambda: _test_to_vvd(
-            ([1., 2, 3], [4, 5, 6]), 2, 3))
+        self.assert_(_test_to_vvd(([1., 2, 3], [4, 5, 6]), 2, 3))
         self.assertEqual(type(int), _type(int))
         self.assertEqual(str(123), _str(123))
         self.assertEqual(callable(1), _callable(1))
@@ -2002,8 +2001,8 @@ class archipelago_test_case(_ut.TestCase):
     def run_mo_migration_bug_test(self):
         from . import dtlz, nsga2, ring, archipelago
 
-        udp = dtlz(2, dim = 50)
-        uda = nsga2(gen = 100)
+        udp = dtlz(2, dim=50)
+        uda = nsga2(gen=100)
         topo = ring()
 
         archi = archipelago(n=10, t=topo, prob=udp, algo=uda, pop_size=100)
@@ -2161,7 +2160,8 @@ class archipelago_test_case(_ut.TestCase):
 
         # Error handling.
         with self.assertRaises(ValueError) as cm:
-            a.push_back(island(algo=de(), prob=rosenbrock(), size=10), a=5, b=6)
+            a.push_back(
+                island(algo=de(), prob=rosenbrock(), size=10), a=5, b=6)
         err = cm.exception
         self.assertTrue(
             "if a positional argument is passed to this method, then no keyword arguments must be passed, but 2 keyword arguments were passed instead" in str(err))
