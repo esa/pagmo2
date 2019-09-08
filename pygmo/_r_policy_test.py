@@ -224,7 +224,7 @@ class r_policy_test_case(_ut.TestCase):
         ret = r_pol.replace(inds, 2, 0, 1, 0, 0, [], inds)
         self.assertEqual(ret[0][0], 1)
 
-        # Test construction of array ID from list.
+        # Test construction of array ID from numpy array.
         class r(object):
 
             def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
