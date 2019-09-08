@@ -4,8 +4,21 @@ Changelog
 2.11.3 (unreleased)
 -------------------
 
+New
+~~~
+
+- :func:`pygmo.archipelago.push_back()` now also accepts :class:`~pygmo.island`
+  objects as input arguments (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
+
 Fix
 ~~~
+
+- Various improvements, fixes and cleanups in the translation of
+  C++ vectors to/from Python
+  (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
+
+- Fix the printing of islands which contain MO problems
+  (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
 
 - Various doc improvements and fixes (`#340 <https://github.com/esa/pagmo2/pull/340>`__).
 
