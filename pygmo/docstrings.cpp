@@ -3502,7 +3502,7 @@ Returns:
 Examples:
     >>> import pygmo as pg
     >>> pg.non_dominated_front_2d(points = [[0,5],[1,4],[2,3],[3,2],[4,1],[2,2]])
-    array([0, 1, 5, 4])
+    array([0, 1, 5, 4], dtype=uint64)
 )";
 }
 
@@ -3865,7 +3865,7 @@ Examples:
     array([[0, 0],
            [0, 3],
            [1, 2],
-           [2, 1]])
+           [2, 1]], dtype=uint64)
 
 )";
 }
