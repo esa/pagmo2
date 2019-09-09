@@ -323,6 +323,9 @@ inline VVector ndarr_to_vvector(PyArrayObject *o)
         auto data = static_cast<value_t *>(PyArray_DATA(o));
         const auto ssize = PyArray_SHAPE(o)[1];
         for (size_type i = 0; i < size; ++i, data += ssize) {
+            // NOTE: here and elsewhere in this header where we
+            // use push_back()/emplace_back(), we should really reserve()
+            // beforeheand.
             retval.push_back(typename VVector::value_type(data, data + ssize));
         }
     }
