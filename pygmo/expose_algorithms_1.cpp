@@ -135,7 +135,7 @@ void expose_algorithms_1()
                  for (const auto &t : a.get_log()) {
                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t),
                                                   std::get<4>(t), std::get<5>(t), std::get<6>(t),
-                                                  v_to_a(std::get<7>(t))));
+                                                  vector_to_ndarr(std::get<7>(t))));
                  }
                  return retval;
              }),
@@ -192,7 +192,7 @@ void expose_algorithms_1()
     nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
                    bp::list retval;
                    for (const auto &t : a.get_log()) {
-                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), vector_to_ndarr(std::get<2>(t))));
                    }
                    return retval;
                }),

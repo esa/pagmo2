@@ -48,6 +48,7 @@ see https://www.gnu.org/licenses/. */
 #include <map>
 #include <string>
 #include <tuple>
+#include <vector>
 
 #include <boost/python/args.hpp>
 #include <boost/python/default_call_policies.hpp>
@@ -83,6 +84,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/types.hpp>
 
 #include <pygmo/algorithm_exposition_suite.hpp>
 #include <pygmo/common_utils.hpp>
@@ -139,21 +141,23 @@ void expose_algorithms_0()
 {
     // MBH meta-algo.
     auto mbh_ = expose_algorithm_pygmo<mbh>("mbh", mbh_docstring().c_str());
-    mbh_.def("__init__",
-             bp::make_constructor(lcast([](const algorithm &a, unsigned stop, const bp::object &perturb,
-                                           unsigned seed) { return ::new pagmo::mbh(a, stop, to_vd(perturb), seed); }),
-                                  bp::default_call_policies()));
+    mbh_.def("__init__", bp::make_constructor(
+                             lcast([](const algorithm &a, unsigned stop, const bp::object &perturb, unsigned seed) {
+                                 return ::new pagmo::mbh(a, stop, obj_to_vector<vector_double>(perturb), seed);
+                             }),
+                             bp::default_call_policies()));
     mbh_.def("__init__", bp::make_constructor(lcast([](const algorithm &a, unsigned stop, const bp::object &perturb) {
-                                                  return ::new pagmo::mbh(a, stop, to_vd(perturb),
+                                                  return ::new pagmo::mbh(a, stop,
+                                                                          obj_to_vector<vector_double>(perturb),
                                                                           pagmo::random_device::next());
                                               }),
                                               bp::default_call_policies()));
     mbh_.def("get_seed", &mbh::get_seed, mbh_get_seed_docstring().c_str());
     mbh_.def("get_verbosity", &mbh::get_verbosity, mbh_get_verbosity_docstring().c_str());
-    mbh_.def("set_perturb", lcast([](mbh &a, const bp::object &o) { a.set_perturb(to_vd(o)); }),
+    mbh_.def("set_perturb", lcast([](mbh &a, const bp::object &o) { a.set_perturb(obj_to_vector<vector_double>(o)); }),
              mbh_set_perturb_docstring().c_str(), (bp::arg("perturb")));
     expose_algo_log(mbh_, mbh_get_log_docstring().c_str());
-    mbh_.def("get_perturb", lcast([](const mbh &a) { return v_to_a(a.get_perturb()); }),
+    mbh_.def("get_perturb", lcast([](const mbh &a) { return vector_to_ndarr(a.get_perturb()); }),
              mbh_get_perturb_docstring().c_str());
     add_property(mbh_, "inner_algorithm",
                  bp::make_function(lcast([](mbh &uda) -> algorithm & { return uda.get_inner_algorithm(); }),
@@ -229,7 +233,7 @@ void expose_algorithms_0()
     de1220_.def("__init__",
                 bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                               double ftol, double xtol, bool memory) -> de1220 * {
-                                         auto av = to_vuint<unsigned>(allowed_variants);
+                                         auto av = obj_to_vector<std::vector<unsigned>>(allowed_variants);
                                          return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory);
                                      }),
                                      bp::default_call_policies(),
@@ -239,7 +243,7 @@ void expose_algorithms_0()
     de1220_.def("__init__",
                 bp::make_constructor(lcast([](unsigned gen, const bp::object &allowed_variants, unsigned variant_adptv,
                                               double ftol, double xtol, bool memory, unsigned seed) -> de1220 * {
-                                         auto av = to_vuint<unsigned>(allowed_variants);
+                                         auto av = obj_to_vector<std::vector<unsigned>>(allowed_variants);
                                          return ::new de1220(gen, av, variant_adptv, ftol, xtol, memory, seed);
                                      }),
                                      bp::default_call_policies(),
@@ -292,8 +296,8 @@ void expose_algorithms_0()
     moead_.def("get_log", lcast([](const moead &a) -> bp::list {
                    bp::list retval;
                    for (const auto &t : a.get_log()) {
-                       retval.append(
-                           bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), v_to_a(std::get<3>(t))));
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t),
+                                                    vector_to_ndarr(std::get<3>(t))));
                    }
                    return retval;
                }),

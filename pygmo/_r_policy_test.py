@@ -204,6 +204,35 @@ class r_policy_test_case(_ut.TestCase):
             r_pol.replace(([1, 2], [[.1, .2], [.3, .4]], [
                 [1.1], [2.2]]), 2, 0, 1, 0, 0, [], ([], [], []))
 
+        class r(object):
+
+            def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
+                return (np.array([1], dtype='float64'), [[1, 2]], [[1]])
+        r_pol = r_policy(r())
+        with self.assertRaises(RuntimeError) as cm:
+            r_pol.replace(([1, 2], [[.1, .2], [.3, .4]], [
+                [1.1], [2.2]]), 2, 0, 1, 0, 0, [], ([], [], []))
+
+        # Test construction of array ID from list.
+        inds = ([1, 2], [[.1, .2], [.3, .4]], [[1.1], [2.2]])
+
+        class r(object):
+
+            def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
+                return ([1], [[1, 2]], [[1]])
+        r_pol = r_policy(r())
+        ret = r_pol.replace(inds, 2, 0, 1, 0, 0, [], inds)
+        self.assertEqual(ret[0][0], 1)
+
+        # Test construction of array ID from numpy array.
+        class r(object):
+
+            def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
+                return (np.array([1], dtype='ulonglong'), [[1, 2]], [[1]])
+        r_pol = r_policy(r())
+        ret = r_pol.replace(inds, 2, 0, 1, 0, 0, [], inds)
+        self.assertEqual(ret[0][0], 1)
+
         # Test that construction from another pygmo.r_policy fails.
         with self.assertRaises(TypeError) as cm:
             r_policy(r_pol)

@@ -204,6 +204,36 @@ class s_policy_test_case(_ut.TestCase):
             s_pol.select(([1, 2], [[.1, .2], [.3, .4]], [
                 [1.1], [2.2]]), 2, 0, 1, 0, 0, [])
 
+        # Test wrong array construction of IDs.
+        class r(object):
+
+            def select(self, inds, nx, nix, nobj, nec, nic, tol):
+                return (np.array([1], dtype='float64'), [[1, 2]], [[1]])
+        s_pol = s_policy(r())
+        with self.assertRaises(RuntimeError) as cm:
+            s_pol.select(([1, 2], [[.1, .2], [.3, .4]], [
+                [1.1], [2.2]]), 2, 0, 1, 0, 0, [])
+
+        # Test construction of array ID from list.
+        class r(object):
+
+            def select(self, inds, nx, nix, nobj, nec, nic, tol):
+                return ([1], [[1, 2]], [[1]])
+        s_pol = s_policy(r())
+        ret = s_pol.select(([1, 2], [[.1, .2], [.3, .4]], [
+                           [1.1], [2.2]]), 2, 0, 1, 0, 0, [])
+        self.assertEqual(ret[0][0], 1)
+
+        # Test construction of array ID from array.
+        class r(object):
+
+            def select(self, inds, nx, nix, nobj, nec, nic, tol):
+                return (np.array([1], dtype='ulonglong'), [[1, 2]], [[1]])
+        s_pol = s_policy(r())
+        ret = s_pol.select(([1, 2], [[.1, .2], [.3, .4]], [
+                           [1.1], [2.2]]), 2, 0, 1, 0, 0, [])
+        self.assertEqual(ret[0][0], 1)
+
         # Test that construction from another pygmo.s_policy fails.
         with self.assertRaises(TypeError) as cm:
             s_policy(s_pol)
