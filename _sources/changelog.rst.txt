@@ -4,8 +4,31 @@ Changelog
 2.11.3 (unreleased)
 -------------------
 
+New
+~~~
+
+- :func:`pygmo.archipelago.push_back()` now also accepts :class:`~pygmo.island`
+  objects as input arguments (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
+
+Changes
+~~~~~~~
+
+- **BREAKING**: the machinery for the translation between C++ and Python
+  of vectors of unsigned integral types (e.g., sparsity patterns, individual
+  IDs, etc.) now requires that, on the Python side, NumPy arrays are created
+  with the appropriate unsigned integral dtype (e.g., ``uint64`` in most
+  cases). Previously, pagmo would accept also signed integral dtypes
+  (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
+
 Fix
 ~~~
+
+- Various improvements, fixes and cleanups in the translation of
+  C++ vectors to/from Python
+  (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
+
+- Fix the printing of islands which contain MO problems
+  (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
 
 - Various doc improvements and fixes (`#340 <https://github.com/esa/pagmo2/pull/340>`__).
 
