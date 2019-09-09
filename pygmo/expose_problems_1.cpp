@@ -109,7 +109,8 @@ void expose_problems_1()
     auto zdt_p = expose_problem_pygmo<zdt>("zdt", "__init__(prob_id = 1, param = 30)\n\nThe ZDT problem.\n\n"
                                                   "See :cpp:class:`pagmo::zdt`.\n\n");
     zdt_p.def(bp::init<unsigned, unsigned>((bp::arg("prob_id") = 1u, bp::arg("param") = 30u)));
-    zdt_p.def("p_distance", lcast([](const zdt &z, const bp::object &x) { return z.p_distance(to_vd(x)); }));
+    zdt_p.def("p_distance",
+              lcast([](const zdt &z, const bp::object &x) { return z.p_distance(obj_to_vector<vector_double>(x)); }));
     zdt_p.def("p_distance", lcast([](const zdt &z, const population &pop) { return z.p_distance(pop); }),
               zdt_p_distance_docstring().c_str());
 
@@ -134,10 +135,11 @@ void expose_problems_1()
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
     // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     translate_.def("__init__", bp::make_constructor(lcast([](const problem &p, const bp::object &tv) {
-                                                        return ::new translate(p, to_vd(tv));
+                                                        return ::new translate(p, obj_to_vector<vector_double>(tv));
                                                     }),
                                                     bp::default_call_policies()));
-    add_property(translate_, "translation", lcast([](const translate &t) { return v_to_a(t.get_translation()); }),
+    add_property(translate_, "translation",
+                 lcast([](const translate &t) { return vector_to_ndarr(t.get_translation()); }),
                  translate_translation_docstring().c_str());
     add_property(translate_, "inner_problem",
                  bp::make_function(lcast([](translate &udp) -> problem & { return udp.get_inner_problem(); }),
@@ -149,7 +151,7 @@ void expose_problems_1()
     // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
     unconstrain_.def("__init__", bp::make_constructor(
                                      lcast([](const problem &p, const std::string &method, const bp::object &weights) {
-                                         return ::new unconstrain(p, method, to_vd(weights));
+                                         return ::new unconstrain(p, method, obj_to_vector<vector_double>(weights));
                                      }),
                                      bp::default_call_policies()));
     add_property(unconstrain_, "inner_problem",

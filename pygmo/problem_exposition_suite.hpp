@@ -77,7 +77,7 @@ inline bp::class_<Prob> expose_problem(const char *name, const char *descr)
 template <typename Prob>
 inline bp::object best_known_wrapper(const Prob &p)
 {
-    return v_to_a(p.best_known());
+    return vector_to_ndarr(p.best_known());
 }
 } // namespace pygmo
 

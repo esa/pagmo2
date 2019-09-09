@@ -689,7 +689,7 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
 setattr(archipelago, "__init__", _archi_init)
 
 
-def _archi_push_back(self, **kwargs):
+def _archi_push_back(self, *args, **kwargs):
     """Add an island.
 
     This method will construct an island from the supplied arguments and add it to the archipelago.
@@ -699,15 +699,42 @@ def _archi_push_back(self, **kwargs):
     the addition of a new island to the archipelago is mirrored by the addition of a new vertex
     to the topology.
 
-    The keyword arguments accept the same format as explained in the constructor of
-    :class:`~pygmo.island`.
+    This method accepts either a single positional argument, or a set of
+    keyword arguments:
+
+    * if no positional arguments are provided, then the keyword arguments will
+      be used to construct a :class:`~pygmo.island` which will then be added
+      to the archipelago; otherwise,
+    * if a single positional argument is provided and no keyword arguments are
+      provided, then the positional argument is interpreted as an :class:`~pygmo.island`
+      object to be added to the archipelago.
+
+    Any other combination of positional/keyword arguments will result in an error.
 
     Raises:
+        ValueError: if, when using positional arguments, there are more than 1 positional arguments,
+          or if keyword arguments are also used at the same time
+        TypeError: if, when using a single positional argument, the type of that argument
+          is not :class:`~pygmo.island`
         unspecified: any exception thrown by the constructor of :class:`~pygmo.island`,
           :func:`pygmo.topology.push_back()` or by the underlying C++ method
 
     """
-    self._push_back(island(**kwargs))
+    from . import island
+
+    if len(args) == 0:
+        self._push_back(island(**kwargs))
+    else:
+        if len(args) != 1:
+            raise ValueError(
+                "{} positional arguments were provided, but this method accepts only a single positional argument".format(len(args)))
+        if len(kwargs) != 0:
+            raise ValueError(
+                "if a positional argument is passed to this method, then no keyword arguments must be passed, but {} keyword arguments were passed instead".format(len(kwargs)))
+        if type(args[0]) != island:
+            raise TypeError(
+                "the positional argument passed to this method must be an island, but the type of the argument is '{}' instead".format(type(args[0])))
+        self._push_back(args[0])
 
 
 setattr(archipelago, "push_back", _archi_push_back)
