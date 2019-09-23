@@ -226,3 +226,20 @@ BOOST_AUTO_TEST_CASE(fair_replace_replace)
         new_inds
         == individuals_group_t{{1, 6, 5, 4, 2}, {{0}, {0}, {0}, {0}, {0}}, {{0, 7}, {10, 0}, {7, 1}, {4, 2}, {1, 5}}}));
 }
+
+// Check behaviour when, in unconstrained
+// single-objective optimisation problems,
+// the fitness is nan.
+BOOST_AUTO_TEST_CASE(fair_replace_nan_fitness)
+{
+    fair_replace f00(1);
+
+    individuals_group_t inds{{1, 2, 3}, {{0}, {0}, {0}}, {{1}, {2}, {3}}};
+    individuals_group_t mig{
+        {4, 5}, {{0}, {0}}, {{std::numeric_limits<double>::quiet_NaN()}, {std::numeric_limits<double>::quiet_NaN()}}};
+
+    auto new_inds = f00.replace(inds, 1, 0, 1, 0, 0, {}, mig);
+
+    // No individual was replaced, because the migrant has nan fitness.
+    BOOST_CHECK(inds == new_inds);
+}

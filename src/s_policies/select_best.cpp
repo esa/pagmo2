@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/variant/get.hpp>
 
 #include <pagmo/detail/base_sr_policy.hpp>
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/s_policies/select_best.hpp>
@@ -114,7 +115,7 @@ individuals_group_t select_best::select(const individuals_group_t &inds, const v
         inds_ind_sort.resize(boost::numeric_cast<decltype(inds_ind_sort.size())>(inds_size));
         std::iota(inds_ind_sort.begin(), inds_ind_sort.end(), pop_size_t(0));
         std::sort(inds_ind_sort.begin(), inds_ind_sort.end(), [&inds](pop_size_t idx1, pop_size_t idx2) {
-            return std::get<2>(inds)[idx1] < std::get<2>(inds)[idx2];
+            return detail::less_than_f(std::get<2>(inds)[idx1][0], std::get<2>(inds)[idx2][0]);
         });
 
         // Create and return the output pop.
