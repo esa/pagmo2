@@ -112,10 +112,11 @@ individuals_group_t s_pol_inner<bp::object>::select(const individuals_group_t &i
 
     try {
         // Fetch the new individuals in Python form.
-        bp::object o = m_value.attr("select")(pygmo::inds_to_tuple(inds), nx, nix, nobj, nec, nic, pygmo::v_to_a(tol));
+        bp::object o
+            = m_value.attr("select")(pygmo::inds_to_tuple(inds), nx, nix, nobj, nec, nic, pygmo::vector_to_ndarr(tol));
 
         // Convert back to C++ form and return.
-        return pygmo::to_inds(o);
+        return pygmo::obj_to_inds(o);
     } catch (const bp::error_already_set &) {
         pygmo::handle_thread_py_exception("The select() method of a pythonic selection policy of type '" + s_pol_name
                                           + "' raised an error:\n");

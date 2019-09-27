@@ -25,16 +25,16 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
         conda_pkgs="$conda_pkgs python=2.7 numpy cloudpickle dill ipyparallel numba"
     fi
 
-    if [[ "${PAGMO_BUILD}" == Python* ]]; then
-        conda_pkgs="$conda_pkgs graphviz doxygen"
-    fi
-
     conda create -q -p $deps_dir -y
     source activate $deps_dir
     # NOTE: install the GCC 4.8 version of the conda packages,
     # otherwise we have errors which I think are related to
     # ABI issues.
     conda install -c conda-forge/label/cf201901 $conda_pkgs -y
+
+    if [[ "${PAGMO_BUILD}" == Python* ]]; then
+        conda install doxygen graphviz -y
+    fi
 fi
 
 set +e

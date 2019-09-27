@@ -46,6 +46,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <boost/python/args.hpp>
 #include <boost/python/default_call_policies.hpp>
@@ -184,7 +185,8 @@ void expose_problems_0()
     auto dtlz_p = expose_problem_pygmo<dtlz>("dtlz", dtlz_docstring().c_str());
     dtlz_p.def(bp::init<unsigned, unsigned, unsigned, unsigned>(
         (bp::arg("prob_id") = 1u, bp::arg("dim") = 5u, bp::arg("fdim") = 3u, bp::arg("alpha") = 100u)));
-    dtlz_p.def("p_distance", lcast([](const dtlz &z, const bp::object &x) { return z.p_distance(to_vd(x)); }));
+    dtlz_p.def("p_distance",
+               lcast([](const dtlz &z, const bp::object &x) { return z.p_distance(obj_to_vector<vector_double>(x)); }));
     dtlz_p.def("p_distance", lcast([](const dtlz &z, const population &pop) { return z.p_distance(pop); }),
                dtlz_p_distance_docstring().c_str());
     // Inventory.
@@ -214,16 +216,18 @@ void expose_problems_0()
     auto decompose_ = expose_problem_pygmo<decompose>("decompose", decompose_docstring().c_str());
     // NOTE: An __init__ wrapper on the Python side will take care of cting a pagmo::problem from the input UDP,
     // and then invoke this ctor. This way we avoid having to expose a different ctor for every exposed C++ prob.
-    decompose_.def("__init__",
-                   bp::make_constructor(lcast([](const problem &p, const bp::object &weight, const bp::object &z,
-                                                 const std::string &method, bool adapt_ideal) {
-                                            return ::new decompose(p, to_vd(weight), to_vd(z), method, adapt_ideal);
-                                        }),
-                                        bp::default_call_policies()));
-    decompose_.def("original_fitness",
-                   lcast([](const decompose &p, const bp::object &x) { return v_to_a(p.original_fitness(to_vd(x))); }),
+    decompose_.def("__init__", bp::make_constructor(
+                                   lcast([](const problem &p, const bp::object &weight, const bp::object &z,
+                                            const std::string &method, bool adapt_ideal) {
+                                       return ::new decompose(p, obj_to_vector<vector_double>(weight),
+                                                              obj_to_vector<vector_double>(z), method, adapt_ideal);
+                                   }),
+                                   bp::default_call_policies()));
+    decompose_.def("original_fitness", lcast([](const decompose &p, const bp::object &x) {
+                       return vector_to_ndarr(p.original_fitness(obj_to_vector<vector_double>(x)));
+                   }),
                    decompose_original_fitness_docstring().c_str(), (bp::arg("x")));
-    add_property(decompose_, "z", lcast([](const decompose &p) { return v_to_a(p.get_z()); }),
+    add_property(decompose_, "z", lcast([](const decompose &p) { return vector_to_ndarr(p.get_z()); }),
                  decompose_z_docstring().c_str());
     add_property(decompose_, "inner_problem",
                  bp::make_function(lcast([](decompose &udp) -> problem & { return udp.get_inner_problem(); }),

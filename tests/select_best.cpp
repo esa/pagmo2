@@ -215,3 +215,18 @@ BOOST_AUTO_TEST_CASE(select_best_select)
     new_inds = f00.select(inds, 1, 0, 2, 0, 0, {});
     BOOST_CHECK((new_inds == inds));
 }
+
+// Check behaviour when, in unconstrained
+// single-objective optimisation problems,
+// the fitness is nan.
+BOOST_AUTO_TEST_CASE(select_best_nan_fitness)
+{
+    select_best f00(2);
+
+    individuals_group_t inds{{1, 2, 3}, {{0}, {0}, {0}}, {{1}, {2}, {std::numeric_limits<double>::quiet_NaN()}}};
+
+    auto new_inds = f00.select(inds, 1, 0, 1, 0, 0, {});
+
+    // Check that the individual with nan fitness was not selected.
+    BOOST_CHECK((new_inds == individuals_group_t{{1, 2}, {{0}, {0}}, {{1}, {2}}}));
+}

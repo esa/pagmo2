@@ -125,8 +125,7 @@ class core_test_case(_ut.TestCase):
         self.assert_(_test_to_vd(array([0, 1]), 2))
         self.assert_(_test_to_vvd([[1., 2, 3], [4, 5, 6]], 2, 3))
         self.assert_(_test_to_vvd(array([[1., 2, 3], [4, 5, 6]]), 2, 3))
-        self.assertRaises(TypeError, lambda: _test_to_vvd(
-            ([1., 2, 3], [4, 5, 6]), 2, 3))
+        self.assert_(_test_to_vvd(([1., 2, 3], [4, 5, 6]), 2, 3))
         self.assertEqual(type(int), _type(int))
         self.assertEqual(str(123), _str(123))
         self.assertEqual(callable(1), _callable(1))
@@ -983,6 +982,7 @@ class mo_utils_test_case(_ut.TestCase):
         decomposition_weights(n_f=2, n_w=6, method="low discrepancy", seed=33)
         nadir(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
         ideal(points=[[1, 1], [-1, 1], [2.2, 3], [0.1, -0.1]])
+        self.assertEqual(len(select_best_N_mo(points=pop.get_f(), N=0)), 0)
 
 
 class con_utils_test_case(_ut.TestCase):
@@ -1843,6 +1843,8 @@ class archipelago_test_case(_ut.TestCase):
             # turn it back on.
             # self.run_torture_test_1()
             self.run_migration_torture_test()
+            # NOTE: temporarily disable this test due to the mingw failures.
+            # self.run_mo_migration_bug_test()
 
     def run_init_tests(self):
         from . import (archipelago, de, rosenbrock, population, null_problem, thread_island,
@@ -1996,6 +1998,20 @@ class archipelago_test_case(_ut.TestCase):
         self.assertEqual(a.get_migrant_handling(), migrant_handling.evict)
         a.wait_check()
 
+    def run_mo_migration_bug_test(self):
+        from . import dtlz, nsga2, ring, archipelago
+
+        udp = dtlz(2, dim=50)
+        uda = nsga2(gen=100)
+        topo = ring()
+
+        archi = archipelago(n=10, t=topo, prob=udp, algo=uda, pop_size=100)
+        archi.evolve(4)
+        try:
+            archi.wait_check()
+        except:
+            self.fail("The MO migration bug test failed")
+
     def run_evolve_tests(self):
         from . import archipelago, de, rosenbrock, mp_island, evolve_status
         from copy import deepcopy
@@ -2076,7 +2092,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_push_back_tests(self):
         from . import (archipelago, de, rosenbrock, r_policy,
-                       s_policy, fair_replace, select_best)
+                       s_policy, fair_replace, select_best, island)
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         # Push back while evolving.
         a.evolve(10)
@@ -2129,6 +2145,38 @@ class archipelago_test_case(_ut.TestCase):
                              for i in range(7, 9)]))
         self.assertTrue(all([a[i].get_s_policy().is_(_s_pol)
                              for i in range(7, 9)]))
+
+        # push_back() with positional argument.
+        a = archipelago()
+        a.push_back(island(algo=de(), prob=rosenbrock(), size=10))
+        a.push_back(island(algo=de(), prob=rosenbrock(), size=10))
+        a.push_back(island(algo=de(), prob=rosenbrock(), size=10))
+
+        self.assertEqual(len(a), 3)
+        for i in range(3):
+            self.assertTrue(a[i].get_algorithm().is_(de))
+            self.assertTrue(a[i].get_population().problem.is_(rosenbrock))
+            self.assertEqual(len(a[i].get_population()), 10)
+
+        # Error handling.
+        with self.assertRaises(ValueError) as cm:
+            a.push_back(
+                island(algo=de(), prob=rosenbrock(), size=10), a=5, b=6)
+        err = cm.exception
+        self.assertTrue(
+            "if a positional argument is passed to this method, then no keyword arguments must be passed, but 2 keyword arguments were passed instead" in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            a.push_back(island(algo=de(), prob=rosenbrock(), size=10), 1)
+        err = cm.exception
+        self.assertTrue(
+            "2 positional arguments were provided, but this method accepts only a single positional argument" in str(err))
+
+        with self.assertRaises(TypeError) as cm:
+            a.push_back(42)
+        err = cm.exception
+        self.assertTrue(
+            "the positional argument passed to this method must be an island, but the type of the argument is '{}' instead".format(type(42)) in str(err))
 
     def run_io_tests(self):
         from . import archipelago, de, rosenbrock

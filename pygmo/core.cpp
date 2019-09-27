@@ -286,7 +286,7 @@ struct archipelago_pickle_suite : bp::pickle_suite {
 // Helper function to test the to_vd functionality.
 bool test_to_vd(const bp::object &o, unsigned n)
 {
-    auto res = to_vd(o);
+    auto res = obj_to_vector<vector_double>(o);
     if (res.size() != n) {
         return false;
     }
@@ -301,7 +301,7 @@ bool test_to_vd(const bp::object &o, unsigned n)
 // Helper function to test the to_vvd functionality.
 bool test_to_vvd(const bp::object &o, unsigned n, unsigned m)
 {
-    auto res = to_vvd(o);
+    auto res = obj_to_vvector<std::vector<vector_double>>(o);
     return res.size() == n
            && std::all_of(res.begin(), res.end(), [m](const vector_double &v) { return v.size() == m; });
 }
@@ -460,7 +460,7 @@ BOOST_PYTHON_MODULE(core)
     bp::def("_str", &pygmo::str);
     bp::def("_callable", &pygmo::callable);
     bp::def("_deepcopy", &pygmo::deepcopy);
-    bp::def("_to_sp", &pygmo::to_sp);
+    bp::def("_to_sp", &pygmo::obj_to_sp);
     bp::def("_test_object_serialization", &pygmo::detail::test_object_serialization);
     bp::def("_test_to_vd", &pygmo::detail::test_to_vd);
     bp::def("_test_to_vvd", &pygmo::detail::test_to_vvd);
@@ -567,48 +567,50 @@ BOOST_PYTHON_MODULE(core)
         .def_pickle(pygmo::detail::population_pickle_suite())
         .def("push_back", lcast([](population &pop, const bp::object &x, const bp::object &f) {
                  if (f.is_none()) {
-                     pop.push_back(pygmo::to_vd(x));
+                     pop.push_back(pygmo::obj_to_vector<vector_double>(x));
                  } else {
-                     pop.push_back(pygmo::to_vd(x), pygmo::to_vd(f));
+                     pop.push_back(pygmo::obj_to_vector<vector_double>(x), pygmo::obj_to_vector<vector_double>(f));
                  }
              }),
              pygmo::population_push_back_docstring().c_str(), (bp::arg("x"), bp::arg("f") = bp::object()))
         .def("random_decision_vector",
-             lcast([](const population &pop) { return pygmo::v_to_a(pop.random_decision_vector()); }),
+             lcast([](const population &pop) { return pygmo::vector_to_ndarr(pop.random_decision_vector()); }),
              pygmo::population_random_decision_vector_docstring().c_str())
-        .def("best_idx",
-             lcast([](const population &pop, const bp::object &tol) { return pop.best_idx(pygmo::to_vd(tol)); }),
+        .def("best_idx", lcast([](const population &pop, const bp::object &tol) {
+                 return pop.best_idx(pygmo::obj_to_vector<vector_double>(tol));
+             }),
              (bp::arg("tol")))
         .def("best_idx", lcast([](const population &pop, double tol) { return pop.best_idx(tol); }), (bp::arg("tol")))
         .def("best_idx", lcast([](const population &pop) { return pop.best_idx(); }),
              pygmo::population_best_idx_docstring().c_str())
-        .def("worst_idx",
-             lcast([](const population &pop, const bp::object &tol) { return pop.worst_idx(pygmo::to_vd(tol)); }),
+        .def("worst_idx", lcast([](const population &pop, const bp::object &tol) {
+                 return pop.worst_idx(pygmo::obj_to_vector<vector_double>(tol));
+             }),
              (bp::arg("tol")))
         .def("worst_idx", lcast([](const population &pop, double tol) { return pop.worst_idx(tol); }), (bp::arg("tol")))
         .def("worst_idx", lcast([](const population &pop) { return pop.worst_idx(); }),
              pygmo::population_worst_idx_docstring().c_str())
         .def("__len__", &population::size)
         .def("set_xf", lcast([](population &pop, population::size_type i, const bp::object &x, const bp::object &f) {
-                 pop.set_xf(i, pygmo::to_vd(x), pygmo::to_vd(f));
+                 pop.set_xf(i, pygmo::obj_to_vector<vector_double>(x), pygmo::obj_to_vector<vector_double>(f));
              }),
              pygmo::population_set_xf_docstring().c_str())
         .def("set_x", lcast([](population &pop, population::size_type i, const bp::object &x) {
-                 pop.set_x(i, pygmo::to_vd(x));
+                 pop.set_x(i, pygmo::obj_to_vector<vector_double>(x));
              }),
              pygmo::population_set_x_docstring().c_str())
-        .def("get_f", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_f()); }),
+        .def("get_f", lcast([](const population &pop) { return pygmo::vvector_to_ndarr(pop.get_f()); }),
              pygmo::population_get_f_docstring().c_str())
-        .def("get_x", lcast([](const population &pop) { return pygmo::vv_to_a(pop.get_x()); }),
+        .def("get_x", lcast([](const population &pop) { return pygmo::vvector_to_ndarr(pop.get_x()); }),
              pygmo::population_get_x_docstring().c_str())
-        .def("get_ID", lcast([](const population &pop) { return pygmo::v_to_a(pop.get_ID(), true); }),
+        .def("get_ID", lcast([](const population &pop) { return pygmo::vector_to_ndarr(pop.get_ID()); }),
              pygmo::population_get_ID_docstring().c_str())
         .def("get_seed", &population::get_seed, pygmo::population_get_seed_docstring().c_str());
     pygmo::add_property(pop_class, "champion_x",
-                        lcast([](const population &pop) { return pygmo::v_to_a(pop.champion_x()); }),
+                        lcast([](const population &pop) { return pygmo::vector_to_ndarr(pop.champion_x()); }),
                         pygmo::population_champion_x_docstring().c_str());
     pygmo::add_property(pop_class, "champion_f",
-                        lcast([](const population &pop) { return pygmo::v_to_a(pop.champion_f()); }),
+                        lcast([](const population &pop) { return pygmo::vector_to_ndarr(pop.champion_f()); }),
                         pygmo::population_champion_f_docstring().c_str());
     pygmo::add_property(pop_class, "problem",
                         bp::make_function(lcast([](population &pop) -> problem & { return pop.get_problem(); }),
@@ -629,37 +631,38 @@ BOOST_PYTHON_MODULE(core)
         .def("_py_extract", &pygmo::generic_py_extract<problem>)
         // Problem methods.
         .def("fitness", lcast([](const pagmo::problem &p, const bp::object &dv) {
-                 return pygmo::v_to_a(p.fitness(pygmo::to_vd(dv)));
+                 return pygmo::vector_to_ndarr(p.fitness(pygmo::obj_to_vector<vector_double>(dv)));
              }),
              pygmo::problem_fitness_docstring().c_str(), (bp::arg("dv")))
         .def("get_bounds", lcast([](const pagmo::problem &p) -> bp::tuple {
                  auto retval = p.get_bounds();
-                 return bp::make_tuple(pygmo::v_to_a(retval.first), pygmo::v_to_a(retval.second));
+                 return bp::make_tuple(pygmo::vector_to_ndarr(retval.first), pygmo::vector_to_ndarr(retval.second));
              }),
              pygmo::problem_get_bounds_docstring().c_str())
-        .def("get_lb", lcast([](const pagmo::problem &p) { return pygmo::v_to_a(p.get_lb()); }),
+        .def("get_lb", lcast([](const pagmo::problem &p) { return pygmo::vector_to_ndarr(p.get_lb()); }),
              pygmo::problem_get_lb_docstring().c_str())
-        .def("get_ub", lcast([](const pagmo::problem &p) { return pygmo::v_to_a(p.get_ub()); }),
+        .def("get_ub", lcast([](const pagmo::problem &p) { return pygmo::vector_to_ndarr(p.get_ub()); }),
              pygmo::problem_get_ub_docstring().c_str())
         .def("batch_fitness", lcast([](const pagmo::problem &p, const bp::object &dvs) {
-                 return pygmo::v_to_a(p.batch_fitness(pygmo::to_vd(dvs)));
+                 return pygmo::vector_to_ndarr(p.batch_fitness(pygmo::obj_to_vector<vector_double>(dvs)));
              }),
              pygmo::problem_batch_fitness_docstring().c_str(), (bp::arg("dvs")))
         .def("has_batch_fitness", &problem::has_batch_fitness, pygmo::problem_has_batch_fitness_docstring().c_str())
         .def("gradient", lcast([](const pagmo::problem &p, const bp::object &dv) {
-                 return pygmo::v_to_a(p.gradient(pygmo::to_vd(dv)));
+                 return pygmo::vector_to_ndarr(p.gradient(pygmo::obj_to_vector<vector_double>(dv)));
              }),
              pygmo::problem_gradient_docstring().c_str(), (bp::arg("dv")))
         .def("has_gradient", &problem::has_gradient, pygmo::problem_has_gradient_docstring().c_str())
-        .def("gradient_sparsity", lcast([](const pagmo::problem &p) { return pygmo::sp_to_a(p.gradient_sparsity()); }),
+        .def("gradient_sparsity",
+             lcast([](const pagmo::problem &p) { return pygmo::sp_to_ndarr(p.gradient_sparsity()); }),
              pygmo::problem_gradient_sparsity_docstring().c_str())
         .def("has_gradient_sparsity", &problem::has_gradient_sparsity,
              pygmo::problem_has_gradient_sparsity_docstring().c_str())
         .def("hessians", lcast([](const pagmo::problem &p, const bp::object &dv) -> bp::list {
                  bp::list retval;
-                 const auto h = p.hessians(pygmo::to_vd(dv));
+                 const auto h = p.hessians(pygmo::obj_to_vector<vector_double>(dv));
                  for (const auto &v : h) {
-                     retval.append(pygmo::v_to_a(v));
+                     retval.append(pygmo::vector_to_ndarr(v));
                  }
                  return retval;
              }),
@@ -669,7 +672,7 @@ BOOST_PYTHON_MODULE(core)
                  bp::list retval;
                  const auto hs = p.hessians_sparsity();
                  for (const auto &sp : hs) {
-                     retval.append(pygmo::sp_to_a(sp));
+                     retval.append(pygmo::sp_to_ndarr(sp));
                  }
                  return retval;
              }),
@@ -691,23 +694,25 @@ BOOST_PYTHON_MODULE(core)
         .def("has_set_seed", &problem::has_set_seed, pygmo::problem_has_set_seed_docstring().c_str())
         .def("is_stochastic", &problem::is_stochastic,
              "is_stochastic()\n\nAlias for :func:`~pygmo.problem.has_set_seed()`.\n")
-        .def("feasibility_x",
-             lcast([](const problem &p, const bp::object &x) { return p.feasibility_x(pygmo::to_vd(x)); }),
+        .def("feasibility_x", lcast([](const problem &p, const bp::object &x) {
+                 return p.feasibility_x(pygmo::obj_to_vector<vector_double>(x));
+             }),
              pygmo::problem_feasibility_x_docstring().c_str(), (bp::arg("x")))
-        .def("feasibility_f",
-             lcast([](const problem &p, const bp::object &f) { return p.feasibility_f(pygmo::to_vd(f)); }),
+        .def("feasibility_f", lcast([](const problem &p, const bp::object &f) {
+                 return p.feasibility_f(pygmo::obj_to_vector<vector_double>(f));
+             }),
              pygmo::problem_feasibility_f_docstring().c_str(), (bp::arg("f")))
         .def("get_name", &problem::get_name, pygmo::problem_get_name_docstring().c_str())
         .def("get_extra_info", &problem::get_extra_info, pygmo::problem_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &problem::get_thread_safety, pygmo::problem_get_thread_safety_docstring().c_str());
     pygmo::add_property(problem_class, "c_tol",
-                        lcast([](const problem &prob) { return pygmo::v_to_a(prob.get_c_tol()); }),
+                        lcast([](const problem &prob) { return pygmo::vector_to_ndarr(prob.get_c_tol()); }),
                         lcast([](problem &prob, const bp::object &c_tol) {
                             bp::extract<double> c_tol_double(c_tol);
                             if (c_tol_double.check()) {
                                 prob.set_c_tol(static_cast<double>(c_tol_double));
                             } else {
-                                prob.set_c_tol(pygmo::to_vd(c_tol));
+                                prob.set_c_tol(pygmo::obj_to_vector<vector_double>(c_tol));
                             }
                         }),
                         pygmo::problem_c_tol_docstring().c_str());
@@ -750,7 +755,7 @@ BOOST_PYTHON_MODULE(core)
     hv_class
         .def("__init__",
              bp::make_constructor(lcast([](const bp::object &points) {
-                                      auto vvd_points = pygmo::to_vvd(points);
+                                      auto vvd_points = pygmo::obj_to_vvector<std::vector<vector_double>>(points);
                                       return ::new hypervolume(vvd_points, true);
                                   }),
                                   bp::default_call_policies(), (bp::arg("points"))),
@@ -759,53 +764,56 @@ BOOST_PYTHON_MODULE(core)
              bp::make_constructor(lcast([](const population &pop) { return ::new hypervolume(pop, true); }),
                                   bp::default_call_policies(), (bp::arg("pop"))),
              pygmo::hv_init1_docstring().c_str())
-        .def("compute",
-             lcast([](const hypervolume &hv, const bp::object &r_point) { return hv.compute(pygmo::to_vd(r_point)); }),
+        .def("compute", lcast([](const hypervolume &hv, const bp::object &r_point) {
+                 return hv.compute(pygmo::obj_to_vector<vector_double>(r_point));
+             }),
              (bp::arg("ref_point")))
         .def("compute",
              lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
-                 return hv.compute(pygmo::to_vd(r_point), *hv_algo);
+                 return hv.compute(pygmo::obj_to_vector<vector_double>(r_point), *hv_algo);
              }),
              pygmo::hv_compute_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("exclusive", lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point) {
-                 return hv.exclusive(p_idx, pygmo::to_vd(r_point));
+                 return hv.exclusive(p_idx, pygmo::obj_to_vector<vector_double>(r_point));
              }),
              (bp::arg("idx"), bp::arg("ref_point")))
         .def("exclusive",
              lcast([](const hypervolume &hv, unsigned p_idx, const bp::object &r_point,
                       boost::shared_ptr<hv_algorithm> hv_algo) {
-                 return hv.exclusive(p_idx, pygmo::to_vd(r_point), *hv_algo);
+                 return hv.exclusive(p_idx, pygmo::obj_to_vector<vector_double>(r_point), *hv_algo);
              }),
              pygmo::hv_exclusive_docstring().c_str(), (bp::arg("idx"), bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("least_contributor", lcast([](const hypervolume &hv, const bp::object &r_point) {
-                 return hv.least_contributor(pygmo::to_vd(r_point));
+                 return hv.least_contributor(pygmo::obj_to_vector<vector_double>(r_point));
              }),
              (bp::arg("ref_point")))
         .def("least_contributor",
              lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
-                 return hv.least_contributor(pygmo::to_vd(r_point), *hv_algo);
+                 return hv.least_contributor(pygmo::obj_to_vector<vector_double>(r_point), *hv_algo);
              }),
              pygmo::hv_least_contributor_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("greatest_contributor", lcast([](const hypervolume &hv, const bp::object &r_point) {
-                 return hv.greatest_contributor(pygmo::to_vd(r_point));
+                 return hv.greatest_contributor(pygmo::obj_to_vector<vector_double>(r_point));
              }),
              (bp::arg("ref_point")))
         .def("greatest_contributor",
              lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
-                 return hv.greatest_contributor(pygmo::to_vd(r_point), *hv_algo);
+                 return hv.greatest_contributor(pygmo::obj_to_vector<vector_double>(r_point), *hv_algo);
              }),
              pygmo::hv_greatest_contributor_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
         .def("contributions", lcast([](const hypervolume &hv, const bp::object &r_point) {
-                 return pygmo::v_to_a(hv.contributions(pygmo::to_vd(r_point)));
+                 return pygmo::vector_to_ndarr(hv.contributions(pygmo::obj_to_vector<vector_double>(r_point)));
              }),
              (bp::arg("ref_point")))
         .def("contributions",
              lcast([](const hypervolume &hv, const bp::object &r_point, boost::shared_ptr<hv_algorithm> hv_algo) {
-                 return pygmo::v_to_a(hv.contributions(pygmo::to_vd(r_point), *hv_algo));
+                 return pygmo::vector_to_ndarr(
+                     hv.contributions(pygmo::obj_to_vector<vector_double>(r_point), *hv_algo));
              }),
              pygmo::hv_contributions_docstring().c_str(), (bp::arg("ref_point"), bp::arg("hv_algo")))
-        .def("get_points", lcast([](const hypervolume &hv) { return pygmo::vv_to_a(hv.get_points()); }))
-        .def("refpoint", lcast([](const hypervolume &hv, double offset) { return pygmo::v_to_a(hv.refpoint(offset)); }),
+        .def("get_points", lcast([](const hypervolume &hv) { return pygmo::vvector_to_ndarr(hv.get_points()); }))
+        .def("refpoint",
+             lcast([](const hypervolume &hv, double offset) { return pygmo::vector_to_ndarr(hv.refpoint(offset)); }),
              pygmo::hv_refpoint_docstring().c_str(), (bp::arg("offset") = 0));
     pygmo::add_property(hv_class, "copy_points", &hypervolume::get_copy_points, &hypervolume::set_copy_points);
 
@@ -831,39 +839,46 @@ BOOST_PYTHON_MODULE(core)
     // Exposition of stand alone functions
     // Multi-objective utilities
     bp::def("fast_non_dominated_sorting", lcast([](const bp::object &x) -> bp::object {
-                auto fnds = fast_non_dominated_sorting(pygmo::to_vvd(x));
+                auto fnds = fast_non_dominated_sorting(pygmo::obj_to_vvector<std::vector<vector_double>>(x));
                 // the non-dominated fronts
                 auto ndf = std::get<0>(fnds);
                 bp::list ndf_py;
                 for (const std::vector<vector_double::size_type> &front : ndf) {
-                    ndf_py.append(pygmo::v_to_a(front));
+                    ndf_py.append(pygmo::vector_to_ndarr(front));
                 }
                 // the domination list
                 auto dl = std::get<1>(fnds);
                 bp::list dl_py;
                 for (const auto &item : dl) {
-                    dl_py.append(pygmo::v_to_a(item));
+                    dl_py.append(pygmo::vector_to_ndarr(item));
                 }
-                return bp::make_tuple(ndf_py, dl_py, pygmo::v_to_a(std::get<2>(fnds)),
-                                      pygmo::v_to_a(std::get<3>(fnds)));
+                return bp::make_tuple(ndf_py, dl_py, pygmo::vector_to_ndarr(std::get<2>(fnds)),
+                                      pygmo::vector_to_ndarr(std::get<3>(fnds)));
             }),
             pygmo::fast_non_dominated_sorting_docstring().c_str(), boost::python::arg("points"));
     bp::def("pareto_dominance", lcast([](const bp::object &obj1, const bp::object &obj2) {
-                return pareto_dominance(pygmo::to_vd(obj1), pygmo::to_vd(obj2));
+                return pareto_dominance(pygmo::obj_to_vector<vector_double>(obj1),
+                                        pygmo::obj_to_vector<vector_double>(obj2));
             }),
             pygmo::pareto_dominance_docstring().c_str(), (bp::arg("obj1"), bp::arg("obj2")));
     bp::def("non_dominated_front_2d", lcast([](const bp::object &points) {
-                return pygmo::v_to_a(non_dominated_front_2d(pygmo::to_vvd(points)));
+                return pygmo::vector_to_ndarr(
+                    non_dominated_front_2d(pygmo::obj_to_vvector<std::vector<vector_double>>(points)));
             }),
             pygmo::non_dominated_front_2d_docstring().c_str(), bp::arg("points"));
-    bp::def("crowding_distance",
-            lcast([](const bp::object &points) { return pygmo::v_to_a(crowding_distance(pygmo::to_vvd(points))); }),
+    bp::def("crowding_distance", lcast([](const bp::object &points) {
+                return pygmo::vector_to_ndarr(
+                    crowding_distance(pygmo::obj_to_vvector<std::vector<vector_double>>(points)));
+            }),
             pygmo::crowding_distance_docstring().c_str(), bp::arg("points"));
-    bp::def("sort_population_mo",
-            lcast([](const bp::object &input_f) { return pygmo::v_to_a(sort_population_mo(pygmo::to_vvd(input_f))); }),
+    bp::def("sort_population_mo", lcast([](const bp::object &input_f) {
+                return pygmo::vector_to_ndarr(
+                    sort_population_mo(pygmo::obj_to_vvector<std::vector<vector_double>>(input_f)));
+            }),
             pygmo::sort_population_mo_docstring().c_str(), bp::arg("points"));
     bp::def("select_best_N_mo", lcast([](const bp::object &input_f, unsigned N) {
-                return pygmo::v_to_a(select_best_N_mo(pygmo::to_vvd(input_f), N));
+                return pygmo::vector_to_ndarr(
+                    select_best_N_mo(pygmo::obj_to_vvector<std::vector<vector_double>>(input_f), N));
             }),
             pygmo::select_best_N_mo_docstring().c_str(), (bp::arg("points"), bp::arg("N")));
     bp::def(
@@ -871,7 +886,7 @@ BOOST_PYTHON_MODULE(core)
         lcast([](vector_double::size_type n_f, vector_double::size_type n_w, const std::string &method, unsigned seed) {
             using reng_t = pagmo::detail::random_engine_type;
             reng_t tmp_rng(static_cast<reng_t::result_type>(seed));
-            return pygmo::vv_to_a(decomposition_weights(n_f, n_w, method, tmp_rng));
+            return pygmo::vvector_to_ndarr(decomposition_weights(n_f, n_w, method, tmp_rng));
         }),
         pygmo::decomposition_weights_docstring().c_str(),
         (bp::arg("n_f"), bp::arg("n_w"), bp::arg("method"), bp::arg("seed")));
@@ -879,22 +894,27 @@ BOOST_PYTHON_MODULE(core)
     bp::def("decompose_objectives",
             lcast([](const bp::object &objs, const bp::object &weights, const bp::object &ref_point,
                      const std::string &method) {
-                return pygmo::v_to_a(
-                    decompose_objectives(pygmo::to_vd(objs), pygmo::to_vd(weights), pygmo::to_vd(ref_point), method));
+                return pygmo::vector_to_ndarr(decompose_objectives(
+                    pygmo::obj_to_vector<vector_double>(objs), pygmo::obj_to_vector<vector_double>(weights),
+                    pygmo::obj_to_vector<vector_double>(ref_point), method));
             }),
             pygmo::decompose_objectives_docstring().c_str(),
             (bp::arg("objs"), bp::arg("weights"), bp::arg("ref_point"), bp::arg("method")));
 
-    bp::def("nadir", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::nadir(pygmo::to_vvd(p))); }),
+    bp::def("nadir", lcast([](const bp::object &p) {
+                return pygmo::vector_to_ndarr(pagmo::nadir(pygmo::obj_to_vvector<std::vector<vector_double>>(p)));
+            }),
             pygmo::nadir_docstring().c_str(), bp::arg("points"));
-    bp::def("ideal", lcast([](const bp::object &p) { return pygmo::v_to_a(pagmo::ideal(pygmo::to_vvd(p))); }),
+    bp::def("ideal", lcast([](const bp::object &p) {
+                return pygmo::vector_to_ndarr(pagmo::ideal(pygmo::obj_to_vvector<std::vector<vector_double>>(p)));
+            }),
             pygmo::ideal_docstring().c_str(), bp::arg("points"));
     // Generic utilities
     bp::def("random_decision_vector", lcast([](const pagmo::problem &p) -> bp::object {
                 using reng_t = pagmo::detail::random_engine_type;
                 reng_t tmp_rng(static_cast<reng_t::result_type>(pagmo::random_device::next()));
                 auto retval = random_decision_vector(p, tmp_rng);
-                return pygmo::v_to_a(retval);
+                return pygmo::vector_to_ndarr(retval);
             }),
             pygmo::random_decision_vector_docstring().c_str(), (bp::arg("prob")));
     bp::def("batch_random_decision_vector",
@@ -902,38 +922,47 @@ BOOST_PYTHON_MODULE(core)
                 using reng_t = pagmo::detail::random_engine_type;
                 reng_t tmp_rng(static_cast<reng_t::result_type>(pagmo::random_device::next()));
                 auto retval = batch_random_decision_vector(p, n, tmp_rng);
-                return pygmo::v_to_a(retval);
+                return pygmo::vector_to_ndarr(retval);
             }),
             pygmo::batch_random_decision_vector_docstring().c_str(), (bp::arg("prob"), bp::arg("n")));
 
     // Gradient and Hessians utilities
     bp::def("estimate_sparsity", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
-                auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };
-                auto retval = estimate_sparsity(f, pygmo::to_vd(x), dx);
-                return pygmo::sp_to_a(retval);
+                auto f = [&func](const vector_double &x_) {
+                    return pygmo::obj_to_vector<vector_double>(func(pygmo::vector_to_ndarr(x_)));
+                };
+                auto retval = estimate_sparsity(f, pygmo::obj_to_vector<vector_double>(x), dx);
+                return pygmo::sp_to_ndarr(retval);
             }),
             pygmo::estimate_sparsity_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
     bp::def("estimate_gradient", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
-                auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };
-                auto retval = estimate_gradient(f, pygmo::to_vd(x), dx);
-                return pygmo::v_to_a(retval);
+                auto f = [&func](const vector_double &x_) {
+                    return pygmo::obj_to_vector<vector_double>(func(pygmo::vector_to_ndarr(x_)));
+                };
+                auto retval = estimate_gradient(f, pygmo::obj_to_vector<vector_double>(x), dx);
+                return pygmo::vector_to_ndarr(retval);
             }),
             pygmo::estimate_gradient_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-8));
     bp::def("estimate_gradient_h", lcast([](const bp::object &func, const bp::object &x, double dx) -> bp::object {
-                auto f = [&func](const vector_double &x_) { return pygmo::to_vd(func(pygmo::v_to_a(x_))); };
-                auto retval = estimate_gradient_h(f, pygmo::to_vd(x), dx);
-                return pygmo::v_to_a(retval);
+                auto f = [&func](const vector_double &x_) {
+                    return pygmo::obj_to_vector<vector_double>(func(pygmo::vector_to_ndarr(x_)));
+                };
+                auto retval = estimate_gradient_h(f, pygmo::obj_to_vector<vector_double>(x), dx);
+                return pygmo::vector_to_ndarr(retval);
             }),
             pygmo::estimate_gradient_h_docstring().c_str(), (bp::arg("callable"), bp::arg("x"), bp::arg("dx") = 1e-2));
     // Constrained optimization utilities
     bp::def("compare_fc",
             lcast([](const bp::object &f1, const bp::object &f2, vector_double::size_type nec, const bp::object &tol) {
-                return compare_fc(pygmo::to_vd(f1), pygmo::to_vd(f2), nec, pygmo::to_vd(tol));
+                return compare_fc(pygmo::obj_to_vector<vector_double>(f1), pygmo::obj_to_vector<vector_double>(f2), nec,
+                                  pygmo::obj_to_vector<vector_double>(tol));
             }),
             pygmo::compare_fc_docstring().c_str(), (bp::arg("f1"), bp::arg("f2"), bp::arg("nec"), bp::arg("tol")));
     bp::def("sort_population_con",
             lcast([](const bp::object &input_f, vector_double::size_type nec, const bp::object &tol) {
-                return pygmo::v_to_a(sort_population_con(pygmo::to_vvd(input_f), nec, pygmo::to_vd(tol)));
+                return pygmo::vector_to_ndarr(
+                    sort_population_con(pygmo::obj_to_vvector<std::vector<vector_double>>(input_f), nec,
+                                        pygmo::obj_to_vector<vector_double>(tol)));
             }),
             pygmo::sort_population_con_docstring().c_str(), (bp::arg("input_f"), bp::arg("nec"), bp::arg("tol")));
     // Global random number generator
@@ -994,7 +1023,7 @@ BOOST_PYTHON_MODULE(core)
                  bp::list retval;
                  auto fs = archi.get_champions_f();
                  for (const auto &f : fs) {
-                     retval.append(pygmo::v_to_a(f));
+                     retval.append(pygmo::vector_to_ndarr(f));
                  }
                  return retval;
              }),
@@ -1003,7 +1032,7 @@ BOOST_PYTHON_MODULE(core)
                  bp::list retval;
                  auto xs = archi.get_champions_x();
                  for (const auto &x : xs) {
-                     retval.append(pygmo::v_to_a(x));
+                     retval.append(pygmo::vector_to_ndarr(x));
                  }
                  return retval;
              }),
@@ -1021,8 +1050,9 @@ BOOST_PYTHON_MODULE(core)
                  bp::list retval;
                  const auto tmp = archi.get_migration_log();
                  for (const auto &le : tmp) {
-                     retval.append(bp::make_tuple(std::get<0>(le), std::get<1>(le), pygmo::v_to_a(std::get<2>(le)),
-                                                  pygmo::v_to_a(std::get<3>(le)), std::get<4>(le), std::get<5>(le)));
+                     retval.append(
+                         bp::make_tuple(std::get<0>(le), std::get<1>(le), pygmo::vector_to_ndarr(std::get<2>(le)),
+                                        pygmo::vector_to_ndarr(std::get<3>(le)), std::get<4>(le), std::get<5>(le)));
                  }
                  return retval;
              }),
@@ -1052,7 +1082,7 @@ BOOST_PYTHON_MODULE(core)
         .def("_py_extract", &pygmo::generic_py_extract<bfe>)
         // Bfe methods.
         .def("__call__", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
-                 return pygmo::v_to_a(b(prob, pygmo::to_vd(dvs)));
+                 return pygmo::vector_to_ndarr(b(prob, pygmo::obj_to_vector<vector_double>(dvs)));
              }),
              pygmo::bfe_call_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
         .def("get_name", &bfe::get_name, pygmo::bfe_get_name_docstring().c_str())
@@ -1077,7 +1107,7 @@ BOOST_PYTHON_MODULE(core)
         // Topology methods.
         .def("get_connections", lcast([](const topology &t, std::size_t n) -> bp::tuple {
                  auto ret = t.get_connections(n);
-                 return bp::make_tuple(pygmo::v_to_a(ret.first), pygmo::v_to_a(ret.second));
+                 return bp::make_tuple(pygmo::vector_to_ndarr(ret.first), pygmo::vector_to_ndarr(ret.second));
              }),
              pygmo::topology_get_connections_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
         .def("push_back", lcast([](topology &t, unsigned n) { t.push_back(n); }),
@@ -1106,8 +1136,8 @@ BOOST_PYTHON_MODULE(core)
                       const vector_double::size_type &nix, const vector_double::size_type &nobj,
                       const vector_double::size_type &nec, const vector_double::size_type &nic, const bp::object &tol,
                       const bp::object &mig) -> bp::tuple {
-                 auto ret
-                     = r.replace(pygmo::to_inds(inds), nx, nix, nobj, nec, nic, pygmo::to_vd(tol), pygmo::to_inds(mig));
+                 auto ret = r.replace(pygmo::obj_to_inds(inds), nx, nix, nobj, nec, nic,
+                                      pygmo::obj_to_vector<vector_double>(tol), pygmo::obj_to_inds(mig));
                  return pygmo::inds_to_tuple(ret);
              }),
              pygmo::r_policy_replace_docstring().c_str(),
@@ -1137,7 +1167,8 @@ BOOST_PYTHON_MODULE(core)
                       const vector_double::size_type &nix, const vector_double::size_type &nobj,
                       const vector_double::size_type &nec, const vector_double::size_type &nic,
                       const bp::object &tol) -> bp::tuple {
-                 auto ret = s.select(pygmo::to_inds(inds), nx, nix, nobj, nec, nic, pygmo::to_vd(tol));
+                 auto ret = s.select(pygmo::obj_to_inds(inds), nx, nix, nobj, nec, nic,
+                                     pygmo::obj_to_vector<vector_double>(tol));
                  return pygmo::inds_to_tuple(ret);
              }),
              pygmo::s_policy_select_docstring().c_str(),

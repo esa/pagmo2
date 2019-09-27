@@ -101,7 +101,7 @@ std::unique_ptr<prob_inner_base> prob_inner<bp::object>::clone() const
 
 vector_double prob_inner<bp::object>::fitness(const vector_double &dv) const
 {
-    return pygmo::to_vd(m_value.attr("fitness")(pygmo::v_to_a(dv)));
+    return pygmo::obj_to_vector<vector_double>(m_value.attr("fitness")(pygmo::vector_to_ndarr(dv)));
 }
 
 std::pair<vector_double, vector_double> prob_inner<bp::object>::get_bounds() const
@@ -115,7 +115,7 @@ std::pair<vector_double, vector_double> prob_inner<bp::object>::get_bounds() con
                                           .c_str());
     }
     // Finally, we build the pair from the tuple elements.
-    return std::make_pair(pygmo::to_vd(tup[0]), pygmo::to_vd(tup[1]));
+    return std::make_pair(pygmo::obj_to_vector<vector_double>(tup[0]), pygmo::obj_to_vector<vector_double>(tup[1]));
 }
 
 vector_double prob_inner<bp::object>::batch_fitness(const vector_double &dv) const
@@ -129,7 +129,7 @@ vector_double prob_inner<bp::object>::batch_fitness(const vector_double &dv) con
                      + "': the method is either not present or not callable")
                         .c_str());
     }
-    return pygmo::to_vd(bf(pygmo::v_to_a(dv)));
+    return pygmo::obj_to_vector<vector_double>(bf(pygmo::vector_to_ndarr(dv)));
 }
 
 bool prob_inner<bp::object>::has_batch_fitness() const
@@ -206,7 +206,7 @@ vector_double prob_inner<bp::object>::gradient(const vector_double &dv) const
                                                 + "': the method is either not present or not callable")
                                                    .c_str());
     }
-    return pygmo::to_vd(g(pygmo::v_to_a(dv)));
+    return pygmo::obj_to_vector<vector_double>(g(pygmo::vector_to_ndarr(dv)));
 }
 
 bool prob_inner<bp::object>::has_gradient_sparsity() const
@@ -245,7 +245,7 @@ sparsity_pattern prob_inner<bp::object>::gradient_sparsity() const
                        "at a later stage")
                         .c_str());
     }
-    return pygmo::to_sp(gs());
+    return pygmo::obj_to_sp(gs());
 }
 
 bool prob_inner<bp::object>::has_hessians() const
@@ -276,11 +276,12 @@ std::vector<vector_double> prob_inner<bp::object>::hessians(const vector_double 
                                                    .c_str());
     }
     // Invoke the method, getting out a generic Python object.
-    bp::object tmp = h(pygmo::v_to_a(dv));
+    bp::object tmp = h(pygmo::vector_to_ndarr(dv));
     // Let's build the return value.
     std::vector<vector_double> retval;
     bp::stl_input_iterator<bp::object> begin(tmp), end;
-    std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_vd(o); });
+    std::transform(begin, end, std::back_inserter(retval),
+                   [](const bp::object &o) { return pygmo::obj_to_vector<vector_double>(o); });
     return retval;
 }
 
@@ -316,7 +317,7 @@ std::vector<sparsity_pattern> prob_inner<bp::object>::hessians_sparsity() const
     bp::object tmp = hs();
     std::vector<sparsity_pattern> retval;
     bp::stl_input_iterator<bp::object> begin(tmp), end;
-    std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::to_sp(o); });
+    std::transform(begin, end, std::back_inserter(retval), [](const bp::object &o) { return pygmo::obj_to_sp(o); });
     return retval;
 }
 

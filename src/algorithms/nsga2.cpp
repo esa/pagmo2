@@ -132,8 +132,8 @@ population nsga2::evolve(population pop) const
     vector_double::size_type parent1_idx, parent2_idx;
     vector_double child1(dim), child2(dim);
 
-    std::iota(shuffle1.begin(), shuffle1.end(), 0u);
-    std::iota(shuffle2.begin(), shuffle2.end(), 0u);
+    std::iota(shuffle1.begin(), shuffle1.end(), vector_double::size_type(0));
+    std::iota(shuffle2.begin(), shuffle2.end(), vector_double::size_type(0));
 
     // Main NSGA-II loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
@@ -204,88 +204,88 @@ population nsga2::evolve(population pop) const
         // 3 - We then loop thorugh all individuals with increment 4 to select two pairs of parents that will
         // each create 2 new offspring
         if (m_bfe) {
-          // bfe is available:
-          auto n_obj = prob.get_nobj();
-          std::vector<vector_double> poptemp;
-          std::vector<unsigned long> fidtemp;
-          for (decltype(NP) i = 0u; i < NP; i += 4) {
-              // We create two offsprings using the shuffled list 1
-              parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
-              parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
-              crossover(child1, child2, parent1_idx, parent2_idx, pop);
-              mutate(child1, pop);
-              mutate(child2, pop);
+            // bfe is available:
+            auto n_obj = prob.get_nobj();
+            std::vector<vector_double> poptemp;
+            std::vector<unsigned long> fidtemp;
+            for (decltype(NP) i = 0u; i < NP; i += 4) {
+                // We create two offsprings using the shuffled list 1
+                parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
+                parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
+                crossover(child1, child2, parent1_idx, parent2_idx, pop);
+                mutate(child1, pop);
+                mutate(child2, pop);
 
-              poptemp.push_back(child1);
-              poptemp.push_back(child2);
+                poptemp.push_back(child1);
+                poptemp.push_back(child2);
 
-              // We repeat with the shuffled list 2
-              parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
-              parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
-              crossover(child1, child2, parent1_idx, parent2_idx, pop);
-              mutate(child1, pop);
-              mutate(child2, pop);
-              // we use prob to evaluate the fitness so
-              // that its feval counter is correctly updated
-              poptemp.push_back(child1);
-              poptemp.push_back(child2);
+                // We repeat with the shuffled list 2
+                parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
+                parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
+                crossover(child1, child2, parent1_idx, parent2_idx, pop);
+                mutate(child1, pop);
+                mutate(child2, pop);
+                // we use prob to evaluate the fitness so
+                // that its feval counter is correctly updated
+                poptemp.push_back(child1);
+                poptemp.push_back(child2);
 
-          } // poptemp now contains 2NP individuals
+            } // poptemp now contains 2NP individuals
 
-          vector_double genes(NP * poptemp[0].size());
-          decltype(genes.size()) pos = 0u;
-          for (population::size_type i = 0; i < NP; ++i) {
-              // I compute the fitness for each new individual which was generated in the
-              // tournament_selection for loop
-              for (decltype(poptemp[i].size()) ii = 0u; ii < poptemp[i].size(); ++ii) {
-                  genes[pos] = poptemp[i][ii];
-                  ++pos;
-              }
-          }
-          // array - now contains 2NP new individuals
-          // run bfe and populate popnew.
-          auto fitnesses = (*m_bfe)(prob, genes);
+            vector_double genes(NP * poptemp[0].size());
+            decltype(genes.size()) pos = 0u;
+            for (population::size_type i = 0; i < NP; ++i) {
+                // I compute the fitness for each new individual which was generated in the
+                // tournament_selection for loop
+                for (decltype(poptemp[i].size()) ii = 0u; ii < poptemp[i].size(); ++ii) {
+                    genes[pos] = poptemp[i][ii];
+                    ++pos;
+                }
+            }
+            // array - now contains 2NP new individuals
+            // run bfe and populate popnew.
+            auto fitnesses = (*m_bfe)(prob, genes);
 
-          // at this point:
-          // genes     is an ordered list of child inputs (not used again)
-          // poptemp   is a structured list of children   (no fitneeses)
-          // fitnesses is an ordered list of fitneeses
-          for(decltype(poptemp.size()) i=0; i<poptemp.size(); i++) {
-            // slice up the fitnesses into a chunks of length n_obj
-            auto start_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>(i * n_obj);
-            auto end_pos   = fitnesses.begin() + static_cast<std::vector<double>::difference_type>((i+1)*n_obj);
-            std::vector<double> f1(start_pos, end_pos);
-            popnew.push_back(poptemp[i], f1);
-          }
+            // at this point:
+            // genes     is an ordered list of child inputs (not used again)
+            // poptemp   is a structured list of children   (no fitneeses)
+            // fitnesses is an ordered list of fitneeses
+            for (decltype(poptemp.size()) i = 0; i < poptemp.size(); i++) {
+                // slice up the fitnesses into a chunks of length n_obj
+                auto start_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>(i * n_obj);
+                auto end_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>((i + 1) * n_obj);
+                std::vector<double> f1(start_pos, end_pos);
+                popnew.push_back(poptemp[i], f1);
+            }
         } else {
-          // bfe not available:
-          for (decltype(NP) i = 0u; i < NP; i += 4) {
-              // We create two offsprings using the shuffled list 1
-              parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
-              parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
-              crossover(child1, child2, parent1_idx, parent2_idx, pop);
-              mutate(child1, pop);
-              mutate(child2, pop);
-              // we use prob to evaluate the fitness so
-              // that its feval counter is correctly updated
-              auto f1 = prob.fitness(child1);
-              auto f2 = prob.fitness(child2);
-              popnew.push_back(child1, f1);
-              popnew.push_back(child2, f2);
+            // bfe not available:
+            for (decltype(NP) i = 0u; i < NP; i += 4) {
+                // We create two offsprings using the shuffled list 1
+                parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
+                parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
+                crossover(child1, child2, parent1_idx, parent2_idx, pop);
+                mutate(child1, pop);
+                mutate(child2, pop);
+                // we use prob to evaluate the fitness so
+                // that its feval counter is correctly updated
+                auto f1 = prob.fitness(child1);
+                auto f2 = prob.fitness(child2);
+                popnew.push_back(child1, f1);
+                popnew.push_back(child2, f2);
 
-              // We repeat with the shuffled list 2
-              parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
-              parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
-              crossover(child1, child2, parent1_idx, parent2_idx, pop);
-              mutate(child1, pop);
-              mutate(child2, pop);
-              // we use prob to evaluate the fitness so
-              // that its feval counter is correctly updated
-              f1 = prob.fitness(child1);
-              f2 = prob.fitness(child2);
-              popnew.push_back(child1, f1);
-              popnew.push_back(child2, f2);
-          } // popnew now contains 2NP individuals
+                // We repeat with the shuffled list 2
+                parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
+                parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
+                crossover(child1, child2, parent1_idx, parent2_idx, pop);
+                mutate(child1, pop);
+                mutate(child2, pop);
+                // we use prob to evaluate the fitness so
+                // that its feval counter is correctly updated
+                f1 = prob.fitness(child1);
+                f2 = prob.fitness(child2);
+                popnew.push_back(child1, f1);
+                popnew.push_back(child2, f2);
+            } // popnew now contains 2NP individuals
         }
         // This method returns the sorted N best individuals in the population according to the crowded comparison
         // operator

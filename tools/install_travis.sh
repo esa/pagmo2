@@ -74,7 +74,7 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
 
     # Documentation.
     cd ../build
-    pip install sphinx breathe requests[security] sphinx-bootstrap-theme;
+    pip install sphinx breathe requests[security] sphinx-rtd-theme;
     # Run doxygen and check the output.
     cd ../doc/doxygen;
     export DOXYGEN_OUTPUT=`doxygen 2>&1 >/dev/null`;

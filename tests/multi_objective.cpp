@@ -258,7 +258,7 @@ BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
     example = {{}, {}, {}, {}, {}, {}};
     BOOST_CHECK_THROW(select_best_N_mo(example, 2u), std::invalid_argument);
     example = {{1, 2}, {3, 4}, {0, 1}, {1, 0}, {2, 2}, {2, 4}};
-    BOOST_CHECK_THROW(select_best_N_mo(example, 0u), std::invalid_argument);
+    BOOST_CHECK(select_best_N_mo(example, 0u).empty());
 }
 
 BOOST_AUTO_TEST_CASE(ideal_test)

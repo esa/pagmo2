@@ -112,11 +112,11 @@ r_pol_inner<bp::object>::replace(const individuals_group_t &inds, const vector_d
 
     try {
         // Fetch the new individuals in Python form.
-        bp::object o = m_value.attr("replace")(pygmo::inds_to_tuple(inds), nx, nix, nobj, nec, nic, pygmo::v_to_a(tol),
-                                               pygmo::inds_to_tuple(mig));
+        bp::object o = m_value.attr("replace")(pygmo::inds_to_tuple(inds), nx, nix, nobj, nec, nic,
+                                               pygmo::vector_to_ndarr(tol), pygmo::inds_to_tuple(mig));
 
         // Convert back to C++ form and return.
-        return pygmo::to_inds(o);
+        return pygmo::obj_to_inds(o);
     } catch (const bp::error_already_set &) {
         pygmo::handle_thread_py_exception("The replace() method of a pythonic replacement policy of type '" + r_pol_name
                                           + "' raised an error:\n");

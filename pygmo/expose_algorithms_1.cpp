@@ -136,7 +136,7 @@ void expose_algorithms_1()
                  for (const auto &t : a.get_log()) {
                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t),
                                                   std::get<4>(t), std::get<5>(t), std::get<6>(t),
-                                                  v_to_a(std::get<7>(t))));
+                                                  vector_to_ndarr(std::get<7>(t))));
                  }
                  return retval;
              }),
@@ -185,15 +185,15 @@ void expose_algorithms_1()
     auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
                                                                    bp::arg("eta_c") = 10., bp::arg("m") = 0.01,
-                                                                   bp::arg("eta_m") = 10.)));
+                                                                   bp::arg("eta_m") = 50.)));
     nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 50.,
          bp::arg("seed"))));
     // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
                    bp::list retval;
                    for (const auto &t : a.get_log()) {
-                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), vector_to_ndarr(std::get<2>(t))));
                    }
                    return retval;
                }),
@@ -265,16 +265,17 @@ void expose_algorithms_1()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
-                                                              bp::return_internal_reference<>()),
-                 lcast([](nlopt &n, const nlopt *ptr) {
-                     if (ptr) {
-                         n.set_local_optimizer(*ptr);
-                     } else {
-                         n.unset_local_optimizer();
-                     }
-                 }),
-                 nlopt_local_optimizer_docstring().c_str());
+    add_property(
+        nlopt_, "local_optimizer",
+        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
+        lcast([](nlopt &n, const nlopt *ptr) {
+            if (ptr) {
+                n.set_local_optimizer(*ptr);
+            } else {
+                n.unset_local_optimizer();
+            }
+        }),
+        nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 } // namespace pygmo

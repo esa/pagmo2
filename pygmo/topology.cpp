@@ -128,7 +128,7 @@ std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_c
                                               .c_str());
         }
 
-        retval.first = pygmo::to_vuint<std::size_t>(*begin);
+        retval.first = pygmo::obj_to_vector<std::vector<std::size_t>>(*begin);
 
         if (++begin == end) {
             // Only one element in the iteratable.
@@ -137,7 +137,7 @@ std::pair<std::vector<std::size_t>, vector_double> topo_inner<bp::object>::get_c
                                               .c_str());
         }
 
-        retval.second = pygmo::to_vd(*begin);
+        retval.second = pygmo::obj_to_vector<vector_double>(*begin);
 
         if (++begin != end) {
             // Too many elements.

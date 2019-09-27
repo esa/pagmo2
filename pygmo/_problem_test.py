@@ -1120,7 +1120,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return array([[0, 0], [0, 1]])
+                return array([[0, 0], [0, 1]], dtype='uint32')
 
         self.assert_(problem(p()).has_gradient_sparsity())
         self.assert_(isinstance(problem(p()).gradient_sparsity(), ndarray))
@@ -1137,7 +1137,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return array([[0, 0], [0, 123]])
+                return array([[0, 0], [0, 123]], dtype='uint32')
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1150,7 +1150,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return array([[0, 0, 0], [0, 1, 0]])
+                return array([[0, 0, 0], [0, 1, 0]], dtype='uint32')
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1163,7 +1163,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return array([[[0], [1], [2]]])
+                return array([[[0], [1], [2]]], dtype='uint32')
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1189,9 +1189,9 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                return array([[0, 0], [0, -1]])
+                return array([[0, 0], [0, -1]], dtype='int32')
 
-        self.assertRaises(OverflowError, lambda: problem(p()))
+        self.assertRaises(TypeError, lambda: problem(p()))
 
         class p(object):
 
@@ -1202,7 +1202,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def gradient_sparsity(self):
-                a = array([[0, 0, 0], [0, 1, 0]])
+                a = array([[0, 0, 0], [0, 1, 0]], dtype='uint32')
                 return a[:, :2]
 
         self.assert_(problem(p()).has_gradient_sparsity())
@@ -1627,7 +1627,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def hessians_sparsity(self):
-                return [array([[0, 0], [1, 1]])]
+                return [array([[0, 0], [1, 1]], dtype='uint32')]
 
         self.assert_(problem(p()).has_hessians_sparsity())
         self.assert_(isinstance(problem(p()).hessians_sparsity(), list))
@@ -1645,7 +1645,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def hessians_sparsity(self):
-                return array([[0, 0], [0, 123]])
+                return array([[0, 0], [0, 123]], dtype='uint32')
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1658,7 +1658,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def hessians_sparsity(self):
-                return (array([[0, 0, 0], [0, 1, 0]]),)
+                return (array([[0, 0, 0], [0, 1, 0]], dtype='uint32'),)
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1671,7 +1671,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def hessians_sparsity(self):
-                return [array([[[0], [1], [2]]])]
+                return [array([[[0], [1], [2]]], dtype='uint32')]
 
         self.assertRaises(ValueError, lambda: problem(p()))
 
@@ -1697,9 +1697,9 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def hessians_sparsity(self):
-                return [array([[0, 0], [0, -1]])]
+                return [array([[0, 0], [0, -1]], dtype='int32')]
 
-        self.assertRaises(OverflowError, lambda: problem(p()))
+        self.assertRaises(TypeError, lambda: problem(p()))
 
         class p(object):
 
@@ -1710,7 +1710,7 @@ class problem_test_case(_ut.TestCase):
                 return [42]
 
             def hessians_sparsity(self):
-                a = array([[0, 0, 0], [1, 1, 0]])
+                a = array([[0, 0, 0], [1, 1, 0]], dtype='uint32')
                 return [a[:, :2]]
 
         self.assert_(problem(p()).has_hessians_sparsity())
@@ -1745,7 +1745,7 @@ class problem_test_case(_ut.TestCase):
                 return 2
 
             def hessians_sparsity(self):
-                return [array([[0, 0], [1, 1]]), array([[0, 0], [1, 0]])]
+                return [array([[0, 0], [1, 1]], dtype='uint32'), array([[0, 0], [1, 0]], dtype='uint32')]
 
         self.assert_(problem(p()).has_hessians_sparsity())
         self.assert_(isinstance(problem(p()).hessians_sparsity(), list))

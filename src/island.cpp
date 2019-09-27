@@ -874,13 +874,22 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
     if (!extra_str.empty()) {
         stream(os, "Extra info:\n", extra_str, "\n\n");
     }
+
+    // Cache out a copy of the population for use below.
+    const auto pop = isl.get_population();
+
     stream(os, "Algorithm: " + isl.get_algorithm().get_name(), "\n\n");
-    stream(os, "Problem: " + isl.get_population().get_problem().get_name(), "\n\n");
+    stream(os, "Problem: " + pop.get_problem().get_name(), "\n\n");
     stream(os, "Replacement policy: " + isl.m_ptr->r_pol.get_name(), "\n\n");
     stream(os, "Selection policy: " + isl.m_ptr->s_pol.get_name(), "\n\n");
-    stream(os, "Population size: ", isl.get_population().size(), "\n");
-    stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
-    stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
+    stream(os, "Population size: ", pop.size(), "\n");
+
+    // NOTE: don't print champion info for MO or stochastic problems.
+    if (pop.get_problem().get_nobj() == 1u && !pop.get_problem().is_stochastic()) {
+        stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
+        stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
+    }
+
     return os;
 }
 

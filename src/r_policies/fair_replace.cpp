@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/variant/get.hpp>
 
 #include <pagmo/detail/base_sr_policy.hpp>
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
@@ -119,8 +120,9 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         std::vector<pop_size_t> mig_ind_sort;
         mig_ind_sort.resize(boost::numeric_cast<decltype(mig_ind_sort.size())>(mig_size));
         std::iota(mig_ind_sort.begin(), mig_ind_sort.end(), pop_size_t(0));
-        std::sort(mig_ind_sort.begin(), mig_ind_sort.end(),
-                  [&mig](pop_size_t idx1, pop_size_t idx2) { return std::get<2>(mig)[idx1] < std::get<2>(mig)[idx2]; });
+        std::sort(mig_ind_sort.begin(), mig_ind_sort.end(), [&mig](pop_size_t idx1, pop_size_t idx2) {
+            return detail::less_than_f(std::get<2>(mig)[idx1][0], std::get<2>(mig)[idx2][0]);
+        });
 
         // Build the merged population from the original individuals plus the
         // top n_migr migrants.
@@ -138,7 +140,7 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
         std::iota(merged_pop_ind_sort.begin(), merged_pop_ind_sort.end(), pop_size_t(0));
         std::sort(merged_pop_ind_sort.begin(), merged_pop_ind_sort.end(),
                   [&merged_pop](pop_size_t idx1, pop_size_t idx2) {
-                      return std::get<2>(merged_pop)[idx1] < std::get<2>(merged_pop)[idx2];
+                      return detail::less_than_f(std::get<2>(merged_pop)[idx1][0], std::get<2>(merged_pop)[idx2][0]);
                   });
 
         // Create and return the output pop.
