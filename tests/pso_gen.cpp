@@ -289,3 +289,21 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_CLOSE(std::get<5>(before_log[i]), std::get<5>(after_log[i]), 1e-8);
     }
 }
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+    population pop{rosenbrock{10u}, 200u, 23u};
+    pso_gen uda{40u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{}); // This will use the default bfe.
+    pop = uda.evolve(pop);
+
+    population pop_2{rosenbrock{10u}, 200u, 23u};
+    pso_gen uda_2{40u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda_2.set_verbosity(1u);
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+
+    BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
+}

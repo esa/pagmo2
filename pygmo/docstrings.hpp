@@ -146,6 +146,7 @@ std::string gwo_docstring();
 std::string gwo_get_log_docstring();
 std::string pso_docstring();
 std::string pso_get_log_docstring();
+std::string pso_gen_set_bfe_docstring();
 std::string pso_gen_docstring();
 std::string pso_gen_get_log_docstring();
 std::string sade_docstring();

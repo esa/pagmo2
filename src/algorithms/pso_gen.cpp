@@ -38,6 +38,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
+#include <boost/serialization/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/exceptions.hpp>
@@ -362,26 +364,86 @@ population pso_gen::evolve(population pop) const
             pop.get_problem().set_seed(urng(m_e));
             // re-evaluate the whole population w.r.t. the new seed
 
-            for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
-                // We evaluate here the new individual fitness
-                fit[p] = prob.fitness(X[p]);
-                // We re-evaluate the fitness of the particle memory
-                lbfit[p] = prob.fitness(lbX[p]);
-            }
+            if (m_bfe) {
+                // bfe is available:
+                vector_double decision_vectors(swarm_size * dim);
+                vector_double decision_vectors_lb(swarm_size * dim);
 
-            best_fit = fit[0];
-            best_neighb = X[0];
+                decltype(decision_vectors.size()) pos = 0u;
 
-            for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
-                if (fit[p] < best_fit) {
-                    best_fit = fit[p];
-                    best_neighb = X[p];
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    // I store the individuals in a contiguous vector
+                    for (decltype(X[i].size()) ii = 0u; ii < X[i].size(); ++ii) {
+                        decision_vectors[pos] = X[i][ii];
+                        decision_vectors_lb[pos] = lbX[i][ii];
+                        ++pos;
+                    }
+                }
+
+                auto fitnesses = (*m_bfe)(prob, decision_vectors);
+                auto fitnesses_lb = (*m_bfe)(prob, decision_vectors_lb);
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    for (decltype(fit[i].size()) i_fit = 0; i_fit < fit[i].size(); ++i_fit) {
+                        fit[i][i_fit] = fitnesses[i];
+                        lbfit[i][i_fit] = fitnesses_lb[i];
+                    }
+                }
+                best_fit = fit[0];
+                best_neighb = X[0];
+
+                for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
+                    if (fit[p] < best_fit) {
+                        best_fit = fit[p];
+                        best_neighb = X[p];
+                    }
+                }
+
+            } else {
+                // bfe not available:
+                for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
+                    // We evaluate here the new individual fitness
+                    fit[p] = prob.fitness(X[p]);
+                    // We re-evaluate the fitness of the particle memory
+                    lbfit[p] = prob.fitness(lbX[p]);
+                }
+
+                best_fit = fit[0];
+                best_neighb = X[0];
+
+                for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
+                    if (fit[p] < best_fit) {
+                        best_fit = fit[p];
+                        best_neighb = X[p];
+                    }
                 }
             }
         } else {
-            for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
-                // We evaluate here the new individual fitness
-                fit[p] = prob.fitness(X[p]);
+            if (m_bfe) {
+                // bfe is available:
+                vector_double decision_vectors(swarm_size * dim);
+
+                decltype(decision_vectors.size()) pos = 0u;
+
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    // I store the individuals in a contiguous vector
+                    for (decltype(X[i].size()) ii = 0u; ii < X[i].size(); ++ii) {
+                        decision_vectors[pos] = X[i][ii];
+                        ++pos;
+                    }
+                }
+
+                auto fitnesses = (*m_bfe)(prob, decision_vectors);
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    for (decltype(fit[i].size()) i_fit = 0; i_fit < fit[i].size(); ++i_fit) {
+                        fit[i][i_fit] = fitnesses[i];
+                    }
+                }
+            } else {
+                // bfe not available:
+                for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
+                    // We evaluate here the new individual fitness
+                    fit[p] = prob.fitness(X[p]);
+                }
             }
         }
 
@@ -484,6 +546,15 @@ void pso_gen::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme
+/**
+ * @param b batch function evaluation object
+ */
+void pso_gen::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -521,7 +592,7 @@ template <typename Archive>
 void pso_gen::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e,
-                    m_seed, m_verbosity, m_log);
+                    m_seed, m_verbosity, m_log, m_bfe);
 }
 
 /**
