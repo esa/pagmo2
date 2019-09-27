@@ -8,7 +8,8 @@ Fix
 ~~~
 
 - Fix various fitness comparisons when nan values are involved
-  (`#346 <https://github.com/esa/pagmo2/pull/346>`__).
+  (`#346 <https://github.com/esa/pagmo2/pull/346>`__,
+  `#347 <https://github.com/esa/pagmo2/pull/347>`__).
 
 2.11.3 (2019-09-09)
 -------------------
