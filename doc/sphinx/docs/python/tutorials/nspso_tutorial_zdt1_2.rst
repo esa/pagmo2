@@ -43,8 +43,8 @@ Each of the UDAs is run ten times on each problem and the results are eventually
 
     >>> #We run the algos ten times each, and we store p-distance and crowding distance
     >>> for j in problems:
-    >>>       # 1. We declare the problem (either ZDT1 or ZDT2):
-    >>>       if j==1:
+    ...       # 1. We declare the problem (either ZDT1 or ZDT2):
+    ...       if j==1:
     ...           udp=zdt(prob_id=1)
     ...       elif j==2:
     ...           udp=zdt(prob_id=2)
