@@ -290,6 +290,15 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(bug)
+{
+    problem prob{rosenbrock{10u}};
+    population pop1{prob, 11u, 23u};
+    pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, 1u, 1u, 4u, false, 23u};
+    user_algo1.set_verbosity(1u);
+    pop1 = user_algo1.evolve(pop1);
+}
+
 BOOST_AUTO_TEST_CASE(bfe_usage_test)
 {
     population pop{rosenbrock{10u}, 200u, 23u};
