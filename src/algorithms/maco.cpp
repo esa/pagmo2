@@ -86,7 +86,6 @@ maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_
 // Algorithm evolve method
 population maco::evolve(population pop) const
 {
-    population popold(pop);
     // If the memory is active, we increase the counter:
     if (m_memory == true) {
         ++m_counter;
@@ -156,6 +155,7 @@ population maco::evolve(population pop) const
 
     // Main ACO loop over generations:
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        population popold(pop);
         //In case memory is active, we store handle the population in two variables (m_pop and pop):
         if (m_memory==false){
             dvs = pop.get_x();
