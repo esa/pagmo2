@@ -1,11 +1,14 @@
 Changelog
 =========
 
-2.11.4 (unreleased)
+2.11.4 (2019-09-29)
 -------------------
 
 Fix
 ~~~
+
+- Fix an indexing bug in the :cpp:class:`pagmo::pso_gen` algorithm
+  (`#349 <https://github.com/esa/pagmo2/pull/349>`__).
 
 - Fix various fitness comparisons when nan values are involved
   (`#346 <https://github.com/esa/pagmo2/pull/346>`__,
