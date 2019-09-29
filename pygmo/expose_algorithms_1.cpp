@@ -238,7 +238,7 @@ void expose_algorithms_1()
     maco_.def("get_log", lcast([](const maco &a) -> bp::list {
                   bp::list retval;
                   for (const auto &t : a.get_log()) {
-                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
+                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), vector_to_ndarr(std::get<2>(t))));
                   }
                   return retval;
               }),
@@ -264,16 +264,17 @@ void expose_algorithms_1()
     nlopt_.def("get_last_opt_result", lcast([](const nlopt &n) { return static_cast<int>(n.get_last_opt_result()); }),
                nlopt_get_last_opt_result_docstring().c_str());
     nlopt_.def("get_solver_name", &nlopt::get_solver_name, nlopt_get_solver_name_docstring().c_str());
-    add_property(nlopt_, "local_optimizer", bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }),
-                                                              bp::return_internal_reference<>()),
-                 lcast([](nlopt &n, const nlopt *ptr) {
-                     if (ptr) {
-                         n.set_local_optimizer(*ptr);
-                     } else {
-                         n.unset_local_optimizer();
-                     }
-                 }),
-                 nlopt_local_optimizer_docstring().c_str());
+    add_property(
+        nlopt_, "local_optimizer",
+        bp::make_function(lcast([](nlopt &n) { return n.get_local_optimizer(); }), bp::return_internal_reference<>()),
+        lcast([](nlopt &n, const nlopt *ptr) {
+            if (ptr) {
+                n.set_local_optimizer(*ptr);
+            } else {
+                n.unset_local_optimizer();
+            }
+        }),
+        nlopt_local_optimizer_docstring().c_str());
 #endif
 }
 } // namespace pygmo

@@ -249,8 +249,8 @@ BOOST_AUTO_TEST_CASE(miscellanea_tests)
 
 BOOST_AUTO_TEST_CASE(memory_test)
 {
-    maco uda{1u, 13u, 1.0, 1u, 7u, 10000u, 0., true, 23u};
-    maco uda_2{10u, 13u, 1.0, 1u, 7u, 10000u, 0., false, 23u};
+    maco uda{1u, 20u, 1.0, 8u, 7u, 10000u, 0., true, 23u};
+    maco uda_2{10u, 20u, 1.0, 8u, 7u, 10000u, 0., false, 23u};
     uda.set_seed(23u);
     uda_2.set_seed(23u);
     uda.set_verbosity(1u);
