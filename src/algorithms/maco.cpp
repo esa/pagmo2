@@ -173,7 +173,7 @@ population maco::evolve(population pop) const
             auto fnds = fast_non_dominated_sorting(fit);
             auto ndf = std::get<0>(fnds);
             vector_double::size_type i_arch = 0;
-            unsigned front=0u;
+            unsigned front = 0u;
             for (const auto &front_idxs : ndf) {
                 if (i_arch < m_ker) {
                     // We can now go through the individuals within each front and store them in the archive, according
@@ -220,29 +220,30 @@ population maco::evolve(population pop) const
                     }
                     // If, in the first front, there are more pareto points than the ones allowed to store
                     // in the archive, then we make sure that the extremities are included
-                    if (i_arch>=m_ker && front==0){
+                    if (i_arch >= m_ker && front == 0) {
                         vector_double id_pt = ideal(list_of_fit);
-                        std::vector<vector_double> border_fits(n_f,vector_double(n_f, 1));
-                        std::vector<vector_double> border_points(n_f,vector_double(n_x, 1));
-                        vector_double::size_type elem=0;
-                        for (decltype(n_f) i_f=0; i_f<n_f; ++i_f){
-                            bool flag=true;
-                            for (decltype(list_of_fit.size()) i_pop=0; i_pop<list_of_fit.size() && flag==true; ++i_pop){
-                                if(list_of_fit[i_pop][i_f]==id_pt[i_f]){
-                                    border_points[elem]=list_of_dvs[i_pop];
-                                    border_fits[elem]=list_of_fit[i_pop];
-                                    flag=false;
+                        std::vector<vector_double> border_fits(n_f, vector_double(n_f, 1));
+                        std::vector<vector_double> border_points(n_f, vector_double(n_x, 1));
+                        vector_double::size_type elem = 0;
+                        for (decltype(n_f) i_f = 0; i_f < n_f; ++i_f) {
+                            bool flag = true;
+                            for (decltype(list_of_fit.size()) i_pop = 0; i_pop < list_of_fit.size() && flag == true;
+                                 ++i_pop) {
+                                if (list_of_fit[i_pop][i_f] == id_pt[i_f]) {
+                                    border_points[elem] = list_of_dvs[i_pop];
+                                    border_fits[elem] = list_of_fit[i_pop];
+                                    flag = false;
                                     ++elem;
                                 }
                             }
                         }
-                        for (decltype(n_f) i_f=0; i_f<n_f && i_f<m_ker; ++i_f){
+                        for (decltype(n_f) i_f = 0; i_f < n_f && i_f < m_ker; ++i_f) {
                             for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
-                                sol_archive[m_ker-1-i_f][i_nx] = border_points[i_f][i_nx];
+                                sol_archive[m_ker - 1 - i_f][i_nx] = border_points[i_f][i_nx];
                             }
                             for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
-                                sol_archive[m_ker-1-i_f][n_x + i_nf] = border_fits[i_f][i_nf];
-                                sol_archive_fit[m_ker-1-i_f][i_nf] = sol_archive[i_f][n_x + i_nf];
+                                sol_archive[m_ker - 1 - i_f][n_x + i_nf] = border_fits[i_f][i_nf];
+                                sol_archive_fit[m_ker - 1 - i_f][i_nf] = sol_archive[i_f][n_x + i_nf];
                             }
                         }
                     }
@@ -320,7 +321,7 @@ population maco::evolve(population pop) const
             auto ndf = std::get<0>(fnds);
             // We now loop through the ndf tuple
             vector_double::size_type i_arch = 0;
-            unsigned front=0u;
+            unsigned front = 0u;
 
             for (const auto &front_idxs : ndf) {
                 if (i_arch < m_ker) {
@@ -368,35 +369,35 @@ population maco::evolve(population pop) const
                     }
                     // If, in the first front, there are more pareto points than the ones allowed to store
                     // in the archive, then we make sure that the extremities are included
-                    if (i_arch>=m_ker && front==0){
+                    if (i_arch >= m_ker && front == 0) {
                         vector_double id_pt = ideal(list_of_fit);
-                        std::vector<vector_double> border_fits(n_f,vector_double(n_f, 1));
-                        std::vector<vector_double> border_points(n_f,vector_double(n_x, 1));
-                        vector_double::size_type elem=0;
-                        for (decltype(n_f) i_f=0; i_f<n_f; ++i_f){
-                            bool flag=true;
-                            for (decltype(list_of_fit.size()) i_pop=0; i_pop<list_of_fit.size() && flag==true; ++i_pop){
-                                if(list_of_fit[i_pop][i_f]==id_pt[i_f]){
-                                    border_points[elem]=list_of_dvs[i_pop];
-                                    border_fits[elem]=list_of_fit[i_pop];
-                                    flag=false;
+                        std::vector<vector_double> border_fits(n_f, vector_double(n_f, 1));
+                        std::vector<vector_double> border_points(n_f, vector_double(n_x, 1));
+                        vector_double::size_type elem = 0;
+                        for (decltype(n_f) i_f = 0; i_f < n_f; ++i_f) {
+                            bool flag = true;
+                            for (decltype(list_of_fit.size()) i_pop = 0; i_pop < list_of_fit.size() && flag == true;
+                                 ++i_pop) {
+                                if (list_of_fit[i_pop][i_f] == id_pt[i_f]) {
+                                    border_points[elem] = list_of_dvs[i_pop];
+                                    border_fits[elem] = list_of_fit[i_pop];
+                                    flag = false;
                                     ++elem;
                                 }
                             }
                         }
-                        for (decltype(n_f) i_f=0; i_f<n_f && i_f<m_ker; ++i_f){
+                        for (decltype(n_f) i_f = 0; i_f < n_f && i_f < m_ker; ++i_f) {
                             for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
-                                sol_archive[m_ker-1-i_f][i_nx] = border_points[i_f][i_nx];
+                                sol_archive[m_ker - 1 - i_f][i_nx] = border_points[i_f][i_nx];
                             }
                             for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
-                                sol_archive[m_ker-1-i_f][n_x + i_nf] = border_fits[i_f][i_nf];
-                                sol_archive_fit[m_ker-1-i_f][i_nf] = sol_archive[i_f][n_x + i_nf];
+                                sol_archive[m_ker - 1 - i_f][n_x + i_nf] = border_fits[i_f][i_nf];
+                                sol_archive_fit[m_ker - 1 - i_f][i_nf] = sol_archive[i_f][n_x + i_nf];
                             }
                         }
                     }
                 }
                 ++front;
-
             }
             if (m_memory == true) {
                 m_sol_archive = sol_archive;
