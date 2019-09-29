@@ -64,7 +64,8 @@ if is_release_build and not is_python_build:
 
 # Get mingw and set the path.
 # USING: mingw64 8.1.0 from the appveyor VMs
-run_command(r'mv C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64 C:\\mingw64')
+run_command(
+    r'mv C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64 C:\\mingw64')
 ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 
@@ -103,12 +104,11 @@ if is_python_build:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
     # Set paths.
-    # Set paths.
     pinterp = r"C:\\" + python_folder + r'\\python.exe'
     pip = r"C:\\" + python_folder + r'\\scripts\\pip'
     twine = r"C:\\" + python_folder + r'\\scripts\\twine'
     pygmo_install_path = r"C:\\" + python_folder + r'\\Lib\\site-packages\\pygmo'
-     # Install pip and deps.
+    # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
     # NOTE: at the moment we have troubles installing ipyparallel.
@@ -122,7 +122,7 @@ if is_python_build:
 os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 
 # Proceed to the build.
-# NOTE: at the moment boost 1.70 seems to have problem to autodetect 
+# NOTE: at the moment boost 1.70 seems to have problem to autodetect
 # the mingw library (with CMake 3.13 currently installed in appveyor)
 # Thus we manually point to the boost libs.
 common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local ' + \
@@ -135,10 +135,10 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local ' + \
 if is_python_build:
     os.makedirs('build_pagmo')
     os.chdir('build_pagmo')
-    run_command(r'cmake -G "MinGW Makefiles" .. ' + \
-                common_cmake_opts + \
-                r'-DPAGMO_WITH_EIGEN3=yes ' + \
-                r'-DPAGMO_WITH_NLOPT=yes ' + \
+    run_command(r'cmake -G "MinGW Makefiles" .. ' +
+                common_cmake_opts +
+                r'-DPAGMO_WITH_EIGEN3=yes ' +
+                r'-DPAGMO_WITH_NLOPT=yes ' +
                 r'-DCMAKE_BUILD_TYPE=Release ')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the pagmo dll.
@@ -146,29 +146,29 @@ if is_python_build:
     os.chdir('..')
     os.makedirs('build_pygmo')
     os.chdir('build_pygmo')
-    run_command(r'cmake -G "MinGW Makefiles" .. ' + \
-                common_cmake_opts + \
-                r'-DPAGMO_BUILD_PYGMO=yes ' + \
-                r'-DPAGMO_BUILD_PAGMO=no ' + \
-                r'-DCMAKE_BUILD_TYPE=Release ' + \
-                r'-DCMAKE_CXX_FLAGS=-s ' + \
-                r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' + \
-                r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
-                r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
-                r'-DPYTHON_LIBRARY=' + python_library + \
+    run_command(r'cmake -G "MinGW Makefiles" .. ' +
+                common_cmake_opts +
+                r'-DPAGMO_BUILD_PYGMO=yes ' +
+                r'-DPAGMO_BUILD_PAGMO=no ' +
+                r'-DCMAKE_BUILD_TYPE=Release ' +
+                r'-DCMAKE_CXX_FLAGS=-s ' +
+                r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' +
+                r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' +
+                r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' +
+                r'-DPYTHON_LIBRARY=' + python_library +
                 r'-DCMAKE_CXX_FLAGS="-D_hypot=hypot"')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
 elif 'Debug' in BUILD_TYPE:
     os.makedirs('build_pagmo')
     os.chdir('build_pagmo')
-    run_command(r'cmake -G "MinGW Makefiles" .. ' + \
-                common_cmake_opts + \
-                r'-DPAGMO_WITH_EIGEN3=yes ' + \
-                r'-DPAGMO_WITH_NLOPT=yes ' + \
-                r'-DCMAKE_BUILD_TYPE=Debug ' + \
-                r'-DPAGMO_BUILD_TESTS=yes ' + \
-                r'-DPAGMO_BUILD_TUTORIALS=yes ' + \
-                r'-DBoost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE=c:\\local\\lib\\libboost_unit_test_framework-mgw81-mt-x64-1_70.dll ' + \
+    run_command(r'cmake -G "MinGW Makefiles" .. ' +
+                common_cmake_opts +
+                r'-DPAGMO_WITH_EIGEN3=yes ' +
+                r'-DPAGMO_WITH_NLOPT=yes ' +
+                r'-DCMAKE_BUILD_TYPE=Debug ' +
+                r'-DPAGMO_BUILD_TESTS=yes ' +
+                r'-DPAGMO_BUILD_TUTORIALS=yes ' +
+                r'-DBoost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE=c:\\local\\lib\\libboost_unit_test_framework-mgw81-mt-x64-1_70.dll ' +
                 r'-DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the pagmo dll.

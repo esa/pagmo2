@@ -285,8 +285,10 @@ public:
     {
         return extract<T>() != nullptr;
     }
+
     // Call operator.
     vector_double operator()(const problem &, const vector_double &) const;
+
     // Name.
     std::string get_name() const
     {
@@ -294,6 +296,7 @@ public:
     }
     // Extra info.
     std::string get_extra_info() const;
+
     // Thread safety level.
     thread_safety get_thread_safety() const
     {

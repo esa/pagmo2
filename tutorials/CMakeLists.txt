@@ -11,6 +11,8 @@ function(ADD_PAGMO_TUTORIAL arg1)
     add_test(${arg1} ${arg1})
 endfunction()
 
+ADD_PAGMO_TUTORIAL(getting_started)
+ADD_PAGMO_TUTORIAL(nsga2_example)
 ADD_PAGMO_TUTORIAL(problem_basic)
 ADD_PAGMO_TUTORIAL(problem_basic_gh)
 ADD_PAGMO_TUTORIAL(problem_basic_s)

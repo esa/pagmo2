@@ -167,12 +167,15 @@ inline bp::object callable_attribute(const bp::object &o, const char *s)
     return bp::object();
 }
 
+// isinstance wrapper.
+inline bool isinstance(const bp::object &o, const bp::object &t)
+{
+    return bp::extract<bool>(builtin().attr("isinstance")(o, t));
+}
+
 // Convert a vector of arithmetic types into a 1D numpy array.
 template <typename T>
-using v_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
-
-template <typename T, v_to_a_enabler<T> = 0>
-inline bp::object v_to_a(const std::vector<T> &v)
+inline bp::object vector_to_ndarr(const std::vector<T> &v)
 {
     // The dimensions of the array to be created.
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(v.size())};
@@ -187,16 +190,12 @@ inline bp::object v_to_a(const std::vector<T> &v)
         // Copy over the data.
         std::copy(v.begin(), v.end(), static_cast<T *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret))));
     }
-    // Hand over to boost python.
     return retval;
 }
 
 // Convert a vector of vectors of arithmetic types into a 2D numpy array.
 template <typename T>
-using vv_to_a_enabler = pagmo::enable_if_t<std::is_arithmetic<T>::value, int>;
-
-template <typename T, vv_to_a_enabler<T> = 0>
-inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
+inline bp::object vvector_to_ndarr(const std::vector<std::vector<T>> &v)
 {
     // The dimensions of the array to be created.
     const auto nrows = v.size();
@@ -223,289 +222,204 @@ inline bp::object vv_to_a(const std::vector<std::vector<T>> &v)
     return retval;
 }
 
-// isinstance wrapper.
-inline bool isinstance(const bp::object &o, const bp::object &t)
+// Convert a numpy array to a std::vector-like object.
+template <typename Vector>
+inline Vector ndarr_to_vector(PyArrayObject *o)
 {
-    return bp::extract<bool>(builtin().attr("isinstance")(o, t));
-}
+    using value_t = typename Vector::value_type;
+    using size_type = typename Vector::size_type;
 
-// Convert a numpy array of double to a vector_double.
-inline pagmo::vector_double ad_to_vd(PyArrayObject *o)
-{
-    assert(PyArray_TYPE(o) == NPY_DOUBLE);
-    using size_type = pagmo::vector_double::size_type;
+    // Checks on the input array.
+    if (PyArray_TYPE(o) != cpp_npy<value_t>::value) {
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a C++ vector: "
+                                        "the source data type does not match the destination data type");
+    }
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of doubles: "
-                                        "data must be C-style contiguous, aligned, and in machine byte-order");
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a C++ vector: "
+                                        "the data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a vector of doubles: "
+        pygmo_throw(PyExc_ValueError, ("cannot convert a NumPy array to a C++ vector: "
                                        "the array must be unidimensional, but the dimension is "
                                        + std::to_string(PyArray_NDIM(o)) + " instead")
                                           .c_str());
     }
-    if (PyArray_STRIDES(o)[0] != sizeof(double)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of doubles: "
-                                         "the stride value must be "
-                                         + std::to_string(sizeof(double)))
-                                            .c_str());
-    }
-    if (PyArray_ITEMSIZE(o) != sizeof(double)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of doubles: "
+    if (PyArray_ITEMSIZE(o) != sizeof(value_t)) {
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert a NumPy array to a C++ vector: "
                                          "the size of the scalar type must be "
-                                         + std::to_string(sizeof(double)))
+                                         + std::to_string(sizeof(value_t)))
                                             .c_str());
     }
+
     // NOTE: not sure if this special casing is needed. We make sure
     // the array contains something in order to avoid messing around
     // with a potentially null pointer in the array.
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
     if (size) {
-        auto data = static_cast<double *>(PyArray_DATA(o));
-        return pagmo::vector_double(data, data + size);
+        auto data = static_cast<value_t *>(PyArray_DATA(o));
+        return Vector(data, data + size);
     }
-    return pagmo::vector_double{};
+    return Vector{};
 }
 
-// Convert an arbitrary python object to a vector_double.
-inline pagmo::vector_double to_vd(const bp::object &o)
+// Convert an arbitrary python object to a
+// std::vector-like object.
+template <typename Vector>
+inline Vector obj_to_vector(const bp::object &o)
 {
+    // Fetch the target scalar type.
+    using value_t = typename Vector::value_type;
+
+    // Check if o is a numpy array.
     bp::object a = bp::import("numpy").attr("ndarray");
     if (isinstance(o, a)) {
         // NOTE: the idea here is that we want to be able to convert
-        // from a NumPy array of types other than double. This is useful
-        // because one can then create arrays of ints and have them converted
-        // on the fly (e.g., for the bounds). If the array is already a
-        // double-precision array, this function should not do any copy.
-        auto n = PyArray_FROM_OTF(o.ptr(), NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+        // from a numpy array of types other than value_t. This is useful
+        // because one can then create arrays of other types and have them
+        // converted on the fly. If the array is already of the correct type,
+        // this function should not do any copy.
+        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<value_t>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             bp::throw_error_already_set();
         }
-        return ad_to_vd(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+        return ndarr_to_vector<Vector>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
-    // If o is not a numpy array, just try to iterate over it and extract doubles.
-    bp::stl_input_iterator<double> begin(o), end;
-    return pagmo::vector_double(begin, end);
+
+    // If o is not a numpy array, just try to iterate over it and extract value_t.
+    bp::stl_input_iterator<value_t> begin(o), end;
+    return Vector(begin, end);
 }
 
-// Convert a numpy array to a vector of vector_double.
-inline std::vector<pagmo::vector_double> a_to_vvd(PyArrayObject *o)
+// Convert a 2D numpy array to a vector of std::vector-like objects.
+template <typename VVector>
+inline VVector ndarr_to_vvector(PyArrayObject *o)
 {
-    using size_type = std::vector<pagmo::vector_double>::size_type;
+    using size_type = typename VVector::size_type;
+    using value_t = typename VVector::value_type::value_type;
+
+    // Checks on the input array.
+    if (PyArray_TYPE(o) != cpp_npy<value_t>::value) {
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a vector of C++ vectors: "
+                                        "the source data type does not match the destination data type");
+    }
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of vector_double: "
-                                        "data must be C-style contiguous, aligned, and in machine byte-order");
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a vector of C++ vectors: "
+                                        "the data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 2) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of vector_double: "
+        pygmo_throw(PyExc_ValueError, "cannot convert a NumPy array to a vector of C++ vectors: "
                                       "the array must be 2-dimensional");
     }
-    if (PyArray_TYPE(o) != NPY_DOUBLE) {
-        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of vector_double: "
-                                     "the scalar type must be 'double'");
-    }
-    if (PyArray_ITEMSIZE(o) != sizeof(double)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of vector_double: "
+    if (PyArray_ITEMSIZE(o) != sizeof(value_t)) {
+        pygmo_throw(PyExc_RuntimeError, ("cannot convert a 2D NumPy array to a vector of C++ vectors: "
                                          "the size of the scalar type must be "
-                                         + std::to_string(sizeof(double)))
+                                         + std::to_string(sizeof(value_t)))
                                             .c_str());
     }
+
     const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
-    std::vector<pagmo::vector_double> retval;
+    VVector retval;
     if (size) {
-        auto data = static_cast<double *>(PyArray_DATA(o));
+        auto data = static_cast<value_t *>(PyArray_DATA(o));
         const auto ssize = PyArray_SHAPE(o)[1];
-        for (size_type i = 0u; i < size; ++i, data += ssize) {
-            retval.push_back(pagmo::vector_double(data, data + ssize));
+        for (size_type i = 0; i < size; ++i, data += ssize) {
+            // NOTE: here and elsewhere in this header where we
+            // use push_back()/emplace_back(), we should really reserve()
+            // beforeheand.
+            retval.push_back(typename VVector::value_type(data, data + ssize));
         }
     }
     return retval;
 }
 
-// Convert an arbitrary Python object to a vector of vector_double.
-inline std::vector<pagmo::vector_double> to_vvd(const bp::object &o)
+// Convert an arbitrary python object to a
+// vector of std::vector-like objects.
+template <typename VVector>
+inline VVector obj_to_vvector(const bp::object &o)
 {
-    bp::object l = builtin().attr("list");
+    using value_t = typename VVector::value_type::value_type;
+
     bp::object a = bp::import("numpy").attr("ndarray");
-    if (isinstance(o, l)) {
-        bp::stl_input_iterator<bp::object> begin(o), end;
-        std::vector<pagmo::vector_double> retval;
-        for (; begin != end; ++begin) {
-            retval.push_back(to_vd(*begin));
-        }
-        return retval;
-    } else if (isinstance(o, a)) {
-        auto n = PyArray_FROM_OTF(o.ptr(), NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    if (isinstance(o, a)) {
+        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<value_t>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             bp::throw_error_already_set();
         }
-        return a_to_vvd(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
+        return ndarr_to_vvector<VVector>(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
     }
-    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a vector of vector_double: only lists of doubles and NumPy arrays of doubles "
-                                    "are supported")
-                                     .c_str());
-}
 
-// Convert a numpy array to an std::vector<unsigned>.
-inline std::vector<unsigned> a_to_vu(PyArrayObject *o)
-{
-    using size_type = std::vector<unsigned>::size_type;
-    using int_type = std::make_signed<std::size_t>::type;
-    if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_RuntimeError, "cannot convert NumPy array to a vector of unsigned: "
-                                        "data must be C-style contiguous, aligned, and in machine byte-order");
-    }
-    if (PyArray_NDIM(o) != 1) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a vector of unsigned: "
-                                      "the array must be unidimensional");
-    }
-    if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
-        pygmo_throw(PyExc_TypeError, "cannot convert NumPy array to a vector of unsigned: "
-                                     "invalid scalar type");
-    }
-    if (PyArray_STRIDES(o)[0] != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned: "
-                                         "the stride value must be "
-                                         + std::to_string(sizeof(int_type)))
-                                            .c_str());
-    }
-    if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_RuntimeError, ("cannot convert NumPy array to a vector of unsigned: "
-                                         "the size of the scalar type must be "
-                                         + std::to_string(sizeof(int_type)))
-                                            .c_str());
-    }
-    const auto size = boost::numeric_cast<size_type>(PyArray_SHAPE(o)[0]);
-    std::vector<unsigned> retval;
-    if (size) {
-        auto data = static_cast<int_type *>(PyArray_DATA(o));
-        std::transform(data, data + size, std::back_inserter(retval),
-                       [](int_type n) { return boost::numeric_cast<unsigned>(n); });
+    bp::stl_input_iterator<bp::object> begin(o), end;
+    VVector retval;
+    for (; begin != end; ++begin) {
+        retval.push_back(obj_to_vector<typename VVector::value_type>(*begin));
     }
     return retval;
-}
-
-// Convert an arbitrary python object to a vector of unsigned.
-inline std::vector<unsigned> to_vu(const bp::object &o)
-{
-    bp::object l = builtin().attr("list");
-    bp::object a = bp::import("numpy").attr("ndarray");
-    if (isinstance(o, l)) {
-        bp::stl_input_iterator<unsigned> begin(o), end;
-        return std::vector<unsigned>(begin, end);
-    } else if (isinstance(o, a)) {
-        // NOTE: as usual, we try first to create an array of signed ints,
-        // and we convert to unsigned in a_to_vu().
-        using int_type = std::make_signed<std::size_t>::type;
-        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<int_type>::value, NPY_ARRAY_IN_ARRAY);
-        if (!n) {
-            bp::throw_error_already_set();
-        }
-        return a_to_vu(reinterpret_cast<PyArrayObject *>(bp::object(bp::handle<>(n)).ptr()));
-    }
-    pygmo_throw(PyExc_TypeError, ("cannot convert the type '" + str(type(o))
-                                  + "' to a vector of ints: only lists of ints and NumPy arrays of ints are supported")
-                                     .c_str());
 }
 
 // Convert a sparsity pattern into a numpy array.
-inline bp::object sp_to_a(const pagmo::sparsity_pattern &s)
+inline bp::object sp_to_ndarr(const pagmo::sparsity_pattern &s)
 {
     // The unsigned integral type that is used in the sparsity pattern.
     using size_type = pagmo::vector_double::size_type;
-    // Its signed counterpart.
-    using int_type = std::make_signed<size_type>::type;
+
+    // Create the return value.
     npy_intp dims[] = {boost::numeric_cast<npy_intp>(s.size()), 2};
-    PyObject *ret = PyArray_SimpleNew(2, dims, cpp_npy<int_type>::value);
+    PyObject *ret = PyArray_SimpleNew(2, dims, cpp_npy<size_type>::value);
     if (!ret) {
         pygmo_throw(PyExc_RuntimeError, "couldn't create a NumPy array: the 'PyArray_SimpleNew()' function failed");
     }
     // Hand over to BP for exception-safe behaviour.
     bp::object retval{bp::handle<>(ret)};
-    auto err_handler = [](const decltype(s[0].first) &n) {
-        pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
-                                          + " to the appropriate signed integer type")
-                                             .c_str());
-    };
+
     // NOTE: same as above, avoid asking for the data pointer if size is zero.
     if (s.size()) {
-        auto data = static_cast<int_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
+        auto data = static_cast<size_type *>(PyArray_DATA(reinterpret_cast<PyArrayObject *>(ret)));
         for (decltype(s.size()) i = 0u; i < s.size(); ++i) {
-            try {
-                *(data + i + i) = boost::numeric_cast<int_type>(s[i].first);
-            } catch (const std::bad_cast &) {
-                err_handler(s[i].first);
-            }
-            try {
-                *(data + i + i + 1u) = boost::numeric_cast<int_type>(s[i].second);
-            } catch (const std::bad_cast &) {
-                err_handler(s[i].second);
-            }
+            *(data + i + i) = s[i].first;
+            *(data + i + i + 1u) = s[i].second;
         }
     }
     return retval;
 }
 
-// Convert a numpy array of std::make_signed<vector_double::size_type>::type into a sparsity pattern.
-inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
+// Convert a numpy array into a sparsity pattern.
+inline pagmo::sparsity_pattern ndarr_to_sp(PyArrayObject *o)
 {
     using size_type = pagmo::vector_double::size_type;
-    using int_type = std::make_signed<size_type>::type;
+
+    // Checks on the input array.
+    if (PyArray_TYPE(o) != cpp_npy<size_type>::value) {
+        pygmo_throw(PyExc_RuntimeError, "cannot convert a NumPy array to a sparsity pattern: "
+                                        "the source data type does not match the destination data type");
+    }
     if (!PyArray_ISCARRAY_RO(o)) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a sparsity pattern: "
-                                      "data must be C-style contiguous, aligned, and in machine byte-order");
+        pygmo_throw(PyExc_ValueError, "cannot convert a NumPy array to a sparsity pattern: "
+                                      "the data must be C-style contiguous, aligned, and in machine byte-order");
     }
     if (PyArray_NDIM(o) != 2) {
-        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+        pygmo_throw(PyExc_ValueError, ("cannot convert a NumPy array to a sparsity pattern: "
                                        "the array must be bidimensional, but its dimension is "
                                        + std::to_string(PyArray_NDIM(o)) + " instead")
                                           .c_str());
     }
     if (PyArray_SHAPE(o)[1] != 2) {
-        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+        pygmo_throw(PyExc_ValueError, ("cannot convert a NumPy array to a sparsity pattern: "
                                        "the second dimension must be 2, but it is instead "
                                        + std::to_string(PyArray_SHAPE(o)[1]))
                                           .c_str());
     }
-    if (PyArray_TYPE(o) != cpp_npy<int_type>::value) {
-        pygmo_throw(PyExc_TypeError,
-                    "cannot convert NumPy array to a sparsity pattern: "
-                    "the scalar type must be the signed counterpart of 'pagmo::vector_double::size_type'");
-    }
-    if (PyArray_STRIDES(o)[0] != sizeof(int_type) * 2u || PyArray_STRIDES(o)[1] != sizeof(int_type)) {
-        pygmo_throw(PyExc_ValueError, "cannot convert NumPy array to a sparsity pattern: "
-                                      "invalid strides detected");
-    }
-    if (PyArray_ITEMSIZE(o) != sizeof(int_type)) {
-        pygmo_throw(PyExc_ValueError, ("cannot convert NumPy array to a sparsity pattern: "
+    if (PyArray_ITEMSIZE(o) != sizeof(size_type)) {
+        pygmo_throw(PyExc_ValueError, ("cannot convert a NumPy array to a sparsity pattern: "
                                        "the size of the scalar type must be "
-                                       + std::to_string(sizeof(int_type)))
+                                       + std::to_string(sizeof(size_type)))
                                           .c_str());
     }
     const auto size = boost::numeric_cast<pagmo::sparsity_pattern::size_type>(PyArray_SHAPE(o)[0]);
-    // Error handler for nice Python error messages.
-    auto err_handler = [](int_type n) {
-        pygmo_throw(PyExc_OverflowError, ("overflow in the conversion of the sparsity index " + std::to_string(n)
-                                          + " to the appropriate unsigned integer type")
-                                             .c_str());
-    };
     if (size) {
-        auto data = static_cast<int_type *>(PyArray_DATA(o));
+        auto data = static_cast<size_type *>(PyArray_DATA(o));
         pagmo::sparsity_pattern retval;
         for (pagmo::sparsity_pattern::size_type i = 0u; i < size; ++i) {
-            size_type a, b;
-            try {
-                a = boost::numeric_cast<size_type>(*(data + i + i));
-            } catch (const std::bad_cast &) {
-                err_handler(*(data + i + i));
-            }
-            try {
-                b = boost::numeric_cast<size_type>(*(data + i + i + 1u));
-            } catch (const std::bad_cast &) {
-                err_handler(*(data + i + i + 1u));
-            }
-            retval.emplace_back(a, b);
+            retval.emplace_back(*(data + i + i), *(data + i + i + 1u));
         }
         return retval;
     }
@@ -513,18 +427,11 @@ inline pagmo::sparsity_pattern a_to_sp(PyArrayObject *o)
 }
 
 // Try converting a python object to a sparsity pattern.
-inline pagmo::sparsity_pattern to_sp(const bp::object &o)
+inline pagmo::sparsity_pattern obj_to_sp(const bp::object &o)
 {
     using size_type = pagmo::vector_double::size_type;
     if (isinstance(o, bp::import("numpy").attr("ndarray"))) {
-        // Input object is a NumPy array of some kind.
-        // NOTE: the idea here is the following: we try to build a NumPy array of the signed counterpart of
-        // vector_double::size_type (most likely long or long long) from whatever type of NumPy array was passed as
-        // input, and then we will convert the elements to the appropriate size_type inside the a_to_sp routine. The
-        // reason for doing this is that in typical usage Python integers are converted to signed integers when used
-        // inside NumPy arrays, so we want to work with signed ints here as well in order no to force the user to create
-        // sparsity patterns like array(...,dtype='ulonglong').
-        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<std::make_signed<size_type>::type>::value, NPY_ARRAY_IN_ARRAY);
+        auto n = PyArray_FROM_OTF(o.ptr(), cpp_npy<size_type>::value, NPY_ARRAY_IN_ARRAY);
         if (!n) {
             // NOTE: PyArray_FROM_OTF already sets the exception at the Python level with an appropriate message,
             // so we just throw the Python exception.
@@ -532,7 +439,7 @@ inline pagmo::sparsity_pattern to_sp(const bp::object &o)
         }
         // Hand over to BP for nice RAII and exception safety.
         auto bp_n = bp::object(bp::handle<>(n));
-        return a_to_sp(reinterpret_cast<PyArrayObject *>(bp_n.ptr()));
+        return ndarr_to_sp(reinterpret_cast<PyArrayObject *>(bp_n.ptr()));
     }
     pagmo::sparsity_pattern retval;
     // We will try to interpret o as a collection of generic python objects, and each element
@@ -731,11 +638,11 @@ inline auto lcast(T func) -> decltype(+func)
 
 // NOTE: these are alternative implementations of BP's add_property() functionality for classes.
 // The reason they exist (and why they should be used instead of the BP implementation) is because
-// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which seems
-// to be somehow related to BP's add_property() (at least judging from the limited stacktrace
-// I could obtain on windows). These alternative wrappers seem to sidestep the issue, at least so far.
-// They can be used exactly like BP's add_property(), the only difference being that they are functions
-// rather than methods, and they thus require the BP class to be passed in as first argument.
+// we are running into a nasty crash on MinGW upon module import that I did not manage to debug fully, but which
+// seems to be somehow related to BP's add_property() (at least judging from the limited stacktrace I could obtain
+// on windows). These alternative wrappers seem to sidestep the issue, at least so far. They can be used exactly
+// like BP's add_property(), the only difference being that they are functions rather than methods, and they thus
+// require the BP class to be passed in as first argument.
 template <typename T>
 inline void add_property(bp::class_<T> &c, const char *name, const bp::object &getter, const char *doc = "")
 {
@@ -803,6 +710,65 @@ inline void import_aps(const bp::list &l)
             }
         }
     }
+}
+
+// Convert an individuals_group_t into a Python tuple of:
+// - 1D integral array of IDs,
+// - 2D float array of dvs,
+// - 2D float array of fvs.
+inline bp::tuple inds_to_tuple(const pagmo::individuals_group_t &inds)
+{
+    // Do the IDs.
+    auto ID_arr = vector_to_ndarr(std::get<0>(inds));
+
+    // Decision vectors.
+    auto dv_arr = vvector_to_ndarr(std::get<1>(inds));
+
+    // Fitness vectors.
+    auto fv_arr = vvector_to_ndarr(std::get<2>(inds));
+
+    return bp::make_tuple(ID_arr, dv_arr, fv_arr);
+}
+
+// Convert a generic Python object into an individuals_group_t.
+inline pagmo::individuals_group_t obj_to_inds(const bp::object &o)
+{
+    // We assume we receive in input something we can iterate over.
+    bp::stl_input_iterator<bp::object> begin(o), end;
+
+    if (begin == end) {
+        // Empty iteratable.
+        pygmo_throw(PyExc_ValueError, "cannot convert an empty iteratable into a pagmo::individuals_group_t");
+    }
+
+    // Try fetching the IDs.
+    auto ID_vec = obj_to_vector<std::vector<unsigned long long>>(*begin);
+
+    if (++begin == end) {
+        // Iteratable with only 1 element.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with only 1 element into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    // Try fetching the decision vectors.
+    auto dvs_vec = obj_to_vvector<std::vector<pagmo::vector_double>>(*begin);
+
+    if (++begin == end) {
+        // Iteratable with only 2 elements.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with only 2 elements into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    // Try fetching the fitness vectors.
+    auto fvs_vec = obj_to_vvector<std::vector<pagmo::vector_double>>(*begin);
+
+    if (++begin != end) {
+        // Iteratable with too many elements.
+        pygmo_throw(PyExc_ValueError, "cannot convert an iteratable with more than 3 elements into a "
+                                      "pagmo::individuals_group_t (exactly 3 elements are needed)");
+    }
+
+    return pagmo::individuals_group_t(std::move(ID_vec), std::move(dvs_vec), std::move(fvs_vec));
 }
 
 } // namespace pygmo

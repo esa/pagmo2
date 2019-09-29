@@ -136,7 +136,7 @@ void expose_algorithms_1()
                  for (const auto &t : a.get_log()) {
                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t),
                                                   std::get<4>(t), std::get<5>(t), std::get<6>(t),
-                                                  v_to_a(std::get<7>(t))));
+                                                  vector_to_ndarr(std::get<7>(t))));
                  }
                  return retval;
              }),
@@ -185,15 +185,15 @@ void expose_algorithms_1()
     auto nsga2_ = expose_algorithm_pygmo<nsga2>("nsga2", nsga2_docstring().c_str());
     nsga2_.def(bp::init<unsigned, double, double, double, double>((bp::arg("gen") = 1u, bp::arg("cr") = 0.95,
                                                                    bp::arg("eta_c") = 10., bp::arg("m") = 0.01,
-                                                                   bp::arg("eta_m") = 10.)));
+                                                                   bp::arg("eta_m") = 50.)));
     nsga2_.def(bp::init<unsigned, double, double, double, double, unsigned>(
-        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 10.,
+        (bp::arg("gen") = 1u, bp::arg("cr") = 0.95, bp::arg("eta_c") = 10., bp::arg("m") = 0.01, bp::arg("eta_m") = 50.,
          bp::arg("seed"))));
     // nsga2 needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
     nsga2_.def("get_log", lcast([](const nsga2 &a) -> bp::list {
                    bp::list retval;
                    for (const auto &t : a.get_log()) {
-                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), v_to_a(std::get<2>(t))));
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), vector_to_ndarr(std::get<2>(t))));
                    }
                    return retval;
                }),
@@ -205,17 +205,15 @@ void expose_algorithms_1()
     // GACO
     auto gaco_ = expose_algorithm_pygmo<gaco>("gaco", gaco_docstring().c_str());
     gaco_.def(
-        bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, unsigned,
-                 double, bool>((bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0.,
-                                bp::arg("acc") = 0.01, bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u,
-                                bp::arg("impstop") = 100000u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0.,
-                                bp::arg("paretomax") = 10u, bp::arg("epsilon") = 0.9, bp::arg("memory") = false)));
-    gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double,
-                       unsigned, double, bool, unsigned>(
+        bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, bool>(
+            (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0.,
+             bp::arg("acc") = 0.01, bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u, bp::arg("impstop") = 100000u,
+             bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false)));
+    gaco_.def(bp::init<unsigned, unsigned, double, double, double, unsigned, unsigned, unsigned, unsigned, double, bool,
+                       unsigned>(
         (bp::arg("gen") = 100u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("oracle") = 0., bp::arg("acc") = 0.01,
          bp::arg("threshold") = 1u, bp::arg("n_gen_mark") = 7u, bp::arg("impstop") = 100000u,
-         bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("paretomax") = 10u, bp::arg("epsilon") = 0.9,
-         bp::arg("memory") = false, bp::arg("seed"))));
+         bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(gaco_, gaco_get_log_docstring().c_str());
     gaco_.def("get_seed", &gaco::get_seed, generic_uda_get_seed_docstring().c_str());
     gaco_.def("set_bfe", &gaco::set_bfe, gaco_set_bfe_docstring().c_str(), bp::arg("b"));

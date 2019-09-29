@@ -93,7 +93,7 @@ std::unique_ptr<bfe_inner_base> bfe_inner<bp::object>::clone() const
 
 vector_double bfe_inner<bp::object>::operator()(const problem &p, const vector_double &dvs) const
 {
-    return pygmo::to_vd(m_value.attr("__call__")(p, pygmo::v_to_a(dvs)));
+    return pygmo::obj_to_vector<vector_double>(m_value.attr("__call__")(p, pygmo::vector_to_ndarr(dvs)));
 }
 
 pagmo::thread_safety bfe_inner<bp::object>::get_thread_safety() const
@@ -125,7 +125,7 @@ namespace bp = boost::python;
 bp::tuple bfe_pickle_suite::getstate(const pagmo::bfe &b)
 {
     // The idea here is that first we extract a char array
-    // into which bfe has been serialized, then we turn
+    // into which b has been serialized, then we turn
     // this object into a Python bytes object and return that.
     std::ostringstream oss;
     {

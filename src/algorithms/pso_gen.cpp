@@ -441,7 +441,7 @@ population pso_gen::evolve(population pop) const
                         auto x2 = X[j];
                         double acc = 0.;
                         for (decltype(x1.size()) k = 0u; k < x1.size(); ++k) {
-                            if (ub[j] > lb[j]) {
+                            if (ub[k] > lb[k]) {
                                 acc += (x1[k] - x2[k]) * (x1[k] - x2[k]) / (ub[k] - lb[k]) / (ub[k] - lb[k]);
                             } // else 0
                         }

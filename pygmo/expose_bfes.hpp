@@ -31,8 +31,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pygmo/python_includes.hpp>
 
-#include <string>
-
 #include <boost/python/args.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/init.hpp>
@@ -47,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 namespace pygmo
 {
 
-// Bfe exposition function.
+// Bfes exposition function.
 void expose_bfes();
 
 namespace bp = boost::python;

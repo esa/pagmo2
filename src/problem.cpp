@@ -169,16 +169,16 @@ void problem::generic_ctor_impl()
         pagmo_throw(std::invalid_argument, "The number of objectives cannot be zero");
     }
     // NOTE: here we check that we can always compute nobj + nec + nic safely.
-    if (m_nobj > std::numeric_limits<decltype(m_nobj)>::max() / 3u) {
+    if (m_nobj > std::numeric_limits<vector_double::size_type>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of objectives is too large");
     }
     // 3 - Constraints.
     m_nec = ptr()->get_nec();
-    if (m_nec > std::numeric_limits<decltype(m_nec)>::max() / 3u) {
+    if (m_nec > std::numeric_limits<vector_double::size_type>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of equality constraints is too large");
     }
     m_nic = ptr()->get_nic();
-    if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
+    if (m_nic > std::numeric_limits<vector_double::size_type>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
     }
     // 4 - Presence of batch_fitness().

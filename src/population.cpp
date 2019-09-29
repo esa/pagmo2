@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -616,7 +617,10 @@ void population::update_champion(vector_double x, vector_double f)
         m_champion_x = std::move(x);
         m_champion_f = std::move(f);
     } else if (m_prob.get_nc() == 0u) { // unconstrained
-        if (f[0] < m_champion_f[0]) {
+        // NOTE: make sure to use the custom comparison less_than_f(),
+        // so that we handle NaN correctly (i.e., a fitness of NaN is
+        // considered worse than any other value).
+        if (detail::less_than_f(f[0], m_champion_f[0])) {
             m_champion_x = std::move(x);
             m_champion_f = std::move(f);
         }

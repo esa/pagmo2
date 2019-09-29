@@ -103,10 +103,10 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
     }
     vector_double::size_type count1 = 0, count2 = 0;
     for (decltype(obj1.size()) i = 0u; i < obj1.size(); ++i) {
-        if (obj1[i] < obj2[i]) {
+        if (detail::less_than_f(obj1[i], obj2[i])) {
             ++count1;
         }
-        if (obj1[i] == obj2[i]) {
+        if (detail::equal_to_f(obj1[i], obj2[i])) {
             ++count2;
         }
     }
@@ -152,7 +152,7 @@ std::vector<pop_size_t> non_dominated_front_2d(const std::vector<vector_double> 
     std::iota(indexes.begin(), indexes.end(), pop_size_t(0u));
     // Sort in ascending order with respect to the first component
     std::sort(indexes.begin(), indexes.end(), [&input_objs](pop_size_t idx1, pop_size_t idx2) {
-        if (input_objs[idx1][0] == input_objs[idx2][0]) {
+        if (detail::equal_to_f(input_objs[idx1][0], input_objs[idx2][0])) {
             return detail::less_than_f(input_objs[idx1][1], input_objs[idx2][1]);
         }
         return detail::less_than_f(input_objs[idx1][0], input_objs[idx2][0]);
@@ -330,8 +330,9 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  * @endcode
  *
  * but it is faster than the above code: it avoids to compute the crowidng distance for all individuals and only
- * computes
- * it for the last non-dominated front that contains individuals included in the best N.
+ * computes it for the last non-dominated front that contains individuals included in the best N.
+ *
+ * If N is zero, an empty vector will be returned.
  *
  * @param input_f Input objectives vectors. Example {{0.25,0.25},{-1,1},{2,-2}};
  * @param N Number of best individuals to return
@@ -342,9 +343,8 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  */
 std::vector<pop_size_t> select_best_N_mo(const std::vector<vector_double> &input_f, pop_size_t N)
 {
-    if (N < 1u) {
-        pagmo_throw(std::invalid_argument,
-                    "The best: " + std::to_string(N) + " individuals were requested, while 1 is the minimum");
+    if (N == 0u) { // corner case
+        return {};
     }
     if (input_f.size() == 0u) { // corner case
         return {};
@@ -497,8 +497,9 @@ vector_double ideal(const std::vector<vector_double> &points)
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
         retval[i]
-            = (*std::min_element(points.begin(), points.end(),
-                                 [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
+            = (*std::min_element(points.begin(), points.end(), [i](const vector_double &f1, const vector_double &f2) {
+                  return detail::less_than_f(f1[i], f2[i]);
+              }))[i];
     }
     return retval;
 }
@@ -532,9 +533,9 @@ vector_double nadir(const std::vector<vector_double> &points)
     // And compute the nadir over them
     vector_double retval(M);
     for (decltype(M) i = 0u; i < M; ++i) {
-        retval[i]
-            = (*std::max_element(nd_points.begin(), nd_points.end(),
-                                 [i](const vector_double &f1, const vector_double &f2) { return f1[i] < f2[i]; }))[i];
+        retval[i] = (*std::max_element(
+            nd_points.begin(), nd_points.end(),
+            [i](const vector_double &f1, const vector_double &f2) { return detail::less_than_f(f1[i], f2[i]); }))[i];
     }
     return retval;
 }

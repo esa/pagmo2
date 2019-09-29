@@ -33,6 +33,18 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 
 
+class _r_pol(object):
+
+    def replace(self, inds, nx, nix, nobj, nec, nic, tol, mig):
+        return inds
+
+
+class _s_pol(object):
+
+    def select(self, inds, nx, nix, nobj, nec, nic, tol):
+        return inds
+
+
 class _udi_01(object):
 
     def run_evolve(self, algo, pop):
@@ -99,10 +111,13 @@ class island_test_case(_ut.TestCase):
         self.run_io_tests()
         self.run_status_tests()
         self.run_stateful_algo_tests()
+        self.run_mo_sto_repr_bug()
 
     def run_basic_tests(self):
-        from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock
+        from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock, r_policy, s_policy, fair_replace, select_best, population
         isl = island()
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
         self.assertTrue(isl.get_algorithm().is_(null_algorithm))
         self.assertTrue(isl.get_population().problem.is_(null_problem))
         self.assertTrue(isl.extract(thread_island) is not None)
@@ -110,17 +125,30 @@ class island_test_case(_ut.TestCase):
         self.assertTrue(isl.extract(int) is None)
         self.assertEqual(len(isl.get_population()), 0)
         isl = island(algo=de(), prob=rosenbrock(), size=10)
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
         self.assertTrue(isl.get_algorithm().is_(de))
         self.assertTrue(isl.get_population().problem.is_(rosenbrock))
         self.assertEqual(len(isl.get_population()), 10)
         isl = island(prob=rosenbrock(), udi=thread_island(),
                      size=11, algo=de(), seed=15)
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
         self.assertTrue(isl.get_algorithm().is_(de))
         self.assertTrue(isl.get_population().problem.is_(rosenbrock))
         self.assertEqual(len(isl.get_population()), 11)
         self.assertEqual(isl.get_population().get_seed(), 15)
+        isl = island(udi=thread_island(),
+                     algo=de(), pop=population())
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
+        self.assertTrue(isl.get_algorithm().is_(de))
+        self.assertTrue(isl.get_population().problem.is_(null_problem))
+        self.assertEqual(len(isl.get_population()), 0)
         isl = island(prob=rosenbrock(), udi=_udi_01(),
                      size=11, algo=de(), seed=15)
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
         self.assertEqual(isl.get_name(), "udi_01")
         self.assertEqual(isl.get_extra_info(), "extra bits")
         self.assertTrue(isl.get_algorithm().is_(de))
@@ -176,6 +204,50 @@ class island_test_case(_ut.TestCase):
         # Test that construction from another pygmo.island fails.
         with self.assertRaises(NotImplementedError) as cm:
             island(prob=rosenbrock(), udi=isl, size=11, algo=de(), seed=15)
+
+        # Constructors with r/s_pol arguments.
+        isl = island(prob=rosenbrock(), udi=thread_island(),
+                     size=11, algo=de(), seed=15, r_pol=r_policy())
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
+        self.assertTrue(isl.get_algorithm().is_(de))
+        self.assertTrue(isl.get_population().problem.is_(rosenbrock))
+        self.assertEqual(len(isl.get_population()), 11)
+        self.assertEqual(isl.get_population().get_seed(), 15)
+
+        isl = island(prob=rosenbrock(), udi=thread_island(),
+                     size=11, algo=de(), seed=15, r_pol=_r_pol())
+        self.assertFalse("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
+        self.assertTrue(isl.get_algorithm().is_(de))
+        self.assertTrue(isl.get_population().problem.is_(rosenbrock))
+        self.assertEqual(len(isl.get_population()), 11)
+        self.assertEqual(isl.get_population().get_seed(), 15)
+
+        isl = island(prob=rosenbrock(), udi=thread_island(),
+                     size=11, algo=de(), seed=15, s_pol=s_policy())
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertTrue("Select best" in repr(isl))
+        self.assertTrue(isl.get_algorithm().is_(de))
+        self.assertTrue(isl.get_population().problem.is_(rosenbrock))
+        self.assertEqual(len(isl.get_population()), 11)
+        self.assertEqual(isl.get_population().get_seed(), 15)
+
+        isl = island(prob=rosenbrock(), udi=thread_island(),
+                     size=11, algo=de(), seed=15, s_pol=_s_pol())
+        self.assertTrue("Fair replace" in repr(isl))
+        self.assertFalse("Select best" in repr(isl))
+        self.assertTrue(isl.get_algorithm().is_(de))
+        self.assertTrue(isl.get_population().problem.is_(rosenbrock))
+        self.assertEqual(len(isl.get_population()), 11)
+        self.assertEqual(isl.get_population().get_seed(), 15)
+
+        # Test the r/s_policy getters.
+        isl = island(prob=rosenbrock(), udi=thread_island(),
+                     size=11, algo=de(), seed=15, r_pol=_r_pol(), s_pol=_s_pol())
+
+        self.assertTrue(isl.get_r_policy().is_(_r_pol))
+        self.assertTrue(isl.get_s_policy().is_(_s_pol))
 
     def run_concurrent_access_tests(self):
         import threading as thr
@@ -244,6 +316,13 @@ class island_test_case(_ut.TestCase):
         from .core import island, de, rosenbrock
         from pickle import dumps, loads
         isl = island(algo=de(), prob=rosenbrock(), size=25)
+        tmp = repr(isl)
+        isl = loads(dumps(isl))
+        self.assertEqual(tmp, repr(isl))
+
+        # Check with custom policies as well.
+        isl = island(algo=de(), prob=rosenbrock(), size=25,
+                     r_pol=_r_pol(), s_pol=_s_pol())
         tmp = repr(isl)
         isl = loads(dumps(isl))
         self.assertEqual(tmp, repr(isl))
@@ -320,6 +399,24 @@ class island_test_case(_ut.TestCase):
                      prob=null_problem(), size=1)
         self.assertTrue(isl.extract(object) is None)
         self.assertTrue(not isl.extract(thread_island) is None)
+
+    def run_mo_sto_repr_bug(self):
+        # Old bug: printing islands containing MO/sto
+        # problems would throw due to an error being raised
+        # when accessing the champion.
+        from .core import island, de, rosenbrock, zdt, inventory
+
+        isl = island(algo=de(), prob=rosenbrock(), size=25)
+        self.assertTrue("Champion decision vector" in repr(isl))
+        self.assertTrue("Champion fitness" in repr(isl))
+
+        isl = island(algo=de(), prob=zdt(), size=25)
+        self.assertFalse("Champion decision vector" in repr(isl))
+        self.assertFalse("Champion fitness" in repr(isl))
+
+        isl = island(algo=de(), prob=inventory(), size=25)
+        self.assertFalse("Champion decision vector" in repr(isl))
+        self.assertFalse("Champion fitness" in repr(isl))
 
 
 class mp_island_test_case(_ut.TestCase):
