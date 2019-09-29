@@ -77,9 +77,8 @@ maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_
                         + std::to_string(threshold) + " was detected");
     }
     if (threshold < 1 && gen != 0 && memory == true) {
-        pagmo_throw(std::invalid_argument,
-                    "If memory is active, the threshold parameter must be >=1 while a value of "
-                        + std::to_string(threshold) + " was detected");
+        pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
+                                               + std::to_string(threshold) + " was detected");
     }
 }
 
@@ -90,9 +89,9 @@ population maco::evolve(population pop) const
     if (m_memory == true) {
         ++m_counter;
     }
-    //If memory is active, I store the 'true' population inside m_pop:
-    if (m_counter==1 && m_memory==true){
-        m_pop=pop;
+    // If memory is active, I store the 'true' population inside m_pop:
+    if (m_counter == 1 && m_memory == true) {
+        m_pop = pop;
     }
     // We store some useful variables:
     const auto &prob = pop.get_problem();
@@ -100,7 +99,7 @@ population maco::evolve(population pop) const
     auto pop_size = pop.size();
     unsigned count_screen = 1u;       // regulates the screen output
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-    auto n_f = prob.get_nf(); // n_f=prob.get_nobj()+prob.get_nec()+prob.get_nic()
+    auto n_f = prob.get_nf();         // n_f=prob.get_nobj()+prob.get_nec()+prob.get_nic()
 
     // Other useful variables are stored:
     std::vector<vector_double> sol_archive(m_ker, vector_double(n_x + n_f, 1));
@@ -117,8 +116,8 @@ population maco::evolve(population pop) const
     std::vector<vector_double> merged_dvs(pop_size + m_ker, vector_double(n_x, 1));
     std::vector<vector_double> sol_archive_fit(m_ker, vector_double(n_f, 1));
     // I retrieve the decision and fitness vectors:
-    std::vector<vector_double> dvs(pop_size,vector_double(n_x,1));
-    std::vector<vector_double> fit(pop_size,vector_double(n_f,1));
+    std::vector<vector_double> dvs(pop_size, vector_double(n_x, 1));
+    std::vector<vector_double> fit(pop_size, vector_double(n_f, 1));
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
@@ -139,14 +138,12 @@ population maco::evolve(population pop) const
                     get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (prob.get_nc() != 0u) {
-        pagmo_throw(std::invalid_argument,
-                    "Non linear constraints detected in " + prob.get_name() + " instance. " + get_name()
-                        + " cannot deal with them.");
+        pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                               + get_name() + " cannot deal with them.");
     }
     if (prob.get_nf() < 2u) {
-        pagmo_throw(std::invalid_argument,
-                    "This is a multiobjective algortihm, while number of objectives detected in " + prob.get_name()
-                        + " is " + std::to_string(prob.get_nf()));
+        pagmo_throw(std::invalid_argument, "This is a multiobjective algortihm, while number of objectives detected in "
+                                               + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
     // ---------------------------------------------------------------------------------------------------------
 
@@ -156,15 +153,16 @@ population maco::evolve(population pop) const
     // Main ACO loop over generations:
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
         population popold(pop);
-        //In case memory is active, we store handle the population in two variables (m_pop and pop):
-        if (m_memory==false){
+        // In case memory is active, we store handle the population in two variables (m_pop and pop):
+        if (m_memory == false) {
             dvs = pop.get_x();
             fit = pop.get_f();
-        } else{
+        } else {
             dvs = m_pop.get_x();
             fit = m_pop.get_f();
         }
-        //In case memory is active, m_sol_archive is used for keeping track of the sol_archive throughout the different iterations:
+        // In case memory is active, m_sol_archive is used for keeping track of the sol_archive throughout the different
+        // iterations:
         if (m_memory == true && m_counter > 1) {
             sol_archive = m_sol_archive;
         }
@@ -450,8 +448,8 @@ population maco::evolve(population pop) const
                 // I set the individuals for the next generation
             }
         }
-        if (m_memory==true){
-          m_pop=pop;
+        if (m_memory == true) {
+            m_pop = pop;
         }
 
     } // end of main ACO loop
@@ -465,7 +463,6 @@ population maco::evolve(population pop) const
             ftns[ii] = sol_archive[i][ii + n_x];
         }
         pop.set_xf(i, ant, ftns);
-
     }
     return pop;
 }
