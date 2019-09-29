@@ -289,3 +289,12 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_CLOSE(std::get<5>(before_log[i]), std::get<5>(after_log[i]), 1e-8);
     }
 }
+
+BOOST_AUTO_TEST_CASE(bug)
+{
+    problem prob{rosenbrock{10u}};
+    population pop1{prob, 11u, 23u};
+    pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, 1u, 1u, 4u, false, 23u};
+    user_algo1.set_verbosity(1u);
+    pop1 = user_algo1.evolve(pop1);
+}
