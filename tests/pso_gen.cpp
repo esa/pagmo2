@@ -319,14 +319,14 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test_not_stoch)
 
 BOOST_AUTO_TEST_CASE(bfe_usage_test_stoch)
 {
-    population pop{my_sto_prob{25u,10,5}, 200u, 23u};
+    population pop{my_sto_prob{25u, 10, 5}, 200u, 23u};
     pso_gen uda{45u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
     uda.set_verbosity(1u);
     uda.set_seed(23u);
     uda.set_bfe(bfe{}); // This will use the default bfe.
     pop = uda.evolve(pop);
 
-    population pop_2{my_sto_prob{25u,10,5}, 200u, 23u};
+    population pop_2{my_sto_prob{25u, 10, 5}, 200u, 23u};
     pso_gen uda_2{45u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
     uda_2.set_verbosity(1u);
     uda_2.set_seed(23u);

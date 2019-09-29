@@ -369,15 +369,10 @@ population pso_gen::evolve(population pop) const
                 vector_double decision_vectors(swarm_size * dim);
                 vector_double decision_vectors_lb(swarm_size * dim);
 
-                decltype(decision_vectors.size()) pos = 0u;
-
                 for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
                     // I store the individuals in a contiguous vector
-                    for (decltype(X[i].size()) ii = 0u; ii < X[i].size(); ++ii) {
-                        decision_vectors[pos] = X[i][ii];
-                        decision_vectors_lb[pos] = lbX[i][ii];
-                        ++pos;
-                    }
+                    std::copy(X[i].begin(), X[i].end(), decision_vectors.data() + i * dim);
+                    std::copy(lbX[i].begin(), lbX[i].end(), decision_vectors_lb.data() + i * dim);
                 }
 
                 auto fitnesses = (*m_bfe)(prob, decision_vectors);
@@ -422,14 +417,9 @@ population pso_gen::evolve(population pop) const
                 // bfe is available:
                 vector_double decision_vectors(swarm_size * dim);
 
-                decltype(decision_vectors.size()) pos = 0u;
-
                 for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
                     // I store the individuals in a contiguous vector
-                    for (decltype(X[i].size()) ii = 0u; ii < X[i].size(); ++ii) {
-                        decision_vectors[pos] = X[i][ii];
-                        ++pos;
-                    }
+                    std::copy(X[i].begin(), X[i].end(), decision_vectors.data() + i * dim);
                 }
 
                 auto fitnesses = (*m_bfe)(prob, decision_vectors);
