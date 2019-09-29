@@ -65,7 +65,7 @@ maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_
            double focus, bool memory, unsigned seed)
     : m_gen(gen), m_focus(focus), m_ker(ker), m_evalstop(evalstop), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(),
       m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(),
-      m_n_evalstop(0u), m_gen_mark(1u)
+      m_n_evalstop(0u), m_gen_mark(1u), m_pop()
 {
     if (focus < 0.) {
         pagmo_throw(std::invalid_argument,
@@ -86,22 +86,21 @@ maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_
 // Algorithm evolve method
 population maco::evolve(population pop) const
 {
+    population popold(pop);
     // If the memory is active, we increase the counter:
     if (m_memory == true) {
         ++m_counter;
     }
-
+    //If memory is active, I store the 'true' population inside m_pop:
+    if (m_counter==1 && m_memory==true){
+        m_pop=pop;
+    }
     // We store some useful variables:
-    const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-    // allowed
-    auto n_x = prob.get_nx(); // This getter does not return a const reference but a copy of the number of
-    // all the variables
-    auto pop_size = pop.size();       // Population size
+    const auto &prob = pop.get_problem();
+    auto n_x = prob.get_nx();
+    auto pop_size = pop.size();
     unsigned count_screen = 1u;       // regulates the screen output
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-
-    // Note that the number of equality and inequality constraints has to be set up manually in the problem
-    // definition, otherwise PaGMO assumes that there aren't any.
     auto n_f = prob.get_nf(); // n_f=prob.get_nobj()+prob.get_nec()+prob.get_nic()
 
     // Other useful variables are stored:
@@ -118,11 +117,13 @@ population maco::evolve(population pop) const
     std::vector<vector_double> merged_fit(pop_size + m_ker, vector_double(n_f, 1));
     std::vector<vector_double> merged_dvs(pop_size + m_ker, vector_double(n_x, 1));
     std::vector<vector_double> sol_archive_fit(m_ker, vector_double(n_f, 1));
+    // I retrieve the decision and fitness vectors:
+    std::vector<vector_double> dvs(pop_size,vector_double(n_x,1));
+    std::vector<vector_double> fit(pop_size,vector_double(n_f,1));
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
     // We start by checking that the problem is suitable for this
     // particular algorithm.
-
     if (!pop_size) {
         pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
     }
@@ -148,7 +149,6 @@ population maco::evolve(population pop) const
                     "This is a multiobjective algortihm, while number of objectives detected in " + prob.get_name()
                         + " is " + std::to_string(prob.get_nf()));
     }
-
     // ---------------------------------------------------------------------------------------------------------
 
     // No throws, all valid: we clear the logs
@@ -156,11 +156,15 @@ population maco::evolve(population pop) const
 
     // Main ACO loop over generations:
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-        // At each generation we make a copy of the population into popold
-        population popold(pop);
-        // I retrieve the decision and fitness vectors:
-        const auto &dvs = pop.get_x();
-        const auto &fit = pop.get_f();
+        //In case memory is active, we store handle the population in two variables (m_pop and pop):
+        if (m_memory==false){
+            dvs = pop.get_x();
+            fit = pop.get_f();
+        } else{
+            dvs = m_pop.get_x();
+            fit = m_pop.get_f();
+        }
+        //In case memory is active, m_sol_archive is used for keeping track of the sol_archive throughout the different iterations:
         if (m_memory == true && m_counter > 1) {
             sol_archive = m_sol_archive;
         }
@@ -264,8 +268,7 @@ population maco::evolve(population pop) const
         }
         // We increase the gen_mark parameter if there are improvements, or if there have not been improvements in the
         // past two generations or more (this parameter reduces the standard deviation pheromone value, thus causing a
-        // greedier
-        // search in the domain, around the best individuals)
+        // greedier search in the domain, around the best individuals)
         if (m_n_evalstop == 0u || m_n_evalstop > 2) {
             ++m_gen_mark;
         }
@@ -399,6 +402,7 @@ population maco::evolve(population pop) const
         // 4 - use pheromone values to generate new ants (i.e., individuals)
         generate_new_ants(popold, dist, gauss, prob_cumulative, sigma, new_ants, sol_archive);
 
+        // In case bfe is available, we parallelize the fitness computation
         if (m_bfe) {
             // bfe is available:
             vector_double ants(pop_size * new_ants[0].size());
@@ -443,21 +447,25 @@ population maco::evolve(population pop) const
                 auto ftns = prob.fitness(ant);
                 // I set the individuals for the next generation
                 pop.set_xf(i, ant, ftns);
+                // I set the individuals for the next generation
             }
+        }
+        if (m_memory==true){
+          m_pop=pop;
         }
 
     } // end of main ACO loop
-    if (m_memory == false) {
-        for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
-            for (decltype(n_x) ii = 0u; ii < n_x; ++ii) {
-                ant[ii] = sol_archive[i][ii];
-            }
-            vector_double ftns(n_f);
-            for (decltype(n_f) ii = 0u; ii < n_f; ++ii) {
-                ftns[ii] = sol_archive[i][ii + n_x];
-            }
-            pop.set_xf(i, ant, ftns);
+
+    for (decltype(m_ker) i = 0u; i < m_ker; ++i) {
+        for (decltype(n_x) ii = 0u; ii < n_x; ++ii) {
+            ant[ii] = sol_archive[i][ii];
         }
+        vector_double ftns(n_f);
+        for (decltype(n_f) ii = 0u; ii < n_f; ++ii) {
+            ftns[ii] = sol_archive[i][ii + n_x];
+        }
+        pop.set_xf(i, ant, ftns);
+
     }
     return pop;
 }

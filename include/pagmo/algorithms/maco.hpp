@@ -136,6 +136,7 @@ private:
     mutable unsigned m_n_evalstop;
     mutable unsigned m_gen_mark;
     boost::optional<bfe> m_bfe;
+    mutable population m_pop;
 };
 
 } // namespace pagmo

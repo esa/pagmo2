@@ -261,5 +261,5 @@ BOOST_AUTO_TEST_CASE(memory_test)
         pop_1 = uda.evolve(pop_1);
     }
     pop_2 = uda_2.evolve(pop_2);
-    // BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
+    BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
 }
