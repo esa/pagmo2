@@ -2018,6 +2018,105 @@ constructed with a <a class="reference internal" href="#pygmo.nsga2" title="pygm
 
 <hr class="docutils" />
 <dl class="class">
+<dt id="pygmo.nspso">
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">nspso</code><span class="sig-paren">(</span><em class="sig-param">gen = 1</em>, <em class="sig-param">omega = 0.6</em>, <em class="sig-param">c1 = 0.01</em>, <em class="sig-param">c2 = 0.5</em>, <em class="sig-param">chi = 0.5</em>, <em class="sig-param">v_coeff = 0.5</em>, <em class="sig-param">leader_selection_range = 2</em>, <em class="sig-param">diversity_mechanism = &quot;crowding distance&quot;</em>, <em class="sig-param">memory = false</em>, <em class="sig-param">seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nspso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Non dominated Sorting Particle Swarm Optimization (NSPSO).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of generations to evolve</p></li>
+<li><p><strong>omega</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – particles’ inertia weight</p></li>
+<li><p><strong>c1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – magnitude of the force, applied to the particle’s velocity, in the direction of its previous best position.</p></li>
+<li><p><strong>c2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – magnitude of the force, applied to the particle’s velocity, in the direction of its global best position.</p></li>
+<li><p><strong>chi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – velocity scaling factor.</p></li>
+<li><p><strong>v_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – velocity coefficient.</p></li>
+<li><p><strong>leader_selection_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – leader selection range.</p></li>
+<li><p><strong>diversity_mechanism</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – leader selection range.</p></li>
+<li><p><strong>memory</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – memory parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either <em>omega</em> &lt; 0 or <em>c1</em> &lt;= 0 or <em>c2</em> &lt;= 0 or <em>chi</em> &lt;= 0, if <em>omega</em> &gt; 1,</p></li>
+<li><p><strong>if v_coeff &lt;= 0</strong><strong> or </strong><strong>v_coeff &gt; 1</strong><strong>, </strong><strong>if leader_selection_range &gt; 100</strong><strong>, </strong><strong>if diversity_mechanism != &quot;crowding distance&quot;</strong><strong>, or </strong><strong>!= &quot;niche count&quot;</strong><strong>, or </strong><strong>!= &quot;max min&quot;</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/nspso.html#_CPPv4N5pagmo5nspsoE" title="pagmo::nspso"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nspso</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.nspso.get_log">
+<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nspso.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.nspso" title="pygmo.nspso"><code class="xref py py-class docutils literal notranslate"><span class="pre">nspso</span></code></a>. A verbosity of <code class="docutils literal notranslate"><span class="pre">N</span></code> implies a log line each <code class="docutils literal notranslate"><span class="pre">N</span></code> generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>at each logged epoch, the values <code class="docutils literal notranslate"><span class="pre">Gen</span></code>, <code class="docutils literal notranslate"><span class="pre">Fevals</span></code>, <code class="docutils literal notranslate"><span class="pre">ideal_point</span></code>, where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Gen</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code>), generation number</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Fevals</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code>), number of functions evaluation made</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ideal_point</span></code> (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">nspso</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">zdt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Gen:        Fevals:        ideal1:        ideal2:</span>
+<span class="go">   1             40       0.019376        2.75209</span>
+<span class="go">  21            840              0        1.97882</span>
+<span class="go">  41           1640              0        1.88428</span>
+<span class="go">  61           2440              0        1.88428</span>
+<span class="go">  81           3240              0        1.88428</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">nspso</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 40, array([0.04843319, 2.98129814])), (21, 840, array([0., 1.68331679])) ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/nspso.html#_CPPv4NK5pagmo5nspso7get_logEv" title="pagmo::nspso::get_log"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::nspso::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.nspso.get_seed">
+<code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nspso.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed used internally by this uda.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the random seed of the population</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.nspso.set_bfe">
+<code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="sig-param">b</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.nspso.set_bfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the batch function evaluation scheme.</p>
+<p>This method will set the batch function evaluation scheme to be used for <a class="reference internal" href="#pygmo.nspso" title="pygmo.nspso"><code class="xref py py-class docutils literal notranslate"><span class="pre">nspso</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>b</strong> (<a class="reference internal" href="../py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a>) – the batch function evaluation object</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
 <dt id="pygmo.mbh">
 <em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">mbh</code><span class="sig-paren">(</span><em class="sig-param">algo=None</em>, <em class="sig-param">stop=5</em>, <em class="sig-param">perturb=0.01</em>, <em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.mbh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Monotonic Basin Hopping (generalized).</p>
