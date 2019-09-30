@@ -61,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/nspso.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
@@ -223,6 +224,29 @@ void expose_algorithms_1()
     gwo_.def(bp::init<unsigned, unsigned>((bp::arg("gen") = 1u, bp::arg("seed"))));
     expose_algo_log(gwo_, gwo_get_log_docstring().c_str());
     gwo_.def("get_seed", &gwo::get_seed, generic_uda_get_seed_docstring().c_str());
+
+    // NSPSO
+    auto nspso_ = expose_algorithm_pygmo<nspso>("nspso", nspso_docstring().c_str());
+    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
+         bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
+         bp::arg("diversity_mechanism") = "crowding distance", bp::arg("memory") = false)));
+    nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("omega") = 0.6, bp::arg("c1") = 0.01, bp::arg("c2") = 0.5, bp::arg("chi") = 0.5,
+         bp::arg("v_coeff") = 0.5, bp::arg("leader_selection_range") = 2u,
+         bp::arg("diversity_mechanism") = "crowding distance", bp::arg("memory") = false, bp::arg("seed"))));
+    // nspso needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    nspso_.def("get_log", lcast([](const nspso &a) -> bp::list {
+                   bp::list retval;
+                   for (const auto &t : a.get_log()) {
+                       retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), vector_to_ndarr(std::get<2>(t))));
+                   }
+                   return retval;
+               }),
+               nspso_get_log_docstring().c_str());
+
+    nspso_.def("get_seed", &nspso::get_seed, generic_uda_get_seed_docstring().c_str());
+    nspso_.def("set_bfe", &nspso::set_bfe, nspso_set_bfe_docstring().c_str(), bp::arg("b"));
 
 #if defined(PAGMO_WITH_NLOPT)
     // NLopt.
