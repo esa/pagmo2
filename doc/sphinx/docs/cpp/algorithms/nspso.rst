@@ -1,7 +1,7 @@
 Non dominated sorting particle swarm optimization(NSPSO)
 ===========================================================
 
-.. versionadded:: 2.11
+.. versionadded:: 2.12
 
 .. cpp:namespace-push:: pagmo
 

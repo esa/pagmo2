@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.12 (unreleased)
+-----------------
+
+New
+~~~
+
+- Implement the NSPSO algorithm
+  (`#314 <https://github.com/esa/pagmo2/pull/314>`__).
+
 2.11.4 (2019-09-29)
 -------------------
 

@@ -4,7 +4,9 @@ get_filename_component(_PAGMO_CONFIG_SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # Find the deps. Alter the cmake module path.
 set(_PAGMO_CONFIG_OLD_MODULE_PATH "${CMAKE_MODULE_PATH}")
 list(APPEND CMAKE_MODULE_PATH "${_PAGMO_CONFIG_SELF_DIR}")
+set(THREADS_PREFER_PTHREAD_FLAG YES)
 find_package(Threads REQUIRED)
+unset(THREADS_PREFER_PTHREAD_FLAG)
 find_package(TBB REQUIRED)
 include(PagmoFindBoost)
 @_PAGMO_CONFIG_OPTIONAL_DEPS@
