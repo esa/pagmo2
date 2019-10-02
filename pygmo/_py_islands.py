@@ -449,28 +449,6 @@ class mp_island(object):
                 mp_island._pool_size = None
 
 
-# NOTE: the idea here is that we don't want to create a new client for
-# every island: creation is expensive, and we cannot have too many clients
-# as after a certain threshold ipyparallel starts erroring out.
-# So we store the clients as values in a dict whose keys are the arguments
-# passed to Client() upon construction, and we re-use existing clients
-# if the construction arguments are identical.
-# NOTE: this is not a proper cache as it never kicks anything out, but as
-# a temporary solution it is fine. Consider using something like a LRU
-# cache in the future.
-_client_cache = {}
-_client_cache_lock = _Lock()
-
-
-def _hashable(v):
-    # Determine whether v can be hashed.
-    try:
-        hash(v)
-    except TypeError:
-        return False
-    return True
-
-
 class ipyparallel_island(object):
     """Ipyparallel island.
 
@@ -492,32 +470,15 @@ class ipyparallel_island(object):
 
     def _init(self, *args, **kwargs):
         # A small helper function which will do the following:
-        # * get a client from the cache in a thread safe manner, or
-        #   create a new one from scratch
-        # * store the input arguments as class members
-        # * create a LoadBalancedView from the client
-        # * create a lock to regulate access to the view
+        # * create a new client from scratch,
+        # * store the input arguments as class members,
+        # * create a LoadBalancedView from the client,
+        # * create a lock to regulate access to the view,
         # * return the view.
         from ipyparallel import Client
-        # Turn the arguments into something that might be hashable.
-        # Make sure the kwargs are sorted so that two sets of identical
-        # kwargs will be recognized as equal also if the keys are stored
-        # in different order.
-        args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
-        if _hashable(args_key):
-            with _client_cache_lock:
-                # Try to see if a client constructed with the same
-                # arguments already exists in the cache.
-                rc = _client_cache.get(args_key)
-                if rc is None:
-                    # No cached client exists. Create a new client
-                    # and store it in the cache.
-                    rc = Client(*args, **kwargs)
-                    _client_cache[args_key] = rc
-        else:
-            # If the arguments are not hashable, just create a brand new
-            # client.
-            rc = Client(*args, **kwargs)
+
+        # Create the client.
+        rc = Client(*args, **kwargs)
 
         # Save the init arguments.
         self._args = args
