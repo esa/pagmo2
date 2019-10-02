@@ -387,7 +387,7 @@ population pso_gen::evolve(population pop) const
                 best_neighb = X[0];
 
                 for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
-                    if (fit[p] < best_fit) {
+                    if (detail::less_than_f(fit[p][0], best_fit[0])) {
                         best_fit = fit[p];
                         best_neighb = X[p];
                     }
@@ -406,7 +406,7 @@ population pso_gen::evolve(population pop) const
                 best_neighb = X[0];
 
                 for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
-                    if (fit[p] < best_fit) {
+                    if (detail::less_than_f(fit[p][0], best_fit[0])) {
                         best_fit = fit[p];
                         best_neighb = X[p];
                     }
@@ -441,13 +441,14 @@ population pso_gen::evolve(population pop) const
         best_fit_improved = false;
 
         for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
-            if (fit[p] <= lbfit[p]) {
+            if (detail::less_than_f(fit[p][0], lbfit[p][0]) || detail::equal_to_f(fit[p][0], lbfit[p][0])) {
                 // update the particle's previous best position
                 lbfit[p] = fit[p];
                 lbX[p] = X[p];
                 // update the best position observed so far by any particle in the swarm
                 // (only performed if swarm topology is gbest)
-                if ((m_neighb_type == 1u || m_neighb_type == 4u) && (fit[p] <= best_fit)) {
+                if ((m_neighb_type == 1u || m_neighb_type == 4u)
+                    && ((detail::less_than_f(fit[p][0], best_fit[0]) || detail::equal_to_f(fit[p][0], best_fit[0])))) {
                     best_neighb = X[p];
                     best_fit = fit[p];
                     best_fit_improved = true;
@@ -616,7 +617,8 @@ vector_double pso_gen::particle__get_best_neighbor(population::size_type pidx,
             // iterate over indexes of the particle's neighbours, and identify the best
             bnidx = neighb[pidx][0];
             for (decltype(neighb[pidx].size()) nidx = 1u; nidx < neighb[pidx].size(); ++nidx) {
-                if (lbfit[neighb[pidx][nidx]][0] <= lbfit[bnidx][0]) {
+                if (detail::less_than_f(lbfit[neighb[pidx][nidx]][0], lbfit[bnidx][0])
+                    || detail::equal_to_f(lbfit[neighb[pidx][nidx]][0], lbfit[bnidx][0])) {
                     bnidx = neighb[pidx][nidx];
                 }
             }
