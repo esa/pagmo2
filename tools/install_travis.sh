@@ -7,7 +7,8 @@ set -x
 set -e
 
 ulimit -n
-ulimit -n 10000
+ulimit -n 60000
+ulimit -n
 
 if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     export deps_dir=$HOME/local
