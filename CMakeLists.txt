@@ -26,7 +26,7 @@ if((NOT PAGMO_BUILD_PAGMO) AND (NOT PAGMO_BUILD_PYGMO))
 endif()
 
 # Main pagmo/pygmo project version.
-set(PAGMO_PROJECT_VERSION 2.11.4)
+set(PAGMO_PROJECT_VERSION 2.12)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
@@ -211,6 +211,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/gaco.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de1220.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/gwo.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/nspso.cpp"
         # UDI.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/thread_island.cpp"
         # UDBFE.

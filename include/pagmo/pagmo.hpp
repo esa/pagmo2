@@ -76,6 +76,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/nspso.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
