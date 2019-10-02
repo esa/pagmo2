@@ -145,7 +145,66 @@ as *user-defined problems*, or UDPs.
 In addition to storing a UDP (which, by itself, would not be
 that useful), :cpp:class:`pagmo::problem` provides various member
 functions to access the properties and capabilities of the UDP.
+We can, for instance, call the :cpp:func:`pagmo::problem::fitness()`
+member function of ``p`` to invoke the fitness function of the UDP:
 
+.. code-block:: c++
+
+   std::cout << "Value of the objfun in (1, 2): " << p.fitness({1, 2})[0] << '\n';
+
+We can also fetch the lower/upper box bounds of the UDP
+via the :cpp:func:`pagmo::problem::get_lb()` and
+:cpp:func:`pagmo::problem::get_ub()` member functions:
+
+.. code-block:: c++
+
+   std::cout << "Lower bounds: [" << p.get_lb()[0] << ", " << p.get_lb()[1] << "]\n";
+   std::cout << "Upper bounds: [" << p.get_ub()[0] << ", " << p.get_ub()[1] << "]\n\n";
+
+Printing ``p`` to screen via
+
+.. code-block:: c++
+
+   std::cout << p << '\n';
+
+will produce a human-readable
+summary that may look like this:
+
+.. code-block:: none
+
+   Problem name: 10problem_v0
+         Global dimension:                       2
+         Integer dimension:                      0
+         Fitness dimension:                      1
+         Number of objectives:                   1
+         Equality constraints dimension:         0
+         Inequality constraints dimension:       0
+         Lower bounds: [-0.5, 0]
+         Upper bounds: [1, 8]
+         Has batch fitness evaluation: false
+
+         Has gradient: false
+         User implemented gradient sparsity: false
+         Has hessians: false
+         User implemented hessians sparsity: false
+
+         Fitness evaluations: 1
+
+         Thread safety: basic
+
+Quite a mouthful! Do not worry about deciphering this
+output right now, as we will examine the more intricate
+aspects of the definition of an optimisation problem in due time.
+For now, we would just like to point out that, from our simple
+UDP definition, pagmo was able to infer
+on its own various properties of the optimisation problem
+(e.g., the problem dimension, the number of objectives,
+the absence of constraints, etc.). pagmo is able to do this
+thanks to both introspection capabilities (based on template
+metaprogramming) and (hopefully) sensible defaults.
+
+Adding the constraints
+----------------------
 
 .. literalinclude:: ../../../../../tutorials/first_udp_ver1.cpp
    :language: c++

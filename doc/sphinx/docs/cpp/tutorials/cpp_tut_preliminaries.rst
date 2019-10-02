@@ -1,9 +1,6 @@
 Preliminaries
 =============
 
-Compiling the tutorials
------------------------
-
 Organization of the library
 ---------------------------
 
@@ -23,7 +20,7 @@ needed in your code (e.g., ``pagmo/problem.hpp``,
    implementation details which may change from version to version in incompatible ways.
 
 Namespaces
-----------
+^^^^^^^^^^
 
 All of pagmo's public classes and functions are located
 directly in the ``pagmo::`` namespace. There are no other
@@ -32,7 +29,7 @@ namespaces in pagmo's public API.
 .. _cpp_tut_type_erasure:
 
 Type erasure
-------------
+^^^^^^^^^^^^
 
 The current incarnation of pagmo eschews traditional
 object-oriented programming (OOP) techniques in favour of a
@@ -82,3 +79,12 @@ algorithm, or UDA, etc.).
 
 .. [#coptlib] In C, where OOP is not natively supported,
    one can use function pointers to emulate some aspects of OOP.
+
+Compiling the tutorials
+-----------------------
+
+The source code of the tutorials
+can be found in the ``tutorials/`` directory in the pagmo
+source tree. The tutorials can be compiled by enabling
+the ``PAGMO_BUILD_TUTORIALS`` CMake option (see the
+:ref:`installation instructions <install>`).

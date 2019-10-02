@@ -31,6 +31,10 @@ int main()
     // in the point (1, 2).
     std::cout << "Value of the objfun in (1, 2): " << p.fitness({1, 2})[0] << '\n';
 
+    // Fetch the lower/upper bounds of the UDP.
+    std::cout << "Lower bounds: [" << p.get_lb()[0] << ", " << p.get_lb()[1] << "]\n";
+    std::cout << "Upper bounds: [" << p.get_ub()[0] << ", " << p.get_ub()[1] << "]\n\n";
+
     // Print p to screen.
     std::cout << p << '\n';
 }
