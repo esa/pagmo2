@@ -283,8 +283,8 @@ if(PAGMO_BUILD_PAGMO)
 
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "1.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 1)
+    set_property(TARGET pagmo PROPERTY VERSION "2.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 2)
     target_compile_options(pagmo PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
     set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
