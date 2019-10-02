@@ -6,6 +6,9 @@ set -x
 # Exit on error.
 set -e
 
+ulimit -n
+ulimit -n 10000
+
 if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
     export deps_dir=$HOME/local
     export PATH="$HOME/miniconda/bin:$PATH"
