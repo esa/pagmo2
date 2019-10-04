@@ -3040,6 +3040,17 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 }
 
 //----------
+std::string pso_gen_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+Set the batch function evaluation scheme.
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.pso_gen`.
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+)";
+}
 std::string pso_gen_docstring()
 {
     return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
