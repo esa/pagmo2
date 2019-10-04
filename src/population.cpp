@@ -258,7 +258,7 @@ vector_double population::random_decision_vector() const
  * this case the user can still obtain a strict ordering of the population
  * individuals by calling the pagmo::sort_population_mo() function.
  *
- * The pagmo::population::get_c_tol() tolerances are accounted by default.
+ * The pagmo::problem::get_c_tol() tolerances are accounted by default.
  * If different tolerances are required the other overloads can be used.
  *
  * @returns the index of the best individual.
@@ -334,7 +334,7 @@ population::size_type population::best_idx(double tol) const
  * this case the user can still obtain a strict ordering of the population
  * individuals by calling the pagmo::sort_population_mo() function.
  *
- * The pagmo::population::get_c_tol() tolerances are accounted by default.
+ * The pagmo::problem::get_c_tol() tolerances are accounted by default.
  * If different tolerances are required the other overloads can be used.
  *
  * @returns the index of the worst individual.
