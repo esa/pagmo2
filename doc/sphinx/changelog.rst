@@ -10,6 +10,10 @@ New
 - Implement the NSPSO algorithm
   (`#314 <https://github.com/esa/pagmo2/pull/314>`__).
 
+- The generational PSO algorithm can now take advantage
+  of the batch fitness evaluation scheme
+  (`#348 <https://github.com/esa/pagmo2/pull/348>`__).
+
 2.11.4 (2019-09-29)
 -------------------
 
@@ -38,7 +42,7 @@ Changes
 - **BREAKING**: the machinery for the translation between C++ and Python
   of vectors of unsigned integral types (e.g., sparsity patterns, individual
   IDs, etc.) now requires that, on the Python side, NumPy arrays are created
-  with the appropriate unsigned integral dtype (e.g., ``uint64`` in most
+  with the appropriate unsigned integral dtype (i.e., ``uint64`` in most
   cases). Previously, pagmo would accept also signed integral dtypes
   (`#342 <https://github.com/esa/pagmo2/pull/342>`__).
 
