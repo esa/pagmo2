@@ -114,6 +114,7 @@ void expose_algorithms_1()
          bp::arg("memory") = false, bp::arg("seed"))));
     expose_algo_log(pso_gen_, pso_gen_get_log_docstring().c_str());
     pso_gen_.def("get_seed", &pso_gen::get_seed, generic_uda_get_seed_docstring().c_str());
+    pso_gen_.def("set_bfe", &pso_gen::set_bfe, pso_gen_set_bfe_docstring().c_str(), bp::arg("b"));
 
     // SEA
     auto sea_ = expose_algorithm_pygmo<sea>("sea", sea_docstring().c_str());
