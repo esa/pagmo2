@@ -14,14 +14,14 @@ if(_PAGMO_FIND_BOOST_PYTHON)
     # NOTE: since Boost 1.67, the naming of the Boost.Python library has changed to include the
     # major and minor python version as a suffix. See the release notes:
     # https://www.boost.org/users/history/version_1_67_0.html
-    if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 66))
+    # Since Boost 1.71, specifiying major and minor python version is incorrect
+    # for specifying boost components
+    # https://www.boost.org/users/history/version_1_71_0.html
+    if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND
+        ${Boost_MINOR_VERSION} GREATER 66 OR ${Boost_MINOR_VERSION} LESS 71))
         list(APPEND _PAGMO_REQUIRED_BOOST_LIBS "python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
     else()
-        if(${PYTHON_VERSION_MAJOR} EQUAL 2)
-            list(APPEND _PAGMO_REQUIRED_BOOST_LIBS python)
-        else()
-            list(APPEND _PAGMO_REQUIRED_BOOST_LIBS python3)
-        endif()
+        list(APPEND _PAGMO_REQUIRED_BOOST_LIBS python)
     endif()
 endif()
 message(STATUS "Required Boost libraries: ${_PAGMO_REQUIRED_BOOST_LIBS}")
