@@ -298,3 +298,39 @@ BOOST_AUTO_TEST_CASE(bug)
     user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 }
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test_not_stoch)
+{
+    population pop{rosenbrock{10u}, 30u, 23u};
+    pso_gen uda{40u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{}); // This will use the default bfe.
+    pop = uda.evolve(pop);
+
+    population pop_2{rosenbrock{10u}, 30u, 23u};
+    pso_gen uda_2{40u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda_2.set_verbosity(1u);
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+
+    BOOST_CHECK(pop.get_f() == pop_2.get_f());
+}
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test_stoch)
+{
+    population pop{my_sto_prob{25u, 10, 5}, 30u, 23u};
+    pso_gen uda{45u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{}); // This will use the default bfe.
+    pop = uda.evolve(pop);
+
+    population pop_2{my_sto_prob{25u, 10, 5}, 30u, 23u};
+    pso_gen uda_2{45u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda_2.set_verbosity(1u);
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+
+    BOOST_CHECK(pop.get_f() == pop_2.get_f());
+}

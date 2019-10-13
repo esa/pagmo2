@@ -95,7 +95,9 @@ namespace
 
 // A test problem.
 struct test_problem {
-    test_problem(unsigned nobj = 1) : m_nobj(nobj) {}
+    test_problem(unsigned nobj = 1) : m_nobj(nobj)
+    {
+    }
     vector_double fitness(const vector_double &) const
     {
         return {1.};

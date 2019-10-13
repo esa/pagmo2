@@ -3119,6 +3119,17 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 }
 
 //----------
+std::string pso_gen_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+Set the batch function evaluation scheme.
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.pso_gen`.
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+)";
+}
 std::string pso_gen_docstring()
 {
     return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
@@ -3291,6 +3302,87 @@ Examples:
     [(57, 5936.999957947842, 5936.999957947842, 0.47999999999999987, 10.0), (10033, ...
 
 See also the docs of the relevant C++ method :cpp:func:`pagmo::simulated_annealing::get_log()`.
+
+)";
+}
+
+std::string nspso_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+
+Set the batch function evaluation scheme.
+
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.nspso`.
+
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string nspso_docstring()
+{
+    return R"(__init__(gen = 1, omega = 0.6, c1 = 0.01, c2 = 0.5, chi = 0.5, v_coeff = 0.5, leader_selection_range = 2, diversity_mechanism = "crowding distance", memory = false, seed = random)
+
+Non dominated Sorting Particle Swarm Optimization (NSPSO).
+
+Args:
+    gen (int): number of generations to evolve
+    omega (float): particles' inertia weight
+    c1 (float): magnitude of the force, applied to the particle's velocity, in the direction of its previous best position.
+    c2 (float): magnitude of the force, applied to the particle's velocity, in the direction of its global best position.
+    chi (float): velocity scaling factor.
+    v_coeff (float): velocity coefficient.
+    leader_selection_range (int): leader selection range.
+    diversity_mechanism (str): leader selection range.
+    memory (bool): memory parameter.
+
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either *omega* < 0 or *c1* <= 0 or *c2* <= 0 or *chi* <= 0, if *omega* > 1,
+    if *v_coeff* <= 0 or *v_coeff* > 1, if *leader_selection_range* > 100, if *diversity_mechanism* != "crowding distance", or != "niche count", or != "max min"
+
+See also the docs of the C++ class :cpp:class:`pagmo::nspso`.
+
+)";
+}
+
+std::string nspso_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.nspso`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``ideal_point`` (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(nspso(gen=100))
+    >>> algo.set_verbosity(20)
+    >>> pop = population(zdt(1), 40)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:        ideal1:        ideal2:
+       1             40       0.019376        2.75209
+      21            840              0        1.97882
+      41           1640              0        1.88428
+      61           2440              0        1.88428
+      81           3240              0        1.88428
+    >>> uda = algo.extract(nspso)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 40, array([0.04843319, 2.98129814])), (21, 840, array([0., 1.68331679])) ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::nspso::get_log`.
 
 )";
 }
