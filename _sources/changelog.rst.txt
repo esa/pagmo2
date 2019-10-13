@@ -7,6 +7,10 @@ Changelog
 New
 ~~~
 
+- The :cpp:class:`pagmo::pso_gen` algorithm can now use the
+  batch fitness evaluation scheme
+  (`#348 <https://github.com/esa/pagmo2/pull/348>`__).
+
 - Implement the NSPSO algorithm
   (`#314 <https://github.com/esa/pagmo2/pull/314>`__).
 
