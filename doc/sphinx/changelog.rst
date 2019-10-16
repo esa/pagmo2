@@ -14,6 +14,17 @@ New
 - Implement the NSPSO algorithm
   (`#314 <https://github.com/esa/pagmo2/pull/314>`__).
 
+Fix
+~~~
+
+- Fix a missing ``inline`` and a few wrong include files in the
+  serialization header
+  (`#355 <https://github.com/esa/pagmo2/pull/355>`__).
+
+- Various build system/doc fixes
+  (`#350 <https://github.com/esa/pagmo2/pull/350>`__,
+  `#354 <https://github.com/esa/pagmo2/pull/354>`__).
+
 2.11.4 (2019-09-29)
 -------------------
 
