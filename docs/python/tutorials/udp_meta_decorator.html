@@ -276,7 +276,7 @@ a new fitness function. <code class="docutils literal notranslate"><span class="
 by the UDP interface: it takes as input parameters the calling <a class="reference internal" href="../problems/py_problems.html#pygmo.decorator_problem" title="pygmo.decorator_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">decorator_problem</span></code></a> object (<code class="docutils literal notranslate"><span class="pre">self</span></code>) and the
 decision vector (<code class="docutils literal notranslate"><span class="pre">dv</span></code>), and returns a fitness vector computed via <code class="docutils literal notranslate"><span class="pre">orig_fitness_function()</span></code>.
 The call to the original fitness function is bracketed between a couple of lines of code that measure
-the elapsed runtime via Python’s <a class="reference external" href="https://docs.python.org/3/library/time.html#time.monotonic" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.monotonic()</span></code></a> function.</p>
+the elapsed runtime via Python’s <a class="reference external" href="https://docs.python.org/3/library/time.html#time.monotonic" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.monotonic()</span></code></a> function.</p>
 <p>We can now construct a decorated Rosenbrock problem:</p>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drb</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">))</span>
 </pre></div>
@@ -347,7 +347,7 @@ decision vectors passed to the fitness function.</p>
 condition <code class="docutils literal notranslate"><span class="pre">hasattr(self,</span> <span class="pre">&quot;dv_log&quot;)</span></code> will be <code class="docutils literal notranslate"><span class="pre">False</span></code> because, initially,
 the decorated problem does not contain any logging structure. The decorated
 fitness function will then proceed to add to the problem a 1-element
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> called <code class="docutils literal notranslate"><span class="pre">dv_log</span></code> containing the current decision vector <code class="docutils literal notranslate"><span class="pre">dv</span></code>;</p></li>
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> called <code class="docutils literal notranslate"><span class="pre">dv_log</span></code> containing the current decision vector <code class="docutils literal notranslate"><span class="pre">dv</span></code>;</p></li>
 <li><p>on subsequent calls of the decorated fitness function, the current decision vector
 <code class="docutils literal notranslate"><span class="pre">dv</span></code> will be appended to the <code class="docutils literal notranslate"><span class="pre">dv_log</span></code> list.</p></li>
 </ul>
@@ -377,7 +377,7 @@ have been logged in the internal <a class="reference internal" href="../problems
 </div>
 <p>All according to plan!</p>
 <p>Of course, the logging presented here is rather simplistic. In a real application, one may want to rely
-on Python’s <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module rather than use an ad-hoc logging structure, and perhaps one may want
+on Python’s <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module rather than use an ad-hoc logging structure, and perhaps one may want
 to log other information as well (e.g., the fitness vector).</p>
 </div>
 <div class="section" id="what-else-can-be-decorated">

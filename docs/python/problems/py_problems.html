@@ -246,13 +246,13 @@ read-only property.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or a user-defined problem, either C++ or Python (if
-<em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
+<em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
 <li><p><strong>kwargs</strong> – the dictionary of decorators to be applied to the functions of the input problem</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if at least one of the values in <em>kwargs</em> is not callable</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if at least one of the values in <em>kwargs</em> is not callable</p></li>
 <li><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or the deep copy
     of <em>prob</em> or <em>kwargs</em></p></li>
 </ul>
@@ -264,7 +264,7 @@ read-only property.</p>
 <dd><p>Get the decorator for the function called <em>fname</em>.</p>
 <p>This method will return a copy of the decorator that has been registered upon construction
 for the function called <em>fname</em>. If no decorator for <em>fname</em> has been specified during
-construction, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> will be returned.</p>
+construction, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> will be returned.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
@@ -280,14 +280,14 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the function whose decorator will be returned</p>
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the name of the function whose decorator will be returned</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a copy of the decorator registered for <em>fname</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if no decorator for <em>fname</em> has been registered</p>
+<dd class="field-even"><p>a copy of the decorator registered for <em>fname</em>, or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> if no decorator for <em>fname</em> has been registered</p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>fname</em> is not a string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if <em>fname</em> is not a string</p></li>
 <li><p><strong>unspecified</strong> – any exception thrown by the deep copying of the decorator for <em>fname</em></p></li>
 </ul>
 </dd>
@@ -329,7 +329,7 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>nobj</em>, <em>nec</em>, <em>nic</em> are negative or greater than an implementation-defined value or if <em>nobj</em> is zero</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>nobj</em>, <em>nec</em>, <em>nic</em> are negative or greater than an implementation-defined value or if <em>nobj</em> is zero</p></li>
 <li><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
     type conversion errors, mismatched function signatures, etc.)</p></li>
 </ul>
@@ -348,14 +348,14 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – problem id (one of [1..30])</p></li>
-<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of dimensions (one of [2, 10, 20, 30, 50, 100])</p></li>
+<li><p><strong>prob_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – problem id (one of [1..30])</p></li>
+<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of dimensions (one of [2, 10, 20, 30, 50, 100])</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 10, 20, 30, 50, 100] or if <em>dim</em> is 2 and <em>prob_id</em> is in [17,18,19,20,21,22,29,30]</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 10, 20, 30, 50, 100] or if <em>dim</em> is 2 and <em>prob_id</em> is in [17,18,19,20,21,22,29,30]</p></li>
 </ul>
 </dd>
 </dl>
@@ -376,8 +376,8 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>dim</em> or <em>prob_id</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..28] or if <em>dim</em> is not in [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]</p></li>
 </ul>
 </dd>
 </dl>
@@ -395,8 +395,8 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..24]</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>prob_id</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..24]</p></li>
 </ul>
 </dd>
 </dl>
@@ -432,8 +432,8 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em> or <em>dim</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..10] or if <em>dim</em> is zero</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>prob_id</em> or <em>dim</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..10] or if <em>dim</em> is zero</p></li>
 </ul>
 </dd>
 </dl>
@@ -451,8 +451,8 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>dim</em> is less than 2</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>dim</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>dim</em> is less than 2</p></li>
 </ul>
 </dd>
 </dl>
@@ -509,8 +509,8 @@ construction, <a class="reference external" href="https://docs.python.org/3/libr
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim_c</em> / <em>dim_i</em> is negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>dim_c</em> + <em>dim_i</em> is less than 1</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>dim_c</em> / <em>dim_i</em> is negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>dim_c</em> + <em>dim_i</em> is less than 1</p></li>
 </ul>
 </dd>
 </dl>
@@ -647,8 +647,8 @@ the pareto front of any DTLZ problem analytically.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em>, <em>dim</em>, <em>fdim</em> or <em>alpha</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..7], <em>fdim</em> is smaller than 2, <em>dim</em> is smaller or equal to <em>fdim</em>.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>prob_id</em>, <em>dim</em>, <em>fdim</em> or <em>alpha</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1..7], <em>fdim</em> is smaller than 2, <em>dim</em> is smaller or equal to <em>fdim</em>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -697,7 +697,7 @@ visualized if the problem id is 2,3 or 4.</p>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>pop</em> does not contain a DTLZ problem (veryfied by its name only) or if <em>comp</em> is not of length 3</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>pop</em> does not contain a DTLZ problem (veryfied by its name only) or if <em>comp</em> is not of length 3</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -763,7 +763,7 @@ constrained optimization.” (1999). <a class="reference external" href="http://
 <dd class="field-odd"><p><strong>dim</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – problem dimension</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>dim</em> is negative or greater than an implementation-defined value</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>dim</em> is negative or greater than an implementation-defined value</p>
 </dd>
 </dl>
 <p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/problems/luksan_vlcek1.html#_CPPv4N5pagmo13luksan_vlcek1E" title="pagmo::luksan_vlcek1"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::luksan_vlcek1</span></code></a>.</p>
@@ -781,13 +781,13 @@ are user-defined problems that can be used in the construction of a <a class="re
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
-(if <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
+(if <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
 <li><p><strong>translation</strong> (<em>array-like object</em>) – an array containing the translation to be applied</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if the length of <em>translation</em> is not equal to the dimension of <em>prob</em></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if the length of <em>translation</em> is not equal to the dimension of <em>prob</em></p></li>
 <li><p><strong>unspecified</strong> – any exception thrown by:
     
     * the constructor of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.problem</span></code></a>,
@@ -872,17 +872,17 @@ derivative-free optimization.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a user-defined problem (either Python or C++), or an instance of <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>
-(if <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
+(if <em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
 <li><p><strong>weight</strong> (<em>array-like object</em>) – the vector of weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span></p></li>
 <li><p><strong>z</strong> (<em>array-like object</em>) – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span></p></li>
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – a string containing the decomposition method chosen</p></li>
-<li><p><strong>adapt_ideal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – when <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a>, the reference point is adapted at each fitness evaluation
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – a string containing the decomposition method chosen</p></li>
+<li><p><strong>adapt_ideal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – when <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code></a>, the reference point is adapted at each fitness evaluation
 to be the ideal point</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if either:
     
     * <em>prob</em> is single objective or constrained,
     * <em>method</em> is not one of [<code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'tchebycheff'</span></code>, <code class="docutils literal notranslate"><span class="pre">'bi'</span></code>],
@@ -984,14 +984,14 @@ Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prob</strong> – a <a class="reference internal" href="../py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or a user-defined problem, either C++ or Python (if
-<em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – a string containing the unconstrain method chosen, one of [<code class="docutils literal notranslate"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kuri'</span></code>, <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_o'</span></code>]</p></li>
+<em>prob</em> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>, a <a class="reference internal" href="#pygmo.null_problem" title="pygmo.null_problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">null_problem</span></code></a> will be used in its stead)</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – a string containing the unconstrain method chosen, one of [<code class="docutils literal notranslate"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kuri'</span></code>, <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_o'</span></code>]</p></li>
 <li><p><strong>weights</strong> (<em>array-like object</em>) – the vector of weights to be used if the method chosen is <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if either:
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if either:
     
     * <em>prob</em> is unconstrained,
     * <em>method</em> is not one of [<code class="docutils literal notranslate"><span class="pre">'death</span> <span class="pre">penalty'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kuri'</span></code>, <code class="docutils literal notranslate"><span class="pre">'weighted'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_c'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ignore_o'</span></code>],
@@ -1030,16 +1030,16 @@ Proceedings 6th European Congress on Intelligent Techniques &amp; Soft Computing
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – WFG problem id</p></li>
-<li><p><strong>dim_dvs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – decision vector size</p></li>
-<li><p><strong>dim_obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of objectives</p></li>
-<li><p><strong>dim_k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – position parameter</p></li>
+<li><p><strong>prob_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – WFG problem id</p></li>
+<li><p><strong>dim_dvs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – decision vector size</p></li>
+<li><p><strong>dim_obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of objectives</p></li>
+<li><p><strong>dim_k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – position parameter</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.7)"><strong>OverflowError</strong></a> – if <em>prob_id</em>, <em>dim_dvs</em>, <em>dim_obj</em> or <em>dim_k</em> are negative or greater than an implementation-defined value</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1, …, 9], <em>dim_dvs</em> is smaller than 1, <em>dim_obj</em> is smaller than 2, <em>dim_k</em> is
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>prob_id</em>, <em>dim_dvs</em>, <em>dim_obj</em> or <em>dim_k</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>prob_id</em> is not in [1, …, 9], <em>dim_dvs</em> is smaller than 1, <em>dim_obj</em> is smaller than 2, <em>dim_k</em> is
     smaller than 1 or bigger or equal to <em>dim_dvs</em> or if <em>dim_k*mod(*dim_obj</em>-1) is different than zero. Also, when <em>prob_id</em> equals
     to 2 or 3, if (<em>dim_dvs</em>-<em>dim_k</em>)mod(2) is different than zero.</p></li>
 </ul>

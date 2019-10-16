@@ -331,14 +331,14 @@ removed from the database.</p></li>
 for the (de)serialization of pythonic user-defined entities (e.g., user-defined pythonic
 problems, algorithms, etc.).</p>
 <p>By default, pygmo uses the <a class="reference external" href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a>
-module, which extends the capabilities of the standard <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> module with support
+module, which extends the capabilities of the standard <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> module with support
 for lambdas, functions and classes defined interactively in the <code class="docutils literal notranslate"><span class="pre">__main__</span></code> module, etc.</p>
 <p>In some specific cases, however, different serialization backends might work better than cloudpickle,
 and thus pygmo provides the possibility for the cognizant user to switch to another
 serialization backend.</p>
 <p>The valid backends are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">'pickle'</span></code> (i.e., the standard Python <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> module),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'pickle'</span></code> (i.e., the standard Python <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> module),</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'cloudpickle'</span></code>,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'dill'</span></code> (from the <a class="reference external" href="https://pypi.org/project/dill/">dill</a> library).</p></li>
 </ul>
@@ -349,13 +349,13 @@ the serialization backend while concurrently setting/getting it from another thr
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the desired backend</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the name of the desired backend</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.7)"><strong>TypeError</strong></a> – if <em>name</em> is not a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – if <em>name</em> is not one of <code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'cloudpickle',</span> <span class="pre">'dill']</span></code></p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.7)"><strong>ImportError</strong></a> – if <em>name</em> is <code class="docutils literal notranslate"><span class="pre">'dill'</span></code> but the dill module is not installed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if <em>name</em> is not a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if <em>name</em> is not one of <code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'cloudpickle',</span> <span class="pre">'dill']</span></code></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.8)"><strong>ImportError</strong></a> – if <em>name</em> is <code class="docutils literal notranslate"><span class="pre">'dill'</span></code> but the dill module is not installed</p></li>
 </ul>
 </dd>
 </dl>
@@ -373,7 +373,7 @@ available backends).</p>
 <dd class="field-odd"><p>the current serialization backend (as a Python module)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/types.html#types.ModuleType" title="(in Python v3.7)">types.ModuleType</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/types.html#types.ModuleType" title="(in Python v3.8)">types.ModuleType</a></p>
 </dd>
 </dl>
 </dd></dl>
