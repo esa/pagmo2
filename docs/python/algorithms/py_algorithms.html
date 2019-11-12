@@ -340,6 +340,104 @@ constructed with a <a class="reference internal" href="#pygmo.gaco" title="pygmo
 
 <hr class="docutils" />
 <dl class="class">
+<dt id="pygmo.maco">
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">maco</code><span class="sig-paren">(</span><em class="sig-param">gen = 1</em>, <em class="sig-param">ker = 63</em>, <em class="sig-param">q = 1.0</em>, <em class="sig-param">threshold = 1</em>, <em class="sig-param">n_gen_mark = 7</em>, <em class="sig-param">evalstop = 100000</em>, <em class="sig-param">focus = 0.</em>, <em class="sig-param">memory = False</em>, <em class="sig-param">seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.maco" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-objective Ant Colony Optimizer (MACO).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of generations</p></li>
+<li><p><strong>ker</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – kernel size</p></li>
+<li><p><strong>q</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – convergence speed parameter</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – threshold parameter</p></li>
+<li><p><strong>n_gen_mark</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – std convergence speed parameter</p></li>
+<li><p><strong>evalstop</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – evaluation stopping criterion</p></li>
+<li><p><strong>focus</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – focus parameter</p></li>
+<li><p><strong>memory</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – memory parameter</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – seed used by the internal random number generator (default is random)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OverflowError" title="(in Python v3.8)"><strong>OverflowError</strong></a> – if <em>gen</em> or <em>seed</em> are negative or greater than an implementation-defined value</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if either <em>focus</em> is &lt; 0, <em>threshold</em> is not in [0,*gen*] when <em>gen</em> is &gt; 0 and <em>memory</em> is <em>False</em>, or if <em>threshold</em> is not &gt;=1 when <em>gen</em> is &gt; 0 and <em>memory</em> is <em>True</em></p></li>
+</ul>
+</dd>
+</dl>
+<p>See also the docs of the C++ class <a class="reference internal" href="../../cpp/algorithms/maco.html#_CPPv4N5pagmo4macoE" title="pagmo::maco"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::maco</span></code></a>.</p>
+<dl class="method">
+<dt id="pygmo.maco.get_log">
+<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.maco.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a log containing relevant parameters recorded during the last call to <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm.set_verbosity" title="pygmo.algorithm.set_verbosity"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a> on an <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>
+constructed with a <a class="reference internal" href="#pygmo.maco" title="pygmo.maco"><code class="xref py py-class docutils literal notranslate"><span class="pre">maco</span></code></a>. A verbosity of <code class="docutils literal notranslate"><span class="pre">N</span></code> implies a log line each <code class="docutils literal notranslate"><span class="pre">N</span></code> generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>at each logged epoch, the values <code class="docutils literal notranslate"><span class="pre">Gen</span></code>, <code class="docutils literal notranslate"><span class="pre">Fevals</span></code>, <code class="docutils literal notranslate"><span class="pre">ideal_point</span></code>, where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Gen</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code>), generation number</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Fevals</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code>), number of functions evaluation made</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ideal_point</span></code> (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">tuples</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span> <span class="o">=</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">maco</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">zdt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">63</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 
+<span class="go">Gen:        Fevals:        ideal1:        ideal2:</span>
+<span class="go">   1              0      0.0422249        2.72416</span>
+<span class="go">  21           1260    0.000622664        1.27304</span>
+<span class="go">  41           2520    0.000100557       0.542994</span>
+<span class="go">  61           3780    8.06766e-06       0.290677</span>
+<span class="go">  81           5040    8.06766e-06       0.290677</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">maco</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uda</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span> 
+<span class="go">[(1, 0, array([0.04222492, 2.72415949])), (21, 1260, array([6.22663991e-04, ...</span>
+</pre></div>
+</div>
+<p>See also the docs of the relevant C++ method <a class="reference internal" href="../../cpp/algorithms/maco.html#_CPPv4NK5pagmo4maco7get_logEv" title="pagmo::maco::get_log"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::maco::get_log()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.maco.get_seed">
+<code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.maco.get_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will return the random seed used internally by this uda.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the random seed of the population</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.maco.set_bfe">
+<code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="sig-param">b</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.maco.set_bfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the batch function evaluation scheme.</p>
+<p>This method will set the batch function evaluation scheme to be used for <a class="reference internal" href="#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal notranslate"><span class="pre">nsga2</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>b</strong> (<a class="reference internal" href="../py_bfe.html#pygmo.bfe" title="pygmo.bfe"><code class="xref py py-class docutils literal notranslate"><span class="pre">bfe</span></code></a>) – the batch function evaluation object</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the underlying C++ method</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
 <dt id="pygmo.gwo">
 <em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">gwo</code><span class="sig-paren">(</span><em class="sig-param">gen = 1</em>, <em class="sig-param">seed = random</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.gwo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grey Wolf Optimizer (gwo).</p>

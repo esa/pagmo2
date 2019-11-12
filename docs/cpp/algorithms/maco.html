@@ -1,0 +1,458 @@
+ 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO) &mdash; pagmo 2.12 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)" href="moead.html" />
+    <link rel="prev" title="Ipopt" href="ipopt.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.12
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="null.html">Null algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bee_colony.html">Artificial Bee Colony</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cmaes.html">Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compass_search.html">Compass Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="de.html">Differential Evolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="de1220.html">Self-adaptive Differential Evolution (DE 1220 aka pDE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaco.html">Extended Ant Colony Optimization (gaco)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (gwo)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ihs.html">Improved Harmony Search (IHS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ipopt.html">Ipopt</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="moead.html">Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mbh.html">Monotonic Basin Hopping (MBH) - Generalized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cstrs_self_adaptive.html">Self-adaptive constraints handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlopt.html">NLopt solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nsga2.html">Non dominated sorting genetic algorithm (NSGA-II)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nspso.html">Non dominated sorting particle swarm optimization(NSPSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pso.html">Particle Swarm Optimization (PSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pso_gen.html">Particle Swarm Optimization Generational (GPSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sade.html">Self-adaptive Differential Evolution (jDE and iDE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sea.html">(N+1)-ES Simple Evolutionary Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sga.html">Simple Genetic Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulated_annealing.html">Simulated Annealing (Corana’s version)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (xNES)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../cpp_docs.html">C++ Documentation</a> &raquo;</li>
+        
+      <li>Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/docs/cpp/algorithms/maco.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="multi-objective-hypervolume-based-ant-colony-optimizer-mhaco">
+<h1>Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)<a class="headerlink" href="#multi-objective-hypervolume-based-ant-colony-optimizer-mhaco" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.11.</span></p>
+</div>
+<dl class="class">
+<dt id="_CPPv4N5pagmo4macoE">
+<span id="_CPPv3N5pagmo4macoE"></span><span id="_CPPv2N5pagmo4macoE"></span><span id="pagmo::maco"></span><em class="property">class </em><code class="sig-name descname">maco</code><a class="headerlink" href="#_CPPv4N5pagmo4macoE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><a class="reference internal image-reference" href="../../../_images/maco.gif"><img alt="MACO-GIF" class="align-center" src="../../../_images/maco.gif" style="width: 251.99999999999997px; height: 251.99999999999997px;" /></a>
+<p>Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO) is a modified version of GACO for multi-objective optimization, based on the hypervolume measure.
+It extends the basic ideas of GACO by making use of hypervolume computation for ranking the individuals and storing them inside a solution archive from which future generations of individuals will be generated. In particular, the algorithm combines the concept of non-dominated fronts and hypervolume computation for ranking the individuals.</p>
+<p>Image credit: <a class="reference external" href="https://sites.psu.edu/paretomusings/2015/02/27/generating-data-sets-of-arbitrary-dimension-with-known-hypervolume/">https://sites.psu.edu/paretomusings/2015/02/27/generating-data-sets-of-arbitrary-dimension-with-known-hypervolume/</a>.</p>
+<p>This constructor will construct MHACO.</p>
+<dl class="function">
+<dt id="_CPPv4N5pagmo4maco4macoEjjdjjjdbj">
+<span id="_CPPv3N5pagmo4maco4macoEjjdjjjdbj"></span><span id="_CPPv2N5pagmo4maco4macoEjjdjjjdbj"></span><span id="pagmo::maco::maco__unsigned.unsigned.double.unsigned.unsigned.unsigned.double.b.unsigned"></span><code class="sig-name descname">maco</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 100u, unsigned <em>ker</em> = 63u, double <em>q</em> = 1.0, unsigned <em>threshold</em> = 1u, unsigned <em>n_gen_mark</em> = 7u, unsigned <em>evalstop</em> = 100000u, double <em>focus</em> = 0., bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco4macoEjjdjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> – number of generations to evolve.</p></li>
+<li><p><strong>ker</strong> – number of solutions stored in the solution archive (which is maintained independently from the population).</p></li>
+<li><p><strong>q</strong> – this parameter is called convergence speed parameter, and it is useful for managing the convergence speed towards the best found solution (in terms of non-dominated front and hypervolume value). The smaller the parameter, the faster the convergence and the higher the chance to get stuck to local minima.</p></li>
+<li><p><strong>threshold</strong> – when the generations reach the threshold, then <cite>q</cite> is set to 0.01 automatically, thus increasing consistently the convergence speed towards the best found value.</p></li>
+<li><p><strong>n_gen_mark</strong> – this parameter regulates the convergence speed of the standard deviation values.</p></li>
+<li><p><strong>evalstop</strong> – if a positive integer is assigned here, the algorithm will count the runs without improvements (in terms of ideal point), if this number will exceed the <cite>evalstop</cite> value, the algorithm will be stopped and will return the evolved population until that moment.</p></li>
+<li><p><strong>focus</strong> – this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the currently found best solutions.</p></li>
+<li><p><strong>memory</strong> – memory parameter. If <cite>true</cite>, memory is activated in the algorithm for multiple calls.</p></li>
+<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if  <cite>focus</cite> &lt; 0.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <cite>threshold</cite> &lt; 1, or <cite>threshold</cite> &gt; <cite>gen</cite>, when <cite>gen</cite>!=0 and <cite>memory</cite> is set to <cite>false</cite>.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <cite>threshold</cite> &lt; 1, when <cite>gen!=0</cite> and <cite>memory</cite> is set to <cite>true</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo4maco6evolveE10population">
+<span id="_CPPv3NK5pagmo4maco6evolveE10population"></span><span id="_CPPv2NK5pagmo4maco6evolveE10population"></span><span id="pagmo::maco::evolve__populationC"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Algorithm evolve method: evolves the population for the requested number of generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pop</strong> – population to be evolved.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>evolved population.</p>
+</dd>
+<dt class="field-odd">Throw</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> if <code class="docutils literal notranslate"><span class="pre">pop.get_problem()</span></code> is stochastic, single objective or has non linear constraints. If the population size is smaller than the <cite>ker</cite> value or if the population is empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo4maco8set_seedEj">
+<span id="_CPPv3N5pagmo4maco8set_seedEj"></span><span id="_CPPv2N5pagmo4maco8set_seedEj"></span><span id="pagmo::maco::set_seed__unsigned"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – the seed controlling the algorithm stochastic behaviour.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo4maco8get_seedEj">
+<span id="_CPPv3N5pagmo4maco8get_seedEj"></span><span id="_CPPv2N5pagmo4maco8get_seedEj"></span><span id="pagmo::maco::get_seed__unsigned"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco8get_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the seed controlling the algorithm stochastic behaviour.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo4maco13set_verbosityEj">
+<span id="_CPPv3N5pagmo4maco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4maco13set_verbosityEj"></span><span id="pagmo::maco::set_verbosity__unsigned"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by <code class="docutils literal notranslate"><span class="pre">get_log()</span></code>. <em>level</em> can be:
+- 0: no verbosity.
+- &gt;0: will print and log one line each <em>level</em> generations.
+Example (verbosity 1, where Gen, is the generation number, Fevals the number of function evaluations used; also, the ideal point of the current population follows cropped to its 5th component):</p>
+</dd></dl>
+
+<div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nl">Gen</span><span class="p">:</span>        <span class="nl">Fevals</span><span class="p">:</span>        <span class="nl">ideal1</span><span class="p">:</span>        <span class="nl">ideal2</span><span class="p">:</span>        <span class="nl">ideal3</span><span class="p">:</span>        <span class="nl">ideal4</span><span class="p">:</span>        <span class="nl">ideal5</span><span class="p">:</span>          <span class="p">...</span> <span class="o">:</span>
+   <span class="mi">1</span>              <span class="mi">0</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">2</span>             <span class="mi">20</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">3</span>             <span class="mi">40</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">4</span>             <span class="mi">60</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">5</span>             <span class="mi">80</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">6</span>            <span class="mi">100</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">7</span>            <span class="mi">120</span>      <span class="mf">0.0994166</span>       <span class="mf">0.101595</span>       <span class="mf">0.106296</span>       <span class="mf">0.107823</span>        <span class="mf">0.11469</span>
+   <span class="mi">8</span>            <span class="mi">140</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+   <span class="mi">9</span>            <span class="mi">160</span>       <span class="mf">0.125887</span>       <span class="mf">0.125978</span>       <span class="mf">0.126125</span>        <span class="mf">0.13308</span>       <span class="mf">0.128715</span>
+  <span class="mi">10</span>            <span class="mi">180</span>      <span class="mf">0.0837379</span>      <span class="mf">0.0837666</span>      <span class="mf">0.0837977</span>      <span class="mf">0.0839922</span>      <span class="mf">0.0845042</span>
+</pre></div>
+</td></tr></table></div>
+<dl class="function">
+<dt id="_CPPv4NK5pagmo4maco13get_verbosityEv">
+<span id="_CPPv3NK5pagmo4maco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4maco13get_verbosityEv"></span><span id="pagmo::maco::get_verbosityC"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the verbosity level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the verbosity level.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo4maco7get_genEv">
+<span id="_CPPv3NK5pagmo4maco7get_genEv"></span><span id="_CPPv2NK5pagmo4maco7get_genEv"></span><span id="pagmo::maco::get_genC"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of generations to evolve for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo4maco7get_logEv">
+<span id="_CPPv3NK5pagmo4maco7get_logEv"></span><span id="_CPPv2NK5pagmo4maco7get_logEv"></span><span id="pagmo::maco::get_logC"></span><em class="property">const</em> log_type &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the log. A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <code class="docutils literal notranslate"><span class="pre">maco::log_line_type</span></code> containing: Gen, Fevals, ideal_point as described in <code class="docutils literal notranslate"><span class="pre">maco::set_verbosity</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <code class="docutils literal notranslate"><span class="pre">maco::log_line_type</span></code> containing the logged values Gen, Fevals, ideal_point.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo4maco7set_bfeERK3bfe">
+<span id="_CPPv3N5pagmo4maco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4maco7set_bfeERK3bfe"></span><span id="pagmo::maco::set_bfe__bfeCR"></span>void <code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the batch function evaluation scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>b</strong> – batch function evaluation object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo4maco14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo4maco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4maco14get_extra_infoEv"></span><span id="pagmo::maco::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extra info. Returns extra information on the algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing extra info on the algorithm.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo4maco8get_nameEv">
+<span id="_CPPv3NK5pagmo4maco8get_nameEv"></span><span id="_CPPv2NK5pagmo4maco8get_nameEv"></span><span id="pagmo::maco::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the problem name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the problem name: “MHACO: Multi-objective Hypervolume-based Ant Colony Optimization”.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo4maco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4maco9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej" title="pagmo::maco::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object serialization.</p>
+<p>This method will save/load this into the archive <em>ar</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – unspecified any exception thrown by the serialization of the UDA and of primitive types.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="moead.html" class="btn btn-neutral float-right" title="Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ipopt.html" class="btn btn-neutral float-left" title="Ipopt" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, pagmo development team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
