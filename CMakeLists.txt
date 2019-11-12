@@ -211,6 +211,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/gaco.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de1220.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/gwo.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/maco.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/nspso.cpp"
         # UDI.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/islands/thread_island.cpp"

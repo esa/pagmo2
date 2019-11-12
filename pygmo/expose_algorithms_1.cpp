@@ -60,6 +60,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/algorithms/ihs.hpp>
+#include <pagmo/algorithms/maco.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/algorithms/nspso.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
@@ -226,6 +227,28 @@ void expose_algorithms_1()
     expose_algo_log(gwo_, gwo_get_log_docstring().c_str());
     gwo_.def("get_seed", &gwo::get_seed, generic_uda_get_seed_docstring().c_str());
 
+    // MACO
+    auto maco_ = expose_algorithm_pygmo<maco>("maco", maco_docstring().c_str());
+    maco_.def(bp::init<unsigned, unsigned, double, unsigned, unsigned, unsigned, double, bool>(
+        (bp::arg("gen") = 1u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("threshold") = 1u,
+         bp::arg("n_gen_mark") = 7u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false)));
+    maco_.def(bp::init<unsigned, unsigned, double, unsigned, unsigned, unsigned, double, bool, unsigned>(
+        (bp::arg("gen") = 1u, bp::arg("ker") = 63u, bp::arg("q") = 1.0, bp::arg("threshold") = 1u,
+         bp::arg("n_gen_mark") = 7u, bp::arg("evalstop") = 100000u, bp::arg("focus") = 0., bp::arg("memory") = false,
+         bp::arg("seed"))));
+    // maco needs an ad hoc exposition for the log as one entry is a vector (ideal_point)
+    maco_.def("get_log", lcast([](const maco &a) -> bp::list {
+                  bp::list retval;
+                  for (const auto &t : a.get_log()) {
+                      retval.append(bp::make_tuple(std::get<0>(t), std::get<1>(t), vector_to_ndarr(std::get<2>(t))));
+                  }
+                  return retval;
+              }),
+              maco_get_log_docstring().c_str());
+
+    maco_.def("get_seed", &maco::get_seed, generic_uda_get_seed_docstring().c_str());
+    maco_.def("set_bfe", &maco::set_bfe, maco_set_bfe_docstring().c_str(), bp::arg("b"));
+  
     // NSPSO
     auto nspso_ = expose_algorithm_pygmo<nspso>("nspso", nspso_docstring().c_str());
     nspso_.def(bp::init<unsigned, double, double, double, double, double, unsigned, std::string, bool>(
