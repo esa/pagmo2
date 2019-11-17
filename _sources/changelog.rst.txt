@@ -26,7 +26,8 @@ Fix
   (`#355 <https://github.com/esa/pagmo2/pull/355>`__).
 
 - Various build system/doc fixes
-  (`#350 <https://github.com/esa/pagmo2/pull/350>`__,
+  (`#361 <https://github.com/esa/pagmo2/pull/361>`__,
+  `#350 <https://github.com/esa/pagmo2/pull/350>`__,
   `#354 <https://github.com/esa/pagmo2/pull/354>`__).
 
 2.11.4 (2019-09-29)
