@@ -67,7 +67,12 @@ YACMA_PYTHON_MODULE(core
     expose_s_policies.cpp
 )
 target_link_libraries(core PRIVATE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking NumPy::numpy pygmo)
-target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+target_compile_options(core PRIVATE
+    "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
+    "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
+    "$<$<CONFIG:RelWithDebInfo>:${PAGMO_CXX_FLAGS_RELEASE}>"
+    "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
+)
 # NOTE: some versions of Boost before 1.66 have wrongly defined visibility settings, hence
 # we enable default hidden visibility only for later versions.
 if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 65))

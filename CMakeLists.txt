@@ -74,6 +74,7 @@ endif()
 
 # Initial setup of compiler flags.
 include(YACMACompilerLinkerSettings)
+include(CheckCXXCompilerFlag)
 
 # Threading setup.
 include(YACMAThreadingSetup)
@@ -88,9 +89,19 @@ if(APPLE AND YACMA_COMPILER_IS_CLANGXX)
 endif()
 if(YACMA_COMPILER_IS_MSVC)
   # Disable the idiotic minmax macros on MSVC, some annoying warnings,
-  # and enable the bigobj option.
-  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj")
-  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj")
+  # enable the bigobj option and the WIN32_LEAN_AND_MEAN definition.
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  # Enable strict conformance mode, if supported.
+  set(CMAKE_REQUIRED_QUIET TRUE)
+  check_cxx_compiler_flag("/permissive-" _PAGMO_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+  unset(CMAKE_REQUIRED_QUIET)
+  if(_PAGMO_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+    message(STATUS "The '/permissive-' flag is supported, enabling it.")
+    list(APPEND PAGMO_CXX_FLAGS_DEBUG "/permissive-")
+    list(APPEND PAGMO_CXX_FLAGS_RELEASE "/permissive-")
+  endif()
+  unset(_PAGMO_MSVC_SUPPORTS_STRICT_CONFORMANCE)
 endif()
 if(MINGW)
 	# Flag needed to deal with big binaries in MinGW.
@@ -284,9 +295,14 @@ if(PAGMO_BUILD_PAGMO)
 
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "1.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 1)
-    target_compile_options(pagmo PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+    set_property(TARGET pagmo PROPERTY VERSION "2.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 2)
+    target_compile_options(pagmo PRIVATE
+        "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:RelWithDebInfo>:${PAGMO_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
+    )
     set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
