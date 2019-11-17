@@ -202,11 +202,6 @@ std::string ipopt_set_numeric_options_docstring();
 std::string ipopt_get_numeric_options_docstring();
 std::string ipopt_reset_numeric_options_docstring();
 
-// base local solver common docstrings.
-std::string bls_selection_docstring(const std::string &);
-std::string bls_replacement_docstring(const std::string &);
-std::string bls_set_random_sr_seed_docstring(const std::string &);
-
 // common docstrings reusable by multiple udas, udps
 std::string generic_uda_get_seed_docstring();
 std::string generic_uda_inner_algorithm_docstring();
