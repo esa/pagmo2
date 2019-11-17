@@ -123,11 +123,9 @@ function(YACMA_PYTHON_MODULE name)
     # with clang and gcc. See:
     # https://bugs.python.org/issue11149
     # http://www.python.org/dev/peps/pep-3123/
-    # NOTE: not sure here how we should set flags up for MSVC or clang on windows, need
-    # to check in the future.
     # NOTE: do not use the yacma compiler linker settings bits, so this module
     # can be used stand-alone.
-    if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+    if(CMAKE_COMPILER_IS_GNUCXX OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND NOT MSVC))
         message(STATUS "Setting up extra compiler flag '-fwrapv' for the Python module '${name}'.")
         target_compile_options(${name} PRIVATE "-fwrapv")
         if(${PYTHON_VERSION_MAJOR} LESS 3)
