@@ -27,11 +27,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(YACMA_COMPILER_IS_GNUCXX TRUE)
 endif()
 
-# Detect the hcc compiler.
-if(YACMA_COMPILER_IS_CLANGXX AND "${CMAKE_CXX_COMPILER}" MATCHES "hcc")
-    set(YACMA_COMPILER_IS_HCC TRUE)
-endif()
-
 # This is an OS X specific setting that is suggested to be enabled. See:
 # https://blog.kitware.com/upcoming-in-cmake-2-8-12-osx-rpath-support/
 # http://stackoverflow.com/questions/31561309/cmake-warnings-under-os-x-macosx-rpath-is-not-specified-for-the-following-targe
@@ -122,11 +117,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdisabled-optimization)
         # This is useful when the compiler decides the template backtrace is too verbose.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
-        if(YACMA_COMPILER_IS_HCC)
-            message(STATUS "hcc compiler detected, the '-fstack-protector-all' flag will not be enabled.")
-        else()
-            _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-fstack-protector-all)
-        endif()
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-fstack-protector-all)
         # A few suggestion flags.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=pure)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=const)
