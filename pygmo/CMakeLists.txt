@@ -25,7 +25,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINA
 
 # Setup of the header-only pygmo library.
 add_library(pygmo INTERFACE)
-target_link_libraries(pygmo INTERFACE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule NumPy::numpy)
+target_link_libraries(pygmo INTERFACE Pagmo::pagmo ${PYGMO_BP_TARGET} Boost::disable_autolinking YACMA::PythonIncludeDir NumPy::numpy)
 target_include_directories(pygmo INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/pygmo> $<INSTALL_INTERFACE:include>)
 # Setup of the export.

@@ -3,11 +3,7 @@ if(YACMAPythonSetupIncluded)
 endif()
 
 # NOTE: this is a heuristic to determine whether we need to link to the Python library.
-# In theory, Python extensions don't need to, as they are dlopened() by the Python process
-# and thus they don't need to be linked to the Python library at compile time. However,
-# the dependency on Boost.Python muddies the waters, as BP itself does link to the Python
-# library, at least on some platforms. The following configuration seems to be working fine
-# on various CI setups.
+# The linking seems to be necessary only on Windows.
 if(WIN32)
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
@@ -39,6 +35,11 @@ else()
   endif()
 endif()
 mark_as_advanced(YACMA_PYTHON_INCLUDE_DIR)
+
+# Add an interface imported target for the
+# Python include dir.
+add_library(YACMA::PythonIncludeDir INTERFACE IMPORTED)
+set_target_properties(YACMA::PythonIncludeDir PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${YACMA_PYTHON_INCLUDE_DIR})
 
 message(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
 message(STATUS "Python interpreter version: ${PYTHON_VERSION_STRING}")
