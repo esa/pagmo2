@@ -72,6 +72,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/algorithms/ihs.hpp>
+#include <pagmo/algorithms/maco.hpp>
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
