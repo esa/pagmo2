@@ -11,7 +11,12 @@ function(ADD_PAGMO_TESTCASE arg1)
     endif()
     add_executable(${arg1} ${arg1}.cpp)
     target_link_libraries(${arg1} pagmo Boost::unit_test_framework)
-    target_compile_options(${arg1} PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+    target_compile_options(${arg1} PRIVATE
+        "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:RelWithDebInfo>:${PAGMO_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
+    )
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
     if(NOT CMAKE_CXX_STANDARD)
         set_property(TARGET ${arg1} PROPERTY CXX_STANDARD 11)
@@ -62,6 +67,7 @@ ADD_PAGMO_TESTCASE(io)
 ADD_PAGMO_TESTCASE(island)
 ADD_PAGMO_TESTCASE(island_torture)
 ADD_PAGMO_TESTCASE(luksan_vlcek1)
+ADD_PAGMO_TESTCASE(maco)
 ADD_PAGMO_TESTCASE(mbh)
 ADD_PAGMO_TESTCASE(member_bfe)
 ADD_PAGMO_TESTCASE(moead)

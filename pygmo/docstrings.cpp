@@ -2573,6 +2573,85 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::gaco::get_log`.
 )";
 }
 
+std::string maco_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+
+Set the batch function evaluation scheme.
+
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.nsga2`.
+
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+
+)";
+}
+
+std::string maco_docstring()
+{
+    return R"(__init__(gen = 1, ker = 63, q = 1.0, threshold = 1, n_gen_mark = 7, evalstop = 100000, focus = 0., memory = False, seed = random)
+
+Multi-objective Ant Colony Optimizer (MACO).
+
+Args:
+    gen (int): number of generations
+    ker (int): kernel size
+    q (float): convergence speed parameter
+    threshold (int): threshold parameter
+    n_gen_mark (int): std convergence speed parameter
+    evalstop (int): evaluation stopping criterion
+    focus (float): focus parameter
+    memory (bool): memory parameter
+    seed (int): seed used by the internal random number generator (default is random)
+
+Raises:
+    OverflowError: if *gen* or *seed* are negative or greater than an implementation-defined value
+    ValueError: if either *focus* is < 0, *threshold* is not in [0,*gen*] when *gen* is > 0 and *memory* is *False*, or if *threshold* is not >=1 when *gen* is > 0 and *memory* is *True*
+
+See also the docs of the C++ class :cpp:class:`pagmo::maco`.
+
+)";
+}
+
+std::string maco_get_log_docstring()
+{
+    return R"(get_log()
+
+Returns a log containing relevant parameters recorded during the last call to ``evolve()`` and printed to screen. The log frequency depends on the verbosity
+parameter (by default nothing is logged) which can be set calling the method :func:`~pygmo.algorithm.set_verbosity()` on an :class:`~pygmo.algorithm`
+constructed with a :class:`~pygmo.maco`. A verbosity of ``N`` implies a log line each ``N`` generations.
+
+Returns:
+    ``list`` of ``tuples``: at each logged epoch, the values ``Gen``, ``Fevals``, ``ideal_point``, where:
+
+    * ``Gen`` (``int``), generation number
+    * ``Fevals`` (``int``), number of functions evaluation made
+    * ``ideal_point`` (1D numpy array), the ideal point of the current population (cropped to max 5 dimensions only in the screen output)
+
+Examples:
+    >>> from pygmo import *
+    >>> algo = algorithm(maco(gen=100))
+    >>> algo.set_verbosity(20)
+    >>> pop = population(zdt(1), 63)
+    >>> pop = algo.evolve(pop) # doctest: +SKIP
+    Gen:        Fevals:        ideal1:        ideal2:
+       1              0      0.0422249        2.72416
+      21           1260    0.000622664        1.27304
+      41           2520    0.000100557       0.542994
+      61           3780    8.06766e-06       0.290677
+      81           5040    8.06766e-06       0.290677
+    >>> uda = algo.extract(maco)
+    >>> uda.get_log() # doctest: +SKIP
+    [(1, 0, array([0.04222492, 2.72415949])), (21, 1260, array([6.22663991e-04, ...
+
+See also the docs of the relevant C++ method :cpp:func:`pagmo::maco::get_log`.
+
+)";
+}
+
 std::string gwo_docstring()
 {
     return R"(__init__(gen = 1, seed = random)
@@ -3040,6 +3119,17 @@ See also the docs of the relevant C++ method :cpp:func:`pagmo::pso::get_log()`.
 }
 
 //----------
+std::string pso_gen_set_bfe_docstring()
+{
+    return R"(set_bfe(b)
+Set the batch function evaluation scheme.
+This method will set the batch function evaluation scheme to be used for :class:`~pygmo.pso_gen`.
+Args:
+    b (:class:`~pygmo.bfe`): the batch function evaluation object
+Raises:
+    unspecified: any exception thrown by the underlying C++ method
+)";
+}
 std::string pso_gen_docstring()
 {
     return R"(__init__(gen = 1, omega = 0.7298, eta1 = 2.05, eta2 = 2.05, max_vel = 0.5, variant = 5, neighb_type = 2, neighb_param = 4, memory = False, seed = random)
@@ -5215,93 +5305,6 @@ Returns:
     ``int``: the value of the ``maxtime`` stopping criterion
 
 Raises:
-    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
-      type conversion errors, mismatched function signatures, etc.)
-
-)";
-}
-
-std::string bls_selection_docstring(const std::string &algo)
-{
-    return R"(Individual selection policy.
-
-This attribute represents the policy that is used in the ``evolve()`` method to select the individual
-that will be optimised. The attribute can be either a string or an integral.
-
-If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"random"``:
-
-* ``"best"`` will select the best individual in the population,
-* ``"worst"`` will select the worst individual in the population,
-* ``"random"`` will randomly choose one individual in the population.
-
-:func:`~pygmo.)"
-           + algo + R"(.set_random_sr_seed()` can be used to seed the random number generator
-used by the ``"random"`` policy.
-
-If the attribute is an integer, it represents the index (in the population) of the individual that is selected
-for optimisation.
-
-Returns:
-    ``int`` or ``str``: the individual selection policy or index
-
-Raises:
-    OverflowError: if the attribute is set to an integer which is negative or too large
-    ValueError: if the attribute is set to an invalid string
-    TypeError: if the attribute is set to a value of an invalid type
-    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
-      type conversion errors, mismatched function signatures, etc.)
-
-)";
-}
-
-std::string bls_replacement_docstring(const std::string &algo)
-{
-    return R"(Individual replacement policy.
-
-This attribute represents the policy that is used in the ``evolve()`` method to select the individual
-that will be replaced by the optimised individual. The attribute can be either a string or an integral.
-
-If the attribute is a string, it must be one of ``"best"``, ``"worst"`` and ``"random"``:
-
-* ``"best"`` will select the best individual in the population,
-* ``"worst"`` will select the worst individual in the population,
-* ``"random"`` will randomly choose one individual in the population.
-
-:func:`~pygmo.)"
-           + algo + R"(.set_random_sr_seed()` can be used to seed the random number generator
-used by the ``"random"`` policy.
-
-If the attribute is an integer, it represents the index (in the population) of the individual that will be
-replaced by the optimised individual.
-
-Returns:
-    ``int`` or ``str``: the individual replacement policy or index
-
-Raises:
-    OverflowError: if the attribute is set to an integer which is negative or too large
-    ValueError: if the attribute is set to an invalid string
-    TypeError: if the attribute is set to a value of an invalid type
-    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
-      type conversion errors, mismatched function signatures, etc.)
-
-)";
-}
-
-std::string bls_set_random_sr_seed_docstring(const std::string &algo)
-{
-    return R"(set_random_sr_seed(seed)
-
-Set the seed for the ``"random"`` selection/replacement policies.
-
-Args:
-    seed (``int``): the value that will be used to seed the random number generator used by the ``"random"``
-      election/replacement policies (see :attr:`~pygmo.)"
-           + algo + R"(.selection` and
-      :attr:`~pygmo.)"
-           + algo + R"(.replacement`)
-
-Raises:
-    OverflowError: if the attribute is set to an integer which is negative or too large
     unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
       type conversion errors, mismatched function signatures, etc.)
 

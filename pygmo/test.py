@@ -521,7 +521,7 @@ class pso_gen_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        from .core import pso_gen
+        from .core import pso_gen, bfe
         uda = pso_gen()
         uda = pso_gen(gen=1, omega=0.7298, eta1=2.05, eta2=2.05, max_vel=0.5,
                       variant=5, neighb_type=2, neighb_param=4, memory=False)
@@ -529,6 +529,8 @@ class pso_gen_test_case(_ut.TestCase):
                       variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
+        uda.set_bfe(b = bfe())
+        uda.set_bfe(bfe())
 
 
 class bee_colony_test_case(_ut.TestCase):

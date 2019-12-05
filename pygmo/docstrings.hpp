@@ -134,6 +134,9 @@ std::string de_docstring();
 std::string de_get_log_docstring();
 std::string de1220_docstring();
 std::string de1220_get_log_docstring();
+std::string maco_set_bfe_docstring();
+std::string maco_docstring();
+std::string maco_get_log_docstring();
 std::string moead_docstring();
 std::string moead_get_log_docstring();
 std::string nsga2_set_bfe_docstring();
@@ -149,6 +152,7 @@ std::string gwo_docstring();
 std::string gwo_get_log_docstring();
 std::string pso_docstring();
 std::string pso_get_log_docstring();
+std::string pso_gen_set_bfe_docstring();
 std::string pso_gen_docstring();
 std::string pso_gen_get_log_docstring();
 std::string sade_docstring();
@@ -197,11 +201,6 @@ std::string ipopt_set_numeric_option_docstring();
 std::string ipopt_set_numeric_options_docstring();
 std::string ipopt_get_numeric_options_docstring();
 std::string ipopt_reset_numeric_options_docstring();
-
-// base local solver common docstrings.
-std::string bls_selection_docstring(const std::string &);
-std::string bls_replacement_docstring(const std::string &);
-std::string bls_set_random_sr_seed_docstring(const std::string &);
 
 // common docstrings reusable by multiple udas, udps
 std::string generic_uda_get_seed_docstring();

@@ -1,14 +1,34 @@
 Changelog
 =========
 
-2.12 (unreleased)
------------------
+2.12.0 (unreleased)
+-------------------
 
 New
 ~~~
 
+- The :cpp:class:`pagmo::pso_gen` algorithm can now use the
+  batch fitness evaluation scheme
+  (`#348 <https://github.com/esa/pagmo2/pull/348>`__).
+
+- Implement the multi-objective hypervolume-based
+  ant colony optimizer (MHACO)
+  (`#326 <https://github.com/esa/pagmo2/pull/326>`__).
+
 - Implement the NSPSO algorithm
   (`#314 <https://github.com/esa/pagmo2/pull/314>`__).
+
+Fix
+~~~
+
+- Fix a missing ``inline`` and a few wrong include files in the
+  serialization header
+  (`#355 <https://github.com/esa/pagmo2/pull/355>`__).
+
+- Various build system/doc fixes
+  (`#361 <https://github.com/esa/pagmo2/pull/361>`__,
+  `#350 <https://github.com/esa/pagmo2/pull/350>`__,
+  `#354 <https://github.com/esa/pagmo2/pull/354>`__).
 
 2.11.4 (2019-09-29)
 -------------------

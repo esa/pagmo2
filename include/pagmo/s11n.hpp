@@ -37,12 +37,13 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 
 #include <boost/config.hpp>
-#include <boost/mpl/comparison.hpp>
 #include <boost/mpl/greater.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/integral_c.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_free.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/tracking.hpp>
@@ -96,7 +97,7 @@ namespace serialization
 
 // Implement serialization for std::tuple.
 template <class Archive, typename... Args>
-void serialize(Archive &ar, std::tuple<Args...> &t, unsigned version)
+inline void serialize(Archive &ar, std::tuple<Args...> &t, unsigned version)
 {
     pagmo::detail::tuple_s11n<sizeof...(Args)>::serialize(ar, t, version);
 }
