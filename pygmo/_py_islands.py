@@ -471,18 +471,19 @@ class ipyparallel_island(object):
     def _init(self, *args, **kwargs):
         # A small helper function which will do the following:
         # * create a new client from scratch,
-        # * store the input arguments as class members,
+        # * store a copy of the input arguments as class members,
         # * create a LoadBalancedView from the client,
         # * create a lock to regulate access to the view,
         # * return the view.
         from ipyparallel import Client
+        from copy import deepcopy
+
+        # Save the init arguments.
+        self._args = deepcopy(args)
+        self._kwargs = deepcopy(kwargs)
 
         # Create the client.
         rc = Client(*args, **kwargs)
-
-        # Save the init arguments.
-        self._args = args
-        self._kwargs = kwargs
 
         # NOTE: we need to regulate access to the view because,
         # while run_evolve() is running in a separate thread, we
@@ -504,7 +505,8 @@ class ipyparallel_island(object):
         # For pickle/unpickle, we employ the construction
         # arguments, which will be used to re-init the class
         # during unpickle.
-        return self._args, self._kwargs
+        from copy import deepcopy
+        return deepcopy(self._args), deepcopy(self._kwargs)
 
     def __setstate__(self, state):
         self._lview = self._init(*state[0], **state[1])
