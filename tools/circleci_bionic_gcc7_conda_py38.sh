@@ -24,15 +24,20 @@ conda install $conda_pkgs -y
 # Build/install pagmo.
 mkdir build
 cd build
-cmake ../ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DPAGMO_BUILD_TESTS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes
+cmake ../ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DPAGMO_BUILD_TESTS=no -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DBoost_NO_BOOST_CMAKE=ON
 make -j2 VERBOSE=1 install
 
 # Build/install pygmo.
 cd ..
 mkdir build_py
 cd build_py
-cmake ../ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DPAGMO_BUILD_PAGMO=no -DPAGMO_BUILD_PYGMO=yes
+cmake ../ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DPAGMO_BUILD_PAGMO=no -DPAGMO_BUILD_PYGMO=yes -DBoost_NO_BOOST_CMAKE=ON
 make -j2 VERBOSE=1 install
+
+# Start ipcluster.
+ipcluster start --daemonize=True;
+# Give some time for the cluster to start up.
+sleep 20;
 
 # Run the tests.
 cd /
