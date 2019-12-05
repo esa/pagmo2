@@ -19,6 +19,7 @@ conda config --add channels conda-forge --force
 conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel python=3.8 numpy cloudpickle dill ipyparallel numba pip"
 conda create -q -p $deps_dir -y
 source activate $deps_dir
+conda install $conda_pkgs -y
 
 # Build/install pagmo.
 mkdir build
