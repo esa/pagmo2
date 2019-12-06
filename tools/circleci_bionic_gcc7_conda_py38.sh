@@ -16,7 +16,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 export PATH="$deps_dir/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
 conda config --add channels conda-forge --force
-conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel python=3.8 numpy cloudpickle dill numba pip"
+conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel python=3.7 numpy cloudpickle dill numba pip"
 conda create -q -p $deps_dir -y
 source activate $deps_dir
 conda install $conda_pkgs -y
