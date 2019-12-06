@@ -45,6 +45,7 @@ python -c "import pygmo; pygmo.test.run_test_suite(); pygmo.mp_island.shutdown_p
 
 # Additional serialization tests.
 ipcluster stop
+sleep 20;
 ipcluster start --daemonize=True;
 sleep 20;
 python travis_additional_tests.py;
