@@ -668,7 +668,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
             return
 
         # Check exception transport.
-        for _ in range(100):
+        for _ in range(10):
             isl = island(algo=de(), prob=_prob(
                 lambda x, y: x + y), size=2, udi=ipyparallel_island(timeout=to + .3))
             isl.evolve()
