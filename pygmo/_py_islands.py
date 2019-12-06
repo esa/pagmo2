@@ -71,11 +71,13 @@ def _evolve_func_mp_pipe(conn, ser_algo_pop):
             conn.close()
 
 
-def _evolve_func_ipy(algo, pop):
+def _evolve_func_ipy(ser_algo_pop):
     # The evolve function that is actually run from the separate processes
     # in ipyparallel_island.
+    import pickle
+    algo, pop = pickle.loads(ser_algo_pop)
     new_pop = algo.evolve(pop)
-    return algo, new_pop
+    return pickle.dumps((algo, new_pop))
 
 
 class mp_island(object):
@@ -535,9 +537,11 @@ class ipyparallel_island(object):
 
 
         """
+        import pickle
+        ser_algo_pop = pickle.dumps((algo, pop))
         with self._view_lock:
-            ret = self._lview.apply_async(_evolve_func_ipy, algo, pop)
-        return ret.get()
+            ret = self._lview.apply_async(_evolve_func_ipy, ser_algo_pop)
+        return pickle.loads(ret.get())
 
     def get_name(self):
         """Island's name.
