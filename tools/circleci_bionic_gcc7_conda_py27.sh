@@ -16,7 +16,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 export PATH="$deps_dir/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
 conda config --add channels conda-forge --force
-conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel python=3.8 numpy cloudpickle dill numba pip"
+conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel python=2.7 numpy cloudpickle dill numba pip ipyparallel"
 conda create -q -p $deps_dir -y
 source activate $deps_dir
 conda install $conda_pkgs -y
@@ -33,6 +33,11 @@ mkdir build_py
 cd build_py
 cmake ../ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DPAGMO_BUILD_PAGMO=no -DPAGMO_BUILD_PYGMO=yes -DBoost_NO_BOOST_CMAKE=ON
 make -j2 VERBOSE=1 install
+
+# Start the ipyparallel cluster.
+ipcluster start --daemonize=True;
+# Give some time for the cluster to start up.
+sleep 20;
 
 # Run the tests.
 cd ../tools
