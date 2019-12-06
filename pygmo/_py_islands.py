@@ -71,15 +71,6 @@ def _evolve_func_mp_pipe(conn, ser_algo_pop):
             conn.close()
 
 
-def _evolve_func_ipy(ser_algo_pop):
-    # The evolve function that is actually run from the separate processes
-    # in ipyparallel_island.
-    import pickle
-    algo, pop = pickle.loads(ser_algo_pop)
-    new_pop = algo.evolve(pop)
-    return pickle.dumps((algo, new_pop))
-
-
 class mp_island(object):
     """Multiprocessing island.
 
@@ -451,6 +442,15 @@ class mp_island(object):
                 mp_island._pool_size = None
 
 
+def _evolve_func_ipy(ser_algo_pop):
+    # The evolve function that is actually run from the separate processes
+    # in ipyparallel_island.
+    import pickle
+    algo, pop = pickle.loads(ser_algo_pop)
+    new_pop = algo.evolve(pop)
+    return pickle.dumps((algo, new_pop))
+
+
 class ipyparallel_island(object):
     """Ipyparallel island.
 
@@ -537,6 +537,9 @@ class ipyparallel_island(object):
 
 
         """
+        # NOTE: as in the mp_island, we pre-serialize
+        # the algo and pop, so that we can catch
+        # serialization errors early.
         import pickle
         ser_algo_pop = pickle.dumps((algo, pop))
         with self._view_lock:
@@ -559,6 +562,7 @@ class ipyparallel_island(object):
             str: a string with extra information about the status of the island
 
         """
+        from copy import deepcopy
         with self._view_lock:
-            d = self._lview.queue_status()
+            d = deepcopy(self._lview.queue_status())
         return "\tQueue status:\n\t\n\t" + "\n\t".join(["(" + str(k) + ", " + str(d[k]) + ")" for k in d])
