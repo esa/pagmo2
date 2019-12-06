@@ -45,7 +45,7 @@ python travis_additional_tests.py;
 cd ../ap_examples/uda_basic;
 mkdir build;
 cd build;
-cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DBoost_NO_BOOST_CMAKE=ON ../;
 make install VERBOSE=1;
 cd ../../;
 python test1.py
@@ -53,7 +53,7 @@ python test1.py
 cd udp_basic;
 mkdir build;
 cd build;
-cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DBoost_NO_BOOST_CMAKE=ON ../;
 make install VERBOSE=1;
 cd ../../;
 python test2.py

@@ -41,19 +41,19 @@ sleep 20;
 
 # Run the tests.
 cd ../tools
-ipcluster stop
-ipcluster start --daemonize=True;
-sleep 20;
 python -c "import pygmo; pygmo.test.run_test_suite(); pygmo.mp_island.shutdown_pool()";
 
 # Additional serialization tests.
+ipcluster stop
+ipcluster start --daemonize=True;
+sleep 20;
 python travis_additional_tests.py;
 
 # AP examples.
 cd ../ap_examples/uda_basic;
 mkdir build;
 cd build;
-cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../ -DBoost_NO_BOOST_CMAKE=ON;
 make install VERBOSE=1;
 cd ../../;
 python test1.py
@@ -61,7 +61,7 @@ python test1.py
 cd udp_basic;
 mkdir build;
 cd build;
-cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../;
+cmake -DCMAKE_INSTALL_PREFIX=$deps_dir -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug ../ -DBoost_NO_BOOST_CMAKE=ON;
 make install VERBOSE=1;
 cd ../../;
 python test2.py
