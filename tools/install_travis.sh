@@ -136,6 +136,9 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
         fi
     done
 elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
+    sysctl -w kern.maxfiles=20480
+    sysctl -w kern.maxfilesperproc=18000
+
     export CXX=clang++
     export CC=clang
     # Install pagmo first.
