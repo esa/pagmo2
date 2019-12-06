@@ -36,16 +36,7 @@ make -j2 VERBOSE=1 install
 
 # Run the tests.
 cd /
-python -c "import pygmo; pygmo.test.run_test_suite(1)";
-
-echo "DONE"
-echo "DONE"
-echo "DONE"
-echo "DONE"
-echo "DONE"
-echo "DONE"
-echo "DONE"
-ps aux
+python -c "import pygmo; pygmo.test.run_test_suite(1); pygmo.mp_island.shutdown_pool()";
 
 set +e
 set +x
