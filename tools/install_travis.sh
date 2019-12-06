@@ -46,7 +46,11 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     sleep 20;
     # Move out of the build dir.
     cd ../tools
-    python -c "import pygmo; pygmo.test.run_test_suite(1)";
+    if [[ "${PAGMO_BUILD}" == Python3* ]]; then
+        python -c "import pygmo; pygmo.test.run_test_suite(1)";
+    else
+        python -c "import pygmo; pygmo.test.run_test_suite()";
+    fi
 
     # Additional serialization tests.
     python travis_additional_tests.py;
