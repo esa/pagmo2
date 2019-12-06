@@ -612,6 +612,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
         from . import ipyparallel_island
         from copy import copy, deepcopy
         from pickle import dumps, loads
+        import gc
         to = .5
         try:
             isl = island(algo=de(), prob=rosenbrock(),
@@ -675,3 +676,4 @@ class ipyparallel_island_test_case(_ut.TestCase):
             isl.wait()
             self.assertTrue("**error occurred**" in repr(isl))
             self.assertRaises(RuntimeError, lambda: isl.wait_check())
+            gc.collect()
