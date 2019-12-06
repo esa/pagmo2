@@ -155,7 +155,7 @@ elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
     sleep 20;
     # Move out of the build dir.
     cd ../tools
-    python -c "import pygmo; pygmo.test.run_test_suite(0)"
+    python -c "import pygmo; pygmo.test.run_test_suite()"
 
     # Additional serialization tests.
     # python travis_additional_tests.py
