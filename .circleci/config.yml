@@ -54,7 +54,7 @@ workflows:
   version: 2
   all_builds:
     jobs:
-    # - bionic_gcc7_conda_py38
+    - bionic_gcc7_conda_py38
     - bionic_gcc7_conda_py27
     # - bionic_gcc7_coverage
     # - cosmic_gcc8_asan
