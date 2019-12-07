@@ -51,17 +51,6 @@ matrix:
           packages:
           - gcc-4.8
           - g++-4.8
-    - env: PAGMO_BUILD="Python27"
-      dist: trusty
-      compiler: gcc
-      os: linux
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - gcc-4.8
-          - g++-4.8
     - env: PAGMO_BUILD="OSXDebug"
       os: osx
       osx_image: xcode6.4

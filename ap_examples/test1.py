@@ -26,4 +26,5 @@ if __name__ == '__main__':
     isl = pygmo.island(algo=ub, prob=py_udp(), size=20)
     isl.evolve()
     isl.wait_check()
+    pygmo.mp_island.shutdown_pool()
     print("All good!")

@@ -75,7 +75,7 @@ if [[ ${PAGMO_BUILD} == *27m ]]; then
 	# which will make some tests fail. Just try to import pygmo in this case.
 	/opt/python/${PYTHON_DIR}/bin/python -c "import pygmo"
 else
-	/opt/python/${PYTHON_DIR}/bin/python -c "import pygmo; pygmo.test.run_test_suite()"
+	/opt/python/${PYTHON_DIR}/bin/python -c "import pygmo; pygmo.test.run_test_suite(1)"
 fi
 
 # Upload to pypi. This variable will contain something if this is a tagged build (vx.y.z), otherwise it will be empty.
