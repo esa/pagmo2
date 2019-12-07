@@ -58,24 +58,32 @@ Non dominated sorting particle swarm optimization(NSPSO)
 
    .. cpp:function:: void set_verbosity(unsigned level)
 
-      Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by ``get_log()`. *level* can be: 
-      - 0: no verbosity.
-      - >0: will print and log one line each *level* generations.
-      Example (verbosity 1, where Gen, is the generation number, Fevals the number of function evaluations used; also, the ideal point of the current population follows cropped to its 5th component):
-   .. code-block:: c++
-      :linenos:
+      Sets the algorithm verbosity: sets the verbosity level
+      of the screen ouput and of the log returned by ``get_log()``.
+      *level* can be:
 
-      Gen:        Fevals:        ideal1:        ideal2:        ideal3:        ideal4:        ideal5:          ... :
-         1             52      0.0586347      0.0587097      0.0586892      0.0592426      0.0614239
-         2            104     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         3            156     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         4            208     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         5            260     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         6            312     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         7            364     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         8            416     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-         9            468     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
-        10            520     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+      * 0: no verbosity.
+      * >0: will print and log one line each *level* generations.
+
+      Example (verbosity 1, where Gen, is the generation number,
+      Fevals the number of function evaluations used; also, the
+      ideal point of the current population follows cropped to its
+      5th component):
+
+      .. code-block:: c++
+         :linenos:
+
+         Gen:        Fevals:        ideal1:        ideal2:        ideal3:        ideal4:        ideal5:          ... :
+            1             52      0.0586347      0.0587097      0.0586892      0.0592426      0.0614239
+            2            104     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            3            156     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            4            208     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            5            260     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            6            312     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            7            364     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            8            416     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+            9            468     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
+           10            520     0.00899252     0.00899395     0.00945782      0.0106282      0.0276778
 
    .. cpp:function:: unsigned get_verbosity() const
 
