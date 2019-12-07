@@ -190,6 +190,8 @@ bp::object test_object_serialization(const bp::object &o)
 // supermodule gets unloaded).
 void cleanup()
 {
+    std::cout << "starting C++ cleanup\n";
+
     problem_ptr.reset();
 
     algorithm_ptr.reset();
@@ -203,6 +205,8 @@ void cleanup()
     r_policy_ptr.reset();
 
     s_policy_ptr.reset();
+
+    std::cout << "C++ cleanup completed\n";
 }
 
 // Serialization support for the population class.
