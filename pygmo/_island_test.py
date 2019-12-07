@@ -612,18 +612,24 @@ class ipyparallel_island_test_case(_ut.TestCase):
         from . import ipyparallel_island
         from copy import copy, deepcopy
         from pickle import dumps, loads
+
+        ipyparallel_island.shutdown_view()
+        ipyparallel_island.shutdown_view()
+        ipyparallel_island.shutdown_view()
+
         to = .5
+        isl = island(algo=de(), prob=rosenbrock(),
+                     size=25, udi=ipyparallel_island())
+        ipyparallel_island.shutdown_view()
         try:
-            isl = island(algo=de(), prob=rosenbrock(),
-                         size=25, udi=ipyparallel_island(timeout=to))
+            ipyparallel_island.init_view(timeout=to)
         except OSError:
             return
         isl = island(algo=de(), prob=rosenbrock(),
-                     size=25, udi=ipyparallel_island(timeout=to))
-        isl = island(algo=de(), prob=rosenbrock(),
-                     size=25, udi=ipyparallel_island(timeout=to + .3))
+                     size=25, udi=ipyparallel_island())
         self.assertEqual(isl.get_name(), "Ipyparallel island")
         self.assertTrue(isl.get_extra_info() != "")
+        ipyparallel_island.shutdown_view()
         isl.evolve(20)
         isl.wait_check()
         isl.evolve(20)
@@ -632,7 +638,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
 
         # Check the picklability of a problem storing a lambda.
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y),
-                     size=25, udi=ipyparallel_island(timeout=to + .3))
+                     size=25, udi=ipyparallel_island())
         isl.evolve()
         isl.wait_check()
 
@@ -670,7 +676,7 @@ class ipyparallel_island_test_case(_ut.TestCase):
         # Check exception transport.
         for _ in range(10):
             isl = island(algo=de(), prob=_prob(
-                lambda x, y: x + y), size=2, udi=ipyparallel_island(timeout=to + .3))
+                lambda x, y: x + y), size=2, udi=ipyparallel_island())
             isl.evolve()
             isl.wait()
             self.assertTrue("**error occurred**" in repr(isl))
