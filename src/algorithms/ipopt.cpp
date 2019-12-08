@@ -667,6 +667,17 @@ unsigned ipopt_test_check(const T &x)
     return !static_cast<bool>(x);
 }
 
+// Small helper to check that an ipopt algo option
+// was successfully set.
+template <typename Pair>
+void ipopt_opt_checker(bool status, const Pair &p, const std::string &op_type)
+{
+    if (!status) {
+        pagmo_throw(std::invalid_argument, "failed to set the ipopt " + op_type + " option '" + p.first
+                                               + "' to the value: " + detail::to_string(p.second));
+    }
+}
+
 } // namespace
 
 // A small private function used only
@@ -848,8 +859,8 @@ population ipopt::evolve(population pop) const
     // Initialize the Ipopt machinery, following the tutorial.
     Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess, m_verbosity);
     // Store a reference to the derived class for later use.
-    detail::ipopt_nlp &inlp = dynamic_cast<detail::ipopt_nlp &>(*nlp);
-    Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
+    auto &inlp = dynamic_cast<detail::ipopt_nlp &>(*nlp);
+    auto app = ::IpoptApplicationFactory();
     app->RethrowNonIpoptException(true);
 
     // Logic for the handling of constraints tolerances. The logic is as follows:
@@ -863,7 +874,7 @@ population ipopt::evolve(population pop) const
         const double min_tol = *std::min_element(c_tol.begin(), c_tol.end());
         if (min_tol > 0.) {
             const auto tmp_p = std::make_pair(std::string("constr_viol_tol"), min_tol);
-            opt_checker(app->Options()->SetNumericValue(tmp_p.first, tmp_p.second), tmp_p, "numeric");
+            detail::ipopt_opt_checker(app->Options()->SetNumericValue(tmp_p.first, tmp_p.second), tmp_p, "numeric");
         }
     }
 
@@ -873,24 +884,24 @@ population ipopt::evolve(population pop) const
     // This way, problems without hessians will work out of the box.
     if (!prob.has_hessians() && !m_string_opts.count("hessian_approximation")) {
         const auto tmp_p = std::make_pair(std::string("hessian_approximation"), std::string("limited-memory"));
-        opt_checker(app->Options()->SetStringValue(tmp_p.first, tmp_p.second), tmp_p, "string");
+        detail::ipopt_opt_checker(app->Options()->SetStringValue(tmp_p.first, tmp_p.second), tmp_p, "string");
     }
 
     // Logic for print_level: change the default to zero.
     if (!m_integer_opts.count("print_level")) {
         const auto tmp_p = std::make_pair(std::string("print_level"), Ipopt::Index(0));
-        opt_checker(app->Options()->SetIntegerValue(tmp_p.first, tmp_p.second), tmp_p, "integer");
+        detail::ipopt_opt_checker(app->Options()->SetIntegerValue(tmp_p.first, tmp_p.second), tmp_p, "integer");
     }
 
     // Set the other options.
     for (const auto &p : m_string_opts) {
-        opt_checker(app->Options()->SetStringValue(p.first, p.second), p, "string");
+        detail::ipopt_opt_checker(app->Options()->SetStringValue(p.first, p.second), p, "string");
     }
     for (const auto &p : m_numeric_opts) {
-        opt_checker(app->Options()->SetNumericValue(p.first, p.second), p, "numeric");
+        detail::ipopt_opt_checker(app->Options()->SetNumericValue(p.first, p.second), p, "numeric");
     }
     for (const auto &p : m_integer_opts) {
-        opt_checker(app->Options()->SetIntegerValue(p.first, p.second), p, "integer");
+        detail::ipopt_opt_checker(app->Options()->SetIntegerValue(p.first, p.second), p, "integer");
     }
 
     // NOTE: Initialize() can take a filename as input, defaults to "ipopt.opt". This is a file
