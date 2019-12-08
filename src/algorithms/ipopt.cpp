@@ -860,7 +860,7 @@ population ipopt::evolve(population pop) const
     Ipopt::SmartPtr<Ipopt::TNLP> nlp = ::new detail::ipopt_nlp(pop.get_problem(), initial_guess, m_verbosity);
     // Store a reference to the derived class for later use.
     auto &inlp = dynamic_cast<detail::ipopt_nlp &>(*nlp);
-    auto app = ::IpoptApplicationFactory();
+    Ipopt::SmartPtr<Ipopt::IpoptApplication> app = ::IpoptApplicationFactory();
     app->RethrowNonIpoptException(true);
 
     // Logic for the handling of constraints tolerances. The logic is as follows:
