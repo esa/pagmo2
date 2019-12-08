@@ -1,6 +1,22 @@
 version: 2
 
 jobs:
+  bionic_gcc7_conda_py38:
+    docker:
+    - image: circleci/buildpack-deps:bionic
+    steps:
+    - checkout
+    - run:
+        name: Build and test
+        command: bash ./tools/circleci_bionic_gcc7_conda_py38.sh
+  bionic_gcc7_conda_py27:
+    docker:
+    - image: circleci/buildpack-deps:bionic
+    steps:
+    - checkout
+    - run:
+        name: Build and test
+        command: bash ./tools/circleci_bionic_gcc7_conda_py27.sh
   bionic_gcc7_coverage:
     docker:
     - image: circleci/buildpack-deps:bionic
@@ -38,8 +54,9 @@ workflows:
   version: 2
   all_builds:
     jobs:
+    - bionic_gcc7_conda_py38
+    - bionic_gcc7_conda_py27
     - bionic_gcc7_coverage
     - cosmic_gcc8_asan
     - cosmic_clang7
     - bionic_clang6_release
-    

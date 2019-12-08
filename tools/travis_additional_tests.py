@@ -38,6 +38,7 @@ def test1():
     archi = pg.archipelago(n=6, algo=algo, prob=prob, pop_size=70)
     archi.evolve()
     archi.wait_check()
+    print("end of test1")
 
 
 def test2():
@@ -46,8 +47,10 @@ def test2():
     archi = pg.archipelago(n=6, algo=mma, prob=p_toy, pop_size=1)
     archi.evolve()
     archi.wait_check()
+    print("end of test2")
 
 
 if __name__ == '__main__':
     test1()
     test2()
+    pg.mp_island.shutdown_pool()
