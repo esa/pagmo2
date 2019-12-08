@@ -431,14 +431,14 @@ will raise an error. A new process pool can be created via an explicit call to
 
 <dl class="class">
 <dt id="pygmo.ipyparallel_island">
-<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">ipyparallel_island</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pygmo.</code><code class="sig-name descname">ipyparallel_island</code><a class="headerlink" href="#pygmo.ipyparallel_island" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ipyparallel island.</p>
 <p>This user-defined island (UDI) will dispatch evolution tasks to an ipyparallel cluster.
-Upon construction, an instance of this UDI will first initialise an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.Client</span></code></a>
-object, and then extract an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a> object from it that will
-be used to submit evolution tasks to the cluster. The arguments to the constructor of this
-class will be passed without modifications to the constructor of the <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.Client</span></code></a>
-object that will be created internally.</p>
+The communication with the cluster is managed via an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>
+instance which is created either implicitly when the first evolution is run, or explicitly
+via the <a class="reference internal" href="#pygmo.ipyparallel_island.init_view" title="pygmo.ipyparallel_island.init_view"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_view()</span></code></a> method. The
+<a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadBalancedView</span></code></a> instance is unique and shared among all the
+ipyparallel islands.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/">https://ipyparallel.readthedocs.io/en/latest/</a></p>
@@ -472,13 +472,42 @@ object that will be created internally.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pygmo.ipyparallel_island.init_view">
+<em class="property">static </em><code class="sig-name descname">init_view</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.init_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init the ipyparallel view.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.12.</span></p>
+</div>
+<p>This method will initialise the <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>
+which is used by all ipyparallel islands to submit the evolution tasks
+to an ipyparallel cluster. The input arguments are forwarded
+to the construction of an <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.Client</span></code></a> instance,
+from which the <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadBalancedView</span></code></a> instance
+is then fetched via the <code class="xref py py-func docutils literal notranslate"><span class="pre">ipyparallel.Client.load_balanced_view()</span></code>
+method.</p>
+<p>Note that usually it is not necessary to explicitly invoke this
+method: a <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadBalancedView</span></code></a> is automatically
+constructed with default settings the first time an evolution task
+is submitted to an ipyparallel island. This method should be used
+only if it is necessary to pass custom arguments to the construction
+of the <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Client</span></code></a> object from which the
+<a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadBalancedView</span></code></a> is fetched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the constructor of <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.Client" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Client</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pygmo.ipyparallel_island.run_evolve">
 <code class="sig-name descname">run_evolve</code><span class="sig-paren">(</span><em class="sig-param">algo</em>, <em class="sig-param">pop</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.run_evolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evolve population.</p>
 <p>This method will evolve the input <a class="reference internal" href="../py_population.html#pygmo.population" title="pygmo.population"><code class="xref py py-class docutils literal notranslate"><span class="pre">population</span></code></a> <em>pop</em> using the input
 <a class="reference internal" href="../py_algorithm.html#pygmo.algorithm" title="pygmo.algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> <em>algo</em>, and return <em>algo</em> and the evolved population. The evolution
-task is submitted to the ipyparallel cluster via an internal <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>
-instance initialised during the construction of the island.</p>
+task is submitted to the ipyparallel cluster via a global <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>
+instance initialised either implicitly by the first invocation of this method,
+or by an explicit call to the <a class="reference internal" href="#pygmo.ipyparallel_island.init_view" title="pygmo.ipyparallel_island.init_view"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_view()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -493,10 +522,25 @@ instance initialised during the construction of the island.</p>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown during the evolution, or by submitting the evolution task
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the evolution, by the creation of a
+    <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>, or by the sumission of the evolution task
     to the ipyparallel cluster</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pygmo.ipyparallel_island.shutdown_view">
+<em class="property">static </em><code class="sig-name descname">shutdown_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.ipyparallel_island.shutdown_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy the ipyparallel view.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.12.</span></p>
+</div>
+<p>This method will destroy the <a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/api/ipyparallel.html#ipyparallel.LoadBalancedView" title="(in ipyparallel v6.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel.LoadBalancedView</span></code></a>
+currently being used by the ipyparallel islands for submitting
+evolution tasks to an ipyparallel cluster. The view can be re-inited
+implicitly by submitting a new evolution task, or by invoking
+the <a class="reference internal" href="#pygmo.ipyparallel_island.init_view" title="pygmo.ipyparallel_island.init_view"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_view()</span></code></a> method.</p>
 </dd></dl>
 
 </dd></dl>

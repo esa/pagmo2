@@ -298,12 +298,17 @@ It extends the basic ideas of PSO by making a better use of personal bests and o
 <dl class="function">
 <dt id="_CPPv4N5pagmo5nspso13set_verbosityEj">
 <span id="_CPPv3N5pagmo5nspso13set_verbosityEj"></span><span id="_CPPv2N5pagmo5nspso13set_verbosityEj"></span><span id="pagmo::nspso::set_verbosity__unsigned"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nspso13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by <a href="#id1"><span class="problematic" id="id2">``</span></a>get_log()`. <em>level</em> can be:
-- 0: no verbosity.
-- &gt;0: will print and log one line each <em>level</em> generations.
-Example (verbosity 1, where Gen, is the generation number, Fevals the number of function evaluations used; also, the ideal point of the current population follows cropped to its 5th component):</p>
-</dd></dl>
-
+<dd><p>Sets the algorithm verbosity: sets the verbosity level
+of the screen ouput and of the log returned by <code class="docutils literal notranslate"><span class="pre">get_log()</span></code>.
+<em>level</em> can be:</p>
+<ul class="simple">
+<li><p>0: no verbosity.</p></li>
+<li><p>&gt;0: will print and log one line each <em>level</em> generations.</p></li>
+</ul>
+<p>Example (verbosity 1, where Gen, is the generation number,
+Fevals the number of function evaluations used; also, the
+ideal point of the current population follows cropped to its
+5th component):</p>
 <div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -327,6 +332,8 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
   <span class="mi">10</span>            <span class="mi">520</span>     <span class="mf">0.00899252</span>     <span class="mf">0.00899395</span>     <span class="mf">0.00945782</span>      <span class="mf">0.0106282</span>      <span class="mf">0.0276778</span>
 </pre></div>
 </td></tr></table></div>
+</dd></dl>
+
 <dl class="function">
 <dt id="_CPPv4NK5pagmo5nspso13get_verbosityEv">
 <span id="_CPPv3NK5pagmo5nspso13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5nspso13get_verbosityEv"></span><span id="pagmo::nspso::get_verbosityC"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
