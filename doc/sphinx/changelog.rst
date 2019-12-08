@@ -18,6 +18,15 @@ New
 - Implement the NSPSO algorithm
   (`#314 <https://github.com/esa/pagmo2/pull/314>`__).
 
+Changes
+~~~~~~~
+
+- **BREAKING**: the mechanism for managing the
+  interaction of an :class:`~pygmo.ipyparallel_island`
+  with an ipyparallel cluster has changed. Please refer
+  to the documentation for details
+  (`#368 <https://github.com/esa/pagmo2/pull/368>`__).
+
 Fix
 ~~~
 

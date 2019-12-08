@@ -67,10 +67,6 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
     make install VERBOSE=1;
     cd ../../;
     python test2.py
-    if [[ "${PAGMO_BUILD}" == "Python27" ]]; then
-        # Stop here if this is the Python27 build. Docs are produced and uploaded only in the Python37 build.
-        exit 0;
-    fi
 
     # Documentation.
     cd ../build
@@ -132,6 +128,8 @@ elif [[ "${PAGMO_BUILD}" == Python* ]]; then
         fi
     done
 elif [[ "${PAGMO_BUILD}" == OSXPython* ]]; then
+    ulimit -S -n 2048
+
     export CXX=clang++
     export CC=clang
     # Install pagmo first.

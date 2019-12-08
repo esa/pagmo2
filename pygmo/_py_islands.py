@@ -71,13 +71,6 @@ def _evolve_func_mp_pipe(conn, ser_algo_pop):
             conn.close()
 
 
-def _evolve_func_ipy(algo, pop):
-    # The evolve function that is actually run from the separate processes
-    # in ipyparallel_island.
-    new_pop = algo.evolve(pop)
-    return algo, new_pop
-
-
 class mp_island(object):
     """Multiprocessing island.
 
@@ -449,37 +442,24 @@ class mp_island(object):
                 mp_island._pool_size = None
 
 
-# NOTE: the idea here is that we don't want to create a new client for
-# every island: creation is expensive, and we cannot have too many clients
-# as after a certain threshold ipyparallel starts erroring out.
-# So we store the clients as values in a dict whose keys are the arguments
-# passed to Client() upon construction, and we re-use existing clients
-# if the construction arguments are identical.
-# NOTE: this is not a proper cache as it never kicks anything out, but as
-# a temporary solution it is fine. Consider using something like a LRU
-# cache in the future.
-_client_cache = {}
-_client_cache_lock = _Lock()
-
-
-def _hashable(v):
-    # Determine whether v can be hashed.
-    try:
-        hash(v)
-    except TypeError:
-        return False
-    return True
+def _evolve_func_ipy(ser_algo_pop):
+    # The evolve function that is actually run from the separate processes
+    # in ipyparallel_island.
+    import pickle
+    algo, pop = pickle.loads(ser_algo_pop)
+    new_pop = algo.evolve(pop)
+    return pickle.dumps((algo, new_pop))
 
 
 class ipyparallel_island(object):
     """Ipyparallel island.
 
     This user-defined island (UDI) will dispatch evolution tasks to an ipyparallel cluster.
-    Upon construction, an instance of this UDI will first initialise an :class:`ipyparallel.Client`
-    object, and then extract an :class:`ipyparallel.LoadBalancedView` object from it that will
-    be used to submit evolution tasks to the cluster. The arguments to the constructor of this
-    class will be passed without modifications to the constructor of the :class:`ipyparallel.Client`
-    object that will be created internally.
+    The communication with the cluster is managed via an :class:`ipyparallel.LoadBalancedView`
+    instance which is created either implicitly when the first evolution is run, or explicitly
+    via the :func:`~pygmo.ipyparallel_island.init_view()` method. The
+    :class:`~ipyparallel.LoadBalancedView` instance is unique and shared among all the
+    ipyparallel islands.
 
     .. seealso::
 
@@ -487,74 +467,76 @@ class ipyparallel_island(object):
 
     """
 
-    def __init__(self, *args, **kwargs):
-        self._lview = self._init(*args, **kwargs)
+    # Static variables for the view.
+    _view_lock = _Lock()
+    _view = None
 
-    def _init(self, *args, **kwargs):
-        # A small helper function which will do the following:
-        # * get a client from the cache in a thread safe manner, or
-        #   create a new one from scratch
-        # * store the input arguments as class members
-        # * create a LoadBalancedView from the client
-        # * create a lock to regulate access to the view
-        # * return the view.
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def init_view(*args, **kwargs):
+        """Init the ipyparallel view.
+
+        .. versionadded:: 2.12
+
+        This method will initialise the :class:`ipyparallel.LoadBalancedView`
+        which is used by all ipyparallel islands to submit the evolution tasks
+        to an ipyparallel cluster. The input arguments are forwarded
+        to the construction of an :class:`ipyparallel.Client` instance,
+        from which the :class:`~ipyparallel.LoadBalancedView` instance
+        is then fetched via the :func:`ipyparallel.Client.load_balanced_view()`
+        method.
+
+        Note that usually it is not necessary to explicitly invoke this
+        method: a :class:`~ipyparallel.LoadBalancedView` is automatically
+        constructed with default settings the first time an evolution task
+        is submitted to an ipyparallel island. This method should be used
+        only if it is necessary to pass custom arguments to the construction
+        of the :class:`~ipyparallel.Client` object from which the
+        :class:`~ipyparallel.LoadBalancedView` is fetched.
+
+        Raises:
+
+           unspecified: any exception thrown by the constructor of :class:`~ipyparallel.Client`
+
+        """
         from ipyparallel import Client
-        # Turn the arguments into something that might be hashable.
-        # Make sure the kwargs are sorted so that two sets of identical
-        # kwargs will be recognized as equal also if the keys are stored
-        # in different order.
-        args_key = (args, tuple(sorted([(k, kwargs[k]) for k in kwargs])))
-        if _hashable(args_key):
-            with _client_cache_lock:
-                # Try to see if a client constructed with the same
-                # arguments already exists in the cache.
-                rc = _client_cache.get(args_key)
-                if rc is None:
-                    # No cached client exists. Create a new client
-                    # and store it in the cache.
-                    rc = Client(*args, **kwargs)
-                    _client_cache[args_key] = rc
-        else:
-            # If the arguments are not hashable, just create a brand new
-            # client.
-            rc = Client(*args, **kwargs)
+        with ipyparallel_island._view_lock:
+            ipyparallel_island._view = Client(
+                *args, **kwargs).load_balanced_view()
 
-        # Save the init arguments.
-        self._args = args
-        self._kwargs = kwargs
+    @staticmethod
+    def shutdown_view():
+        """Destroy the ipyparallel view.
 
-        # NOTE: we need to regulate access to the view because,
-        # while run_evolve() is running in a separate thread, we
-        # could be doing other things involving the view (e.g.,
-        # asking extra_info()). Thus, create the lock here.
-        self._view_lock = _Lock()
+        .. versionadded:: 2.12
 
-        return rc.load_balanced_view()
+        This method will destroy the :class:`ipyparallel.LoadBalancedView`
+        currently being used by the ipyparallel islands for submitting
+        evolution tasks to an ipyparallel cluster. The view can be re-inited
+        implicitly by submitting a new evolution task, or by invoking
+        the :func:`~pygmo.ipyparallel_island.init_view()` method.
 
-    def __copy__(self):
-        # For copy/deepcopy, construct a new instance
-        # with the same arguments used to construct self.
-        return ipyparallel_island(*self._args, **self._kwargs)
+        """
+        import gc
+        with ipyparallel_island._view_lock:
+            if ipyparallel_island._view is None:
+                return
 
-    def __deepcopy__(self, d):
-        return self.__copy__()
-
-    def __getstate__(self):
-        # For pickle/unpickle, we employ the construction
-        # arguments, which will be used to re-init the class
-        # during unpickle.
-        return self._args, self._kwargs
-
-    def __setstate__(self, state):
-        self._lview = self._init(*state[0], **state[1])
+            old_view = ipyparallel_island._view
+            ipyparallel_island._view = None
+            del(old_view)
+            gc.collect()
 
     def run_evolve(self, algo, pop):
         """Evolve population.
 
         This method will evolve the input :class:`~pygmo.population` *pop* using the input
         :class:`~pygmo.algorithm` *algo*, and return *algo* and the evolved population. The evolution
-        task is submitted to the ipyparallel cluster via an internal :class:`ipyparallel.LoadBalancedView`
-        instance initialised during the construction of the island.
+        task is submitted to the ipyparallel cluster via a global :class:`ipyparallel.LoadBalancedView`
+        instance initialised either implicitly by the first invocation of this method,
+        or by an explicit call to the :func:`~pygmo.ipyparallel_island.init_view()` method.
 
         Args:
 
@@ -567,14 +549,25 @@ class ipyparallel_island(object):
 
         Raises:
 
-            unspecified: any exception thrown during the evolution, or by submitting the evolution task
+            unspecified: any exception thrown by the evolution, by the creation of a
+              :class:`ipyparallel.LoadBalancedView`, or by the sumission of the evolution task
               to the ipyparallel cluster
 
 
         """
-        with self._view_lock:
-            ret = self._lview.apply_async(_evolve_func_ipy, algo, pop)
-        return ret.get()
+        # NOTE: as in the mp_island, we pre-serialize
+        # the algo and pop, so that we can catch
+        # serialization errors early.
+        import pickle
+        ser_algo_pop = pickle.dumps((algo, pop))
+        with ipyparallel_island._view_lock:
+            if ipyparallel_island._view is None:
+                from ipyparallel import Client
+                ipyparallel_island._view = Client().load_balanced_view()
+            ret = ipyparallel_island._view.apply_async(
+                _evolve_func_ipy, ser_algo_pop)
+
+        return pickle.loads(ret.get())
 
     def get_name(self):
         """Island's name.
@@ -592,6 +585,10 @@ class ipyparallel_island(object):
             str: a string with extra information about the status of the island
 
         """
-        with self._view_lock:
-            d = self._lview.queue_status()
+        from copy import deepcopy
+        with ipyparallel_island._view_lock:
+            if ipyparallel_island._view is None:
+                return "\tNo cluster view has been created yet"
+            else:
+                d = deepcopy(ipyparallel_island._view.queue_status())
         return "\tQueue status:\n\t\n\t" + "\n\t".join(["(" + str(k) + ", " + str(d[k]) + ")" for k in d])

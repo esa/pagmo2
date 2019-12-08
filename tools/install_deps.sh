@@ -21,7 +21,7 @@ if [[ "${PAGMO_BUILD}" != manylinux* ]]; then
 
     if [[ "${PAGMO_BUILD}" == "Python37" || "${PAGMO_BUILD}" == "OSXPython37" ]]; then
         conda_pkgs="$conda_pkgs python=3.7 numpy cloudpickle dill ipyparallel numba pip"
-    elif [[ "${PAGMO_BUILD}" == "Python27" || "${PAGMO_BUILD}" == "OSXPython27" ]]; then
+    elif [[ "${PAGMO_BUILD}" == "OSXPython27" ]]; then
         conda_pkgs="$conda_pkgs python=2.7 numpy cloudpickle dill ipyparallel numba"
     fi
 

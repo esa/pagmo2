@@ -837,6 +837,7 @@ def get_serialization_backend():
 
 def _cleanup():
     mp_island.shutdown_pool()
+    ipyparallel_island.shutdown_view()
     _cpp_cleanup()
 
 
