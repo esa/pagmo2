@@ -35,8 +35,15 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../cmake_modules/FindNumPy.cmake" "${
     "${CMAKE_CURRENT_SOURCE_DIR}/../cmake_modules/yacma/YACMAPythonSetup.cmake" DESTINATION "lib/cmake/pygmo")
 # Take care of versioning.
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" VERSION ${pygmo_VERSION}
-    COMPATIBILITY ExactVersion)
+# NOTE: SameMinorVersion available only
+# since CMake 3.11.
+if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
+    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" VERSION ${pygmo_VERSION}
+        COMPATIBILITY SameMajorVersion)
+else()
+    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" VERSION ${pygmo_VERSION}
+        COMPATIBILITY SameMinorVersion)
+endif()
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pygmo-config-version.cmake" DESTINATION "lib/cmake/pygmo")
 install(TARGETS pygmo EXPORT pygmo_export)
 install(EXPORT pygmo_export NAMESPACE Pygmo:: DESTINATION lib/cmake/pygmo)
