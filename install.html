@@ -300,10 +300,17 @@ various platforms.</p>
 <h4>Conda<a class="headerlink" href="#conda" title="Permalink to this headline">¶</a></h4>
 <p>pagmo is available via the <a class="reference external" href="https://conda.io/docs/">conda</a> package manager for Linux, OSX and Windows
 thanks to the infrastructure provided by <a class="reference external" href="https://conda-forge.org/">conda-forge</a>.
-In order to install pagmo via conda, you just need to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>
+Two packages are available:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://anaconda.org/conda-forge/pagmo">pagmo</a>, which contains the pagmo shared library,</p></li>
+<li><p><a class="reference external" href="https://anaconda.org/conda-forge/pagmo-devel">pagmo-devel</a>,
+which contains the pagmo headers and the
+CMake support files.</p></li>
+</ul>
+<p>In order to install pagmo via conda, you just need to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>
 to the channels, and then we can immediately install pagmo:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> conda config --add channels conda-forge
-<span class="gp">$</span> conda install pagmo
+<span class="gp">$</span> conda install pagmo pagmo-devel
 </pre></div>
 </div>
 <p>The conda packages for pagmo are maintained by the core development team,
@@ -480,6 +487,18 @@ system-wide, which is in general a good idea, you can do:</p>
 and they are regularly updated when new pygmo versions are released.
 We provide pip packages for Linux and Windows (both Python 2.7 and 3.x),
 but <strong>not</strong> for OSX.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It has been reported that the pip packages for Windows
+exhibit erratic behaviour (sometimes leading to crashes)
+when certain algorithms are used. These issues stem
+from incompatibilities between the compiler currently
+in use for the production of the pip packages on Windows
+(MinGW) and the compiler used to compile Python itself (MSVC).
+We are trying to determine if and how these issues can be
+resolved. For the time being, users are encouraged to use
+the conda packages on Windows instead of the pip packages.</p>
+</div>
 </div>
 <div class="section" id="id5">
 <h4>Arch Linux<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
