@@ -427,8 +427,15 @@ if(PAGMO_BUILD_PAGMO)
     install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)
-    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
-        COMPATIBILITY ExactVersion)
+    # NOTE: SameMinorVersion available only
+    # since CMake 3.11.
+    if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
+        write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
+            COMPATIBILITY SameMajorVersion)
+    else()
+        write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
+            COMPATIBILITY SameMinorVersion)
+    endif()
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "lib/cmake/pagmo")
 endif()
 
