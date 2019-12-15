@@ -147,13 +147,20 @@ Conda
 
 pagmo is available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows
 thanks to the infrastructure provided by `conda-forge <https://conda-forge.org/>`__.
+Two packages are available:
+
+* `pagmo <https://anaconda.org/conda-forge/pagmo>`__, which contains the pagmo shared library,
+* `pagmo-devel <https://anaconda.org/conda-forge/pagmo-devel>`__,
+  which contains the pagmo headers and the
+  CMake support files.
+
 In order to install pagmo via conda, you just need to add ``conda-forge``
 to the channels, and then we can immediately install pagmo:
 
 .. code-block:: console
 
    $ conda config --add channels conda-forge
-   $ conda install pagmo
+   $ conda install pagmo pagmo-devel
 
 The conda packages for pagmo are maintained by the core development team,
 and they are regularly updated when new pagmo versions are released.
@@ -362,6 +369,18 @@ The pip packages for pygmo are maintained by the core development team,
 and they are regularly updated when new pygmo versions are released.
 We provide pip packages for Linux and Windows (both Python 2.7 and 3.x),
 but **not** for OSX.
+
+.. warning::
+
+   It has been reported that the pip packages for Windows
+   exhibit erratic behaviour (sometimes leading to crashes)
+   when certain algorithms are used. These issues stem
+   from incompatibilities between the compiler currently
+   in use for the production of the pip packages on Windows
+   (MinGW) and the compiler used to compile Python itself (MSVC).
+   We are trying to determine if and how these issues can be
+   resolved. For the time being, users are encouraged to use
+   the conda packages on Windows instead of the pip packages.
 
 Arch Linux
 """"""""""
