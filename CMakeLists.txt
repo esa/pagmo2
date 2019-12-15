@@ -327,7 +327,10 @@ if(PAGMO_BUILD_PAGMO)
     target_link_libraries(pagmo PUBLIC Boost::boost Boost::serialization)
 
     # TBB.
-    target_link_libraries(pagmo PUBLIC TBB::tbb)
+    # NOTE: TBB is a private dependency because
+    # all uses of TBB are limited to the .cpp files,
+    # thus fully encapsulated in the pagmo library.
+    target_link_libraries(pagmo PRIVATE TBB::tbb)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.
@@ -337,12 +340,22 @@ if(PAGMO_BUILD_PAGMO)
 
     if(PAGMO_WITH_NLOPT)
         # Link pagmo to NLopt.
+        # NOTE: although all the NLopt functions we use
+        # are called from within the .cpp files, we have
+        # to include a couple of NLopt headers in the
+        # public pagmo API. This, NLopt needs to be
+        # in the public link interface.
         target_link_libraries(pagmo PUBLIC NLOPT::nlopt)
         set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
     endif()
 
     if(PAGMO_WITH_IPOPT)
         # Link pagmo to Ipopt.
+        # NOTE: although all the Ipopt functions we use
+        # are called from within the .cpp files, we have
+        # to include a couple of Ipopt headers in the
+        # public pagmo API. This, Ipopt needs to be
+        # in the public link interface.
         target_link_libraries(pagmo PUBLIC IPOPT::ipopt)
         set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
     endif()
@@ -423,7 +436,7 @@ if(PAGMO_BUILD_PAGMO)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindEigen3.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindTBB.cmake" DESTINATION "lib/cmake/pagmo")
+        DESTINATION "lib/cmake/pagmo")
     install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)
