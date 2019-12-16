@@ -1,5 +1,5 @@
 # CMake version check.
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.3)
 
 # Module path setup.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
@@ -125,16 +125,12 @@ if(PAGMO_BUILD_PAGMO)
 
     # NLopt
     if(PAGMO_WITH_NLOPT)
-        find_package(NLOPT REQUIRED)
-        message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIR}")
-        message(STATUS "NLopt library: ${NLOPT_LIBRARY}")
+        find_package(NLOPT REQUIRED COMPONENTS header libnlopt)
     endif()
 
     # Ipopt
     if(PAGMO_WITH_IPOPT)
-        find_package(IPOPT REQUIRED)
-        message(STATUS "Ipopt include directory: ${IPOPT_INCLUDE_DIR}")
-        message(STATUS "Ipopt library: ${IPOPT_LIBRARY}")
+        find_package(IPOPT REQUIRED COMPONENTS header libipopt)
     endif()
 
     if(PAGMO_BUILD_TESTS)
@@ -340,23 +336,25 @@ if(PAGMO_BUILD_PAGMO)
 
     if(PAGMO_WITH_NLOPT)
         # Link pagmo to NLopt.
-        # NOTE: although all the NLopt functions we use
-        # are called from within the .cpp files, we have
-        # to include a couple of NLopt headers in the
-        # public pagmo API. This, NLopt needs to be
-        # in the public link interface.
-        target_link_libraries(pagmo PUBLIC NLOPT::nlopt)
+        # NOTE: we make use of some NLopt types in the
+        # public pagmo interface, but we don't use any
+        # function from the library in the public headers.
+        # Thus, depend publicly on the header,
+        # privately on the compiled library.
+        target_link_libraries(pagmo PUBLIC NLOPT::header)
+        target_link_libraries(pagmo PRIVATE NLOPT::libnlopt)
         set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
     endif()
 
     if(PAGMO_WITH_IPOPT)
         # Link pagmo to Ipopt.
-        # NOTE: although all the Ipopt functions we use
-        # are called from within the .cpp files, we have
-        # to include a couple of Ipopt headers in the
-        # public pagmo API. This, Ipopt needs to be
-        # in the public link interface.
-        target_link_libraries(pagmo PUBLIC IPOPT::ipopt)
+        # NOTE: we make use of some Ipopt types in the
+        # public pagmo interface, but we don't use any
+        # function from the library in the public headers.
+        # Thus, depend publicly on the header,
+        # privately on the compiled library.
+        target_link_libraries(pagmo PUBLIC IPOPT::header)
+        target_link_libraries(pagmo PRIVATE IPOPT::libipopt)
         set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
     endif()
 
@@ -426,10 +424,10 @@ if(PAGMO_BUILD_PAGMO)
         set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 REQUIRED)\n")
     endif()
     if(PAGMO_WITH_NLOPT)
-        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLOPT REQUIRED)\n")
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLOPT REQUIRED COMPONENTS header)\n")
     endif()
     if(PAGMO_WITH_IPOPT)
-        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(IPOPT REQUIRED)\n")
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(IPOPT REQUIRED COMPONENTS header)\n")
     endif()
 
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
