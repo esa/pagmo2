@@ -10,7 +10,7 @@ set -e
 sudo apt-get install build-essential wget
 
 # Install conda+deps.
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -O miniconda.sh
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 export deps_dir=$HOME/local
 export PATH="$HOME/miniconda/bin:$PATH"
 export PATH="$deps_dir/bin:$PATH"
