@@ -201,7 +201,7 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">],[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">3.1</span><span class="p">]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span><span class="p">)</span>
 </pre></div>
@@ -218,7 +218,7 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">population</span><span class="p">(</span><span class="n">prob</span> <span class="o">=</span> <span class="n">zdt</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv</span> <span class="o">=</span> <span class="n">hypervolume</span><span class="p">(</span><span class="n">pop</span> <span class="o">=</span> <span class="n">pop</span><span class="p">)</span>
 </pre></div>
@@ -380,7 +380,7 @@ class <code class="xref py py-class docutils literal notranslate"><span class="p
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hvwfg</span><span class="p">(</span><span class="n">stop_dimension</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -396,7 +396,7 @@ class <code class="xref py py-class docutils literal notranslate"><span class="p
 class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal notranslate"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hv2d</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -412,7 +412,7 @@ class <code class="xref py py-class docutils literal notranslate"><span class="p
 class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal notranslate"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">hv3d</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -429,7 +429,7 @@ reduced to the special case of approximating the hypervolume indicator.</p>
 class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal notranslate"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">bf_fpras</span><span class="p">(</span><span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -446,7 +446,7 @@ reduced to the special case of approximating the least contributor.</p>
 class <a class="reference internal" href="#pygmo.hypervolume" title="pygmo.hypervolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">hypervolume</span></code></a> as it derives from the hidden base
 class <code class="xref py py-class docutils literal notranslate"><span class="pre">_hv_algorithm</span></code></p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">hv_algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">bf_approx</span><span class="p">()</span>
 </pre></div>
 </div>

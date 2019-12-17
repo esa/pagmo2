@@ -207,7 +207,7 @@ of a PyGMO <a class="reference internal" href="../py_problem.html#pygmo.problem"
 must be named after the function they are meant to decorate plus the
 <code class="docutils literal notranslate"><span class="pre">_decorator</span></code> suffix. For instance, we can define a minimal decorator
 for the fitness function as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating dv: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dv</span><span class="p">))</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">orig_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
@@ -217,13 +217,13 @@ for the fitness function as follows:</p>
 <p>This decorator will print the input decision vector <em>dv</em> before invoking the
 original fitness function. We can then construct a decorated Rosenbrock problem
 as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dprob</span> <span class="o">=</span> <span class="n">problem</span><span class="p">(</span><span class="n">decorator_problem</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">(),</span> <span class="n">fitness_decorator</span><span class="o">=</span><span class="n">f_decor</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>We can then verify that calling the fitness function of <em>dprob</em> will print
 the decision vector before returning the fitness value:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fv</span> <span class="o">=</span> <span class="n">dprob</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fv</span> <span class="o">=</span> <span class="n">dprob</span><span class="o">.</span><span class="n">fitness</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 <span class="go">Evaluating dv: [1. 2.]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
 <span class="go">[100.]</span>
@@ -265,7 +265,7 @@ read-only property.</p>
 <p>This method will return a copy of the decorator that has been registered upon construction
 for the function called <em>fname</em>. If no decorator for <em>fname</em> has been specified during
 construction, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> will be returned.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygmo</span> <span class="k">import</span> <span class="n">decorator_problem</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">rosenbrock</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f_decor</span><span class="p">(</span><span class="n">orig_fitness_function</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">new_fitness_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dv</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating dv: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dv</span><span class="p">))</span>
@@ -701,7 +701,7 @@ visualized if the problem id is 2,3 or 4.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">dtlz</span><span class="p">(</span><span class="n">prob_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> 

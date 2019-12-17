@@ -369,7 +369,7 @@ UDI will be returned (this allows to extract a Python UDI without knowing its ty
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i1</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">island</span><span class="p">(</span><span class="n">algo</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">de</span><span class="p">(),</span> <span class="n">prob</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">rosenbrock</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">udi</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">thread_island</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i1</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">thread_island</span><span class="p">)</span> 
 <span class="go">&lt;pygmo.core.thread_island at 0x7f8e478e1210&gt;</span>
