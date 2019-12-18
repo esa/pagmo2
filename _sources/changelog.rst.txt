@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.12.0 (unreleased)
+2.12.0 (2019-12-18)
 -------------------
 
 New
@@ -35,7 +35,9 @@ Fix
   (`#355 <https://github.com/esa/pagmo2/pull/355>`__).
 
 - Various build system/doc fixes
-  (`#361 <https://github.com/esa/pagmo2/pull/361>`__,
+  (`#372 <https://github.com/esa/pagmo2/pull/372>`__,
+  `#363 <https://github.com/esa/pagmo2/pull/363>`__,
+  `#361 <https://github.com/esa/pagmo2/pull/361>`__,
   `#350 <https://github.com/esa/pagmo2/pull/350>`__,
   `#354 <https://github.com/esa/pagmo2/pull/354>`__).
 
