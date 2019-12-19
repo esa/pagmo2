@@ -240,6 +240,7 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/generic.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/multi_objective.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hypervolume.cpp"
         # Detail.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
