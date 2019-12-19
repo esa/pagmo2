@@ -26,7 +26,7 @@ if((NOT PAGMO_BUILD_PAGMO) AND (NOT PAGMO_BUILD_PYGMO))
 endif()
 
 # Main pagmo/pygmo project version.
-set(PAGMO_PROJECT_VERSION 2.12.0)
+set(PAGMO_PROJECT_VERSION 2.13.0)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
@@ -291,8 +291,8 @@ if(PAGMO_BUILD_PAGMO)
 
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "2.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 2)
+    set_property(TARGET pagmo PROPERTY VERSION "3.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 3)
     target_compile_options(pagmo PRIVATE
         "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
         "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
