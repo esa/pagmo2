@@ -26,6 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <cmath>
 #include <stdexcept>
 #include <vector>
 
@@ -77,20 +78,16 @@ hypervolume::hypervolume(const std::vector<vector_double> &points, bool verify)
 /**
  * The copy constructor will deep copy the input problem \p other.
  *
- * @param other the hypervolume object to be copied.
- *
  * @throws unspecified any exception thrown by:
  * - memory allocation errors in standard containers,
  */
-hypervolume::hypervolume(const hypervolume &other) = default;
+hypervolume::hypervolume(const hypervolume &) = default;
 
 /// Default copy assignment operator
 /**
- * @param other the assignment target.
- *
  * @return a reference to \p this.
  */
-hypervolume &hypervolume::operator=(const hypervolume &other) = default;
+hypervolume &hypervolume::operator=(const hypervolume &) = default;
 
 /// Setter for 'copy_points' flag
 /**
@@ -253,6 +250,212 @@ double hypervolume::exclusive(unsigned p_idx, const vector_double &r_point, hv_a
         return hv_algo.exclusive(p_idx, points_cpy, r_point);
     } else {
         return hv_algo.exclusive(p_idx, m_points, r_point);
+    }
+}
+
+/// Compute exclusive contribution
+/**
+ * Computes exclusive hypervolume for given indivdual.
+ * This methods chooses the hv_algorithm dynamically.
+ *
+ * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
+ * @param r_point fitness vector describing the reference point
+ *
+ * @return the exclusive contribution to the hypervolume
+ */
+double hypervolume::exclusive(unsigned p_idx, const vector_double &r_point) const
+{
+    return exclusive(p_idx, r_point, *get_best_exclusive(p_idx, r_point));
+}
+
+/// Contributions method
+/**
+ * This method returns the exclusive contribution to the hypervolume by every point.
+ * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor
+ * in a loop).
+ *
+ * @param r_point fitness vector describing the reference point
+ * @param hv_algo instance of the algorithm object used for the computation
+ *
+ * @return vector of exclusive contributions by every point
+ */
+std::vector<double> hypervolume::contributions(const vector_double &r_point, hv_algorithm &hv_algo) const
+{
+    if (m_verify) {
+        verify_before_compute(r_point, hv_algo);
+    }
+
+    // Trivial case
+    if (m_points.size() == 1u) {
+        std::vector<double> c;
+        c.push_back(hv_algorithm::volume_between(m_points[0], r_point));
+        return c;
+    }
+
+    // copy the initial set of points, as the algorithm may alter its contents
+    if (m_copy_points) {
+        std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+        return hv_algo.contributions(points_cpy, r_point);
+    } else {
+        return hv_algo.contributions(m_points, r_point);
+    }
+}
+
+/// Contributions method
+/**
+ * This method returns the exclusive contribution to the hypervolume by every point.
+ * The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor
+ * in a loop).
+ * The hv_algorithm itself is chosen dynamically, so the best performing method is employed for given task.
+ *
+ * @param r_point fitness vector describing the reference point
+ * @return vector of exclusive contributions by every point
+ */
+std::vector<double> hypervolume::contributions(const vector_double &r_point) const
+{
+    return contributions(r_point, *get_best_contributions(r_point));
+}
+
+/// Find the least contributing individual
+/**
+ * Establishes the individual contributing the least to the total hypervolume.
+ *
+ * @param r_point fitness vector describing the reference point
+ * @param hv_algo instance of the algorithm object used for the computation
+ *
+ * @return index of the least contributing point
+ */
+unsigned long long hypervolume::least_contributor(const vector_double &r_point, hv_algorithm &hv_algo) const
+{
+    if (m_verify) {
+        verify_before_compute(r_point, hv_algo);
+    }
+
+    // Trivial case
+    if (m_points.size() == 1) {
+        return 0u;
+    }
+
+    // copy the initial set of points, as the algorithm may alter its contents
+    if (m_copy_points) {
+        std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+        return hv_algo.least_contributor(points_cpy, r_point);
+    } else {
+        return hv_algo.least_contributor(m_points, r_point);
+    }
+}
+
+/// Find the least contributing individual
+/**
+ * Establishes the individual contributing the least to the total hypervolume.
+ * This method chooses the best performing hv_algorithm dynamically
+ *
+ * @param r_point fitness vector describing the reference point
+ *
+ * @return index of the least contributing point
+ */
+unsigned long long hypervolume::least_contributor(const vector_double &r_point) const
+{
+    return least_contributor(r_point, *get_best_contributions(r_point));
+}
+
+/// Find the most contributing individual
+/**
+ * Establish the individual contributing the most to the total hypervolume.
+ *
+ * @param r_point fitness vector describing the reference point
+ * @param hv_algo instance of the algorithm object used for the computation
+ *
+ * @return index of the most contributing point
+ */
+unsigned long long hypervolume::greatest_contributor(const vector_double &r_point, hv_algorithm &hv_algo) const
+{
+    if (m_verify) {
+        verify_before_compute(r_point, hv_algo);
+    }
+
+    // copy the initial set of points, as the algorithm may alter its contents
+    if (m_copy_points) {
+        std::vector<vector_double> points_cpy(m_points.begin(), m_points.end());
+        return hv_algo.greatest_contributor(points_cpy, r_point);
+    } else {
+        return hv_algo.greatest_contributor(m_points, r_point);
+    }
+}
+
+/// Find the most contributing individual
+/**
+ * Establish the individual contributing the most to the total hypervolume.
+ * This method chooses the best performing hv_algorithm dynamically
+ *
+ * @param r_point fitness vector describing the reference point
+ *
+ * @return index of the most contributing point
+ */
+unsigned long long hypervolume::greatest_contributor(const vector_double &r_point) const
+{
+    return greatest_contributor(r_point, *get_best_contributions(r_point));
+}
+
+// Verify after construct method
+/**
+ * Verifies whether basic requirements are met for the initial set of points.
+ *
+ * @throws invalid_argument if point size is empty or when the dimensions among the points differ
+ */
+void hypervolume::verify_after_construct() const
+{
+    if (m_points.size() == 0) {
+        pagmo_throw(std::invalid_argument, "Point set cannot be empty.");
+    }
+    auto f_dim = m_points[0].size();
+    if (f_dim <= 1) {
+        pagmo_throw(std::invalid_argument, "Points of dimension > 1 required.");
+    }
+    for (const auto &v : m_points) {
+        if (v.size() != f_dim) {
+            pagmo_throw(std::invalid_argument, "All point set dimensions must be equal.");
+        }
+    }
+}
+
+// Verify before compute method
+/**
+ * Verifies whether reference point and the hypervolume method meet certain criteria.
+ *
+ * @param r_point vector describing the reference point
+ * @param hv_algo instance of the algorithm object used for the computation
+ *
+ * @throws value_error if reference point's and point set dimension do not agree
+ */
+void hypervolume::verify_before_compute(const vector_double &r_point, hv_algorithm &hv_algo) const
+{
+    if (m_points[0].size() != r_point.size()) {
+        pagmo_throw(std::invalid_argument, "Point set dimensions and reference point dimension must be equal.");
+    }
+    hv_algo.verify_before_compute(m_points, r_point);
+}
+
+// Expected number of operations
+/**
+ * Returns the expected average amount of elementary operations necessary to compute the hypervolume
+ * for a given front size \f$n\f$ and dimension size \f$d\f$
+ * This method is used by the approximated algorithms that fall back to exact computation.
+ *
+ * @param n size of the front
+ * @param d dimension size
+ *
+ * @return expected number of operations
+ */
+double expected_hv_operations(vector_double::size_type n, vector_double::size_type d)
+{
+    if (d <= 3u) {
+        return static_cast<double>(d) * static_cast<double>(n) * std::log(n); // hv3d
+    } else if (d == 4u) {
+        return 4.0 * static_cast<double>(n) * static_cast<double>(n); // hv4d
+    } else {
+        return 0.0005 * static_cast<double>(d)
+               * std::pow(static_cast<double>(n), static_cast<double>(d) * 0.5); // exponential complexity
     }
 }
 
