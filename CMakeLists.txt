@@ -26,7 +26,7 @@ if((NOT PAGMO_BUILD_PAGMO) AND (NOT PAGMO_BUILD_PYGMO))
 endif()
 
 # Main pagmo/pygmo project version.
-set(PAGMO_PROJECT_VERSION 2.12.0)
+set(PAGMO_PROJECT_VERSION 2.13.0)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
@@ -240,6 +240,13 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/generic.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/multi_objective.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hypervolume.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_algorithm.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_bf_approx.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_bf_fpras.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hv2d.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hv3d.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hvwfg.cpp"
         # Detail.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
@@ -291,8 +298,8 @@ if(PAGMO_BUILD_PAGMO)
 
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "2.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 2)
+    set_property(TARGET pagmo PROPERTY VERSION "3.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 3)
     target_compile_options(pagmo PRIVATE
         "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
         "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
