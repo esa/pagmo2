@@ -34,7 +34,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
