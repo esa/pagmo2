@@ -32,7 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
 #include <string>
 

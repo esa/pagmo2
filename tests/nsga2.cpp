@@ -32,7 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
 #include <string>
 
@@ -228,5 +228,5 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
 
     // 7 - Evolve the population
     pop2 = algo2.evolve(pop);
-    BOOST_CHECK(algo1.extract<nsga2>()->get_log() == algo2.extract<nsga2>()->get_log() );
+    BOOST_CHECK(algo1.extract<nsga2>()->get_log() == algo2.extract<nsga2>()->get_log());
 }
