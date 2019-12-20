@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_UTIL_HYPERVOLUME_HPP
-#define PAGMO_UTIL_HYPERVOLUME_HPP
+#ifndef PAGMO_UTILS_HYPERVOLUME_HPP
+#define PAGMO_UTILS_HYPERVOLUME_HPP
 
 #include <memory>
 #include <vector>

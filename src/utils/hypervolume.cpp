@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <cmath>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -34,6 +35,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
+#include <pagmo/utils/hv_algos/hv_hv2d.hpp>
+#include <pagmo/utils/hv_algos/hv_hv3d.hpp>
+#include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
 
 namespace pagmo
@@ -436,6 +440,9 @@ void hypervolume::verify_before_compute(const vector_double &r_point, hv_algorit
     hv_algo.verify_before_compute(m_points, r_point);
 }
 
+namespace detail
+{
+
 // Expected number of operations
 /**
  * Returns the expected average amount of elementary operations necessary to compute the hypervolume
@@ -456,6 +463,69 @@ double expected_hv_operations(vector_double::size_type n, vector_double::size_ty
     } else {
         return 0.0005 * static_cast<double>(d)
                * std::pow(static_cast<double>(n), static_cast<double>(d) * 0.5); // exponential complexity
+    }
+}
+
+} // namespace detail
+
+/// Chooses the best algorithm to compute the hypervolume
+/**
+ * Returns the best method for given hypervolume computation problem.
+ * As of yet, only the dimension size is taken into account.
+ *
+ * @param r_point reference point for the vector of points
+ *
+ * @return an std::shared_ptr to the selected algorithm
+ */
+std::shared_ptr<hv_algorithm> hypervolume::get_best_compute(const vector_double &r_point) const
+{
+    auto fdim = r_point.size();
+
+    if (fdim == 2u) {
+        return hv2d().clone();
+    } else if (fdim == 3u) {
+        return hv3d().clone();
+    } else {
+        return hvwfg().clone();
+    }
+}
+
+/// Chooses the best algorithm to compute the hypervolume
+/**
+ * Returns the best method for given hypervolume computation problem.
+ * As of yet, only the dimension size is taken into account.
+ *
+ * @param p_idx index of the point for which the exclusive contribution is to be computed
+ * @param r_point reference point for the vector of points
+ *
+ * @return an std::shared_ptr to the selected algorithm
+ */
+std::shared_ptr<hv_algorithm> hypervolume::get_best_exclusive(const unsigned p_idx, const vector_double &r_point) const
+{
+    (void)p_idx;
+    // Exclusive contribution and compute method share the same "best" set of algorithms.
+    return hypervolume::get_best_compute(r_point);
+}
+
+/// Chooses the best algorithm to compute the hypervolume
+/**
+ * Returns the best method for given hypervolume computation problem.
+ * As of yet, only the dimension size is taken into account.
+ *
+ * @param r_point reference point for the vector of points
+ *
+ * @return an std::shared_ptr to the selected algorithm
+ */
+std::shared_ptr<hv_algorithm> hypervolume::get_best_contributions(const vector_double &r_point) const
+{
+    auto fdim = r_point.size();
+
+    if (fdim == 2u) {
+        return hv2d().clone();
+    } else if (fdim == 3u) {
+        return hv3d().clone();
+    } else {
+        return hvwfg().clone();
     }
 }
 
