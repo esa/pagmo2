@@ -120,6 +120,12 @@ class mp_island(object):
        are thus advised to tread carefully with interrupt signals (especially in interactive sessions) when using
        :class:`~pygmo.mp_island`.
 
+    .. warning::
+
+       Due to an `upstream bug <https://bugs.python.org/issue38501>`_, when using Python 3.8 the multiprocessing island
+       machinery may lead to a hangup when exiting a Python session. As a workaround until the bug is resolved, users
+       are advised to explicitly call :func:`~pygmo.mp_island.shutdown_pool()` before exiting a Python session.
+
     """
 
     # Static variables for the pool.
@@ -330,6 +336,15 @@ class mp_island(object):
         return retval
 
     @staticmethod
+    def _init_pool_impl(processes):
+        # Implementation method for initing
+        # the pool. This will *not* do any locking.
+        from ._mp_utils import _make_pool
+
+        if mp_island._pool is None:
+            mp_island._pool, mp_island._pool_size = _make_pool(processes)
+
+    @staticmethod
     def init_pool(processes=None):
         """Initialise the process pool.
 
@@ -350,11 +365,8 @@ class mp_island(object):
            TypeError: if *processes* is not :data:`None` and not an :class:`int`
 
         """
-        from ._mp_utils import _make_pool
-
         with mp_island._pool_lock:
-            if mp_island._pool is None:
-                mp_island._pool, mp_island._pool_size = _make_pool(processes)
+            mp_island._init_pool_impl(processes)
 
     @staticmethod
     def get_pool_size():
@@ -372,8 +384,8 @@ class mp_island(object):
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
-        mp_island.init_pool()
         with mp_island._pool_lock:
+            mp_island._init_pool_impl(None)
             return mp_island._pool_size
 
     @staticmethod
@@ -404,8 +416,11 @@ class mp_island(object):
             raise ValueError(
                 "The 'processes' argument must be strictly positive")
 
-        mp_island.init_pool()
         with mp_island._pool_lock:
+            # NOTE: this will either init a new pool
+            # with the requested number of processes,
+            # or do nothing if the pool exists already.
+            mp_island._init_pool_impl(processes)
             if processes == mp_island._pool_size:
                 # Don't do anything if we are not changing
                 # the size of the pool.
