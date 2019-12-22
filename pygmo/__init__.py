@@ -60,8 +60,9 @@ from .core import *
 from .plotting import *
 from ._py_islands import *
 from ._py_problems import *
+from ._py_bfes import *
 
-# We move into the problems, algorithms and islands namespaces
+# We move into the problems, algorithms, etc. namespaces
 # all the pure python UDAs, UDPs and UDIs.
 for item in dir(_py_islands):
     if not item.startswith("_"):
@@ -72,6 +73,11 @@ for item in dir(_py_problems):
     if not item.startswith("_"):
         setattr(problems, item, getattr(_py_problems, item))
 del _py_problems
+
+for item in dir(_py_bfes):
+    if not item.startswith("_"):
+        setattr(batch_evaluators, item, getattr(_py_bfes, item))
+del _py_bfes
 
 del item
 
@@ -837,6 +843,7 @@ def get_serialization_backend():
 
 def _cleanup():
     mp_island.shutdown_pool()
+    mp_bfe.shutdown_pool()
     ipyparallel_island.shutdown_view()
     _cpp_cleanup()
 

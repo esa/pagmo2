@@ -417,6 +417,34 @@ BOOST_PYTHON_MODULE(core)
               }
           };
 
+    // Override the default implementation of default_bfe.
+    detail::default_bfe_impl = [](const problem &p, const vector_double &dvs) -> vector_double {
+        // The member function batch_fitness() of p, if present, has priority.
+        if (p.has_batch_fitness()) {
+            return member_bfe{}(p, dvs);
+        }
+
+        // Otherwise, we run the generic thread-based bfe, if the problem
+        // is thread-safe enough.
+        if (p.get_thread_safety() >= thread_safety::basic) {
+            return thread_bfe{}(p, dvs);
+        }
+
+        // NOTE: in this last bit of the implementation we need to call
+        // into the Python interpreter. In order to ensure that default_bfe
+        // still works also from a C++ thread of which Python knows nothing about,
+        // we will be using a thread ensurer, so that the thread safety
+        // guarantee provided by default_bfe is still respected.
+        // NOTE: the original default_bfe code is thread safe in the sense that the
+        // code directly implemented within that class is thread safe. Invoking the call
+        // operator of default_bfe might still end up being thread unsafe if p
+        // itself is thread unsafe (the same happens, e.g., in a thread-safe algorithm
+        // which uses a thread-unsafe problem in its evolve()).
+        pygmo::gil_thread_ensurer gte;
+        // Otherwise, we go for the multiprocessing bfe.
+        return pygmo::obj_to_vector<vector_double>(bp::import("pygmo").attr("mp_bfe")().attr("__call__")(p, dvs));
+    };
+
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
     // destroyed at the end of island::wait().

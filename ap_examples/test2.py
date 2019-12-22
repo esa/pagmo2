@@ -25,4 +25,5 @@ if __name__ == '__main__':
     isl.evolve()
     isl.wait_check()
     pygmo.mp_island.shutdown_pool()
+    pygmo.mp_bfe.shutdown_pool()
     print("All good!")

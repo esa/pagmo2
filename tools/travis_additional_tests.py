@@ -54,3 +54,4 @@ if __name__ == '__main__':
     test1()
     test2()
     pg.mp_island.shutdown_pool()
+    pygmo.mp_bfe.shutdown_pool()
