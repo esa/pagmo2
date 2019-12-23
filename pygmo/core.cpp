@@ -352,14 +352,6 @@ std::unordered_set<std::string> ap_set;
 
 } // namespace pygmo
 
-// Detect if pygmo can use the multiprocessing module.
-// NOTE: the mp machinery is supported since Python 3.4 or on Windows.
-#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
-
-#define PYGMO_CAN_USE_MP
-
-#endif
-
 BOOST_PYTHON_MODULE(core)
 {
     using pygmo::lcast;
@@ -407,12 +399,7 @@ BOOST_PYTHON_MODULE(core)
                   // of code normally would provide a basic thread safety guarantee, and in order to continue providing
                   // it we use the ensurer.
                   pygmo::gil_thread_ensurer gte;
-                  bp::object py_island = bp::import("pygmo")
-#if defined(PYGMO_CAN_USE_MP)
-                                             .attr("mp_island");
-#else
-                                             .attr("ipyparallel_island");
-#endif
+                  bp::object py_island = bp::import("pygmo").attr("mp_island");
                   ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
               }
           };

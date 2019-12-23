@@ -120,11 +120,7 @@ inline bp::object deepcopy(const bp::object &o)
 // Import and return the builtin module.
 inline bp::object builtin()
 {
-#if PY_MAJOR_VERSION < 3
-    return bp::import("__builtin__");
-#else
     return bp::import("builtins");
-#endif
 }
 
 // hasattr() wrapper.
