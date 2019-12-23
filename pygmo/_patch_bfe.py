@@ -109,11 +109,11 @@ def _bfe_call(self, prob, dvs):
     and it will return the corresponding fitness vectors.
 
     The input decision vectors must be stored contiguously in *dvs*: for a problem with dimension :math:`n`, the first
-    decision vector in *dvs* occupies the index range :math:`\left[0, n\right)`, the second decision vector
-    occupies the range :math:`\left[n, 2n\right)`, and so on. Similarly, the output fitness vectors must be
+    decision vector in *dvs* occupies the index range :math:`\\left[0, n\\right)`, the second decision vector
+    occupies the range :math:`\\left[n, 2n\\right)`, and so on. Similarly, the output fitness vectors must be
     laid out contiguously in the return value: for a problem with fitness dimension :math:`f`, the first fitness
-    vector will occupy the index range :math:`\left[0, f\right)`, the second fitness vector
-    will occupy the range :math:`\left[f, 2f\right)`, and so on.
+    vector will occupy the index range :math:`\\left[0, f\\right)`, the second fitness vector
+    will occupy the range :math:`\\left[f, 2f\\right)`, and so on.
 
     This function will perform a variety of sanity checks on both *dvs* and on the return value.
 

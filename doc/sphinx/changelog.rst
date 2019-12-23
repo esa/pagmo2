@@ -1,6 +1,31 @@
 Changelog
 =========
 
+2.13.0 (unreleased)
+-------------------
+
+New
+~~~
+
+- The :cpp:class:`pagmo::not_implemented_error` C++ exception
+  is now correctly translated to the :class:`NotImplementedError`
+  Python exception
+  (`#380 <https://github.com/esa/pagmo2/pull/380>`__).
+
+Changes
+~~~~~~~
+
+- The hypervolume code has been moved to the compiled
+  pagmo library
+  (`#376 <https://github.com/esa/pagmo2/pull/376>`__).
+
+Fix
+~~~
+
+- Fix a compilation warning in debug mode when using
+  recent Boost versions
+  (`#377 <https://github.com/esa/pagmo2/pull/377>`__).
+
 2.12.0 (2019-12-18)
 -------------------
 
