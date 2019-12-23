@@ -49,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
 #include <pygmo/docstrings.hpp>
@@ -90,6 +91,14 @@ struct test_bfe {
     int m_n = 1;
 };
 
+// A thread-unsafe test bfe.
+struct tu_test_bfe : test_bfe {
+    thread_safety get_thread_safety() const
+    {
+        return thread_safety::none;
+    }
+};
+
 } // namespace
 
 } // namespace detail
@@ -100,6 +109,11 @@ void expose_bfes()
     auto t_bfe = expose_bfe_pygmo<detail::test_bfe>("_test_bfe", "A test bfe.");
     t_bfe.def("get_n", &detail::test_bfe::get_n);
     t_bfe.def("set_n", &detail::test_bfe::set_n);
+
+    // Thread unsafe test bfe.
+    auto tu_bfe = expose_bfe_pygmo<detail::tu_test_bfe>("_tu_test_bfe", "A thread-unsafe test bfe.");
+    tu_bfe.def("get_n", &detail::tu_test_bfe::get_n);
+    tu_bfe.def("set_n", &detail::tu_test_bfe::set_n);
 
     // Default bfe.
     expose_bfe_pygmo<default_bfe>("default_bfe", default_bfe_docstring().c_str());

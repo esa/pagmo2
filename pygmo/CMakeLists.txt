@@ -108,7 +108,7 @@ add_subdirectory(plotting)
 
 # Add the Python files.
 install(FILES __init__.py test.py _patch_problem.py _patch_algorithm.py _patch_bfe.py _patch_island.py _patch_topology.py _patch_r_policy.py
-     _patch_s_policy.py _problem_test.py _algorithm_test.py _island_test.py _topology_test.py _r_policy_test.py _s_policy_test.py
+     _patch_s_policy.py _problem_test.py _algorithm_test.py _island_test.py _topology_test.py _r_policy_test.py _s_policy_test.py _bfe_test.py
      _py_islands.py _py_problems.py _py_bfes.py _mp_utils.py
      "${CMAKE_CURRENT_BINARY_DIR}/_version.py" DESTINATION ${PYGMO_INSTALL_PATH})
 
