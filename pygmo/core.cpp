@@ -61,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/enum.hpp>
 #include <boost/python/errors.hpp>
+#include <boost/python/exception_translator.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
@@ -445,6 +446,10 @@ BOOST_PYTHON_MODULE(core)
     doc_options.enable_all();
     doc_options.disable_cpp_signatures();
     doc_options.disable_py_signatures();
+
+    // Register pagmo's custom exceptions.
+    bp::register_exception_translator<not_implemented_error>(
+        lcast([](const not_implemented_error &nie) { PyErr_SetString(PyExc_NotImplementedError, nie.what()); }));
 
     // The thread_safety enum.
     bp::enum_<thread_safety>("_thread_safety")
