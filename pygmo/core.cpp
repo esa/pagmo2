@@ -1109,10 +1109,9 @@ BOOST_PYTHON_MODULE(core)
         // UDBFE extraction.
         .def("_py_extract", &pygmo::generic_py_extract<bfe>)
         // Bfe methods.
-        .def("__call__", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
+        .def("_call_impl", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
                  return pygmo::vector_to_ndarr(b(prob, pygmo::obj_to_vector<vector_double>(dvs)));
-             }),
-             pygmo::bfe_call_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+             }))
         .def("get_name", &bfe::get_name, pygmo::bfe_get_name_docstring().c_str())
         .def("get_extra_info", &bfe::get_extra_info, pygmo::bfe_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &bfe::get_thread_safety, pygmo::bfe_get_thread_safety_docstring().c_str());

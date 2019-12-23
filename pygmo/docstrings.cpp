@@ -6256,40 +6256,6 @@ Raises:
 )";
 }
 
-std::string bfe_call_docstring()
-{
-    return R"(__call__(prob, dvs)
-
-Call operator.
-
-The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
-of the decision vectors stored in *dvs* using the input problem *prob*, and it will return the corresponding
-fitness vectors.
-
-The input decision vectors must be stored contiguously in *dvs*: for a problem with dimension :math:`n`, the first
-decision vector in *dvs* occupies the index range :math:`\left[0, n\right)`, the second decision vector
-occupies the range :math:`\left[n, 2n\right)`, and so on. Similarly, the output fitness vectors must be
-laid out contiguously in the return value: for a problem with fitness dimension :math:`f`, the first fitness
-vector will occupy the index range :math:`\left[0, f\right)`, the second fitness vector
-will occupy the range :math:`\left[f, 2f\right)`, and so on.
-
-This function will perform a variety of sanity checks on both *dvs* and on the return value.
-
-Args:
-    prob (:class:`~pygmo.problem`): the input problem
-    dvs (array-like object): the input decision vectors that will be evaluated in batch mode
-
-Returns:
-    1D NumPy float array: the fitness vectors corresponding to the input decision vectors in *dvs*
-
-Raises:
-    ValueError: if *dvs* or the return value produced by the UDBFE are incompatible with the input problem *prob*
-    unspecified: any exception raised by the invocation of the UDBFE, or by failures at the intersection
-      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
-
-)";
-}
-
 std::string bfe_get_name_docstring()
 {
     return R"(get_name()

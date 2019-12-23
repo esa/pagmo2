@@ -282,7 +282,6 @@ std::string archipelago_set_migrant_handling_docstring();
 
 // bfe.
 std::string bfe_docstring();
-std::string bfe_call_docstring();
 std::string bfe_get_name_docstring();
 std::string bfe_get_extra_info_docstring();
 std::string bfe_get_thread_safety_docstring();
