@@ -529,7 +529,7 @@ class pso_gen_test_case(_ut.TestCase):
                       variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
-        uda.set_bfe(b = bfe())
+        uda.set_bfe(b=bfe())
         uda.set_bfe(bfe())
 
 
@@ -2559,6 +2559,176 @@ class fully_connected_test_case(_ut.TestCase):
         self.assertEqual(topo.get_name(), "Fully connected")
 
 
+class thread_bfe_test_case(_ut.TestCase):
+    """Test case for the thread_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, member_bfe, rosenbrock, batch_random_decision_vector, problem
+        udbfe = thread_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertTrue(b.is_(thread_bfe))
+        self.assertFalse(b.is_(member_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+
+        self.assertTrue(
+            b.get_name() == "Multi-threaded batch fitness evaluator")
+        self.assertTrue(b.get_extra_info() == "")
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def get_name(self):
+                return 'pippo'
+
+        prob = problem(p())
+
+        with self.assertRaises(ValueError) as cm:
+            b(prob, [0])
+        err = cm.exception
+        self.assertTrue(
+            "Cannot use a thread_bfe on the problem 'pippo', which does not provide the required level of thread safety" in str(err))
+
+
+class member_bfe_test_case(_ut.TestCase):
+    """Test case for the member_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, member_bfe, rosenbrock, batch_random_decision_vector, problem
+        udbfe = member_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(member_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+
+        with self.assertRaises(NotImplementedError) as cm:
+            b(prob, dvs)
+        err = cm.exception
+        self.assertTrue(
+            "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type 'Multidimensional Rosenbrock Function'" in str(err))
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def batch_fitness(self, dvs):
+                return [42] * len(dvs)
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        for f in fvs:
+            self.assertTrue(f == 42)
+
+
+class mp_bfe_test_case(_ut.TestCase):
+    """Test case for the mp_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, rosenbrock, batch_random_decision_vector, problem
+        from . import mp_bfe
+
+        udbfe = mp_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(mp_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+
+class default_bfe_test_case(_ut.TestCase):
+    """Test case for the default_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, default_bfe, rosenbrock, batch_random_decision_vector, problem
+
+        udbfe = default_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(default_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def batch_fitness(self, dvs):
+                return [42] * len(dvs)
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        for f in fvs:
+            self.assertTrue(f == 42)
+
+
 def run_test_suite(level=0):
     """Run the full test suite.
 
@@ -2577,6 +2747,11 @@ def run_test_suite(level=0):
 
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
+    suite.addTest(_bfe_test.bfe_test_case())
+    suite.addTest(thread_bfe_test_case())
+    suite.addTest(member_bfe_test_case())
+    suite.addTest(mp_bfe_test_case())
+    suite.addTest(default_bfe_test_case())
     suite.addTest(archipelago_test_case(level))
     suite.addTest(_island_test.island_test_case())
     suite.addTest(_s_policy_test.s_policy_test_case())
@@ -2588,7 +2763,6 @@ def run_test_suite(level=0):
     suite.addTest(ring_test_case())
     suite.addTest(fully_connected_test_case())
     suite.addTest(thread_island_torture_test_case())
-    suite.addTest(_bfe_test.bfe_test_case())
     suite.addTest(_problem_test.problem_test_case())
     suite.addTest(_algorithm_test.algorithm_test_case())
     suite.addTest(_island_test.mp_island_test_case(level))

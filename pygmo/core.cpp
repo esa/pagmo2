@@ -430,7 +430,8 @@ BOOST_PYTHON_MODULE(core)
         // which uses a thread-unsafe problem in its evolve()).
         pygmo::gil_thread_ensurer gte;
         // Otherwise, we go for the multiprocessing bfe.
-        return pygmo::obj_to_vector<vector_double>(bp::import("pygmo").attr("mp_bfe")().attr("__call__")(p, dvs));
+        return pygmo::obj_to_vector<vector_double>(
+            bp::import("pygmo").attr("mp_bfe")().attr("__call__")(p, pygmo::vector_to_ndarr(dvs)));
     };
 
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
