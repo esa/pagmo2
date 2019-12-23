@@ -1,3 +1,4 @@
+import os
 from setuptools import setup
 from setuptools.dist import Distribution
 import sys
@@ -27,7 +28,6 @@ CLASSIFIERS = [
     'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
     'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
 
-    'Programming Language :: Python :: 2',
     'Programming Language :: Python :: 3'
 ]
 KEYWORDS = 'science math physics optimization ai evolutionary-computing parallel-computing metaheuristics'
@@ -40,8 +40,8 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(foo):
         return True
 
+
 # Setup the list of external dlls.
-import os
 if os.name == 'nt':
     mingw_wheel_libs = 'mingw_wheel_libs_python{}{}.txt'.format(
         sys.version_info[0], sys.version_info[1])
