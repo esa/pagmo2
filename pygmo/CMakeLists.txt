@@ -13,11 +13,7 @@ endif()
 if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 66))
     set(PYGMO_BP_TARGET "Boost::python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
 else()
-    if(${PYTHON_VERSION_MAJOR} EQUAL 2)
-        set(PYGMO_BP_TARGET "Boost::python")
-    else()
-        set(PYGMO_BP_TARGET "Boost::python3")
-    endif()
+    set(PYGMO_BP_TARGET "Boost::python3")
 endif()
 
 # Setup of the config.hpp file for pygmo.

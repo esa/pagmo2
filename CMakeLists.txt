@@ -145,8 +145,8 @@ if(PAGMO_BUILD_PYGMO)
     include(YACMAPythonSetup)
 
     # Python version check.
-    if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
-        message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+    if(${PYTHON_VERSION_MAJOR} LESS 3 OR (${PYTHON_VERSION_MAJOR} EQUAL 3 AND ${PYTHON_VERSION_MINOR} LESS 4))
+        message(FATAL_ERROR "Minimum supported Python version is 3.4.")
     endif()
 
     # NOTE: for the time being, require that pagmo/pygmo versions are matching exactly.
