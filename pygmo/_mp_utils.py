@@ -40,7 +40,7 @@ def _get_spawn_context():
 
     import multiprocessing as mp
 
-    return = mp.get_context('spawn')
+    return mp.get_context('spawn')
 
 
 class _temp_disable_sigint(object):
