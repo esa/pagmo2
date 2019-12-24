@@ -31,10 +31,9 @@
 from threading import Lock as _Lock
 
 
-def _mp_bfe_func(ser_prob_dv):
+def _mp_ipy_bfe_func(ser_prob_dv):
     # The function that will be invoked
-    # by the individual processes of mp_bfe.
-
+    # by the individual processes/nodes of mp/ipy bfe.
     import pickle
 
     prob = pickle.loads(ser_prob_dv[0])
@@ -93,10 +92,10 @@ class mp_bfe(object):
             mp_bfe._init_pool_impl(None)
             # Runt the objfun evaluations in async mode.
             if self._chunksize is None:
-                ret = mp_bfe._pool.map_async(_mp_bfe_func, async_args)
+                ret = mp_bfe._pool.map_async(_mp_ipy_bfe_func, async_args)
             else:
                 ret = mp_bfe._pool.map_async(
-                    _mp_bfe_func, async_args, chunksize=self._chunksize)
+                    _mp_ipy_bfe_func, async_args, chunksize=self._chunksize)
 
         # Build the vector of fitness vectors as a 2D numpy array.
         fvs = np.array([pickle.loads(fv) for fv in ret.get()])
@@ -168,3 +167,90 @@ class mp_bfe(object):
                 mp_bfe._pool.join()
                 mp_bfe._pool = None
                 mp_bfe._pool_size = None
+
+
+class ipyparallel_bfe(object):
+    # Static variables for the view.
+    _view_lock = _Lock()
+    _view = None
+
+    @staticmethod
+    def init_view(client_args=[], client_kwargs={}, view_args=[], view_kwargs={}):
+        from ipyparallel import Client
+        import gc
+
+        # Create the new view.
+        new_view = Client(
+            *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
+
+        with ipyparallel_bfe._view_lock:
+            if not ipyparallel_bfe._view is None:
+                # Erase the old view.
+                old_view = ipyparallel_bfe._view
+                ipyparallel_bfe._view = None
+                del(old_view)
+                gc.collect()
+
+            # Assign the new view.
+            ipyparallel_bfe._view = new_view
+
+    @staticmethod
+    def shutdown_view():
+        import gc
+        with ipyparallel_bfe._view_lock:
+            if ipyparallel_bfe._view is None:
+                return
+
+            old_view = ipyparallel_bfe._view
+            ipyparallel_bfe._view = None
+            del(old_view)
+            gc.collect()
+
+    def __call__(self, prob, dvs):
+        import pickle
+        import numpy as np
+
+        # Fetch the dimension and the fitness
+        # dimension of the problem.
+        ndim = prob.get_nx()
+        nf = prob.get_nf()
+
+        # Compute the total number of decision
+        # vectors represented by dvs.
+        ndvs = len(dvs) // ndim
+        # Reshape dvs so that it represents
+        # ndvs decision vectors of dimension ndim
+        # each.
+        dvs.shape = (ndvs, ndim)
+
+        # Pre-serialize the problem.
+        pprob = pickle.dumps(prob)
+
+        # Build the list of arguments to pass
+        # to the cluster nodes.
+        async_args = [(pprob, pickle.dumps(dv)) for dv in dvs]
+
+        with ipyparallel_bfe._view_lock:
+            if ipyparallel_bfe._view is None:
+                from ipyparallel import Client
+                ipyparallel_bfe._view = Client().load_balanced_view()
+            ret = ipyparallel_bfe._view.map_async(_mp_ipy_bfe_func, async_args)
+
+        # Build the vector of fitness vectors as a 2D numpy array.
+        fvs = np.array([pickle.loads(fv) for fv in ret.get()])
+        # Reshape it so that it is 1D.
+        fvs.shape = (ndvs*nf,)
+
+        return fvs
+
+    def get_name(self):
+        return "Ipyparallel batch fitness evaluator"
+
+    def get_extra_info(self):
+        from copy import deepcopy
+        with ipyparallel_bfe._view_lock:
+            if ipyparallel_bfe._view is None:
+                return "\tNo cluster view has been created yet"
+            else:
+                d = deepcopy(ipyparallel_bfe._view.queue_status())
+        return "\tQueue status:\n\t\n\t" + "\n\t".join(["(" + str(k) + ", " + str(d[k]) + ")" for k in d])

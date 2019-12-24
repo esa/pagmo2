@@ -842,6 +842,7 @@ def _cleanup():
     mp_island.shutdown_pool()
     mp_bfe.shutdown_pool()
     ipyparallel_island.shutdown_view()
+    ipyparallel_bfe.shutdown_view()
     _cpp_cleanup()
 
 
