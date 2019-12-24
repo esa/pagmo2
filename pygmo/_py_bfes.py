@@ -43,12 +43,71 @@ def _mp_ipy_bfe_func(ser_prob_dv):
 
 
 class mp_bfe(object):
+    """Multiprocessing batch fitness evaluator.
+
+    .. versionadded:: 2.13
+
+    This user-defined batch fitness evaluator (UDBFE) will dispatch
+    the fitness evaluation in batch mode of a set of decision vectors
+    to a process pool created and managed via the facilities of the
+    standard Python :mod:`multiprocessing` module.
+
+    The evaluations of the decision vectors are dispatched to the processes
+    of a global :class:`pool <multiprocessing.pool.Pool>` shared between
+    different instances of :class:`~pygmo.mp_bfe`. The pool is created
+    either implicitly by the construction of the first :class:`~pygmo.mp_bfe`
+    object or explicitly via the :func:`~pygmo.mp_bfe.init_pool()`
+    static method. The default number of processes in the pool is equal to
+    the number of logical CPUs on the current machine. The pool's size can
+    be queried via :func:`~pygmo.mp_bfe.get_pool_size()`, and changed via
+    :func:`~pygmo.mp_bfe.resize_pool()`. The pool can be stopped via
+    :func:`~pygmo.mp_bfe.shutdown_pool()`.
+
+    .. note::
+
+       Due to certain implementation details of CPython, it is not possible to initialise, resize or shutdown the pool
+       from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
+       :class:`~pygmo.mp_bfe` instance is created in a thread different from the main one, an error
+       will be raised. In such a situation, the user should ensure to call :func:`~pygmo.mp_bfe.init_pool()`
+       from the main thread before spawning the secondary thread.
+
+    .. warning::
+
+       Due to internal limitations of CPython, sending an interrupt signal (e.g., by pressing ``Ctrl+C`` in an interactive
+       Python session) while an :class:`~pygmo.mp_bfe` is running might end up sending an interrupt signal also to the
+       external process(es). This can lead to unpredictable runtime behaviour (e.g., the session may hang). Although
+       pygmo tries hard to limit as much as possible the chances of this occurrence, it cannot eliminate them completely. Users
+       are thus advised to tread carefully with interrupt signals (especially in interactive sessions) when using
+       :class:`~pygmo.mp_bfe`.
+
+    .. warning::
+
+       Due to an `upstream bug <https://bugs.python.org/issue38501>`_, when using Python 3.8 the multiprocessing
+       machinery may lead to a hangup when exiting a Python session. As a workaround until the bug is resolved, users
+       are advised to explicitly call :func:`~pygmo.mp_bfe.shutdown_pool()` before exiting a Python session.
+
+    """
+
     # Static variables for the pool.
     _pool_lock = _Lock()
     _pool = None
     _pool_size = None
 
     def __init__(self, chunksize=None):
+        """
+        Args:
+
+           chunksize(:type:`int` or :data:`None`): if not :data:`None`, this positive integral represents
+             the approximate number of decision vectors that are processed by each task
+             submitted to the process pool by the call operator
+
+        Raises:
+
+           TypeError: if *chunksize* is neither :data:`None` nor a value of an integral type
+           ValueError: if *chunksize* is not strictly positive
+           unspecified: any exception thrown by :func:`~pygmo.mp_bfe.init_pool()`
+
+        """
         if not chunksize is None and not isinstance(chunksize, int):
             raise TypeError(
                 "The 'chunksize' argument must be None or an int, but it is of type '{}' instead".format(type(chunksize)))
@@ -64,6 +123,35 @@ class mp_bfe(object):
         self._chunksize = chunksize
 
     def __call__(self, prob, dvs):
+        """Call operator.
+
+        This method will evaluate in batch mode the fitnesses of the input decision vectors
+        *dvs* using the fitness function from the optimisation problem *prob*. The fitness
+        evaluations are delegated to the processes of the pool backing
+        :class:`~pygmo.mp_bfe`.
+
+        See the documentation of :class:`pygmo.bfe` for an explanation of the expected
+        formats of *dvs* and of the return value.
+
+        Args:
+
+           prob(:class:`~pygmo.problem`): the input problem
+           dvs(:class:`numpy.ndarray`): the input decision vectors, represented as a
+             flattened 1D array
+
+        Returns:
+
+           :class:`numpy.ndarray`: the fitness vectors corresponding to *dvs*, represented as a
+             flattened 1D array
+
+        Raises:
+
+           unspecified: any exception thrown by the evaluations, by the (de)serialization
+             of the input arguments or of the return value, or by the public interface of the
+             process pool
+
+
+        """
         import pickle
         import numpy as np
 
@@ -105,9 +193,30 @@ class mp_bfe(object):
         return fvs
 
     def get_name(self):
+        """Name of this evaluator.
+
+        Returns:
+
+           :type:`str`: ``"Multiprocessing batch fitness evaluator"``
+
+        """
         return "Multiprocessing batch fitness evaluator"
 
     def get_extra_info(self):
+        """Extra info for this evaluator.
+
+        If the process pool was previously shut down via :func:`~pygmo.mp_bfe.shutdown_pool()`,
+        invoking this function will trigger the creation of a new pool.
+
+        Returns:
+
+           :type:`str`: a string containing information about the number of processes in the pool
+
+        Raises:
+
+           unspecified: any exception thrown by :func:`~pygmo.mp_bfe.get_pool_size()`
+
+        """
         return "\tNumber of processes in the pool: {}".format(
             mp_bfe.get_pool_size())
 
@@ -122,17 +231,67 @@ class mp_bfe(object):
 
     @staticmethod
     def init_pool(processes=None):
+        """Initialise the process pool.
+
+        This method will initialise the process pool backing :class:`~pygmo.mp_bfe`, if the pool
+        has not been initialised yet or if the pool was previously shut down via :func:`~pygmo.mp_bfe.shutdown_pool()`.
+        Otherwise, this method will have no effects.
+
+        Args:
+
+           processes(:data:`None` or an :class:`int`): the size of the pool (if :data:`None`, the size of the pool will be
+             equal to the number of logical CPUs on the system)
+
+        Raises:
+
+           ValueError: if the pool does not exist yet and the function is being called from a thread different
+             from the main one, or if *processes* is a non-positive value
+           TypeError: if *processes* is not :data:`None` and not an :class:`int`
+
+        """
         with mp_bfe._pool_lock:
             mp_bfe._init_pool_impl(processes)
 
     @staticmethod
     def get_pool_size():
+        """Get the size of the process pool.
+
+        If the process pool was previously shut down via :func:`~pygmo.mp_bfe.shutdown_pool()`, invoking this
+        function will trigger the creation of a new pool.
+
+        Returns:
+
+           :type:`int`: the current size of the pool
+
+        Raises:
+
+           unspecified: any exception thrown by :func:`~pygmo.mp_bfe.init_pool()`
+
+        """
         with mp_bfe._pool_lock:
             mp_bfe._init_pool_impl(None)
             return mp_bfe._pool_size
 
     @staticmethod
     def resize_pool(processes):
+        """Resize pool.
+
+        This method will resize the process pool backing :class:`~pygmo.mp_bfe`.
+
+        If the process pool was previously shut down via :func:`~pygmo.mp_bfe.shutdown_pool()`, invoking this
+        function will trigger the creation of a new pool.
+
+        Args:
+
+           processes(:type:`int`): the desired number of processes in the pool
+
+        Raises:
+
+           TypeError: if the *processes* argument is not an :class:`int`
+           ValueError: if the *processes* argument is not strictly positive
+           unspecified: any exception thrown by :func:`~pygmo.mp_bfe.init_pool()`
+
+        """
         from ._mp_utils import _make_pool
 
         if not isinstance(processes, int):
@@ -161,6 +320,17 @@ class mp_bfe(object):
 
     @staticmethod
     def shutdown_pool():
+        """Shutdown pool.
+
+        This method will shut down the process pool backing :class:`~pygmo.mp_bfe`, after
+        all pending tasks in the pool have completed.
+
+        After the process pool has been shut down, attempting to use the evaluator
+        will raise an error. A new process pool can be created via an explicit call to
+        :func:`~pygmo.mp_bfe.init_pool()` or one of the methods of the public API of
+        :class:`~pygmo.mp_bfe` which trigger the creation of a new process pool.
+
+        """
         with mp_bfe._pool_lock:
             if mp_bfe._pool is not None:
                 mp_bfe._pool.close()
