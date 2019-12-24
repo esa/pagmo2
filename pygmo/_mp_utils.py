@@ -28,9 +28,6 @@
 # GNU Lesser General Public License along with the PaGMO library.  If not,
 # see https://www.gnu.org/licenses/.
 
-# for python 2.0 compatibility
-from __future__ import absolute_import as _ai
-
 
 def _get_spawn_context():
     # Small utlity to get a context that will use the 'spawn' method to
