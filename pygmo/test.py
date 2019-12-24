@@ -2676,6 +2676,42 @@ class mp_bfe_test_case(_ut.TestCase):
         for fv in fvs:
             self.assertTrue(fv == 0.)
 
+        # Try different chunksize as well.
+        udbfe = mp_bfe(chunksize=2)
+        b = bfe(udbfe=udbfe)
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        udbfe = mp_bfe(chunksize=None)
+        b = bfe(udbfe=udbfe)
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        # Error handling.
+        with self.assertRaises(TypeError) as cm:
+            b = bfe(udbfe=mp_bfe(chunksize='pippo'))
+        err = cm.exception
+        self.assertTrue(
+            "The 'chunksize' argument must be None or an int, but it is of type '{}' instead".format(str) in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            b = bfe(udbfe=mp_bfe(chunksize=0))
+        err = cm.exception
+        self.assertTrue(
+            "The 'chunksize' parameter must be a positive integer, but its value is 0 instead" in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            b = bfe(udbfe=mp_bfe(chunksize=-1))
+        err = cm.exception
+        self.assertTrue(
+            "The 'chunksize' parameter must be a positive integer, but its value is -1 instead" in str(err))
+
 
 class default_bfe_test_case(_ut.TestCase):
     """Test case for the default_bfe UDBFE
