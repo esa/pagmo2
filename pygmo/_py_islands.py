@@ -97,11 +97,6 @@ class mp_island(object):
 
     .. note::
 
-       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
-       this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.
-
-    .. note::
-
        Due to certain implementation details of CPython, it is not possible to initialise, resize or shutdown the pool
        from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
        :class:`~pygmo.mp_island` instance is created in a thread different from the main one, an error
@@ -119,7 +114,7 @@ class mp_island(object):
 
     .. warning::
 
-       Due to an `upstream bug <https://bugs.python.org/issue38501>`_, when using Python 3.8 the multiprocessing island
+       Due to an `upstream bug <https://bugs.python.org/issue38501>`_, when using Python 3.8 the multiprocessing
        machinery may lead to a hangup when exiting a Python session. As a workaround until the bug is resolved, users
        are advised to explicitly call :func:`~pygmo.mp_island.shutdown_pool()` before exiting a Python session.
 
@@ -139,8 +134,7 @@ class mp_island(object):
 
         Raises:
 
-           TypeError: is *use_pool* is not of type :class:`bool`
-           RuntimeError: if the multiprocessing island is not supported on the current platform and *use_pool* is :data:`False`
+           TypeError: if *use_pool* is not of type :class:`bool`
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()` if *use_pool* is :data:`True`
 
         """
@@ -215,7 +209,8 @@ class mp_island(object):
         Raises:
 
            RuntimeError: if the pool was manually shut down via :func:`~pygmo.mp_island.shutdown_pool()`
-           unspecified: any exception thrown during the evolution, or by the public interface of the
+           unspecified: any exception thrown by the evolution, by the (de)serialization
+             of the input arguments or of the return value, or by the public interface of the
              process pool
 
 
@@ -298,7 +293,7 @@ class mp_island(object):
 
         Returns:
 
-           str: ``"Multiprocessing island"``
+           :type:`str`: ``"Multiprocessing island"``
 
         """
         return "Multiprocessing island"
@@ -311,7 +306,7 @@ class mp_island(object):
 
         Returns:
 
-           str: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
+           :type:`str`: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
 
         Raises:
 
@@ -358,7 +353,6 @@ class mp_island(object):
 
            ValueError: if the pool does not exist yet and the function is being called from a thread different
              from the main one, or if *processes* is a non-positive value
-           RuntimeError: if the current platform or Python version is not supported
            TypeError: if *processes* is not :data:`None` and not an :class:`int`
 
         """
@@ -374,7 +368,7 @@ class mp_island(object):
 
         Returns:
 
-           int: the current size of the pool
+           :type:`int`: the current size of the pool
 
         Raises:
 
@@ -396,7 +390,7 @@ class mp_island(object):
 
         Args:
 
-           processes(int): the desired number of processes in the pool
+           processes(:type:`int`): the desired number of processes in the pool
 
         Raises:
 
