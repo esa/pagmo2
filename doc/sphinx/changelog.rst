@@ -15,6 +15,12 @@ New
 Changes
 ~~~~~~~
 
+- Allow to specify arguments to the construction of both
+  the client and the view in :class:`~pygmo.ipyparallel_island`
+  (`#380 <https://github.com/esa/pagmo2/pull/380>`__).
+  Note that this is a **BREAKING** change for non-standard
+  usages of :class:`~pygmo.ipyparallel_island`.
+
 - The hypervolume code has been moved to the compiled
   pagmo library
   (`#376 <https://github.com/esa/pagmo2/pull/376>`__).

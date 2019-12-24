@@ -486,40 +486,66 @@ class ipyparallel_island(object):
     _view_lock = _Lock()
     _view = None
 
-    def __init__(self):
-        pass
-
     @staticmethod
-    def init_view(*args, **kwargs):
+    def init_view(client_args=[], client_kwargs={}, view_args=[], view_kwargs={}):
         """Init the ipyparallel view.
 
         .. versionadded:: 2.12
 
         This method will initialise the :class:`ipyparallel.LoadBalancedView`
         which is used by all ipyparallel islands to submit the evolution tasks
-        to an ipyparallel cluster. The input arguments are forwarded
-        to the construction of an :class:`ipyparallel.Client` instance,
-        from which the :class:`~ipyparallel.LoadBalancedView` instance
-        is then fetched via the :func:`ipyparallel.Client.load_balanced_view()`
-        method.
+        to an ipyparallel cluster.
+
+        The input arguments *client_args* and *client_kwargs* are forwarded
+        as positional and keyword arguments to the construction of an
+        :class:`ipyparallel.Client` instance. From the constructed client,
+        an :class:`ipyparallel.LoadBalancedView` instance is then created
+        via the :func:`ipyparallel.Client.load_balanced_view()` method, to
+        which the positional and keyword arguments *view_args* and
+        *view_kwargs* are passed.
 
         Note that usually it is not necessary to explicitly invoke this
-        method: a :class:`~ipyparallel.LoadBalancedView` is automatically
+        method: an :class:`ipyparallel.LoadBalancedView` is automatically
         constructed with default settings the first time an evolution task
         is submitted to an ipyparallel island. This method should be used
         only if it is necessary to pass custom arguments to the construction
-        of the :class:`~ipyparallel.Client` object from which the
-        :class:`~ipyparallel.LoadBalancedView` is fetched.
+        of the :class:`ipyparallel.Client` or :class:`ipyparallel.LoadBalancedView`
+        objects.
+
+        Args:
+
+            client_args(:class:`list`): the positional arguments used for the
+              construction of the client
+            client_kwargs(:class:`dict`): the keyword arguments used for the
+              construction of the client
+            view_args(:class:`list`): the positional arguments used for the
+              construction of the view
+            view_kwargs(:class:`dict`): the keyword arguments used for the
+              construction of the view
 
         Raises:
 
-           unspecified: any exception thrown by the constructor of :class:`~ipyparallel.Client`
+           unspecified: any exception thrown by the constructor of :class:`ipyparallel.Client`
+             or by the :func:`ipyparallel.Client.load_balanced_view()` method
 
         """
         from ipyparallel import Client
+        import gc
+
+        # Create the new view.
+        new_view = Client(
+            *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
+
         with ipyparallel_island._view_lock:
-            ipyparallel_island._view = Client(
-                *args, **kwargs).load_balanced_view()
+            if not ipyparallel_island._view is None:
+                # Erase the old view.
+                old_view = ipyparallel_island._view
+                ipyparallel_island._view = None
+                del(old_view)
+                gc.collect()
+
+            # Assign the new view.
+            ipyparallel_island._view = new_view
 
     @staticmethod
     def shutdown_view():

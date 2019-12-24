@@ -622,7 +622,8 @@ class ipyparallel_island_test_case(_ut.TestCase):
                      size=25, udi=ipyparallel_island())
         ipyparallel_island.shutdown_view()
         try:
-            ipyparallel_island.init_view(timeout=to)
+            # Try with kwargs for the client.
+            ipyparallel_island.init_view(client_kwargs={'timeout': to})
         except OSError:
             return
         isl = island(algo=de(), prob=rosenbrock(),
@@ -634,7 +635,13 @@ class ipyparallel_island_test_case(_ut.TestCase):
         isl.wait_check()
         isl.evolve(20)
         isl.evolve(20)
-        isl.wait()
+        isl.wait_check()
+
+        # Try kwargs for the view.
+        ipyparallel_island.init_view(view_kwargs={'targets': [1]})
+        isl.evolve(20)
+        isl.evolve(20)
+        isl.wait_check()
 
         # Check the picklability of a problem storing a lambda.
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y),
