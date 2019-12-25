@@ -6317,7 +6317,16 @@ construct a :class:`~pygmo.bfe`.
 
 :class:`~pygmo.default_bfe` is the default UDBFE used by :class:`~pygmo.bfe`, and,
 depending on the properties of the input :class:`~pygmo.problem`, it will delegate the implementation
-of its call operator to :class:`~pygmo.member_bfe` or :class:`~pygmo.thread_bfe`.
+of its call operator to another UDBFE. Specifically:
+
+* if the input problem provides a batch fitness member function (as established by
+  :func:`pygmo.problem.has_batch_fitness()`), then a :class:`~pygmo.member_bfe` will
+  be constructed and invoked to produce the return value; otherwise,
+* if the input problem provides at least the :attr:`~pygmo.thread_safety.basic` thread
+  safety level (as established by :func:`pygmo.problem.get_thread_safety()`), then a
+  :class:`pygmo.thread_bfe` will be constructed and invoked to produce the return value;
+  otherwise,
+* a :class:`pygmo.mp_bfe` will be constructed and invoked to produce the return value.
 
 See also the docs of the C++ class :cpp:class:`pagmo::default_bfe`.
 

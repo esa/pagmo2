@@ -3,6 +3,12 @@
 List of batch evaluators available in pygmo
 ===========================================
 
+Batch evaluators implemented in Python
+--------------------------------------
+
+.. autoclass:: pygmo.mp_bfe
+   :members:
+
 .. _py_bfes_cpp:
 
 Batch evaluators exposed from C++

@@ -129,7 +129,7 @@ class mp_island(object):
         """
         Args:
 
-           use_pool(bool): if :data:`True`, a process from a global pool will be used to run the evolution, otherwise a new
+           use_pool(:class:`bool`): if :data:`True`, a process from a global pool will be used to run the evolution, otherwise a new
               process will be spawned for each evolution
 
         Raises:
@@ -161,7 +161,7 @@ class mp_island(object):
 
         Returns:
 
-           bool: :data:`True` if this island uses a process pool, :data:`False` otherwise
+           :class:`bool`: :data:`True` if this island uses a process pool, :data:`False` otherwise
 
         """
         return self._use_pool
@@ -204,7 +204,7 @@ class mp_island(object):
 
         Returns:
 
-           tuple: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
+           :class:`tuple`: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
 
         Raises:
 
@@ -274,7 +274,7 @@ class mp_island(object):
 
         Returns:
 
-           int: the ID of the process running the current evolution, or :data:`None` if no evolution is ongoing
+           :class:`int`: the ID of the process running the current evolution, or :data:`None` if no evolution is ongoing
 
         Raises:
 
@@ -293,7 +293,7 @@ class mp_island(object):
 
         Returns:
 
-           :type:`str`: ``"Multiprocessing island"``
+           :class:`str`: ``"Multiprocessing island"``
 
         """
         return "Multiprocessing island"
@@ -306,7 +306,7 @@ class mp_island(object):
 
         Returns:
 
-           :type:`str`: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
+           :class:`str`: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
 
         Raises:
 
@@ -368,7 +368,7 @@ class mp_island(object):
 
         Returns:
 
-           :type:`int`: the current size of the pool
+           :class:`int`: the current size of the pool
 
         Raises:
 
@@ -390,7 +390,7 @@ class mp_island(object):
 
         Args:
 
-           processes(:type:`int`): the desired number of processes in the pool
+           processes(:class:`int`): the desired number of processes in the pool
 
         Raises:
 
@@ -577,7 +577,7 @@ class ipyparallel_island(object):
 
         Returns:
 
-            tuple: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
+            :class:`tuple`: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
 
         Raises:
 
@@ -605,7 +605,7 @@ class ipyparallel_island(object):
         """Island's name.
 
         Returns:
-            str: ``"Ipyparallel island"``
+            :class:`str`: ``"Ipyparallel island"``
 
         """
         return "Ipyparallel island"
@@ -614,7 +614,7 @@ class ipyparallel_island(object):
         """Island's extra info.
 
         Returns:
-            str: a string with extra information about the status of the island
+            :class:`str`: a string with extra information about the status of the island
 
         """
         from copy import deepcopy

@@ -97,7 +97,7 @@ class mp_bfe(object):
         """
         Args:
 
-           chunksize(:type:`int` or :data:`None`): if not :data:`None`, this positive integral represents
+           chunksize(:class:`int` or :data:`None`): if not :data:`None`, this positive integral represents
              the approximate number of decision vectors that are processed by each task
              submitted to the process pool by the call operator
 
@@ -197,7 +197,7 @@ class mp_bfe(object):
 
         Returns:
 
-           :type:`str`: ``"Multiprocessing batch fitness evaluator"``
+           :class:`str`: ``"Multiprocessing batch fitness evaluator"``
 
         """
         return "Multiprocessing batch fitness evaluator"
@@ -210,7 +210,7 @@ class mp_bfe(object):
 
         Returns:
 
-           :type:`str`: a string containing information about the number of processes in the pool
+           :class:`str`: a string containing information about the number of processes in the pool
 
         Raises:
 
@@ -261,7 +261,7 @@ class mp_bfe(object):
 
         Returns:
 
-           :type:`int`: the current size of the pool
+           :class:`int`: the current size of the pool
 
         Raises:
 
@@ -283,7 +283,7 @@ class mp_bfe(object):
 
         Args:
 
-           processes(:type:`int`): the desired number of processes in the pool
+           processes(:class:`int`): the desired number of processes in the pool
 
         Raises:
 
