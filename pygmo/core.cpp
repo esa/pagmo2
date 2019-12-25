@@ -709,6 +709,8 @@ BOOST_PYTHON_MODULE(core)
         .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
         .def("get_nc", &problem::get_nc, pygmo::problem_get_nc_docstring().c_str())
         .def("get_fevals", &problem::get_fevals, pygmo::problem_get_fevals_docstring().c_str())
+        .def("increment_fevals", &problem::increment_fevals, pygmo::problem_increment_fevals_docstring().c_str(),
+             (bp::arg("n")))
         .def("get_gevals", &problem::get_gevals, pygmo::problem_get_gevals_docstring().c_str())
         .def("get_hevals", &problem::get_hevals, pygmo::problem_get_hevals_docstring().c_str())
         .def("set_seed", &problem::set_seed, pygmo::problem_set_seed_docstring().c_str(), (bp::arg("seed")))

@@ -792,6 +792,24 @@ Returns:
 )";
 }
 
+std::string problem_increment_fevals_docstring()
+{
+    return R"(increment_fevals(n)
+
+Increment the number of fitness evaluations.
+
+This method will increase the internal counter of fitness evaluations by *n*.
+
+Args:
+    n (:class:`int`): the amount by which the internal counter of fitness evaluations will be increased
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
 std::string problem_get_gevals_docstring()
 {
     return R"(get_gevals()

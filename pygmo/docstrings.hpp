@@ -68,6 +68,7 @@ std::string problem_get_nf_docstring();
 std::string problem_get_nc_docstring();
 std::string problem_c_tol_docstring();
 std::string problem_get_fevals_docstring();
+std::string problem_increment_fevals_docstring();
 std::string problem_get_gevals_docstring();
 std::string problem_get_hevals_docstring();
 std::string problem_has_set_seed_docstring();

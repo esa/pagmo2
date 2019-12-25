@@ -409,6 +409,8 @@ class problem_test_case(_ut.TestCase):
         self.assertEqual(prob.get_hevals(), 0)
         prob.fitness([1, 2])
         self.assertEqual(prob.get_fevals(), 1)
+        prob.increment_fevals(5)
+        self.assertEqual(prob.get_fevals(), 6)
         prob.gradient([1, 2])
         self.assertEqual(prob.get_gevals(), 1)
         prob.hessians([1, 2])
