@@ -427,13 +427,11 @@ def _population_init(self, prob=None, size=0, b=None, seed=None):
             Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
     """
-    import sys
     from .core import _random_device_next
-    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check input params.
-    if not isinstance(size, int_types):
+    if not isinstance(size, int):
         raise TypeError("the 'size' parameter must be an integer")
-    if not seed is None and not isinstance(seed, int_types):
+    if not seed is None and not isinstance(seed, int):
         raise TypeError("the 'seed' parameter must be None or an integer")
     if prob is None:
         # Problem not specified, def-construct it.
@@ -640,10 +638,8 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
 
 
     """
-    import sys
-    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check n.
-    if not isinstance(n, int_types):
+    if not isinstance(n, int):
         raise TypeError("the 'n' parameter must be an integer")
     if n < 0:
         raise ValueError(
@@ -673,7 +669,7 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
         RND = Random()
         # Get the seed from kwargs.
         seed = kwargs.pop('seed')
-        if not isinstance(seed, int_types):
+        if not isinstance(seed, int):
             raise TypeError("the 'seed' parameter must be an integer")
         # Seed the rng.
         RND.seed(seed)

@@ -98,15 +98,11 @@ class core_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        import sys
         from numpy import random, all, array
         from .core import _builtin, _test_to_vd, _test_to_vvd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
         from . import __version__
         self.assertTrue(__version__ != "")
-        if sys.version_info[0] < 3:
-            import __builtin__ as b
-        else:
-            import builtins as b
+        import builtins as b
         self.assertEqual(b, _builtin())
         self.assert_(_test_to_vd([], 0))
         self.assert_(_test_to_vd((), 0))
@@ -1783,12 +1779,7 @@ class decorator_problem_test_case(_ut.TestCase):
             getattr(d, _)()
             self.assertTrue(getattr(d, _ + "_decorated"))
 
-        # Run an evolution in an mp_island of a decorated problem, if possible.
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
+        # Run an evolution in an mp_island of a decorated problem.
         from . import archipelago, de, mp_island
 
         # fitness logging decorator.
@@ -1901,11 +1892,6 @@ class archipelago_test_case(_ut.TestCase):
                         1].get_population().get_f()).all() for t in zip(a, a2)]))
         self.assertTrue(all([(t[0].get_population().get_ID() != t[
                         1].get_population().get_ID()).all() for t in zip(a, a2)]))
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
         a = archipelago(5, algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5)
         self.assertEqual(len(a), 5)
@@ -2033,11 +2019,6 @@ class archipelago_test_case(_ut.TestCase):
         a.evolve(10)
         a2 = deepcopy(a)
         a.wait_check()
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
         a = archipelago(5, udi=mp_island(), algo=de(),
                         prob=rosenbrock(), pop_size=10)
         a.evolve(10)
@@ -2188,13 +2169,8 @@ class archipelago_test_case(_ut.TestCase):
     def run_pickle_tests(self):
         from . import archipelago, de, rosenbrock, mp_island, ring, migration_type, migrant_handling
         from pickle import dumps, loads
-        import sys
-        import os
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         self.assertEqual(repr(a), repr(loads(dumps(a))))
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
         a = archipelago(5, algo=de(), prob=_prob(),
                         pop_size=10, udi=mp_island())
         self.assertEqual(repr(a), repr(loads(dumps(a))))

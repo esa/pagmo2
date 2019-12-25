@@ -429,12 +429,6 @@ class mp_island_test_case(_ut.TestCase):
         self._level = level
 
     def runTest(self):
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
-
         self.run_basic_tests()
 
     def run_basic_tests(self):
