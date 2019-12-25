@@ -464,7 +464,7 @@ class ipyparallel_island(object):
     The communication with the cluster is managed via an :class:`ipyparallel.LoadBalancedView`
     instance which is created either implicitly when the first evolution is run, or explicitly
     via the :func:`~pygmo.ipyparallel_island.init_view()` method. The
-    :class:`~ipyparallel.LoadBalancedView` instance is unique and shared among all the
+    :class:`~ipyparallel.LoadBalancedView` instance is a global object shared among all the
     ipyparallel islands.
 
     .. seealso::
@@ -584,7 +584,6 @@ class ipyparallel_island(object):
             unspecified: any exception thrown by the evolution, by the creation of a
               :class:`ipyparallel.LoadBalancedView`, or by the sumission of the evolution task
               to the ipyparallel cluster
-
 
         """
         # NOTE: as in the mp_island, we pre-serialize

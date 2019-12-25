@@ -340,12 +340,69 @@ class mp_bfe(object):
 
 
 class ipyparallel_bfe(object):
+    """Ipyparallel batch fitness evaluator.
+
+    .. versionadded:: 2.13
+
+    This user-defined batch fitness evaluator (UDBFE) will dispatch
+    the fitness evaluation in batch mode of a set of decision vectors
+    to an ipyparallel cluster. The communication with the cluster is managed
+    via an :class:`ipyparallel.LoadBalancedView` instance which is
+    created either implicitly when the first fitness evaluation is run, or
+    explicitly via the :func:`~pygmo.ipyparallel_bfe.init_view()` method. The
+    :class:`~ipyparallel.LoadBalancedView` instance is a global object shared
+    among all the ipyparallel batch fitness evaluators.
+
+    .. seealso::
+
+       https://ipyparallel.readthedocs.io/en/latest/
+
+    """
     # Static variables for the view.
     _view_lock = _Lock()
     _view = None
 
     @staticmethod
     def init_view(client_args=[], client_kwargs={}, view_args=[], view_kwargs={}):
+        """Init the ipyparallel view.
+
+        This method will initialise the :class:`ipyparallel.LoadBalancedView`
+        which is used by all ipyparallel evaluators to submit the evolution tasks
+        to an ipyparallel cluster.
+
+        The input arguments *client_args* and *client_kwargs* are forwarded
+        as positional and keyword arguments to the construction of an
+        :class:`ipyparallel.Client` instance. From the constructed client,
+        an :class:`ipyparallel.LoadBalancedView` instance is then created
+        via the :func:`ipyparallel.Client.load_balanced_view()` method, to
+        which the positional and keyword arguments *view_args* and
+        *view_kwargs* are passed.
+
+        Note that usually it is not necessary to explicitly invoke this
+        method: an :class:`ipyparallel.LoadBalancedView` is automatically
+        constructed with default settings the first time a batch evaluation task
+        is submitted to an ipyparallel evaluator. This method should be used
+        only if it is necessary to pass custom arguments to the construction
+        of the :class:`ipyparallel.Client` or :class:`ipyparallel.LoadBalancedView`
+        objects.
+
+        Args:
+
+            client_args(:class:`list`): the positional arguments used for the
+              construction of the client
+            client_kwargs(:class:`dict`): the keyword arguments used for the
+              construction of the client
+            view_args(:class:`list`): the positional arguments used for the
+              construction of the view
+            view_kwargs(:class:`dict`): the keyword arguments used for the
+              construction of the view
+
+        Raises:
+
+           unspecified: any exception thrown by the constructor of :class:`ipyparallel.Client`
+             or by the :func:`ipyparallel.Client.load_balanced_view()` method
+
+        """
         from ipyparallel import Client
         import gc
 
@@ -366,6 +423,15 @@ class ipyparallel_bfe(object):
 
     @staticmethod
     def shutdown_view():
+        """Destroy the ipyparallel view.
+
+        This method will destroy the :class:`ipyparallel.LoadBalancedView`
+        currently being used by the ipyparallel evaluators for submitting
+        evaluation tasks to an ipyparallel cluster. The view can be re-inited
+        implicitly by submitting a new evolution task, or by invoking
+        the :func:`~pygmo.ipyparallel_bfe.init_view()` method.
+
+        """
         import gc
         with ipyparallel_bfe._view_lock:
             if ipyparallel_bfe._view is None:
@@ -377,6 +443,34 @@ class ipyparallel_bfe(object):
             gc.collect()
 
     def __call__(self, prob, dvs):
+        """Call operator.
+
+        This method will evaluate in batch mode the fitnesses of the input decision vectors
+        *dvs* using the fitness function from the optimisation problem *prob*. The fitness
+        evaluations are delegated to the nodes of the ipyparallel cluster backing
+        :class:`~pygmo.ipyparallel_bfe`.
+
+        See the documentation of :class:`pygmo.bfe` for an explanation of the expected
+        formats of *dvs* and of the return value.
+
+        Args:
+
+           prob(:class:`~pygmo.problem`): the input problem
+           dvs(:class:`numpy.ndarray`): the input decision vectors, represented as a
+             flattened 1D array
+
+        Returns:
+
+           :class:`numpy.ndarray`: the fitness vectors corresponding to *dvs*, represented as a
+             flattened 1D array
+
+        Raises:
+
+           unspecified: any exception thrown by the evaluations, by the (de)serialization
+             of the input arguments or of the return value, or by the public interface of
+             :class:`ipyparallel.LoadBalancedView`.
+
+        """
         import pickle
         import numpy as np
 
@@ -414,9 +508,21 @@ class ipyparallel_bfe(object):
         return fvs
 
     def get_name(self):
+        """Name of the evaluator.
+
+        Returns:
+            :class:`str`: ``"Ipyparallel batch fitness evaluator"``
+
+        """
         return "Ipyparallel batch fitness evaluator"
 
     def get_extra_info(self):
+        """Extra info for this evaluator.
+
+        Returns:
+            :class:`str`: a string with extra information about the status of the evaluator
+
+        """
         from copy import deepcopy
         with ipyparallel_bfe._view_lock:
             if ipyparallel_bfe._view is None:
