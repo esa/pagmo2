@@ -798,6 +798,8 @@ std::string problem_increment_fevals_docstring()
 
 Increment the number of fitness evaluations.
 
+.. versionadded:: 2.13
+
 This method will increase the internal counter of fitness evaluations by *n*.
 
 Args:

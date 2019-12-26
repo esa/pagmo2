@@ -674,6 +674,8 @@ class ipyparallel_island_test_case(_ut.TestCase):
         if self._level == 0:
             return
 
+        ipyparallel_island.shutdown_view()
+
         # Check exception transport.
         for _ in range(10):
             isl = island(algo=de(), prob=_prob(

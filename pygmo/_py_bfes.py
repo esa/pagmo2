@@ -190,6 +190,9 @@ class mp_bfe(object):
         # Reshape it so that it is 1D.
         fvs.shape = (ndvs*nf,)
 
+        # Ensure the increment the fevals for prob.
+        prob.increment_fevals(ndvs)
+
         return fvs
 
     def get_name(self):
@@ -367,8 +370,9 @@ class ipyparallel_bfe(object):
         """Init the ipyparallel view.
 
         This method will initialise the :class:`ipyparallel.LoadBalancedView`
-        which is used by all ipyparallel evaluators to submit the evolution tasks
-        to an ipyparallel cluster.
+        which is used by all ipyparallel evaluators to submit the evaluation tasks
+        to an ipyparallel cluster. If the :class:`ipyparallel.LoadBalancedView`
+        has already been created, this method will perform no action.
 
         The input arguments *client_args* and *client_kwargs* are forwarded
         as positional and keyword arguments to the construction of an
@@ -406,20 +410,11 @@ class ipyparallel_bfe(object):
         from ipyparallel import Client
         import gc
 
-        # Create the new view.
-        new_view = Client(
-            *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
-
         with ipyparallel_bfe._view_lock:
-            if not ipyparallel_bfe._view is None:
-                # Erase the old view.
-                old_view = ipyparallel_bfe._view
-                ipyparallel_bfe._view = None
-                del(old_view)
-                gc.collect()
-
-            # Assign the new view.
-            ipyparallel_bfe._view = new_view
+            if ipyparallel_bfe._view is None:
+                # Create the new view.
+                ipyparallel_bfe._view = Client(
+                    *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
 
     @staticmethod
     def shutdown_view():
@@ -428,7 +423,7 @@ class ipyparallel_bfe(object):
         This method will destroy the :class:`ipyparallel.LoadBalancedView`
         currently being used by the ipyparallel evaluators for submitting
         evaluation tasks to an ipyparallel cluster. The view can be re-inited
-        implicitly by submitting a new evolution task, or by invoking
+        implicitly by submitting a new evaluation task, or by invoking
         the :func:`~pygmo.ipyparallel_bfe.init_view()` method.
 
         """
@@ -504,6 +499,9 @@ class ipyparallel_bfe(object):
         fvs = np.array([pickle.loads(fv) for fv in ret.get()])
         # Reshape it so that it is 1D.
         fvs.shape = (ndvs*nf,)
+
+        # Ensure the increment the fevals for prob.
+        prob.increment_fevals(ndvs)
 
         return fvs
 

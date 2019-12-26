@@ -2625,10 +2625,18 @@ class mp_bfe_test_case(_ut.TestCase):
         from .core import thread_bfe, bfe, rosenbrock, batch_random_decision_vector, problem
         from . import mp_bfe
 
+        mp_bfe.shutdown_pool()
+        mp_bfe.shutdown_pool()
+        mp_bfe.shutdown_pool()
+
         udbfe = mp_bfe()
         b = bfe(udbfe=udbfe)
         self.assertFalse(b.is_(thread_bfe))
         self.assertTrue(b.is_(mp_bfe))
+
+        mp_bfe.init_pool()
+        mp_bfe.init_pool()
+        mp_bfe.init_pool()
 
         prob = problem(rosenbrock(5))
         dvs = batch_random_decision_vector(prob, 6)
@@ -2637,6 +2645,7 @@ class mp_bfe_test_case(_ut.TestCase):
         dvs.shape = (6, 5)
         for dv, fv in zip(dvs, fvs):
             self.assertTrue(fv == prob.fitness(dv))
+        self.assertEqual(prob.get_fevals(), 6)
 
         class p(object):
             def fitness(self, x):
@@ -2644,6 +2653,14 @@ class mp_bfe_test_case(_ut.TestCase):
 
             def get_bounds(self):
                 return ([0], [1])
+
+        mp_bfe.resize_pool(2)
+        self.assertEqual(mp_bfe.get_pool_size(), 2)
+        mp_bfe.resize_pool(2)
+        self.assertEqual(mp_bfe.get_pool_size(), 2)
+        mp_bfe.shutdown_pool()
+        mp_bfe.resize_pool(16)
+        mp_bfe.shutdown_pool()
 
         prob = problem(p())
         dvs = batch_random_decision_vector(prob, 6)
@@ -2688,6 +2705,77 @@ class mp_bfe_test_case(_ut.TestCase):
         self.assertTrue(
             "The 'chunksize' parameter must be a positive integer, but its value is -1 instead" in str(err))
 
+        self.assertEqual(b.get_name(), "Multiprocessing batch fitness evaluator")
+        self.assertTrue("Number of processes in the pool" in b.get_extra_info())
+
+
+class ipyparallel_bfe_test_case(_ut.TestCase):
+    """Test case for the ipyparallel_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        try:
+            import ipyparallel
+        except ImportError:
+            return
+
+        from .core import thread_bfe, bfe, rosenbrock, batch_random_decision_vector, problem
+        from . import ipyparallel_bfe
+
+        ipyparallel_bfe.shutdown_view()
+        ipyparallel_bfe.shutdown_view()
+        ipyparallel_bfe.shutdown_view()
+
+        to = .5
+        try:
+            # Try with kwargs for the client.
+            ipyparallel_bfe.init_view(client_kwargs={'timeout': to})
+        except OSError:
+            return
+
+        udbfe = ipyparallel_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(ipyparallel_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+        self.assertEqual(prob.get_fevals(), 6)
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        ipyparallel_bfe.init_view()
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        ipyparallel_bfe.shutdown_view()
+        ipyparallel_bfe.shutdown_view()
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        self.assertEqual(b.get_name(), "Ipyparallel batch fitness evaluator")
+        self.assertTrue(b.get_extra_info() != '')
 
 class default_bfe_test_case(_ut.TestCase):
     """Test case for the default_bfe UDBFE
@@ -2763,6 +2851,7 @@ def run_test_suite(level=0):
     suite.addTest(thread_bfe_test_case())
     suite.addTest(member_bfe_test_case())
     suite.addTest(mp_bfe_test_case())
+    suite.addTest(ipyparallel_bfe_test_case())
     suite.addTest(default_bfe_test_case())
     suite.addTest(archipelago_test_case(level))
     suite.addTest(_island_test.island_test_case())

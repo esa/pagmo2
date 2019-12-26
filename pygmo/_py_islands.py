@@ -485,7 +485,8 @@ class ipyparallel_island(object):
 
         This method will initialise the :class:`ipyparallel.LoadBalancedView`
         which is used by all ipyparallel islands to submit the evolution tasks
-        to an ipyparallel cluster.
+        to an ipyparallel cluster. If the :class:`ipyparallel.LoadBalancedView`
+        has already been created, this method will perform no action.
 
         The input arguments *client_args* and *client_kwargs* are forwarded
         as positional and keyword arguments to the construction of an
@@ -523,20 +524,11 @@ class ipyparallel_island(object):
         from ipyparallel import Client
         import gc
 
-        # Create the new view.
-        new_view = Client(
-            *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
-
         with ipyparallel_island._view_lock:
-            if not ipyparallel_island._view is None:
-                # Erase the old view.
-                old_view = ipyparallel_island._view
-                ipyparallel_island._view = None
-                del(old_view)
-                gc.collect()
-
-            # Assign the new view.
-            ipyparallel_island._view = new_view
+            if ipyparallel_island._view is None:
+                # Create the new view.
+                ipyparallel_island._view = Client(
+                    *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
 
     @staticmethod
     def shutdown_view():
