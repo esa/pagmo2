@@ -60,22 +60,11 @@ matrix:
     - env: PAGMO_BUILD="OSXPython37"
       os: osx
       osx_image: xcode6.4
-    - env: PAGMO_BUILD="OSXPython27"
-      os: osx
-      osx_image: xcode6.4
     - env: PAGMO_BUILD="manylinux64Py37" DOCKER_IMAGE="pagmo2/manylinux1_x86_64_with_deps"
       sudo: required
       services:
       - docker
     - env: PAGMO_BUILD="manylinux64Py36" DOCKER_IMAGE="pagmo2/manylinux1_x86_64_with_deps"
-      sudo: required
-      services:
-      - docker
-    - env: PAGMO_BUILD="manylinux64Py27" DOCKER_IMAGE="pagmo2/manylinux1_x86_64_with_deps"
-      sudo: required
-      services:
-      - docker
-    - env: PAGMO_BUILD="manylinux64Py27mu" DOCKER_IMAGE="pagmo2/manylinux1_x86_64_with_deps"
       sudo: required
       services:
       - docker

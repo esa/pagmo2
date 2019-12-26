@@ -114,7 +114,7 @@ class island_test_case(_ut.TestCase):
         self.run_mo_sto_repr_bug()
 
     def run_basic_tests(self):
-        from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock, r_policy, s_policy, fair_replace, select_best, population
+        from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock, r_policy, s_policy, fair_replace, select_best, population, bfe, thread_bfe, default_bfe, problem
         isl = island()
         self.assertTrue("Fair replace" in repr(isl))
         self.assertTrue("Select best" in repr(isl))
@@ -248,6 +248,48 @@ class island_test_case(_ut.TestCase):
 
         self.assertTrue(isl.get_r_policy().is_(_r_pol))
         self.assertTrue(isl.get_s_policy().is_(_s_pol))
+
+        # Ctors from bfe.
+        p = problem(rosenbrock())
+        isl = island(prob=p, size=20, b=bfe(default_bfe()), algo=de())
+        for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pass in explicit UDBFE.
+        isl = island(prob=p, size=20, b=thread_bfe(), algo=de())
+        for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        p = problem(p())
+        isl = island(prob=p, size=20, b=bfe(default_bfe()), algo=de())
+        for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem with batch_fitness method.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [43] * len(dvs)
+
+        p = problem(p())
+        isl = island(prob=p, size=20, b=bfe(default_bfe()), algo=de())
+        for f in isl.get_population().get_f():
+            self.assertEqual(f, 43)
 
     def run_concurrent_access_tests(self):
         import threading as thr
@@ -429,12 +471,6 @@ class mp_island_test_case(_ut.TestCase):
         self._level = level
 
     def runTest(self):
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
-
         self.run_basic_tests()
 
     def run_basic_tests(self):
@@ -622,7 +658,8 @@ class ipyparallel_island_test_case(_ut.TestCase):
                      size=25, udi=ipyparallel_island())
         ipyparallel_island.shutdown_view()
         try:
-            ipyparallel_island.init_view(timeout=to)
+            # Try with kwargs for the client.
+            ipyparallel_island.init_view(client_kwargs={'timeout': to})
         except OSError:
             return
         isl = island(algo=de(), prob=rosenbrock(),
@@ -634,7 +671,13 @@ class ipyparallel_island_test_case(_ut.TestCase):
         isl.wait_check()
         isl.evolve(20)
         isl.evolve(20)
-        isl.wait()
+        isl.wait_check()
+
+        # Try kwargs for the view.
+        ipyparallel_island.init_view(view_kwargs={'targets': [1]})
+        isl.evolve(20)
+        isl.evolve(20)
+        isl.wait_check()
 
         # Check the picklability of a problem storing a lambda.
         isl = island(algo=de(), prob=_prob(lambda x, y: x + y),
@@ -672,6 +715,8 @@ class ipyparallel_island_test_case(_ut.TestCase):
 
         if self._level == 0:
             return
+
+        ipyparallel_island.shutdown_view()
 
         # Check exception transport.
         for _ in range(10):

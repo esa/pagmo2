@@ -1,6 +1,48 @@
 Changelog
 =========
 
+2.13.0 (unreleased)
+-------------------
+
+New
+~~~
+
+- The batch fitness evaluation functionality has been completed
+  on the Python side. This includes 2 new batch fitness evaluation
+  schemes usable with Pythonic problems
+  (:class:`~pygmo.mp_bfe` and :class:`~pygmo.ipyparallel_bfe`),
+  and additional testing
+  (`#380 <https://github.com/esa/pagmo2/pull/380>`__).
+
+- The :cpp:class:`pagmo::not_implemented_error` C++ exception
+  is now correctly translated to the :class:`NotImplementedError`
+  Python exception
+  (`#380 <https://github.com/esa/pagmo2/pull/380>`__).
+
+Changes
+~~~~~~~
+
+- **BREAKING**: as anticipated, Python 2 support has been
+  removed from pygmo. pygmo now requires Python 3.4
+  or later.
+
+- Allow to specify arguments to the construction of both
+  the client and the view in :class:`~pygmo.ipyparallel_island`
+  (`#380 <https://github.com/esa/pagmo2/pull/380>`__).
+  Note that this is a **BREAKING** change for non-standard
+  usages of :class:`~pygmo.ipyparallel_island`.
+
+- The hypervolume code has been moved to the compiled
+  pagmo library
+  (`#376 <https://github.com/esa/pagmo2/pull/376>`__).
+
+Fix
+~~~
+
+- Fix a compilation warning in debug mode when using
+  recent Boost versions
+  (`#377 <https://github.com/esa/pagmo2/pull/377>`__).
+
 2.12.0 (2019-12-18)
 -------------------
 

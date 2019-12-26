@@ -98,15 +98,11 @@ class core_test_case(_ut.TestCase):
     """
 
     def runTest(self):
-        import sys
         from numpy import random, all, array
         from .core import _builtin, _test_to_vd, _test_to_vvd, _type, _str, _callable, _deepcopy, _test_object_serialization as tos
         from . import __version__
         self.assertTrue(__version__ != "")
-        if sys.version_info[0] < 3:
-            import __builtin__ as b
-        else:
-            import builtins as b
+        import builtins as b
         self.assertEqual(b, _builtin())
         self.assert_(_test_to_vd([], 0))
         self.assert_(_test_to_vd((), 0))
@@ -219,7 +215,7 @@ class population_test_case(_ut.TestCase):
         self.run_pickle_test()
 
     def run_init_test(self):
-        from .core import population, null_problem, rosenbrock, problem
+        from .core import population, null_problem, rosenbrock, problem, bfe, default_bfe, thread_bfe
         pop = population()
         self.assertTrue(len(pop) == 0)
         self.assertTrue(pop.problem.extract(null_problem) is not None)
@@ -235,6 +231,48 @@ class population_test_case(_ut.TestCase):
         self.assertTrue(pop.problem.extract(null_problem) is None)
         self.assertTrue(pop.problem.extract(rosenbrock) is not None)
         self.assertEqual(pop.get_seed(), 42)
+
+        # Tests with a bfe argument.
+        p = problem(rosenbrock())
+        pop = population(prob=p, size=20, b=bfe(default_bfe()))
+        for x, f in zip(pop.get_x(), pop.get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pass in explicit UDBFE.
+        pop = population(prob=p, size=20, b=thread_bfe())
+        for x, f in zip(pop.get_x(), pop.get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        p = problem(p())
+        pop = population(prob=p, size=20, b=bfe(default_bfe()))
+        for x, f in zip(pop.get_x(), pop.get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem with batch_fitness method.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [43] * len(dvs)
+
+        p = problem(p())
+        pop = population(prob=p, size=20, b=bfe(default_bfe()))
+        for f in pop.get_f():
+            self.assertEqual(f, 43)
 
     def run_best_worst_idx_test(self):
         from .core import population, rosenbrock, zdt
@@ -529,7 +567,7 @@ class pso_gen_test_case(_ut.TestCase):
                       variant=5, neighb_type=2, neighb_param=4, memory=False, seed=32)
         self.assertEqual(uda.get_seed(), 32)
         log = uda.get_log()
-        uda.set_bfe(b = bfe())
+        uda.set_bfe(b=bfe())
         uda.set_bfe(bfe())
 
 
@@ -1776,19 +1814,14 @@ class decorator_problem_test_case(_ut.TestCase):
         dmeths = ["get_nobj", "get_nec", "get_nic", "get_nix",
                   "has_gradient", "has_gradient_sparsity", "has_hessians",
                   "has_hessians_sparsity", "has_set_seed", "get_name",
-                  "get_extra_info"]
+                  "get_extra_info", "has_batch_fitness"]
         decors = dict((_+"_decorator", any_decor(_)) for _ in dmeths)
         d = dp(prob=rb, **decors)
         for _ in dmeths:
             getattr(d, _)()
             self.assertTrue(getattr(d, _ + "_decorated"))
 
-        # Run an evolution in an mp_island of a decorated problem, if possible.
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
+        # Run an evolution in an mp_island of a decorated problem.
         from . import archipelago, de, mp_island
 
         # fitness logging decorator.
@@ -1808,6 +1841,33 @@ class decorator_problem_test_case(_ut.TestCase):
         for isl in a:
             self.assertTrue(
                 len(isl.get_population().problem.extract(dp).dv_log) > 5)
+
+        # Batch fitness decorator.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [43] * len(dvs)
+
+        def bf_log_decor(orig_bfitness_function):
+            def new_bfitness_function(self, dvs):
+                if hasattr(self, "dv_log"):
+                    self.dv_log.append(dvs)
+                else:
+                    self.dv_log = [dvs]
+                return orig_bfitness_function(self, dvs)
+            return new_bfitness_function
+
+        prob = problem(dp(p(), batch_fitness_decorator=bf_log_decor))
+        prob.batch_fitness([0] * 10)
+        prob.batch_fitness([0] * 10)
+        prob.batch_fitness([0] * 10)
+        self.assertTrue(len(prob.extract(dp).dv_log) > 0)
 
 
 class archipelago_test_case(_ut.TestCase):
@@ -1850,7 +1910,7 @@ class archipelago_test_case(_ut.TestCase):
 
     def run_init_tests(self):
         from . import (archipelago, de, rosenbrock, population, null_problem, thread_island,
-                       mp_island, topology, unconnected, ring, r_policy, s_policy, fair_replace, select_best)
+                       mp_island, topology, unconnected, ring, r_policy, s_policy, fair_replace, select_best, bfe, default_bfe, thread_bfe, problem)
         a = archipelago()
         self.assertEqual(len(a), 0)
         self.assertRaises(IndexError, lambda: a[0])
@@ -1901,11 +1961,6 @@ class archipelago_test_case(_ut.TestCase):
                         1].get_population().get_f()).all() for t in zip(a, a2)]))
         self.assertTrue(all([(t[0].get_population().get_ID() != t[
                         1].get_population().get_ID()).all() for t in zip(a, a2)]))
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
         a = archipelago(5, algo=de(), prob=rosenbrock(),
                         pop_size=10, udi=mp_island(), seed=5)
         self.assertEqual(len(a), 5)
@@ -1952,6 +2007,55 @@ class archipelago_test_case(_ut.TestCase):
                         pop_size=10, udi=mp_island(), seed=5, r_pol=_r_pol(), s_pol=_s_pol())
         self.assertTrue(all([isl.get_r_policy().is_(_r_pol) for isl in a]))
         self.assertTrue(all([isl.get_s_policy().is_(_s_pol) for isl in a]))
+
+        # Ctors with bfe.
+        p = problem(rosenbrock())
+        a = archipelago(5, t=topology(ring()), algo=de(), prob=p,
+                        pop_size=10, udi=mp_island(), seed=5, b=bfe(default_bfe()))
+        for isl in a:
+            for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+                self.assertEqual(p.fitness(x), f)
+
+        a = archipelago(5, t=topology(ring()), algo=de(), prob=p,
+                        pop_size=10, udi=mp_island(), seed=5, b=thread_bfe())
+        for isl in a:
+            for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+                self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        p = problem(p())
+        a = archipelago(5, t=topology(ring()), algo=de(), prob=p,
+                        pop_size=10, udi=mp_island(), seed=5, b=bfe(default_bfe()))
+        for isl in a:
+            for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+                self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem with batch_fitness method.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [43] * len(dvs)
+
+        p = problem(p())
+        a = archipelago(5, t=topology(ring()), algo=de(), prob=p,
+                        pop_size=10, udi=mp_island(), seed=5, b=bfe(default_bfe()))
+        for isl in a:
+            for f in isl.get_population().get_f():
+                self.assertEqual(f, 43)
 
     def run_mig_log_db_tests(self):
         from . import archipelago, de, rosenbrock, ring
@@ -2033,11 +2137,6 @@ class archipelago_test_case(_ut.TestCase):
         a.evolve(10)
         a2 = deepcopy(a)
         a.wait_check()
-        import sys
-        import os
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
         a = archipelago(5, udi=mp_island(), algo=de(),
                         prob=rosenbrock(), pop_size=10)
         a.evolve(10)
@@ -2188,13 +2287,8 @@ class archipelago_test_case(_ut.TestCase):
     def run_pickle_tests(self):
         from . import archipelago, de, rosenbrock, mp_island, ring, migration_type, migrant_handling
         from pickle import dumps, loads
-        import sys
-        import os
         a = archipelago(5, algo=de(), prob=rosenbrock(), pop_size=10)
         self.assertEqual(repr(a), repr(loads(dumps(a))))
-        # The mp island requires either Windows or at least Python 3.4.
-        if os.name != 'nt' and (sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
-            return
         a = archipelago(5, algo=de(), prob=_prob(),
                         pop_size=10, udi=mp_island())
         self.assertEqual(repr(a), repr(loads(dumps(a))))
@@ -2568,7 +2662,7 @@ def run_test_suite(level=0):
         level(``int``): the test level (higher values run longer tests)
 
     """
-    from . import _problem_test, _algorithm_test, _island_test, _topology_test, _r_policy_test, _s_policy_test, set_global_rng_seed
+    from . import _problem_test, _algorithm_test, _island_test, _topology_test, _r_policy_test, _s_policy_test, _bfe_test, set_global_rng_seed
 
     # Make test runs deterministic.
     # NOTE: we'll need to place the async/migration tests at the end, so that at
@@ -2577,6 +2671,12 @@ def run_test_suite(level=0):
 
     retval = 0
     suite = _ut.TestLoader().loadTestsFromTestCase(core_test_case)
+    suite.addTest(_bfe_test.bfe_test_case())
+    suite.addTest(_bfe_test.thread_bfe_test_case())
+    suite.addTest(_bfe_test.member_bfe_test_case())
+    suite.addTest(_bfe_test.mp_bfe_test_case())
+    suite.addTest(_bfe_test.ipyparallel_bfe_test_case())
+    suite.addTest(_bfe_test.default_bfe_test_case())
     suite.addTest(archipelago_test_case(level))
     suite.addTest(_island_test.island_test_case())
     suite.addTest(_s_policy_test.s_policy_test_case())

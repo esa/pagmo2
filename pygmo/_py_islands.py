@@ -28,9 +28,6 @@
 # GNU Lesser General Public License along with the PaGMO library.  If not,
 # see https://www.gnu.org/licenses/.
 
-# for python 2.0 compatibility
-from __future__ import absolute_import as _ai
-
 from threading import Lock as _Lock
 
 
@@ -100,11 +97,6 @@ class mp_island(object):
 
     .. note::
 
-       This island type is supported only on Windows or if the Python version is at least 3.4. Attempting to use
-       this class on non-Windows platforms with a Python version earlier than 3.4 will raise an error.
-
-    .. note::
-
        Due to certain implementation details of CPython, it is not possible to initialise, resize or shutdown the pool
        from a thread different from the main one. Normally this is not a problem, but, for instance, if the first
        :class:`~pygmo.mp_island` instance is created in a thread different from the main one, an error
@@ -120,6 +112,12 @@ class mp_island(object):
        are thus advised to tread carefully with interrupt signals (especially in interactive sessions) when using
        :class:`~pygmo.mp_island`.
 
+    .. warning::
+
+       Due to an `upstream bug <https://bugs.python.org/issue38501>`_, when using Python 3.8 the multiprocessing
+       machinery may lead to a hangup when exiting a Python session. As a workaround until the bug is resolved, users
+       are advised to explicitly call :func:`~pygmo.mp_island.shutdown_pool()` before exiting a Python session.
+
     """
 
     # Static variables for the pool.
@@ -131,13 +129,12 @@ class mp_island(object):
         """
         Args:
 
-           use_pool(bool): if :data:`True`, a process from a global pool will be used to run the evolution, otherwise a new
+           use_pool(:class:`bool`): if :data:`True`, a process from a global pool will be used to run the evolution, otherwise a new
               process will be spawned for each evolution
 
         Raises:
 
-           TypeError: is *use_pool* is not of type :class:`bool`
-           RuntimeError: if the multiprocessing island is not supported on the current platform and *use_pool* is :data:`False`
+           TypeError: if *use_pool* is not of type :class:`bool`
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()` if *use_pool* is :data:`True`
 
         """
@@ -164,7 +161,7 @@ class mp_island(object):
 
         Returns:
 
-           bool: :data:`True` if this island uses a process pool, :data:`False` otherwise
+           :class:`bool`: :data:`True` if this island uses a process pool, :data:`False` otherwise
 
         """
         return self._use_pool
@@ -207,12 +204,13 @@ class mp_island(object):
 
         Returns:
 
-           tuple: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
+           :class:`tuple`: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
 
         Raises:
 
            RuntimeError: if the pool was manually shut down via :func:`~pygmo.mp_island.shutdown_pool()`
-           unspecified: any exception thrown during the evolution, or by the public interface of the
+           unspecified: any exception thrown by the evolution, by the (de)serialization
+             of the input arguments or of the return value, or by the public interface of the
              process pool
 
 
@@ -276,7 +274,7 @@ class mp_island(object):
 
         Returns:
 
-           int: the ID of the process running the current evolution, or :data:`None` if no evolution is ongoing
+           :class:`int`: the ID of the process running the current evolution, or :data:`None` if no evolution is ongoing
 
         Raises:
 
@@ -295,7 +293,7 @@ class mp_island(object):
 
         Returns:
 
-           str: ``"Multiprocessing island"``
+           :class:`str`: ``"Multiprocessing island"``
 
         """
         return "Multiprocessing island"
@@ -308,7 +306,7 @@ class mp_island(object):
 
         Returns:
 
-           str: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
+           :class:`str`: a string containing information about the state of the island (e.g., number of processes in the pool, ID of the evolution process, etc.)
 
         Raises:
 
@@ -330,6 +328,15 @@ class mp_island(object):
         return retval
 
     @staticmethod
+    def _init_pool_impl(processes):
+        # Implementation method for initing
+        # the pool. This will *not* do any locking.
+        from ._mp_utils import _make_pool
+
+        if mp_island._pool is None:
+            mp_island._pool, mp_island._pool_size = _make_pool(processes)
+
+    @staticmethod
     def init_pool(processes=None):
         """Initialise the process pool.
 
@@ -346,15 +353,11 @@ class mp_island(object):
 
            ValueError: if the pool does not exist yet and the function is being called from a thread different
              from the main one, or if *processes* is a non-positive value
-           RuntimeError: if the current platform or Python version is not supported
            TypeError: if *processes* is not :data:`None` and not an :class:`int`
 
         """
-        from ._mp_utils import _make_pool
-
         with mp_island._pool_lock:
-            if mp_island._pool is None:
-                mp_island._pool, mp_island._pool_size = _make_pool(processes)
+            mp_island._init_pool_impl(processes)
 
     @staticmethod
     def get_pool_size():
@@ -365,15 +368,15 @@ class mp_island(object):
 
         Returns:
 
-           int: the current size of the pool
+           :class:`int`: the current size of the pool
 
         Raises:
 
            unspecified: any exception thrown by :func:`~pygmo.mp_island.init_pool()`
 
         """
-        mp_island.init_pool()
         with mp_island._pool_lock:
+            mp_island._init_pool_impl(None)
             return mp_island._pool_size
 
     @staticmethod
@@ -387,7 +390,7 @@ class mp_island(object):
 
         Args:
 
-           processes(int): the desired number of processes in the pool
+           processes(:class:`int`): the desired number of processes in the pool
 
         Raises:
 
@@ -404,8 +407,11 @@ class mp_island(object):
             raise ValueError(
                 "The 'processes' argument must be strictly positive")
 
-        mp_island.init_pool()
         with mp_island._pool_lock:
+            # NOTE: this will either init a new pool
+            # with the requested number of processes,
+            # or do nothing if the pool exists already.
+            mp_island._init_pool_impl(processes)
             if processes == mp_island._pool_size:
                 # Don't do anything if we are not changing
                 # the size of the pool.
@@ -458,7 +464,7 @@ class ipyparallel_island(object):
     The communication with the cluster is managed via an :class:`ipyparallel.LoadBalancedView`
     instance which is created either implicitly when the first evolution is run, or explicitly
     via the :func:`~pygmo.ipyparallel_island.init_view()` method. The
-    :class:`~ipyparallel.LoadBalancedView` instance is unique and shared among all the
+    :class:`~ipyparallel.LoadBalancedView` instance is a global object shared among all the
     ipyparallel islands.
 
     .. seealso::
@@ -471,40 +477,58 @@ class ipyparallel_island(object):
     _view_lock = _Lock()
     _view = None
 
-    def __init__(self):
-        pass
-
     @staticmethod
-    def init_view(*args, **kwargs):
+    def init_view(client_args=[], client_kwargs={}, view_args=[], view_kwargs={}):
         """Init the ipyparallel view.
 
         .. versionadded:: 2.12
 
         This method will initialise the :class:`ipyparallel.LoadBalancedView`
         which is used by all ipyparallel islands to submit the evolution tasks
-        to an ipyparallel cluster. The input arguments are forwarded
-        to the construction of an :class:`ipyparallel.Client` instance,
-        from which the :class:`~ipyparallel.LoadBalancedView` instance
-        is then fetched via the :func:`ipyparallel.Client.load_balanced_view()`
-        method.
+        to an ipyparallel cluster. If the :class:`ipyparallel.LoadBalancedView`
+        has already been created, this method will perform no action.
+
+        The input arguments *client_args* and *client_kwargs* are forwarded
+        as positional and keyword arguments to the construction of an
+        :class:`ipyparallel.Client` instance. From the constructed client,
+        an :class:`ipyparallel.LoadBalancedView` instance is then created
+        via the :func:`ipyparallel.Client.load_balanced_view()` method, to
+        which the positional and keyword arguments *view_args* and
+        *view_kwargs* are passed.
 
         Note that usually it is not necessary to explicitly invoke this
-        method: a :class:`~ipyparallel.LoadBalancedView` is automatically
+        method: an :class:`ipyparallel.LoadBalancedView` is automatically
         constructed with default settings the first time an evolution task
         is submitted to an ipyparallel island. This method should be used
         only if it is necessary to pass custom arguments to the construction
-        of the :class:`~ipyparallel.Client` object from which the
-        :class:`~ipyparallel.LoadBalancedView` is fetched.
+        of the :class:`ipyparallel.Client` or :class:`ipyparallel.LoadBalancedView`
+        objects.
+
+        Args:
+
+            client_args(:class:`list`): the positional arguments used for the
+              construction of the client
+            client_kwargs(:class:`dict`): the keyword arguments used for the
+              construction of the client
+            view_args(:class:`list`): the positional arguments used for the
+              construction of the view
+            view_kwargs(:class:`dict`): the keyword arguments used for the
+              construction of the view
 
         Raises:
 
-           unspecified: any exception thrown by the constructor of :class:`~ipyparallel.Client`
+           unspecified: any exception thrown by the constructor of :class:`ipyparallel.Client`
+             or by the :func:`ipyparallel.Client.load_balanced_view()` method
 
         """
         from ipyparallel import Client
+        import gc
+
         with ipyparallel_island._view_lock:
-            ipyparallel_island._view = Client(
-                *args, **kwargs).load_balanced_view()
+            if ipyparallel_island._view is None:
+                # Create the new view.
+                ipyparallel_island._view = Client(
+                    *client_args, **client_kwargs).load_balanced_view(*view_args, **view_kwargs)
 
     @staticmethod
     def shutdown_view():
@@ -545,14 +569,13 @@ class ipyparallel_island(object):
 
         Returns:
 
-            tuple: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
+            :class:`tuple`: a tuple of 2 elements containing *algo* (i.e., the :class:`~pygmo.algorithm` object that was used for the evolution) and the evolved :class:`~pygmo.population`
 
         Raises:
 
             unspecified: any exception thrown by the evolution, by the creation of a
               :class:`ipyparallel.LoadBalancedView`, or by the sumission of the evolution task
               to the ipyparallel cluster
-
 
         """
         # NOTE: as in the mp_island, we pre-serialize
@@ -573,7 +596,7 @@ class ipyparallel_island(object):
         """Island's name.
 
         Returns:
-            str: ``"Ipyparallel island"``
+            :class:`str`: ``"Ipyparallel island"``
 
         """
         return "Ipyparallel island"
@@ -582,7 +605,7 @@ class ipyparallel_island(object):
         """Island's extra info.
 
         Returns:
-            str: a string with extra information about the status of the island
+            :class:`str`: a string with extra information about the status of the island
 
         """
         from copy import deepcopy
