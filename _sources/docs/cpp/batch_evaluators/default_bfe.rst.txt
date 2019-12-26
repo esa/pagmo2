@@ -26,7 +26,7 @@ Default BFE
       * if *p* provides a batch fitness member function (as established by :cpp:func:`pagmo::problem::has_batch_fitness()`),
         then a :cpp:class:`~pagmo::member_bfe` will be constructed and invoked to produce the return value; otherwise,
       * if *p* provides at least the :cpp:enumerator:`~pagmo::thread_safety::basic` thread safety level (as established
-        by :cpp:func:`pagmo::problem::get_thread_safety()`), then  a :cpp:class:`~pagmo::thread_bfe` will be constructed
+        by :cpp:func:`pagmo::problem::get_thread_safety()`), then a :cpp:class:`~pagmo::thread_bfe` will be constructed
         and invoked to produce the return value.
 
       If *p* does not provide a batch fitness member function and if it does not provide at least the :cpp:enumerator:`~pagmo::thread_safety::basic`

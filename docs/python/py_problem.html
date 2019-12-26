@@ -1155,6 +1155,25 @@ containing each exactly 2 elements representing the indices <span class="math no
 </dd></dl>
 
 <dl class="method">
+<dt id="pygmo.problem.increment_fevals">
+<code class="sig-name descname">increment_fevals</code><span class="sig-paren">(</span><em class="sig-param">n</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.increment_fevals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment the number of fitness evaluations.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.13.</span></p>
+</div>
+<p>This method will increase the internal counter of fitness evaluations by <em>n</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – the amount by which the internal counter of fitness evaluations will be increased</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by failures at the intersection between C++ and Python (e.g.,
+    type conversion errors, mismatched function signatures, etc.)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pygmo.problem.is_">
 <code class="sig-name descname">is_</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.problem.is_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the type of the user-defined problem.</p>

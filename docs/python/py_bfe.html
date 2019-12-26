@@ -256,8 +256,8 @@ methods in the UDBFE are used by <a class="reference internal" href="#pygmo.bfe"
 <code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">prob</em>, <em class="sig-param">dvs</em><span class="sig-paren">)</span><a class="headerlink" href="#pygmo.bfe.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
-of the decision vectors stored in <em>dvs</em> using the input problem <em>prob</em>, and it will return the corresponding
-fitness vectors.</p>
+of the decision vectors stored in <em>dvs</em> using the input <a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or UDP <em>prob</em>,
+and it will return the corresponding fitness vectors.</p>
 <p>The input decision vectors must be stored contiguously in <em>dvs</em>: for a problem with dimension <span class="math notranslate nohighlight">\(n\)</span>, the first
 decision vector in <em>dvs</em> occupies the index range <span class="math notranslate nohighlight">\(\left[0, n\right)\)</span>, the second decision vector
 occupies the range <span class="math notranslate nohighlight">\(\left[n, 2n\right)\)</span>, and so on. Similarly, the output fitness vectors must be
@@ -268,7 +268,7 @@ will occupy the range <span class="math notranslate nohighlight">\(\left[f, 2f\r
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prob</strong> (<a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a>) – the input problem</p></li>
+<li><p><strong>prob</strong> (<a class="reference internal" href="py_problem.html#pygmo.problem" title="pygmo.problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">problem</span></code></a> or a UDP) – the input problem</p></li>
 <li><p><strong>dvs</strong> (<em>array-like object</em>) – the input decision vectors that will be evaluated in batch mode</p></li>
 </ul>
 </dd>
