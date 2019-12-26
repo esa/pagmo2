@@ -114,7 +114,7 @@ class island_test_case(_ut.TestCase):
         self.run_mo_sto_repr_bug()
 
     def run_basic_tests(self):
-        from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock, r_policy, s_policy, fair_replace, select_best, population
+        from .core import island, thread_island, null_algorithm, null_problem, de, rosenbrock, r_policy, s_policy, fair_replace, select_best, population, bfe, thread_bfe, default_bfe, problem
         isl = island()
         self.assertTrue("Fair replace" in repr(isl))
         self.assertTrue("Select best" in repr(isl))
@@ -248,6 +248,48 @@ class island_test_case(_ut.TestCase):
 
         self.assertTrue(isl.get_r_policy().is_(_r_pol))
         self.assertTrue(isl.get_s_policy().is_(_s_pol))
+
+        # Ctors from bfe.
+        p = problem(rosenbrock())
+        isl = island(prob=p, size=20, b=bfe(default_bfe()), algo=de())
+        for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pass in explicit UDBFE.
+        isl = island(prob=p, size=20, b=thread_bfe(), algo=de())
+        for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+        p = problem(p())
+        isl = island(prob=p, size=20, b=bfe(default_bfe()), algo=de())
+        for x, f in zip(isl.get_population().get_x(), isl.get_population().get_f()):
+            self.assertEqual(p.fitness(x), f)
+
+        # Pythonic problem with batch_fitness method.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [43] * len(dvs)
+
+        p = problem(p())
+        isl = island(prob=p, size=20, b=bfe(default_bfe()), algo=de())
+        for f in isl.get_population().get_f():
+            self.assertEqual(f, 43)
 
     def run_concurrent_access_tests(self):
         import threading as thr

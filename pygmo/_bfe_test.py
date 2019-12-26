@@ -327,3 +327,332 @@ class bfe_test_case(_ut.TestCase):
         bf = loads(dumps(bf))
         self.assertEqual(repr(bf), repr(bfe(_bf())))
         self.assertTrue(bf.is_(_bf))
+
+
+class thread_bfe_test_case(_ut.TestCase):
+    """Test case for the thread_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, member_bfe, rosenbrock, batch_random_decision_vector, problem
+        udbfe = thread_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertTrue(b.is_(thread_bfe))
+        self.assertFalse(b.is_(member_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+
+        self.assertTrue(
+            b.get_name() == "Multi-threaded batch fitness evaluator")
+        self.assertTrue(b.get_extra_info() == "")
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def get_name(self):
+                return 'pippo'
+
+        prob = problem(p())
+
+        with self.assertRaises(ValueError) as cm:
+            b(prob, [0])
+        err = cm.exception
+        self.assertTrue(
+            "Cannot use a thread_bfe on the problem 'pippo', which does not provide the required level of thread safety" in str(err))
+
+
+class member_bfe_test_case(_ut.TestCase):
+    """Test case for the member_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, member_bfe, rosenbrock, batch_random_decision_vector, problem
+        udbfe = member_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(member_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+
+        with self.assertRaises(NotImplementedError) as cm:
+            b(prob, dvs)
+        err = cm.exception
+        self.assertTrue(
+            "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type 'Multidimensional Rosenbrock Function'" in str(err))
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def batch_fitness(self, dvs):
+                return [42] * len(dvs)
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        for f in fvs:
+            self.assertTrue(f == 42)
+
+
+class mp_bfe_test_case(_ut.TestCase):
+    """Test case for the mp_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, rosenbrock, batch_random_decision_vector, problem
+        from . import mp_bfe
+
+        mp_bfe.shutdown_pool()
+        mp_bfe.shutdown_pool()
+        mp_bfe.shutdown_pool()
+
+        udbfe = mp_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(mp_bfe))
+
+        mp_bfe.init_pool()
+        mp_bfe.init_pool()
+        mp_bfe.init_pool()
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+        self.assertEqual(prob.get_fevals(), 6)
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        mp_bfe.resize_pool(2)
+        self.assertEqual(mp_bfe.get_pool_size(), 2)
+        mp_bfe.resize_pool(2)
+        self.assertEqual(mp_bfe.get_pool_size(), 2)
+        mp_bfe.shutdown_pool()
+        mp_bfe.resize_pool(16)
+        mp_bfe.shutdown_pool()
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        # Try different chunksize as well.
+        udbfe = mp_bfe(chunksize=2)
+        b = bfe(udbfe=udbfe)
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        udbfe = mp_bfe(chunksize=None)
+        b = bfe(udbfe=udbfe)
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        # Error handling.
+        with self.assertRaises(TypeError) as cm:
+            b = bfe(udbfe=mp_bfe(chunksize='pippo'))
+        err = cm.exception
+        self.assertTrue(
+            "The 'chunksize' argument must be None or an int, but it is of type '{}' instead".format(str) in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            b = bfe(udbfe=mp_bfe(chunksize=0))
+        err = cm.exception
+        self.assertTrue(
+            "The 'chunksize' parameter must be a positive integer, but its value is 0 instead" in str(err))
+
+        with self.assertRaises(ValueError) as cm:
+            b = bfe(udbfe=mp_bfe(chunksize=-1))
+        err = cm.exception
+        self.assertTrue(
+            "The 'chunksize' parameter must be a positive integer, but its value is -1 instead" in str(err))
+
+        self.assertEqual(
+            b.get_name(), "Multiprocessing batch fitness evaluator")
+        self.assertTrue(
+            "Number of processes in the pool" in b.get_extra_info())
+
+        # Test exception transport in the pool.
+        class _bfe_throw_prob(object):
+            def fitness(self, x):
+                raise ValueError("oh snap")
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(_bfe_throw_prob())
+        dvs = batch_random_decision_vector(prob, 6)
+        with self.assertRaises(ValueError) as cm:
+            b(prob, dvs)
+        err = cm.exception
+        self.assertTrue(
+            "oh snap" in str(err))
+
+
+class ipyparallel_bfe_test_case(_ut.TestCase):
+    """Test case for the ipyparallel_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        try:
+            import ipyparallel
+        except ImportError:
+            return
+
+        from .core import thread_bfe, bfe, rosenbrock, batch_random_decision_vector, problem
+        from . import ipyparallel_bfe
+
+        ipyparallel_bfe.shutdown_view()
+        ipyparallel_bfe.shutdown_view()
+        ipyparallel_bfe.shutdown_view()
+
+        to = .5
+        try:
+            # Try with kwargs for the client.
+            ipyparallel_bfe.init_view(client_kwargs={'timeout': to})
+        except OSError:
+            return
+
+        udbfe = ipyparallel_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(ipyparallel_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+        self.assertEqual(prob.get_fevals(), 6)
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        ipyparallel_bfe.init_view()
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        ipyparallel_bfe.shutdown_view()
+        ipyparallel_bfe.shutdown_view()
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        self.assertEqual(b.get_name(), "Ipyparallel batch fitness evaluator")
+        self.assertTrue(b.get_extra_info() != '')
+
+        # Test exception transport.
+        class _bfe_throw_prob(object):
+            def fitness(self, x):
+                raise ValueError("oh snap")
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(_bfe_throw_prob())
+        dvs = batch_random_decision_vector(prob, 6)
+        with self.assertRaises(ipyparallel.error.CompositeError) as cm:
+            b(prob, dvs)
+        err = cm.exception
+        self.assertTrue(
+            "oh snap" in str(err))
+
+
+class default_bfe_test_case(_ut.TestCase):
+    """Test case for the default_bfe UDBFE
+
+    """
+
+    def runTest(self):
+        from .core import thread_bfe, bfe, default_bfe, rosenbrock, batch_random_decision_vector, problem
+
+        udbfe = default_bfe()
+        b = bfe(udbfe=udbfe)
+        self.assertFalse(b.is_(thread_bfe))
+        self.assertTrue(b.is_(default_bfe))
+
+        prob = problem(rosenbrock(5))
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        fvs.shape = (6, )
+        dvs.shape = (6, 5)
+        for dv, fv in zip(dvs, fvs):
+            self.assertTrue(fv == prob.fitness(dv))
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+
+        for fv in fvs:
+            self.assertTrue(fv == 0.)
+
+        class p(object):
+            def fitness(self, x):
+                return [0]
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def batch_fitness(self, dvs):
+                return [42] * len(dvs)
+
+        prob = problem(p())
+        dvs = batch_random_decision_vector(prob, 6)
+        fvs = b(prob, dvs)
+        for f in fvs:
+            self.assertTrue(f == 42)

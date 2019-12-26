@@ -411,11 +411,11 @@ def _population_init(self, prob=None, size=0, b=None, seed=None):
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
              (if *prob* is :data:`None`, a default-constructed :class:`~pygmo.problem` will be used
              in its stead)
-        size (int): the number of individuals
+        size (:class:`int`): the number of individuals
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
              (if *b* is :data:`None`, the evaluation of the population's individuals will be performed
              in sequential mode)
-        seed (int): the random seed (if *seed* is :data:`None`, a randomly-generated value will be used
+        seed (:class:`int`): the random seed (if *seed* is :data:`None`, a randomly-generated value will be used
              in its stead)
 
     Raises:
@@ -469,10 +469,10 @@ def _island_init(self, **kwargs):
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
-        size (int): the number of individuals
+        size (:class:`int`): the number of individuals
         r_pol: a user-defined replacement policy (either Python or C++), or an instance of :class:`~pygmo.r_policy`
         s_pol: a user-defined selection policy (either Python or C++), or an instance of :class:`~pygmo.s_policy`
-        seed (int): the random seed (if not specified, it will be randomly-generated)
+        seed (:class:`int`): the random seed (if not specified, it will be randomly-generated)
 
     Raises:
         KeyError: if the set of keyword arguments is invalid
@@ -566,7 +566,7 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
     This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
 
     Args:
-        n (int): the number of islands in the archipelago
+        n (:class:`int`): the number of islands in the archipelago
         t: a user-defined topology (either Python or C++), or an instance of :class:`~pygmo.topology`
 
     Keyword Args:
@@ -575,10 +575,10 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
-        pop_size (int): the number of individuals for each island
+        pop_size (:class:`int`): the number of individuals for each island
         r_pol: a user-defined replacement policy (either Python or C++), or an instance of :class:`~pygmo.r_policy`
         s_pol: a user-defined selection policy (either Python or C++), or an instance of :class:`~pygmo.s_policy`
-        seed (int): the random seed
+        seed (:class:`int`): the random seed
 
     Raises:
         TypeError: if *n* is not an integral type
