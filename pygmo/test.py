@@ -1814,7 +1814,7 @@ class decorator_problem_test_case(_ut.TestCase):
         dmeths = ["get_nobj", "get_nec", "get_nic", "get_nix",
                   "has_gradient", "has_gradient_sparsity", "has_hessians",
                   "has_hessians_sparsity", "has_set_seed", "get_name",
-                  "get_extra_info"]
+                  "get_extra_info", "has_batch_fitness"]
         decors = dict((_+"_decorator", any_decor(_)) for _ in dmeths)
         d = dp(prob=rb, **decors)
         for _ in dmeths:
@@ -1841,6 +1841,33 @@ class decorator_problem_test_case(_ut.TestCase):
         for isl in a:
             self.assertTrue(
                 len(isl.get_population().problem.extract(dp).dv_log) > 5)
+
+        # Batch fitness decorator.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [43] * len(dvs)
+
+        def bf_log_decor(orig_bfitness_function):
+            def new_bfitness_function(self, dvs):
+                if hasattr(self, "dv_log"):
+                    self.dv_log.append(dvs)
+                else:
+                    self.dv_log = [dvs]
+                return orig_bfitness_function(self, dvs)
+            return new_bfitness_function
+
+        prob = problem(dp(p(), batch_fitness_decorator=bf_log_decor))
+        prob.batch_fitness([0] * 10)
+        prob.batch_fitness([0] * 10)
+        prob.batch_fitness([0] * 10)
+        self.assertTrue(len(prob.extract(dp).dv_log) > 0)
 
 
 class archipelago_test_case(_ut.TestCase):
