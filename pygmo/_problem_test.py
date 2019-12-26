@@ -70,6 +70,7 @@ class problem_test_case(_ut.TestCase):
         self.run_name_info_tests()
         self.run_thread_safety_tests()
         self.run_pickle_test()
+        self.run_batch_fitness_test()
 
     def run_basic_tests(self):
         # Tests for minimal problem, and mandatory methods.
@@ -876,7 +877,10 @@ class problem_test_case(_ut.TestCase):
 
     def run_gradient_tests(self):
         from numpy import array
-        from .core import problem
+        from .core import problem, schwefel
+
+        self.assertRaises(NotImplementedError,
+                          lambda: problem(schwefel()).gradient([1]))
 
         class p(object):
 
@@ -2013,3 +2017,91 @@ class problem_test_case(_ut.TestCase):
         self.assertEqual(p.get_nx(), 2)
         self.assertTrue(p.is_(translate))
         self.assertTrue(p.extract(translate).inner_problem.is_(_prob))
+
+    def run_batch_fitness_test(self):
+        from .core import problem, rosenbrock
+
+        prob = problem(rosenbrock())
+        self.assertFalse(prob.has_batch_fitness())
+        with self.assertRaises(NotImplementedError) as cm:
+            prob.batch_fitness([])
+        err = cm.exception
+        self.assertTrue(
+            "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type 'Multidimensional Rosenbrock Function'" in str(err))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def get_name(self):
+                return 'pluto'
+
+        prob = problem(p())
+        self.assertFalse(prob.has_batch_fitness())
+        with self.assertRaises(NotImplementedError) as cm:
+            prob.batch_fitness([])
+        err = cm.exception
+        self.assertTrue(
+            "the batch_fitness() method has been invoked, but it is not implemented in the user-defined Python problem" in str(err))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0], [1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [41] * len(dvs)
+
+        prob = problem(p())
+        self.assertTrue(prob.has_batch_fitness())
+        fvs = prob.batch_fitness([0] * 10)
+        for f in fvs:
+            self.assertEqual(f, 41)
+
+        # Failure modes.
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42]
+
+            def batch_fitness(self, dvs):
+                return [41] * len(dvs)
+
+        prob = problem(p())
+        self.assertTrue(prob.has_batch_fitness())
+        with self.assertRaises(ValueError) as cm:
+            prob.batch_fitness([0, 0])
+        err = cm.exception
+        self.assertTrue("the number of produced fitness vectors, " in str(err))
+
+        class p(object):
+
+            def get_bounds(self):
+                return ([0, 0], [1, 1])
+
+            def fitness(self, a):
+                return [42, 43]
+
+            def get_nobj(self):
+                return 2
+
+            def batch_fitness(self, dvs):
+                return [41]
+
+        prob = problem(p())
+        self.assertTrue(prob.has_batch_fitness())
+        with self.assertRaises(ValueError) as cm:
+            prob.batch_fitness([0, 0])
+        err = cm.exception
+        self.assertTrue(
+            "is not an exact multiple of the fitness dimension of the problem, " in str(err))
