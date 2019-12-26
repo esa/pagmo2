@@ -2705,8 +2705,26 @@ class mp_bfe_test_case(_ut.TestCase):
         self.assertTrue(
             "The 'chunksize' parameter must be a positive integer, but its value is -1 instead" in str(err))
 
-        self.assertEqual(b.get_name(), "Multiprocessing batch fitness evaluator")
-        self.assertTrue("Number of processes in the pool" in b.get_extra_info())
+        self.assertEqual(
+            b.get_name(), "Multiprocessing batch fitness evaluator")
+        self.assertTrue(
+            "Number of processes in the pool" in b.get_extra_info())
+
+        # Test exception transport in the pool.
+        class _bfe_throw_prob(object):
+            def fitness(self, x):
+                raise ValueError("oh snap")
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(_bfe_throw_prob())
+        dvs = batch_random_decision_vector(prob, 6)
+        with self.assertRaises(ValueError) as cm:
+            b(prob, dvs)
+        err = cm.exception
+        self.assertTrue(
+            "oh snap" in str(err))
 
 
 class ipyparallel_bfe_test_case(_ut.TestCase):
@@ -2776,6 +2794,23 @@ class ipyparallel_bfe_test_case(_ut.TestCase):
 
         self.assertEqual(b.get_name(), "Ipyparallel batch fitness evaluator")
         self.assertTrue(b.get_extra_info() != '')
+
+        # Test exception transport.
+        class _bfe_throw_prob(object):
+            def fitness(self, x):
+                raise ValueError("oh snap")
+
+            def get_bounds(self):
+                return ([0], [1])
+
+        prob = problem(_bfe_throw_prob())
+        dvs = batch_random_decision_vector(prob, 6)
+        with self.assertRaises(ipyparallel.error.CompositeError) as cm:
+            b(prob, dvs)
+        err = cm.exception
+        self.assertTrue(
+            "oh snap" in str(err))
+
 
 class default_bfe_test_case(_ut.TestCase):
     """Test case for the default_bfe UDBFE
