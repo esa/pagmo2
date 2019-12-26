@@ -315,10 +315,6 @@ to the channels, and then we can immediately install pygmo:
 
 The conda packages for pygmo are maintained by the core development team,
 and they are regularly updated when new pygmo versions are released.
-Note however that, due to various technical issues, the Python 2.7
-conda packages for Windows are **not** available. If you need pygmo
-on Windows on a Python 2.7 installation, the pip packages can be used
-(see below).
 
 Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
 your conda installation.
@@ -347,8 +343,7 @@ An even better idea is to make use of Python's
 
 The pip packages for pygmo are maintained by the core development team,
 and they are regularly updated when new pygmo versions are released.
-We provide pip packages for Linux and Windows (both Python 2.7 and 3.x),
-but **not** for OSX.
+We provide pip packages for Linux and Windows, but **not** for OSX.
 
 .. warning::
 

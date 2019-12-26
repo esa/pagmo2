@@ -65,8 +65,8 @@ program presented earlier may look like this:
 
 .. code-block:: cmake
 
-   # pagmo needs at least CMake 3.2.
-   cmake_minimum_required(VERSION 3.2.0)
+   # pagmo needs at least CMake 3.3.
+   cmake_minimum_required(VERSION 3.3)
 
    # The name of our project.
    project(sample_project)
