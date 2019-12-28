@@ -20,16 +20,30 @@ needed in your code (e.g., ``pagmo/problem.hpp``,
    implementation details which may change from version to version in incompatible ways.
 
 Namespaces
-^^^^^^^^^^
+----------
 
 All of pagmo's public classes and functions are located
 directly in the ``pagmo::`` namespace. There are no other
 namespaces in pagmo's public API.
 
+API and ABI stability
+---------------------
+
+Currently, pagmo guarantees API and ABI stability across
+patch versions. That is, version x.y.n of the pagmo library
+is both API and ABI compatible with version x.y.m.
+
+While the binary interface is very likely to change across
+minor versions (e.g., from 2.11 to 2.12), incompatible
+API changes between minor versions are less frequent,
+and they are always explicitly
+documented in the :ref:`changelog <changelog>` with
+the **BREAKING** tag.
+
 .. _cpp_tut_type_erasure:
 
 Type erasure
-^^^^^^^^^^^^
+------------
 
 The current incarnation of pagmo eschews traditional
 object-oriented programming (OOP) techniques in favour of a
