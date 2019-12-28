@@ -28,9 +28,6 @@
 # GNU Lesser General Public License along with the PaGMO library.  If not,
 # see https://www.gnu.org/licenses/.
 
-# for python 2.0 compatibility
-from __future__ import absolute_import as _ai
-
 import cloudpickle as _cloudpickle
 # Register the cleanup function.
 from .core import _cleanup as _cpp_cleanup
@@ -60,8 +57,9 @@ from .core import *
 from .plotting import *
 from ._py_islands import *
 from ._py_problems import *
+from ._py_bfes import *
 
-# We move into the problems, algorithms and islands namespaces
+# We move into the problems, algorithms, etc. namespaces
 # all the pure python UDAs, UDPs and UDIs.
 for item in dir(_py_islands):
     if not item.startswith("_"):
@@ -72,6 +70,11 @@ for item in dir(_py_problems):
     if not item.startswith("_"):
         setattr(problems, item, getattr(_py_problems, item))
 del _py_problems
+
+for item in dir(_py_bfes):
+    if not item.startswith("_"):
+        setattr(batch_evaluators, item, getattr(_py_bfes, item))
+del _py_bfes
 
 del item
 
@@ -408,11 +411,11 @@ def _population_init(self, prob=None, size=0, b=None, seed=None):
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
              (if *prob* is :data:`None`, a default-constructed :class:`~pygmo.problem` will be used
              in its stead)
-        size (int): the number of individuals
+        size (:class:`int`): the number of individuals
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
              (if *b* is :data:`None`, the evaluation of the population's individuals will be performed
              in sequential mode)
-        seed (int): the random seed (if *seed* is :data:`None`, a randomly-generated value will be used
+        seed (:class:`int`): the random seed (if *seed* is :data:`None`, a randomly-generated value will be used
              in its stead)
 
     Raises:
@@ -424,13 +427,11 @@ def _population_init(self, prob=None, size=0, b=None, seed=None):
             Python (e.g., type conversion errors, mismatched function signatures, etc.)
 
     """
-    import sys
     from .core import _random_device_next
-    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check input params.
-    if not isinstance(size, int_types):
+    if not isinstance(size, int):
         raise TypeError("the 'size' parameter must be an integer")
-    if not seed is None and not isinstance(seed, int_types):
+    if not seed is None and not isinstance(seed, int):
         raise TypeError("the 'seed' parameter must be None or an integer")
     if prob is None:
         # Problem not specified, def-construct it.
@@ -468,10 +469,10 @@ def _island_init(self, **kwargs):
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
-        size (int): the number of individuals
+        size (:class:`int`): the number of individuals
         r_pol: a user-defined replacement policy (either Python or C++), or an instance of :class:`~pygmo.r_policy`
         s_pol: a user-defined selection policy (either Python or C++), or an instance of :class:`~pygmo.s_policy`
-        seed (int): the random seed (if not specified, it will be randomly-generated)
+        seed (:class:`int`): the random seed (if not specified, it will be randomly-generated)
 
     Raises:
         KeyError: if the set of keyword arguments is invalid
@@ -565,7 +566,7 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
     This class is the Python counterpart of the C++ class :cpp:class:`pagmo::archipelago`.
 
     Args:
-        n (int): the number of islands in the archipelago
+        n (:class:`int`): the number of islands in the archipelago
         t: a user-defined topology (either Python or C++), or an instance of :class:`~pygmo.topology`
 
     Keyword Args:
@@ -574,10 +575,10 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
         pop (:class:`~pygmo.population`): a population
         prob: a user-defined problem (either Python or C++), or an instance of :class:`~pygmo.problem`
         b: a user-defined batch fitness evaluator (either Python or C++), or an instance of :class:`~pygmo.bfe`
-        pop_size (int): the number of individuals for each island
+        pop_size (:class:`int`): the number of individuals for each island
         r_pol: a user-defined replacement policy (either Python or C++), or an instance of :class:`~pygmo.r_policy`
         s_pol: a user-defined selection policy (either Python or C++), or an instance of :class:`~pygmo.s_policy`
-        seed (int): the random seed
+        seed (:class:`int`): the random seed
 
     Raises:
         TypeError: if *n* is not an integral type
@@ -637,10 +638,8 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
 
 
     """
-    import sys
-    int_types = (int, long) if sys.version_info[0] < 3 else (int,)
     # Check n.
-    if not isinstance(n, int_types):
+    if not isinstance(n, int):
         raise TypeError("the 'n' parameter must be an integer")
     if n < 0:
         raise ValueError(
@@ -670,7 +669,7 @@ def _archi_init(self, n=0, t=topology(), **kwargs):
         RND = Random()
         # Get the seed from kwargs.
         seed = kwargs.pop('seed')
-        if not isinstance(seed, int_types):
+        if not isinstance(seed, int):
             raise TypeError("the 'seed' parameter must be an integer")
         # Seed the rng.
         RND.seed(seed)
@@ -837,7 +836,9 @@ def get_serialization_backend():
 
 def _cleanup():
     mp_island.shutdown_pool()
+    mp_bfe.shutdown_pool()
     ipyparallel_island.shutdown_view()
+    ipyparallel_bfe.shutdown_view()
     _cpp_cleanup()
 
 

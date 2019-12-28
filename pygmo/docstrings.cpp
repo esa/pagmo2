@@ -792,6 +792,26 @@ Returns:
 )";
 }
 
+std::string problem_increment_fevals_docstring()
+{
+    return R"(increment_fevals(n)
+
+Increment the number of fitness evaluations.
+
+.. versionadded:: 2.13
+
+This method will increase the internal counter of fitness evaluations by *n*.
+
+Args:
+    n (:class:`int`): the amount by which the internal counter of fitness evaluations will be increased
+
+Raises:
+    unspecified: any exception thrown by failures at the intersection between C++ and Python (e.g.,
+      type conversion errors, mismatched function signatures, etc.)
+
+)";
+}
+
 std::string problem_get_gevals_docstring()
 {
     return R"(get_gevals()
@@ -6256,40 +6276,6 @@ Raises:
 )";
 }
 
-std::string bfe_call_docstring()
-{
-    return R"(__call__(prob, dvs)
-
-Call operator.
-
-The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
-of the decision vectors stored in *dvs* using the input problem *prob*, and it will return the corresponding
-fitness vectors.
-
-The input decision vectors must be stored contiguously in *dvs*: for a problem with dimension :math:`n`, the first
-decision vector in *dvs* occupies the index range :math:`\left[0, n\right)`, the second decision vector
-occupies the range :math:`\left[n, 2n\right)`, and so on. Similarly, the output fitness vectors must be
-laid out contiguously in the return value: for a problem with fitness dimension :math:`f`, the first fitness
-vector will occupy the index range :math:`\left[0, f\right)`, the second fitness vector
-will occupy the range :math:`\left[f, 2f\right)`, and so on.
-
-This function will perform a variety of sanity checks on both *dvs* and on the return value.
-
-Args:
-    prob (:class:`~pygmo.problem`): the input problem
-    dvs (array-like object): the input decision vectors that will be evaluated in batch mode
-
-Returns:
-    1D NumPy float array: the fitness vectors corresponding to the input decision vectors in *dvs*
-
-Raises:
-    ValueError: if *dvs* or the return value produced by the UDBFE are incompatible with the input problem *prob*
-    unspecified: any exception raised by the invocation of the UDBFE, or by failures at the intersection
-      between C++ and Python (e.g., type conversion errors, mismatched function signatures, etc.)
-
-)";
-}
-
 std::string bfe_get_name_docstring()
 {
     return R"(get_name()
@@ -6351,7 +6337,16 @@ construct a :class:`~pygmo.bfe`.
 
 :class:`~pygmo.default_bfe` is the default UDBFE used by :class:`~pygmo.bfe`, and,
 depending on the properties of the input :class:`~pygmo.problem`, it will delegate the implementation
-of its call operator to :class:`~pygmo.member_bfe` or :class:`~pygmo.thread_bfe`.
+of its call operator to another UDBFE. Specifically:
+
+* if the input problem provides a batch fitness member function (as established by
+  :func:`pygmo.problem.has_batch_fitness()`), then a :class:`~pygmo.member_bfe` will
+  be constructed and invoked to produce the return value; otherwise,
+* if the input problem provides at least the :attr:`~pygmo.thread_safety.basic` thread
+  safety level (as established by :func:`pygmo.problem.get_thread_safety()`), then a
+  :class:`pygmo.thread_bfe` will be constructed and invoked to produce the return value;
+  otherwise,
+* a :class:`pygmo.mp_bfe` will be constructed and invoked to produce the return value.
 
 See also the docs of the C++ class :cpp:class:`pagmo::default_bfe`.
 

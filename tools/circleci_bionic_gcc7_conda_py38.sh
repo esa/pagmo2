@@ -10,7 +10,7 @@ set -e
 sudo apt-get install build-essential wget
 
 # Install conda+deps.
-wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 export deps_dir=$HOME/local
 export PATH="$HOME/miniconda/bin:$PATH"
 export PATH="$deps_dir/bin:$PATH"
@@ -36,7 +36,7 @@ make -j2 VERBOSE=1 install
 
 # Run the tests.
 cd ../tools
-python -c "import pygmo; pygmo.test.run_test_suite(1); pygmo.mp_island.shutdown_pool()";
+python -c "import pygmo; pygmo.test.run_test_suite(1); pygmo.mp_island.shutdown_pool(); pygmo.mp_bfe.shutdown_pool()";
 
 # Additional serialization tests.
 python travis_additional_tests.py;

@@ -33,7 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <tuple>
 
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <pagmo/detail/prime_numbers.hpp>
 #include <pagmo/io.hpp>

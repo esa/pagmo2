@@ -53,20 +53,12 @@ see https://www.gnu.org/licenses/. */
 namespace pygmo
 {
 
-// This is necessary because the NumPy macro import_array() has different return values
-// depending on the Python version.
-#if PY_MAJOR_VERSION < 3
-inline void numpy_import_array()
-{
-    import_array();
-}
-#else
 inline void *numpy_import_array()
 {
     import_array();
     return nullptr;
 }
-#endif
+
 } // namespace pygmo
 
 #endif

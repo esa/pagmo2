@@ -38,7 +38,7 @@ Fork island
    .. note::
 
       :cpp:class:`~pagmo::fork_island` is not exposed in the Python bindings. Instead, pygmo provides a
-      :py:class:`process-based island <pygmo.mp_island>` via Python's :py:mod:`multiprocessing` module.
+      :class:`process-based island <pygmo.mp_island>` via Python's :mod:`multiprocessing` module.
 
    .. note::
 

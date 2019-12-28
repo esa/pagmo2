@@ -1,5 +1,5 @@
 # CMake version check.
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.3)
 
 # Module path setup.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
@@ -26,7 +26,7 @@ if((NOT PAGMO_BUILD_PAGMO) AND (NOT PAGMO_BUILD_PYGMO))
 endif()
 
 # Main pagmo/pygmo project version.
-set(PAGMO_PROJECT_VERSION 2.12.0)
+set(PAGMO_PROJECT_VERSION 2.13.0)
 
 if(PAGMO_BUILD_PAGMO)
     # Initial setup of a pagmo build.
@@ -125,16 +125,12 @@ if(PAGMO_BUILD_PAGMO)
 
     # NLopt
     if(PAGMO_WITH_NLOPT)
-        find_package(NLOPT REQUIRED)
-        message(STATUS "NLopt include directory: ${NLOPT_INCLUDE_DIR}")
-        message(STATUS "NLopt library: ${NLOPT_LIBRARY}")
+        find_package(NLOPT REQUIRED COMPONENTS header libnlopt)
     endif()
 
     # Ipopt
     if(PAGMO_WITH_IPOPT)
-        find_package(IPOPT REQUIRED)
-        message(STATUS "Ipopt include directory: ${IPOPT_INCLUDE_DIR}")
-        message(STATUS "Ipopt library: ${IPOPT_LIBRARY}")
+        find_package(IPOPT REQUIRED COMPONENTS header libipopt)
     endif()
 
     if(PAGMO_BUILD_TESTS)
@@ -149,8 +145,8 @@ if(PAGMO_BUILD_PYGMO)
     include(YACMAPythonSetup)
 
     # Python version check.
-    if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
-        message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+    if(${PYTHON_VERSION_MAJOR} LESS 3 OR (${PYTHON_VERSION_MAJOR} EQUAL 3 AND ${PYTHON_VERSION_MINOR} LESS 4))
+        message(FATAL_ERROR "Minimum supported Python version is 3.4.")
     endif()
 
     # NOTE: for the time being, require that pagmo/pygmo versions are matching exactly.
@@ -244,6 +240,13 @@ if(PAGMO_BUILD_PAGMO)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/generic.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/multi_objective.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hypervolume.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_algorithm.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_bf_approx.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_bf_fpras.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hv2d.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hv3d.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hvwfg.cpp"
         # Detail.
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
@@ -295,8 +298,8 @@ if(PAGMO_BUILD_PAGMO)
 
     # Setup of the pagmo library.
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "2.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 2)
+    set_property(TARGET pagmo PROPERTY VERSION "3.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 3)
     target_compile_options(pagmo PRIVATE
         "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
         "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
@@ -327,7 +330,10 @@ if(PAGMO_BUILD_PAGMO)
     target_link_libraries(pagmo PUBLIC Boost::boost Boost::serialization)
 
     # TBB.
-    target_link_libraries(pagmo PUBLIC TBB::tbb)
+    # NOTE: TBB is a private dependency because
+    # all uses of TBB are limited to the .cpp files,
+    # thus fully encapsulated in the pagmo library.
+    target_link_libraries(pagmo PRIVATE TBB::tbb)
 
     if(PAGMO_WITH_EIGEN3)
         # Link pagmo to eigen3.
@@ -337,13 +343,25 @@ if(PAGMO_BUILD_PAGMO)
 
     if(PAGMO_WITH_NLOPT)
         # Link pagmo to NLopt.
-        target_link_libraries(pagmo PUBLIC NLOPT::nlopt)
+        # NOTE: we make use of some NLopt types in the
+        # public pagmo interface, but we don't use any
+        # function from the library in the public headers.
+        # Thus, depend publicly on the header,
+        # privately on the compiled library.
+        target_link_libraries(pagmo PUBLIC NLOPT::header)
+        target_link_libraries(pagmo PRIVATE NLOPT::libnlopt)
         set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
     endif()
 
     if(PAGMO_WITH_IPOPT)
         # Link pagmo to Ipopt.
-        target_link_libraries(pagmo PUBLIC IPOPT::ipopt)
+        # NOTE: we make use of some Ipopt types in the
+        # public pagmo interface, but we don't use any
+        # function from the library in the public headers.
+        # Thus, depend publicly on the header,
+        # privately on the compiled library.
+        target_link_libraries(pagmo PUBLIC IPOPT::header)
+        target_link_libraries(pagmo PRIVATE IPOPT::libipopt)
         set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
     endif()
 
@@ -413,17 +431,17 @@ if(PAGMO_BUILD_PAGMO)
         set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 REQUIRED)\n")
     endif()
     if(PAGMO_WITH_NLOPT)
-        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLOPT REQUIRED)\n")
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLOPT REQUIRED COMPONENTS header)\n")
     endif()
     if(PAGMO_WITH_IPOPT)
-        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(IPOPT REQUIRED)\n")
+        set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(IPOPT REQUIRED COMPONENTS header)\n")
     endif()
 
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindEigen3.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindTBB.cmake" DESTINATION "lib/cmake/pagmo")
+        DESTINATION "lib/cmake/pagmo")
     install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)

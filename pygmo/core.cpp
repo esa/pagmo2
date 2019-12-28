@@ -61,6 +61,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/enum.hpp>
 #include <boost/python/errors.hpp>
+#include <boost/python/exception_translator.hpp>
 #include <boost/python/extract.hpp>
 #include <boost/python/import.hpp>
 #include <boost/python/init.hpp>
@@ -352,14 +353,6 @@ std::unordered_set<std::string> ap_set;
 
 } // namespace pygmo
 
-// Detect if pygmo can use the multiprocessing module.
-// NOTE: the mp machinery is supported since Python 3.4 or on Windows.
-#if defined(_WIN32) || PY_MAJOR_VERSION > 3 || (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4)
-
-#define PYGMO_CAN_USE_MP
-
-#endif
-
 BOOST_PYTHON_MODULE(core)
 {
     using pygmo::lcast;
@@ -407,15 +400,39 @@ BOOST_PYTHON_MODULE(core)
                   // of code normally would provide a basic thread safety guarantee, and in order to continue providing
                   // it we use the ensurer.
                   pygmo::gil_thread_ensurer gte;
-                  bp::object py_island = bp::import("pygmo")
-#if defined(PYGMO_CAN_USE_MP)
-                                             .attr("mp_island");
-#else
-                                             .attr("ipyparallel_island");
-#endif
+                  bp::object py_island = bp::import("pygmo").attr("mp_island");
                   ptr = detail::make_unique<detail::isl_inner<bp::object>>(py_island());
               }
           };
+
+    // Override the default implementation of default_bfe.
+    detail::default_bfe_impl = [](const problem &p, const vector_double &dvs) -> vector_double {
+        // The member function batch_fitness() of p, if present, has priority.
+        if (p.has_batch_fitness()) {
+            return member_bfe{}(p, dvs);
+        }
+
+        // Otherwise, we run the generic thread-based bfe, if the problem
+        // is thread-safe enough.
+        if (p.get_thread_safety() >= thread_safety::basic) {
+            return thread_bfe{}(p, dvs);
+        }
+
+        // NOTE: in this last bit of the implementation we need to call
+        // into the Python interpreter. In order to ensure that default_bfe
+        // still works also from a C++ thread of which Python knows nothing about,
+        // we will be using a thread ensurer, so that the thread safety
+        // guarantee provided by default_bfe is still respected.
+        // NOTE: the original default_bfe code is thread safe in the sense that the
+        // code directly implemented within that class is thread safe. Invoking the call
+        // operator of default_bfe might still end up being thread unsafe if p
+        // itself is thread unsafe (the same happens, e.g., in a thread-safe algorithm
+        // which uses a thread-unsafe problem in its evolve()).
+        pygmo::gil_thread_ensurer gte;
+        // Otherwise, we go for the multiprocessing bfe.
+        return pygmo::obj_to_vector<vector_double>(
+            bp::import("pygmo").attr("mp_bfe")().attr("__call__")(p, pygmo::vector_to_ndarr(dvs)));
+    };
 
     // Override the default RAII waiter. We need to use shared_ptr because we don't want to move/copy/destroy
     // the locks when invoking this from island::wait(), we need to instaniate exactly 1 py_wait_lock and have it
@@ -430,6 +447,10 @@ BOOST_PYTHON_MODULE(core)
     doc_options.enable_all();
     doc_options.disable_cpp_signatures();
     doc_options.disable_py_signatures();
+
+    // Register pagmo's custom exceptions.
+    bp::register_exception_translator<not_implemented_error>(
+        lcast([](const not_implemented_error &nie) { PyErr_SetString(PyExc_NotImplementedError, nie.what()); }));
 
     // The thread_safety enum.
     bp::enum_<thread_safety>("_thread_safety")
@@ -688,6 +709,8 @@ BOOST_PYTHON_MODULE(core)
         .def("get_nic", &problem::get_nic, pygmo::problem_get_nic_docstring().c_str())
         .def("get_nc", &problem::get_nc, pygmo::problem_get_nc_docstring().c_str())
         .def("get_fevals", &problem::get_fevals, pygmo::problem_get_fevals_docstring().c_str())
+        .def("increment_fevals", &problem::increment_fevals, pygmo::problem_increment_fevals_docstring().c_str(),
+             (bp::arg("n")))
         .def("get_gevals", &problem::get_gevals, pygmo::problem_get_gevals_docstring().c_str())
         .def("get_hevals", &problem::get_hevals, pygmo::problem_get_hevals_docstring().c_str())
         .def("set_seed", &problem::set_seed, pygmo::problem_set_seed_docstring().c_str(), (bp::arg("seed")))
@@ -1081,10 +1104,9 @@ BOOST_PYTHON_MODULE(core)
         // UDBFE extraction.
         .def("_py_extract", &pygmo::generic_py_extract<bfe>)
         // Bfe methods.
-        .def("__call__", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
+        .def("_call_impl", lcast([](const bfe &b, const problem &prob, const bp::object &dvs) {
                  return pygmo::vector_to_ndarr(b(prob, pygmo::obj_to_vector<vector_double>(dvs)));
-             }),
-             pygmo::bfe_call_docstring().c_str(), (bp::arg("prob"), bp::arg("dvs")))
+             }))
         .def("get_name", &bfe::get_name, pygmo::bfe_get_name_docstring().c_str())
         .def("get_extra_info", &bfe::get_extra_info, pygmo::bfe_get_extra_info_docstring().c_str())
         .def("get_thread_safety", &bfe::get_thread_safety, pygmo::bfe_get_thread_safety_docstring().c_str());

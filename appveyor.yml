@@ -14,7 +14,6 @@ environment:
     - BUILD_TYPE: "MinGW_64_Debug"
     - BUILD_TYPE: "MinGW_64_Python37"
     - BUILD_TYPE: "MinGW_64_Python36"
-    - BUILD_TYPE: "MinGW_64_Python27"
   global:
     PLATFORMTOOLSET: "v140"
 
@@ -53,7 +52,6 @@ install:
 # Rename sh.exe as sh.exe in PATH interferes with MinGW.
 - if [%BUILD_TYPE%]==[MinGW_64_Debug] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
-- if [%BUILD_TYPE%]==[MinGW_64_Python27] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 - if [%BUILD_TYPE%]==[MinGW_64_Python36] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 - if [%BUILD_TYPE%]==[MinGW_64_Python37] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
@@ -85,7 +83,6 @@ build_script:
 
 - if [%BUILD_TYPE%]==[MinGW_64_Debug] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
 
-- if [%BUILD_TYPE%]==[MinGW_64_Python27] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
 - if [%BUILD_TYPE%]==[MinGW_64_Python36] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
 - if [%BUILD_TYPE%]==[MinGW_64_Python37] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
 

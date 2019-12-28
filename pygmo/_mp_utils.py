@@ -28,9 +28,6 @@
 # GNU Lesser General Public License along with the PaGMO library.  If not,
 # see https://www.gnu.org/licenses/.
 
-# for python 2.0 compatibility
-from __future__ import absolute_import as _ai
-
 
 def _get_spawn_context():
     # Small utlity to get a context that will use the 'spawn' method to
@@ -38,31 +35,12 @@ def _get_spawn_context():
     # a uniform way of creating new processes across platforms in
     # order to prevent users from implicitly relying on platform-specific
     # behaviour (e.g., fork()), only to discover later that their
-    # code is not portable across platforms.
-    #
-    # The mp context functionality is available from Python 3.4. However,
-    # since in Windows the 'spawn' method is the default, we can
-    # just return the multiprocessing module in output instead of
-    # a context and the 'spawn' method will be used anyway in that case.
-    #
-    # See:
+    # code is not portable across platforms. See:
     # https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
 
     import multiprocessing as mp
-    import os
-    import sys
 
-    has_context = sys.version_info[0] > 3 or (
-        sys.version_info[0] == 3 and sys.version_info[1] >= 4)
-    if has_context:
-        mp_ctx = mp.get_context('spawn')
-    else:
-        if os.name != 'nt':
-            raise RuntimeError(
-                'Cannot enforce the "spawn" process creation method in Python < 3.4 if we are not on Windows')
-        mp_ctx = mp
-
-    return mp_ctx
+    return mp.get_context('spawn')
 
 
 class _temp_disable_sigint(object):

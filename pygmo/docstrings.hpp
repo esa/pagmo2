@@ -68,6 +68,7 @@ std::string problem_get_nf_docstring();
 std::string problem_get_nc_docstring();
 std::string problem_c_tol_docstring();
 std::string problem_get_fevals_docstring();
+std::string problem_increment_fevals_docstring();
 std::string problem_get_gevals_docstring();
 std::string problem_get_hevals_docstring();
 std::string problem_has_set_seed_docstring();
@@ -282,7 +283,6 @@ std::string archipelago_set_migrant_handling_docstring();
 
 // bfe.
 std::string bfe_docstring();
-std::string bfe_call_docstring();
 std::string bfe_get_name_docstring();
 std::string bfe_get_extra_info_docstring();
 std::string bfe_get_thread_safety_docstring();
