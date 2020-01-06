@@ -230,7 +230,9 @@ public:
 
 private:
     template <typename T>
-    using topo_ctor_enabler = enable_if_t<std::is_constructible<topology, T &&>::value, int>;
+    using topo_ctor_enabler = enable_if_t<detail::conjunction<detail::negation<std::is_same<archipelago, uncvref_t<T>>>,
+                                                              std::is_constructible<topology, T>>::value,
+                                          int>;
 
 public:
     /// Constructor from a topology.
@@ -238,8 +240,8 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    This constructor is enabled only if ``t``
-     *    can be used to construct a :cpp:class:`pagmo::topology`.
+     *    This constructor is enabled only if ``t`` is not :cpp:class:`pagmo::archipelago`
+     *    and it can be used to construct a :cpp:class:`pagmo::topology`.
      *
      * This constructor is equivalent to the default constructor, but it will additionally
      * allow to select the archipelago's topology.
