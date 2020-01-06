@@ -240,7 +240,7 @@ public:
      * \verbatim embed:rst:leading-asterisk
      * .. note::
      *
-     *    This constructor is enabled only if ``t`` is not :cpp:class:`pagmo::archipelago`
+     *    This constructor is enabled only if ``t`` is not an :cpp:class:`~pagmo::archipelago`
      *    and it can be used to construct a :cpp:class:`pagmo::topology`.
      *
      * This constructor is equivalent to the default constructor, but it will additionally
