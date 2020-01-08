@@ -421,6 +421,13 @@ void hypervolume::verify_after_construct() const
             pagmo_throw(std::invalid_argument, "All point set dimensions must be equal.");
         }
     }
+    for (const auto &point : m_points) {
+        for (auto value : point) {
+            if (std::isnan(value)) {
+                pagmo_throw(std::invalid_argument, "A nan value has been encountered in the hypervolume points. Cannot construct the hypervolume object");
+            }
+        }
+    }
 }
 
 // Verify before compute method
