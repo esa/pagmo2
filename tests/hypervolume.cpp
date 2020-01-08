@@ -30,12 +30,12 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <stdexcept>
-#include <tuple>
-
+#include <cmath>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -215,8 +215,8 @@ BOOST_AUTO_TEST_CASE(hypervolume_compute_test)
     // errors
     population pop2{problem{rosenbrock(10)}, 2};
     BOOST_CHECK_THROW(hypervolume(pop2, true), std::invalid_argument);
-    // Checks the hypervolume cannot be constructed in nans are present
-    BOOST_CHECK_THROW(hypervolume({{0./0., 2.}, {2., 1.}}), std::invalid_argument);
+    // Checks the hypervolume cannot be constructed if nans are present
+    BOOST_CHECK_THROW(hypervolume({{std::numeric_limits<double>::quiet_NaN(), 2.}, {2., 1.}}), std::invalid_argument);
     // Checks the hypervolume cannot be constructed if point have different dimensions
     BOOST_CHECK_THROW(hypervolume({{1., 2.}, {2., 1.}, {3, 0, 5}}), std::invalid_argument);
     // Checks the hypervolume cannot be constructed if points have no dimension
