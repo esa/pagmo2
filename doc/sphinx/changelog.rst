@@ -39,6 +39,13 @@ Changes
 Fix
 ~~~
 
+- Fix a bug in the hypervolume utilities when
+  NaNs are encountered
+  (`#383 <https://github.com/esa/pagmo2/pull/383>`__).
+
+- Fix an ambiguous archipelago constructor
+  (`#381 <https://github.com/esa/pagmo2/pull/381>`__).
+
 - Fix a compilation warning in debug mode when using
   recent Boost versions
   (`#377 <https://github.com/esa/pagmo2/pull/377>`__).
