@@ -26,8 +26,7 @@ Heuristic Global Optimization
 ========================================================== ========================================= ========================================= =========================
 Common Name                                                Docs of the C++ class                     Docs of the python class                  Capabilities
 ========================================================== ========================================= ========================================= =========================
-The null algorithm [#null_algo]_                           :cpp:class:`pagmo::null_algorithm`        :class:`pygmo.null_algorithm`             SM-CU-I-sto
-Extended Ant Colony Optimization (ACOmi)                   :cpp:class:`pagmo::gaco`                  :class:`pygmo.gaco`                       S-CU-I
+Extended Ant Colony Optimization (GACO)                    :cpp:class:`pagmo::gaco`                  :class:`pygmo.gaco`                       S-CU-I
 Differential Evolution (DE)                                :cpp:class:`pagmo::de`                    :class:`pygmo.de`                         S-U
 Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  :class:`pygmo.sade`                       S-U
 Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                :class:`pygmo.de1220`                     S-U
@@ -82,8 +81,6 @@ Augmented Lagrangian algorithm (from NLopt) [#auglag]_ :cpp:class:`pagmo::nlopt`
 ====================================================== ============================================ ============================================ ==========================
 
 .. rubric:: Footnotes
-
-.. [#null_algo] The null algorithm is used only for initialisation purposes. It will not actually run any optimisation if invoked.
 
 .. [#meta_capa] The capabilities of the meta-algorithms depend also on the capabilities of the algorithms they wrap. If, for instance,
    a meta-algorithm supporting constrained problems is constructed from an algorithm which does *not* support constrained problems, the

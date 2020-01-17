@@ -88,11 +88,9 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
-</ul>
-<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">List of algorithms (UDAs) available in pagmo/pygmo</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#heuristic-global-optimization">Heuristic Global Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#local-optimization">Local optimization</a></li>
@@ -101,14 +99,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp/cpp_docs.html">C++ Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cpp/tutorials/cpp_tut.html">C++ tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python/python_docs.html">Python Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/cpp_docs.html">C++ API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python/tutorials/python_tut.html">Python tutorials</a></li>
-</ul>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
@@ -210,97 +204,92 @@ to turn constrained problems into unconstrained ones, and multi-objective proble
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>The null algorithm <a class="footnote-reference brackets" href="#null-algo" id="id1">1</a></p></td>
-<td><p><a class="reference internal" href="cpp/algorithms/null.html#_CPPv4N5pagmo14null_algorithmE" title="pagmo::null_algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::null_algorithm</span></code></a></p></td>
-<td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.null_algorithm" title="pygmo.null_algorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.null_algorithm</span></code></a></p></td>
-<td><p>SM-CU-I-sto</p></td>
-</tr>
-<tr class="row-odd"><td><p>Extended Ant Colony Optimization (ACOmi)</p></td>
+<tr class="row-even"><td><p>Extended Ant Colony Optimization (GACO)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/gaco.html#_CPPv4N5pagmo4gacoE" title="pagmo::gaco"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::gaco</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.gaco" title="pygmo.gaco"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.gaco</span></code></a></p></td>
 <td><p>S-CU-I</p></td>
 </tr>
-<tr class="row-even"><td><p>Differential Evolution (DE)</p></td>
+<tr class="row-odd"><td><p>Differential Evolution (DE)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/de.html#_CPPv4N5pagmo2deE" title="pagmo::de"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::de</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.de" title="pygmo.de"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.de</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-odd"><td><p>Self-adaptive DE (jDE and iDE)</p></td>
+<tr class="row-even"><td><p>Self-adaptive DE (jDE and iDE)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/sade.html#_CPPv4N5pagmo4sadeE" title="pagmo::sade"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sade</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sade" title="pygmo.sade"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.sade</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td><p>Self-adaptive DE (de_1220 aka pDE)</p></td>
+<tr class="row-odd"><td><p>Self-adaptive DE (de_1220 aka pDE)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/de1220.html#_CPPv4N5pagmo6de1220E" title="pagmo::de1220"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::de1220</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.de1220" title="pygmo.de1220"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.de1220</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-odd"><td><p>Grey wolf optimizer (GWO)</p></td>
+<tr class="row-even"><td><p>Grey wolf optimizer (GWO)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/gwo.html#_CPPv4N5pagmo3gwoE" title="pagmo::gwo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::gwo</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.gwo" title="pygmo.gwo"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.gwo</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td><p>Improved Harmony Search</p></td>
+<tr class="row-odd"><td><p>Improved Harmony Search</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/ihs.html#_CPPv4N5pagmo3ihsE" title="pagmo::ihs"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ihs</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.ihs" title="pygmo.ihs"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.ihs</span></code></a></p></td>
 <td><p>SM-CU-I</p></td>
 </tr>
-<tr class="row-odd"><td><p>Particle Swarm Optimization (PSO)</p></td>
+<tr class="row-even"><td><p>Particle Swarm Optimization (PSO)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/pso.html#_CPPv4N5pagmo3psoE" title="pagmo::pso"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::pso</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.pso" title="pygmo.pso"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.pso</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td><p>Particle Swarm Optimization Generational (GPSO)</p></td>
+<tr class="row-odd"><td><p>Particle Swarm Optimization Generational (GPSO)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/pso_gen.html#_CPPv4N5pagmo7pso_genE" title="pagmo::pso_gen"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::pso_gen</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.pso_gen" title="pygmo.pso_gen"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.pso_gen</span></code></a></p></td>
 <td><p>S-U-sto</p></td>
 </tr>
-<tr class="row-odd"><td><p>(N+1)-ES Simple Evolutionary Algorithm</p></td>
+<tr class="row-even"><td><p>(N+1)-ES Simple Evolutionary Algorithm</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/sea.html#_CPPv4N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sea</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sea" title="pygmo.sea"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.sea</span></code></a></p></td>
 <td><p>S-U-sto</p></td>
 </tr>
-<tr class="row-even"><td><p>Simple Genetic Algorithm</p></td>
+<tr class="row-odd"><td><p>Simple Genetic Algorithm</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/sga.html#_CPPv4N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sga</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.sga" title="pygmo.sga"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.sga</span></code></a></p></td>
 <td><p>S-U-I-sto</p></td>
 </tr>
-<tr class="row-odd"><td><p>Corana’s Simulated Annealing (SA)</p></td>
+<tr class="row-even"><td><p>Corana’s Simulated Annealing (SA)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/simulated_annealing.html#_CPPv4N5pagmo19simulated_annealingE" title="pagmo::simulated_annealing"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::simulated_annealing</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.simulated_annealing" title="pygmo.simulated_annealing"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.simulated_annealing</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-even"><td><p>Artificial Bee Colony (ABC)</p></td>
+<tr class="row-odd"><td><p>Artificial Bee Colony (ABC)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/bee_colony.html#_CPPv4N5pagmo10bee_colonyE" title="pagmo::bee_colony"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bee_colony</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.bee_colony" title="pygmo.bee_colony"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.bee_colony</span></code></a></p></td>
 <td><p>S-U</p></td>
 </tr>
-<tr class="row-odd"><td><p>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</p></td>
+<tr class="row-even"><td><p>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/cmaes.html#_CPPv4N5pagmo5cmaesE" title="pagmo::cmaes"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cmaes</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.cmaes" title="pygmo.cmaes"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.cmaes</span></code></a></p></td>
 <td><p>S-U-sto</p></td>
 </tr>
-<tr class="row-even"><td><p>Exponential Evolution Strategies (xNES)</p></td>
+<tr class="row-odd"><td><p>Exponential Evolution Strategies (xNES)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/xnes.html#_CPPv4N5pagmo4xnesE" title="pagmo::xnes"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::xnes</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.xnes" title="pygmo.xnes"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.xnes</span></code></a></p></td>
 <td><p>S-U-sto</p></td>
 </tr>
-<tr class="row-odd"><td><p>Non-dominated Sorting GA (NSGA2)</p></td>
+<tr class="row-even"><td><p>Non-dominated Sorting GA (NSGA2)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/nsga2.html#_CPPv4N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nsga2</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nsga2" title="pygmo.nsga2"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.nsga2</span></code></a></p></td>
 <td><p>M-U-I</p></td>
 </tr>
-<tr class="row-even"><td><p>Multi-objective EA vith Decomposition (MOEA/D)</p></td>
+<tr class="row-odd"><td><p>Multi-objective EA vith Decomposition (MOEA/D)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/moead.html#_CPPv4N5pagmo5moeadE" title="pagmo::moead"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::moead</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.moead" title="pygmo.moead"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.moead</span></code></a></p></td>
 <td><p>M-U</p></td>
 </tr>
-<tr class="row-odd"><td><p>Multi-objective Hypervolume-based ACO (MHACO)</p></td>
+<tr class="row-even"><td><p>Multi-objective Hypervolume-based ACO (MHACO)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/maco.html#_CPPv4N5pagmo4macoE" title="pagmo::maco"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::maco</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.maco" title="pygmo.maco"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.maco</span></code></a></p></td>
 <td><p>M-U-I</p></td>
 </tr>
-<tr class="row-even"><td><p>Non-dominated Sorting PSO (NSPSO)</p></td>
+<tr class="row-odd"><td><p>Non-dominated Sorting PSO (NSPSO)</p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/nspso.html#_CPPv4N5pagmo5nspsoE" title="pagmo::nspso"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nspso</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nspso" title="pygmo.nspso"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.nspso</span></code></a></p></td>
 <td><p>M-U-I</p></td>
@@ -421,7 +410,7 @@ to turn constrained problems into unconstrained ones, and multi-objective proble
 <tr class="row-odd"><th class="head"><p>Common Name</p></th>
 <th class="head"><p>Docs of the C++ class</p></th>
 <th class="head"><p>Docs of the python class</p></th>
-<th class="head"><p>Capabilities <a class="footnote-reference brackets" href="#meta-capa" id="id2">2</a></p></th>
+<th class="head"><p>Capabilities <a class="footnote-reference brackets" href="#meta-capa" id="id1">1</a></p></th>
 </tr>
 </thead>
 <tbody>
@@ -435,7 +424,7 @@ to turn constrained problems into unconstrained ones, and multi-objective proble
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.cstrs_self_adaptive" title="pygmo.cstrs_self_adaptive"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.cstrs_self_adaptive</span></code></a></p></td>
 <td><p>S-C</p></td>
 </tr>
-<tr class="row-even"><td><p>Augmented Lagrangian algorithm (from NLopt) <a class="footnote-reference brackets" href="#auglag" id="id3">3</a></p></td>
+<tr class="row-even"><td><p>Augmented Lagrangian algorithm (from NLopt) <a class="footnote-reference brackets" href="#auglag" id="id2">2</a></p></td>
 <td><p><a class="reference internal" href="cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
 <td><p><a class="reference internal" href="python/algorithms/py_algorithms.html#pygmo.nlopt" title="pygmo.nlopt"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.nlopt</span></code></a></p></td>
 <td><p>S-CU</p></td>
@@ -444,15 +433,12 @@ to turn constrained problems into unconstrained ones, and multi-objective proble
 </table>
 <p class="rubric">Footnotes</p>
 <dl class="footnote brackets">
-<dt class="label" id="null-algo"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>The null algorithm is used only for initialisation purposes. It will not actually run any optimisation if invoked.</p>
-</dd>
-<dt class="label" id="meta-capa"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dt class="label" id="meta-capa"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>The capabilities of the meta-algorithms depend also on the capabilities of the algorithms they wrap. If, for instance,
 a meta-algorithm supporting constrained problems is constructed from an algorithm which does <em>not</em> support constrained problems, the
 resulting meta-algorithms will <em>not</em> be able to solve constrained problems.</p>
 </dd>
-<dt class="label" id="auglag"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dt class="label" id="auglag"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>The Augmented Lagrangian algorithm can be used only in conjunction with other NLopt algorithms.</p>
 </dd>
 </dl>

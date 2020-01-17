@@ -1,0 +1,641 @@
+ 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Writing your first optimisation problem &mdash; pagmo 2.14.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Evolving a population" href="evolving_a_population.html" />
+    <link rel="prev" title="Preliminaries" href="cpp_tut_preliminaries.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.14.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_tut.html">C++ tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cpp_tut_preliminaries.html">Preliminaries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Writing your first optimisation problem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#a-simple-problem">A simple problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-bare-necessities">The bare necessities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meet-pagmo-problem">Meet pagmo::problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-the-constraints">Adding the constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cpp_tut.html">C++ tutorial</a> &raquo;</li>
+        
+      <li>Writing your first optimisation problem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/docs/cpp/tutorials/cpp_tut_first_problem.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="writing-your-first-optimisation-problem">
+<h1>Writing your first optimisation problem<a class="headerlink" href="#writing-your-first-optimisation-problem" title="Permalink to this headline">¶</a></h1>
+<p>A fundamental requirement of any optimisation
+library is the ability to represent an optimisation
+problem to be solved. In this section, our
+goal is to show how this is done in pagmo.</p>
+<div class="section" id="a-simple-problem">
+<h2>A simple problem<a class="headerlink" href="#a-simple-problem" title="Permalink to this headline">¶</a></h2>
+<p>We will be considering the minimisation of
+the multidimensional objective function</p>
+<div class="math notranslate nohighlight">
+\[f\left(x_1, x_2, x_3, x_4\right) = x_1x_4(x_1+x_2+x_3) + x_3,\]</div>
+<p>subject to the box bounds</p>
+<div class="math notranslate nohighlight">
+\[1 \le x_{1,2,3,4} \le 5\]</div>
+<p>and to the constraints</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+   x_1^2+x_2^2+x_3^2+x_4^2 - 40 &amp;= 0, \\
+   25 - x_1 x_2 x_3 x_4 &amp;\le 0.
+\end{align}\end{split}\]</div>
+<p>In pagmo’s taxonomy, this optimisation problem is</p>
+<ul class="simple">
+<li><p><em>continuous</em> (because <span class="math notranslate nohighlight">\(x_{1,2,3,4}\)</span> are real variables),</p></li>
+<li><p><em>single-objective</em> (because the objective
+function produces a single value), and</p></li>
+<li><p><em>constrained</em> (because there are nonlinear
+constraints in addition to the box bounds).</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this chapter, we will focus on the implementation
+of a single-objective
+continuous problem. pagmo can also represent many other
+types of problems, including multi-objective and
+(mixed) integer problems. TODO link to the deep dive.</p>
+</div>
+<p>We will start by implementing the objective function
+and the box bounds first, and we will then add
+the constraints at a later stage.</p>
+</div>
+<div class="section" id="the-bare-necessities">
+<h2>The bare necessities<a class="headerlink" href="#the-bare-necessities" title="Permalink to this headline">¶</a></h2>
+<p>In pagmo, an optimisation problem must provide
+at the very least an objective function and
+the box bounds. Let’s see how this is done
+for our simple example problem:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">first_udp_ver0.cpp</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;initializer_list&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pagmo/types.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">pagmo</span><span class="p">;</span>
+
+<span class="c1">// Our simple example problem, version 0.</span>
+<span class="k">struct</span> <span class="n">problem_v0</span> <span class="p">{</span>
+    <span class="c1">// Implementation of the objective function.</span>
+    <span class="n">vector_double</span> <span class="n">fitness</span><span class="p">(</span><span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
+    <span class="p">}</span>
+    <span class="c1">// Implementation of the box bounds.</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span> <span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">get_bounds</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{{</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">},</span> <span class="p">{</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">}};</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Construct a pagmo::problem from our example problem.</span>
+    <span class="n">problem</span> <span class="n">p</span><span class="p">{</span><span class="n">problem_v0</span><span class="p">{}};</span>
+
+    <span class="c1">// Compute the value of the objective function</span>
+    <span class="c1">// in the point (1, 2, 3, 4).</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+
+    <span class="c1">// Fetch the lower/upper bounds for the first variable.</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Lower bounds: [&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">get_lb</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Upper bounds: [&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">get_ub</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;]</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="c1">// Print p to screen.</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<p>Let’s analyse this code.</p>
+<p>After the inclusion of the necessary header files, and a helpful</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">pagmo</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>to reduce typing, we reach the definition
+of our optimisation
+problem via a class called <code class="docutils literal notranslate"><span class="pre">problem_v0</span></code>. As explained
+in the <a class="reference internal" href="cpp_tut_preliminaries.html#cpp-tut-type-erasure"><span class="std std-ref">section about type erasure</span></a>,
+this class does not need to derive from any base class.
+It is just a “regular” class implementing two specific
+member functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fitness()</span></code>, which is used to compute the value of the
+objective function for the input decision
+vector <code class="docutils literal notranslate"><span class="pre">dv</span></code>, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>, which is used to fetch the box bounds of
+the problem.</p></li>
+</ul>
+<p>As you can notice, the signatures of both <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>
+use the type <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">pagmo::vector_double</span></code></a>. This is the type
+used by pagmo to represent decision and fitness vectors, and currently
+it is just an alias for <code class="docutils literal notranslate"><span class="pre">std::vector&lt;double&gt;</span></code>.</p>
+<p>The objective function is called <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> in pagmo because
+it is used to return not only the value of the objective function,
+but also of the constraints (thus in some sense it computes the
+overall “fitness”
+of the input decision vector). In this specific case, however,
+our optimisation problem does not have constraints yet,
+and thus the <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> implementation just returns
+a vector of size 1 whose only element is the value
+of the (single) objective function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="nf">fitness</span><span class="p">(</span><span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The other mandatory function, <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>, returns the
+box bounds of the problem as a <code class="docutils literal notranslate"><span class="pre">std::pair</span></code> of lower/upper
+bounds:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span> <span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">get_bounds</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">{{</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">},</span> <span class="p">{</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">}};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In addition to returning the box bounds, the <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>
+function plays another important role: it also
+(implicitly) establishes the dimension of the problem
+via the sizes of the returned lower/upper bounds vectors
+(in this specific case, 4).</p>
+</div>
+<div class="section" id="meet-pagmo-problem">
+<h2>Meet pagmo::problem<a class="headerlink" href="#meet-pagmo-problem" title="Permalink to this headline">¶</a></h2>
+<p>After the definition of our optimisation problem, <code class="docutils literal notranslate"><span class="pre">problem_v0</span></code>,
+we encounter the <code class="docutils literal notranslate"><span class="pre">main()</span></code> function. In the <code class="docutils literal notranslate"><span class="pre">main()</span></code>, the first
+thing we do is to construct a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> from an
+instance of <code class="docutils literal notranslate"><span class="pre">problem_v0</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span> <span class="n">p</span><span class="p">{</span><span class="n">problem_v0</span><span class="p">{}};</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> is pagmo’s
+<a class="reference internal" href="cpp_tut_preliminaries.html#cpp-tut-type-erasure"><span class="std std-ref">type-erased</span></a> interface to optimisation
+problems. It is a generic container which can store internally
+an instance of any class which “acts like” an optimisation problem,
+that is, any class which provides (at least) the two member functions
+described earlier (<code class="docutils literal notranslate"><span class="pre">fitness()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>). In the pagmo
+jargon, we refer to classes which “act like” optimisation problems
+as <em>user-defined problems</em>, or UDPs.</p>
+<p>In addition to storing a UDP (which, by itself, would not be
+that useful), <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> provides various member
+functions to access the properties and capabilities of the UDP.
+We can, for instance, call the <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem7fitnessERK13vector_double" title="pagmo::problem::fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::fitness()</span></code></a>
+member function of <code class="docutils literal notranslate"><span class="pre">p</span></code> to invoke the fitness function of the UDP:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We can also fetch the lower/upper box bounds of the UDP
+via the <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem6get_lbEv" title="pagmo::problem::get_lb"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::get_lb()</span></code></a> and
+<a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem6get_ubEv" title="pagmo::problem::get_ub"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::get_ub()</span></code></a> member functions:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Fetch the lower/upper bounds for the first variable.</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Lower bounds: [&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">get_lb</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Upper bounds: [&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">get_ub</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;]</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Printing <code class="docutils literal notranslate"><span class="pre">p</span></code> to screen via</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>will produce a human-readable
+summary that may look like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Problem name: 10problem_v0
+      Global dimension:                       4
+      Integer dimension:                      0
+      Fitness dimension:                      1
+      Number of objectives:                   1
+      Equality constraints dimension:         0
+      Inequality constraints dimension:       0
+      Lower bounds: [1, 1, 1, 1]
+      Upper bounds: [5, 5, 5, 5]
+      Has batch fitness evaluation: false
+
+      Has gradient: false
+      User implemented gradient sparsity: false
+      Has hessians: false
+      User implemented hessians sparsity: false
+
+      Fitness evaluations: 1
+
+      Thread safety: basic
+</pre></div>
+</div>
+<p>Quite a mouthful! Do not worry about deciphering this
+output right now, as we will examine the more intricate
+aspects of the definition of an optimisation problem in due time.</p>
+<p>For now, let us just point out that, from our simple
+UDP definition, pagmo was able to infer
+on its own various properties of the optimisation problem
+(e.g., the problem dimension, the number of objectives,
+the absence of constraints, etc.). pagmo is able to do this
+thanks to both introspection capabilities (based on template
+metaprogramming) and (hopefully) sensible defaults.</p>
+</div>
+<div class="section" id="adding-the-constraints">
+<h2>Adding the constraints<a class="headerlink" href="#adding-the-constraints" title="Permalink to this headline">¶</a></h2>
+<p>In order to implement the constraints in our UDP we have to:</p>
+<ul class="simple">
+<li><p>add a couple of member functions which describe the type
+and number of constraints,</p></li>
+<li><p>modify the fitness function to return, in addition to the
+objective function, also the value of the constraints for
+an input decision vector.</p></li>
+</ul>
+<p>Let us see the code:</p>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- /home/travis/build/esa/pagmo2/tutorials/first_udp_ver0.cpp</span>
+<span class="gi">+++ /home/travis/build/esa/pagmo2/tutorials/first_udp_ver1.cpp</span>
+<span class="gu">@@ -8,12 +8,26 @@</span>
+ 
+ using namespace pagmo;
+ 
+<span class="gd">-// Our simple example problem, version 0.</span>
+<span class="gd">-struct problem_v0 {</span>
+<span class="gi">+// Our simple example problem, version 1.</span>
+<span class="gi">+struct problem_v1 {</span>
+<span class="gi">+    // Number of equality constraints.</span>
+<span class="gi">+    vector_double::size_type get_nec() const</span>
+<span class="gi">+    {</span>
+<span class="gi">+        return 1;</span>
+<span class="gi">+    }</span>
+<span class="gi">+    // Number of inequality constraints.</span>
+<span class="gi">+    vector_double::size_type get_nic() const</span>
+<span class="gi">+    {</span>
+<span class="gi">+        return 1;</span>
+<span class="gi">+    }</span>
+     // Implementation of the objective function.
+     vector_double fitness(const vector_double &amp;dv) const
+     {
+<span class="gd">-        return {dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2]};</span>
+<span class="gi">+        return {</span>
+<span class="gi">+            dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2],                     // objfun</span>
+<span class="gi">+            dv[0] * dv[0] + dv[1] * dv[1] + dv[2] * dv[2] + dv[3] * dv[3] - 40., // equality con.</span>
+<span class="gi">+            25. - dv[0] * dv[1] * dv[2] * dv[3]                                  // inequality con.</span>
+<span class="gi">+        };</span>
+     }
+     // Implementation of the box bounds.
+     std::pair&lt;vector_double, vector_double&gt; get_bounds() const
+<span class="gu">@@ -25,11 +39,14 @@</span>
+ int main()
+ {
+     // Construct a pagmo::problem from our example problem.
+<span class="gd">-    problem p{problem_v0{}};</span>
+<span class="gi">+    problem p{problem_v1{}};</span>
+ 
+<span class="gd">-    // Compute the value of the objective function</span>
+<span class="gd">-    // in the point (1, 2, 3, 4).</span>
+<span class="gd">-    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; p.fitness({1, 2, 3, 4})[0] &lt;&lt; &#39;\n&#39;;</span>
+<span class="gi">+    // Compute the value of the objective function, equality and</span>
+<span class="gi">+    // inequality constraints in the point (1, 2, 3, 4).</span>
+<span class="gi">+    const auto fv = p.fitness({1, 2, 3, 4});</span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; fv[0] &lt;&lt; &#39;\n&#39;;</span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the eq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[1] &lt;&lt; &#39;\n&#39;;</span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[2] &lt;&lt; &#39;\n&#39;;</span>
+ 
+     // Fetch the lower/upper bounds for the first variable.
+     std::cout &lt;&lt; &quot;Lower bounds: [&quot; &lt;&lt; p.get_lb()[0] &lt;&lt; &quot;]\n&quot;;
+</pre></div>
+</div>
+<p>In order to specify the type and number of constraints in our
+optimisation problem, we have to implement the two member
+functions <code class="docutils literal notranslate"><span class="pre">get_nec()</span></code>, which returns the number of equality
+constraints, and <code class="docutils literal notranslate"><span class="pre">get_nic()</span></code>, which returns the number of
+inequality constraints:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span> <span class="n">get_nec</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+   <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span> <span class="n">get_nic</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+   <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the number of (in)equality constraints is represented
+via the size type of <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">vector_double</span></code></a>
+(which is an unsigned integral type, usually <code class="docutils literal notranslate"><span class="pre">std::size_t</span></code>).</p>
+<p>Next, we need to modify our fitness function to compute,
+in addition to the objective function, the (in)equality
+constraints for an input decision vector.
+pagmo adopts the following conventions:</p>
+<ul class="simple">
+<li><p>the constraints are expressed as equations with zero
+on the right-hand-side,</p></li>
+<li><p>the values returned by the fitness function are computed
+from the left-hand-sides of the constraint equations,</p></li>
+<li><p>the inequality constraints are expressed via
+a less-than-or-equal relation (<span class="math notranslate nohighlight">\(\leq\)</span>),</p></li>
+<li><p>in the fitness vector, the equality constraints
+follow the value(s) of the objective function and precede
+the inequality constraints.</p></li>
+</ul>
+<p>In our specific example, we have 1 equality constraint and 1
+inequality constraint,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+   x_1^2+x_2^2+x_3^2+x_4^2 - 40 &amp;= 0, \\
+   25 - x_1 x_2 x_3 x_4 &amp;\le 0,
+\end{align}\end{split}\]</div>
+<p>and thus the fitness function will have to return a vector
+with 3 values, which are, in order, the objective function,
+the equality constraint and the inequality constraint:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="nf">fitness</span><span class="p">(</span><span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+   <span class="k">return</span> <span class="p">{</span>
+      <span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>                     <span class="c1">// objfun</span>
+      <span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">40.</span><span class="p">,</span> <span class="c1">// equality con.</span>
+      <span class="mf">25.</span> <span class="o">-</span> <span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>                                  <span class="c1">// inequality con.</span>
+   <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now we can create a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> from our
+new UDP, and, if we print it to screen, we can verify how
+the <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> class has correctly
+identified the number and type of constraints from the
+implementation of our UDP:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Problem name: 10problem_v1
+      Global dimension:                       4
+      Integer dimension:                      0
+      Fitness dimension:                      3
+      Number of objectives:                   1
+      Equality constraints dimension:         1
+      Inequality constraints dimension:       1
+      Tolerances on constraints: [0, 0]
+      Lower bounds: [1, 1, 1, 1]
+      Upper bounds: [5, 5, 5, 5]
+      Has batch fitness evaluation: false
+
+      Has gradient: false
+      User implemented gradient sparsity: false
+      Has hessians: false
+      User implemented hessians sparsity: false
+
+      Fitness evaluations: 3
+
+      Thread safety: basic
+</pre></div>
+</div>
+<p>We can also verify that the <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem7fitnessERK13vector_double" title="pagmo::problem::fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::fitness()</span></code></a>
+function now produces a vector with three components:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Compute the value of the objective function, equality and</span>
+<span class="c1">// inequality constraints in the point (1, 2, 3, 4).</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">fv</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Value of the eq. constraint in (1, 2, 3, 4): &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="evolving_a_population.html" class="btn btn-neutral float-right" title="Evolving a population" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cpp_tut_preliminaries.html" class="btn btn-neutral float-left" title="Preliminaries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, pagmo development team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

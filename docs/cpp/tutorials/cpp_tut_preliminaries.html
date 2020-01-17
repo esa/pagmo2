@@ -1,0 +1,328 @@
+ 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Preliminaries &mdash; pagmo 2.14.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Writing your first optimisation problem" href="cpp_tut_first_problem.html" />
+    <link rel="prev" title="C++ tutorial" href="cpp_tut.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.14.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_tut.html">C++ tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Preliminaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#organization-of-the-library">Organization of the library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#namespaces">Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-and-abi-stability">API and ABI stability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-erasure">Type erasure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-the-tutorials">Compiling the tutorials</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/tutorials/python_tut.html">Python tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/python_docs.html">Python API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cpp_tut.html">C++ tutorial</a> &raquo;</li>
+        
+      <li>Preliminaries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/docs/cpp/tutorials/cpp_tut_preliminaries.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="preliminaries">
+<h1>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="organization-of-the-library">
+<h2>Organization of the library<a class="headerlink" href="#organization-of-the-library" title="Permalink to this headline">¶</a></h2>
+<p>pagmo consists of a set of header files and a single
+compiled library. The headers are collected hierarchically
+in the <code class="docutils literal notranslate"><span class="pre">pagmo/</span></code> subdirectory. There is a global
+<code class="docutils literal notranslate"><span class="pre">pagmo/pagmo.hpp</span></code> header which includes
+the public API in its entirety. In order to reduce
+compilation times, however, we recommend
+to include only the header files which are actually
+needed in your code (e.g., <code class="docutils literal notranslate"><span class="pre">pagmo/problem.hpp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pagmo/algorithms/de.hpp</span></code>, etc.).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do <strong>not</strong> include headers from the <code class="docutils literal notranslate"><span class="pre">pagmo/detail</span></code> subdirectory! They contain
+implementation details which may change from version to version in incompatible ways.</p>
+</div>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<p>All of pagmo’s public classes and functions are located
+directly in the <code class="docutils literal notranslate"><span class="pre">pagmo::</span></code> namespace. There are no other
+namespaces in pagmo’s public API.</p>
+</div>
+<div class="section" id="api-and-abi-stability">
+<h2>API and ABI stability<a class="headerlink" href="#api-and-abi-stability" title="Permalink to this headline">¶</a></h2>
+<p>Currently, pagmo guarantees API and ABI stability across
+patch versions. That is, version x.y.n of the pagmo library
+is both API and ABI compatible with version x.y.m.</p>
+<p>While the binary interface is very likely to change across
+minor versions (e.g., from 2.11 to 2.12), incompatible
+API changes between minor versions are less frequent,
+and they are always explicitly
+documented in the <a class="reference internal" href="../../../changelog.html#changelog"><span class="std std-ref">changelog</span></a> with
+the <strong>BREAKING</strong> tag.</p>
+</div>
+<div class="section" id="type-erasure">
+<span id="cpp-tut-type-erasure"></span><h2>Type erasure<a class="headerlink" href="#type-erasure" title="Permalink to this headline">¶</a></h2>
+<p>The current incarnation of pagmo eschews traditional
+object-oriented programming (OOP) techniques in favour of a
+more modern approach based on <a class="reference external" href="https://en.wikipedia.org/wiki/Type_erasure">type erasure</a>.
+What does that mean exactly?</p>
+<p>A widely-used approach in C++ optimisation libraries
+is to leverage the language’s OOP facilities in order
+to allow the users to define their own optimisation
+problems <a class="footnote-reference brackets" href="#coptlib" id="id1">1</a>. In practical terms, this means that
+the definition of an optimisation problem requires
+the user to write a new class which derives from a “base”
+optimisation problem class (e.g., see the <code class="docutils literal notranslate"><span class="pre">TNLP</span></code>
+class from the <a class="reference external" href="https://github.com/coin-or/Ipopt">Ipopt</a>
+optimisation library). Pure virtual methods from the
+base class need then to be implemented in the derived class
+in order to provide the implementation of the objective
+function, of its gradient, etc.</p>
+<p>Although perfectly valid, the OOP approach has a couple
+of serious drawbacks:</p>
+<ul class="simple">
+<li><p>it introduces a tight coupling between the user’s
+code and the optimisation library’s code,</p></li>
+<li><p>due to the way traditional OOP is implemented in C++,
+it forces the use of reference semantics
+(i.e., you have to deal with “pointers to base
+objects” rather than “regular” objects).</p></li>
+</ul>
+<p>By contrast, in the type erasure approach, there
+are no inheritance relationships and value
+semantics are employed. The fundamental idea is that
+<em>any</em> class can “act as” an optimisation problem
+as long as it conforms to a pre-determined interface.
+Specifically, in the case of pagmo, any class that
+implements a certain set of member functions can
+be used to represent an optimisation problem.</p>
+<p>In pagmo, type erasure is used pervasively not only
+in the implementation of optimisation problems, but also
+in the implementation of optimisation algorithms,
+in the parallelisation strategies, in the migration framework,
+etc. In the lingo of pagmo, we refer to classes that
+conform to specific type-erased interfaces as <em>user-defined</em>
+classes (e.g., user-defined problem, or UDP, user-defined
+algorithm, or UDA, etc.).</p>
+<dl class="footnote brackets">
+<dt class="label" id="coptlib"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>In C, where OOP is not natively supported,
+one can use function pointers to emulate some aspects of OOP.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="compiling-the-tutorials">
+<h2>Compiling the tutorials<a class="headerlink" href="#compiling-the-tutorials" title="Permalink to this headline">¶</a></h2>
+<p>The source code of the tutorials
+can be found in the <code class="docutils literal notranslate"><span class="pre">tutorials/</span></code> directory in the pagmo
+source tree. The tutorials can be compiled by enabling
+the <code class="docutils literal notranslate"><span class="pre">PAGMO_BUILD_TUTORIALS</span></code> CMake option (see the
+<a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cpp_tut_first_problem.html" class="btn btn-neutral float-right" title="Writing your first optimisation problem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cpp_tut.html" class="btn btn-neutral float-left" title="C++ tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, pagmo development team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

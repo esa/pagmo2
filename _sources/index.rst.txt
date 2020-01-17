@@ -51,24 +51,12 @@ Contents:
 
    install
    quickstart
-
-.. toctree::
-   :maxdepth: 1
-
    docs/algorithm_list
    docs/problem_list
    docs/island_list
-
-.. toctree::
-   :maxdepth: 1
-
-   docs/cpp/cpp_docs
    docs/cpp/tutorials/cpp_tut
-   docs/python/python_docs
+   docs/cpp/cpp_docs
    docs/python/tutorials/python_tut
-
-.. toctree::
-   :maxdepth: 1
-
+   docs/python/python_docs
    credits
    changelog

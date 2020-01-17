@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="C++ Documentation" href="cpp/cpp_docs.html" />
+    <link rel="next" title="C++ tutorial" href="cpp/tutorials/cpp_tut.html" />
     <link rel="prev" title="List of problems (UDPs) available in pagmo/pygmo" href="problem_list.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
@@ -88,22 +88,16 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a></li>
-</ul>
-<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">List of islands (UDIs) available in pagmo/pygmo</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp/cpp_docs.html">C++ Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cpp/tutorials/cpp_tut.html">C++ tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python/python_docs.html">Python Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/cpp_docs.html">C++ API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python/tutorials/python_tut.html">Python tutorials</a></li>
-</ul>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
@@ -175,6 +169,11 @@
 <p>This is the list of user defined islands (UDIs) currently provided with pagmo/pygmo. These are classes that
 can be used to construct a <a class="reference internal" href="cpp/island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a> (C++), or a <a class="reference internal" href="python/py_island.html#pygmo.island" title="pygmo.island"><code class="xref py py-class docutils literal notranslate"><span class="pre">pygmo.island</span></code></a> (Python), which will then
 provide a unified interface to access the island’s functionalities.</p>
+<p>In the pagmo/pygmo jargon, an island is an entity tasked with
+managing the asynchronous evolution of a population via
+an algorithm. Different UDIs enable different parallelisation
+strategies (e.g., multithreading, multiprocessing,
+cluster architectures, etc.).</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 41%" />
@@ -216,7 +215,7 @@ provide a unified interface to access the island’s functionalities.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="cpp/cpp_docs.html" class="btn btn-neutral float-right" title="C++ Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="cpp/tutorials/cpp_tut.html" class="btn btn-neutral float-right" title="C++ tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="problem_list.html" class="btn btn-neutral float-left" title="List of problems (UDPs) available in pagmo/pygmo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

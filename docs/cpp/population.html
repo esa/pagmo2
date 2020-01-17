@@ -88,17 +88,14 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
-</ul>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ Documentation</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ API documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="types.html">Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="problem.html">Problem</a></li>
@@ -123,11 +120,8 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#miscellanea">Miscellanea</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/cpp_tut.html">C++ tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python/tutorials/python_tut.html">Python tutorials</a></li>
-</ul>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 </ul>
@@ -175,7 +169,7 @@
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="cpp_docs.html">C++ Documentation</a> &raquo;</li>
+          <li><a href="cpp_docs.html">C++ API documentation</a> &raquo;</li>
         
       <li>Population</li>
     
@@ -460,7 +454,7 @@ to <em>seed</em>. The input problem <em>x</em> can be either a <a class="referen
 <span id="_CPPv3NK5pagmo10population8best_idxEv"></span><span id="_CPPv2NK5pagmo10population8best_idxEv"></span><span id="pagmo::population::best_idxC"></span><span class="target" id="classpagmo_1_1population_1a6934b3b6b9f35a613daae6bc0789e906"></span><a class="reference internal" href="#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="sig-name descname">best_idx</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10population8best_idxEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Index of the best individual. </p>
 <p>If the problem is single-objective and unconstrained, the best is simply the individual with the smallest fitness. If the problem is, instead, single objective, but with constraints, the best will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#namespacepagmo_1ac2181b869e69e8d2b0abb9c6ace5f82c"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single best is not defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
-<p>The pagmo::population::get_c_tol() tolerances are accounted by default. If different tolerances are required the other overloads can be used.</p>
+<p>The <a class="reference internal" href="problem.html#classpagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">pagmo::problem::get_c_tol()</span></a> tolerances are accounted by default. If different tolerances are required the other overloads can be used.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the index of the best individual.</p>
 </dd>
@@ -519,7 +513,7 @@ to <em>seed</em>. The input problem <em>x</em> can be either a <a class="referen
 <span id="_CPPv3NK5pagmo10population9worst_idxEv"></span><span id="_CPPv2NK5pagmo10population9worst_idxEv"></span><span id="pagmo::population::worst_idxC"></span><span class="target" id="classpagmo_1_1population_1a448128f326ae587a053d84753952a7b1"></span><a class="reference internal" href="#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>::<a class="reference internal" href="#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type">size_type</a> <code class="sig-name descname">worst_idx</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10population9worst_idxEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Index of the worst individual. </p>
 <p>If the problem is single-objective and unconstrained, the worst is simply the individual with the largest fitness. If the problem is, instead, single objective, but with constraints, the worst individual will be defined using the criteria specified in <a class="reference internal" href="utils/constrained.html#namespacepagmo_1ac2181b869e69e8d2b0abb9c6ace5f82c"><span class="std std-ref">pagmo::sort_population_con()</span></a>. If the problem is multi-objective one single worst is not defined. In this case the user can still obtain a strict ordering of the population individuals by calling the <a class="reference internal" href="utils/multi_objective.html#namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"><span class="std std-ref">pagmo::sort_population_mo()</span></a> function.</p>
-<p>The pagmo::population::get_c_tol() tolerances are accounted by default. If different tolerances are required the other overloads can be used.</p>
+<p>The <a class="reference internal" href="problem.html#classpagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">pagmo::problem::get_c_tol()</span></a> tolerances are accounted by default. If different tolerances are required the other overloads can be used.</p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the index of the worst individual.</p>
 </dd>

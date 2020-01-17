@@ -1,12 +1,12 @@
 .. _python_docs:
 
-Python Documentation
-====================
+Python API documentation
+========================
+
 The full, stand-alone, detailed, documentation of the Python code.
 
 Core classes
 ^^^^^^^^^^^^
-These are the core PyGMO classes.
 
 .. toctree::
    :maxdepth: 1
@@ -24,6 +24,7 @@ These are the core PyGMO classes.
 
 Implemented user-defined classes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 These are the user-defined problems, algorithms, islands,
 batch evaluators and topologies implemented in PyGMO.
 
@@ -40,6 +41,7 @@ batch evaluators and topologies implemented in PyGMO.
 
 Utilities
 ^^^^^^^^^
+
 Various optimization utilities implemented in PyGMO.
 
 .. toctree::

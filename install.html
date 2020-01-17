@@ -116,19 +116,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a></li>
-</ul>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -199,6 +193,18 @@
 <span id="install"></span><h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="c">
 <span id="cpp-install"></span><h2>C++<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
+<p>pagmo is written in modern C++, and it requires a compiler able to understand
+at least C++11. pagmo is known to run on the following setups:</p>
+<ul class="simple">
+<li><p>GCC 4.8 and later versions on GNU/Linux,</p></li>
+<li><p>Clang 3.8 and later versions on GNU/Linux,</p></li>
+<li><p>MSVC 2015 and later versions on Windows,</p></li>
+<li><p>Clang 4 and later versions on Windows
+(with the <code class="docutils literal notranslate"><span class="pre">clang-cl</span></code> driver for MSVC),</p></li>
+<li><p>MinGW GCC 8 on Windows,</p></li>
+<li><p>Clang on OSX (Xcode 6.4 and later),</p></li>
+<li><p>Clang on FreeBSD.</p></li>
+</ul>
 <div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
 <p>The pagmo C++ library has the following <strong>mandatory</strong> dependencies:</p>
@@ -215,6 +221,9 @@ the <a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5p
 <li><p><a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a> (which is required by
 the <a class="reference internal" href="docs/cpp/algorithms/ipopt.html#_CPPv4N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ipopt</span></code></a> wrapper).</p></li>
 </ul>
+<p>Additionally, <a class="reference external" href="https://cmake.org/">CMake</a> is the build system used by
+pagmo and it must also be available when
+installing from source (the minimum required version is 3.3).</p>
 </div>
 <div class="section" id="installation-from-source">
 <h3>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h3>
@@ -243,6 +252,8 @@ dependencies, configure the install destination, etc.</p>
 <p>The following options are currently recognised by pagmo’s build system:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">PAGMO_BUILD_TESTS</span></code>: build the test suite (defaults to <code class="docutils literal notranslate"><span class="pre">OFF</span></code>),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PAGMO_BUILD_TUTORIALS</span></code>: build the C++
+<a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html#cpp-tutorial"><span class="std std-ref">tutorials</span></a> (defaults to <code class="docutils literal notranslate"><span class="pre">OFF</span></code>),</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_EIGEN3</span></code>: enable features depending on <a class="reference external" href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen3</a>
 (defaults to <code class="docutils literal notranslate"><span class="pre">OFF</span></code>),</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_NLOPT</span></code>: enable the <a class="reference external" href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>
@@ -379,9 +390,11 @@ capabilities.</p></li>
 <li><p><a class="reference external" href="https://dill.readthedocs.io">dill</a>, which can be used as an
 alternative serialization backend,</p></li>
 <li><p><a class="reference external" href="https://matplotlib.org/">Matplotlib</a>, which is used by a few
-plotting utilities.</p></li>
+plotting utilities,</p></li>
+<li><p><a class="reference external" href="https://ipyparallel.readthedocs.io/en/latest/">ipyparallel</a>,
+for using pygmo on clusters.</p></li>
 </ul>
-<p>The presence of dill and/or matplotlib will be detected at runtime
+<p>The presence of the optional dependencies will be detected at runtime
 by pygmo, thus they need not to be present when installing/compiling
 pygmo.</p>
 <div class="admonition note">

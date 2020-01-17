@@ -24,6 +24,6 @@ Miscellanea
 
 --------------------------------------
 
-.. autofunction:: pygmo.set_serialization_backend()
+.. autofunction:: pygmo.set_serialization_backend
 
-.. autofunction:: pygmo.get_serialization_backend()
+.. autofunction:: pygmo.get_serialization_backend
