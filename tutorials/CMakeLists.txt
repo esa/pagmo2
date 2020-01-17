@@ -17,6 +17,8 @@ function(ADD_PAGMO_TUTORIAL arg1)
 endfunction()
 
 ADD_PAGMO_TUTORIAL(getting_started)
+ADD_PAGMO_TUTORIAL(first_udp_ver0)
+ADD_PAGMO_TUTORIAL(first_udp_ver1)
 ADD_PAGMO_TUTORIAL(nsga2_example)
 ADD_PAGMO_TUTORIAL(problem_basic)
 ADD_PAGMO_TUTORIAL(problem_basic_gh)
