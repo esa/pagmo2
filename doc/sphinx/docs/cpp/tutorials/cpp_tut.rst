@@ -1,4 +1,4 @@
-.. _cpp_tutorial:
+.. _tutorial:
 
 C++ tutorial
 ============

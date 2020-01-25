@@ -1,17 +1,11 @@
-.. _quickstart:
-
-Quick start 
-============
-
-.. _getting_started_c++:
-
-C++
----
+Quick start
+===========
 
 After following the :ref:`installation guide <install>`,
 you will be able to compile and run your first C++ pagmo program:
 
 .. literalinclude:: ../../tutorials/getting_started.cpp
+   :caption: getting_started.cpp
    :language: c++
    :linenos:
 
@@ -86,24 +80,15 @@ program presented earlier may look like this:
    # Not strictly necessary with a recent-enough compiler.
    set_property(TARGET getting_started PROPERTY CXX_STANDARD 11)
 
-.. _getting_started_py:
-
-Python
-------
-
-If you have successfully installed pygmo following the
-:ref:`installation guide <install>`, you can try the following script:
-
-.. literalinclude:: docs/examples/getting_started.py
-   :language: python
-   :linenos:
-
-Place it into a ``getting_started.py`` text file and run it with:
+Place this ``CMakeLists.txt`` and the ``getting_started.cpp`` files
+in the same directory, and create a ``build`` subdirectory. From
+the ``build`` subdirectory, execute these commands to produce
+the ``getting_started`` executable:
 
 .. code-block:: console
 
-   $ python getting_started.py
+   $ cmake ../ -DCMAKE_BUILD_TYPE=Release
+   $ cmake  --build .
 
-We recommend the use of `Jupyter <https://jupyter.org/>`__ or
-`IPython <https://ipython.org/>`__ to enjoy pygmo the most.
-
+Please refer to the `CMake documentation <https://cmake.org/documentation/>`__
+for more information on how to use CMake.
