@@ -6,6 +6,14 @@ Changelog
 2.14.0 (unreleased)
 -------------------
 
+New
+~~~
+
+- pygmo has been split off into
+  a separate project. Please see the
+  `website <https://github.com/esa/pygmo2>`__
+  for pygmo's documentation and changelog.
+
 2.13.0 (2020-01-10)
 -------------------
 
