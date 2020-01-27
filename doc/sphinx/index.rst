@@ -64,12 +64,8 @@ Contents:
 
    install
    quickstart
-   docs/algorithm_list
-   docs/problem_list
-   docs/island_list
+   overview
    docs/cpp/tutorials/cpp_tut
    docs/cpp/cpp_docs
-   docs/python/tutorials/python_tut
-   docs/python/python_docs
    credits
    changelog
