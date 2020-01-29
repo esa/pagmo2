@@ -78,7 +78,7 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://people.sc.fsu.edu/~inavon/5420a/corana.pdf
+ *    https://people.sc.fsu.edu/~inavon/5420a/corana.pdf
  *
  * \endverbatim
  */

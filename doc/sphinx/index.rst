@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pagmo & Pygmo
-=============
+Pagmo
+=====
 
 .. image:: ../sphinx/docs/images/prob.png
    :target: docs/problem_list.html
@@ -28,21 +28,34 @@ Pagmo & Pygmo
    :width: 15%
 
 
-Pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built
-around the idea of providing a unified interface to optimization algorithms and to optimization problems and to
+pagmo is a C++ scientific library for massively parallel optimization.
+It is built
+around the idea of providing a unified interface to optimization
+algorithms and problems, and to
 make their deployment in massively parallel environments easy.
 
-Efficient implementantions of bio-inspired and evolutionary algorithms are sided to state-of the art optimization algorithms
-(Simplex Methods, SQP methods,  interior points methods ....) and can be easily mixed (also with your newly invented algorithms)
-to build a super-algorithm exploiting algoritmic cooperation via the asynchronous, generalized island model.
+Efficient implementantions of bio-inspired and evolutionary algorithms
+are sided to state-of-the-art optimization algorithms
+(Simplex Methods, SQP methods,  interior points methods, ...)
+and can be easily mixed (also with your newly-invented algorithms)
+to build a super-algorithm exploiting algorithmic cooperation
+via the asynchronous, generalized island model.
 
-Pagmo and pygmo can be used to solve constrained, unconstrained, single objective, multiple objective, continuous and integer optimization
-problems, stochastic and deterministic problems, as well as to perform research on novel algorithms and paradigms and easily compare them to state of the
-art implementations of established ones.
+pagmo can be used to solve constrained, unconstrained, single objective,
+multiple objective, continuous and integer optimization
+problems, stochastic and deterministic problems, as well as to perform
+research on novel algorithms and paradigms and easily compare
+them to state-of-the-art implementations of established ones.
 
-If you are using pagmo/pygmo as part of your research, teaching, or other activities, we would be grateful if you could star
-the repository and/or cite our work. The DOI of the latest version and other citation resources are available
+If you are using pagmo as part of your research, teaching, or other
+activities, we would be grateful if you could star
+the repository and/or cite our work. The DOI of the latest version
+and other citation resources are available
 at `this link <https://doi.org/10.5281/zenodo.1045336>`__.
+
+If you prefer using Python rather than C++, pagmo
+can be used from Python via `pygmo <https://esa.github.io/pagmo2/>`__,
+its Python bindings.
 
 Contents:
 
@@ -51,12 +64,8 @@ Contents:
 
    install
    quickstart
-   docs/algorithm_list
-   docs/problem_list
-   docs/island_list
+   overview
    docs/cpp/tutorials/cpp_tut
    docs/cpp/cpp_docs
-   docs/python/tutorials/python_tut
-   docs/python/python_docs
    credits
    changelog
