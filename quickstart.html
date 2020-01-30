@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="List of algorithms (UDAs) available in pagmo/pygmo" href="docs/algorithm_list.html" />
-    <link rel="prev" title="Installation guide" href="install.html" />
+    <link rel="next" title="Capabilities" href="overview.html" />
+    <link rel="prev" title="Installation" href="install.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
@@ -89,22 +89,14 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#c">C++</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-pagmo-with-cmake">Using pagmo with CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-pagmo-with-cmake">Using pagmo with CMake</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#python">Python</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -172,11 +164,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="quick-start">
-<span id="quickstart"></span><h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="c">
-<span id="getting-started-c"></span><h2>C++<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h2>
+<h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
 <p>After following the <a class="reference internal" href="install.html#install"><span class="std std-ref">installation guide</span></a>,
 you will be able to compile and run your first C++ pagmo program:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">getting_started.cpp</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -209,7 +201,9 @@ you will be able to compile and run your first C++ pagmo program:</p>
 30
 31
 32
-33</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+33
+34
+35</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithms/sade.hpp&gt;</span><span class="cp"></span>
@@ -222,28 +216,31 @@ you will be able to compile and run your first C++ pagmo program:</p>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="c1">// 1 - Instantiate a pagmo problem constructing it from a UDP</span>
-    <span class="c1">// (user defined problem).</span>
+    <span class="c1">// (i.e., a user-defined problem, in this case the 30-dimensional</span>
+    <span class="c1">// generalised Schwefel test function).</span>
     <span class="n">problem</span> <span class="n">prob</span><span class="p">{</span><span class="n">schwefel</span><span class="p">(</span><span class="mi">30</span><span class="p">)};</span>
 
-    <span class="c1">// 2 - Instantiate a pagmo algorithm</span>
+    <span class="c1">// 2 - Instantiate a pagmo algorithm (self-adaptive differential</span>
+    <span class="c1">// evolution, 100 generations).</span>
     <span class="n">algorithm</span> <span class="n">algo</span><span class="p">{</span><span class="n">sade</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
 
-    <span class="c1">// 3 - Instantiate an archipelago with 16 islands having each 20 individuals</span>
+    <span class="c1">// 3 - Instantiate an archipelago with 16 islands having each 20 individuals.</span>
     <span class="n">archipelago</span> <span class="n">archi</span><span class="p">{</span><span class="mi">16u</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="mi">20u</span><span class="p">};</span>
 
     <span class="c1">// 4 - Run the evolution in parallel on the 16 separate islands 10 times.</span>
     <span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
 
-    <span class="c1">// 5 - Wait for the evolutions to be finished</span>
+    <span class="c1">// 5 - Wait for the evolutions to finish.</span>
     <span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span>
 
-    <span class="c1">// 6 - Print the fitness of the best solution in each island</span>
+    <span class="c1">// 6 - Print the fitness of the best solution in each island.</span>
     <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">isl</span> <span class="p">:</span> <span class="n">archi</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+</div>
 <p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> text file and compile it
 (for example) with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> g++ -O2 -DNDEBUG -std<span class="o">=</span>c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
@@ -267,7 +264,7 @@ you will have to link your executable to the
 <p>We recommend to use pagmo’s CMake support in order to simplify
 the build process of code depending on pagmo (see next section).</p>
 <div class="section" id="using-pagmo-with-cmake">
-<h3>Using pagmo with CMake<a class="headerlink" href="#using-pagmo-with-cmake" title="Permalink to this headline">¶</a></h3>
+<h2>Using pagmo with CMake<a class="headerlink" href="#using-pagmo-with-cmake" title="Permalink to this headline">¶</a></h2>
 <p>As a part of the pagmo installation, a group of CMake files is installed into
 <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX/lib/cmake/pagmo</span></code>.
 This bundle, which is known in the CMake lingo as a
@@ -304,61 +301,16 @@ program presented earlier may look like this:</p>
 <span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">getting_started</span> <span class="s">PROPERTY</span> <span class="s">CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="python">
-<span id="getting-started-py"></span><h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
-<p>If you have successfully installed pygmo following the
-<a class="reference internal" href="install.html#install"><span class="std std-ref">installation guide</span></a>, you can try the following script:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="kn">as</span> <span class="nn">pg</span>
-
-<span class="c1"># 1 - Instantiate a pygmo problem constructing it from a UDP</span>
-<span class="c1"># (user defined problem).</span>
-<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">schwefel</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
-
-<span class="c1"># 2 - Instantiate a pagmo algorithm</span>
-<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sade</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
-
-<span class="c1"># 3 - Instantiate an archipelago with 16 islands having each 20 individuals</span>
-<span class="n">archi</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">archipelago</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">algo</span><span class="o">=</span><span class="n">algo</span><span class="p">,</span> <span class="n">prob</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">pop_size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="c1"># 4 - Run the evolution in parallel on the 16 separate islands 10 times.</span>
-<span class="n">archi</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-
-<span class="c1"># 5 - Wait for the evolutions to be finished</span>
-<span class="n">archi</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-<span class="c1"># 6 - Print the fitness of the best solution in each island</span>
-<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">isl</span><span class="o">.</span><span class="n">get_population</span><span class="p">()</span><span class="o">.</span><span class="n">champion_f</span> <span class="k">for</span> <span class="n">isl</span> <span class="ow">in</span> <span class="n">archi</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
-<p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.py</span></code> text file and run it with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python getting_started.py
+<p>Place this <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and the <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> files
+in the same directory, and create a <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory. From
+the <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory, execute these commands to produce
+the <code class="docutils literal notranslate"><span class="pre">getting_started</span></code> executable:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cmake ../ -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+<span class="gp">$</span> cmake  --build .
 </pre></div>
 </div>
-<p>We recommend the use of <a class="reference external" href="https://jupyter.org/">Jupyter</a> or
-<a class="reference external" href="https://ipython.org/">IPython</a> to enjoy pygmo the most.</p>
+<p>Please refer to the <a class="reference external" href="https://cmake.org/documentation/">CMake documentation</a>
+for more information on how to use CMake.</p>
 </div>
 </div>
 
@@ -370,10 +322,10 @@ program presented earlier may look like this:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="docs/algorithm_list.html" class="btn btn-neutral float-right" title="List of algorithms (UDAs) available in pagmo/pygmo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-right" title="Capabilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install.html" class="btn btn-neutral float-left" title="Installation guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

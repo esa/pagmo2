@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Pagmo &amp; Pygmo &mdash; pagmo 2.14.0 documentation</title>
+  <title>Pagmo &mdash; pagmo 2.14.0 documentation</title>
   
 
   
@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation guide" href="install.html" />
+    <link rel="next" title="Installation" href="install.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
@@ -88,15 +88,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -144,7 +140,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Pagmo &amp; Pygmo</li>
+      <li>Pagmo</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -163,38 +159,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pagmo-pygmo">
-<h1>Pagmo &amp; Pygmo<a class="headerlink" href="#pagmo-pygmo" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pagmo">
+<h1>Pagmo<a class="headerlink" href="#pagmo" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="docs/problem_list.html"><img alt="_images/prob.png" src="_images/prob.png" style="width: 15%;" /></a>
 <a class="reference external image-reference" href="docs/algorithm_list.html"><img alt="_images/algo.png" src="_images/algo.png" style="width: 15%;" /></a>
 <a class="reference internal image-reference" href="_images/pop.png"><img alt="_images/pop.png" src="_images/pop.png" style="width: 15%;" /></a>
 <a class="reference external image-reference" href="docs/island_list.html"><img alt="_images/island.png" src="_images/island.png" style="width: 15%;" /></a>
 <a class="reference internal image-reference" href="_images/archi.png"><img alt="_images/archi.png" src="_images/archi.png" style="width: 15%;" /></a>
 <a class="reference internal image-reference" href="_images/migration.png"><img alt="_images/migration.png" src="_images/migration.png" style="width: 15%;" /></a>
-<p>Pagmo (C++) or pygmo (Python) is a scientific library for massively parallel optimization. It is built
-around the idea of providing a unified interface to optimization algorithms and to optimization problems and to
+<p>pagmo is a C++ scientific library for massively parallel optimization.
+It is built
+around the idea of providing a unified interface to optimization
+algorithms and problems, and to
 make their deployment in massively parallel environments easy.</p>
-<p>Efficient implementantions of bio-inspired and evolutionary algorithms are sided to state-of the art optimization algorithms
-(Simplex Methods, SQP methods,  interior points methods ….) and can be easily mixed (also with your newly invented algorithms)
-to build a super-algorithm exploiting algoritmic cooperation via the asynchronous, generalized island model.</p>
-<p>Pagmo and pygmo can be used to solve constrained, unconstrained, single objective, multiple objective, continuous and integer optimization
-problems, stochastic and deterministic problems, as well as to perform research on novel algorithms and paradigms and easily compare them to state of the
-art implementations of established ones.</p>
-<p>If you are using pagmo/pygmo as part of your research, teaching, or other activities, we would be grateful if you could star
-the repository and/or cite our work. The DOI of the latest version and other citation resources are available
+<p>Efficient implementantions of bio-inspired and evolutionary algorithms
+are sided to state-of-the-art optimization algorithms
+(Simplex Methods, SQP methods,  interior points methods, …)
+and can be easily mixed (also with your newly-invented algorithms)
+to build a super-algorithm exploiting algorithmic cooperation
+via the asynchronous, generalized island model.</p>
+<p>pagmo can be used to solve constrained, unconstrained, single objective,
+multiple objective, continuous and integer optimization
+problems, stochastic and deterministic problems, as well as to perform
+research on novel algorithms and paradigms and easily compare
+them to state-of-the-art implementations of established ones.</p>
+<p>If you are using pagmo as part of your research, teaching, or other
+activities, we would be grateful if you could star
+the repository and/or cite our work. The DOI of the latest version
+and other citation resources are available
 at <a class="reference external" href="https://doi.org/10.5281/zenodo.1045336">this link</a>.</p>
+<p>If you prefer using Python rather than C++, pagmo
+can be used from Python via <a class="reference external" href="https://esa.github.io/pagmo2/">pygmo</a>,
+its Python bindings.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/algorithm_list.html">List of algorithms (UDAs) available in pagmo/pygmo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/problem_list.html">List of problems (UDPs) available in pagmo/pygmo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/island_list.html">List of islands (UDIs) available in pagmo/pygmo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/tutorials/python_tut.html">Python tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/python/python_docs.html">Python API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -209,7 +213,7 @@ at <a class="reference external" href="https://doi.org/10.5281/zenodo.1045336">t
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install.html" class="btn btn-neutral float-right" title="Installation guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

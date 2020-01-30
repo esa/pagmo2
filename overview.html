@@ -1,0 +1,729 @@
+ 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Capabilities &mdash; pagmo 2.14.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="C++ tutorial" href="docs/cpp/tutorials/cpp_tut.html" />
+    <link rel="prev" title="Quick start" href="quickstart.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.14.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Capabilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-algorithms">List of algorithms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heuristic-global-optimization">Heuristic Global Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-optimization">Local optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meta-algorithms">Meta-algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-problems">List of problems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scalable-problems">Scalable problems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-suites">Problem suites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meta-problems">Meta-problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-islands">List of islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-batch-fitness-evaluators">List of batch fitness evaluators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Capabilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="capabilities">
+<h1>Capabilities<a class="headerlink" href="#capabilities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Support for a wide array of types of
+optimisation problems (continuous, integer, single
+and multi-objective, constrained and unconstrained,
+with or without derivatives, stochastic, etc.).</p></li>
+<li><p>A comprehensive library of algorithms,
+including global and local solvers, meta-heuristics,
+single and multi-objective algorithms,
+wrappers for third-party solvers (e.g.,
+<a class="reference external" href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>,
+<a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a>, etc.).</p></li>
+<li><p>Comprehensive support for coarse-grained
+parallelisation via the
+<a class="reference external" href="https://link.springer.com/chapter/10.1007/978-3-642-28789-3_7">generalised island model</a>.
+In the island model, multiple optimisation instances
+run in parallel (possibly on different machines) and
+exchange information as the optimisation proceeds,
+improving the overall time-to-solution and allowing
+to harness the computational power of modern computer
+architectures (including massively-parallel
+high-performance clusters).</p></li>
+<li><p>Support for fine-grained parallelisation
+(i.e., at the level of single objective function
+evaluations) in selected algorithms via the batch
+fitness evaluation framework. This allows to
+speed-up single optimisations via parallel
+processing (e.g., multithreading, high-performance
+clusters, GPUs, SIMD vectorization, etc.).</p></li>
+<li><p>A library of ready-to-use optimisation problems
+for algorithmic testing and performance evaluation
+(Rosenbrock, Rastrigin, Lennard-Jones, etc.).</p></li>
+<li><p>A library of optimisation-oriented utilities
+(e.g., hypervolume computation, non-dominated
+sorting, plotting, etc.).</p></li>
+</ul>
+</div>
+<div class="section" id="list-of-algorithms">
+<h2>List of algorithms<a class="headerlink" href="#list-of-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>This is the list of user defined algorithms (UDAs) currently
+provided with pagmo. These are classes that
+can be used to construct a <a class="reference internal" href="docs/cpp/algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>, which will
+then provide a unified interface to access the algorithm’s functionalities.</p>
+<p>Generally speaking, algorithms can solve only specific problem classes.
+In the tables below, we use the following
+flags to signal which problem types an algorithm can solve:</p>
+<ul class="simple">
+<li><p>S = Single-objective</p></li>
+<li><p>M = Multi-objective</p></li>
+<li><p>C = Constrained</p></li>
+<li><p>U = Unconstrained</p></li>
+<li><p>I = Integer programming</p></li>
+<li><p>sto = Stochastic</p></li>
+</ul>
+<p>Note that algorithms that do not directly support integer programming
+will still work on integer problems
+(i.e., they will optimise the relaxed problem). Note also that it is possible
+to use <a class="reference internal" href="#available-meta-problems"><span class="std std-ref">meta-problems</span></a>
+to turn constrained problems into unconstrained ones, and multi-objective
+problems into single-objective ones.</p>
+<div class="section" id="heuristic-global-optimization">
+<h3>Heuristic Global Optimization<a class="headerlink" href="#heuristic-global-optimization" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 33%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Capabilities</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Extended Ant Colony Optimization (GACO)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/gaco.html#_CPPv4N5pagmo4gacoE" title="pagmo::gaco"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::gaco</span></code></a></p></td>
+<td><p>S-CU-I</p></td>
+</tr>
+<tr class="row-odd"><td><p>Differential Evolution (DE)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/de.html#_CPPv4N5pagmo2deE" title="pagmo::de"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::de</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Self-adaptive DE (jDE and iDE)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/sade.html#_CPPv4N5pagmo4sadeE" title="pagmo::sade"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sade</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Self-adaptive DE (de_1220 aka pDE)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/de1220.html#_CPPv4N5pagmo6de1220E" title="pagmo::de1220"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::de1220</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Grey wolf optimizer (GWO)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/gwo.html#_CPPv4N5pagmo3gwoE" title="pagmo::gwo"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::gwo</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Improved Harmony Search</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/ihs.html#_CPPv4N5pagmo3ihsE" title="pagmo::ihs"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ihs</span></code></a></p></td>
+<td><p>SM-CU-I</p></td>
+</tr>
+<tr class="row-even"><td><p>Particle Swarm Optimization (PSO)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/pso.html#_CPPv4N5pagmo3psoE" title="pagmo::pso"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::pso</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Particle Swarm Optimization Generational (GPSO)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/pso_gen.html#_CPPv4N5pagmo7pso_genE" title="pagmo::pso_gen"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::pso_gen</span></code></a></p></td>
+<td><p>S-U-sto</p></td>
+</tr>
+<tr class="row-even"><td><p>(N+1)-ES Simple Evolutionary Algorithm</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/sea.html#_CPPv4N5pagmo3seaE" title="pagmo::sea"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sea</span></code></a></p></td>
+<td><p>S-U-sto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simple Genetic Algorithm</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/sga.html#_CPPv4N5pagmo3sgaE" title="pagmo::sga"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::sga</span></code></a></p></td>
+<td><p>S-U-I-sto</p></td>
+</tr>
+<tr class="row-even"><td><p>Corana’s Simulated Annealing (SA)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/simulated_annealing.html#_CPPv4N5pagmo19simulated_annealingE" title="pagmo::simulated_annealing"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::simulated_annealing</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Artificial Bee Colony (ABC)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/bee_colony.html#_CPPv4N5pagmo10bee_colonyE" title="pagmo::bee_colony"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bee_colony</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Covariance Matrix Adaptation Evo. Strategy (CMA-ES)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/cmaes.html#_CPPv4N5pagmo5cmaesE" title="pagmo::cmaes"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cmaes</span></code></a></p></td>
+<td><p>S-U-sto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Exponential Evolution Strategies (xNES)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/xnes.html#_CPPv4N5pagmo4xnesE" title="pagmo::xnes"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::xnes</span></code></a></p></td>
+<td><p>S-U-sto</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-dominated Sorting GA (NSGA2)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nsga2.html#_CPPv4N5pagmo5nsga2E" title="pagmo::nsga2"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nsga2</span></code></a></p></td>
+<td><p>M-U-I</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multi-objective EA vith Decomposition (MOEA/D)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/moead.html#_CPPv4N5pagmo5moeadE" title="pagmo::moead"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::moead</span></code></a></p></td>
+<td><p>M-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Multi-objective Hypervolume-based ACO (MHACO)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/maco.html#_CPPv4N5pagmo4macoE" title="pagmo::maco"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::maco</span></code></a></p></td>
+<td><p>M-U-I</p></td>
+</tr>
+<tr class="row-odd"><td><p>Non-dominated Sorting PSO (NSPSO)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nspso.html#_CPPv4N5pagmo5nspsoE" title="pagmo::nspso"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nspso</span></code></a></p></td>
+<td><p>M-U-I</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="local-optimization">
+<h3>Local optimization<a class="headerlink" href="#local-optimization" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 57%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Capabilities</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Compass Search (CS)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/compass_search.html#_CPPv4N5pagmo14compass_searchE" title="pagmo::compass_search"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::compass_search</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-odd"><td><p>COBYLA (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-even"><td><p>BOBYQA (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>NEWUOA + bound constraints (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>PRAXIS (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nelder-Mead simplex (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Subplex (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>MMA (Method of Moving Asymptotes) (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-even"><td><p>CCSA (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-odd"><td><p>SLSQP (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-even"><td><p>Low-storage BFGS (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Preconditioned truncated Newton (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Shifted limited-memory variable-metric (from NLopt)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ipopt</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/ipopt.html#_CPPv4N5pagmo5ipoptE" title="pagmo::ipopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ipopt</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-even"><td><p>SNOPT (in pagmo_plugins_non_free affiliated package)</p></td>
+<td><p><a class="reference external" href="https://esa.github.io/pagmo_plugins_nonfree/cpp_snopt7.html">pagmo::snopt7</a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-odd"><td><p>WORHP (in pagmo_plugins_non_free affiliated package)</p></td>
+<td><p><a class="reference external" href="https://esa.github.io/pagmo_plugins_nonfree/cpp_worhp.html">pagmo::wohrp</a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="meta-algorithms">
+<h3>Meta-algorithms<a class="headerlink" href="#meta-algorithms" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 35%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Capabilities <a class="footnote-reference brackets" href="#meta-capa" id="id1">1</a></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Monotonic Basin Hopping (MBH)</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/mbh.html#_CPPv4N5pagmo3mbhE" title="pagmo::mbh"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::mbh</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cstrs Self-Adaptive</p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/cstrs_self_adaptive.html#_CPPv4N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a></p></td>
+<td><p>S-C</p></td>
+</tr>
+<tr class="row-even"><td><p>Augmented Lagrangian algorithm (from NLopt) <a class="footnote-reference brackets" href="#auglag" id="id2">2</a></p></td>
+<td><p><a class="reference internal" href="docs/cpp/algorithms/nlopt.html#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a></p></td>
+<td><p>S-CU</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="meta-capa"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>The capabilities of the meta-algorithms depend also on the capabilities of the algorithms they wrap. If, for instance,
+a meta-algorithm supporting constrained problems is constructed from an algorithm which does <em>not</em> support constrained problems, the
+resulting meta-algorithms will <em>not</em> be able to solve constrained problems.</p>
+</dd>
+<dt class="label" id="auglag"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>The Augmented Lagrangian algorithm can be used only in conjunction with other NLopt algorithms.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-of-problems">
+<h2>List of problems<a class="headerlink" href="#list-of-problems" title="Permalink to this headline">¶</a></h2>
+<p>This is the list of user defined problems (UDPs) currently provided with pagmo.
+These are classes that can be used to construct a <a class="reference internal" href="docs/cpp/problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>,
+which will
+then provide a unified interface to access the problem’s functionalities.</p>
+<p>In the tables below, we classify optimisation problems
+according to the following flags:</p>
+<ul class="simple">
+<li><p>S = Single-objective</p></li>
+<li><p>M = Multi-objective</p></li>
+<li><p>C = Constrained</p></li>
+<li><p>U = Unconstrained</p></li>
+<li><p>I = Integer programming</p></li>
+<li><p>sto = Stochastic</p></li>
+</ul>
+<div class="section" id="scalable-problems">
+<h3>Scalable problems<a class="headerlink" href="#scalable-problems" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 36%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ackley</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/ackley.html#_CPPv4N5pagmo6ackleyE" title="pagmo::ackley"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::ackley</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Golomb Ruler</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/golomb_ruler.html#_CPPv4N5pagmo12golomb_rulerE" title="pagmo::golomb_ruler"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::golomb_ruler</span></code></a></p></td>
+<td><p>S-C-I</p></td>
+</tr>
+<tr class="row-even"><td><p>Griewank</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/griewank.html#_CPPv4N5pagmo8griewankE" title="pagmo::griewank"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::griewank</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hock Schittkowsky 71</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/hock_schittkowsky_71.html#_CPPv4N5pagmo20hock_schittkowsky_71E" title="pagmo::hock_schittkowsky_71"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::hock_schittkowsky_71</span></code></a></p></td>
+<td><p>S-C</p></td>
+</tr>
+<tr class="row-even"><td><p>Inventory</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/inventory.html#_CPPv4N5pagmo9inventoryE" title="pagmo::inventory"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::inventory</span></code></a></p></td>
+<td><p>S-U-sto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lennard Jones</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/lennard_jones.html#_CPPv4N5pagmo13lennard_jonesE" title="pagmo::lennard_jones"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::lennard_jones</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Luksan Vlcek 1</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/luksan_vlcek1.html#_CPPv4N5pagmo13luksan_vlcek1E" title="pagmo::luksan_vlcek1"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::luksan_vlcek1</span></code></a></p></td>
+<td><p>S-C</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rastrigin</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/rastrigin.html#_CPPv4N5pagmo9rastriginE" title="pagmo::rastrigin"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::rastrigin</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>MINLP Rastrigin</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/minlp_rastrigin.html#_CPPv4N5pagmo15minlp_rastriginE" title="pagmo::minlp_rastrigin"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::minlp_rastrigin</span></code></a></p></td>
+<td><p>S-U-I</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rosenbrock</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/rosenbrock.html#_CPPv4N5pagmo10rosenbrockE" title="pagmo::rosenbrock"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::rosenbrock</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>Schwefel</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/schwefel.html#_CPPv4N5pagmo8schwefelE" title="pagmo::schwefel"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::schwefel</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="problem-suites">
+<h3>Problem suites<a class="headerlink" href="#problem-suites" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 47%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CEC2006</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/cec2006.html#_CPPv4N5pagmo7cec2006E" title="pagmo::cec2006"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2006</span></code></a></p></td>
+<td><p>S-C</p></td>
+</tr>
+<tr class="row-odd"><td><p>CEC2009</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/cec2009.html#_CPPv4N5pagmo7cec2009E" title="pagmo::cec2009"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2009</span></code></a></p></td>
+<td><p>S-C</p></td>
+</tr>
+<tr class="row-even"><td><p>CEC2013</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/cec2013.html#_CPPv4N5pagmo7cec2013E" title="pagmo::cec2013"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2013</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>CEC2014</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/cec2014.html#_CPPv4N5pagmo7cec2014E" title="pagmo::cec2014"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cec2014</span></code></a></p></td>
+<td><p>S-U</p></td>
+</tr>
+<tr class="row-even"><td><p>ZDT</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/zdt.html#_CPPv4N5pagmo3zdtE" title="pagmo::zdt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::zdt</span></code></a></p></td>
+<td><p>M-U</p></td>
+</tr>
+<tr class="row-odd"><td><p>DTLZ</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/dtlz.html#_CPPv4N5pagmo4dtlzE" title="pagmo::dtlz"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::dtlz</span></code></a></p></td>
+<td><p>M-U</p></td>
+</tr>
+<tr class="row-even"><td><p>WFG</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/wfg.html#_CPPv4N5pagmo3wfgE" title="pagmo::wfg"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::wfg</span></code></a></p></td>
+<td><p>M-U</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="meta-problems">
+<span id="available-meta-problems"></span><h3>Meta-problems<a class="headerlink" href="#meta-problems" title="Permalink to this headline">¶</a></h3>
+<p>Meta-problems are UDPs that take another UDP as input, yielding a new UDP which modifies the behaviour and/or the properties of the original
+problem in a variety of ways.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Decompose</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/decompose.html#_CPPv4N5pagmo9decomposeE" title="pagmo::decompose"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::decompose</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Translate</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/translate.html#_CPPv4N5pagmo9translateE" title="pagmo::translate"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::translate</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Unconstrain</p></td>
+<td><p><a class="reference internal" href="docs/cpp/problems/unconstrain.html#_CPPv4N5pagmo11unconstrainE" title="pagmo::unconstrain"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::unconstrain</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="list-of-islands">
+<h2>List of islands<a class="headerlink" href="#list-of-islands" title="Permalink to this headline">¶</a></h2>
+<p>This is the list of user defined islands (UDIs)
+currently provided with pagmo. These are classes that
+can be used to construct a <a class="reference internal" href="docs/cpp/island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a>,
+which will then
+provide a unified interface to access the island’s functionalities.</p>
+<p>In the pagmo jargon, an island is an entity tasked with
+managing the asynchronous evolution of a population via
+an algorithm in the generalised island model.
+Different UDIs enable different parallelisation
+strategies (e.g., multithreading, multiprocessing,
+cluster architectures, etc.).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Thread island</p></td>
+<td><p><a class="reference internal" href="docs/cpp/islands/thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::thread_island</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fork island</p></td>
+<td><p><a class="reference internal" href="docs/cpp/islands/fork_island.html#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::fork_island</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="list-of-batch-fitness-evaluators">
+<h2>List of batch fitness evaluators<a class="headerlink" href="#list-of-batch-fitness-evaluators" title="Permalink to this headline">¶</a></h2>
+<p>This is the list of user defined batch fitness
+evaluators (UDBFEs)
+currently provided with pagmo. These are classes that
+can be used to construct a <a class="reference internal" href="docs/cpp/bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a>,
+which will then
+provide a unified interface to access the evaluator’s
+functionalities.</p>
+<p>In the pagmo jargon, a batch fitness evaluator
+implements the capability of evaluating a group
+of decision vectors in a parallel and/or vectorised
+fashion. Batch fitness evaluators are used to implement
+fine-grained parallelisation in pagmo (e.g., parallel
+initialisation of populations, or parallel
+fitness evaluations within the inner loop of an algorithm).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Common Name</p></th>
+<th class="head"><p>Docs of the C++ class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Default BFE</p></td>
+<td><p><a class="reference internal" href="docs/cpp/batch_evaluators/default_bfe.html#_CPPv4N5pagmo11default_bfeE" title="pagmo::default_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::default_bfe</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Thread BFE</p></td>
+<td><p><a class="reference internal" href="docs/cpp/batch_evaluators/thread_bfe.html#_CPPv4N5pagmo10thread_bfeE" title="pagmo::thread_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::thread_bfe</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="docs/cpp/tutorials/cpp_tut.html" class="btn btn-neutral float-right" title="C++ tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, pagmo development team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
