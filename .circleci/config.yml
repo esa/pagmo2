@@ -33,6 +33,14 @@ jobs:
     - run:
         name: Build and test
         command: bash ./tools/circleci_bionic_clang6_release.sh
+  bionic_gcc7_conda_docs:
+    docker:
+    - image: circleci/buildpack-deps:bionic
+    steps:
+    - checkout
+    - run:
+        name: Build and test
+        command: bash ./tools/circleci_bionic_gcc7_conda_docs.sh
 
 workflows:
   version: 2
@@ -42,3 +50,4 @@ workflows:
     - cosmic_gcc8_asan
     - cosmic_clang7
     - bionic_clang6_release
+    - bionic_gcc7_conda_docs
