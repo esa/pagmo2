@@ -54,7 +54,7 @@ and other citation resources are available
 at `this link <https://doi.org/10.5281/zenodo.1045336>`__.
 
 If you prefer using Python rather than C++, pagmo
-can be used from Python via `pygmo <https://esa.github.io/pagmo2/>`__,
+can be used from Python via `pygmo <https://esa.github.io/pygmo2/>`__,
 its Python bindings.
 
 Contents:
