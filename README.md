@@ -13,7 +13,7 @@ pagmo
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1045337.svg)](https://doi.org/10.5281/zenodo.1045336)
 
 **IMPORTANT NOTICE**: pygmo, the Python bindings for pagmo, have been split off into a separate
-project, hosted [here](https://esa.github.io/pygmo2/). Please update your bookmarks!
+project, hosted [here](https://github.com/esa/pygmo2). Please update your bookmarks!
 
 pagmo is a C++ scientific library for massively parallel optimization. It is built around the idea of providing
 a unified interface to optimization algorithms and to optimization problems and to make their deployment in
