@@ -87,7 +87,8 @@
               
             
             
-              <ul>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a></li>
@@ -189,18 +190,74 @@ the repository and/or cite our work. The DOI of the latest version
 and other citation resources are available
 at <a class="reference external" href="https://doi.org/10.5281/zenodo.1045336">this link</a>.</p>
 <p>If you prefer using Python rather than C++, pagmo
-can be used from Python via <a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a>,
+can be used from Python via <a class="reference external" href="https://github.com/esa/pygmo2">pygmo</a>,
 its Python bindings.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#packages">Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installation-from-source">Installation from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#getting-help">Getting help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-pagmo-with-cmake">Using pagmo with CMake</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#list-of-algorithms">List of algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#list-of-problems">List of problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#list-of-islands">List of islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#list-of-batch-fitness-evaluators">List of batch fitness evaluators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut_preliminaries.html">Preliminaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html#basics">Basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/cpp/cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="credits.html#main-developers">Main developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">2.14.0 (unreleased)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">2.13.0 (2020-01-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">2.12.0 (2019-12-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">2.11.4 (2019-09-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id10">2.11.3 (2019-09-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id14">2.11.2 (2019-08-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id16">2.11.1 (2019-08-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id18">2.11 (2019-08-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id22">2.10 (2019-01-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id25">2.9 (2018-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id29">2.8 (2018-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id33">2.7 (2018-04-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id36">2.6 (2017-11-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id38">2.5 (2017-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id40">2.4 (2017-06-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id44">2.3 (2017-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id47">2.2 (2017-05-12)</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
