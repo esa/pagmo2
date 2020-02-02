@@ -42,6 +42,8 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
+#include <functional>
+
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
 
