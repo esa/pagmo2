@@ -163,7 +163,7 @@ elif 'Debug' in BUILD_TYPE:
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the pagmo dll.
     os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
-    run_command(r'ctest')
+    run_command(r'ctest -VV')
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
 
