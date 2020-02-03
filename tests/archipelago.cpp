@@ -986,7 +986,6 @@ BOOST_AUTO_TEST_CASE(archipelago_set_migrants_db)
     std::get<2>(new_db[0]).push_back(vector_double(3u));
     a.set_migrants_db(new_db);
     a.evolve(1);
-    a.wait_check();
     BOOST_CHECK_EXCEPTION(a.wait_check(), std::invalid_argument, [](const std::invalid_argument &err) {
         return boost::contains(err.what(), "' have the expected dimension (50)");
     });
