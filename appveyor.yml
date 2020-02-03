@@ -1,16 +1,13 @@
 environment:
-  TWINE_PASSWORD:
-    secure: fqy2DKVE2zM+97vNPB8xgw3ae3SDPkL/T8RvC6s4ncY=
   matrix:
     - BUILD_TYPE: "MSVC_64_Debug"
       COMPILER: MSVC15
       PLATFORM: "x64"
-    - BUILD_TYPE: "MinGW_64_Debug"
   global:
     PLATFORMTOOLSET: "v140"
 
 install:
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
 # NOTE: we clean and update the conda env due to some apparent caching issues in the
 # conda version installed on appveyor. This is necessary sometimes, depending on the
@@ -21,12 +18,9 @@ install:
 # NOTE: we are installing some extra packages here (the same as in the python builds, even though we don't
 # use Python here), because otherwise there's some error arising when trying to detect the nlopt installation.
 # Not clear why that's the case, hopefully it's temporary.
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.6 cmake boost boost-cpp eigen nlopt numpy cloudpickle dill ipyparallel tbb tbb-devel
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.7 cmake boost boost-cpp eigen nlopt numpy cloudpickle dill ipyparallel tbb tbb-devel
 # NOTE: need to use "call" because otherwise it won't work within an if block.
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
-
-# Rename sh.exe as sh.exe in PATH interferes with MinGW.
-- if [%BUILD_TYPE%]==[MinGW_64_Debug] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
 build_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] mkdir build
@@ -34,15 +28,9 @@ build_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
 - if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake --build . --config Release --target install
 
-- if [%BUILD_TYPE%]==[MinGW_64_Debug] C:\Python36-x64\python.exe tools\install_appveyor_mingw.py
-
 test_script:
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest --output-on-failure
+- if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest -VV --output-on-failure
 
-
-artifacts:
-  - path: build\wheel\dist
-    name: wheels
 
 notifications:
   - provider: Webhook

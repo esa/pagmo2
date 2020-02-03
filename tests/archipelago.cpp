@@ -987,9 +987,9 @@ BOOST_AUTO_TEST_CASE(archipelago_set_migrants_db)
     a.set_migrants_db(new_db);
     a.evolve(1);
     a.wait_check();
-    // BOOST_CHECK_EXCEPTION(a.wait_check(), std::invalid_argument, [](const std::invalid_argument &err) {
-    //     return boost::contains(err.what(), "' have the expected dimension (50)");
-    // });
+    BOOST_CHECK_EXCEPTION(a.wait_check(), std::invalid_argument, [](const std::invalid_argument &err) {
+        return boost::contains(err.what(), "' have the expected dimension (50)");
+    });
 
     // db with wrong fv length.
     a = archipelago{ring{}, 10u, nsga2{10}, dtlz{2, 50}, 100u};
