@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+dependencies:
+  - pagmo
+  - pagmo-devel
+  - xeus-cling
+  - jupyter
