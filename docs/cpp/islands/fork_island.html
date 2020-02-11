@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -210,11 +210,6 @@ which uses the thread-unsafe Ipopt optimiser).</p>
 <p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is the UDI type automatically selected by the constructors of <a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a>
 on POSIX platforms when the island’s problem and/or algorithm do not provide the basic <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">thread_safety</span></code></a>
 guarantee.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is not exposed in the Python bindings. Instead, pygmo provides a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">process-based</span> <span class="pre">island</span></code> via Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code> module.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When using memory checking tools such as valgrind, or the address/memory sanitizers from GCC/clang, be aware

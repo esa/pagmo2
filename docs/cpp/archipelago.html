@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -740,6 +740,35 @@ contains the current candidate outgoing migrants for each island.</p>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives or by memory allocation errors. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo11archipelago15set_migrants_dbE13migrants_db_t">
+<span id="_CPPv3N5pagmo11archipelago15set_migrants_dbE13migrants_db_t"></span><span id="_CPPv2N5pagmo11archipelago15set_migrants_dbE13migrants_db_t"></span><span id="pagmo::archipelago::set_migrants_db__migrants_db_t"></span><span class="target" id="classpagmo_1_1archipelago_1aad9ee87d3f062538da6686a39f3bbb1d"></span>void <code class="sig-name descname">set_migrants_db</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago13migrants_db_tE" title="pagmo::archipelago::migrants_db_t">migrants_db_t</a> <em>mig</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago15set_migrants_dbE13migrants_db_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the database of migrants. </p>
+<p><p>During the evolution of an archipelago, islands will periodically
+store the individuals selected for migration in a <em>migrant database</em>.
+This is a vector of <a class="reference internal" href="types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">individuals_group_t</span></code></a> whose
+size is equal to the number of islands in the archipelago, and which
+contains the current candidate outgoing migrants for each island.</p>
+<p>This setter allows to replace the current database of migrants
+with a new one.</p>
+<p>Note that this setter will accept in input a malformed database
+of migrants without complaining. An invalid database of migrants
+will however result in exceptions being raised when migration
+occurs.</p>
+</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mig</span></code>: the new database of migrants.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by threading primitives. </p></li>
 </ul>
 </dd>
 </dl>

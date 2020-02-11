@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -198,6 +198,8 @@ the multidimensional objective function</p>
 <p>In pagmo’s taxonomy, this optimisation problem is</p>
 <ul class="simple">
 <li><p><em>continuous</em> (because <span class="math notranslate nohighlight">\(x_{1,2,3,4}\)</span> are real variables),</p></li>
+<li><p><em>deterministic</em> (as neither the objectives nor the constraints depend
+on stochastic variables),</p></li>
 <li><p><em>single-objective</em> (because the objective
 function produces a single value), and</p></li>
 <li><p><em>constrained</em> (because there are nonlinear
