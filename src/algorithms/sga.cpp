@@ -26,6 +26,13 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#if defined(_MSC_VER)
+
+// Boost's bimap results in some C++17 deprecation warnings in C++17 mode.
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+
+#endif
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
