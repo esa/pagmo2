@@ -2,14 +2,14 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       BUILD_TYPE: "MSVC_2017"
-    - BUILD_TYPE: "MSVC_64_Debug"
+    - BUILD_TYPE: "MSVC_2015"
 
 install:
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] conda create -y --name pagmo python=3.7 cmake boost-cpp eigen nlopt tbb tbb-devel
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] call activate pagmo
+- if [%BUILD_TYPE%]==[MSVC_2015] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_2015] conda config --add channels conda-forge --force
+- if [%BUILD_TYPE%]==[MSVC_2015] conda update --all -y
+- if [%BUILD_TYPE%]==[MSVC_2015] conda create -y --name pagmo python=3.7 cmake boost-cpp eigen nlopt tbb tbb-devel
+- if [%BUILD_TYPE%]==[MSVC_2015] call activate pagmo
 
 - if [%BUILD_TYPE%]==[MSVC_2017] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
 - if [%BUILD_TYPE%]==[MSVC_2017] conda config --add channels conda-forge --force
@@ -18,10 +18,10 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_2017] call activate pagmo
 
 build_script:
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] mkdir build
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] cd build
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake -G "Visual Studio 14 2015 Win64" -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] cmake --build . --config Release --target install
+- if [%BUILD_TYPE%]==[MSVC_2015] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_2015] cd build
+- if [%BUILD_TYPE%]==[MSVC_2015] cmake -G "Visual Studio 14 2015 Win64" -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes ..
+- if [%BUILD_TYPE%]==[MSVC_2015] cmake --build . --config Release --target install
 
 - if [%BUILD_TYPE%]==[MSVC_2017] mkdir build
 - if [%BUILD_TYPE%]==[MSVC_2017] cd build
@@ -29,7 +29,7 @@ build_script:
 - if [%BUILD_TYPE%]==[MSVC_2017] cmake --build . --config Release --target install
 
 test_script:
-- if [%BUILD_TYPE%]==[MSVC_64_Debug] ctest -VV --output-on-failure
+- if [%BUILD_TYPE%]==[MSVC_2015] ctest -VV --output-on-failure
 
 - if [%BUILD_TYPE%]==[MSVC_2017] ctest -VV --output-on-failure
 
