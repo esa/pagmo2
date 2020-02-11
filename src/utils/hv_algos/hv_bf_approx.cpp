@@ -40,6 +40,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
 #include <pagmo/utils/hypervolume.hpp>
 
+#if defined(_MSC_VER)
+
+#pragma warning(push)
+#pragma warning(disable : 4646)
+
+#endif
+
 namespace pagmo
 {
 
@@ -492,3 +499,9 @@ bool bf_approx::gc_erase_condition(vector_double::size_type idx, vector_double::
 }
 
 } // namespace pagmo
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
