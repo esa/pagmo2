@@ -101,16 +101,17 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
                     "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) + " and "
                         + std::to_string(obj2.size()) + ". I cannot define dominance");
     }
-    vector_double::size_type count1 = 0, count2 = 0;
+    bool foundStrictlyDominatingDimension = false;
     for (decltype(obj1.size()) i = 0u; i < obj1.size(); ++i) {
         if (detail::less_than_f(obj1[i], obj2[i])) {
-            ++count1;
-        }
-        if (detail::equal_to_f(obj1[i], obj2[i])) {
-            ++count2;
+            foundStrictlyDominatingDimension = true;
+        } else if (detail::equal_to_f(obj1[i], obj2[i])) {
+            continue;
+        } else {
+            return false;
         }
     }
-    return (((count1 + count2) == obj1.size()) && (count1 > 0u));
+    return foundStrictlyDominatingDimension;
 }
 
 /// Non dominated front 2D (Kung's algorithm)
