@@ -574,6 +574,11 @@ archipelago::migrants_db_t archipelago::get_migrants_db() const
  *
  * This setter allows to replace the current database of migrants
  * with a new one.
+ *
+ * Note that this setter will accept in input a malformed database
+ * of migrants without complaining. An invalid database of migrants
+ * will however result in exceptions being raised when migration
+ * occurs.
  * \endverbatim
  *
  * @param mig the new database of migrants.
