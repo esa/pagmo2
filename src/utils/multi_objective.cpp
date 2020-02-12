@@ -103,14 +103,12 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
     }
     bool foundStrictlyDominatingDimension = false;
     for (decltype(obj1.size()) i = 0u; i < obj1.size(); ++i) {
-        if (detail::less_than_f(obj1[i], obj2[i])) {
-            foundStrictlyDominatingDimension = true;
-        } else if (detail::equal_to_f(obj1[i], obj2[i])) {
-            continue;
-        } else {
+        if (detail::greater_than_f(obj1[i], obj2[i])) {
             return false;
+        } else if (detail::less_than_f(obj1[i], obj2[i])) {
+            foundStrictlyDominatingDimension = true;
         }
-    }
+    } 
     return foundStrictlyDominatingDimension;
 }
 
