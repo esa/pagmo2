@@ -39,7 +39,9 @@ namespace pagmo
 // Call operator.
 vector_double member_bfe::operator()(const problem &p, const vector_double &dvs) const
 {
-    return detail::prob_invoke_mem_batch_fitness(p, dvs);
+    // NOTE: do *not* increment the fevals, as this is taken
+    // care of by pagmo::bfe.
+    return detail::prob_invoke_mem_batch_fitness(p, dvs, false);
 }
 
 // Serialization support.

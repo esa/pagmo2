@@ -14,6 +14,17 @@ New
   `website <https://github.com/esa/pygmo2>`__
   for pygmo's documentation and changelog.
 
+- Implement a setter for the migration database
+  of an archipelago
+  (`#390 <https://github.com/esa/pagmo2/pull/390>`__).
+
+Changes
+~~~~~~~
+
+- Various performance improvements for the
+  Pareto dominance utilities
+  (`#394 <https://github.com/esa/pagmo2/pull/394>`__).
+
 2.13.0 (2020-01-10)
 -------------------
 

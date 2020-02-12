@@ -169,6 +169,7 @@ Batch fitness evaluator
       will occupy the range :math:`\left[f, 2f\right)`, and so on.
 
       This function will perform a variety of sanity checks on both *dvs* and on the return value.
+      It will also take care of increasing the fitness evaluation counter in *p*.
 
       :param p: the input :cpp:class:`~pagmo::problem`.
       :param dvs: the input decision vectors that will be evaluated in batch mode.

@@ -30,6 +30,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <boost/numeric/conversion/cast.hpp>
+
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/bfe_impl.hpp>
@@ -88,10 +90,20 @@ vector_double bfe::operator()(const problem &p, const vector_double &dvs) const
 {
     // Check the input dvs.
     detail::bfe_check_input_dvs(p, dvs);
+
     // Invoke the call operator from the UDBFE.
     auto retval((*ptr())(p, dvs));
+
     // Check the produced vector of fitnesses.
     detail::bfe_check_output_fvs(p, dvs, retval);
+
+    // Update the fevals counter in p.
+    // NOTE: we already checked in bfe_check_input_dvs()
+    // that the problem dimension exactly divides
+    // dvs.size().
+    const auto n_dvs = dvs.size() / p.get_nx();
+    p.increment_fevals(boost::numeric_cast<unsigned long long>(n_dvs));
+
     return retval;
 }
 
