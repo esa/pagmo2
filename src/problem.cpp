@@ -415,7 +415,7 @@ vector_double problem::batch_fitness(const vector_double &dvs) const
 
     // Invoke the batch fitness function of the UDP, and
     // increase the fevals counter as well.
-    auto retval = detail::prob_invoke_mem_batch_fitness(*this, dvs);
+    auto retval = detail::prob_invoke_mem_batch_fitness(*this, dvs, true);
 
     // Check the produced vector of fitnesses.
     detail::bfe_check_output_fvs(*this, dvs, retval);
@@ -938,14 +938,17 @@ void prob_check_fv(const problem &p, const double *fv, vector_double::size_type 
 // This is useful for avoiding doing double checks on the input/output values
 // of batch_fitness() when we are sure that the checks have been performed elsewhere already.
 // This helper will also take care of increasing the fevals counter in the
-// input problem.
-vector_double prob_invoke_mem_batch_fitness(const problem &p, const vector_double &dvs)
+// input problem, if requested.
+vector_double prob_invoke_mem_batch_fitness(const problem &p, const vector_double &dvs, bool incr_fevals)
 {
     // Invoke the batch fitness from the UDP.
     auto retval(p.ptr()->batch_fitness(dvs));
 
-    // Increment the number of fitness evaluations.
-    p.increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / p.get_nx()));
+    // Increment the number of fitness evaluations, if
+    // requested.
+    if (incr_fevals) {
+        p.increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / p.get_nx()));
+    }
 
     return retval;
 }
