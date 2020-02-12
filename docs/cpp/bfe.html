@@ -385,7 +385,8 @@ occupies the range <span class="math notranslate nohighlight">\(\left[n, 2n\righ
 laid out contiguously in the return value: for a problem with fitness dimension <span class="math notranslate nohighlight">\(f\)</span>, the first fitness
 vector will occupy the index range <span class="math notranslate nohighlight">\(\left[0, f\right)\)</span>, the second fitness vector
 will occupy the range <span class="math notranslate nohighlight">\(\left[f, 2f\right)\)</span>, and so on.</p>
-<p>This function will perform a variety of sanity checks on both <em>dvs</em> and on the return value.</p>
+<p>This function will perform a variety of sanity checks on both <em>dvs</em> and on the return value.
+It will also take care of increasing the fitness evaluation counter in <em>p</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
