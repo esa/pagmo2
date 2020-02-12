@@ -215,16 +215,17 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
     for (decltype(N) i = 0u; i < N; ++i) {
         dom_list[i].clear();
         dom_count[i] = 0u;
-        for (decltype(N) j = 0u; j < N; ++j) {
-            if (i == j) {
-                continue;
-            }
+        for (decltype(N) j = 0u; j < i; ++j) {
             if (pareto_dominance(points[i], points[j])) {
                 dom_list[i].push_back(j);
+                ++dom_count[j];
             } else if (pareto_dominance(points[j], points[i])) {
+                dom_list[j].push_back(i);
                 ++dom_count[i];
             }
         }
+    }
+    for (decltype(N) i = 0u; i < N; ++i) {
         if (dom_count[i] == 0u) {
             non_dom_rank[i] = 0u;
             non_dom_fronts[0].push_back(i);
