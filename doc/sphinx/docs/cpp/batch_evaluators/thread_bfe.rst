@@ -14,7 +14,7 @@ Multithreaded BFE
    :cpp:class:`~pagmo::thread_bfe` will use multiple threads of execution to parallelise
    the evaluation of the fitnesses of a batch of input decision vectors.
 
-   .. cpp:function:: vector_double operator()(const problem &p, const vector_double &dvs) const
+   .. cpp:function:: vector_double operator()(problem p, const vector_double &dvs) const
 
       Call operator.
 
