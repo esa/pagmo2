@@ -1,11 +1,3 @@
 #!/bin/bash
 conda init --dry-run bash
 conda init bash
-conda activate
-cat > ${CONDA_PREFIX}/include/notebookIncludes.hpp <<EOF
-#pragma cling add_include_path("${CONDA_PREFIX}/include/eigen3")
-#pragma cling add_include_path("${CONDA_PREFIX}/include/coin")
-#pragma cling add_library_path("${CONDA_PREFIX}/lib")
-#pragma cling load("pagmo")
-EOF
-
