@@ -101,16 +101,15 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
                     "Different number of objectives found in input fitnesses: " + std::to_string(obj1.size()) + " and "
                         + std::to_string(obj2.size()) + ". I cannot define dominance");
     }
-    vector_double::size_type count1 = 0, count2 = 0;
+    bool found_strictly_dominating_dimension = false;
     for (decltype(obj1.size()) i = 0u; i < obj1.size(); ++i) {
-        if (detail::less_than_f(obj1[i], obj2[i])) {
-            ++count1;
+        if (detail::greater_than_f(obj1[i], obj2[i])) {
+            return false;
+        } else if (detail::less_than_f(obj1[i], obj2[i])) {
+            found_strictly_dominating_dimension = true;
         }
-        if (detail::equal_to_f(obj1[i], obj2[i])) {
-            ++count2;
-        }
-    }
-    return (((count1 + count2) == obj1.size()) && (count1 > 0u));
+    } 
+    return found_strictly_dominating_dimension;
 }
 
 /// Non dominated front 2D (Kung's algorithm)
@@ -216,16 +215,17 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
     for (decltype(N) i = 0u; i < N; ++i) {
         dom_list[i].clear();
         dom_count[i] = 0u;
-        for (decltype(N) j = 0u; j < N; ++j) {
-            if (i == j) {
-                continue;
-            }
+        for (decltype(N) j = 0u; j < i; ++j) {
             if (pareto_dominance(points[i], points[j])) {
                 dom_list[i].push_back(j);
+                ++dom_count[j];
             } else if (pareto_dominance(points[j], points[i])) {
+                dom_list[j].push_back(i);
                 ++dom_count[i];
             }
         }
+    }
+    for (decltype(N) i = 0u; i < N; ++i) {
         if (dom_count[i] == 0u) {
             non_dom_rank[i] = 0u;
             non_dom_fronts[0].push_back(i);
