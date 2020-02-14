@@ -44,7 +44,10 @@ class PAGMO_DLL_PUBLIC thread_bfe
 {
 public:
     // Call operator.
-    vector_double operator()(const problem &, const vector_double &) const;
+    // NOTE: pass the problem by copy, as we want to ensure the
+    // fitness() of the original problem is never called in order
+    // to avoid altering the fevals counter.
+    vector_double operator()(problem, const vector_double &) const;
     // Name.
     std::string get_name() const
     {

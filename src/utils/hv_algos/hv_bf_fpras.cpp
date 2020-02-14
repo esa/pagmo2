@@ -40,6 +40,13 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_fpras.hpp>
 
+#if defined(_MSC_VER)
+
+#pragma warning(push)
+#pragma warning(disable : 4646)
+
+#endif
+
 namespace pagmo
 {
 
@@ -198,3 +205,9 @@ std::string bf_fpras::get_name() const
 }
 
 } // namespace pagmo
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif

@@ -954,7 +954,7 @@ namespace detail
 // them as free functions.
 PAGMO_DLL_PUBLIC void prob_check_dv(const problem &, const double *, vector_double::size_type);
 PAGMO_DLL_PUBLIC void prob_check_fv(const problem &, const double *, vector_double::size_type);
-PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &, bool);
 
 } // namespace detail
 
@@ -1206,7 +1206,8 @@ public:
 private:
 #if !defined(PAGMO_DOXYGEN_INVOKED)
     // Make friends with the batch_fitness() invocation helper.
-    friend PAGMO_DLL_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+    friend PAGMO_DLL_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &,
+                                                                                bool);
 #endif
 
 public:

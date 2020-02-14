@@ -34,6 +34,8 @@ and to the constraints
 In pagmo's taxonomy, this optimisation problem is
 
 * *continuous* (because :math:`x_{1,2,3,4}` are real variables),
+* *deterministic* (as neither the objectives nor the constraints depend
+  on stochastic variables),
 * *single-objective* (because the objective
   function produces a single value), and
 * *constrained* (because there are nonlinear

@@ -251,14 +251,8 @@ archipelago::~archipelago()
     assert(std::all_of(m_islands.begin(), m_islands.end(),
                        [this](const std::unique_ptr<island> &iptr) { return iptr->m_ptr->archi_ptr == this; }));
     assert(m_idx_map.size() == m_islands.size());
-    assert(m_migrants.size() == m_islands.size());
 #if !defined(NDEBUG)
     for (size_type i = 0; i < m_islands.size(); ++i) {
-        // Ensure that the vectors in the migrant db have
-        // consistent sizes.
-        assert(std::get<0>(m_migrants[i]).size() == std::get<1>(m_migrants[i]).size());
-        assert(std::get<1>(m_migrants[i]).size() == std::get<2>(m_migrants[i]).size());
-
         // Ensure the map of indices is correct.
         assert(m_idx_map.find(m_islands[i].get()) != m_idx_map.end());
         assert(m_idx_map.find(m_islands[i].get())->second == i);
@@ -567,6 +561,57 @@ archipelago::migrants_db_t archipelago::get_migrants_db() const
 {
     std::lock_guard<std::mutex> lock(m_migrants_mutex);
     return m_migrants;
+}
+
+/// Set the database of migrants.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * During the evolution of an archipelago, islands will periodically
+ * store the individuals selected for migration in a *migrant database*.
+ * This is a vector of :cpp:type:`~pagmo::individuals_group_t` whose
+ * size is equal to the number of islands in the archipelago, and which
+ * contains the current candidate outgoing migrants for each island.
+ *
+ * This setter allows to replace the current database of migrants
+ * with a new one.
+ *
+ * Note that this setter will accept in input a malformed database
+ * of migrants without complaining. An invalid database of migrants
+ * will however result in exceptions being raised when migration
+ * occurs.
+ * \endverbatim
+ *
+ * @param mig the new database of migrants.
+ *
+ * @throws unspecified any exception thrown by threading primitives.
+ */
+void archipelago::set_migrants_db(migrants_db_t mig)
+{
+    // NOTE: don't run any check on mig, since:
+    // - if mig.size() is wrong, we have checks in
+    //   get/extract/set_migrants() in order to avoid
+    //   reading/writing into invalid indices;
+    // - if the groups of individuals in mig have bogus
+    //   properties (i.e., inconsistent lengths,
+    //   wrong dimensions of the dvs
+    //   fvs, etc.), we have checks in r_policy
+    //   to ensure the incoming individuals are sane and compatible
+    //   with the problem in the destination island.
+    //
+    // NOTE: currently r_policy.replace() is the only
+    // function doing something with individuals
+    // from a migration database (s_policy.select() *puts*
+    // individuals in the db), and that function
+    // has checks in it. If we ever start using individuals
+    // in the db in other ways, we'll have to keep in mind
+    // that we cannot make any assumption on the sanity
+    // of the individuals in the db.
+    // NOTE: we used to have sanity checks on the mig
+    // db in the archipelago dtor, but they have been
+    // removed.
+
+    std::lock_guard<std::mutex> lock(m_migrants_mutex);
+    m_migrants = std::move(mig);
 }
 
 /// Get the migration log.
