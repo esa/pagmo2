@@ -1,7 +1,5 @@
 #!/bin/bash
 
-env
-
 export CONDA_PREFIX=${NB_PYTHON_PREFIX}
 
 cat > ${CONDA_PREFIX}/include/notebookIncludes.hpp <<EOF
