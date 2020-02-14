@@ -646,6 +646,8 @@ public:
     migration_log_t get_migration_log() const;
     // Get the database of migrants.
     migrants_db_t get_migrants_db() const;
+    // Set the database of migrants.
+    void set_migrants_db(migrants_db_t);
 
     // Topology get/set.
     topology get_topology() const;

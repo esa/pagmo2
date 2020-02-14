@@ -32,8 +32,6 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <stdexcept>
 
-#include <boost/numeric/conversion/cast.hpp>
-
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 
@@ -49,7 +47,7 @@ namespace pagmo
 {
 
 // Call operator.
-vector_double thread_bfe::operator()(const problem &p, const vector_double &dvs) const
+vector_double thread_bfe::operator()(problem p, const vector_double &dvs) const
 {
     // Fetch a few quantities from the problem.
     // Problem dimension.
@@ -123,9 +121,6 @@ vector_double thread_bfe::operator()(const problem &p, const vector_double &dvs)
         tbb::parallel_for(range_t(0u, n_dvs), [p, &range_evaluator](const range_t &range) {
             range_evaluator(p, range.begin(), range.end());
         });
-        // Manually increment the fitness eval counter in p. Since we used copies
-        // of p for the parallel fitness evaluations, the counter in p did not change.
-        p.increment_fevals(boost::numeric_cast<unsigned long long>(n_dvs));
     } else {
         pagmo_throw(std::invalid_argument, "Cannot use a thread_bfe on the problem '" + p.get_name()
                                                + "', which does not provide the required level of thread safety");

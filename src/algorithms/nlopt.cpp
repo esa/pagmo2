@@ -32,6 +32,9 @@ see https://www.gnu.org/licenses/. */
 // triggered by Boost algos instantiations which we cannot do much about.
 #define _SCL_SECURE_NO_WARNINGS
 
+// Boost's bimap results in some C++17 deprecation warnings in C++17 mode.
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+
 #endif
 
 #include <algorithm>

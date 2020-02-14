@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -470,7 +471,7 @@ BOOST_AUTO_TEST_CASE(archipelago_topology_constructors)
 BOOST_AUTO_TEST_CASE(archipelago_push_back_migr)
 {
     // Verify that push_back() also calls the topology's push_back() and adds
-    // entrie to the migrants db.
+    // entries to the migrants db.
     archipelago archi{ring{}};
 
     BOOST_CHECK(archi.get_topology().extract<ring>()->num_vertices() == 0u);
@@ -919,6 +920,35 @@ BOOST_AUTO_TEST_CASE(archipelago_bfe_ctors)
 BOOST_AUTO_TEST_CASE(archipelago_mo_migration_bug)
 {
     archipelago a{ring{}, 10u, nsga2{100}, dtlz{2, 50}, 100u};
+
+    a.evolve(4);
+    BOOST_CHECK_NO_THROW(a.wait_check());
+}
+
+BOOST_AUTO_TEST_CASE(archipelago_set_migrants_db)
+{
+    archipelago a{ring{}, 10u, nsga2{10}, dtlz{2, 50}, 100u};
+    a.evolve(4);
+    a.wait_check();
+
+    BOOST_CHECK(a.get_migrants_db().size() == 10u);
+
+    // Set a db of empty groups.
+    a.set_migrants_db(archipelago::migrants_db_t(10u));
+    BOOST_CHECK(a.get_migrants_db().size() == 10u);
+    for (const auto &ig : a.get_migrants_db()) {
+        BOOST_CHECK(std::get<0>(ig).empty());
+        BOOST_CHECK(std::get<1>(ig).empty());
+        BOOST_CHECK(std::get<2>(ig).empty());
+    }
+
+    // Try putting in a correct migrants db.
+    a = archipelago{ring{}, 10u, nsga2{10}, dtlz{2, 50}, 100u};
+    archipelago::migrants_db_t new_db(10u);
+    std::get<0>(new_db[0]).push_back(42);
+    std::get<1>(new_db[0]).push_back(vector_double(50u));
+    std::get<2>(new_db[0]).push_back(vector_double(3u));
+    a.set_migrants_db(new_db);
 
     a.evolve(4);
     BOOST_CHECK_NO_THROW(a.wait_check());
