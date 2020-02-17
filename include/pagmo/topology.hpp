@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
-#include <pagmo/detail/support_cling.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
@@ -354,7 +354,7 @@ PAGMO_DLL_PUBLIC void topology_check_edge_weight(double);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::topology)
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(topology)
 
 // Disable tracking for the serialisation of topology.
 BOOST_CLASS_TRACKING(pagmo::topology, boost::serialization::track_never)

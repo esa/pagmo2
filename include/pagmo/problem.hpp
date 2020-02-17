@@ -44,7 +44,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/visibility.hpp>
-#include <pagmo/detail/support_cling.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -1694,7 +1694,7 @@ private:
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::problem)
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(problem)
 
 // Disable tracking for the serialisation of problem.
 BOOST_CLASS_TRACKING(pagmo::problem, boost::serialization::track_never)

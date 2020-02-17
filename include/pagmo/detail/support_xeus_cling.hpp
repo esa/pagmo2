@@ -1,5 +1,5 @@
-#ifndef PAGMO_DETAIL_SUPPORT_CLING_HPP
-#define PAGMO_DETAIL_SUPPORT_CLING_HPP
+#ifndef PAGMO_DETAIL_SUPPORT_XEUS_CLING_HPP
+#define PAGMO_DETAIL_SUPPORT_XEUS_CLING_HPP
 
 #if defined(__CLING__)
 
@@ -30,7 +30,7 @@ inline nlohmann::json cling_repr(const T &x)
 
 } // namespace pagmo
 
-#define PAGMO_IMPLEMENT_CLING_REPR(name)                                                                               \
+#define PAGMO_IMPLEMENT_XEUS_CLING_REPR(name)                                                                               \
     namespace pagmo                                                                                                    \
     {                                                                                                                  \
     inline nlohmann::json mime_bundle_repr(const name &x)                                                              \
@@ -42,14 +42,14 @@ inline nlohmann::json cling_repr(const T &x)
 #else
 
 // nlohmann::json not available.
-#define PAGMO_IMPLEMENT_CLING_REPR(name)
+#define PAGMO_IMPLEMENT_XEUS_CLING_REPR(name)
 
 #endif
 
 #else
 
 // We are not using cling.
-#define PAGMO_IMPLEMENT_CLING_REPR(name)
+#define PAGMO_IMPLEMENT_XEUS_CLING_REPR(name)
 
 #endif
 

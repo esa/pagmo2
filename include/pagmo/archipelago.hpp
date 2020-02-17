@@ -47,7 +47,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/archipelago_fwd.hpp>
 #include <pagmo/detail/make_unique.hpp>
-#include <pagmo/detail/support_cling.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/problem.hpp>
@@ -786,7 +786,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const archipelago &);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::archipelago)
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(archipelago)
 
 // Disable tracking for the serialisation of archipelago.
 BOOST_CLASS_TRACKING(pagmo::archipelago, boost::serialization::track_never)
