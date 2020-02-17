@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/island_fwd.hpp>
+#include <pagmo/detail/support_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
@@ -375,6 +376,9 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::population);
 
 // Disable tracking for the serialisation of population.
 BOOST_CLASS_TRACKING(pagmo::population, boost::serialization::track_never)

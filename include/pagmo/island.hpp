@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/archipelago_fwd.hpp>
 #include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/support_cling.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
@@ -1161,6 +1162,9 @@ private:
 };
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::island);
 
 // Disable tracking for the serialisation of island.
 BOOST_CLASS_TRACKING(pagmo::island, boost::serialization::track_never)

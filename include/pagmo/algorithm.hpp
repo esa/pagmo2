@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/support_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
@@ -700,6 +701,9 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::algorithm);
 
 // Disable tracking for the serialisation of algorithm.
 BOOST_CLASS_TRACKING(pagmo::algorithm, boost::serialization::track_never)
