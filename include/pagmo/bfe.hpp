@@ -359,7 +359,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::bfe);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::bfe)
 
 // Disable tracking for the serialisation of bfe.
 BOOST_CLASS_TRACKING(pagmo::bfe, boost::serialization::track_never)

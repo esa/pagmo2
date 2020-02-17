@@ -786,7 +786,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const archipelago &);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::archipelago);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::archipelago)
 
 // Disable tracking for the serialisation of archipelago.
 BOOST_CLASS_TRACKING(pagmo::archipelago, boost::serialization::track_never)

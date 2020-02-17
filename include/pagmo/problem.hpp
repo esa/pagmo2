@@ -1694,7 +1694,7 @@ private:
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::problem);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::problem)
 
 // Disable tracking for the serialisation of problem.
 BOOST_CLASS_TRACKING(pagmo::problem, boost::serialization::track_never)

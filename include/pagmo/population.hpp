@@ -378,7 +378,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::population);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::population)
 
 // Disable tracking for the serialisation of population.
 BOOST_CLASS_TRACKING(pagmo::population, boost::serialization::track_never)

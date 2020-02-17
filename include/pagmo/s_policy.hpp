@@ -334,7 +334,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const s_policy &);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::s_policy);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::s_policy)
 
 // Disable tracking for the serialisation of s_policy.
 BOOST_CLASS_TRACKING(pagmo::s_policy, boost::serialization::track_never)

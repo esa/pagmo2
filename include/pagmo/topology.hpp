@@ -354,7 +354,7 @@ PAGMO_DLL_PUBLIC void topology_check_edge_weight(double);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::topology);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::topology)
 
 // Disable tracking for the serialisation of topology.
 BOOST_CLASS_TRACKING(pagmo::topology, boost::serialization::track_never)

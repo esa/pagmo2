@@ -703,7 +703,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::algorithm);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::algorithm)
 
 // Disable tracking for the serialisation of algorithm.
 BOOST_CLASS_TRACKING(pagmo::algorithm, boost::serialization::track_never)

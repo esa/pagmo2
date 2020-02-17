@@ -1164,7 +1164,7 @@ private:
 } // namespace pagmo
 
 // Add some repr support for CLING
-PAGMO_IMPLEMENT_CLING_REPR(pagmo::island);
+PAGMO_IMPLEMENT_CLING_REPR(pagmo::island)
 
 // Disable tracking for the serialisation of island.
 BOOST_CLASS_TRACKING(pagmo::island, boost::serialization::track_never)
