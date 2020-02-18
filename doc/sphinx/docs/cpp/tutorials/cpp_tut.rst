@@ -1,6 +1,6 @@
 .. _tutorial:
 
-C++ tutorial
+Tutorial
 ============
 
 .. toctree::
@@ -15,4 +15,7 @@ Basics
 .. toctree::
   :maxdepth: 2
 
+  using_problem
+  using_algorithm
+  using_population
   evolving_a_population
