@@ -318,7 +318,7 @@ BOOST_AUTO_TEST_CASE(integer_test_1)
     pop = uda.evolve(pop);
     for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
         auto x = pop.get_x()[i];
-        std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); });
+        BOOST_CHECK(std::all_of(x.begin() + 3, x.end(), [](double el) { return (el == std::floor(el)); }));
     }
 }
 
@@ -330,7 +330,7 @@ BOOST_AUTO_TEST_CASE(integer_test_2)
     pop = uda.evolve(pop);
     for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
         auto x = pop.get_x()[i];
-        std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); });
+        BOOST_CHECK(std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); }));
     }
 }
 
