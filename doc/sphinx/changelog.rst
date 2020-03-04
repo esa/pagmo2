@@ -9,10 +9,14 @@ Changelog
 New
 ~~~
 
-- pygmo has been split off into
+- **IMPORTANT**: pygmo has been split off into
   a separate project. Please see the
   `website <https://github.com/esa/pygmo2>`__
   for pygmo's documentation and changelog.
+
+- pagmo's core classes now support pretty-printing in the
+  `xeus-cling notebook <https://github.com/jupyter-xeus/xeus-cling>`__
+  (`#397 <https://github.com/esa/pagmo2/pull/397>`__).
 
 - Implement a setter for the migration database
   of an archipelago
@@ -24,6 +28,12 @@ Changes
 - Various performance improvements for the
   Pareto dominance utilities
   (`#394 <https://github.com/esa/pagmo2/pull/394>`__).
+
+Fix
+~~~
+
+- Fix an error message in the CEC2009 test suite
+  (`#402 <https://github.com/esa/pagmo2/pull/402>`__).
 
 2.13.0 (2020-01-10)
 -------------------
