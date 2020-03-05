@@ -156,7 +156,7 @@ Base BGL topology
 
       .. versionadded:: 2.15
 
-      Converto to a BGL graph.
+      Convert to a BGL graph.
 
       :return: a copy of the internal graph object used to represent the topology.
 
