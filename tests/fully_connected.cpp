@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/algorithm/string/predicate.hpp>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/topology.hpp>
@@ -205,4 +206,16 @@ BOOST_AUTO_TEST_CASE(basic_test)
         BOOST_CHECK(t1.extract<fully_connected>()->get_weight() == .2);
         verify_fully_connected_topology(*t1.extract<fully_connected>());
     }
+}
+
+BOOST_AUTO_TEST_CASE(to_bgl_test)
+{
+    BOOST_CHECK(!has_to_bgl<fully_connected>::value);
+
+    BOOST_CHECK_EXCEPTION(
+        topology{fully_connected{}}.to_bgl(), not_implemented_error, [](const not_implemented_error &nie) {
+            return boost::contains(
+                nie.what(),
+                "The to_bgl() method has been invoked, but it is not implemented in a UDT of type 'Fully connected'");
+        });
 }

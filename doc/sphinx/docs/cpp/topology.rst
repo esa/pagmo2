@@ -61,6 +61,7 @@ Topology
 
       std::string get_name() const;
       std::string get_extra_info() const;
+      bgl_graph_t to_bgl() const;
 
    See the documentation of the corresponding member functions in this class for details on how the optional
    member functions in the UDT are used by :cpp:class:`~pagmo::topology`.
@@ -193,6 +194,24 @@ Topology
 
       :exception unspecified: any exception thrown by :cpp:func:`~pagmo::topology::push_back()`.
 
+   .. cpp:function:: bgl_graph_t to_bgl() const
+
+      .. versionadded:: 2.15
+
+      Convert to a Boost graph.
+
+      If the UDT satisfies :cpp:class:`pagmo::has_to_bgl`, then this member function will return
+      the output of its ``to_bgl()`` member function. Otherwise, an exception will be raised.
+
+      This function is meant to export a representation of the current state of the topology
+      as a :cpp:type:`pagmo::bgl_graph_t` object (that is, as a graph object from the Boost
+      Graph Library).
+
+      :return: a representation of ``this`` as a Boost graph object.
+
+      :exception not_implemented_error: if the UDT does not satisfy :cpp:class:`pagmo::has_to_bgl`.
+      :exception unspecified: any exception thrown by the ``to_bgl()`` member function of the UDT.
+
    .. cpp:function:: std::string get_name() const
 
       Get the name of this topology.
@@ -231,6 +250,24 @@ Topology
       :param ar: the input/output archive.
 
       :exception unspecified: any exception raised by the (de)serialisation of primitive types or of the UDT.
+
+Types
+-----
+
+.. cpp:type:: bgl_graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, boost::no_property, double, boost::no_property, boost::listS>
+
+   .. versionadded:: 2.15
+
+   This type is a ``boost::adjacency_list`` from the Boost Graph Library (BGL),
+   and it is used as an export format for user-defined topologies (UDTs).
+
+   Specifically, UDTs can (optionally) implement a ``to_bgl()`` member function
+   which will return an object of this type representing the internal state
+   of the topology as a weighted directed graph.
+
+   .. seealso::
+
+      https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/adjacency_list.html
 
 Functions
 ---------
@@ -279,6 +316,24 @@ Associated type traits
 
    The ``push_back()`` member function is part of the interface for the definition of a
    :cpp:class:`~pagmo::topology`.
+
+   .. cpp:member:: static const bool value
+
+      The value of the type trait.
+
+.. cpp:class:: template <typename T> has_to_bgl
+
+   .. versionadded:: 2.15
+
+   The :cpp:any:`value` of this type trait will be ``true`` if
+   ``T`` provides a member function with signature:
+
+   .. code-block:: c++
+
+      bgl_graph_t to_bgl() const;
+
+   The ``to_bgl()`` member function is part of the optional interface
+   for the definition of a :cpp:class:`~pagmo::topology`.
 
    .. cpp:member:: static const bool value
 

@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/ring.hpp>
@@ -196,4 +197,13 @@ BOOST_AUTO_TEST_CASE(basic_test)
     r0.set_weight(4, 5, .7);
 
     std::cout << r0.get_extra_info() << '\n';
+}
+
+BOOST_AUTO_TEST_CASE(to_bgl_test)
+{
+    BOOST_CHECK(has_to_bgl<ring>::value);
+
+    auto r0 = ring(4, .5);
+    BOOST_CHECK(boost::num_vertices(r0.to_bgl()) == 4);
+    BOOST_CHECK(boost::num_edges(r0.to_bgl()) == 8);
 }

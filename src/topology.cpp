@@ -152,6 +152,11 @@ void topology::push_back(unsigned n)
     }
 }
 
+bgl_graph_t topology::to_bgl() const
+{
+    return ptr()->to_bgl();
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 std::ostream &operator<<(std::ostream &os, const topology &t)
