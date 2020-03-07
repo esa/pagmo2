@@ -185,6 +185,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/fully_connected.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/free_form.cpp"
     # UDRP.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/fair_replace.cpp"
     # UDSP.

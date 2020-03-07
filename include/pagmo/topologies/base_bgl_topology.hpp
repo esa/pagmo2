@@ -51,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
+#include <pagmo/detail/free_form_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topology.hpp>
@@ -63,6 +64,9 @@ namespace pagmo
 // based on the Boost Graph library.
 class PAGMO_DLL_PUBLIC base_bgl_topology
 {
+    // The free_form topology needs access to the internals.
+    friend class PAGMO_DLL_PUBLIC free_form;
+
     // NOTE: all these methods do *not* lock the mutex,
     // hence they are marked as "unsafe". These should
     // be invoked only if the mutex is already being
