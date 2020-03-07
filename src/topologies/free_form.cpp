@@ -38,11 +38,15 @@ namespace pagmo
 {
 
 free_form::free_form() = default;
+free_form::free_form(const free_form &) = default;
+free_form::free_form(free_form &&) noexcept = default;
 
 free_form::free_form(bgl_graph_t g)
 {
     set_graph(std::move(g));
 }
+
+free_form::free_form(const topology &t) : free_form(t.to_bgl()) {}
 
 // Serialization.
 template <typename Archive>
