@@ -30,11 +30,13 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/free_form.hpp>
+#include <pagmo/topologies/ring.hpp>
 #include <pagmo/topology.hpp>
 
 using namespace pagmo;
@@ -111,4 +113,26 @@ BOOST_AUTO_TEST_CASE(basic_test)
     BOOST_CHECK(!f0.are_adjacent(1, 2));
 
     std::cout << topology{f0}.get_extra_info() << '\n';
+}
+
+BOOST_AUTO_TEST_CASE(bgl_ctor)
+{
+    ring r0{100, .25};
+    free_form f0{r0.to_bgl()};
+
+    BOOST_CHECK(f0.num_vertices() == 100u);
+    BOOST_CHECK(f0.are_adjacent(0, 1));
+    BOOST_CHECK(f0.are_adjacent(1, 0));
+    BOOST_CHECK(f0.are_adjacent(0, 99));
+    BOOST_CHECK(f0.are_adjacent(99, 0));
+    BOOST_CHECK(!f0.are_adjacent(0, 2));
+    BOOST_CHECK(!f0.are_adjacent(2, 0));
+
+    for (auto i = 0u; i < 100u; ++i) {
+        auto c = f0.get_connections(98);
+
+        BOOST_CHECK(c.first.size() == 2u);
+        BOOST_CHECK(c.second.size() == 2u);
+        BOOST_CHECK(std::all_of(c.second.begin(), c.second.end(), [](double w) { return w == .25; }));
+    }
 }
