@@ -129,7 +129,7 @@ BOOST_AUTO_TEST_CASE(bgl_ctor)
     BOOST_CHECK(!f0.are_adjacent(2, 0));
 
     for (auto i = 0u; i < 100u; ++i) {
-        auto c = f0.get_connections(98);
+        auto c = f0.get_connections(i);
 
         BOOST_CHECK(c.first.size() == 2u);
         BOOST_CHECK(c.second.size() == 2u);
