@@ -43,15 +43,12 @@ namespace pagmo
 
 // Unconnected topology.
 struct PAGMO_DLL_PUBLIC unconnected {
-    // Get the connections.
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
-    // Add the next vertex (no-op).
-    void push_back() {}
-    // Name.
-    std::string get_name() const
-    {
-        return "Unconnected";
-    }
+
+    void push_back();
+
+    std::string get_name() const;
+
     // Serialization.
     template <typename Archive>
     void serialize(Archive &, unsigned);
