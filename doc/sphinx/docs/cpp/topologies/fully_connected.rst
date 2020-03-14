@@ -80,6 +80,16 @@ Fully connected
 
       :return: the number of vertices in the topology.
 
+   .. cpp:function:: bgl_graph_t to_bgl() const
+
+      .. versionadded:: 2.15
+
+      Convert to a BGL graph.
+
+      :return: a complete graph representing ``this``.
+
+      :exception unspecified: any exception thrown by the public BGL API.
+
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
    .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
 

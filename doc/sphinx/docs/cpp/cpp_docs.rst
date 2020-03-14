@@ -110,6 +110,7 @@ Implemented topologies
   topologies/fully_connected
   topologies/base_bgl_topology
   topologies/ring
+  topologies/free_form
 
 Implemented replacement policies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -9,8 +9,17 @@ Changelog
 New
 ~~~
 
+- Add the :cpp:class:`~pagmo::free_form` topology
+  (`#405 <https://github.com/esa/pagmo2/pull/405>`__).
+
 - User-defined topologies can now (optionally) implement
   a conversion function to a Boost graph object
+  (`#405 <https://github.com/esa/pagmo2/pull/405>`__).
+
+Fix
+~~~
+
+- Various doc fixes
   (`#405 <https://github.com/esa/pagmo2/pull/405>`__).
 
 2.14.0 (2020-03-04)

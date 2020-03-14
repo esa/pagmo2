@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+#include <utility>
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/free_form.hpp>
@@ -67,6 +68,42 @@ BOOST_AUTO_TEST_CASE(basic_test)
     BOOST_CHECK(!f0.are_adjacent(0, 2));
     BOOST_CHECK(!f0.are_adjacent(1, 2));
 
+    // Copy ctor.
+    auto f1(f0);
+
+    BOOST_CHECK(f1.num_vertices() == 3u);
+
+    BOOST_CHECK(f1.get_connections(0).first.empty());
+    BOOST_CHECK(f1.get_connections(0).second.empty());
+
+    BOOST_CHECK(f1.get_connections(1).first.empty());
+    BOOST_CHECK(f1.get_connections(1).second.empty());
+
+    BOOST_CHECK(f1.get_connections(2).first.empty());
+    BOOST_CHECK(f1.get_connections(2).second.empty());
+
+    BOOST_CHECK(!f1.are_adjacent(0, 1));
+    BOOST_CHECK(!f1.are_adjacent(0, 2));
+    BOOST_CHECK(!f1.are_adjacent(1, 2));
+
+    // Move ctor.
+    auto f2(std::move(f1));
+
+    BOOST_CHECK(f2.num_vertices() == 3u);
+
+    BOOST_CHECK(f2.get_connections(0).first.empty());
+    BOOST_CHECK(f2.get_connections(0).second.empty());
+
+    BOOST_CHECK(f2.get_connections(1).first.empty());
+    BOOST_CHECK(f2.get_connections(1).second.empty());
+
+    BOOST_CHECK(f2.get_connections(2).first.empty());
+    BOOST_CHECK(f2.get_connections(2).second.empty());
+
+    BOOST_CHECK(!f2.are_adjacent(0, 1));
+    BOOST_CHECK(!f2.are_adjacent(0, 2));
+    BOOST_CHECK(!f2.are_adjacent(1, 2));
+
     BOOST_CHECK(f0.get_name() == "Free form");
     BOOST_CHECK(topology{f0}.get_name() == "Free form");
 
@@ -97,7 +134,7 @@ BOOST_AUTO_TEST_CASE(basic_test)
         BOOST_CHECK(t1.extract<free_form>()->get_connections(2).second.empty());
     }
 
-    // Example of cout printing for ring.
+    // Example of cout printing for free_form.
     std::cout << topology{f0}.get_extra_info() << '\n';
 
     // Add a couple of edges.
@@ -119,6 +156,50 @@ BOOST_AUTO_TEST_CASE(bgl_ctor)
 {
     ring r0{100, .25};
     free_form f0{r0.to_bgl()};
+
+    BOOST_CHECK(f0.num_vertices() == 100u);
+    BOOST_CHECK(f0.are_adjacent(0, 1));
+    BOOST_CHECK(f0.are_adjacent(1, 0));
+    BOOST_CHECK(f0.are_adjacent(0, 99));
+    BOOST_CHECK(f0.are_adjacent(99, 0));
+    BOOST_CHECK(!f0.are_adjacent(0, 2));
+    BOOST_CHECK(!f0.are_adjacent(2, 0));
+
+    for (auto i = 0u; i < 100u; ++i) {
+        auto c = f0.get_connections(i);
+
+        BOOST_CHECK(c.first.size() == 2u);
+        BOOST_CHECK(c.second.size() == 2u);
+        BOOST_CHECK(std::all_of(c.second.begin(), c.second.end(), [](double w) { return w == .25; }));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(udt_ctor)
+{
+    ring r0{100, .25};
+    free_form f0{r0};
+
+    BOOST_CHECK(f0.num_vertices() == 100u);
+    BOOST_CHECK(f0.are_adjacent(0, 1));
+    BOOST_CHECK(f0.are_adjacent(1, 0));
+    BOOST_CHECK(f0.are_adjacent(0, 99));
+    BOOST_CHECK(f0.are_adjacent(99, 0));
+    BOOST_CHECK(!f0.are_adjacent(0, 2));
+    BOOST_CHECK(!f0.are_adjacent(2, 0));
+
+    for (auto i = 0u; i < 100u; ++i) {
+        auto c = f0.get_connections(i);
+
+        BOOST_CHECK(c.first.size() == 2u);
+        BOOST_CHECK(c.second.size() == 2u);
+        BOOST_CHECK(std::all_of(c.second.begin(), c.second.end(), [](double w) { return w == .25; }));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(topology_ctor)
+{
+    ring r0{100, .25};
+    free_form f0{topology{r0}};
 
     BOOST_CHECK(f0.num_vertices() == 100u);
     BOOST_CHECK(f0.are_adjacent(0, 1));
