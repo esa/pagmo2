@@ -30,7 +30,7 @@ Fully connected
 
       :param w: the weight of the edges.
 
-      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :exception std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: explicit fully_connected(std::size_t n, double w)
 
@@ -42,7 +42,7 @@ Fully connected
       :param n: the desired number of vertices.
       :param w: the weight of the edges.
 
-      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :exception std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: fully_connected(const fully_connected &)
    .. cpp:function:: fully_connected(fully_connected &&) noexcept
