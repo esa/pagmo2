@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <atomic>
+#include <cassert>
 #include <cstddef>
 #include <limits>
 #include <stdexcept>
@@ -34,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/graph/adjacency_list.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/exceptions.hpp>
@@ -109,6 +111,49 @@ std::pair<std::vector<std::size_t>, vector_double> fully_connected::get_connecti
 
     // Fill the weights list with m_weight.
     retval.second.resize(boost::numeric_cast<decltype(retval.second.size())>(num_vertices - 1u), m_weight);
+
+    return retval;
+}
+
+// Convert to bgl_graph_t.
+bgl_graph_t fully_connected::to_bgl() const
+{
+    bgl_graph_t retval;
+
+    // Fetch the number of vertices and the weight.
+    const auto nv = m_num_vertices.load();
+    const auto w = m_weight;
+
+    switch (nv) {
+        case 0u:
+            break;
+        case 1u:
+            // Add a single vertex, no edges.
+            boost::add_vertex(retval);
+            break;
+        default:
+            // Add the edges.
+            // NOTE: adding the edges will automatically
+            // create the vertices too.
+            for (std::size_t i = 0; i < nv; ++i) {
+                for (std::size_t j = 0; j < nv; ++j) {
+                    if (i == j) {
+                        // NOTE: avoid connecting i to itself.
+                        continue;
+                    }
+
+                    // Establish the connection between i and j.
+                    const auto result = boost::add_edge(
+                        boost::vertex(boost::numeric_cast<bgl_graph_t::vertices_size_type>(i), retval),
+                        boost::vertex(boost::numeric_cast<bgl_graph_t::vertices_size_type>(j), retval), retval);
+
+                    assert(result.second);
+
+                    // Assign the weight too.
+                    retval[result.first] = w;
+                }
+            }
+    }
 
     return retval;
 }

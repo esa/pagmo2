@@ -38,8 +38,8 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
-#include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/topology.hpp>
@@ -210,12 +210,75 @@ BOOST_AUTO_TEST_CASE(basic_test)
 
 BOOST_AUTO_TEST_CASE(to_bgl_test)
 {
-    BOOST_CHECK(!has_to_bgl<fully_connected>::value);
+    BOOST_CHECK(has_to_bgl<fully_connected>::value);
 
-    BOOST_CHECK_EXCEPTION(
-        topology{fully_connected{}}.to_bgl(), not_implemented_error, [](const not_implemented_error &nie) {
-            return boost::contains(
-                nie.what(),
-                "The to_bgl() method has been invoked, but it is not implemented in a UDT of type 'Fully connected'");
-        });
+    auto g0 = fully_connected{}.to_bgl();
+    BOOST_CHECK(boost::num_vertices(g0) == 0u);
+
+    g0 = fully_connected{1, .5}.to_bgl();
+    BOOST_CHECK(boost::num_vertices(g0) == 1u);
+    auto vi = boost::vertex(0, g0);
+    auto av = boost::adjacent_vertices(vi, g0);
+    BOOST_CHECK(av.first == av.second);
+
+    g0 = fully_connected{2, .5}.to_bgl();
+    BOOST_CHECK(boost::num_vertices(g0) == 2u);
+
+    vi = boost::vertex(0, g0);
+    av = boost::adjacent_vertices(vi, g0);
+    auto e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 1);
+    BOOST_CHECK(g0[e.first] == .5);
+    BOOST_CHECK(++av.first == av.second);
+
+    vi = boost::vertex(1, g0);
+    av = boost::adjacent_vertices(vi, g0);
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 0);
+    BOOST_CHECK(g0[e.first] == .5);
+    BOOST_CHECK(++av.first == av.second);
+
+    g0 = fully_connected{3, .5}.to_bgl();
+    BOOST_CHECK(boost::num_vertices(g0) == 3u);
+
+    vi = boost::vertex(0, g0);
+    av = boost::adjacent_vertices(vi, g0);
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 1 || *av.first == 2);
+    BOOST_CHECK(g0[e.first] == .5);
+    ++av.first;
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 1 || *av.first == 2);
+    BOOST_CHECK(g0[e.first] == .5);
+    BOOST_CHECK(++av.first == av.second);
+
+    vi = boost::vertex(1, g0);
+    av = boost::adjacent_vertices(vi, g0);
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 0 || *av.first == 2);
+    BOOST_CHECK(g0[e.first] == .5);
+    ++av.first;
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 0 || *av.first == 2);
+    BOOST_CHECK(g0[e.first] == .5);
+    BOOST_CHECK(++av.first == av.second);
+
+    vi = boost::vertex(2, g0);
+    av = boost::adjacent_vertices(vi, g0);
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 0 || *av.first == 1);
+    BOOST_CHECK(g0[e.first] == .5);
+    ++av.first;
+    e = boost::edge(boost::vertex(*av.first, g0), vi, g0);
+    BOOST_CHECK(e.second);
+    BOOST_CHECK(*av.first == 0 || *av.first == 1);
+    BOOST_CHECK(g0[e.first] == .5);
+    BOOST_CHECK(++av.first == av.second);
 }
