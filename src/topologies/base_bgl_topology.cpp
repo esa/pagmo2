@@ -65,9 +65,9 @@ std::size_t scast(I n)
     return boost::numeric_cast<std::size_t>(n);
 }
 
-bgl_topology_graph_t::vertices_size_type vcast(std::size_t n)
+bgl_graph_t::vertices_size_type vcast(std::size_t n)
 {
-    return boost::numeric_cast<bgl_topology_graph_t::vertices_size_type>(n);
+    return boost::numeric_cast<bgl_graph_t::vertices_size_type>(n);
 }
 
 } // namespace
@@ -89,19 +89,19 @@ void base_bgl_topology::unsafe_check_vertex_indices(std::size_t idx, Args... oth
     unsafe_check_vertex_indices(others...);
 }
 
-base_bgl_topology::graph_t base_bgl_topology::get_graph() const
+bgl_graph_t base_bgl_topology::get_graph() const
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     return m_graph;
 }
 
-base_bgl_topology::graph_t base_bgl_topology::move_graph()
+bgl_graph_t base_bgl_topology::move_graph()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     return std::move(m_graph);
 }
 
-void base_bgl_topology::set_graph(graph_t &&g)
+void base_bgl_topology::set_graph(bgl_graph_t &&g)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_graph = std::move(g);
@@ -268,6 +268,11 @@ std::string base_bgl_topology::get_extra_info() const
     }
 
     return oss.str();
+}
+
+bgl_graph_t base_bgl_topology::to_bgl() const
+{
+    return get_graph();
 }
 
 } // namespace pagmo

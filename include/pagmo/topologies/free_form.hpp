@@ -26,36 +26,47 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_TOPOLOGIES_UNCONNECTED_HPP
-#define PAGMO_TOPOLOGIES_UNCONNECTED_HPP
+#ifndef PAGMO_TOPOLOGIES_FREE_FORM_HPP
+#define PAGMO_TOPOLOGIES_FREE_FORM_HPP
 
-#include <cstddef>
 #include <string>
-#include <utility>
-#include <vector>
+#include <type_traits>
 
+#include <pagmo/detail/free_form_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/topologies/base_bgl_topology.hpp>
 #include <pagmo/topology.hpp>
-#include <pagmo/types.hpp>
+#include <pagmo/type_traits.hpp>
 
 namespace pagmo
 {
 
-// Unconnected topology.
-struct PAGMO_DLL_PUBLIC unconnected {
-    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
+// Free-form topology.
+class PAGMO_DLL_PUBLIC free_form : public base_bgl_topology
+{
+public:
+    free_form();
+    free_form(const free_form &);
+    free_form(free_form &&) noexcept;
+
+    explicit free_form(bgl_graph_t);
+    explicit free_form(const topology &);
+    template <typename T,
+              enable_if_t<detail::conjunction<detail::negation<std::is_same<T, free_form>>, is_udt<T>>::value, int> = 0>
+    explicit free_form(const T &t) : free_form(topology(t))
+    {
+    }
 
     void push_back();
 
     std::string get_name() const;
 
-    // Serialization.
     template <typename Archive>
     void serialize(Archive &, unsigned);
 };
 
 } // namespace pagmo
 
-PAGMO_S11N_TOPOLOGY_EXPORT_KEY(pagmo::unconnected)
+PAGMO_S11N_TOPOLOGY_EXPORT_KEY(pagmo::free_form)
 
 #endif

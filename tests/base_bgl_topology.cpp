@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
@@ -284,4 +285,49 @@ BOOST_AUTO_TEST_CASE(thread_torture_test)
     }
 
     BOOST_CHECK(failures.load() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(to_bgl_test)
+{
+    bbt t0;
+
+    auto b = t0.to_bgl();
+
+    BOOST_CHECK(boost::num_vertices(b) == 0u);
+
+    t0.add_vertex();
+    t0.add_vertex();
+    t0.add_vertex();
+
+    b = t0.to_bgl();
+    BOOST_CHECK(boost::num_vertices(b) == 3u);
+    auto a_vertices = boost::adjacent_vertices(boost::vertex(0, b), b);
+    BOOST_CHECK(a_vertices.first == a_vertices.second);
+    a_vertices = boost::adjacent_vertices(boost::vertex(1, b), b);
+    BOOST_CHECK(a_vertices.first == a_vertices.second);
+    a_vertices = boost::adjacent_vertices(boost::vertex(2, b), b);
+    BOOST_CHECK(a_vertices.first == a_vertices.second);
+
+    t0.add_edge(0, 1, .25);
+    t0.add_edge(1, 2, 1);
+    b = t0.to_bgl();
+    BOOST_CHECK(boost::num_vertices(b) == 3u);
+    a_vertices = boost::adjacent_vertices(boost::vertex(0, b), b);
+    BOOST_CHECK(a_vertices.second - a_vertices.first == 1);
+    auto vi = boost::vertex(0, b);
+    for (auto av = boost::adjacent_vertices(vi, b); av.first != av.second; ++av.first) {
+        const auto e = boost::edge(vi, boost::vertex(*av.first, b), b);
+        BOOST_CHECK(e.second);
+        BOOST_CHECK(b[e.first] == .25);
+    }
+    a_vertices = boost::adjacent_vertices(boost::vertex(1, b), b);
+    BOOST_CHECK(a_vertices.second - a_vertices.first == 1);
+    vi = boost::vertex(1, b);
+    for (auto av = boost::adjacent_vertices(vi, b); av.first != av.second; ++av.first) {
+        const auto e = boost::edge(vi, boost::vertex(*av.first, b), b);
+        BOOST_CHECK(e.second);
+        BOOST_CHECK(b[e.first] == 1.);
+    }
+    a_vertices = boost::adjacent_vertices(boost::vertex(2, b), b);
+    BOOST_CHECK(a_vertices.first == a_vertices.second);
 }

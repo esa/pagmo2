@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <cstddef>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -42,6 +43,15 @@ namespace pagmo
 std::pair<std::vector<std::size_t>, vector_double> unconnected::get_connections(std::size_t) const
 {
     return std::make_pair(std::vector<std::size_t>{}, vector_double{});
+}
+
+// Add the next vertex (no-op).
+void unconnected::push_back() {}
+
+// Name.
+std::string unconnected::get_name() const
+{
+    return "Unconnected";
 }
 
 // Serialization.

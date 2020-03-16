@@ -10,7 +10,7 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(pagmo VERSION 2.14.0 LANGUAGES CXX C)
+project(pagmo VERSION 2.15.0 LANGUAGES CXX C)
 
 # Setup module path.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/yacma")
@@ -185,6 +185,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/unconnected.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/fully_connected.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/ring.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/topologies/free_form.cpp"
     # UDRP.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/r_policies/fair_replace.cpp"
     # UDSP.
@@ -252,8 +253,8 @@ endif()
 
 # Setup of the pagmo library.
 add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-set_property(TARGET pagmo PROPERTY VERSION "4.0")
-set_property(TARGET pagmo PROPERTY SOVERSION 4)
+set_property(TARGET pagmo PROPERTY VERSION "5.0")
+set_property(TARGET pagmo PROPERTY SOVERSION 5)
 target_compile_options(pagmo PRIVATE
     "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
     "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"

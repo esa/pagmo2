@@ -152,6 +152,16 @@ Base BGL topology
 
       :exception unspecified: any exception thrown by the public BGL API.
 
+   .. cpp:function:: bgl_graph_t to_bgl() const
+
+      .. versionadded:: 2.15
+
+      Convert to a BGL graph.
+
+      :return: a copy of the internal graph object used to represent the topology.
+
+      :exception unspecified: any exception thrown by the public BGL API.
+
    .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
 

@@ -41,7 +41,9 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
+#include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
@@ -71,6 +73,10 @@ struct npb00 {
 
 struct npb01 {
     int push_back();
+};
+
+struct with_to_bgl {
+    bgl_graph_t to_bgl() const;
 };
 
 struct udt00 {
@@ -108,6 +114,10 @@ struct udt01 {
     std::string get_extra_info() const
     {
         return "hello";
+    }
+    bgl_graph_t to_bgl() const
+    {
+        return bgl_graph_t{};
     }
     int n_pushed = 0;
 };
@@ -332,4 +342,17 @@ BOOST_AUTO_TEST_CASE(topology_push_back_n_test)
     t0.push_back(5);
 
     BOOST_CHECK(t0.extract<ring>()->num_vertices() == 7u);
+}
+
+BOOST_AUTO_TEST_CASE(topology_to_bgl_test)
+{
+    BOOST_CHECK(!has_to_bgl<gc00>::value);
+    BOOST_CHECK(has_to_bgl<with_to_bgl>::value);
+
+    BOOST_CHECK_EXCEPTION(topology{udt00{}}.to_bgl(), not_implemented_error, [](const not_implemented_error &nie) {
+        return boost::contains(
+            nie.what(), "The to_bgl() method has been invoked, but it is not implemented in a UDT of type 'udt00'");
+    });
+
+    BOOST_CHECK(boost::num_vertices(topology{udt01{}}.to_bgl()) == 0);
 }

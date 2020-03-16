@@ -30,7 +30,7 @@ Fully connected
 
       :param w: the weight of the edges.
 
-      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :exception std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: explicit fully_connected(std::size_t n, double w)
 
@@ -42,7 +42,7 @@ Fully connected
       :param n: the desired number of vertices.
       :param w: the weight of the edges.
 
-      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :exception std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: fully_connected(const fully_connected &)
    .. cpp:function:: fully_connected(fully_connected &&) noexcept
@@ -79,6 +79,23 @@ Fully connected
    .. cpp:function:: std::size_t num_vertices() const
 
       :return: the number of vertices in the topology.
+
+   .. cpp:function:: bgl_graph_t to_bgl() const
+
+      .. versionadded:: 2.15
+
+      Convert to a BGL graph.
+
+      .. warning::
+
+         The graph representation of a fully connected topology
+         requires :math:`\operatorname{O}\left( n^2 \right)` memory
+         in the number of vertices. Be careful when invoking this
+         function on large topologies.
+
+      :return: a complete graph representing ``this``.
+
+      :exception unspecified: any exception thrown by the public BGL API.
 
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
    .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)

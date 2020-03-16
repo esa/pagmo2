@@ -32,6 +32,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <sstream>
 
+#include <boost/algorithm/string/predicate.hpp>
+
+#include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
@@ -67,4 +70,16 @@ BOOST_AUTO_TEST_CASE(basic_test)
         }
         BOOST_CHECK(t1.is<unconnected>());
     }
+}
+
+BOOST_AUTO_TEST_CASE(to_bgl_test)
+{
+    BOOST_CHECK(!has_to_bgl<unconnected>::value);
+
+    BOOST_CHECK_EXCEPTION(
+        topology{unconnected{}}.to_bgl(), not_implemented_error, [](const not_implemented_error &nie) {
+            return boost::contains(
+                nie.what(),
+                "The to_bgl() method has been invoked, but it is not implemented in a UDT of type 'Unconnected'");
+        });
 }

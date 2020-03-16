@@ -39,12 +39,14 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#include <boost/graph/adjacency_list.hpp>
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
@@ -95,6 +97,38 @@ public:
 template <typename T>
 const bool has_push_back<T>::value;
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// A Boost graph type which is used as an export format for topologies
+// and also as the underyling graph type for base_bgl_topology.
+// NOTE: the definition of the graph type is taken from pagmo 1. We might
+// want to consider alternative storage classes down the line, as the complexity
+// of some graph operations is not that great when using vecs and lists.
+using bgl_graph_t
+    = boost::adjacency_list<boost::vecS,           // std::vector for list of adjacent vertices (OutEdgeList)
+                            boost::vecS,           // std::vector for the list of vertices (VertexList)
+                            boost::bidirectionalS, // we require bi-directional edges for topology (Directed)
+                            boost::no_property,    // no vertex properties (VertexProperties)
+                            double,                // edge property stores migration probability (EdgeProperties)
+                            boost::no_property,    // no graph properties (GraphProperties)
+                            boost::listS           // std::list for of the graph's edge list (EdgeList)
+                            >;
+
+#endif
+
+// Detect the to_bgl() method.
+template <typename T>
+class has_to_bgl
+{
+    template <typename U>
+    using to_bgl_t = decltype(std::declval<const U &>().to_bgl());
+    static const bool implementation_defined = std::is_same<bgl_graph_t, detected_t<to_bgl_t, T>>::value;
+
+public:
+    // Value of the type trait.
+    static const bool value = implementation_defined;
+};
+
 namespace detail
 {
 
@@ -136,6 +170,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner_base {
     virtual std::string get_extra_info() const = 0;
     virtual std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const = 0;
     virtual void push_back() = 0;
+    virtual bgl_graph_t to_bgl() const = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -168,6 +203,10 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
         m_value.push_back();
     }
     // Optional methods.
+    virtual bgl_graph_t to_bgl() const override final
+    {
+        return to_bgl_impl(m_value);
+    }
     virtual std::string get_name() const override final
     {
         return get_name_impl(m_value);
@@ -177,6 +216,18 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
         return get_extra_info_impl(m_value);
     }
     // Implementation of the optional methods.
+    template <typename U, enable_if_t<has_to_bgl<U>::value, int> = 0>
+    static bgl_graph_t to_bgl_impl(const U &value)
+    {
+        return value.to_bgl();
+    }
+    template <typename U, enable_if_t<!has_to_bgl<U>::value, int> = 0>
+    [[noreturn]] static bgl_graph_t to_bgl_impl(const U &value)
+    {
+        pagmo_throw(not_implemented_error,
+                    "The to_bgl() method has been invoked, but it is not implemented in a UDT of type '"
+                        + get_name_impl(value) + "'");
+    }
     template <typename U, enable_if_t<has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &value)
     {
@@ -298,6 +349,9 @@ public:
     void push_back();
     // Add multiple vertices.
     void push_back(unsigned);
+
+    // Convert to BGL.
+    bgl_graph_t to_bgl() const;
 
     // Serialization.
     template <typename Archive>

@@ -56,6 +56,8 @@ public:
     void push_back();
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
 
+    bgl_graph_t to_bgl() const;
+
     std::string get_name() const;
     std::string get_extra_info() const;
 

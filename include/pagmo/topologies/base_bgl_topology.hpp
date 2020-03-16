@@ -35,8 +35,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include <boost/graph/adjacency_list.hpp>
-
 #if defined(_MSC_VER)
 
 // Disable a warning from MSVC in the graph serialization code.
@@ -53,38 +51,27 @@ see https://www.gnu.org/licenses/. */
 
 #endif
 
+#include <pagmo/detail/free_form_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
 {
 
-namespace detail
-{
-
-// NOTE: the definition of the graph type is taken from pagmo 1. We might
-// want to consider alternative storage classes down the line, as the complexity
-// of some graph operations is not that great when using vecs and lists.
-using bgl_topology_graph_t
-    = boost::adjacency_list<boost::vecS,           // std::vector for list of adjacent vertices (OutEdgeList)
-                            boost::vecS,           // std::vector for the list of vertices (VertexList)
-                            boost::bidirectionalS, // we require bi-directional edges for topology (Directed)
-                            boost::no_property,    // no vertex properties (VertexProperties)
-                            double,                // edge property stores migration probability (EdgeProperties)
-                            boost::no_property,    // no graph properties (GraphProperties)
-                            boost::listS           // std::list for of the graph's edge list (EdgeList)
-                            >;
-
-} // namespace detail
-
 // Helper for the implementation of topologies
 // based on the Boost Graph library.
 class PAGMO_DLL_PUBLIC base_bgl_topology
 {
-    using graph_t = detail::bgl_topology_graph_t;
+    // The free_form topology needs access to the internals.
+    // NOTE: in the future this friendship relation might
+    // become unnecessary if we make the set_graph() function
+    // public. In such case, remember moving the checks
+    // in the free_form ctor to the set_graph() function.
+    friend class PAGMO_DLL_PUBLIC free_form;
 
-    // NOTE: all these methods do *not* lock the mutex,
+    // NOTE: all these functions do *not* lock the mutex,
     // hence they are marked as "unsafe". These should
     // be invoked only if the mutex is already being
     // held by the calling thread.
@@ -100,9 +87,9 @@ class PAGMO_DLL_PUBLIC base_bgl_topology
     // A few helpers to set/get the integral graph
     // object. These will lock the mutex, so they
     // are safe for general use.
-    graph_t get_graph() const;
-    PAGMO_DLL_LOCAL graph_t move_graph();
-    PAGMO_DLL_LOCAL void set_graph(graph_t &&);
+    bgl_graph_t get_graph() const;
+    PAGMO_DLL_LOCAL bgl_graph_t move_graph();
+    PAGMO_DLL_LOCAL void set_graph(bgl_graph_t &&);
 
 public:
     base_bgl_topology() = default;
@@ -123,6 +110,8 @@ public:
 
     std::string get_extra_info() const;
 
+    bgl_graph_t to_bgl() const;
+
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
@@ -142,7 +131,7 @@ public:
 
 private:
     mutable std::mutex m_mutex;
-    graph_t m_graph;
+    bgl_graph_t m_graph;
 };
 
 } // namespace pagmo
