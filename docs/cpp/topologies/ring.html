@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ring &mdash; pagmo 2.14.0 documentation</title>
+  <title>Ring &mdash; pagmo 2.15.0 documentation</title>
   
 
   
@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Fair replacement policy" href="../r_policies/fair_replace.html" />
+    <link rel="next" title="Free-form topology" href="free_form.html" />
     <link rel="prev" title="Base BGL topology" href="base_bgl_topology.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                2.14.0
+                2.15.0
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="fully_connected.html">Fully connected</a></li>
 <li class="toctree-l3"><a class="reference internal" href="base_bgl_topology.html">Base BGL topology</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Ring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="free_form.html">Free-form topology</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
@@ -210,8 +211,8 @@ a weight of <em>w</em>.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>w</strong> – the weight of the edges.</p>
 </dd>
-<dt class="field-even">Except std::invalid_argument</dt>
-<dd class="field-even"><p>if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -231,11 +232,11 @@ will also have a weight of <em>w</em>.</p>
 <li><p><strong>w</strong> – the weight of the edges.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Except std::invalid_argument</dt>
-<dd class="field-even"><p>if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
-</dd>
-<dt class="field-odd">Except unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by <a class="reference internal" href="#_CPPv4N5pagmo4ring9push_backEv" title="pagmo::ring::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a>.</p>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#_CPPv4N5pagmo4ring9push_backEv" title="pagmo::ring::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a>.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -245,8 +246,8 @@ will also have a weight of <em>w</em>.</p>
 <span id="_CPPv3N5pagmo4ring9push_backEv"></span><span id="_CPPv2N5pagmo4ring9push_backEv"></span><span id="pagmo::ring::push_back"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add the next vertex.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Except unspecified</dt>
-<dd class="field-odd"><p>any exception thrown by the public API of <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>.</p>
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the public API of <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -299,7 +300,7 @@ or of primitive types.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../r_policies/fair_replace.html" class="btn btn-neutral float-right" title="Fair replacement policy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="free_form.html" class="btn btn-neutral float-right" title="Free-form topology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="base_bgl_topology.html" class="btn btn-neutral float-left" title="Base BGL topology" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

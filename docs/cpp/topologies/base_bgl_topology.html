@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Base BGL topology &mdash; pagmo 2.14.0 documentation</title>
+  <title>Base BGL topology &mdash; pagmo 2.15.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                2.14.0
+                2.15.0
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="fully_connected.html">Fully connected</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Base BGL topology</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ring.html">Ring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="free_form.html">Free-form topology</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
@@ -415,6 +416,23 @@ connections to/from the new vertex).</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a string containing human-readable information about the topology.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo17base_bgl_topology6to_bglEv">
+<span id="_CPPv3NK5pagmo17base_bgl_topology6to_bglEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology6to_bglEv"></span><span id="pagmo::base_bgl_topology::to_bglC"></span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t">bgl_graph_t</a> <code class="sig-name descname">to_bgl</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>Convert to a BGL graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a copy of the internal graph object used to represent the topology.</p>
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p>

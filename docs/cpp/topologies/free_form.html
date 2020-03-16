@@ -1,0 +1,350 @@
+ 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Free-form topology &mdash; pagmo 2.15.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Fair replacement policy" href="../r_policies/fair_replace.html" />
+    <link rel="prev" title="Ring" href="ring.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="unconnected.html">Unconnected topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fully_connected.html">Fully connected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="base_bgl_topology.html">Base BGL topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ring.html">Ring</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Free-form topology</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
+        
+      <li>Free-form topology</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/docs/cpp/topologies/free_form.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="free-form-topology">
+<h1>Free-form topology<a class="headerlink" href="#free-form-topology" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p><em>#include &lt;pagmo/topologies/free_form.hpp&gt;</em></p>
+<dl class="class">
+<dt id="_CPPv4N5pagmo9free_formE">
+<span id="_CPPv3N5pagmo9free_formE"></span><span id="_CPPv2N5pagmo9free_formE"></span><span id="pagmo::free_form"></span><em class="property">class </em><code class="sig-name descname">free_form</code> : <em class="property">public</em> <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology">base_bgl_topology</a><a class="headerlink" href="#_CPPv4N5pagmo9free_formE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This user-defined topology (UDT) represents a graph in which
+vertices and edges can be manipulated freely. It is implemented
+as a simple extension of <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>
+in which the <a class="reference internal" href="#_CPPv4N5pagmo9free_form9push_backEv" title="pagmo::free_form::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a> function
+adds a vertex without connections.</p>
+<dl class="function">
+<dt id="_CPPv4N5pagmo9free_form9free_formEv">
+<span id="_CPPv3N5pagmo9free_form9free_formEv"></span><span id="_CPPv2N5pagmo9free_form9free_formEv"></span><span id="pagmo::free_form::free_form"></span><code class="sig-name descname">free_form</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default constructor.</p>
+<p>The default constructor initialises an empty topology.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo9free_form9free_formERK9free_form">
+<span id="_CPPv3N5pagmo9free_form9free_formERK9free_form"></span><span id="_CPPv2N5pagmo9free_form9free_formERK9free_form"></span><span id="pagmo::free_form::free_form__free_formCR"></span><code class="sig-name descname">free_form</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo9free_form9free_formEv" title="pagmo::free_form::free_form">free_form</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERK9free_form" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo9free_form9free_formERR9free_form">
+<span id="_CPPv3N5pagmo9free_form9free_formERR9free_form"></span><span id="_CPPv2N5pagmo9free_form9free_formERR9free_form"></span><span id="pagmo::free_form::free_form__free_formRR"></span><code class="sig-name descname">free_form</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9free_form9free_formEv" title="pagmo::free_form::free_form">free_form</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERR9free_form" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy and move constructors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo9free_form9free_formE11bgl_graph_t">
+<span id="_CPPv3N5pagmo9free_form9free_formE11bgl_graph_t"></span><span id="_CPPv2N5pagmo9free_form9free_formE11bgl_graph_t"></span><span id="pagmo::free_form::free_form__bgl_graph_t"></span><em class="property">explicit</em> <code class="sig-name descname">free_form</code><span class="sig-paren">(</span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t">bgl_graph_t</a> <em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formE11bgl_graph_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor from a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">bgl_graph_t</span></code></a>.</p>
+<p>The internal graph of the topology will be set to <em>g</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>g</strong> – the graph that will be used to initialise <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if any edge in the graph has
+a weight outside the <span class="math notranslate nohighlight">\(\left[ 0, 1 \right]\)</span> range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo9free_form9free_formERK8topology">
+<span id="_CPPv3N5pagmo9free_form9free_formERK8topology"></span><span id="_CPPv2N5pagmo9free_form9free_formERK8topology"></span><span id="pagmo::free_form::free_form__topologyCR"></span><em class="property">explicit</em> <code class="sig-name descname">free_form</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology">topology</a> &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERK8topology" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo9free_form9free_formERK1T">
+<span id="_CPPv3I0EN5pagmo9free_form9free_formERK1T"></span><span id="_CPPv2I0EN5pagmo9free_form9free_formERK1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">explicit</em> <code class="sig-name descname">free_form</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="pagmo::free_form::free_form::T">T</a> &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructors from a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> or a UDT.</p>
+<p>These constructors will first invoke the <a class="reference internal" href="../topology.html#_CPPv4NK5pagmo8topology6to_bglEv" title="pagmo::topology::to_bgl"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::topology::to_bgl()</span></code></a>
+function to extract a graph representation of the input <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>
+or UDT, and will then use that graph object to initialise this <a class="reference internal" href="#_CPPv4N5pagmo9free_formE" title="pagmo::free_form"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">free_form</span></code></a>
+object via the constructor from <a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">bgl_graph_t</span></code></a>.</p>
+<p>In other words, these constructors allow to copy the graph
+of a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> or a UDT into <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> – the input <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> or UDT.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception raised by the construction of a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>
+object, the invocation of the <a class="reference internal" href="../topology.html#_CPPv4NK5pagmo8topology6to_bglEv" title="pagmo::topology::to_bgl"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::topology::to_bgl()</span></code></a> function or by
+the constructor from <a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">bgl_graph_t</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo9free_form9push_backEv">
+<span id="_CPPv3N5pagmo9free_form9push_backEv"></span><span id="_CPPv2N5pagmo9free_form9push_backEv"></span><span id="pagmo::free_form::push_back"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add a new vertex.</p>
+<p>The newly-added vertex will not be connected to any other vertex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the public API of <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo9free_form8get_nameEv">
+<span id="_CPPv3NK5pagmo9free_form8get_nameEv"></span><span id="_CPPv2NK5pagmo9free_form8get_nameEv"></span><span id="pagmo::free_form::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9free_form8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the name of the topology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Free</span> <span class="pre">form&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0EN5pagmo9free_form9serializeEvR7Archivej">
+<span id="_CPPv3I0EN5pagmo9free_form9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9free_form9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9free_form9serializeEvR7Archivej" title="pagmo::free_form::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9free_form9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This function implements the serialisation of a <a class="reference internal" href="#_CPPv4N5pagmo9free_formE" title="pagmo::free_form"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">free_form</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – the input/output archive.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialisation of a <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../r_policies/fair_replace.html" class="btn btn-neutral float-right" title="Fair replacement policy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ring.html" class="btn btn-neutral float-left" title="Ring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, pagmo development team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

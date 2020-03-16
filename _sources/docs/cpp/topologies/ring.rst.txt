@@ -29,7 +29,7 @@ Ring
 
       :param w: the weight of the edges.
 
-      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :exception std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
 
    .. cpp:function:: explicit ring(std::size_t n, double w)
 
@@ -44,14 +44,14 @@ Ring
       :param n: the desired number of vertices.
       :param w: the weight of the edges.
 
-      :except std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
-      :except unspecified: any exception thrown by :cpp:func:`~pagmo::ring::push_back()`.
+      :exception std\:\:invalid_argument: if *w* is not in the :math:`\left[0, 1\right]` range.
+      :exception unspecified: any exception thrown by :cpp:func:`~pagmo::ring::push_back()`.
 
    .. cpp:function:: void push_back()
 
       Add the next vertex.
 
-      :except unspecified: any exception thrown by the public API of :cpp:class:`~pagmo::base_bgl_topology`.
+      :exception unspecified: any exception thrown by the public API of :cpp:class:`~pagmo::base_bgl_topology`.
 
    .. cpp:function:: double get_weight() const
 

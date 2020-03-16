@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Fully connected &mdash; pagmo 2.14.0 documentation</title>
+  <title>Fully connected &mdash; pagmo 2.15.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                2.14.0
+                2.15.0
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Fully connected</a></li>
 <li class="toctree-l3"><a class="reference internal" href="base_bgl_topology.html">Base BGL topology</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ring.html">Ring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="free_form.html">Free-form topology</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
@@ -211,8 +212,8 @@ weight <em>w</em>.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>w</strong> – the weight of the edges.</p>
 </dd>
-<dt class="field-even">Except std::invalid_argument</dt>
-<dd class="field-even"><p>if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -230,8 +231,8 @@ with <em>n</em> vertices and whose edges will all have a weight of <em>w</em>.</
 <li><p><strong>w</strong> – the weight of the edges.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Except std::invalid_argument</dt>
-<dd class="field-even"><p>if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <em>w</em> is not in the <span class="math notranslate nohighlight">\(\left[0, 1\right]\)</span> range.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -307,6 +308,30 @@ itself) and the corresponding edge weights.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of vertices in the topology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo15fully_connected6to_bglEv">
+<span id="_CPPv3NK5pagmo15fully_connected6to_bglEv"></span><span id="_CPPv2NK5pagmo15fully_connected6to_bglEv"></span><span id="pagmo::fully_connected::to_bglC"></span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t">bgl_graph_t</a> <code class="sig-name descname">to_bgl</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>Convert to a BGL graph.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The graph representation of a fully connected topology
+requires <span class="math notranslate nohighlight">\(\operatorname{O}\left( n^2 \right)\)</span> memory
+in the number of vertices. Be careful when invoking this
+function on large topologies.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a complete graph representing <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public BGL API.</p>
 </dd>
 </dl>
 </dd></dl>

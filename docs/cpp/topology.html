@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Topology &mdash; pagmo 2.14.0 documentation</title>
+  <title>Topology &mdash; pagmo 2.15.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                2.14.0
+                2.15.0
               </div>
             
           
@@ -104,6 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="archipelago.html">Archipelago</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bfe.html">Batch fitness evaluator</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Topology</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#types">Types</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#associated-type-traits">Associated type traits</a></li>
 </ul>
@@ -243,6 +244,7 @@ on the specifics of the topology).</p>
 <p>Additional optional member functions can be implemented in a UDT:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="n">bgl_graph_t</span> <span class="nf">to_bgl</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>See the documentation of the corresponding member functions in this class for details on how the optional
@@ -434,6 +436,31 @@ topology, assigning it the next available index and establishing connections to 
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4NK5pagmo8topology6to_bglEv">
+<span id="_CPPv3NK5pagmo8topology6to_bglEv"></span><span id="_CPPv2NK5pagmo8topology6to_bglEv"></span><span id="pagmo::topology::to_bglC"></span><a class="reference internal" href="#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t">bgl_graph_t</a> <code class="sig-name descname">to_bgl</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo8topology6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>Convert to a Boost graph.</p>
+<p>If the UDT satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="pagmo::has_to_bgl"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_to_bgl</span></code></a>, then this member function will return
+the output of its <code class="docutils literal notranslate"><span class="pre">to_bgl()</span></code> member function. Otherwise, an exception will be raised.</p>
+<p>This function is meant to export a representation of the current state of the topology
+as a <a class="reference internal" href="#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">pagmo::bgl_graph_t</span></code></a> object (that is, as a graph object from the Boost
+Graph Library).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a representation of <code class="docutils literal notranslate"><span class="pre">this</span></code> as a Boost graph object.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="miscellanea/exceptions.html#_CPPv4N5pagmo21not_implemented_errorE" title="pagmo::not_implemented_error"><strong>not_implemented_error</strong></a> – if the UDT does not satisfy <a class="reference internal" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="pagmo::has_to_bgl"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_to_bgl</span></code></a>.</p></li>
+<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">to_bgl()</span></code> member function of the UDT.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4NK5pagmo8topology8get_nameEv">
 <span id="_CPPv3NK5pagmo8topology8get_nameEv"></span><span id="_CPPv2NK5pagmo8topology8get_nameEv"></span><span id="pagmo::topology::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo8topology8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the name of this topology.</p>
@@ -498,6 +525,26 @@ Otherwise, an implementation-defined name based on the type of the UDT will be r
 
 </dd></dl>
 
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<dl class="type">
+<dt id="_CPPv4N5pagmo11bgl_graph_tE">
+<span id="_CPPv3N5pagmo11bgl_graph_tE"></span><span id="_CPPv2N5pagmo11bgl_graph_tE"></span><em class="property">using </em><code class="sig-name descname">bgl_graph_t</code> = boost::adjacency_list&lt;boost::vecS, boost::vecS, boost::bidirectionalS, boost::no_property, double, boost::no_property, boost::listS&gt;<a class="headerlink" href="#_CPPv4N5pagmo11bgl_graph_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This type is a <code class="docutils literal notranslate"><span class="pre">boost::adjacency_list</span></code> from the Boost Graph Library (BGL),
+and it is used as an export format for user-defined topologies (UDTs).</p>
+<p>Specifically, UDTs can (optionally) implement a <code class="docutils literal notranslate"><span class="pre">to_bgl()</span></code> member function
+which will return an object of this type representing the internal state
+of the topology as a weighted directed graph.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/adjacency_list.html">https://www.boost.org/doc/libs/1_72_0/libs/graph/doc/adjacency_list.html</a></p>
+</div>
+</dd></dl>
+
+</div>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -556,6 +603,27 @@ Otherwise, an implementation-defined name based on the type of the UDT will be r
 <dl class="member">
 <dt id="_CPPv4N5pagmo13has_push_back5valueE">
 <span id="_CPPv3N5pagmo13has_push_back5valueE"></span><span id="_CPPv2N5pagmo13has_push_back5valueE"></span><span id="pagmo::has_push_back::value__bC"></span><em class="property">static</em> <em class="property">const</em> bool <code class="sig-name descname">value</code><a class="headerlink" href="#_CPPv4N5pagmo13has_push_back5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The value of the type trait.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4I0EN5pagmo10has_to_bglE">
+<span id="_CPPv3I0EN5pagmo10has_to_bglE"></span><span id="_CPPv2I0EN5pagmo10has_to_bglE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">class </em><code class="sig-name descname">has_to_bgl</code><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>The <a class="reference internal" href="#_CPPv4N5pagmo10has_to_bgl5valueE" title="pagmo::has_to_bgl::value"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">value</span></code></a> of this type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if
+<code class="docutils literal notranslate"><span class="pre">T</span></code> provides a member function with signature:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">bgl_graph_t</span> <span class="nf">to_bgl</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">to_bgl()</span></code> member function is part of the optional interface
+for the definition of a <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>.</p>
+<dl class="member">
+<dt id="_CPPv4N5pagmo10has_to_bgl5valueE">
+<span id="_CPPv3N5pagmo10has_to_bgl5valueE"></span><span id="_CPPv2N5pagmo10has_to_bgl5valueE"></span><span id="pagmo::has_to_bgl::value__bC"></span><em class="property">static</em> <em class="property">const</em> bool <code class="sig-name descname">value</code><a class="headerlink" href="#_CPPv4N5pagmo10has_to_bgl5valueE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
