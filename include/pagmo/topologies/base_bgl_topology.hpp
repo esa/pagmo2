@@ -65,9 +65,13 @@ namespace pagmo
 class PAGMO_DLL_PUBLIC base_bgl_topology
 {
     // The free_form topology needs access to the internals.
+    // NOTE: in the future this friendship relation might
+    // become unnecessary if we make the set_graph() function
+    // public. In such case, remember moving the checks
+    // in the free_form ctor to the set_graph() function.
     friend class PAGMO_DLL_PUBLIC free_form;
 
-    // NOTE: all these methods do *not* lock the mutex,
+    // NOTE: all these functions do *not* lock the mutex,
     // hence they are marked as "unsafe". These should
     // be invoked only if the mutex is already being
     // held by the calling thread.

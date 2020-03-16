@@ -32,8 +32,14 @@ see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <sstream>
+#include <stdexcept>
+#include <string>
 #include <utility>
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/free_form.hpp>
@@ -172,6 +178,43 @@ BOOST_AUTO_TEST_CASE(bgl_ctor)
         BOOST_CHECK(c.second.size() == 2u);
         BOOST_CHECK(std::all_of(c.second.begin(), c.second.end(), [](double w) { return w == .25; }));
     }
+
+    // Test error throwing with invalid weights.
+    bgl_graph_t bogus;
+
+    boost::add_vertex(bogus);
+    boost::add_vertex(bogus);
+    boost::add_vertex(bogus);
+
+    auto res = boost::add_edge(boost::vertex(0, bogus), boost::vertex(1, bogus), bogus);
+    bogus[res.first] = 0.;
+    res = boost::add_edge(boost::vertex(1, bogus), boost::vertex(2, bogus), bogus);
+    bogus[res.first] = 2.;
+
+    auto trigger = [&bogus]() { free_form fobus(bogus); };
+
+    BOOST_CHECK_EXCEPTION(trigger(), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "In the constructor of a free_form topology from a graph object, an invalid edge weight of "
+                           + std::to_string(2.) + " was detected (the weight must be in the [0., 1.] range)");
+    });
+
+    bogus[res.first] = -1.;
+
+    BOOST_CHECK_EXCEPTION(trigger(), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "In the constructor of a free_form topology from a graph object, an invalid edge weight of "
+                           + std::to_string(-1.) + " was detected (the weight must be in the [0., 1.] range)");
+    });
+
+    bogus[res.first] = std::numeric_limits<double>::quiet_NaN();
+
+    BOOST_CHECK_EXCEPTION(trigger(), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "In the constructor of a free_form topology from a graph object, an invalid edge weight of "
+                           + std::to_string(std::numeric_limits<double>::quiet_NaN())
+                           + " was detected (the weight must be in the [0., 1.] range)");
+    });
 }
 
 BOOST_AUTO_TEST_CASE(udt_ctor)

@@ -10,7 +10,7 @@ Free-form topology
 .. cpp:class:: free_form: public base_bgl_topology
 
    This user-defined topology (UDT) represents a graph in which
-   vertex and edges can be manipulated freely. It is implemented
+   vertices and edges can be manipulated freely. It is implemented
    as a simple extension of :cpp:class:`~pagmo::base_bgl_topology`
    in which the :cpp:func:`~free_form::push_back()` function
    adds a vertex without connections.
@@ -33,6 +33,9 @@ Free-form topology
       The internal graph of the topology will be set to *g*.
 
       :param g: the graph that will be used to initialise ``this``.
+
+      :exception std\:\:invalid_argument: if any edge in the graph has
+        a weight outside the :math:`\left[ 0, 1 \right]` range.
 
    .. cpp:function:: explicit free_form(const topology &t)
    .. cpp:function:: template <typename T> explicit free_form(const T &t)

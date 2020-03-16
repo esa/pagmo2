@@ -86,6 +86,13 @@ Fully connected
 
       Convert to a BGL graph.
 
+      .. warning::
+
+         The graph representation of a fully connected topology
+         requires :math:`\operatorname{O}\left( n^2 \right)` memory
+         in the number of vertices. Be careful when invoking this
+         function on large topologies.
+
       :return: a complete graph representing ``this``.
 
       :exception unspecified: any exception thrown by the public BGL API.

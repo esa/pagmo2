@@ -26,9 +26,14 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <cmath>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
+#include <boost/graph/adjacency_list.hpp>
+
+#include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
 #include <pagmo/topologies/free_form.hpp>
@@ -43,6 +48,19 @@ free_form::free_form(free_form &&) noexcept = default;
 
 free_form::free_form(bgl_graph_t g)
 {
+    // NOTE: verify the values of the weights,
+    // as the base BGL topology maintains
+    // correct weights as a class invariant.
+    for (auto erange = boost::edges(g); erange.first != erange.second; ++erange.first) {
+        const auto w = g[*erange.first];
+
+        if (!std::isfinite(w) || w < 0. || w > 1.) {
+            pagmo_throw(std::invalid_argument,
+                        "In the constructor of a free_form topology from a graph object, an invalid edge weight of "
+                            + std::to_string(w) + " was detected (the weight must be in the [0., 1.] range)");
+        }
+    }
+
     set_graph(std::move(g));
 }
 
