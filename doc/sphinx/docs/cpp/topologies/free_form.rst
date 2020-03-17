@@ -40,6 +40,12 @@ Free-form topology
    .. cpp:function:: explicit free_form(const topology &t)
    .. cpp:function:: template <typename T> explicit free_form(const T &t)
 
+      .. note::
+
+         The constructor from ``T`` does not participate in overload resolution
+         if ``T`` is :cpp:class:`~pagmo::free_form` or if ``T`` does not
+         satisfy :cpp:class:`~pagmo::is_udt`.
+
       Constructors from a :cpp:class:`~pagmo::topology` or a UDT.
 
       These constructors will first invoke the :cpp:func:`pagmo::topology::to_bgl()`

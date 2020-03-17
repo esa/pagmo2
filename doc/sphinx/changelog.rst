@@ -9,6 +9,10 @@ Changelog
 New
 ~~~
 
+- Add a :cpp:func:`pagmo::base_bgl_topology::get_weight()`
+  function to fetch the weight of an edge in a BGL topology
+  (`#407 <https://github.com/esa/pagmo2/pull/407>`__).
+
 - Add the :cpp:class:`~pagmo::free_form` topology
   (`#405 <https://github.com/esa/pagmo2/pull/405>`__).
 
