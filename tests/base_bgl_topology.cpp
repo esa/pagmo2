@@ -81,6 +81,8 @@ BOOST_AUTO_TEST_CASE(basic_test)
 
     t0.add_edge(1, 0);
     t0.add_edge(2, 0);
+    BOOST_CHECK(t0.get_weight(1, 0) == 1.);
+    BOOST_CHECK(t0.get_weight(2, 0) == 1.);
 
     auto conns = t0.get_connections(0);
     using c_vec = decltype(conns.first);
@@ -104,6 +106,7 @@ BOOST_AUTO_TEST_CASE(basic_test)
     BOOST_CHECK(t0.get_connections(2).second.empty());
 
     t0.set_weight(0, 1, .5);
+    BOOST_CHECK(t0.get_weight(0, 1) == .5);
 
     conns = t0.get_connections(1);
 
@@ -193,6 +196,19 @@ BOOST_AUTO_TEST_CASE(error_handling)
     BOOST_CHECK_EXCEPTION(t0.set_weight(0, 1, .2), std::invalid_argument, [](const std::invalid_argument &ia) {
         return boost::contains(
             ia.what(), "cannot set the weight of an edge in a BGL topology: the vertex 0 is not connected to vertex 1");
+    });
+
+    BOOST_CHECK_EXCEPTION(t0.get_weight(0, 1), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "cannot get the weight of an edge in a BGL topology: the vertex 0 is not connected to vertex 1");
+    });
+    BOOST_CHECK_EXCEPTION(t0.get_weight(0, 10), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "invalid vertex index in a BGL topology: the index is 10, but the number of vertices is only 3");
+    });
+    BOOST_CHECK_EXCEPTION(t0.get_weight(11, 10), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(
+            ia.what(), "invalid vertex index in a BGL topology: the index is 11, but the number of vertices is only 3");
     });
 }
 

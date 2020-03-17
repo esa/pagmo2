@@ -229,6 +229,23 @@ std::pair<std::vector<std::size_t>, vector_double> base_bgl_topology::get_connec
     return retval;
 }
 
+double base_bgl_topology::get_weight(std::size_t i, std::size_t j) const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    unsafe_check_vertex_indices(i, j);
+
+    const auto ret
+        = boost::edge(boost::vertex(detail::vcast(i), m_graph), boost::vertex(detail::vcast(j), m_graph), m_graph);
+    if (ret.second) {
+        return m_graph[ret.first];
+    } else {
+        pagmo_throw(std::invalid_argument, "cannot get the weight of an edge in a BGL topology: the vertex "
+                                               + std::to_string(i) + " is not connected to vertex "
+                                               + std::to_string(j));
+    }
+}
+
 std::string base_bgl_topology::get_extra_info() const
 {
     std::ostringstream oss;

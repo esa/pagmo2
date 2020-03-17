@@ -101,6 +101,7 @@ public:
     std::size_t num_vertices() const;
     bool are_adjacent(std::size_t, std::size_t) const;
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
+    double get_weight(std::size_t, std::size_t) const;
 
     void add_vertex();
     void add_edge(std::size_t, std::size_t, double = 1.);
