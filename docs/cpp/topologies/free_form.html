@@ -238,7 +238,13 @@ a weight outside the <span class="math notranslate nohighlight">\(\left[ 0, 1 \r
 <dl class="function">
 <dt id="_CPPv4I0EN5pagmo9free_form9free_formERK1T">
 <span id="_CPPv3I0EN5pagmo9free_form9free_formERK1T"></span><span id="_CPPv2I0EN5pagmo9free_form9free_formERK1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">explicit</em> <code class="sig-name descname">free_form</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="pagmo::free_form::free_form::T">T</a> &amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Constructors from a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> or a UDT.</p>
+<dd><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The constructor from <code class="docutils literal notranslate"><span class="pre">T</span></code> does not participate in overload resolution
+if <code class="docutils literal notranslate"><span class="pre">T</span></code> is <a class="reference internal" href="#_CPPv4N5pagmo9free_formE" title="pagmo::free_form"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">free_form</span></code></a> or if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not
+satisfy <a class="reference internal" href="../topology.html#_CPPv4I0EN5pagmo6is_udtE" title="pagmo::is_udt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">is_udt</span></code></a>.</p>
+</div>
+<p>Constructors from a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> or a UDT.</p>
 <p>These constructors will first invoke the <a class="reference internal" href="../topology.html#_CPPv4NK5pagmo8topology6to_bglEv" title="pagmo::topology::to_bgl"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::topology::to_bgl()</span></code></a>
 function to extract a graph representation of the input <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>
 or UDT, and will then use that graph object to initialise this <a class="reference internal" href="#_CPPv4N5pagmo9free_formE" title="pagmo::free_form"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">free_form</span></code></a>

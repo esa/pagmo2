@@ -75,6 +75,24 @@ Base BGL topology
       :exception std\:\:invalid_argument: if *i* is not smaller than the number of vertices.
       :exception unspecified: any exception thrown by the public BGL API.
 
+   .. cpp:function:: double get_weight(std::size_t i, std::size_t j) const
+
+      .. versionadded:: 2.15
+
+      Fetch the weight of the edge connecting *i* to *j*.
+
+      :param i: the source vertex index.
+      :param j: the destination vertex index.
+
+      :return: the weight of the edge connecting *i* to *j*.
+
+      :exception std\:\:invalid_argument: if either:
+
+         * *i* or *j* are not smaller than the number of vertices,
+         * *i* and *j* are not adjacent.
+
+      :exception unspecified: any exception thrown by the public BGL API.
+
    .. cpp:function:: void add_vertex()
 
       Add a vertex.
