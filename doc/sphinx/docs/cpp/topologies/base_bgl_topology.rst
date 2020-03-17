@@ -75,7 +75,7 @@ Base BGL topology
       :exception std\:\:invalid_argument: if *i* is not smaller than the number of vertices.
       :exception unspecified: any exception thrown by the public BGL API.
 
-   .. cpp:function:: double get_weight(std::size_t i, std::size_t j) const
+   .. cpp:function:: double get_edge_weight(std::size_t i, std::size_t j) const
 
       .. versionadded:: 2.15
 

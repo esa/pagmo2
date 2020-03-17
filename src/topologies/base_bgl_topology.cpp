@@ -229,7 +229,7 @@ std::pair<std::vector<std::size_t>, vector_double> base_bgl_topology::get_connec
     return retval;
 }
 
-double base_bgl_topology::get_weight(std::size_t i, std::size_t j) const
+double base_bgl_topology::get_edge_weight(std::size_t i, std::size_t j) const
 {
     std::lock_guard<std::mutex> lock(m_mutex);
 
