@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <numeric>
+#include <random>
 #include <stdexcept>
 #include <tuple>
 
@@ -257,7 +258,7 @@ BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
     example = {{}, {}, {}, {}, {}, {}};
     BOOST_CHECK_THROW(select_best_N_mo(example, 2u), std::invalid_argument);
     example = {{1, 2}, {3, 4}, {0, 1}, {1, 0}, {2, 2}, {2, 4}};
-    BOOST_CHECK_THROW(select_best_N_mo(example, 0u), std::invalid_argument);
+    BOOST_CHECK(select_best_N_mo(example, 0u).empty());
 }
 
 BOOST_AUTO_TEST_CASE(ideal_test)
@@ -327,7 +328,7 @@ void check_weights(const std::vector<std::vector<double>> &win, vector_double::s
 
 BOOST_AUTO_TEST_CASE(decomposition_weights_test)
 {
-    detail::random_engine_type r_engine(23u);
+    std::mt19937 r_engine(23u);
     // We test some throws
     // At least 2 objectives are needed
     BOOST_CHECK_THROW(decomposition_weights(1u, 5u, "grid", r_engine), std::invalid_argument);

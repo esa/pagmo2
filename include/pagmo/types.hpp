@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_TYPES_HPP
 #define PAGMO_TYPES_HPP
 
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -38,8 +39,25 @@ namespace pagmo
 
 /// Alias for an <tt>std::vector</tt> of <tt>double</tt>s.
 typedef std::vector<double> vector_double;
+
 /// Alias for an <tt>std::vector</tt> of <tt>std::pair</tt>s of the size type of pagmo::vector_double.
 typedef std::vector<std::pair<vector_double::size_type, vector_double::size_type>> sparsity_pattern;
+
+/// Population size type.
+/**
+ * This unsigned integral types is used to represent the size
+ * of a pagmo::population, and, more generally, of collections
+ * of decision vectors, fitness vectors, etc.
+ */
+typedef std::vector<vector_double>::size_type pop_size_t;
+
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// A group of individuals: IDs, dvs and fvs.
+using individuals_group_t
+    = std::tuple<std::vector<unsigned long long>, std::vector<vector_double>, std::vector<vector_double>>;
+
+#endif
 
 } // namespace pagmo
 

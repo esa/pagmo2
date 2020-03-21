@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,6 +34,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#endif
 
 namespace pagmo
 {

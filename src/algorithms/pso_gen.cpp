@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -37,6 +37,8 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+#include <boost/serialization/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
@@ -362,26 +364,76 @@ population pso_gen::evolve(population pop) const
             pop.get_problem().set_seed(urng(m_e));
             // re-evaluate the whole population w.r.t. the new seed
 
-            for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
-                // We evaluate here the new individual fitness
-                fit[p] = prob.fitness(X[p]);
-                // We re-evaluate the fitness of the particle memory
-                lbfit[p] = prob.fitness(lbX[p]);
-            }
+            if (m_bfe) {
+                // bfe is available:
+                vector_double decision_vectors(swarm_size * dim);
+                vector_double decision_vectors_lb(swarm_size * dim);
 
-            best_fit = fit[0];
-            best_neighb = X[0];
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    // I store the individuals in a contiguous vector
+                    std::copy(X[i].begin(), X[i].end(), decision_vectors.data() + i * dim);
+                    std::copy(lbX[i].begin(), lbX[i].end(), decision_vectors_lb.data() + i * dim);
+                }
 
-            for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
-                if (fit[p] < best_fit) {
-                    best_fit = fit[p];
-                    best_neighb = X[p];
+                auto fitnesses = (*m_bfe)(prob, decision_vectors);
+                auto fitnesses_lb = (*m_bfe)(prob, decision_vectors_lb);
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    for (decltype(fit[i].size()) i_fit = 0; i_fit < fit[i].size(); ++i_fit) {
+                        fit[i][i_fit] = fitnesses[i];
+                        lbfit[i][i_fit] = fitnesses_lb[i];
+                    }
+                }
+                best_fit = fit[0];
+                best_neighb = X[0];
+
+                for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
+                    if (detail::less_than_f(fit[p][0], best_fit[0])) {
+                        best_fit = fit[p];
+                        best_neighb = X[p];
+                    }
+                }
+
+            } else {
+                // bfe not available:
+                for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
+                    // We evaluate here the new individual fitness
+                    fit[p] = prob.fitness(X[p]);
+                    // We re-evaluate the fitness of the particle memory
+                    lbfit[p] = prob.fitness(lbX[p]);
+                }
+
+                best_fit = fit[0];
+                best_neighb = X[0];
+
+                for (decltype(swarm_size) p = 1; p < swarm_size; p++) {
+                    if (detail::less_than_f(fit[p][0], best_fit[0])) {
+                        best_fit = fit[p];
+                        best_neighb = X[p];
+                    }
                 }
             }
         } else {
-            for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
-                // We evaluate here the new individual fitness
-                fit[p] = prob.fitness(X[p]);
+            if (m_bfe) {
+                // bfe is available:
+                vector_double decision_vectors(swarm_size * dim);
+
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    // I store the individuals in a contiguous vector
+                    std::copy(X[i].begin(), X[i].end(), decision_vectors.data() + i * dim);
+                }
+
+                auto fitnesses = (*m_bfe)(prob, decision_vectors);
+                for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    for (decltype(fit[i].size()) i_fit = 0; i_fit < fit[i].size(); ++i_fit) {
+                        fit[i][i_fit] = fitnesses[i];
+                    }
+                }
+            } else {
+                // bfe not available:
+                for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
+                    // We evaluate here the new individual fitness
+                    fit[p] = prob.fitness(X[p]);
+                }
             }
         }
 
@@ -389,13 +441,14 @@ population pso_gen::evolve(population pop) const
         best_fit_improved = false;
 
         for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
-            if (fit[p] <= lbfit[p]) {
+            if (detail::less_than_f(fit[p][0], lbfit[p][0]) || detail::equal_to_f(fit[p][0], lbfit[p][0])) {
                 // update the particle's previous best position
                 lbfit[p] = fit[p];
                 lbX[p] = X[p];
                 // update the best position observed so far by any particle in the swarm
                 // (only performed if swarm topology is gbest)
-                if ((m_neighb_type == 1u || m_neighb_type == 4u) && (fit[p] <= best_fit)) {
+                if ((m_neighb_type == 1u || m_neighb_type == 4u)
+                    && ((detail::less_than_f(fit[p][0], best_fit[0]) || detail::equal_to_f(fit[p][0], best_fit[0])))) {
                     best_neighb = X[p];
                     best_fit = fit[p];
                     best_fit_improved = true;
@@ -441,7 +494,7 @@ population pso_gen::evolve(population pop) const
                         auto x2 = X[j];
                         double acc = 0.;
                         for (decltype(x1.size()) k = 0u; k < x1.size(); ++k) {
-                            if (ub[j] > lb[j]) {
+                            if (ub[k] > lb[k]) {
                                 acc += (x1[k] - x2[k]) * (x1[k] - x2[k]) / (ub[k] - lb[k]) / (ub[k] - lb[k]);
                             } // else 0
                         }
@@ -484,6 +537,15 @@ void pso_gen::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme
+/**
+ * @param b batch function evaluation object
+ */
+void pso_gen::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -521,7 +583,7 @@ template <typename Archive>
 void pso_gen::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e,
-                    m_seed, m_verbosity, m_log);
+                    m_seed, m_verbosity, m_log, m_bfe);
 }
 
 /**
@@ -555,7 +617,8 @@ vector_double pso_gen::particle__get_best_neighbor(population::size_type pidx,
             // iterate over indexes of the particle's neighbours, and identify the best
             bnidx = neighb[pidx][0];
             for (decltype(neighb[pidx].size()) nidx = 1u; nidx < neighb[pidx].size(); ++nidx) {
-                if (lbfit[neighb[pidx][nidx]][0] <= lbfit[bnidx][0]) {
+                if (detail::less_than_f(lbfit[neighb[pidx][nidx]][0], lbfit[bnidx][0])
+                    || detail::equal_to_f(lbfit[neighb[pidx][nidx]][0], lbfit[bnidx][0])) {
                     bnidx = neighb[pidx][nidx];
                 }
             }

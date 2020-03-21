@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,6 +31,9 @@ see https://www.gnu.org/licenses/. */
 // Disable the checked iterators feature in MSVC. There are some warnings
 // triggered by Boost algos instantiations which we cannot do much about.
 #define _SCL_SECURE_NO_WARNINGS
+
+// Boost's bimap results in some C++17 deprecation warnings in C++17 mode.
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
 #endif
 

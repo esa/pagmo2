@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -30,7 +30,10 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <cmath>
+#include <initializer_list>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -443,4 +446,19 @@ BOOST_AUTO_TEST_CASE(population_bfe_ctor_test)
     }
     BOOST_CHECK(pop1000.champion_x() == pop1000a.champion_x());
     BOOST_CHECK(pop1000.champion_f() == pop1000a.champion_f());
+}
+
+// Ensure that we use proper floating-point comparisons
+// when updating the champion of a population.
+BOOST_AUTO_TEST_CASE(population_nan_champion)
+{
+    population pop0{rosenbrock{2u}};
+    pop0.push_back({std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()});
+    BOOST_CHECK(std::isnan(pop0.champion_f()[0]));
+    pop0.push_back({std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()});
+    BOOST_CHECK(std::isnan(pop0.champion_f()[0]));
+    pop0.push_back({1, 2});
+    BOOST_CHECK(!std::isnan(pop0.champion_f()[0]));
+    pop0.push_back({std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()});
+    BOOST_CHECK(!std::isnan(pop0.champion_f()[0]));
 }

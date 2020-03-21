@@ -3,11 +3,7 @@ if(YACMAPythonSetupIncluded)
 endif()
 
 # NOTE: this is a heuristic to determine whether we need to link to the Python library.
-# In theory, Python extensions don't need to, as they are dlopened() by the Python process
-# and thus they don't need to be linked to the Python library at compile time. However,
-# the dependency on Boost.Python muddies the waters, as BP itself does link to the Python
-# library, at least on some platforms. The following configuration seems to be working fine
-# on various CI setups.
+# The linking seems to be necessary only on Windows.
 if(WIN32)
   message(STATUS "Python modules require linking to the Python library.")
   set(_YACMA_PYTHON_MODULE_NEED_LINK TRUE)
@@ -40,22 +36,17 @@ else()
 endif()
 mark_as_advanced(YACMA_PYTHON_INCLUDE_DIR)
 
+# Add an interface imported target for the
+# Python include dir.
+add_library(YACMA::PythonIncludeDir INTERFACE IMPORTED)
+set_target_properties(YACMA::PythonIncludeDir PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${YACMA_PYTHON_INCLUDE_DIR})
+
 message(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
 message(STATUS "Python interpreter version: ${PYTHON_VERSION_STRING}")
 if(_YACMA_PYTHON_MODULE_NEED_LINK)
   message(STATUS "Python libraries: ${PYTHON_LIBRARIES}")
 endif()
 message(STATUS "Python include dir: ${YACMA_PYTHON_INCLUDE_DIR}")
-
-# An imported target to be used when building extension modules.
-if(_YACMA_PYTHON_MODULE_NEED_LINK)
-  add_library(YACMA::PythonModule UNKNOWN IMPORTED)
-  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}"
-    IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
-else()
-  add_library(YACMA::PythonModule INTERFACE IMPORTED)
-  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}")
-endif()
 
 # This flag is used to signal the need to override the default extension of the Python modules
 # depending on the architecture. Under Windows, for instance, CMake produces shared objects as
@@ -123,11 +114,9 @@ function(YACMA_PYTHON_MODULE name)
     # with clang and gcc. See:
     # https://bugs.python.org/issue11149
     # http://www.python.org/dev/peps/pep-3123/
-    # NOTE: not sure here how we should set flags up for MSVC or clang on windows, need
-    # to check in the future.
     # NOTE: do not use the yacma compiler linker settings bits, so this module
     # can be used stand-alone.
-    if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+    if(CMAKE_COMPILER_IS_GNUCXX OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND NOT MSVC))
         message(STATUS "Setting up extra compiler flag '-fwrapv' for the Python module '${name}'.")
         target_compile_options(${name} PRIVATE "-fwrapv")
         if(${PYTHON_VERSION_MAJOR} LESS 3)
@@ -143,7 +132,14 @@ function(YACMA_PYTHON_MODULE name)
       # https://cmake.org/pipermail/cmake/2017-March/065115.html
       set_target_properties(${name} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
     endif()
-    target_link_libraries("${name}" PRIVATE YACMA::PythonModule)
+
+    # Add the Python include dirs.
+    target_include_directories("${name}" SYSTEM PRIVATE ${YACMA_PYTHON_INCLUDE_DIR})
+
+    # Link to the Python libs, if necessary.
+    if(_YACMA_PYTHON_MODULE_NEED_LINK)
+      target_link_libraries("${name}" PRIVATE ${PYTHON_LIBRARIES})
+    endif()
 endfunction()
 
 # Mark as included.

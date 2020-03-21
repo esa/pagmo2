@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -133,7 +133,7 @@ vector_double translate::batch_fitness(const vector_double &xs) const
     // or of the fitness, thus all the checks run by m_problem.batch_fitness()
     // are redundant.
 #if defined(NDEBUG)
-    return detail::prob_invoke_mem_batch_fitness(m_problem, xs_deshifted);
+    return detail::prob_invoke_mem_batch_fitness(m_problem, xs_deshifted, true);
 #else
     return m_problem.batch_fitness(xs_deshifted);
 #endif

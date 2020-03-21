@@ -37,11 +37,6 @@ Fork island
 
    .. note::
 
-      :cpp:class:`~pagmo::fork_island` is not exposed in the Python bindings. Instead, pygmo provides a
-      :py:class:`process-based island <pygmo.mp_island>` via Python's :py:mod:`multiprocessing` module.
-
-   .. note::
-
       When using memory checking tools such as valgrind, or the address/memory sanitizers from GCC/clang, be aware
       that memory leaks in the child process may be flagged by such tools. These are spurious warnings due to the
       fact that the child process is exited via ``std::exit()`` (which does not invoke the destructors

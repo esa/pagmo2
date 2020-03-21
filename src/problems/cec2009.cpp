@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -84,7 +84,7 @@ cec2009::cec2009(unsigned prob_id, bool is_constrained, unsigned dim)
 {
     if (prob_id < 1u || prob_id > 10u) {
         pagmo_throw(std::invalid_argument,
-                    "Error: CEC2009 Test functions are only defined for prob_id in [1, 20], a prob_id of "
+                    "Error: CEC2009 Test functions are only defined for prob_id in [1, 10], a prob_id of "
                         + std::to_string(prob_id) + " was requested.");
     }
     if (dim < 1u) {

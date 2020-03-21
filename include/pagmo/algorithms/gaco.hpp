@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -86,12 +86,12 @@ class PAGMO_DLL_PUBLIC gaco
 {
 public:
     /// Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp)
-    typedef std::tuple<unsigned, unsigned, double, unsigned, double, double, double> log_line_type;
+    typedef std::tuple<unsigned, vector_double::size_type, double, unsigned, double, double, double> log_line_type;
     /// The log
     typedef std::vector<log_line_type> log_type;
 
     /**
-     * Constructs the ACO user defined algorithm for single and multi-objective optimization.
+     * Constructs the ACO user defined algorithm for single-objective optimization.
      *
      * @param[in] gen Generations: number of generations to evolve.
      * @param[in] ker Kernel: number of solutions stored in the solution archive.
@@ -109,23 +109,18 @@ public:
      * @param[in] focus Focus parameter: this parameter makes the search for the optimum greedier and more focused on
      * local improvements (the higher the greedier). If the value is very high, the search is more focused around the
      * current best solutions.
-     * @param[in] paretomax Max number of non-dominated solutions: this regulates the max number of Pareto points to be
-     * stored.
-     * @param[in] epsilon Pareto precision parameter: the smaller this parameter, the higher the chances to introduce a
-     * new solution in the Pareto front.
      * @param[in] memory Memory parameter: if true, memory is activated in the algorithm for multiple calls
      * @param seed seed used by the internal random number generator (default is random).
      *
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$,
-     * \p ker is not a positive integer, \p oracle is not positive, \p paretomax is not a positive integer, \p
+     * \p ker is not a positive integer, \p oracle is not positive, \p
      * threshold is not \f$ \in [1,gen] \f$ when \f$memory=false\f$ and  \f$gen!=0\f$, \p threshold is not \f$ >=1 \f$
-     * when \f$memory=true\f$ and \f$gen!=0\f$, \p epsilon is not \f$ \in [0,1[\f$, \p q is not \f$ >=0 \f$
+     * when \f$memory=true\f$ and \f$gen!=0\f$, \p q is not \f$ >=0 \f$
      */
-    gaco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
+    gaco(unsigned gen = 1u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
          unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned impstop = 100000u, unsigned evalstop = 100000u,
-         double focus = 0., unsigned paretomax = 10u, double epsilon = 0.9, bool memory = false,
-         unsigned seed = pagmo::random_device::next());
+         double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -249,8 +244,6 @@ private:
     double m_focus;
     unsigned m_ker;
     mutable double m_oracle;
-    unsigned m_paretomax;
-    double m_epsilon;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;
@@ -265,7 +258,7 @@ private:
     mutable unsigned m_n_evalstop;
     mutable unsigned m_n_impstop;
     mutable unsigned m_gen_mark;
-    mutable unsigned m_fevals;
+    mutable vector_double::size_type m_fevals;
     boost::optional<bfe> m_bfe;
 };
 

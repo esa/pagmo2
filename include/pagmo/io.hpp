@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -80,26 +80,54 @@ constexpr unsigned max_stream_output_length()
     return 5u;
 }
 
+// Helper to stream a [begin, end) range.
+template <typename It>
+inline void stream_range(std::ostream &os, It begin, It end)
+{
+    // Special-case an empty range.
+    if (begin == end) {
+        os << "[]";
+        return;
+    }
+
+    os << '[';
+
+    for (auto counter = 0u;; ++counter) {
+        if (counter == max_stream_output_length()) {
+            // NOTE: if we are here, it means we have more
+            // elements in the range to print, but we already
+            // printed the maximum number of elements.
+            // Add the ellipsis and exit.
+            os << "... ";
+            break;
+        }
+
+        // Stream the current element of the range.
+        stream(os, *begin);
+
+        // NOTE: because we handled the empty range earlier,
+        // ++begin is always well-defined at the first iteration
+        // of this loop. Following iterations will happen only
+        // if begin != end.
+        if (++begin == end) {
+            // We printed the last element. Omit the comma,
+            // and exit.
+            break;
+        }
+
+        // We have more elements to print, or perhaps the
+        // ellipsis. Print comma and add space.
+        os << ", ";
+    }
+
+    os << ']';
+}
+
+// Implementation for vector.
 template <typename T>
 inline void stream_impl(std::ostream &os, const std::vector<T> &v)
 {
-    auto len = v.size();
-    if (len <= max_stream_output_length()) {
-        os << '[';
-        for (decltype(v.size()) i = 0u; i < v.size(); ++i) {
-            stream(os, v[i]);
-            if (i != v.size() - 1u) {
-                os << ", ";
-            }
-        }
-        os << ']';
-    } else {
-        os << '[';
-        for (decltype(v.size()) i = 0u; i < max_stream_output_length(); ++i) {
-            stream(os, v[i], ", ");
-        }
-        os << "... ]";
-    }
+    stream_range(os, v.begin(), v.end());
 }
 
 template <typename T, typename U>

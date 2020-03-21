@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
@@ -365,7 +366,7 @@ namespace pagmo
  * This class represents an optimization algorithm. An algorithm can be
  * stochastic, deterministic, population based, derivative-free, using hessians,
  * using gradients, a meta-heuristic, evolutionary, etc.. Via this class pagmo offers a common interface to
- * all types of algorithms that can be applied to find solution to a generic matematical
+ * all types of algorithms that can be applied to find solution to a generic mathematical
  * programming problem as represented by the pagmo::problem class.
  *
  * In order to define an optimizaztion algorithm in pagmo, the user must first define a class
@@ -700,5 +701,11 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(algorithm)
+
+// Disable tracking for the serialisation of algorithm.
+BOOST_CLASS_TRACKING(pagmo::algorithm, boost::serialization::track_never)
 
 #endif

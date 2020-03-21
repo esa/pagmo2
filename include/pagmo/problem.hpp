@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -954,7 +955,7 @@ namespace detail
 // them as free functions.
 PAGMO_DLL_PUBLIC void prob_check_dv(const problem &, const double *, vector_double::size_type);
 PAGMO_DLL_PUBLIC void prob_check_fv(const problem &, const double *, vector_double::size_type);
-PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &, bool);
 
 } // namespace detail
 
@@ -1044,7 +1045,7 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  */
 class PAGMO_DLL_PUBLIC problem
 {
-    // Make friend with the streaming operator, which needs access
+    // Make friends with the streaming operator, which needs access
     // to the internals.
     friend PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const problem &);
 
@@ -1206,7 +1207,8 @@ public:
 private:
 #if !defined(PAGMO_DOXYGEN_INVOKED)
     // Make friends with the batch_fitness() invocation helper.
-    friend PAGMO_DLL_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &);
+    friend PAGMO_DLL_PUBLIC vector_double detail::prob_invoke_mem_batch_fitness(const problem &, const vector_double &,
+                                                                                bool);
 #endif
 
 public:
@@ -1690,5 +1692,11 @@ private:
 };
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(problem)
+
+// Disable tracking for the serialisation of problem.
+BOOST_CLASS_TRACKING(pagmo::problem, boost::serialization::track_never)
 
 #endif

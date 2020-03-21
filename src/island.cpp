@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -28,9 +28,9 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/config.hpp>
 
-#include <array>
 #include <cassert>
 #include <chrono>
+#include <cstddef>
 #include <exception>
 #include <functional>
 #include <future>
@@ -38,22 +38,40 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <random>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include <boost/any.hpp>
+#include <boost/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/archipelago.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/r_policy.hpp>
+#include <pagmo/rng.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/types.hpp>
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
 #include <pagmo/islands/fork_island.hpp>
+#endif
+
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
 #endif
 
 namespace pagmo
@@ -61,6 +79,16 @@ namespace pagmo
 
 namespace detail
 {
+
+namespace
+{
+
+// This will contain the time point at which
+// the pagmo library is loaded. It is used in the migration
+// logging to record the migration time.
+const auto initial_timestamp = std::chrono::steady_clock::now();
+
+} // namespace
 
 // NOTE: this is just a simple wrapper to force noexcept behaviour on std::future::wait().
 // If f.wait() throws something, the program will terminate. A valid std::future should not
@@ -157,11 +185,36 @@ island_data::island_data()
 {
 }
 
+// This is used only in the copy ctor of island. The island will come from the clone()
+// method of an isl_inner, the algo/pop from the island's getters. The r_policy
+// will come directly from the island's data member, as the r_policy is supposed
+// to be thread-safe.
+island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, population &&p, const r_policy &r,
+                         const s_policy &s)
+    : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::move(a))),
+      pop(std::make_shared<population>(std::move(p))), r_pol(r), s_pol(s)
+{
+}
+
+namespace
+{
+
+// NOTE: in C++11 hashing of enums might not be available. Provide our own.
+struct island_status_hasher {
+    std::size_t operator()(evolve_status es) const noexcept
+    {
+        return std::hash<int>{}(static_cast<int>(es));
+    }
+};
+
+// A map to link a human-readable description to evolve_status.
 const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses
     = {{evolve_status::idle, "idle"},
        {evolve_status::busy, "busy"},
        {evolve_status::idle_error, "idle - **error occurred**"},
        {evolve_status::busy_error, "busy - **error occurred**"}};
+
+} // namespace
 
 } // namespace detail
 
@@ -191,7 +244,7 @@ void island::wait_check_ignore()
 /// Default constructor.
 /**
  * The default constructor will initialise an island containing a UDI of type pagmo::thread_island,
- * and default-constructed pagmo::algorithm and pagmo::population.
+ * and default-constructed algorithm, population and replacement/selection policies.
  *
  * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
  */
@@ -199,18 +252,19 @@ island::island() : m_ptr(detail::make_unique<idata_t>()) {}
 
 /// Copy constructor.
 /**
- * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population
- * and algorithm. It is safe to call this constructor while \p other is evolving.
+ * The copy constructor will initialise an island containing a copy of <tt>other</tt>'s UDI, population,
+ * algorithm and replacement/selection policies. It is safe to call this constructor while \p other is evolving.
  *
  * @param other the island tht will be copied.
  *
  * @throws unspecified any exception thrown by:
  * - get_population() and get_algorithm(),
  * - memory allocation errors,
- * - the copy constructors of pagmo::algorithm and pagmo::population.
+ * - copying the island's members.
  */
 island::island(const island &other)
-    : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population()))
+    : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population(),
+                                         other.m_ptr->r_pol, other.m_ptr->s_pol))
 {
     // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
     assert(m_ptr->archi_ptr == nullptr);
@@ -292,8 +346,210 @@ void island::evolve(unsigned n)
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
         m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+            // Random engine for use in the migration logic.
+            // Wrap it in an optional so that, if we don't need
+            // it, we don't waste CPU/memory.
+            boost::optional<std::mt19937> migr_eng;
+
+            // Cache the archi pointer.
+            const auto aptr = this->m_ptr->archi_ptr;
+
+            // Figure out what is the island's index in the archi, if we are
+            // in an archi. Otherwise, this variable will be unused.
+            const auto isl_idx = aptr ? aptr->get_island_idx(*this) : 0u;
+
             for (auto i = 0u; i < n; ++i) {
+                if (aptr) {
+                    // If the island is in an archi, before
+                    // launching the evolution migrate the
+                    // individuals from the connecting islands.
+
+                    // Get the indices of the islands with a connection
+                    // towards this.
+                    // NOTE: the get_island_connections() helper will take care
+                    // of converting topology indices to island indices.
+                    const auto connections = aptr->get_island_connections(isl_idx);
+                    assert(connections.first.size() == connections.second.size());
+
+                    // Do something only if we actually have connections.
+                    if (connections.first.size()) {
+                        // Init the rng engine, if necessary.
+                        if (!migr_eng) {
+                            migr_eng.emplace(static_cast<std::mt19937::result_type>(random_device::next()));
+                        }
+
+                        // Fetch the migration type and the migrant handling policy
+                        // from the archipelago.
+                        const auto mt = aptr->get_migration_type();
+                        const auto mh = aptr->get_migrant_handling();
+
+                        // Small helper to turn a group of individuals into
+                        // an ID -> (dv, fv) map. inds will be destroyed
+                        // in the process.
+                        using inds_map_t
+                            = std::unordered_map<unsigned long long, std::pair<vector_double, vector_double>>;
+                        auto group_to_map = [](individuals_group_t &&inds) -> inds_map_t {
+                            inds_map_t retval;
+
+                            for (decltype(std::get<0>(inds).size()) j = 0; j < std::get<0>(inds).size(); ++j) {
+                                retval[std::get<0>(inds)[j]]
+                                    = std::make_pair(std::move(std::get<1>(inds)[j]), std::move(std::get<2>(inds)[j]));
+                            }
+
+                            return retval;
+                        };
+
+                        if (mt == migration_type::p2p) {
+                            // Point-to-point migration.
+
+                            // Pick a random island among the islands connecting to this.
+                            const auto conn_idx = std::uniform_int_distribution<decltype(connections.first.size())>(
+                                0, connections.first.size() - 1u)(*migr_eng);
+
+                            // Throw the dice against the migration probability.
+                            if (std::uniform_real_distribution<>{}(*migr_eng) < connections.second[conn_idx]) {
+                                // Get the source island's index.
+                                const auto src_idx = connections.first[conn_idx];
+
+                                // Extract or copy the candidate migrants from the archipelago.
+                                const auto migrants = (mh == migrant_handling::preserve)
+                                                          ? aptr->get_migrants(src_idx)
+                                                          : aptr->extract_migrants(src_idx);
+
+                                // Extract the migration data from this island.
+                                const auto mig_data = this->get_migration_data();
+
+                                // Run the replacement policy.
+                                auto new_inds = this->m_ptr->r_pol.replace(std::get<0>(mig_data), std::get<1>(mig_data),
+                                                                           std::get<2>(mig_data), std::get<3>(mig_data),
+                                                                           std::get<4>(mig_data), std::get<5>(mig_data),
+                                                                           std::get<6>(mig_data), migrants);
+
+                                // Set the new individuals.
+                                this->set_individuals(new_inds);
+
+                                // Compute the migration timestamp.
+                                const std::chrono::duration<double> mig_ts
+                                    = std::chrono::steady_clock::now() - detail::initial_timestamp;
+
+                                // Turn new_inds into an ID -> (dv, fv) map in order to build the log.
+                                const auto new_inds_map = group_to_map(std::move(new_inds));
+
+                                // Build the migration log.
+                                archipelago::migration_log_t mlog;
+                                for (auto mig_ID : std::get<0>(migrants)) {
+                                    const auto it = new_inds_map.find(mig_ID);
+
+                                    if (it != new_inds_map.end()) {
+                                        mlog.emplace_back(mig_ts.count(), mig_ID, it->second.first, it->second.second,
+                                                          src_idx, isl_idx);
+                                    }
+                                }
+
+                                // Append it.
+                                aptr->append_migration_log(mlog);
+                            }
+                        } else {
+                            // Broadcast migration.
+
+                            // Group of candidate migrants from the all
+                            // the islands connecting to this.
+                            // We will build this below iteratively.
+                            individuals_group_t migrants;
+
+                            // Vector to pair source island indices to the corresponding
+                            // candidate migrants. This will contain the same set of individuals
+                            // as migrants, but split according to the source island. This is needed
+                            // to build the migration log.
+                            std::vector<std::pair<archipelago::size_type, individuals_group_t>> split_migrants;
+
+                            for (decltype(connections.first.size()) j = 0; j < connections.first.size(); ++j) {
+                                // Throw the dice against the migration probability.
+                                if (std::uniform_real_distribution<>{}(*migr_eng) < connections.second[j]) {
+                                    // Get the source island's index.
+                                    const auto src_idx = connections.first[j];
+
+                                    // Extract or copy the candidate migrants from the archipelago.
+                                    auto cur_migrants = (mh == migrant_handling::preserve)
+                                                            ? aptr->get_migrants(src_idx)
+                                                            : aptr->extract_migrants(src_idx);
+
+                                    // Add them to the global migrants vector.
+                                    std::get<0>(migrants).insert(std::get<0>(migrants).end(),
+                                                                 std::get<0>(cur_migrants).begin(),
+                                                                 std::get<0>(cur_migrants).end());
+                                    std::get<1>(migrants).insert(std::get<1>(migrants).end(),
+                                                                 std::get<1>(cur_migrants).begin(),
+                                                                 std::get<1>(cur_migrants).end());
+                                    std::get<2>(migrants).insert(std::get<2>(migrants).end(),
+                                                                 std::get<2>(cur_migrants).begin(),
+                                                                 std::get<2>(cur_migrants).end());
+
+                                    // Add them to split_migrants too.
+                                    split_migrants.emplace_back(src_idx, std::move(cur_migrants));
+                                }
+                            }
+
+                            // Extract the migration data from this island.
+                            const auto mig_data = this->get_migration_data();
+
+                            // Run the replacement policy.
+                            auto new_inds = this->m_ptr->r_pol.replace(std::get<0>(mig_data), std::get<1>(mig_data),
+                                                                       std::get<2>(mig_data), std::get<3>(mig_data),
+                                                                       std::get<4>(mig_data), std::get<5>(mig_data),
+                                                                       std::get<6>(mig_data), migrants);
+
+                            // Set the new individuals.
+                            this->set_individuals(new_inds);
+
+                            // Compute the migration timestamp.
+                            const std::chrono::duration<double> mig_ts
+                                = std::chrono::steady_clock::now() - detail::initial_timestamp;
+
+                            // Turn new_inds into an ID -> (dv, fv) map in order to build the log.
+                            const auto new_inds_map = group_to_map(std::move(new_inds));
+
+                            // Build the migration log.
+                            archipelago::migration_log_t mlog;
+                            for (const auto &p : split_migrants) {
+                                const auto src_idx = p.first;
+
+                                for (auto mig_ID : std::get<0>(p.second)) {
+                                    const auto it = new_inds_map.find(mig_ID);
+
+                                    if (it != new_inds_map.end()) {
+                                        mlog.emplace_back(mig_ts.count(), mig_ID, it->second.first, it->second.second,
+                                                          src_idx, isl_idx);
+                                    }
+                                }
+                            }
+
+                            // Append it.
+                            aptr->append_migration_log(mlog);
+                        }
+                    }
+                }
+
+                // Run the evolution.
                 this->m_ptr->isl_ptr->run_evolve(*this);
+
+                if (aptr) {
+                    // If the island is in an archi, after evolution select
+                    // the migrating individuals and place them in the archi's migrants
+                    // database.
+
+                    // Extract the migration data from this island.
+                    const auto mig_data = this->get_migration_data();
+
+                    // Select the individuals to place into the archi's
+                    // migration database.
+                    auto mig_inds = this->m_ptr->s_pol.select(
+                        std::get<0>(mig_data), std::get<1>(mig_data), std::get<2>(mig_data), std::get<3>(mig_data),
+                        std::get<4>(mig_data), std::get<5>(mig_data), std::get<6>(mig_data));
+
+                    // Place them in the database.
+                    aptr->set_migrants(isl_idx, std::move(mig_inds));
+                }
             }
         });
         // LCOV_EXCL_START
@@ -450,9 +706,22 @@ algorithm island::get_algorithm() const
     // by set_algorithm() below, and we guarantee strong thread safety for this method.
     // NOTE: it might be possible to replace the locks with atomic operations:
     // http://en.cppreference.com/w/cpp/memory/shared_ptr/atomic
-    std::unique_lock<std::mutex> lock(m_ptr->algo_mutex);
-    auto new_algo_ptr = m_ptr->algo;
-    lock.unlock();
+
+    // Create a new reference to the internal algo
+    // (this involves only C++ operations).
+    std::shared_ptr<algorithm> new_algo_ptr;
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
+        new_algo_ptr = m_ptr->algo;
+    }
+
+    // Return a copy.
+    // NOTE: when exiting the function, the dtor of new_algo_ptr
+    // will be called. This will result in the refcount
+    // decreasing, and, if new_algo_ptr is the last existing reference,
+    // in the call of the dtor of the internal algorithm. This could
+    // be the case, for instance, if we are using set_algorithm() from
+    // another thread.
     return *new_algo_ptr;
 }
 
@@ -465,11 +734,30 @@ algorithm island::get_algorithm() const
  * @throws unspecified any exception thrown by threading primitives, memory allocation erros
  * or the invoked copy constructor.
  */
-void island::set_algorithm(algorithm algo)
+void island::set_algorithm(const algorithm &algo)
 {
-    auto new_algo_ptr = std::make_shared<algorithm>(std::move(algo));
-    std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
-    m_ptr->algo = new_algo_ptr;
+    // Step 1: create a new shared ptr to a copy of algo.
+    auto new_algo_ptr = std::make_shared<algorithm>(algo);
+
+    // Step 2: init an empty algorithm pointer.
+    std::shared_ptr<algorithm> old_ptr;
+
+    // Step 3: store a reference to the old algo
+    // in old_ptr, and assign a reference to the
+    // new algo.
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
+        old_ptr = m_ptr->algo;
+        // NOTE: this assignment will never invoke
+        // the destructor of the object pointed-to
+        // by m_ptr->algo, as we made sure
+        // to create a new reference above.
+        m_ptr->algo = new_algo_ptr;
+    }
+
+    // NOTE: upon exit, the refcount of old_ptr and
+    // new_algo_ptr will be decreased, possibly invoking
+    // the dtor of the contained objects.
 }
 
 /// Get the population.
@@ -483,9 +771,13 @@ void island::set_algorithm(algorithm algo)
  */
 population island::get_population() const
 {
-    std::unique_lock<std::mutex> lock(m_ptr->pop_mutex);
-    auto new_pop_ptr = m_ptr->pop;
-    lock.unlock();
+    // NOTE: same pattern as in get_algorithm().
+    std::shared_ptr<population> new_pop_ptr;
+    {
+        std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
+        new_pop_ptr = m_ptr->pop;
+    }
+
     return *new_pop_ptr;
 }
 
@@ -498,34 +790,45 @@ population island::get_population() const
  * @throws unspecified any exception thrown by threading primitives, memory allocation errors
  * or by the invoked copy constructor.
  */
-void island::set_population(population pop)
+void island::set_population(const population &pop)
 {
-    auto new_pop_ptr = std::make_shared<population>(std::move(pop));
-    std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-    m_ptr->pop = new_pop_ptr;
-}
+    // Same pattern as in set_algorithm().
+    auto new_pop_ptr = std::make_shared<population>(pop);
 
-/// Get the thread safety of the island's members.
-/**
- * It is safe to call this method while the island is evolving.
- *
- * @return an array containing the pagmo::thread_safety values for the internal algorithm and population's
- * problem (as returned by pagmo::algorithm::get_thread_safety() and pagmo::problem::get_thread_safety()).
- *
- * @throws unspecified any exception thrown by threading primitives.
- */
-std::array<thread_safety, 2> island::get_thread_safety() const
-{
-    std::array<thread_safety, 2> retval;
-    {
-        std::lock_guard<std::mutex> lock(m_ptr->algo_mutex);
-        retval[0] = m_ptr->algo->get_thread_safety();
-    }
+    std::shared_ptr<population> old_ptr;
+
     {
         std::lock_guard<std::mutex> lock(m_ptr->pop_mutex);
-        retval[1] = m_ptr->pop->get_problem().get_thread_safety();
+        old_ptr = m_ptr->pop;
+        m_ptr->pop = new_pop_ptr;
     }
-    return retval;
+}
+
+/// Get the replacement policy.
+/**
+ * @return a copy of the current replacement policy.
+ *
+ * @throws unspecified any exception thrown by the copy constructor
+ * of the replacement policy.
+ */
+r_policy island::get_r_policy() const
+{
+    // NOTE: replacement/selection policies
+    // are supposed to provide thread-safe
+    // copy constructors.
+    return m_ptr->r_pol;
+}
+
+/// Get the selection policy.
+/**
+ * @return a copy of the current selection policy.
+ *
+ * @throws unspecified any exception thrown by the copy constructor
+ * of the selection policy.
+ */
+s_policy island::get_s_policy() const
+{
+    return m_ptr->s_pol;
 }
 
 /// Island's name.
@@ -560,21 +863,9 @@ std::string island::get_extra_info() const
     return m_ptr->isl_ptr->get_extra_info();
 }
 
-/// Stream operator for pagmo::island.
-/**
- * This operator will stream to \p os a human-readable representation of \p isl.
- *
- * It is safe to call this method while the island is evolving.
- *
- * @param os the target stream.
- * @param isl the island.
- *
- * @return a reference to \p os.
- *
- * @throws unspecified any exception thrown by:
- * - the stream operators of fundamental types, pagmo::algorithm and pagmo::population,
- * - pagmo::island::get_extra_info(), pagmo::island::get_algorithm(), pagmo::island::get_population().
- */
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+// Stream operator for pagmo::island.
 std::ostream &operator<<(std::ostream &os, const island &isl)
 {
     stream(os, "Island name: ", isl.get_name());
@@ -583,13 +874,26 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
     if (!extra_str.empty()) {
         stream(os, "Extra info:\n", extra_str, "\n\n");
     }
+
+    // Cache out a copy of the population for use below.
+    const auto pop = isl.get_population();
+
     stream(os, "Algorithm: " + isl.get_algorithm().get_name(), "\n\n");
-    stream(os, "Problem: " + isl.get_population().get_problem().get_name(), "\n\n");
-    stream(os, "Population size: ", isl.get_population().size(), "\n");
-    stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
-    stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
+    stream(os, "Problem: " + pop.get_problem().get_name(), "\n\n");
+    stream(os, "Replacement policy: " + isl.m_ptr->r_pol.get_name(), "\n\n");
+    stream(os, "Selection policy: " + isl.m_ptr->s_pol.get_name(), "\n\n");
+    stream(os, "Population size: ", pop.size(), "\n");
+
+    // NOTE: don't print champion info for MO or stochastic problems.
+    if (pop.get_problem().get_nobj() == 1u && !pop.get_problem().is_stochastic()) {
+        stream(os, "\tChampion decision vector: ", isl.get_population().champion_x(), "\n");
+        stream(os, "\tChampion fitness: ", isl.get_population().champion_f(), "\n");
+    }
+
     return os;
 }
+
+#endif
 
 /// Check if the island is in a valid state.
 /**
@@ -598,6 +902,66 @@ std::ostream &operator<<(std::ostream &os, const island &isl)
 bool island::is_valid() const
 {
     return static_cast<bool>(m_ptr);
+}
+
+// Get the migration data.
+island::migration_data_t island::get_migration_data() const
+{
+    migration_data_t retval;
+
+    {
+        // NOTE: this helper is called from the separate
+        // thread of execution within pagmo::island. We need to protect
+        // with a gte.
+        auto gte = detail::gte_getter();
+        (void)gte;
+
+        // Get a copy of the population.
+        auto tmp_pop(get_population());
+
+        // Move out the individuals.
+        std::get<0>(std::get<0>(retval)) = std::move(tmp_pop.m_ID);
+        std::get<1>(std::get<0>(retval)) = std::move(tmp_pop.m_x);
+        std::get<2>(std::get<0>(retval)) = std::move(tmp_pop.m_f);
+
+        // nx, nix, nobj, nec, nic.
+        std::get<1>(retval) = tmp_pop.get_problem().get_nx();
+        std::get<2>(retval) = tmp_pop.get_problem().get_nix();
+        std::get<3>(retval) = tmp_pop.get_problem().get_nobj();
+        std::get<4>(retval) = tmp_pop.get_problem().get_nec();
+        std::get<5>(retval) = tmp_pop.get_problem().get_nic();
+
+        // The vector of tolerances.
+        std::get<6>(retval) = tmp_pop.get_problem().get_c_tol();
+    }
+
+    return retval;
+}
+
+// Set all the individuals in the population.
+void island::set_individuals(const individuals_group_t &inds)
+{
+    // Create copy for move semantics below.
+    auto tmp_inds(inds);
+
+    {
+        // NOTE: this helper is called from the separate
+        // thread of execution within pagmo::island. We need to protect
+        // with a gte.
+        auto gte = detail::gte_getter();
+        (void)gte;
+
+        // Get out a copy of the population.
+        auto tmp_pop(get_population());
+
+        // Move in the individuals.
+        tmp_pop.m_ID = std::move(std::get<0>(tmp_inds));
+        tmp_pop.m_x = std::move(std::get<1>(tmp_inds));
+        tmp_pop.m_f = std::move(std::get<2>(tmp_inds));
+
+        // Set the new population.
+        set_population(tmp_pop);
+    }
 }
 
 } // namespace pagmo

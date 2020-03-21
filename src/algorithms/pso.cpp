@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -80,7 +80,7 @@ pso::pso(unsigned gen, double omega, double eta1, double eta2, double max_vel, u
         // variants using Inertia weight
         pagmo_throw(std::invalid_argument,
                     "The particles' inertia (or the constriction factor) must be in the [0,1] range, while a value of "
-                        + std::to_string(m_variant) + " was detected");
+                        + std::to_string(m_omega) + " was detected");
     }
     if (m_eta1 < 0. || m_eta2 < 0. || m_eta1 > 4. || m_eta2 > 4.) {
         pagmo_throw(std::invalid_argument,

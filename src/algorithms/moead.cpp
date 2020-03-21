@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -85,6 +85,10 @@ moead::moead(unsigned gen, std::string weight_generation, std::string decomposit
         pagmo_throw(std::invalid_argument,
                     "The chance of considering a neighbourhood (realb) needs to be in [0,1], while a value of "
                         + std::to_string(realb) + " was detected");
+    }
+    if (neighbours < 2) {
+        pagmo_throw(std::invalid_argument, "The size of the weight's neighborhood needs to be >= 2, while a size of "
+                                               + std::to_string(neighbours) + " was detected");
     }
 }
 
@@ -308,7 +312,7 @@ std::string moead::get_extra_info() const
     stream(ss, "\n\tWeight generation: ", m_weight_generation);
     stream(ss, "\n\tDecomposition method: ", m_decomposition);
     stream(ss, "\n\tNeighbourhood size: ", m_neighbours);
-    stream(ss, "\n\tParameter CR: ", m_F);
+    stream(ss, "\n\tParameter CR: ", m_CR);
     stream(ss, "\n\tParameter F: ", m_F);
     stream(ss, "\n\tDistribution index: ", m_eta_m);
     stream(ss, "\n\tChance for diversity preservation: ", m_realb);
@@ -378,6 +382,7 @@ moead::select_parents(population::size_type n, const std::vector<std::vector<pop
     std::vector<population::size_type> retval;
     auto ss = neigh_idx[n].size();
     decltype(ss) p;
+    assert(neigh_idx[n].size() > 1);
 
     std::uniform_int_distribution<vector_double::size_type> p_idx(
         0, neigh_idx.size() - 1u); // to generate a random index for the neighbourhood

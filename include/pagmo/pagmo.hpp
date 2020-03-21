@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -40,9 +40,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/island.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/threading.hpp>
+#include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -69,10 +72,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/gaco.hpp>
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/algorithms/ihs.hpp>
+#include <pagmo/algorithms/maco.hpp>
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
+#include <pagmo/algorithms/nspso.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
 #include <pagmo/algorithms/pso.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
@@ -120,6 +125,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/schwefel.hpp>
 #include <pagmo/problems/translate.hpp>
 #include <pagmo/problems/unconstrain.hpp>
+#include <pagmo/problems/wfg.hpp>
 #include <pagmo/problems/zdt.hpp>
 
 // Enable conditionally the inclusion of these
@@ -137,5 +143,17 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
+
+// Replacement policies.
+#include <pagmo/r_policies/fair_replace.hpp>
+
+// Selection policies.
+#include <pagmo/s_policies/select_best.hpp>
+
+// Topologies.
+#include <pagmo/topologies/base_bgl_topology.hpp>
+#include <pagmo/topologies/fully_connected.hpp>
+#include <pagmo/topologies/ring.hpp>
+#include <pagmo/topologies/unconnected.hpp>
 
 #endif

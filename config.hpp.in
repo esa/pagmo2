@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_VERSION "@pagmo_VERSION@"
 #define PAGMO_VERSION_MAJOR @pagmo_VERSION_MAJOR@
 #define PAGMO_VERSION_MINOR @pagmo_VERSION_MINOR@
+#define PAGMO_VERSION_PATCH @pagmo_VERSION_PATCH@
 @PAGMO_ENABLE_EIGEN3@
 @PAGMO_ENABLE_NLOPT@
 @PAGMO_ENABLE_IPOPT@

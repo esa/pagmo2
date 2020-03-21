@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -36,7 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
@@ -288,4 +288,49 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<5>(before_log[i]), std::get<5>(after_log[i]), 1e-8);
     }
+}
+
+BOOST_AUTO_TEST_CASE(bug)
+{
+    problem prob{rosenbrock{10u}};
+    population pop1{prob, 11u, 23u};
+    pso_gen user_algo1{10u, 0.79, 2., 2., 0.1, 1u, 1u, 4u, false, 23u};
+    user_algo1.set_verbosity(1u);
+    pop1 = user_algo1.evolve(pop1);
+}
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test_not_stoch)
+{
+    population pop{rosenbrock{10u}, 30u, 23u};
+    pso_gen uda{40u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{}); // This will use the default bfe.
+    pop = uda.evolve(pop);
+
+    population pop_2{rosenbrock{10u}, 30u, 23u};
+    pso_gen uda_2{40u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda_2.set_verbosity(1u);
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+
+    BOOST_CHECK(pop.get_f() == pop_2.get_f());
+}
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test_stoch)
+{
+    population pop{my_sto_prob{25u, 10, 5}, 30u, 23u};
+    pso_gen uda{45u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    uda.set_bfe(bfe{}); // This will use the default bfe.
+    pop = uda.evolve(pop);
+
+    population pop_2{my_sto_prob{25u, 10, 5}, 30u, 23u};
+    pso_gen uda_2{45u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
+    uda_2.set_verbosity(1u);
+    uda_2.set_seed(23u);
+    pop_2 = uda_2.evolve(pop_2);
+
+    BOOST_CHECK(pop.get_f() == pop_2.get_f());
 }

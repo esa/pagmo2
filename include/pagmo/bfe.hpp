@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/s11n.hpp>
@@ -285,8 +286,10 @@ public:
     {
         return extract<T>() != nullptr;
     }
+
     // Call operator.
     vector_double operator()(const problem &, const vector_double &) const;
+
     // Name.
     std::string get_name() const
     {
@@ -294,6 +297,7 @@ public:
     }
     // Extra info.
     std::string get_extra_info() const;
+
     // Thread safety level.
     thread_safety get_thread_safety() const
     {
@@ -353,5 +357,11 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
 #endif
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(bfe)
+
+// Disable tracking for the serialisation of bfe.
+BOOST_CLASS_TRACKING(pagmo::bfe, boost::serialization::track_never)
 
 #endif

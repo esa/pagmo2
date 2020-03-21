@@ -1,7 +1,12 @@
 function(ADD_PAGMO_TUTORIAL arg1)
     add_executable(${arg1} ${arg1}.cpp)
     target_link_libraries(${arg1} pagmo)
-    target_compile_options(${arg1} PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+    target_compile_options(${arg1} PRIVATE
+        "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:RelWithDebInfo>:${PAGMO_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
+    )
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
     if(NOT CMAKE_CXX_STANDARD)
         set_property(TARGET ${arg1} PROPERTY CXX_STANDARD 11)
@@ -11,6 +16,10 @@ function(ADD_PAGMO_TUTORIAL arg1)
     add_test(${arg1} ${arg1})
 endfunction()
 
+ADD_PAGMO_TUTORIAL(getting_started)
+ADD_PAGMO_TUTORIAL(first_udp_ver0)
+ADD_PAGMO_TUTORIAL(first_udp_ver1)
+ADD_PAGMO_TUTORIAL(nsga2_example)
 ADD_PAGMO_TUTORIAL(problem_basic)
 ADD_PAGMO_TUTORIAL(problem_basic_gh)
 ADD_PAGMO_TUTORIAL(problem_basic_s)

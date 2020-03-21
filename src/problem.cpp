@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -47,6 +47,12 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
+
+// MINGW-specific warnings.
+#if defined(__GNUC__) && defined(__MINGW32__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+#endif
 
 namespace pagmo
 {
@@ -163,16 +169,16 @@ void problem::generic_ctor_impl()
         pagmo_throw(std::invalid_argument, "The number of objectives cannot be zero");
     }
     // NOTE: here we check that we can always compute nobj + nec + nic safely.
-    if (m_nobj > std::numeric_limits<decltype(m_nobj)>::max() / 3u) {
+    if (m_nobj > std::numeric_limits<vector_double::size_type>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of objectives is too large");
     }
     // 3 - Constraints.
     m_nec = ptr()->get_nec();
-    if (m_nec > std::numeric_limits<decltype(m_nec)>::max() / 3u) {
+    if (m_nec > std::numeric_limits<vector_double::size_type>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of equality constraints is too large");
     }
     m_nic = ptr()->get_nic();
-    if (m_nic > std::numeric_limits<decltype(m_nic)>::max() / 3u) {
+    if (m_nic > std::numeric_limits<vector_double::size_type>::max() / 3u) {
         pagmo_throw(std::invalid_argument, "The number of inequality constraints is too large");
     }
     // 4 - Presence of batch_fitness().
@@ -409,7 +415,7 @@ vector_double problem::batch_fitness(const vector_double &dvs) const
 
     // Invoke the batch fitness function of the UDP, and
     // increase the fevals counter as well.
-    auto retval = detail::prob_invoke_mem_batch_fitness(*this, dvs);
+    auto retval = detail::prob_invoke_mem_batch_fitness(*this, dvs, true);
 
     // Check the produced vector of fitnesses.
     detail::bfe_check_output_fvs(*this, dvs, retval);
@@ -932,14 +938,17 @@ void prob_check_fv(const problem &p, const double *fv, vector_double::size_type 
 // This is useful for avoiding doing double checks on the input/output values
 // of batch_fitness() when we are sure that the checks have been performed elsewhere already.
 // This helper will also take care of increasing the fevals counter in the
-// input problem.
-vector_double prob_invoke_mem_batch_fitness(const problem &p, const vector_double &dvs)
+// input problem, if requested.
+vector_double prob_invoke_mem_batch_fitness(const problem &p, const vector_double &dvs, bool incr_fevals)
 {
     // Invoke the batch fitness from the UDP.
     auto retval(p.ptr()->batch_fitness(dvs));
 
-    // Increment the number of fitness evaluations.
-    p.increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / p.get_nx()));
+    // Increment the number of fitness evaluations, if
+    // requested.
+    if (incr_fevals) {
+        p.increment_fevals(boost::numeric_cast<unsigned long long>(dvs.size() / p.get_nx()));
+    }
 
     return retval;
 }

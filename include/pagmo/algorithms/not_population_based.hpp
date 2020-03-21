@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -178,6 +178,10 @@ protected:
     /// Random engine for the <tt>"random"</tt> selection/replacement policies.
     mutable detail::random_engine_type m_e;
 };
+
 } // namespace pagmo
+
+// Disable tracking for the serialisation of not_population_based.
+BOOST_CLASS_TRACKING(pagmo::not_population_based, boost::serialization::track_never)
 
 #endif

@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -78,7 +78,7 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    http://people.sc.fsu.edu/~inavon/5420a/corana.pdf
+ *    https://people.sc.fsu.edu/~inavon/5420a/corana.pdf
  *
  * \endverbatim
  */

@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -26,23 +26,14 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_UTIL_HV_ALGORITHM_H
-#define PAGMO_UTIL_HV_ALGORITHM_H
+#ifndef PAGMO_UTILS_HV_ALGORITHM_HPP
+#define PAGMO_UTILS_HV_ALGORITHM_HPP
 
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <iterator>
 #include <memory>
-#include <set>
-#include <stdexcept>
 #include <string>
-#include <typeinfo>
 #include <vector>
 
-#include <pagmo/exceptions.hpp>
-#include <pagmo/io.hpp>
-#include <pagmo/population.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -98,16 +89,20 @@ namespace pagmo
  * the computation in case of incompatible data.
  *
  */
-class hv_algorithm
+class PAGMO_DLL_PUBLIC hv_algorithm
 {
 public:
-    /// Destructor required for pure virtual methods
-    hv_algorithm() = default;
-    virtual ~hv_algorithm() {}
-    /// Default copy constructor
-    hv_algorithm(const hv_algorithm &) = default;
-    /// Default move constructor
-    hv_algorithm(hv_algorithm &&) = default;
+    // Default ctor.
+    hv_algorithm();
+
+    // Destructor.
+    virtual ~hv_algorithm();
+
+    // Copy constructor
+    hv_algorithm(const hv_algorithm &);
+
+    // Move constructor
+    hv_algorithm(hv_algorithm &&) noexcept;
 
     /// Compute volume between two points
     /**
@@ -121,36 +116,10 @@ public:
      * @return volume of hypercube defined by points a and b
      */
     static double volume_between(const vector_double &a, const vector_double &b,
-                                 vector_double::size_type dim_bound = 0u)
-    {
-        if (dim_bound == 0) {
-            dim_bound = a.size();
-        }
-        double volume = 1.0;
-        for (vector_double::size_type idx = 0u; idx < dim_bound; ++idx) {
-            volume *= (a[idx] - b[idx]);
-        }
-        return (volume < 0. ? -volume : volume);
-    }
+                                 vector_double::size_type dim_bound = 0u);
 
-    /// Compute volume between two points
-    /**
-     * Calculates the volume between points a and b (as defined for n-dimensional Euclidean spaces).
-     *
-     * @param a first point defining the hypercube
-     * @param b second point defining the hypercube
-     * @param size dimension of the vectors.
-     *
-     * @return volume of hypercube defined by points a and b
-     */
-    static double volume_between(double *a, double *b, vector_double::size_type size)
-    {
-        double volume = 1.0;
-        while (size--) {
-            volume *= (b[size] - a[size]);
-        }
-        return (volume < 0 ? -volume : volume);
-    }
+    // Compute volume between two points
+    static double volume_between(double *, double *, vector_double::size_type);
 
     /// Compute method
     /**
@@ -166,110 +135,17 @@ public:
      */
     virtual double compute(std::vector<vector_double> &points, const vector_double &r_point) const = 0;
 
-    /// Exclusive hypervolume method
-    /**
-     * This method computes the exclusive hypervolume for given individual.
-     * It accepts a list of points as an input, and the distinguished "reference point".
-     * Hypervolume is then computed as a joint hypervolume of hypercubes, generated pairwise with the reference point
-     * and each point from the set.
-     *
-     * @param p_idx index of the individual
-     * @param points vector of vector_doubles for which the hypervolume is computed
-     * @param r_point distinguished "reference point".
-     *
-     * @return exlusive hypervolume contributed by the individual at index p_idx
-     */
-    virtual double exclusive(unsigned p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
-    {
-        if (points.size() == 1) {
-            return compute(points, r_point);
-        }
-        std::vector<vector_double> points_less;
-        points_less.reserve(points.size() - 1);
-        copy(points.begin(), points.begin() + p_idx, back_inserter(points_less));
-        copy(points.begin() + p_idx + 1, points.end(), back_inserter(points_less));
+    // Exclusive hypervolume method
+    virtual double exclusive(unsigned p_idx, std::vector<vector_double> &, const vector_double &) const;
 
-        return compute(points, r_point) - compute(points_less, r_point);
-    }
+    // Least contributor method
+    virtual unsigned long long least_contributor(std::vector<vector_double> &, const vector_double &) const;
 
-    /// Least contributor method
-    /**
-     * This method establishes the individual that contributes the least to the hypervolume.
-     * By default it computes each individual contribution, and chooses the one with the lowest contribution.
-     * Other algorithms may overload this method for a more efficient solution.
-     *
-     * @param points vector of vector_doubles for which the hypervolume is computed
-     * @param r_point distinguished "reference point".
-     *
-     * @return index of the least contributor
-     */
-    virtual unsigned long long least_contributor(std::vector<vector_double> &points, const vector_double &r_point) const
-    {
-        return extreme_contributor(points, r_point, [](double a, double b) { return a < b; });
-    }
+    // Greatest contributor method
+    virtual unsigned long long greatest_contributor(std::vector<vector_double> &, const vector_double &) const;
 
-    /// Greatest contributor method
-    /**
-     * This method establishes the individual that contributes the most to the hypervolume.
-     * By default it computes each individual contribution, and chooses the one with the highest contribution.
-     * Other algorithms may overload this method for a more efficient solution.
-     *
-     * @param points vector of vector_doubles for which the hypervolume is computed
-     * @param r_point distinguished "reference point".
-     *
-     * @return index of the greatest contributor
-     */
-    virtual unsigned long long greatest_contributor(std::vector<vector_double> &points,
-                                                    const vector_double &r_point) const
-    {
-        return extreme_contributor(points, r_point, [](double a, double b) { return a > b; });
-    }
-
-    /// Contributions method
-    /**
-     * This methods return the exclusive contribution to the hypervolume for each point.
-     * Main reason for this method is the fact that in most cases the explicit request for all contributions
-     * can be done more efficiently (may vary depending on the provided hv_algorithm) than executing "exclusive" method
-     * in a loop.
-     *
-     * This base method uses a very naive approach, which in fact is only slightly more efficient than calling
-     * "exclusive" method successively.
-     *
-     * @param points vector of vector_doubles for which the contributions are computed
-     * @param r_point distinguished "reference point".
-     * @return vector of exclusive contributions by every point
-     */
-    virtual std::vector<double> contributions(std::vector<vector_double> &points, const vector_double &r_point) const
-    {
-        std::vector<double> c;
-        c.reserve(points.size());
-
-        // Trivial case
-        if (points.size() == 1) {
-            c.push_back(volume_between(points[0], r_point));
-            return c;
-        }
-
-        // Compute the total hypervolume for the reference
-        std::vector<vector_double> points_cpy(points.begin(), points.end());
-        double hv_total = compute(points_cpy, r_point);
-
-        // Points[0] as a first candidate
-        points_cpy = std::vector<vector_double>(points.begin() + 1, points.end());
-        c.push_back(hv_total - compute(points_cpy, r_point));
-
-        // Check the remaining ones using the provided comparison function
-        for (unsigned idx = 1u; idx < points.size(); ++idx) {
-            std::vector<vector_double> points_less;
-            points_less.reserve(points.size() - 1);
-            copy(points.begin(), points.begin() + idx, back_inserter(points_less));
-            copy(points.begin() + idx + 1, points.end(), back_inserter(points_less));
-            double delta = hv_total - compute(points_less, r_point);
-            c.push_back(delta);
-        }
-
-        return c;
-    }
+    // Contributions method
+    virtual std::vector<double> contributions(std::vector<vector_double> &, const vector_double &) const;
 
     /// Verification of input
     /**
@@ -288,62 +164,12 @@ public:
      */
     virtual std::shared_ptr<hv_algorithm> clone() const = 0;
 
-    /// Get algorithm's name.
-    /**
-     * Default implementation will return the algorithm's mangled C++ name.
-     *
-     * @return name of the algorithm.
-     */
-    virtual std::string get_name() const
-    {
-        return typeid(*this).name();
-    }
+    // Get algorithm's name.
+    virtual std::string get_name() const;
 
 protected:
-    /// Assert that reference point dominates every other point from the set.
-    /**
-     * This is a method that can be referenced from verify_before_compute method.
-     * The method checks whether the provided reference point fits the minimisation assumption, e.g.,
-     * reference point must be "no worse" and in at least one objective and "better" for each of the points from the
-     * set.
-     *
-     * @param points - vector of vector_doubles for which the hypervolume is computed
-     * @param r_point - distinguished "reference point".
-     */
-    void assert_minimisation(const std::vector<vector_double> &points, const vector_double &r_point) const
-    {
-        for (std::vector<vector_double>::size_type idx = 0; idx < points.size(); ++idx) {
-            bool outside_bounds = false;
-            bool all_equal = true;
-
-            for (vector_double::size_type f_idx = 0; f_idx < points[idx].size(); ++f_idx) {
-                outside_bounds |= (r_point[f_idx] < points[idx][f_idx]);
-                all_equal &= (r_point[f_idx] == points[idx][f_idx]);
-            }
-            if (all_equal || outside_bounds) {
-                // Prepare error message.
-                std::stringstream ss;
-                std::string str_p("("), str_r("(");
-                for (vector_double::size_type f_idx = 0; f_idx < points[idx].size(); ++f_idx) {
-                    str_p += std::to_string(points[idx][f_idx]);
-                    str_r += std::to_string(r_point[f_idx]);
-                    if (f_idx < points[idx].size() - 1) {
-                        str_p += ", ";
-                        str_r += ", ";
-                    } else {
-                        str_p += ")";
-                        str_r += ")";
-                    }
-                }
-                ss << "Reference point is invalid: another point seems to be outside the reference point boundary, or "
-                      "be equal to it:"
-                   << std::endl;
-                ss << " P[" << idx << "]\t= " << str_p << std::endl;
-                ss << " R\t= " << str_r << std::endl;
-                pagmo_throw(std::invalid_argument, ss.str());
-            }
-        }
-    }
+    // Assert that reference point dominates every other point from the set.
+    void assert_minimisation(const std::vector<vector_double> &, const vector_double &) const;
 
     /*! Possible result of a comparison between points */
     enum {
@@ -353,42 +179,8 @@ protected:
         DOM_CMP_INCOMPARABLE = 4   ///< points are incomparable
     };
 
-    /// Dominance comparison method
-    /**
-     * Establishes the domination relationship between two points (overloaded for double*);
-     *
-     * returns DOM_CMP_B_DOMINATES_A if point 'b' DOMINATES point 'a'
-     * returns DOM_CMP_A_DOMINATES_B if point 'a' DOMINATES point 'b'
-     * returns DOM_CMP_A_B_EQUAL if point 'a' IS EQUAL TO 'b'
-     * returns DOM_CMP_INCOMPARABLE otherwise
-     *
-     * @param a first point
-     * @param b second point
-     * @param size size of the points
-     *
-     * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
-     */
-    static int dom_cmp(double *a, double *b, vector_double::size_type size)
-    {
-        for (vector_double::size_type i = 0; i < size; ++i) {
-            if (a[i] > b[i]) {
-                for (vector_double::size_type j = i + 1; j < size; ++j) {
-                    if (a[j] < b[j]) {
-                        return DOM_CMP_INCOMPARABLE;
-                    }
-                }
-                return DOM_CMP_B_DOMINATES_A;
-            } else if (a[i] < b[i]) {
-                for (vector_double::size_type j = i + 1; j < size; ++j) {
-                    if (a[j] > b[j]) {
-                        return DOM_CMP_INCOMPARABLE;
-                    }
-                }
-                return DOM_CMP_A_DOMINATES_B;
-            }
-        }
-        return DOM_CMP_A_B_EQUAL;
-    }
+    // Dominance comparison method
+    static int dom_cmp(double *, double *, vector_double::size_type);
 
     /// Dominance comparison method
     /**
@@ -405,58 +197,12 @@ protected:
      *
      * @return the comparison result (1 - b dom a,2 - a dom b, 3 - a == b,4 - not comparable)
      */
-    static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0u)
-    {
-        if (dim_bound == 0u) {
-            dim_bound = a.size();
-        }
-        for (vector_double::size_type i = 0u; i < dim_bound; ++i) {
-            if (a[i] > b[i]) {
-                for (vector_double::size_type j = i + 1; j < dim_bound; ++j) {
-                    if (a[j] < b[j]) {
-                        return DOM_CMP_INCOMPARABLE;
-                    }
-                }
-                return DOM_CMP_B_DOMINATES_A;
-            } else if (a[i] < b[i]) {
-                for (vector_double::size_type j = i + 1; j < dim_bound; ++j) {
-                    if (a[j] > b[j]) {
-                        return DOM_CMP_INCOMPARABLE;
-                    }
-                }
-                return DOM_CMP_A_DOMINATES_B;
-            }
-        }
-        return DOM_CMP_A_B_EQUAL;
-    }
+    static int dom_cmp(const vector_double &a, const vector_double &b, vector_double::size_type dim_bound = 0u);
 
 private:
-    /// Compute the extreme contributor
-    /**
-     * Computes the index of the individual that contributes the most or the least to the
-     * hypervolume (depending on the  prodivded comparison function)
-     */
-    unsigned extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
-                                 bool (*cmp_func)(double, double)) const
-    {
-        // Trivial case
-        if (points.size() == 1u) {
-            return 0u;
-        }
-
-        std::vector<double> c = contributions(points, r_point);
-
-        unsigned idx_extreme = 0u;
-
-        // Check the remaining ones using the provided comparison function
-        for (unsigned idx = 1u; idx < c.size(); ++idx) {
-            if (cmp_func(c[idx], c[idx_extreme])) {
-                idx_extreme = idx;
-            }
-        }
-
-        return idx_extreme;
-    }
+    // Compute the extreme contributor
+    PAGMO_DLL_LOCAL unsigned extreme_contributor(std::vector<vector_double> &, const vector_double &,
+                                                 bool (*)(double, double)) const;
 };
 
 } // namespace pagmo

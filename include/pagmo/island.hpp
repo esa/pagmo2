@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -29,8 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ISLAND_HPP
 #define PAGMO_ISLAND_HPP
 
-#include <array>
-#include <cstddef>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -38,9 +36,9 @@ see https://www.gnu.org/licenses/. */
 #include <mutex>
 #include <random>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <typeinfo>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -51,15 +49,19 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/archipelago_fwd.hpp>
+#include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/r_policy.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
-#include <pagmo/threading.hpp>
+#include <pagmo/s_policy.hpp>
 #include <pagmo/type_traits.hpp>
+#include <pagmo/types.hpp>
 
 #define PAGMO_S11N_ISLAND_EXPORT_KEY(isl)                                                                              \
     BOOST_CLASS_EXPORT_KEY2(pagmo::detail::isl_inner<isl>, "udi " #isl)                                                \
@@ -73,9 +75,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-// Fwd declaration.
-class PAGMO_DLL_PUBLIC island;
 
 /// Detect \p run_evolve() method.
 /**
@@ -112,6 +111,7 @@ namespace detail
 template <typename>
 struct disable_udi_checks : std::false_type {
 };
+
 } // namespace detail
 
 /// Detect user-defined islands (UDI).
@@ -273,14 +273,33 @@ struct PAGMO_DLL_PUBLIC island_data {
           pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
     }
-    // This is used only in the copy ctor of island. It's equivalent to the ctor from Algo + pop,
-    // the island will come from the clone() method of an isl_inner.
-    template <typename Algo, typename Pop>
-    explicit island_data(std::unique_ptr<isl_inner_base> &&ptr, Algo &&a, Pop &&p)
-        : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
-          pop(std::make_shared<population>(std::forward<Pop>(p)))
+    // A tag to distinguish ctors with policy arguments.
+    struct ptag {
+    };
+    // Constructor from algo, pop and r/s policies.
+    template <typename Algo, typename Pop, typename RPol, typename SPol>
+    explicit island_data(ptag, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
+          s_pol(std::forward<SPol>(s))
+    {
+        island_factory(*algo, *pop, isl_ptr);
+    }
+    // As above, but the UDI is explicitly passed by the user.
+    template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol>
+    explicit island_data(ptag, Isl &&isl, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : isl_ptr(detail::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+          algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
+          pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
+          s_pol(std::forward<SPol>(s))
     {
     }
+    // This is used only in the copy ctor of island. The island will come from the clone()
+    // method of an isl_inner, the algo/pop from the island's getters. The r/s_policies
+    // will come directly from the island's data member, as they are supposed
+    // to be thread-safe.
+    explicit island_data(std::unique_ptr<isl_inner_base> &&, algorithm &&, population &&, const r_policy &,
+                         const s_policy &);
     // Delete all the rest, make sure we don't implicitly rely on any of this.
     island_data(const island_data &) = delete;
     island_data(island_data &&) = delete;
@@ -298,6 +317,16 @@ struct PAGMO_DLL_PUBLIC island_data {
     std::shared_ptr<algorithm> algo;
     std::mutex pop_mutex;
     std::shared_ptr<population> pop;
+    // The replacement/selection policies. They are supposed to be thread-safe,
+    // thus no protection is needed.
+    // NOTE: additionally, contrary to algo/pop, we never need to copy
+    // r/s_pol during evolution, as all the replace/select logic
+    // is currently always happening within the thread of execution of the
+    // island. Thus, all the machinery above for safely copying out algo
+    // and pop is not necessary.
+    r_policy r_pol;
+    s_policy s_pol;
+    // The vector of futures.
     std::vector<std::future<void>> futures;
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
@@ -329,26 +358,13 @@ enum class evolve_status {
                     /// was generated by an asynchronous operation in the past
 };
 
-namespace detail
-{
-
-// NOTE: in C++11 hashing of enums might not be available. Provide our own.
-struct island_status_hasher {
-    std::size_t operator()(evolve_status es) const noexcept
-    {
-        return std::hash<int>{}(static_cast<int>(es));
-    }
-};
-
-// A map to link a human-readable description to evolve_status.
-PAGMO_DLL_PUBLIC extern const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses;
-
-} // namespace detail
-
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Provide the stream operator overload for evolve_status.
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
+
+// Stream operator for pagmo::island.
+PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
 
 #endif
 
@@ -358,11 +374,13 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
  *
  * \verbatim embed:rst:leading-asterisk
  *
- * In the pagmo jargon, an island is a class that encapsulates three entities:
+ * In the pagmo jargon, an island is a class that encapsulates the following entities:
  *
  * - a user-defined island (UDI),
  * - an :cpp:class:`~pagmo::algorithm`,
- * - a :cpp:class:`~pagmo::population`.
+ * - a :cpp:class:`~pagmo::population`,
+ * - a replacement policy (of type :cpp:class:`~pagmo::r_policy`),
+ * - a selection policy (of type :cpp:class:`~pagmo::s_policy`).
  *
  * Through the UDI, the island class manages the asynchronous evolution (or optimisation)
  * of its :cpp:class:`~pagmo::population` via the algorithm's :cpp:func:`~pagmo::algorithm::evolve()`
@@ -374,6 +392,11 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, evolve_status);
  * and fetch its internal data members. The user can explicitly wait for pending evolutions
  * to conclude by calling the :cpp:func:`~pagmo::island::wait()` and :cpp:func:`~pagmo::island::wait_check()`
  * methods. The status of ongoing evolutions in the island can be queried via :cpp:func:`~pagmo::island::status()`.
+ *
+ * The replacement and selection policies are used when the island is part of an :cpp:class:`~pagmo::archipelago`.
+ * They establish how individuals are selected and replaced from the island when migration across islands occurs within
+ * the :cpp:class:`~pagmo::archipelago`. If the island is not part of an :cpp:class:`~pagmo::archipelago`,
+ * the replacement and selection policies play no role.
  *
  * \endverbatim
  *
@@ -422,10 +445,14 @@ class PAGMO_DLL_PUBLIC island
     using idata_t = detail::island_data;
     // archi needs access to the internal of island.
     friend class PAGMO_DLL_PUBLIC archipelago;
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+    // Make friends with the stream operator.
+    friend PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
+#endif
     // NOTE: the idea in the move members and the dtor is that
     // we want to wait *and* erase any future in the island, before doing
     // the move/destruction. Thus we use this small wrapper.
-    void wait_check_ignore();
+    PAGMO_DLL_LOCAL void wait_check_ignore();
 
 public:
     // Default constructor.
@@ -448,7 +475,7 @@ public:
      * .. note::
      *
      *    This constructor is enabled only if ``a`` can be used to construct a
-     *    :cpp:class:`pagmo::algorithm` and :cpp:class:`p` is an instance of :cpp:class:`pagmo::population`.
+     *    :cpp:class:`pagmo::algorithm` and ``p`` is an instance of :cpp:class:`pagmo::population`.
      *
      * This constructor will use *a* to construct the internal algorithm, and *p* to construct
      * the internal population. The UDI type will be inferred from the :cpp:type:`~pagmo::thread_safety` properties
@@ -463,6 +490,8 @@ public:
      * but island evolutions will fail if the algorithm and/or problem do not provide at least the
      * basic :cpp:type:`~pagmo::thread_safety` guarantee.
      *
+     * The replacement/selection policies will be default-constructed.
+     *
      * \endverbatim
      *
      * @param a the input algorithm.
@@ -475,6 +504,45 @@ public:
     template <typename Algo, typename Pop, algo_pop_enabler<Algo, Pop> = 0>
     explicit island(Algo &&a, Pop &&p)
         : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
+    {
+    }
+
+private:
+    template <typename Algo, typename Pop, typename RPol, typename SPol>
+    using algo_pop_pol_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_same<population, uncvref_t<Pop>>,
+                            std::is_constructible<r_policy, RPol &&>, std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from algorithm, population and replacement/selection policies.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` is an instance of :cpp:class:`pagmo::population`,
+     *    and ``r`` and ``s`` can be used to construct, respectively, a :cpp:class:`pagmo::r_policy`
+     *    and a :cpp:class:`pagmo::s_policy`.
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * \endverbatim
+     *
+     * @param a the input algorithm.
+     * @param p the input population.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Algo, typename Pop, typename RPol, typename SPol,
+              algo_pop_pol_enabler<Algo, Pop, RPol, SPol> = 0>
+    explicit island(Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : m_ptr(detail::make_unique<idata_t>(idata_t::ptag{}, std::forward<Algo>(a), std::forward<Pop>(p),
+                                             std::forward<RPol>(r), std::forward<SPol>(s)))
     {
     }
 
@@ -521,6 +589,50 @@ public:
     }
 
 private:
+    template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol>
+    using isl_algo_pop_pol_enabler = enable_if_t<
+        detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
+                            std::is_same<population, uncvref_t<Pop>>, std::is_constructible<r_policy, RPol &&>,
+                            std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from UDI, algorithm, population and replacement/selection policies.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if:
+     *
+     *    - ``Isl`` satisfies :cpp:class:`pagmo::is_udi`,
+     *    - ``a`` can be used to construct a :cpp:class:`pagmo::algorithm`,
+     *    - ``p`` is an instance of :cpp:class:`pagmo::population`,
+     *    - ``r`` and ``s`` can be used to construct, respectively, a
+     *      :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * \endverbatim
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input population.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol,
+              isl_algo_pop_pol_enabler<Isl, Algo, Pop, RPol, SPol> = 0>
+    explicit island(Isl &&isl, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
+        : m_ptr(detail::make_unique<idata_t>(idata_t::ptag{}, std::forward<Isl>(isl), std::forward<Algo>(a),
+                                             std::forward<Pop>(p), std::forward<RPol>(r), std::forward<SPol>(s)))
+    {
+    }
+
+private:
     template <typename Algo, typename Prob>
     using algo_prob_enabler = enable_if_t<
         detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>>::value,
@@ -556,6 +668,48 @@ public:
     }
 
 private:
+    template <typename Algo, typename Prob, typename RPol, typename SPol>
+    using algo_prob_pol_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>,
+                            std::is_constructible<r_policy, RPol &&>, std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from algorithm, problem, size, replacement/selections policies and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * \endverbatim
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Algo, typename Prob, typename RPol, typename SPol,
+              algo_prob_pol_enabler<Algo, Prob, RPol, SPol> = 0>
+    explicit island(Algo &&a, Prob &&p, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed), std::forward<RPol>(r),
+                 std::forward<SPol>(s))
+    {
+    }
+
+private:
     template <typename Algo, typename Prob, typename Bfe>
     using algo_prob_bfe_enabler = enable_if_t<
         detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>,
@@ -566,7 +720,15 @@ public:
     /// Constructor from algorithm, problem, batch fitness evaluator, size and seed.
     /**
      * \verbatim embed:rst:leading-asterisk
-     * This constructor is equivalent to the previous one, the only difference being that
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``b`` can be used to construct a
+     *    :cpp:class:`pagmo::bfe`.
+     *
+     * This constructor is equivalent to the constructor from algorithm, problem, size and seed,
+     * the only difference being that
      * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
      * or UDBFE *b*.
      * \endverbatim
@@ -584,6 +746,50 @@ public:
     explicit island(Algo &&a, Prob &&p, Bfe &&b, population::size_type size,
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Algo>(a), population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
+    {
+    }
+
+private:
+    template <typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol>
+    using algo_prob_bfe_pol_enabler = enable_if_t<
+        detail::conjunction<std::is_constructible<algorithm, Algo &&>, std::is_constructible<problem, Prob &&>,
+                            std::is_constructible<bfe, Bfe &&>, std::is_constructible<r_policy, RPol &&>,
+                            std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from algorithm, problem, batch fitness evaluator, size, replacement/selection policies and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``a`` can be used to construct a
+     *    :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, ``b`` can be used to construct a
+     *    :cpp:class:`pagmo::bfe`, and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     * \endverbatim
+     *
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input (user-defined) batch fitness evaluator.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol,
+              algo_prob_bfe_pol_enabler<Algo, Prob, Bfe, RPol, SPol> = 0>
+    explicit island(Algo &&a, Prob &&p, Bfe &&b, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Algo>(a), population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed),
+                 std::forward<RPol>(r), std::forward<SPol>(s))
     {
     }
 
@@ -628,6 +834,50 @@ public:
     }
 
 private:
+    template <typename Isl, typename Algo, typename Prob, typename RPol, typename SPol>
+    using isl_algo_prob_pol_enabler = enable_if_t<
+        detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
+                            std::is_constructible<problem, Prob &&>, std::is_constructible<r_policy, RPol &&>,
+                            std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from UDI, algorithm, problem, size, replacement/selection policies and seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * \endverbatim
+     *
+     * This constructor is equivalent to the previous one, but it additionally allows
+     * to specify the replacement and selection policies for the island.
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Isl, typename Algo, typename Prob, typename RPol, typename SPol,
+              isl_algo_prob_pol_enabler<Isl, Algo, Prob, RPol, SPol> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a), population(std::forward<Prob>(p), size, seed),
+                 std::forward<RPol>(r), std::forward<SPol>(s))
+    {
+    }
+
+private:
     template <typename Isl, typename Algo, typename Prob, typename Bfe>
     using isl_algo_prob_bfe_enabler = enable_if_t<
         detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
@@ -638,7 +888,14 @@ public:
     /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size and seed.
     /**
      * \verbatim embed:rst:leading-asterisk
-     * This constructor is equivalent to the previous one, the only difference being that
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, and ``b`` can be used to construct a :cpp:class:`pagmo::bfe`.
+     *
+     * This constructor is equivalent to the constructor from UDI, algorithm, problem, size and seed,
+     * the only difference being that
      * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
      * or UDBFE *b*.
      * \endverbatim
@@ -659,6 +916,54 @@ public:
                     unsigned seed = pagmo::random_device::next())
         : island(std::forward<Isl>(isl), std::forward<Algo>(a),
                  population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed))
+    {
+    }
+
+private:
+    template <typename Isl, typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol>
+    using isl_algo_prob_bfe_pol_enabler = enable_if_t<
+        detail::conjunction<is_udi<uncvref_t<Isl>>, std::is_constructible<algorithm, Algo &&>,
+                            std::is_constructible<problem, Prob &&>, std::is_constructible<bfe, Bfe &&>,
+                            std::is_constructible<r_policy, RPol &&>, std::is_constructible<s_policy, SPol &&>>::value,
+        int>;
+
+public:
+    /// Constructor from UDI, algorithm, problem, batch fitness evaluator, size, replacement/selection policies and
+    /// seed.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. note::
+     *
+     *    This constructor is enabled only if ``Isl`` satisfies :cpp:class:`pagmo::is_udi`, ``a`` can be used to
+     *    construct a :cpp:class:`pagmo::algorithm`, ``p`` can be used to construct a
+     *    :cpp:class:`pagmo::problem`, ``b`` can be used to construct a :cpp:class:`pagmo::bfe`,
+     *    and ``r`` and ``s`` can be used to construct, respectively, a
+     *    :cpp:class:`pagmo::r_policy` and a :cpp:class:`pagmo::s_policy`.
+     *
+     * This constructor is equivalent to the previous one, the only difference being that
+     * the population's individuals will be initialised using the input :cpp:class:`~pagmo::bfe`
+     * or UDBFE *b*.
+     * \endverbatim
+     *
+     * @param isl the input UDI.
+     * @param a the input algorithm.
+     * @param p the input problem.
+     * @param b the input (user-defined) batch fitness evaluator.
+     * @param size the population size.
+     * @param r the input replacement policy.
+     * @param s the input selection policy.
+     * @param seed the population seed.
+     *
+     * @throws unspecified any exception thrown by the previous constructor or by
+     * the construction of the replacement/selection policies.
+     */
+    template <typename Isl, typename Algo, typename Prob, typename Bfe, typename RPol, typename SPol,
+              isl_algo_prob_bfe_pol_enabler<Isl, Algo, Prob, Bfe, RPol, SPol> = 0>
+    explicit island(Isl &&isl, Algo &&a, Prob &&p, Bfe &&b, population::size_type size, RPol &&r, SPol &&s,
+                    unsigned seed = pagmo::random_device::next())
+        : island(std::forward<Isl>(isl), std::forward<Algo>(a),
+                 population(std::forward<Prob>(p), std::forward<Bfe>(b), size, seed), std::forward<RPol>(r),
+                 std::forward<SPol>(s))
     {
     }
     // Destructor.
@@ -742,18 +1047,36 @@ public:
      * invocation. Exceptions raised inside the
      * tasks are stored within the island object, and can be re-raised by calling wait_check().
      *
+     * If the island is part of a pagmo::archipelago, then migration of individuals to/from other
+     * islands might occur. The migration algorithm consists of the following steps:
+     *
+     * - before invoking <tt>run_evolve()</tt> on the UDI, the island will ask the
+     *   archipelago if there are candidate incoming individuals from other islands.
+     *   If so, the replacement policy is invoked and
+     *   the current population of the island is updated with the migrants;
+     * - <tt>run_evolve()</tt> is then invoked and the current population is evolved;
+     * - after <tt>run_evolve()</tt> has concluded, individuals are selected in the
+     *   evolved population and copied into the migration database of the archipelago
+     *   for future migrations.
+     *
      * It is possible to call this method multiple times to enqueue multiple evolution tasks, which
      * will be consumed in a FIFO (first-in first-out) fashion. The user may call island::wait() or island::wait_check()
      * to block until all tasks have been completed, and to fetch exceptions raised during the execution of the tasks.
      * island::status() can be used to query the status of the asynchronous operations in the island.
      *
      * @param n the number of times the <tt>run_evolve()</tt> method of the UDI will be called
-     * within the evolution task.
+     * within the evolution task. This corresponds also to the number of times migration can
+     * happen, if the island belongs to an archipelago.
      *
+     * @throws std::out_of_range if the island is part of an archipelago and during migration
+     * an invalid island index is used (this can happen if the archipelago's topology is
+     * malformed).
      * @throws unspecified any exception thrown by:
      * - threading primitives,
      * - memory allocation errors,
-     * - the public interface of \p std::future.
+     * - the public interface of \p std::future,
+     * - the public interface of pagmo::archipelago,
+     * - the public interface of the replacement/selection policies.
      */
     void evolve(unsigned n = 1);
     // Block until evolution ends and re-raise the first stored exception.
@@ -762,20 +1085,24 @@ public:
     void wait();
     // Status of the island.
     evolve_status status() const;
+
     // Get the algorithm.
     algorithm get_algorithm() const;
     // Set the algorithm.
-    void set_algorithm(algorithm);
+    void set_algorithm(const algorithm &);
     // Get the population.
     population get_population() const;
     // Set the population.
-    void set_population(population);
-    // Get the thread safety of the island's members.
-    std::array<thread_safety, 2> get_thread_safety() const;
+    void set_population(const population &);
+    // Get the replacement policy.
+    r_policy get_r_policy() const;
+    // Get the selection policy.
+    s_policy get_s_policy() const;
     // Island's name.
     std::string get_name() const;
     // Island's extra info.
     std::string get_extra_info() const;
+
     // Check if the island is valid.
     bool is_valid() const;
     /// Save to archive.
@@ -793,7 +1120,7 @@ public:
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
-        detail::to_archive(ar, m_ptr->isl_ptr, get_algorithm(), get_population());
+        detail::to_archive(ar, m_ptr->isl_ptr, get_algorithm(), get_population(), m_ptr->r_pol, m_ptr->s_pol);
     }
     /// Load from archive.
     /**
@@ -812,18 +1139,34 @@ public:
         // Deserialize into tmp island, and then move assign it.
         island tmp_island;
         // NOTE: no need to lock access to these, as there is no evolution going on in tmp_island.
-        detail::from_archive(ar, tmp_island.m_ptr->isl_ptr, *tmp_island.m_ptr->algo, *tmp_island.m_ptr->pop);
+        detail::from_archive(ar, tmp_island.m_ptr->isl_ptr, *tmp_island.m_ptr->algo, *tmp_island.m_ptr->pop,
+                             tmp_island.m_ptr->r_pol, tmp_island.m_ptr->s_pol);
         *this = std::move(tmp_island);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
+    // Data used in the migration machinery:
+    // - the island's population (represented via individuals_group_t),
+    // - the problem's nx, nix, nobj, nec, nic, and tolerances.
+    using migration_data_t
+        = std::tuple<individuals_group_t, vector_double::size_type, vector_double::size_type, vector_double::size_type,
+                     vector_double::size_type, vector_double::size_type, vector_double>;
+    // Fetch the migration data.
+    PAGMO_DLL_LOCAL migration_data_t get_migration_data() const;
+    // Set all the individuals in the population.
+    PAGMO_DLL_LOCAL void set_individuals(const individuals_group_t &);
+
+private:
     std::unique_ptr<idata_t> m_ptr;
 };
 
-// Stream operator for pagmo::island.
-PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
-
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(island)
+
+// Disable tracking for the serialisation of island.
+BOOST_CLASS_TRACKING(pagmo::island, boost::serialization::track_never)
 
 #endif

@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,9 +31,12 @@ see https://www.gnu.org/licenses/. */
 
 #include <tbb/task.h>
 
+#include <pagmo/algorithm.hpp>
+#include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
+#include <pagmo/population.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 
@@ -97,15 +100,47 @@ thread_island::thread_island(bool use_pool) : m_use_pool(use_pool) {}
  */
 void thread_island::run_evolve(island &isl) const
 {
-    const auto i_ts = isl.get_thread_safety();
-    if (i_ts[0] < thread_safety::basic) {
-        pagmo_throw(std::invalid_argument,
-                    "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
-                    "thread safety guarantee");
-    }
-    if (i_ts[1] < thread_safety::basic) {
-        pagmo_throw(std::invalid_argument, "the 'thread_island' UDI requires a problem providing at least the 'basic' "
-                                           "thread safety guarantee");
+    // Init default-constructed algo/pop. We will move
+    // later into these variables the algo/pop from isl.
+    algorithm algo;
+    population pop;
+
+    {
+        // NOTE: run_evolve() is called from the separate
+        // thread of execution within pagmo::island. Since
+        // we need to extract copies of algorithm and population,
+        // which may be implemented in Python, we need to protect
+        // with a gte.
+        auto gte = detail::gte_getter();
+        (void)gte;
+
+        // Get copies of algo/pop from isl.
+        // NOTE: in case of exceptions, any pythonic object
+        // existing within this scope will be destroyed before the gte,
+        // while it is still safe to call into Python.
+        auto tmp_algo(isl.get_algorithm());
+        auto tmp_pop(isl.get_population());
+
+        // Check the thread safety levels.
+        if (tmp_algo.get_thread_safety() < thread_safety::basic) {
+            pagmo_throw(std::invalid_argument,
+                        "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
+                        "thread safety guarantee, but an algorithm of type '"
+                            + tmp_algo.get_name() + "' does not");
+        }
+
+        if (tmp_pop.get_problem().get_thread_safety() < thread_safety::basic) {
+            pagmo_throw(std::invalid_argument,
+                        "the 'thread_island' UDI requires a problem providing at least the 'basic' "
+                        "thread safety guarantee, but a problem of type '"
+                            + tmp_pop.get_problem().get_name() + "' does not");
+        }
+
+        // Move the copies into algo/pop. At this point, we know
+        // that algo and pop are not pythonic, as pythonic entities are never
+        // marked as thread-safe.
+        algo = std::move(tmp_algo);
+        pop = std::move(tmp_pop);
     }
 
     if (m_use_pool) {

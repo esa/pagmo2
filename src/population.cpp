@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/custom_comparisons.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -257,7 +258,7 @@ vector_double population::random_decision_vector() const
  * this case the user can still obtain a strict ordering of the population
  * individuals by calling the pagmo::sort_population_mo() function.
  *
- * The pagmo::population::get_c_tol() tolerances are accounted by default.
+ * The pagmo::problem::get_c_tol() tolerances are accounted by default.
  * If different tolerances are required the other overloads can be used.
  *
  * @returns the index of the best individual.
@@ -333,7 +334,7 @@ population::size_type population::best_idx(double tol) const
  * this case the user can still obtain a strict ordering of the population
  * individuals by calling the pagmo::sort_population_mo() function.
  *
- * The pagmo::population::get_c_tol() tolerances are accounted by default.
+ * The pagmo::problem::get_c_tol() tolerances are accounted by default.
  * If different tolerances are required the other overloads can be used.
  *
  * @returns the index of the worst individual.
@@ -616,7 +617,10 @@ void population::update_champion(vector_double x, vector_double f)
         m_champion_x = std::move(x);
         m_champion_f = std::move(f);
     } else if (m_prob.get_nc() == 0u) { // unconstrained
-        if (f[0] < m_champion_f[0]) {
+        // NOTE: make sure to use the custom comparison less_than_f(),
+        // so that we handle NaN correctly (i.e., a fitness of NaN is
+        // considered worse than any other value).
+        if (detail::less_than_f(f[0], m_champion_f[0])) {
             m_champion_x = std::move(x);
             m_champion_f = std::move(f);
         }

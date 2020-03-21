@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,7 +34,6 @@ see https://www.gnu.org/licenses/. */
 #if defined(PAGMO_WITH_IPOPT)
 
 #include <map>
-#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -45,8 +44,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/detail/visibility.hpp>
-#include <pagmo/exceptions.hpp>
-#include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -137,15 +134,6 @@ PAGMO_DLL_PUBLIC unsigned ipopt_internal_test();
  */
 class PAGMO_DLL_PUBLIC ipopt : public not_population_based
 {
-    template <typename Pair>
-    static void opt_checker(bool status, const Pair &p, const std::string &op_type)
-    {
-        if (!status) {
-            pagmo_throw(std::invalid_argument, "failed to set the ipopt " + op_type + " option '" + p.first
-                                                   + "' to the value: " + detail::to_string(p.second));
-        }
-    }
-
 public:
     /// Single data line for the algorithm's log.
     /**

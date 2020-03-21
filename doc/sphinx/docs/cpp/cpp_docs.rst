@@ -1,11 +1,10 @@
-C++ Documentation
-=================
+C++ API documentation
+=====================
+
 The full, stand-alone, detailed, documentation of the c++ code.
 
 Core classes
 ^^^^^^^^^^^^
-These are the core PaGMO classes. In order to learn how to use them
-we suggest to follow the tutorials / examples.
 
 .. toctree::
   :maxdepth: 1
@@ -17,6 +16,9 @@ we suggest to follow the tutorials / examples.
   island
   archipelago
   bfe
+  topology
+  r_policy
+  s_policy
 
 Implemented algorithms
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -34,11 +36,13 @@ Implemented algorithms
   algorithms/gwo
   algorithms/ihs
   algorithms/ipopt
+  algorithms/maco
   algorithms/moead
   algorithms/mbh
   algorithms/cstrs_self_adaptive
   algorithms/nlopt
   algorithms/nsga2
+  algorithms/nspso
   algorithms/pso
   algorithms/pso_gen
   algorithms/sade
@@ -75,6 +79,7 @@ Implemented problems
   problems/cec2013
   problems/cec2014
   problems/unconstrain
+  problems/wfg
 
 Implemented islands
 ^^^^^^^^^^^^^^^^^^^
@@ -95,9 +100,36 @@ Implemented batch evaluators
   batch_evaluators/thread_bfe
   batch_evaluators/member_bfe
 
+Implemented topologies
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  topologies/unconnected
+  topologies/fully_connected
+  topologies/base_bgl_topology
+  topologies/ring
+  topologies/free_form
+
+Implemented replacement policies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  r_policies/fair_replace
+
+Implemented selection policies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  s_policies/select_best
+
 Utilities
 ^^^^^^^^^
-Various optimization utilities.
 
 .. toctree::
   :maxdepth: 1
@@ -110,7 +142,6 @@ Various optimization utilities.
 
 Miscellanea
 ^^^^^^^^^^^
-Various coding utilities.
 
 .. toctree::
   :maxdepth: 1

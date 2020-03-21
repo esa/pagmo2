@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -25,6 +25,13 @@ for more details.
 You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
+
+#if defined(_MSC_VER)
+
+// Boost's bimap results in some C++17 deprecation warnings in C++17 mode.
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+
+#endif
 
 #include <algorithm>
 #include <cassert>

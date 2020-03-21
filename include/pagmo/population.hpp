@@ -1,4 +1,4 @@
-/* Copyright 2017-2018 PaGMO development team
+/* Copyright 2017-2020 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -37,6 +37,8 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/island_fwd.hpp>
+#include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
@@ -76,9 +78,14 @@ namespace pagmo
  */
 class PAGMO_DLL_PUBLIC population
 {
+    // Make friends with island for direct
+    // access to the population's members during
+    // evolution.
+    friend class PAGMO_DLL_PUBLIC island;
+
 public:
     /// The size type of the population.
-    typedef std::vector<vector_double>::size_type size_type;
+    typedef pop_size_t size_type;
     // Default constructor
     population();
 
@@ -369,5 +376,11 @@ private:
 PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 } // namespace pagmo
+
+// Add some repr support for CLING
+PAGMO_IMPLEMENT_XEUS_CLING_REPR(population)
+
+// Disable tracking for the serialisation of population.
+BOOST_CLASS_TRACKING(pagmo::population, boost::serialization::track_never)
 
 #endif
