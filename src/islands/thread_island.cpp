@@ -29,7 +29,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <utility>
 
-#include <tbb/task.h>
+#include <tbb/task_group.h>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/gte_getter.hpp>
@@ -42,42 +42,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-namespace detail
-{
-
-namespace
-{
-
-void ti_evolve_impl(island &isl)
-{
-    // Get out a copy of the algorithm for evolution.
-    auto algo = isl.get_algorithm();
-    // Replace the island's population with the evolved population.
-    isl.set_population(algo.evolve(isl.get_population()));
-    // Replace the island's algorithm with the algorithm used for the evolution.
-    // NOTE: if set_algorithm() fails, we will have the new population with the
-    // original algorithm, which is still a valid state for the island.
-    isl.set_algorithm(std::move(algo));
-}
-
-class ti_evolve_task final : public tbb::task
-{
-public:
-    ti_evolve_task(island &isl) : m_isl(isl) {}
-    tbb::task *execute() override final
-    {
-        ti_evolve_impl(m_isl);
-        return nullptr;
-    }
-
-private:
-    island &m_isl;
-};
-
-} // namespace
-
-} // namespace detail
 
 thread_island::thread_island(bool use_pool) : m_use_pool(use_pool) {}
 
@@ -143,12 +107,12 @@ void thread_island::run_evolve(island &isl) const
         pop = std::move(tmp_pop);
     }
 
-    if (m_use_pool) {
-        detail::ti_evolve_task &t = *new (tbb::task::allocate_root()) detail::ti_evolve_task(isl);
-        tbb::task::spawn_root_and_wait(t);
-    } else {
-        detail::ti_evolve_impl(isl);
-    }
+    // Evolve and replace the island's population with the evolved population.
+    isl.set_population(algo.evolve(pop));
+    // Replace the island's algorithm with the algorithm used for the evolution.
+    // NOTE: if set_algorithm() fails, we will have the new population with the
+    // original algorithm, which is still a valid state for the island.
+    isl.set_algorithm(algo);
 }
 
 /// Serialization support.
