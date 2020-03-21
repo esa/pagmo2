@@ -50,6 +50,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/version.hpp>
 #include <boost/static_assert.hpp>
 
 // Include the archives.

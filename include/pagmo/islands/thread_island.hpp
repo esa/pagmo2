@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/island.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -49,16 +50,19 @@ namespace pagmo
 class PAGMO_DLL_PUBLIC thread_island
 {
 public:
-    thread_island(bool use_pool = true);
-    /// Island's name.
-    /**
-     * @return <tt>"Thread island"</tt>.
-     */
-    std::string get_name() const
-    {
-        return "Thread island";
-    }
+    // Default ctor.
+    thread_island();
+    // Ctor with use_pool flag.
+    explicit thread_island(bool);
+
+    // Island's name.
+    std::string get_name() const;
+    // Extra info.
+    std::string get_extra_info() const;
+
+    // run_evolve implementation.
     void run_evolve(island &) const;
+
     // Serialization support.
     template <typename Archive>
     void serialize(Archive &, unsigned);
@@ -70,5 +74,8 @@ private:
 } // namespace pagmo
 
 PAGMO_S11N_ISLAND_EXPORT_KEY(pagmo::thread_island)
+
+// NOTE: version 1 added the m_use_pool flag.
+BOOST_CLASS_VERSION(pagmo::thread_island, 1)
 
 #endif

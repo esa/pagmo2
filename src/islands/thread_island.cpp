@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <stdexcept>
+#include <string>
 #include <utility>
 
 #include <tbb/task_group.h>
@@ -43,7 +44,25 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
+thread_island::thread_island() : thread_island(true) {}
+
 thread_island::thread_island(bool use_pool) : m_use_pool(use_pool) {}
+
+/// Island's name.
+/**
+ * @return <tt>"Thread island"</tt>.
+ */
+std::string thread_island::get_name() const
+{
+    return "Thread island";
+}
+
+/// Island's extra info.
+// TODO docs
+std::string thread_island::get_extra_info() const
+{
+    return std::string("\tUsing pool: ") + (m_use_pool ? "yes" : "no");
+}
 
 /// Run evolve.
 /**
@@ -125,13 +144,13 @@ void thread_island::run_evolve(island &isl) const
 }
 
 /// Serialization support.
-/**
- * This class is stateless, no data will be saved to or loaded from the archive.
- */
+// TODO docs.
 template <typename Archive>
-void thread_island::serialize(Archive &ar, unsigned)
+void thread_island::serialize(Archive &ar, unsigned version)
 {
-    detail::archive(ar, m_use_pool);
+    if (version > 0u) {
+        ar &m_use_pool;
+    }
 }
 
 } // namespace pagmo
