@@ -1593,3 +1593,11 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
     BOOST_CHECK((!std::is_assignable<problem, const int &>::value));
     BOOST_CHECK((!std::is_assignable<problem, int &&>::value));
 }
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    problem p0;
+    std::cout << p0.get_type_index().name() << '\n';
+    p0 = problem{grad_p_override{}};
+    std::cout << p0.get_type_index().name() << '\n';
+}

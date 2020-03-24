@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <stdexcept>
 #include <string>
+#include <typeindex>
 #include <utility>
 #include <vector>
 
@@ -739,6 +740,12 @@ std::string problem::get_extra_info() const
 bool problem::is_valid() const
 {
     return static_cast<bool>(m_ptr);
+}
+
+// Get the type at runtime.
+std::type_index problem::get_type_index() const
+{
+    return ptr()->get_type_index();
 }
 
 /// Streaming operator

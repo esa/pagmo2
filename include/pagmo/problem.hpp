@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <typeindex>
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -43,8 +44,8 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/detail/make_unique.hpp>
-#include <pagmo/detail/visibility.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
+#include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -538,6 +539,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner_base {
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     virtual thread_safety get_thread_safety() const = 0;
+    virtual std::type_index get_type_index() const = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -907,6 +909,11 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     static thread_safety get_thread_safety_impl(const U &)
     {
         return thread_safety::basic;
+    }
+    // Get the type at runtime.
+    virtual std::type_index get_type_index() const override final
+    {
+        return std::type_index(typeid(T));
     }
     // Serialization.
     template <typename Archive>
@@ -1590,6 +1597,9 @@ public:
 
     // Check if the problem is in a valid state.
     bool is_valid() const;
+
+    // Get the type at runtime.
+    std::type_index get_type_index() const;
 
     /// Save to archive.
     /**
