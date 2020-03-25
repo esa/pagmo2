@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
@@ -888,7 +889,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &)
     {
-        return typeid(U).name();
+        return detail::type_name<U>();
     }
     template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &value)

@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/detail/bfe_impl.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -766,6 +767,7 @@ std::ostream &operator<<(std::ostream &os, const problem &p)
     if (p.is_stochastic()) {
         stream(os, " [stochastic]");
     }
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(p.get_type_index().name()) << '\n';
     os << "\n\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
     os << "\tInteger dimension:\t\t\t" << p.get_nix() << '\n';
     os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';

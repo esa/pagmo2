@@ -36,12 +36,14 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/null_problem.hpp>
@@ -714,7 +716,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_name() == "A base toy problem");
     BOOST_CHECK(p1.get_extra_info() == "Nothing to report");
     // Default
-    BOOST_CHECK(p3.get_name() == typeid(*p3.extract<empty>()).name());
+    BOOST_CHECK(p3.get_name() == detail::demangle_from_typeid(typeid(*p3.extract<empty>()).name()));
     BOOST_CHECK(p3.get_extra_info() == "");
 }
 
@@ -1597,7 +1599,7 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
 BOOST_AUTO_TEST_CASE(type_index)
 {
     problem p0;
-    std::cout << p0.get_type_index().name() << '\n';
+    std::cout << p0 << '\n';
     p0 = problem{grad_p_override{}};
-    std::cout << p0.get_type_index().name() << '\n';
+    std::cout << p0 << '\n';
 }
