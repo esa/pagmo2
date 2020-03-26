@@ -541,6 +541,8 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner_base {
     virtual std::string get_extra_info() const = 0;
     virtual thread_safety get_thread_safety() const = 0;
     virtual std::type_index get_type_index() const = 0;
+    virtual const void *get_void_ptr() const = 0;
+    virtual void *get_void_ptr() = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -916,6 +918,14 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     {
         return std::type_index(typeid(T));
     }
+    virtual const void *get_void_ptr() const override final
+    {
+        return &m_value;
+    }
+    virtual void *get_void_ptr() override final
+    {
+        return &m_value;
+    }
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
@@ -1165,8 +1175,13 @@ public:
     template <typename T>
     const T *extract() const noexcept
     {
-        auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
-        return p == nullptr ? nullptr : &(p->m_value);
+        // auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
+        // return p == nullptr ? nullptr : &(p->m_value);
+        if (get_type_index().name() == typeid(T).name()) {
+            return static_cast<const T *>(ptr()->get_void_ptr());
+        } else {
+            return nullptr;
+        }
     }
 
     /// Extract a pointer to the UDP used for construction.
@@ -1195,8 +1210,13 @@ public:
     template <typename T>
     T *extract() noexcept
     {
-        auto p = dynamic_cast<detail::prob_inner<T> *>(ptr());
-        return p == nullptr ? nullptr : &(p->m_value);
+        // auto p = dynamic_cast<detail::prob_inner<T> *>(ptr());
+        // return p == nullptr ? nullptr : &(p->m_value);
+        if (get_type_index().name() == typeid(T).name()) {
+            return static_cast<T *>(ptr()->get_void_ptr());
+        } else {
+            return nullptr;
+        }
     }
 
     /// Check if the UDP used for construction is of type \p T.
