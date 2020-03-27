@@ -44,36 +44,32 @@ endfunction()
 
 # Enable conditionally a CXX flag, if supported by the compiler.
 # This is for flags intended to be enabled in all configurations.
-# NOTE: we use macros and go through temporary private variables
-# because it's apparently impossible to append to an internal
+# NOTE: we use macros because it's apparently impossible to append to an internal
 # CACHEd list.
 macro(_YACMA_CHECK_ENABLE_CXX_FLAG flag)
     set(CMAKE_REQUIRED_QUIET TRUE)
-    check_cxx_compiler_flag("${flag}" YACMA_CHECK_CXX_FLAG)
+    check_cxx_compiler_flag("${flag}" YACMA_CHECK_CXX_FLAG::${flag})
     unset(CMAKE_REQUIRED_QUIET)
-    if(YACMA_CHECK_CXX_FLAG)
+    if(YACMA_CHECK_CXX_FLAG::${flag})
         message(STATUS "'${flag}': flag is supported by the compiler, enabling.")
         list(APPEND _YACMA_CXX_FLAGS "${flag}")
     else()
         message(STATUS "'${flag}': flag is not supported by the compiler.")
     endif()
-    # NOTE: check_cxx_compiler stores variables in the cache.
-    unset(YACMA_CHECK_CXX_FLAG CACHE)
 endmacro()
 
 # Enable conditionally a debug CXX flag, is supported by the compiler.
 # This is for flags intended to be enabled in debug mode.
 macro(_YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG flag)
     set(CMAKE_REQUIRED_QUIET TRUE)
-    check_cxx_compiler_flag("${flag}" YACMA_CHECK_DEBUG_CXX_FLAG)
+    check_cxx_compiler_flag("${flag}" YACMA_CHECK_DEBUG_CXX_FLAG::${flag})
     unset(CMAKE_REQUIRED_QUIET)
-    if(YACMA_CHECK_DEBUG_CXX_FLAG)
+    if(YACMA_CHECK_DEBUG_CXX_FLAG::${flag})
         message(STATUS "'${flag}': debug flag is supported by the compiler, enabling.")
         list(APPEND _YACMA_CXX_FLAGS_DEBUG "${flag}")
     else()
         message(STATUS "'${flag}': debug flag is not supported by the compiler.")
     endif()
-    unset(YACMA_CHECK_DEBUG_CXX_FLAG CACHE)
 endmacro()
 
 # What we want to avoid is to re-run the expensive flag checks. We will set cache variables
@@ -86,6 +82,8 @@ if(NOT _YACMACompilerLinkerSettingsRun)
     # Configuration bits specific for GCC.
     if(YACMA_COMPILER_IS_GNUCXX)
         _YACMA_CHECK_ENABLE_CXX_FLAG(-fdiagnostics-color=auto)
+        # New in GCC 9.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Waddress-of-packed-member)
     endif()
 
     # Configuration bits specific for clang.
@@ -94,7 +92,26 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # for the time being.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wshadow)
         # Clang is better at this flag than GCC.
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Werror)
+        # NOTE: enable unconditionally, as it seems like the CMake
+        # machinery for detecting this fails. Perhaps the source code
+        # used for checking the flag emits warnings?
+        list(APPEND _YACMA_CXX_FLAGS_DEBUG "-Werror")
+        # New warnings in clang 8.
+        # NOTE: a few issues with macros here, let's disable for now.
+        # _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wextra-semi-stmt)
+        # New warnings in clang 10.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wtautological-overlap-compare)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wtautological-compare)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wtautological-bitwise-compare)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wbitwise-conditional-parentheses)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wrange-loop-analysis)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wmisleading-indentation)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wc99-designator)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wreorder-init-list)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsizeof-pointer-div)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsizeof-array-div)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wxor-used-as-pow)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wfinal-dtor-non-final-class)
     endif()
 
     # Common configuration for GCC, clang and Intel.
