@@ -61,14 +61,6 @@ unsigned random_device::next()
     return static_cast<unsigned>(detail::global_rng());
 }
 
-/// Sets the seed for the PRS
-/**
- * This static method sets a new seed for the PRS, so that all the
- * following calls to random_device::next() will always repeat the same
- * numbers.
- *
- * @param seed The new seed to be used
- */
 void random_device::set_seed(unsigned seed)
 {
     std::lock_guard<std::mutex> lock(detail::global_rng_mutex);

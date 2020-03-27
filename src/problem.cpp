@@ -743,10 +743,31 @@ bool problem::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
-// Get the type at runtime.
+/// Get the type of the UDP.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.15
+ *
+ * This function will return the type
+ * of the UDP stored within this problem
+ * instance.
+ * \endverbatim
+ *
+ * @return the type of the UDP.
+ */
 std::type_index problem::get_type_index() const
 {
     return ptr()->get_type_index();
+}
+
+const void *problem::get_void_ptr() const
+{
+    return ptr()->get_void_ptr();
+}
+
+void *problem::get_void_ptr()
+{
+    return ptr()->get_void_ptr();
 }
 
 /// Streaming operator

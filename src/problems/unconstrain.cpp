@@ -269,32 +269,11 @@ thread_safety unconstrain::get_thread_safety() const
     return m_problem.get_thread_safety();
 }
 
-/// Getter for the inner problem.
-/**
- * Returns a const reference to the inner pagmo::problem.
- *
- * @return a const reference to the inner pagmo::problem.
- */
 const problem &unconstrain::get_inner_problem() const
 {
     return m_problem;
 }
 
-/// Getter for the inner problem.
-/**
- * Returns a reference to the inner pagmo::problem.
- *
- * \verbatim embed:rst:leading-asterisk
- * .. note::
- *
- *    The ability to extract a non const reference is provided only in order to allow to call
- *    non-const methods on the internal :cpp:class:`pagmo::problem` instance. Assigning a new
- *    :cpp:class:`pagmo::problem` via this reference is undefined behaviour.
- *
- * \endverbatim
- *
- * @return a reference to the inner pagmo::problem.
- */
 problem &unconstrain::get_inner_problem()
 {
     return m_problem;
