@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeindex>
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -1599,7 +1600,19 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
 BOOST_AUTO_TEST_CASE(type_index)
 {
     problem p0;
-    std::cout << p0 << '\n';
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(null_problem)));
     p0 = problem{grad_p_override{}};
-    std::cout << p0 << '\n';
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(grad_p_override)));
+}
+
+BOOST_AUTO_TEST_CASE(get_void_ptr)
+{
+    problem p0;
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<null_problem>());
+    BOOST_CHECK(static_cast<const problem &>(p0).get_void_ptr()
+                == static_cast<const problem &>(p0).extract<null_problem>());
+    p0 = problem{grad_p_override{}};
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<grad_p_override>());
+    BOOST_CHECK(static_cast<const problem &>(p0).get_void_ptr()
+                == static_cast<const problem &>(p0).extract<grad_p_override>());
 }
