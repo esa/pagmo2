@@ -57,15 +57,11 @@ using random_engine_type = std::mt19937;
  */
 struct PAGMO_DLL_PUBLIC random_device {
     static unsigned next();
-    /// Sets the seed for the PRS
-    /**
-     * This static method sets a new seed for the PRS, so that all the
-     * following calls to random_device::next() will always repeat the same
-     * numbers.
-     *
-     * @param seed The new seed to be used
-     */
+
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+    // Sets the seed for the PRS.
     static void set_seed(unsigned seed);
+#endif
 };
 
 } // namespace pagmo

@@ -38,11 +38,14 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 
 #include <boost/algorithm/string/predicate.hpp>
@@ -50,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -152,6 +156,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
     BOOST_CHECK(bfe0.is<default_bfe>());
     BOOST_CHECK(!bfe0.is<udbfe_func_t>());
     BOOST_CHECK(bfe0.get_name() == "Default batch fitness evaluator");
+    BOOST_CHECK(bfe{udbfe1{}}.get_name() == detail::type_name<udbfe1>());
     BOOST_CHECK(bfe0.get_extra_info().empty());
     BOOST_CHECK(bfe0.get_thread_safety() == thread_safety::basic);
 
@@ -340,6 +345,7 @@ BOOST_AUTO_TEST_CASE(stream_operator)
         BOOST_CHECK(boost::contains(st, "bartoppo"));
         BOOST_CHECK(boost::contains(st, "Extra info:"));
     }
+    std::cout << bfe{} << '\n';
 }
 
 BOOST_AUTO_TEST_CASE(call_operator)
@@ -505,4 +511,22 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
     BOOST_CHECK((!std::is_assignable<bfe, int &>::value));
     BOOST_CHECK((!std::is_assignable<bfe, const int &>::value));
     BOOST_CHECK((!std::is_assignable<bfe, int &&>::value));
+}
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    bfe p0;
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(default_bfe)));
+    p0 = bfe{udbfe1{}};
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udbfe1)));
+}
+
+BOOST_AUTO_TEST_CASE(get_void_ptr)
+{
+    bfe p0;
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<default_bfe>());
+    BOOST_CHECK(static_cast<const bfe &>(p0).get_void_ptr() == static_cast<const bfe &>(p0).extract<default_bfe>());
+    p0 = bfe{udbfe1{}};
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udbfe1>());
+    BOOST_CHECK(static_cast<const bfe &>(p0).get_void_ptr() == static_cast<const bfe &>(p0).extract<udbfe1>());
 }

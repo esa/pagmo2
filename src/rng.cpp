@@ -61,10 +61,22 @@ unsigned random_device::next()
     return static_cast<unsigned>(detail::global_rng());
 }
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+
+/// Sets the seed for the PRS
+/**
+ * This static method sets a new seed for the PRS, so that all the
+ * following calls to random_device::next() will always repeat the same
+ * numbers.
+ *
+ * @param seed The new seed to be used
+ */
 void random_device::set_seed(unsigned seed)
 {
     std::lock_guard<std::mutex> lock(detail::global_rng_mutex);
     detail::global_rng.seed(static_cast<detail::random_engine_type::result_type>(seed));
 }
+
+#endif
 
 } // namespace pagmo
