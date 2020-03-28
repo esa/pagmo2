@@ -86,7 +86,7 @@ Exponential Evolution Strategies (xNES)                    :cpp:class:`pagmo::xn
 Non-dominated Sorting GA (NSGA2)                           :cpp:class:`pagmo::nsga2`                 M-U-I
 Multi-objective EA vith Decomposition (MOEA/D)             :cpp:class:`pagmo::moead`                 M-U
 Multi-objective Hypervolume-based ACO (MHACO)              :cpp:class:`pagmo::maco`                  M-U-I
-Non-dominated Sorting PSO (NSPSO)                          :cpp:class:`pagmo::nspso`                 M-U-I
+Non-dominated Sorting PSO (NSPSO)                          :cpp:class:`pagmo::nspso`                 M-U
 ========================================================== ========================================= =========================
 
 Local optimization 
