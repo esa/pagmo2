@@ -34,14 +34,18 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <typeindex>
 #include <typeinfo>
 #include <utility>
 
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
+#include <pagmo/config.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
+#include <pagmo/detail/type_name.hpp>
+#include <pagmo/detail/typeid_name_extract.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
@@ -122,6 +126,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS s_pol_inner_base {
                                        const vector_double &) const = 0;
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
+    virtual std::type_index get_type_index() const = 0;
+    virtual const void *get_void_ptr() const = 0;
+    virtual void *get_void_ptr() = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -169,7 +176,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS s_pol_inner final : s_pol_inner_base {
     template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &)
     {
-        return typeid(U).name();
+        return detail::type_name<U>();
     }
     template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &value)
@@ -180,6 +187,20 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS s_pol_inner final : s_pol_inner_base {
     static std::string get_extra_info_impl(const U &)
     {
         return "";
+    }
+    // Get the type at runtime.
+    virtual std::type_index get_type_index() const override final
+    {
+        return std::type_index(typeid(T));
+    }
+    // Raw getters for the internal instance.
+    virtual const void *get_void_ptr() const override final
+    {
+        return &m_value;
+    }
+    virtual void *get_void_ptr() override final
+    {
+        return &m_value;
     }
     // Serialization
     template <typename Archive>
@@ -245,14 +266,22 @@ public:
     template <typename T>
     const T *extract() const noexcept
     {
+#if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
+        return detail::typeid_name_extract<T>(*this);
+#else
         auto p = dynamic_cast<const detail::s_pol_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
+#endif
     }
     template <typename T>
     T *extract() noexcept
     {
+#if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
+        return detail::typeid_name_extract<T>(*this);
+#else
         auto p = dynamic_cast<detail::s_pol_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
+#endif
     }
     template <typename T>
     bool is() const noexcept
@@ -276,6 +305,53 @@ public:
 
     // Check if the s_policy is valid.
     bool is_valid() const;
+
+    // Get the type at runtime.
+    std::type_index get_type_index() const;
+
+    /// Get a const pointer to the UDSP.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. versionadded:: 2.15
+     *
+     * This function will return a raw const pointer
+     * to the internal UDSP instance. Differently from
+     * :cpp:func:`~pagmo::s_policy::extract()`, this function
+     * does not require to pass the correct type
+     * in input. It is however the user's responsibility
+     * to cast the returned void pointer to the correct type.
+     *
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     * \endverbatim
+     *
+     * @return a pointer to the internal UDSP.
+     */
+    const void *get_void_ptr() const;
+
+    /// Get a mutable pointer to the UDSP.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. versionadded:: 2.15
+     *
+     * This function will return a raw pointer
+     * to the internal UDSP instance. Differently from
+     * :cpp:func:`~pagmo::s_policy::extract()`, this function
+     * does not require to pass the correct type
+     * in input. It is however the user's responsibility
+     * to cast the returned void pointer to the correct type.
+     *
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     * \endverbatim
+     *
+     * @return a pointer to the internal UDSP.
+     */
+    void *get_void_ptr();
 
     // Serialisation support.
     template <typename Archive>

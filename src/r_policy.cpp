@@ -32,8 +32,10 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <typeindex>
 #include <utility>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/r_policies/fair_replace.hpp>
 #include <pagmo/r_policy.hpp>
@@ -236,12 +238,40 @@ bool r_policy::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
+/// Get the type of the UDRP.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.15
+ *
+ * This function will return the type
+ * of the UDRP stored within this policy
+ * instance.
+ * \endverbatim
+ *
+ * @return the type of the UDRP.
+ */
+std::type_index r_policy::get_type_index() const
+{
+    return ptr()->get_type_index();
+}
+
+const void *r_policy::get_void_ptr() const
+{
+    return ptr()->get_void_ptr();
+}
+
+void *r_policy::get_void_ptr()
+{
+    return ptr()->get_void_ptr();
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator.
 std::ostream &operator<<(std::ostream &os, const r_policy &r)
 {
-    os << "Replacement policy name: " << r.get_name() << '\n';
+    os << "Replacement policy name: " << r.get_name();
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(r.get_type_index().name()) << '\n';
     const auto extra_str = r.get_extra_info();
     if (!extra_str.empty()) {
         os << "\nExtra info:\n" << extra_str << '\n';
