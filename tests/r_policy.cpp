@@ -601,13 +601,13 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udrp1)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     r_policy p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<fair_replace>());
-    BOOST_CHECK(static_cast<const r_policy &>(p0).get_void_ptr()
+    BOOST_CHECK(p0.get_ptr() == p0.extract<fair_replace>());
+    BOOST_CHECK(static_cast<const r_policy &>(p0).get_ptr()
                 == static_cast<const r_policy &>(p0).extract<fair_replace>());
     p0 = r_policy{udrp1{}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udrp1>());
-    BOOST_CHECK(static_cast<const r_policy &>(p0).get_void_ptr() == static_cast<const r_policy &>(p0).extract<udrp1>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<udrp1>());
+    BOOST_CHECK(static_cast<const r_policy &>(p0).get_ptr() == static_cast<const r_policy &>(p0).extract<udrp1>());
 }

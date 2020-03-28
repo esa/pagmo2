@@ -521,12 +521,12 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udbfe1)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     bfe p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<default_bfe>());
-    BOOST_CHECK(static_cast<const bfe &>(p0).get_void_ptr() == static_cast<const bfe &>(p0).extract<default_bfe>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<default_bfe>());
+    BOOST_CHECK(static_cast<const bfe &>(p0).get_ptr() == static_cast<const bfe &>(p0).extract<default_bfe>());
     p0 = bfe{udbfe1{}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udbfe1>());
-    BOOST_CHECK(static_cast<const bfe &>(p0).get_void_ptr() == static_cast<const bfe &>(p0).extract<udbfe1>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<udbfe1>());
+    BOOST_CHECK(static_cast<const bfe &>(p0).get_ptr() == static_cast<const bfe &>(p0).extract<udbfe1>());
 }

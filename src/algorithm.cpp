@@ -216,14 +216,14 @@ std::type_index algorithm::get_type_index() const
     return ptr()->get_type_index();
 }
 
-const void *algorithm::get_void_ptr() const
+const void *algorithm::get_ptr() const
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
-void *algorithm::get_void_ptr()
+void *algorithm::get_ptr()
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
 /// Streaming operator for pagmo::algorithm

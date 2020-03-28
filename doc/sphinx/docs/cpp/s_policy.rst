@@ -223,8 +223,8 @@ Selection policy
 
       :return: the type of the UDSP.
 
-   .. cpp:function:: const void *get_void_ptr() const
-   .. cpp:function:: void *get_void_ptr()
+   .. cpp:function:: const void *get_ptr() const
+   .. cpp:function:: void *get_ptr()
 
       .. versionadded:: 2.15
 

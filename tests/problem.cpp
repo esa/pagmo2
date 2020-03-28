@@ -1605,14 +1605,13 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(grad_p_override)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     problem p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<null_problem>());
-    BOOST_CHECK(static_cast<const problem &>(p0).get_void_ptr()
-                == static_cast<const problem &>(p0).extract<null_problem>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<null_problem>());
+    BOOST_CHECK(static_cast<const problem &>(p0).get_ptr() == static_cast<const problem &>(p0).extract<null_problem>());
     p0 = problem{grad_p_override{}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<grad_p_override>());
-    BOOST_CHECK(static_cast<const problem &>(p0).get_void_ptr()
+    BOOST_CHECK(p0.get_ptr() == p0.extract<grad_p_override>());
+    BOOST_CHECK(static_cast<const problem &>(p0).get_ptr()
                 == static_cast<const problem &>(p0).extract<grad_p_override>());
 }

@@ -176,8 +176,8 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner_base {
     virtual void push_back() = 0;
     virtual bgl_graph_t to_bgl() const = 0;
     virtual std::type_index get_type_index() const = 0;
-    virtual const void *get_void_ptr() const = 0;
-    virtual void *get_void_ptr() = 0;
+    virtual const void *get_ptr() const = 0;
+    virtual void *get_ptr() = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -261,11 +261,11 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_void_ptr() const override final
+    virtual const void *get_ptr() const override final
     {
         return &m_value;
     }
-    virtual void *get_void_ptr() override final
+    virtual void *get_ptr() override final
     {
         return &m_value;
     }
@@ -386,10 +386,10 @@ public:
     std::type_index get_type_index() const;
 
     // Get a const pointer to the UDT.
-    const void *get_void_ptr() const;
+    const void *get_ptr() const;
 
     // Get a mutable pointer to the UDT.
-    void *get_void_ptr();
+    void *get_ptr();
 
     // Serialization.
     template <typename Archive>

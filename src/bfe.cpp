@@ -126,14 +126,14 @@ std::type_index bfe::get_type_index() const
     return ptr()->get_type_index();
 }
 
-const void *bfe::get_void_ptr() const
+const void *bfe::get_ptr() const
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
-void *bfe::get_void_ptr()
+void *bfe::get_ptr()
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)

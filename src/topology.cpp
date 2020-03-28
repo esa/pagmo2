@@ -165,14 +165,14 @@ std::type_index topology::get_type_index() const
     return ptr()->get_type_index();
 }
 
-const void *topology::get_void_ptr() const
+const void *topology::get_ptr() const
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
-void *topology::get_void_ptr()
+void *topology::get_ptr()
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)

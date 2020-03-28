@@ -510,16 +510,15 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(al_01)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     algorithm p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<null_algorithm>());
-    BOOST_CHECK(static_cast<const algorithm &>(p0).get_void_ptr()
+    BOOST_CHECK(p0.get_ptr() == p0.extract<null_algorithm>());
+    BOOST_CHECK(static_cast<const algorithm &>(p0).get_ptr()
                 == static_cast<const algorithm &>(p0).extract<null_algorithm>());
     p0 = algorithm{al_01{}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<al_01>());
-    BOOST_CHECK(static_cast<const algorithm &>(p0).get_void_ptr()
-                == static_cast<const algorithm &>(p0).extract<al_01>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<al_01>());
+    BOOST_CHECK(static_cast<const algorithm &>(p0).get_ptr() == static_cast<const algorithm &>(p0).extract<al_01>());
 }
 
 BOOST_AUTO_TEST_CASE(stream_operator)

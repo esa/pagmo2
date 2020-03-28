@@ -380,14 +380,13 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udt00a)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     topology p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<unconnected>());
-    BOOST_CHECK(static_cast<const topology &>(p0).get_void_ptr()
+    BOOST_CHECK(p0.get_ptr() == p0.extract<unconnected>());
+    BOOST_CHECK(static_cast<const topology &>(p0).get_ptr()
                 == static_cast<const topology &>(p0).extract<unconnected>());
     p0 = topology{udt00a{}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udt00a>());
-    BOOST_CHECK(static_cast<const topology &>(p0).get_void_ptr()
-                == static_cast<const topology &>(p0).extract<udt00a>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<udt00a>());
+    BOOST_CHECK(static_cast<const topology &>(p0).get_ptr() == static_cast<const topology &>(p0).extract<udt00a>());
 }

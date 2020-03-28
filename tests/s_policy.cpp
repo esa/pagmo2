@@ -562,13 +562,13 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udsp1)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     s_policy p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<select_best>());
-    BOOST_CHECK(static_cast<const s_policy &>(p0).get_void_ptr()
+    BOOST_CHECK(p0.get_ptr() == p0.extract<select_best>());
+    BOOST_CHECK(static_cast<const s_policy &>(p0).get_ptr()
                 == static_cast<const s_policy &>(p0).extract<select_best>());
     p0 = s_policy{udsp1{}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udsp1>());
-    BOOST_CHECK(static_cast<const s_policy &>(p0).get_void_ptr() == static_cast<const s_policy &>(p0).extract<udsp1>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<udsp1>());
+    BOOST_CHECK(static_cast<const s_policy &>(p0).get_ptr() == static_cast<const s_policy &>(p0).extract<udsp1>());
 }

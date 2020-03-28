@@ -191,8 +191,8 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner_base {
     virtual std::string get_extra_info() const = 0;
     virtual thread_safety get_thread_safety() const = 0;
     virtual std::type_index get_type_index() const = 0;
-    virtual const void *get_void_ptr() const = 0;
-    virtual void *get_void_ptr() = 0;
+    virtual const void *get_ptr() const = 0;
+    virtual void *get_ptr() = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -346,11 +346,11 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_void_ptr() const override final
+    virtual const void *get_ptr() const override final
     {
         return &m_value;
     }
-    virtual void *get_void_ptr() override final
+    virtual void *get_ptr() override final
     {
         return &m_value;
     }
@@ -691,7 +691,7 @@ public:
      *
      * @return a pointer to the internal UDA.
      */
-    const void *get_void_ptr() const;
+    const void *get_ptr() const;
 
     /// Get a mutable pointer to the UDA.
     /**
@@ -718,7 +718,7 @@ public:
      *
      * @return a pointer to the internal UDA.
      */
-    void *get_void_ptr();
+    void *get_ptr();
 
     /// Save to archive.
     /**

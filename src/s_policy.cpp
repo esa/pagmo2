@@ -227,14 +227,14 @@ std::type_index s_policy::get_type_index() const
     return ptr()->get_type_index();
 }
 
-const void *s_policy::get_void_ptr() const
+const void *s_policy::get_ptr() const
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
-void *s_policy::get_void_ptr()
+void *s_policy::get_ptr()
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)

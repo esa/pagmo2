@@ -882,14 +882,14 @@ std::type_index island::get_type_index() const
     return m_ptr->isl_ptr->get_type_index();
 }
 
-const void *island::get_void_ptr() const
+const void *island::get_ptr() const
 {
-    return m_ptr->isl_ptr->get_void_ptr();
+    return m_ptr->isl_ptr->get_ptr();
 }
 
-void *island::get_void_ptr()
+void *island::get_ptr()
 {
-    return m_ptr->isl_ptr->get_void_ptr();
+    return m_ptr->isl_ptr->get_ptr();
 }
 
 #if !defined(PAGMO_DOXYGEN_INVOKED)

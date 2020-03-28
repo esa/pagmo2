@@ -760,14 +760,14 @@ std::type_index problem::get_type_index() const
     return ptr()->get_type_index();
 }
 
-const void *problem::get_void_ptr() const
+const void *problem::get_ptr() const
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
-void *problem::get_void_ptr()
+void *problem::get_ptr()
 {
-    return ptr()->get_void_ptr();
+    return ptr()->get_ptr();
 }
 
 /// Streaming operator

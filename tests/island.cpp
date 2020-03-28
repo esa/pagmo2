@@ -652,13 +652,12 @@ BOOST_AUTO_TEST_CASE(type_index)
     BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udi_01a)));
 }
 
-BOOST_AUTO_TEST_CASE(get_void_ptr)
+BOOST_AUTO_TEST_CASE(get_ptr)
 {
     island p0;
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<thread_island>());
-    BOOST_CHECK(static_cast<const island &>(p0).get_void_ptr()
-                == static_cast<const island &>(p0).extract<thread_island>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<thread_island>());
+    BOOST_CHECK(static_cast<const island &>(p0).get_ptr() == static_cast<const island &>(p0).extract<thread_island>());
     p0 = island{udi_01a{}, de{}, population{rosenbrock{}, 25}};
-    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udi_01a>());
-    BOOST_CHECK(static_cast<const island &>(p0).get_void_ptr() == static_cast<const island &>(p0).extract<udi_01a>());
+    BOOST_CHECK(p0.get_ptr() == p0.extract<udi_01a>());
+    BOOST_CHECK(static_cast<const island &>(p0).get_ptr() == static_cast<const island &>(p0).extract<udi_01a>());
 }

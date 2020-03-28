@@ -58,7 +58,7 @@ inline typename std::conditional<std::is_const<C>::value, const T *, T *>::type 
     } else {
         // The names match, cast to the correct type and return.
         return static_cast<typename std::conditional<std::is_const<C>::value, const T *, T *>::type>(
-            class_inst.get_void_ptr());
+            class_inst.get_ptr());
     }
 }
 
