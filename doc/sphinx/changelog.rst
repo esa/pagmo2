@@ -9,6 +9,13 @@ Changelog
 New
 ~~~
 
+- The type-erased wrappers now have additional member functions
+  to interact at runtime with the contained user-defined objects.
+  Specifically, it is now possible to fetch ``void`` pointers to the
+  user-defined objects without knowing their type, and to query
+  at runtime the ``std::type_index`` of the user-defined objects
+  (`#410 <https://github.com/esa/pagmo2/pull/410>`__).
+
 - Add a :cpp:func:`pagmo::base_bgl_topology::get_edge_weight()`
   function to fetch the weight of an edge in a BGL topology
   (`#407 <https://github.com/esa/pagmo2/pull/407>`__).
@@ -23,8 +30,12 @@ New
 Fix
 ~~~
 
+- Build fixes for recent CMake versions
+  (`#410 <https://github.com/esa/pagmo2/pull/410>`__).
+
 - Various doc fixes
-  (`#405 <https://github.com/esa/pagmo2/pull/405>`__).
+  (`#410 <https://github.com/esa/pagmo2/pull/410>`__,
+  `#405 <https://github.com/esa/pagmo2/pull/405>`__).
 
 2.14.0 (2020-03-04)
 -------------------
