@@ -543,7 +543,9 @@ BOOST_AUTO_TEST_CASE(island_extract)
     BOOST_CHECK((std::is_same<udi_01 *, decltype(isl.extract<udi_01>())>::value));
     BOOST_CHECK((std::is_same<udi_01 const *, decltype(static_cast<const island &>(isl).extract<udi_01>())>::value));
     BOOST_CHECK(isl.is<udi_01>());
+#if !defined(_MSC_VER) || defined(__clang__)
     BOOST_CHECK(isl.extract<const udi_01>() == nullptr);
+#endif
 }
 
 // Constructors with bfe arguments.
