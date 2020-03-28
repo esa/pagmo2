@@ -34,6 +34,8 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
@@ -42,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -117,7 +120,7 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     BOOST_CHECK_THROW(algo_minimal.set_verbosity(1u), not_implemented_error);
     // We check that at construction the name has been assigned
     BOOST_CHECK(algo_full.get_name() == "name");
-    BOOST_CHECK(algo_minimal.get_name().find("al_02") != std::string::npos);
+    BOOST_CHECK(algo_minimal.get_name() == detail::type_name<al_02>());
     // Default constructor.
     algorithm a0;
     BOOST_CHECK((a0.extract<null_algorithm>() != nullptr));
@@ -496,4 +499,24 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
     BOOST_CHECK((!std::is_assignable<algorithm, int &>::value));
     BOOST_CHECK((!std::is_assignable<algorithm, const int &>::value));
     BOOST_CHECK((!std::is_assignable<algorithm, int &&>::value));
+}
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    algorithm p0;
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(null_algorithm)));
+    p0 = algorithm{al_01{}};
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(al_01)));
+}
+
+BOOST_AUTO_TEST_CASE(get_void_ptr)
+{
+    algorithm p0;
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<null_algorithm>());
+    BOOST_CHECK(static_cast<const algorithm &>(p0).get_void_ptr()
+                == static_cast<const algorithm &>(p0).extract<null_algorithm>());
+    p0 = algorithm{al_01{}};
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<al_01>());
+    BOOST_CHECK(static_cast<const algorithm &>(p0).get_void_ptr()
+                == static_cast<const algorithm &>(p0).extract<al_01>());
 }
