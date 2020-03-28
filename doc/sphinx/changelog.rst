@@ -16,6 +16,10 @@ New
   at runtime the ``std::type_index`` of the user-defined objects
   (`#410 <https://github.com/esa/pagmo2/pull/410>`__).
 
+- The default ``get_name()`` implementations for the type-erased
+  wrappers now return the demangled C++ name on most platforms
+  (`#410 <https://github.com/esa/pagmo2/pull/410>`__).
+
 - Add a :cpp:func:`pagmo::base_bgl_topology::get_edge_weight()`
   function to fetch the weight of an edge in a BGL topology
   (`#407 <https://github.com/esa/pagmo2/pull/407>`__).
