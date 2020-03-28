@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <ostream>
 #include <string>
 #include <type_traits>
+#include <typeindex>
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -43,8 +44,11 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
+#include <pagmo/config.hpp>
 #include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
+#include <pagmo/detail/type_name.hpp>
+#include <pagmo/detail/typeid_name_extract.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
@@ -171,6 +175,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner_base {
     virtual std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const = 0;
     virtual void push_back() = 0;
     virtual bgl_graph_t to_bgl() const = 0;
+    virtual std::type_index get_type_index() const = 0;
+    virtual const void *get_void_ptr() const = 0;
+    virtual void *get_void_ptr() = 0;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -236,7 +243,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
     template <typename U, enable_if_t<!has_name<U>::value, int> = 0>
     static std::string get_name_impl(const U &)
     {
-        return typeid(U).name();
+        return detail::type_name<U>();
     }
     template <typename U, enable_if_t<has_extra_info<U>::value, int> = 0>
     static std::string get_extra_info_impl(const U &value)
@@ -247,6 +254,20 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
     static std::string get_extra_info_impl(const U &)
     {
         return "";
+    }
+    // Get the type at runtime.
+    virtual std::type_index get_type_index() const override final
+    {
+        return std::type_index(typeid(T));
+    }
+    // Raw getters for the internal instance.
+    virtual const void *get_void_ptr() const override final
+    {
+        return &m_value;
+    }
+    virtual void *get_void_ptr() override final
+    {
+        return &m_value;
     }
     // Serialization
     template <typename Archive>
@@ -315,14 +336,22 @@ public:
     template <typename T>
     const T *extract() const noexcept
     {
+#if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
+        return detail::typeid_name_extract<T>(*this);
+#else
         auto p = dynamic_cast<const detail::topo_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
+#endif
     }
     template <typename T>
     T *extract() noexcept
     {
+#if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
+        return detail::typeid_name_extract<T>(*this);
+#else
         auto p = dynamic_cast<detail::topo_inner<T> *>(ptr());
         return p == nullptr ? nullptr : &(p->m_value);
+#endif
     }
     template <typename T>
     bool is() const noexcept
@@ -352,6 +381,53 @@ public:
 
     // Convert to BGL.
     bgl_graph_t to_bgl() const;
+
+    // Get the type at runtime.
+    std::type_index get_type_index() const;
+
+    /// Get a const pointer to the UDT.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. versionadded:: 2.15
+     *
+     * This function will return a raw const pointer
+     * to the internal UDT instance. Differently from
+     * :cpp:func:`~pagmo::topology::extract()`, this function
+     * does not require to pass the correct type
+     * in input. It is however the user's responsibility
+     * to cast the returned void pointer to the correct type.
+     *
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     * \endverbatim
+     *
+     * @return a pointer to the internal UDT.
+     */
+    const void *get_void_ptr() const;
+
+    /// Get a mutable pointer to the UDT.
+    /**
+     * \verbatim embed:rst:leading-asterisk
+     * .. versionadded:: 2.15
+     *
+     * This function will return a raw pointer
+     * to the internal UDT instance. Differently from
+     * :cpp:func:`~pagmo::topology::extract()`, this function
+     * does not require to pass the correct type
+     * in input. It is however the user's responsibility
+     * to cast the returned void pointer to the correct type.
+     *
+     * .. note::
+     *
+     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+     *    of ``this``, and ``delete`` must never be called on the pointer.
+     * \endverbatim
+     *
+     * @return a pointer to the internal UDT.
+     */
+    void *get_void_ptr();
 
     // Serialization.
     template <typename Archive>

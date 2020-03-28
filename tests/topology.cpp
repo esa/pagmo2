@@ -32,17 +32,21 @@ see https://www.gnu.org/licenses/. */
 
 #include <cstddef>
 #include <initializer_list>
+#include <iostream>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/topologies/ring.hpp>
@@ -98,6 +102,14 @@ struct udt00 {
         ar &n_pushed;
     }
     int n_pushed = 0;
+};
+
+struct udt00a {
+    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const
+    {
+        return {{0, 1, 2}, {0.1, 0.2, 0.3}};
+    }
+    void push_back() {}
 };
 
 PAGMO_S11N_TOPOLOGY_EXPORT(udt00)
@@ -158,6 +170,7 @@ BOOST_AUTO_TEST_CASE(topology_basic_tests)
     BOOST_CHECK(t0.extract<udt01>() == nullptr);
     BOOST_CHECK(static_cast<const topology &>(t0).extract<udt01>() == nullptr);
     BOOST_CHECK(t0.get_name() == "udt00");
+    BOOST_CHECK(topology{udt00a{}}.get_name() == detail::type_name<udt00a>());
     BOOST_CHECK(t0.get_extra_info().empty());
 
     t0.push_back();
@@ -321,6 +334,8 @@ BOOST_AUTO_TEST_CASE(topology_stream_test)
 
         BOOST_CHECK(boost::contains(str, "Topology name: udt00"));
     }
+
+    std::cout << topology{} << '\n';
 }
 
 BOOST_AUTO_TEST_CASE(topology_push_back_n_test)
@@ -355,4 +370,24 @@ BOOST_AUTO_TEST_CASE(topology_to_bgl_test)
     });
 
     BOOST_CHECK(boost::num_vertices(topology{udt01{}}.to_bgl()) == 0);
+}
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    topology p0;
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(unconnected)));
+    p0 = topology{udt00a{}};
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udt00a)));
+}
+
+BOOST_AUTO_TEST_CASE(get_void_ptr)
+{
+    topology p0;
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<unconnected>());
+    BOOST_CHECK(static_cast<const topology &>(p0).get_void_ptr()
+                == static_cast<const topology &>(p0).extract<unconnected>());
+    p0 = topology{udt00a{}};
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udt00a>());
+    BOOST_CHECK(static_cast<const topology &>(p0).get_void_ptr()
+                == static_cast<const topology &>(p0).extract<udt00a>());
 }

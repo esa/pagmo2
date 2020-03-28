@@ -31,9 +31,11 @@ see https://www.gnu.org/licenses/. */
 #include <ostream>
 #include <stdexcept>
 #include <string>
+#include <typeindex>
 #include <utility>
 #include <vector>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/topologies/unconnected.hpp>
 #include <pagmo/topology.hpp>
@@ -157,11 +159,39 @@ bgl_graph_t topology::to_bgl() const
     return ptr()->to_bgl();
 }
 
+/// Get the type of the UDT.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.15
+ *
+ * This function will return the type
+ * of the UDT stored within this topology
+ * instance.
+ * \endverbatim
+ *
+ * @return the type of the UDT.
+ */
+std::type_index topology::get_type_index() const
+{
+    return ptr()->get_type_index();
+}
+
+const void *topology::get_void_ptr() const
+{
+    return ptr()->get_void_ptr();
+}
+
+void *topology::get_void_ptr()
+{
+    return ptr()->get_void_ptr();
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 std::ostream &operator<<(std::ostream &os, const topology &t)
 {
     os << "Topology name: " << t.get_name();
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(t.get_type_index().name()) << '\n';
     const auto extra_str = t.get_extra_info();
     if (!extra_str.empty()) {
         os << "\nExtra info:\n" << extra_str;
