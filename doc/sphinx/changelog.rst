@@ -30,6 +30,13 @@ New
 Fix
 ~~~
 
+- Introduce a workaround for an issue present on some
+  compiler/standard library combinations, where
+  the ``dynamic_cast`` used in the ``extract()``
+  implementations would fail when crossing the boundaries
+  between ``dlopen()``-ed libraries
+  (`#410 <https://github.com/esa/pagmo2/pull/410>`__).
+
 - Build fixes for recent CMake versions
   (`#410 <https://github.com/esa/pagmo2/pull/410>`__).
 
