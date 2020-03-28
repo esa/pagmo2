@@ -38,6 +38,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <thread>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
@@ -49,6 +51,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
 #include <pagmo/islands/thread_island.hpp>
@@ -78,6 +81,10 @@ struct udi_01 {
     {
         return "extra bits";
     }
+};
+
+struct udi_01a {
+    void run_evolve(island &) const {}
 };
 
 struct udi_02 {
@@ -391,6 +398,7 @@ BOOST_AUTO_TEST_CASE(island_name_info_stream)
     oss << isl;
     BOOST_CHECK(!oss.str().empty());
     BOOST_CHECK(isl.get_name() == "udi_01");
+    BOOST_CHECK((island{udi_01a{}, de{}, population{rosenbrock{}, 25}}.get_name()) == detail::type_name<udi_01a>());
     BOOST_CHECK(isl.get_extra_info() == "extra bits");
     BOOST_CHECK(boost::contains(oss.str(), "Replacement policy: Fair replace"));
     BOOST_CHECK(boost::contains(oss.str(), "Selection policy: Select best"));
@@ -630,4 +638,23 @@ BOOST_AUTO_TEST_CASE(is_valid)
     BOOST_CHECK(!p0.is_valid());
     p0 = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
     BOOST_CHECK(p0.is_valid());
+}
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    island p0;
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(thread_island)));
+    p0 = island{udi_01a{}, de{}, population{rosenbrock{}, 25}};
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udi_01a)));
+}
+
+BOOST_AUTO_TEST_CASE(get_void_ptr)
+{
+    island p0;
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<thread_island>());
+    BOOST_CHECK(static_cast<const island &>(p0).get_void_ptr()
+                == static_cast<const island &>(p0).extract<thread_island>());
+    p0 = island{udi_01a{}, de{}, population{rosenbrock{}, 25}};
+    BOOST_CHECK(p0.get_void_ptr() == p0.extract<udi_01a>());
+    BOOST_CHECK(static_cast<const island &>(p0).get_void_ptr() == static_cast<const island &>(p0).extract<udi_01a>());
 }

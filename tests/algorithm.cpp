@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -519,4 +520,9 @@ BOOST_AUTO_TEST_CASE(get_void_ptr)
     BOOST_CHECK(p0.get_void_ptr() == p0.extract<al_01>());
     BOOST_CHECK(static_cast<const algorithm &>(p0).get_void_ptr()
                 == static_cast<const algorithm &>(p0).extract<al_01>());
+}
+
+BOOST_AUTO_TEST_CASE(stream_operator)
+{
+    std::cout << algorithm{} << '\n';
 }
