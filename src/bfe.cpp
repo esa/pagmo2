@@ -121,18 +121,6 @@ bool bfe::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
-/// Get the type of the UDBFE.
-/**
- * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.15
- *
- * This function will return the type
- * of the UDBFE stored within this bfe
- * instance.
- * \endverbatim
- *
- * @return the type of the UDBFE.
- */
 std::type_index bfe::get_type_index() const
 {
     return ptr()->get_type_index();

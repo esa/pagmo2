@@ -339,48 +339,10 @@ public:
     // Get the type at runtime.
     std::type_index get_type_index() const;
 
-    /// Get a const pointer to the UDBFE.
-    /**
-     * \verbatim embed:rst:leading-asterisk
-     * .. versionadded:: 2.15
-     *
-     * This function will return a raw const pointer
-     * to the internal UDBFE instance. Differently from
-     * :cpp:func:`~pagmo::bfe::extract()`, this function
-     * does not require to pass the correct type
-     * in input. It is however the user's responsibility
-     * to cast the returned void pointer to the correct type.
-     *
-     * .. note::
-     *
-     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of ``this``, and ``delete`` must never be called on the pointer.
-     * \endverbatim
-     *
-     * @return a pointer to the internal UDBFE.
-     */
+    // Get a const pointer to the UDBFE.
     const void *get_void_ptr() const;
 
-    /// Get a mutable pointer to the UDBFE.
-    /**
-     * \verbatim embed:rst:leading-asterisk
-     * .. versionadded:: 2.15
-     *
-     * This function will return a raw pointer
-     * to the internal UDBFE instance. Differently from
-     * :cpp:func:`~pagmo::bfe::extract()`, this function
-     * does not require to pass the correct type
-     * in input. It is however the user's responsibility
-     * to cast the returned void pointer to the correct type.
-     *
-     * .. note::
-     *
-     *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
-     *    of ``this``, and ``delete`` must never be called on the pointer.
-     * \endverbatim
-     *
-     * @return a pointer to the internal UDBFE.
-     */
+    // Get a mutable pointer to the UDBFE.
     void *get_void_ptr();
 
     // Serialisation support.

@@ -221,18 +221,7 @@ bool s_policy::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
-/// Get the type of the UDSP.
-/**
- * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.15
- *
- * This function will return the type
- * of the UDSP stored within this policy
- * instance.
- * \endverbatim
- *
- * @return the type of the UDSP.
- */
+// Get the type of the UDSP.
 std::type_index s_policy::get_type_index() const
 {
     return ptr()->get_type_index();

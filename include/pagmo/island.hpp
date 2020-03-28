@@ -1176,6 +1176,11 @@ public:
      *
      *    The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
      *    of ``this``, and ``delete`` must never be called on the pointer.
+     *
+     * .. note::
+     *
+     *    The ability to extract a mutable pointer is provided only in order to allow to call non-const
+     *    methods on the internal UDI instance. Assigning a new UDI via this pointer is undefined behaviour.
      * \endverbatim
      *
      * @return a pointer to the internal UDI.

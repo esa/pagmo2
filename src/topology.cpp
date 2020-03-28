@@ -159,18 +159,7 @@ bgl_graph_t topology::to_bgl() const
     return ptr()->to_bgl();
 }
 
-/// Get the type of the UDT.
-/**
- * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.15
- *
- * This function will return the type
- * of the UDT stored within this topology
- * instance.
- * \endverbatim
- *
- * @return the type of the UDT.
- */
+// Get the type of the UDT.
 std::type_index topology::get_type_index() const
 {
     return ptr()->get_type_index();

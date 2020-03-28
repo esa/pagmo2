@@ -240,6 +240,44 @@ Topology
 
       :return: ``false`` if *this* was moved from, ``true`` otherwise.
 
+   .. cpp:function:: std::type_index get_type_index() const
+
+      .. versionadded:: 2.15
+
+      Get the type of the UDT.
+
+      This function will return the type
+      of the UDT stored within this :cpp:class:`~pagmo::topology`
+      instance.
+
+      :return: the type of the UDT.
+
+   .. cpp:function:: const void *get_void_ptr() const
+   .. cpp:function:: void *get_void_ptr()
+
+      .. versionadded:: 2.15
+
+      Get a pointer to the UDT.
+
+      These functions will return a raw (const) pointer
+      to the internal UDT instance. Differently from
+      the :cpp:func:`~pagmo::topology::extract()` overloads, these functions
+      do not require to pass the correct type
+      in input. It is however the user's responsibility
+      to cast the returned void pointer to the correct type.
+
+      .. note::
+
+         The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+         of ``this``, and ``delete`` must never be called on the pointer.
+
+      .. note::
+
+         The ability to extract a mutable pointer is provided only in order to allow to call non-const
+         methods on the internal UDT instance. Assigning a new UDT via this pointer is undefined behaviour.
+
+      :return: a pointer to the internal UDT.
+
    .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
    .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
 

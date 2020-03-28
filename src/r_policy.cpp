@@ -238,18 +238,7 @@ bool r_policy::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
-/// Get the type of the UDRP.
-/**
- * \verbatim embed:rst:leading-asterisk
- * .. versionadded:: 2.15
- *
- * This function will return the type
- * of the UDRP stored within this policy
- * instance.
- * \endverbatim
- *
- * @return the type of the UDRP.
- */
+// Get the type of the UDRP.
 std::type_index r_policy::get_type_index() const
 {
     return ptr()->get_type_index();
