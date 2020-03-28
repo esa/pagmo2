@@ -532,7 +532,9 @@ BOOST_AUTO_TEST_CASE(island_extract)
     BOOST_CHECK((std::is_same<thread_island const *,
                               decltype(static_cast<const island &>(isl).extract<thread_island>())>::value));
     BOOST_CHECK(isl.is<thread_island>());
+#if !defined(_MSC_VER) || defined(__clang__)
     BOOST_CHECK(isl.extract<const thread_island>() == nullptr);
+#endif
     BOOST_CHECK(isl.extract<udi_01>() == nullptr);
     BOOST_CHECK(!isl.is<udi_01>());
     isl = island(udi_01{}, stateful_algo{}, null_problem{}, 20);
