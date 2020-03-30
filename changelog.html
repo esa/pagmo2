@@ -263,6 +263,15 @@
 <div class="section" id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>The type-erased wrappers now have additional member functions
+to interact at runtime with the contained user-defined objects.
+Specifically, it is now possible to fetch <code class="docutils literal notranslate"><span class="pre">void</span></code> pointers to the
+user-defined objects without knowing their type, and to query
+at runtime the <code class="docutils literal notranslate"><span class="pre">std::type_index</span></code> of the user-defined objects
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/410">#410</a>).</p></li>
+<li><p>The default <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> implementations for the type-erased
+wrappers now return the demangled C++ name on most platforms
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/410">#410</a>).</p></li>
 <li><p>Add a <a class="reference internal" href="docs/cpp/topologies/base_bgl_topology.html#_CPPv4NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE" title="pagmo::base_bgl_topology::get_edge_weight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::base_bgl_topology::get_edge_weight()</span></code></a>
 function to fetch the weight of an edge in a BGL topology
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/407">#407</a>).</p></li>
@@ -276,8 +285,17 @@ a conversion function to a Boost graph object
 <div class="section" id="fix">
 <h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Introduce a workaround for an issue present on some
+compiler/standard library combinations, where
+the <code class="docutils literal notranslate"><span class="pre">dynamic_cast</span></code> used in the <code class="docutils literal notranslate"><span class="pre">extract()</span></code>
+implementations would fail when crossing the boundaries
+between <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code>-ed libraries
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/410">#410</a>).</p></li>
+<li><p>Build fixes for recent CMake versions
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/410">#410</a>).</p></li>
 <li><p>Various doc fixes
-(<a class="reference external" href="https://github.com/esa/pagmo2/pull/405">#405</a>).</p></li>
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/410">#410</a>,
+<a class="reference external" href="https://github.com/esa/pagmo2/pull/405">#405</a>).</p></li>
 </ul>
 </div>
 </div>

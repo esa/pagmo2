@@ -464,6 +464,58 @@ That is, pagmo assumes by default that is it safe to operate concurrently on dis
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4NK5pagmo3bfe14get_type_indexEv">
+<span id="_CPPv3NK5pagmo3bfe14get_type_indexEv"></span><span id="_CPPv2NK5pagmo3bfe14get_type_indexEv"></span><span id="pagmo::bfe::get_type_indexC"></span>std::type_index <code class="sig-name descname">get_type_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3bfe14get_type_indexEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>Get the type of the UDBFE.</p>
+<p>This function will return the type
+of the UDBFE stored within this <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>
+instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the type of the UDBFE.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo3bfe7get_ptrEv">
+<span id="_CPPv3NK5pagmo3bfe7get_ptrEv"></span><span id="_CPPv2NK5pagmo3bfe7get_ptrEv"></span><span id="pagmo::bfe::get_ptrC"></span><em class="property">const</em> void *<code class="sig-name descname">get_ptr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3bfe7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo3bfe7get_ptrEv">
+<span id="_CPPv3N5pagmo3bfe7get_ptrEv"></span><span id="_CPPv2N5pagmo3bfe7get_ptrEv"></span><span id="pagmo::bfe::get_ptr"></span>void *<code class="sig-name descname">get_ptr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>Get a pointer to the UDBFE.</p>
+<p>These functions will return a raw (const) pointer
+to the internal UDBFE instance. Differently from
+the <a class="reference internal" href="#_CPPv4I0ENK5pagmo3bfe7extractEPK1Tv" title="pagmo::bfe::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">extract()</span></code></a> overloads, these functions
+do not require to pass the correct type
+in input. It is however the user’s responsibility
+to cast the returned void pointer to the correct type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the internal UDBFE instance. Assigning a new UDBFE via this pointer is undefined behaviour.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a pointer to the internal UDBFE.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4I0ENK5pagmo3bfe4saveEvR7Archivej">
 <span id="_CPPv3I0ENK5pagmo3bfe4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo3bfe4saveER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo3bfe4saveEvR7Archivej" title="pagmo::bfe::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo3bfe4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>

@@ -1068,6 +1068,81 @@ sparsity pattern of the hessians is dense. See <code class="xref cpp cpp-func do
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4NK5pagmo7problem14get_type_indexEv">
+<span id="_CPPv3NK5pagmo7problem14get_type_indexEv"></span><span id="_CPPv2NK5pagmo7problem14get_type_indexEv"></span><span id="pagmo::problem::get_type_indexC"></span><span class="target" id="classpagmo_1_1problem_1a7da506fd5956046349b1f2e198ba7140"></span>std::type_index <code class="sig-name descname">get_type_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7problem14get_type_indexEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the type of the UDP. </p>
+<p><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This function will return the type
+of the UDP stored within this problem
+instance.</p>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the type of the UDP. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo7problem7get_ptrEv">
+<span id="_CPPv3NK5pagmo7problem7get_ptrEv"></span><span id="_CPPv2NK5pagmo7problem7get_ptrEv"></span><span id="pagmo::problem::get_ptrC"></span><span class="target" id="classpagmo_1_1problem_1a5d805cec80f08a4c15bba0c4758a92b3"></span>void *<code class="sig-name descname">get_ptr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7problem7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a const pointer to the UDP. </p>
+<p><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This function will return a raw const pointer
+to the internal UDP instance. Differently from
+<a class="reference internal" href="#_CPPv4I0ENK5pagmo7problem7extractEPK1Tv" title="pagmo::problem::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">extract()</span></code></a>, this function
+does not require to pass the correct type
+in input. It is however the user’s responsibility
+to cast the returned void pointer to the correct type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a pointer to the internal UDP. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo7problem7get_ptrEv">
+<span id="_CPPv3N5pagmo7problem7get_ptrEv"></span><span id="_CPPv2N5pagmo7problem7get_ptrEv"></span><span id="pagmo::problem::get_ptr"></span><span class="target" id="classpagmo_1_1problem_1af2d114c22a8541c451e4c005df807947"></span>void *<code class="sig-name descname">get_ptr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7problem7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a mutable pointer to the UDP. </p>
+<p><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This function will return a raw pointer
+to the internal UDP instance. Differently from
+<a class="reference internal" href="#_CPPv4I0ENK5pagmo7problem7extractEPK1Tv" title="pagmo::problem::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">extract()</span></code></a>, this function
+does not require to pass the correct type
+in input. It is however the user’s responsibility
+to cast the returned void pointer to the correct type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the internal UDP instance. Assigning a new UDP via this pointer is undefined behaviour.</p>
+</div>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a pointer to the internal UDP. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4I0ENK5pagmo7problem4saveEvR7Archivej">
 <span id="_CPPv3I0ENK5pagmo7problem4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo7problem4saveER7Archivej"></span><span class="target" id="classpagmo_1_1problem_1a92299a04fab47e306d92abd3e3e65eef"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo7problem4saveEvR7Archivej" title="pagmo::problem::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo7problem4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>

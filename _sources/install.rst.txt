@@ -60,6 +60,7 @@ to the channels, and then we can immediately install pagmo:
 .. code-block:: console
 
    $ conda config --add channels conda-forge
+   $ conda config --set channel_priority strict
    $ conda install pagmo pagmo-devel
 
 The conda packages for pagmo are maintained by the core development team,

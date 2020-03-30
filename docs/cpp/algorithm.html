@@ -573,6 +573,81 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </dd></dl>
 
 <dl class="function">
+<dt id="_CPPv4NK5pagmo9algorithm14get_type_indexEv">
+<span id="_CPPv3NK5pagmo9algorithm14get_type_indexEv"></span><span id="_CPPv2NK5pagmo9algorithm14get_type_indexEv"></span><span id="pagmo::algorithm::get_type_indexC"></span><span class="target" id="classpagmo_1_1algorithm_1aca1d95ae13e9063fc5e137b9765fcbd6"></span>std::type_index <code class="sig-name descname">get_type_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm14get_type_indexEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the type of the UDA. </p>
+<p><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This function will return the type
+of the UDA stored within this algorithm
+instance.</p>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the type of the UDA. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5pagmo9algorithm7get_ptrEv">
+<span id="_CPPv3NK5pagmo9algorithm7get_ptrEv"></span><span id="_CPPv2NK5pagmo9algorithm7get_ptrEv"></span><span id="pagmo::algorithm::get_ptrC"></span><span class="target" id="classpagmo_1_1algorithm_1ad71e10e6ff9c073f1c6cf29991144289"></span>void *<code class="sig-name descname">get_ptr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a const pointer to the UDA. </p>
+<p><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This function will return a raw const pointer
+to the internal UDA instance. Differently from
+<a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">extract()</span></code></a>, this function
+does not require to pass the correct type
+in input. It is however the user’s responsibility
+to cast the returned void pointer to the correct type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a pointer to the internal UDA. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N5pagmo9algorithm7get_ptrEv">
+<span id="_CPPv3N5pagmo9algorithm7get_ptrEv"></span><span id="_CPPv2N5pagmo9algorithm7get_ptrEv"></span><span id="pagmo::algorithm::get_ptr"></span><span class="target" id="classpagmo_1_1algorithm_1a1fc8f8320163be80ec1255c55f8a5a7a"></span>void *<code class="sig-name descname">get_ptr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a mutable pointer to the UDA. </p>
+<p><div class="versionadded">
+<p><span class="versionmodified added">New in version 2.15.</span></p>
+</div>
+<p>This function will return a raw pointer
+to the internal UDA instance. Differently from
+<a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">extract()</span></code></a>, this function
+does not require to pass the correct type
+in input. It is however the user’s responsibility
+to cast the returned void pointer to the correct type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned value is a raw non-owning pointer: the lifetime of the pointee is tied to the lifetime
+of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ability to extract a mutable pointer is provided only in order to allow to call non-const
+methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.</p>
+</div>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a pointer to the internal UDA. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="_CPPv4I0ENK5pagmo9algorithm4saveEvR7Archivej">
 <span id="_CPPv3I0ENK5pagmo9algorithm4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo9algorithm4saveER7Archivej"></span><span class="target" id="classpagmo_1_1algorithm_1a983a1b0f677c3ec0828c939e1fd307ab"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm4saveEvR7Archivej" title="pagmo::algorithm::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
