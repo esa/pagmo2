@@ -28,6 +28,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 #include <string>
+#include <typeindex>
 #include <utility>
 
 #include <boost/numeric/conversion/cast.hpp>
@@ -35,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/bfe_impl.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
@@ -119,12 +121,28 @@ bool bfe::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
+std::type_index bfe::get_type_index() const
+{
+    return ptr()->get_type_index();
+}
+
+const void *bfe::get_ptr() const
+{
+    return ptr()->get_ptr();
+}
+
+void *bfe::get_ptr()
+{
+    return ptr()->get_ptr();
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator.
 std::ostream &operator<<(std::ostream &os, const bfe &b)
 {
-    os << "BFE name: " << b.get_name() << '\n';
+    os << "BFE name: " << b.get_name();
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(b.get_type_index().name()) << '\n';
     os << "\n\tThread safety: " << b.get_thread_safety() << '\n';
     const auto extra_str = b.get_extra_info();
     if (!extra_str.empty()) {

@@ -29,6 +29,10 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_CONFIG_HPP
 #define PAGMO_CONFIG_HPP
 
+// NOTE: include this so that we can
+// detect _LIBCPP_VERSION below.
+#include <ciso646>
+
 // Start of defines instantiated by CMake.
 // clang-format off
 #define PAGMO_VERSION "@pagmo_VERSION@"
@@ -51,6 +55,15 @@ see https://www.gnu.org/licenses/. */
 
 #define PAGMO_ENABLE_CEC2013
 #define PAGMO_ENABLE_CEC2014
+
+#endif
+
+#if defined(__clang__) && defined(_LIBCPP_VERSION)
+
+// When using clang + libc++, prefer the name-based
+// extract() implementation for UDx classes. See
+// the explanation in typeid_name_extract.hpp.
+#define PAGMO_PREFER_TYPEID_NAME_EXTRACT
 
 #endif
 

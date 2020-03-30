@@ -35,12 +35,14 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <stdexcept>
 #include <string>
+#include <typeindex>
 #include <utility>
 #include <vector>
 
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <pagmo/detail/bfe_impl.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -741,6 +743,33 @@ bool problem::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
+/// Get the type of the UDP.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.15
+ *
+ * This function will return the type
+ * of the UDP stored within this problem
+ * instance.
+ * \endverbatim
+ *
+ * @return the type of the UDP.
+ */
+std::type_index problem::get_type_index() const
+{
+    return ptr()->get_type_index();
+}
+
+const void *problem::get_ptr() const
+{
+    return ptr()->get_ptr();
+}
+
+void *problem::get_ptr()
+{
+    return ptr()->get_ptr();
+}
+
 /// Streaming operator
 /**
  * This function will stream to \p os a human-readable representation of the input
@@ -759,6 +788,7 @@ std::ostream &operator<<(std::ostream &os, const problem &p)
     if (p.is_stochastic()) {
         stream(os, " [stochastic]");
     }
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(p.get_type_index().name()) << '\n';
     os << "\n\tGlobal dimension:\t\t\t" << p.get_nx() << '\n';
     os << "\tInteger dimension:\t\t\t" << p.get_nix() << '\n';
     os << "\tFitness dimension:\t\t\t" << p.get_nf() << '\n';

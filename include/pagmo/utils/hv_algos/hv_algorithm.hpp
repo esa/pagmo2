@@ -147,6 +147,7 @@ public:
     // Contributions method
     virtual std::vector<double> contributions(std::vector<vector_double> &, const vector_double &) const;
 
+#if !defined(PAGMO_DOXYGEN_INVOKED)
     /// Verification of input
     /**
      * This method serves as a verification method.
@@ -157,6 +158,7 @@ public:
      */
     virtual void verify_before_compute(const std::vector<vector_double> &points,
                                        const vector_double &r_point) const = 0;
+#endif
 
     /// Clone method.
     /**

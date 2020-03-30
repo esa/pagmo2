@@ -208,6 +208,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/gte_getter.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/type_name.cpp"
 )
 
 # Some compilers choke on the cec2013/2014 data arrays.

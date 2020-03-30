@@ -36,12 +36,15 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/null_problem.hpp>
@@ -714,7 +717,7 @@ BOOST_AUTO_TEST_CASE(problem_getters_test)
     BOOST_CHECK(p1.get_name() == "A base toy problem");
     BOOST_CHECK(p1.get_extra_info() == "Nothing to report");
     // Default
-    BOOST_CHECK(p3.get_name() == typeid(*p3.extract<empty>()).name());
+    BOOST_CHECK(p3.get_name() == detail::demangle_from_typeid(typeid(*p3.extract<empty>()).name()));
     BOOST_CHECK(p3.get_extra_info() == "");
 }
 
@@ -1592,4 +1595,23 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
     BOOST_CHECK((!std::is_assignable<problem, int &>::value));
     BOOST_CHECK((!std::is_assignable<problem, const int &>::value));
     BOOST_CHECK((!std::is_assignable<problem, int &&>::value));
+}
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    problem p0;
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(null_problem)));
+    p0 = problem{grad_p_override{}};
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(grad_p_override)));
+}
+
+BOOST_AUTO_TEST_CASE(get_ptr)
+{
+    problem p0;
+    BOOST_CHECK(p0.get_ptr() == p0.extract<null_problem>());
+    BOOST_CHECK(static_cast<const problem &>(p0).get_ptr() == static_cast<const problem &>(p0).extract<null_problem>());
+    p0 = problem{grad_p_override{}};
+    BOOST_CHECK(p0.get_ptr() == p0.extract<grad_p_override>());
+    BOOST_CHECK(static_cast<const problem &>(p0).get_ptr()
+                == static_cast<const problem &>(p0).extract<grad_p_override>());
 }
