@@ -26,6 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <exception>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -136,8 +137,26 @@ void thread_island::run_evolve(island &isl) const
     };
 
     if (m_use_pool) {
+        // NOTE: do manual exception transport because
+        // TBB's exception transport is dependent upon
+        // the TBB library being compiled with certain
+        // flags:
+        // https://www.threadingbuildingblocks.org/docs/help/reference/environment/feature_macros.html
+
         tbb::task_group tg;
-        tg.run_and_wait(impl);
+        std::exception_ptr eptr;
+
+        tg.run_and_wait([&impl, &eptr]() {
+            try {
+                impl();
+            } catch (...) {
+                eptr = std::current_exception();
+            }
+        });
+
+        if (eptr) {
+            std::rethrow_exception(eptr);
+        }
     } else {
         impl();
     }
