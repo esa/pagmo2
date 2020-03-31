@@ -32,8 +32,10 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <typeindex>
 #include <utility>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/s_policies/select_best.hpp>
 #include <pagmo/s_policy.hpp>
@@ -219,12 +221,29 @@ bool s_policy::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
+// Get the type of the UDSP.
+std::type_index s_policy::get_type_index() const
+{
+    return ptr()->get_type_index();
+}
+
+const void *s_policy::get_ptr() const
+{
+    return ptr()->get_ptr();
+}
+
+void *s_policy::get_ptr()
+{
+    return ptr()->get_ptr();
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator.
 std::ostream &operator<<(std::ostream &os, const s_policy &s)
 {
-    os << "Selection policy name: " << s.get_name() << '\n';
+    os << "Selection policy name: " << s.get_name();
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(s.get_type_index().name()) << '\n';
     const auto extra_str = s.get_extra_info();
     if (!extra_str.empty()) {
         os << "\nExtra info:\n" << extra_str << '\n';

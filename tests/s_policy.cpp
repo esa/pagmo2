@@ -38,17 +38,21 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <initializer_list>
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <utility>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/s_policies/select_best.hpp>
 #include <pagmo/s_policy.hpp>
@@ -148,7 +152,7 @@ BOOST_AUTO_TEST_CASE(basic_tests)
     BOOST_CHECK(!r.get_extra_info().empty());
 
     BOOST_CHECK(s_policy(udsp1{}).get_extra_info().empty());
-    BOOST_CHECK(!s_policy(udsp1{}).get_name().empty());
+    BOOST_CHECK(s_policy(udsp1{}).get_name() == detail::type_name<udsp1>());
 
     // Constructors, assignments.
     // Generic constructor with copy.
@@ -212,6 +216,8 @@ BOOST_AUTO_TEST_CASE(basic_tests)
         BOOST_CHECK(before == boost::lexical_cast<std::string>(r));
         BOOST_CHECK(r.is<select_best>());
     }
+
+    std::cout << s_policy{} << '\n';
 }
 
 BOOST_AUTO_TEST_CASE(optional_tests)
@@ -546,4 +552,23 @@ BOOST_AUTO_TEST_CASE(generic_assignment)
     BOOST_CHECK((!std::is_assignable<s_policy, int &>::value));
     BOOST_CHECK((!std::is_assignable<s_policy, const int &>::value));
     BOOST_CHECK((!std::is_assignable<s_policy, int &&>::value));
+}
+
+BOOST_AUTO_TEST_CASE(type_index)
+{
+    s_policy p0;
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(select_best)));
+    p0 = s_policy{udsp1{}};
+    BOOST_CHECK(p0.get_type_index() == std::type_index(typeid(udsp1)));
+}
+
+BOOST_AUTO_TEST_CASE(get_ptr)
+{
+    s_policy p0;
+    BOOST_CHECK(p0.get_ptr() == p0.extract<select_best>());
+    BOOST_CHECK(static_cast<const s_policy &>(p0).get_ptr()
+                == static_cast<const s_policy &>(p0).extract<select_best>());
+    p0 = s_policy{udsp1{}};
+    BOOST_CHECK(p0.get_ptr() == p0.extract<udsp1>());
+    BOOST_CHECK(static_cast<const s_policy &>(p0).get_ptr() == static_cast<const s_policy &>(p0).extract<udsp1>());
 }

@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <typeindex>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -53,6 +54,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/archipelago.hpp>
 #include <pagmo/detail/gte_getter.hpp>
 #include <pagmo/detail/make_unique.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/island.hpp>
@@ -863,12 +865,40 @@ std::string island::get_extra_info() const
     return m_ptr->isl_ptr->get_extra_info();
 }
 
+/// Get the type of the UDI.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.15
+ *
+ * This function will return the type
+ * of the UDI stored within this island
+ * instance.
+ * \endverbatim
+ *
+ * @return the type of the UDI.
+ */
+std::type_index island::get_type_index() const
+{
+    return m_ptr->isl_ptr->get_type_index();
+}
+
+const void *island::get_ptr() const
+{
+    return m_ptr->isl_ptr->get_ptr();
+}
+
+void *island::get_ptr()
+{
+    return m_ptr->isl_ptr->get_ptr();
+}
+
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // Stream operator for pagmo::island.
 std::ostream &operator<<(std::ostream &os, const island &isl)
 {
     stream(os, "Island name: ", isl.get_name());
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(isl.get_type_index().name()) << '\n';
     stream(os, "\n\tStatus: ", isl.status(), "\n\n");
     const auto extra_str = isl.get_extra_info();
     if (!extra_str.empty()) {

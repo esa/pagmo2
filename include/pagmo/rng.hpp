@@ -57,7 +57,11 @@ using random_engine_type = std::mt19937;
  */
 struct PAGMO_DLL_PUBLIC random_device {
     static unsigned next();
-    static void set_seed(unsigned);
+
+#if !defined(PAGMO_DOXYGEN_INVOKED)
+    // Sets the seed for the PRS.
+    static void set_seed(unsigned seed);
+#endif
 };
 
 } // namespace pagmo

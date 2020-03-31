@@ -28,10 +28,12 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 #include <string>
+#include <typeindex>
 #include <utility>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/null_algorithm.hpp>
+#include <pagmo/detail/type_name.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 
@@ -197,6 +199,33 @@ bool algorithm::is_valid() const
     return static_cast<bool>(m_ptr);
 }
 
+/// Get the type of the UDA.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * .. versionadded:: 2.15
+ *
+ * This function will return the type
+ * of the UDA stored within this algorithm
+ * instance.
+ * \endverbatim
+ *
+ * @return the type of the UDA.
+ */
+std::type_index algorithm::get_type_index() const
+{
+    return ptr()->get_type_index();
+}
+
+const void *algorithm::get_ptr() const
+{
+    return ptr()->get_ptr();
+}
+
+void *algorithm::get_ptr()
+{
+    return ptr()->get_ptr();
+}
+
 /// Streaming operator for pagmo::algorithm
 /**
  * This function will stream to \p os a human-readable representation of the input
@@ -217,6 +246,7 @@ std::ostream &operator<<(std::ostream &os, const algorithm &a)
     } else {
         stream(os, " [stochastic]");
     }
+    os << "\n\tC++ class name: " << detail::demangle_from_typeid(a.get_type_index().name()) << '\n';
     stream(os, "\n\tThread safety: ", a.get_thread_safety(), '\n');
     const auto extra_str = a.get_extra_info();
     if (!extra_str.empty()) {
