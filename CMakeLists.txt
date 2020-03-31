@@ -254,6 +254,7 @@ endif()
 
 # Setup of the pagmo library.
 add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
+target_compile_definitions(pagmo PRIVATE TBB_USE_CAPTURED_EXCEPTION=0)
 set_property(TARGET pagmo PROPERTY VERSION "5.0")
 set_property(TARGET pagmo PROPERTY SOVERSION 5)
 target_compile_options(pagmo PRIVATE
