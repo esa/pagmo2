@@ -419,14 +419,15 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const island &);
  * the :cpp:class:`~pagmo::archipelago`. If the island is not part of an :cpp:class:`~pagmo::archipelago`,
  * the replacement and selection policies play no role.
  *
- * \endverbatim
- *
- * Typically, pagmo users will employ an already-available UDI (such as pagmo::thread_island) in
+ * Typically, pagmo users will employ an already-available UDI (such as :cpp:class:`~pagmo::thread_island`) in
  * conjunction with this class, but advanced users can implement their own UDI types. A user-defined
  * island must implement the following method:
- * @code{.unparsed}
- * void run_evolve(island &) const;
- * @endcode
+ *
+ * .. code-block:: c++
+ *
+ *    void run_evolve(island &) const;
+ *
+ * \endverbatim
  *
  * The <tt>run_evolve()</tt> method of
  * the UDI will use the input island algorithm's algorithm::evolve() method to evolve the input island's

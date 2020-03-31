@@ -245,8 +245,10 @@ void island::wait_check_ignore()
 
 /// Default constructor.
 /**
- * The default constructor will initialise an island containing a UDI of type pagmo::thread_island,
+ *\verbatim embed:rst:leading-asterisk
+ * The default constructor will initialise an island containing a UDI of type :cpp:class:`~pagmo::thread_island`,
  * and default-constructed algorithm, population and replacement/selection policies.
+ * \endverbatim
  *
  * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
  */

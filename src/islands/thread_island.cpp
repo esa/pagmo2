@@ -49,39 +49,19 @@ thread_island::thread_island() : thread_island(true) {}
 
 thread_island::thread_island(bool use_pool) : m_use_pool(use_pool) {}
 
-/// Island's name.
-/**
- * @return <tt>"Thread island"</tt>.
- */
+// Island's name.
 std::string thread_island::get_name() const
 {
     return "Thread island";
 }
 
-/// Island's extra info.
-// TODO docs
+// Island's extra info.
 std::string thread_island::get_extra_info() const
 {
     return std::string("\tUsing pool: ") + (m_use_pool ? "yes" : "no");
 }
 
-/// Run evolve.
-/**
- * This method will use copies of <tt>isl</tt>'s
- * algorithm and population, obtained via island::get_algorithm() and island::get_population(),
- * to evolve the input island's population. The evolved population will be assigned to \p isl
- * using island::set_population(), and the algorithm used for the evolution will be assigned
- * to \p isl using island::set_algorithm().
- *
- * @param isl the pagmo::island that will undergo evolution.
- *
- * @throws std::invalid_argument if <tt>isl</tt>'s algorithm or problem do not provide
- * at least the pagmo::thread_safety::basic thread safety guarantee.
- * @throws unspecified any exception thrown by:
- * - island::get_algorithm(), island::get_population(),
- * - island::set_algorithm(), island::set_population(),
- * - algorithm::evolve().
- */
+// Run evolve.
 void thread_island::run_evolve(island &isl) const
 {
     auto impl = [&isl]() {
@@ -162,8 +142,7 @@ void thread_island::run_evolve(island &isl) const
     }
 }
 
-/// Serialization support.
-// TODO docs.
+// Serialization support.
 template <typename Archive>
 void thread_island::serialize(Archive &ar, unsigned version)
 {

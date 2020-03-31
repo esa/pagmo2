@@ -38,15 +38,7 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Thread island.
-/**
- * This class is a user-defined island (UDI) that will run evolutions directly inside
- * the separate thread of execution within pagmo::island.
- *
- * thread_island is the UDI type automatically selected by the constructors of pagmo::island
- * on non-POSIX platforms or when both the island's problem and algorithm provide at least the
- * pagmo::thread_safety::basic thread safety guarantee.
- */
+// Thread island.
 class PAGMO_DLL_PUBLIC thread_island
 {
 public:
