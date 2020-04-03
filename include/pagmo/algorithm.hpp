@@ -211,41 +211,41 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
     explicit algo_inner(const T &x) : m_value(x) {}
     explicit algo_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of algorithm.
-    virtual std::unique_ptr<algo_inner_base> clone() const override final
+    std::unique_ptr<algo_inner_base> clone() const final
     {
         return detail::make_unique<algo_inner>(m_value);
     }
     // Mandatory methods.
-    virtual population evolve(const population &pop) const override final
+    population evolve(const population &pop) const final
     {
         return m_value.evolve(pop);
     }
     // Optional methods
-    virtual void set_seed(unsigned seed) override final
+    void set_seed(unsigned seed) final
     {
         set_seed_impl(m_value, seed);
     }
-    virtual bool has_set_seed() const override final
+    bool has_set_seed() const final
     {
         return has_set_seed_impl(m_value);
     }
-    virtual void set_verbosity(unsigned level) override final
+    void set_verbosity(unsigned level) final
     {
         set_verbosity_impl(m_value, level);
     }
-    virtual bool has_set_verbosity() const override final
+    bool has_set_verbosity() const final
     {
         return has_set_verbosity_impl(m_value);
     }
-    virtual std::string get_name() const override final
+    std::string get_name() const final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string get_extra_info() const override final
+    std::string get_extra_info() const final
     {
         return get_extra_info_impl(m_value);
     }
-    virtual thread_safety get_thread_safety() const override final
+    thread_safety get_thread_safety() const final
     {
         return get_thread_safety_impl(m_value);
     }
@@ -341,16 +341,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
         return thread_safety::basic;
     }
     // Get the type at runtime.
-    virtual std::type_index get_type_index() const override final
+    std::type_index get_type_index() const final
     {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_ptr() const override final
+    const void *get_ptr() const final
     {
         return &m_value;
     }
-    virtual void *get_ptr() override final
+    void *get_ptr() final
     {
         return &m_value;
     }

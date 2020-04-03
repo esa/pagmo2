@@ -172,21 +172,21 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS isl_inner final : isl_inner_base {
     explicit isl_inner(const T &x) : m_value(x) {}
     explicit isl_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of island.
-    virtual std::unique_ptr<isl_inner_base> clone() const override final
+    std::unique_ptr<isl_inner_base> clone() const final
     {
         return detail::make_unique<isl_inner>(m_value);
     }
     // The mandatory run_evolve() method.
-    virtual void run_evolve(island &isl) const override final
+    void run_evolve(island &isl) const final
     {
         m_value.run_evolve(isl);
     }
     // Optional methods.
-    virtual std::string get_name() const override final
+    std::string get_name() const final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string get_extra_info() const override final
+    std::string get_extra_info() const final
     {
         return get_extra_info_impl(m_value);
     }
@@ -211,16 +211,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS isl_inner final : isl_inner_base {
         return "";
     }
     // Get the type at runtime.
-    virtual std::type_index get_type_index() const override final
+    std::type_index get_type_index() const final
     {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_ptr() const override final
+    const void *get_ptr() const final
     {
         return &m_value;
     }
-    virtual void *get_ptr() override final
+    void *get_ptr() final
     {
         return &m_value;
     }

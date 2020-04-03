@@ -233,8 +233,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     ipopt_nlp &operator=(ipopt_nlp &&) = delete;
 
     // Method to return some info about the nlp.
-    virtual bool get_nlp_info(Index &n, Index &m, Index &nnz_jac_g, Index &nnz_h_lag,
-                              IndexStyleEnum &index_style) override final
+    bool get_nlp_info(Index &n, Index &m, Index &nnz_jac_g, Index &nnz_h_lag, IndexStyleEnum &index_style) final
     {
         // NOTE: these try catches and the mechanism to handle exceptions outside the Ipopt
         // callbacks are needed because, apparently, Ipopt does not handle gracefully exceptions
@@ -269,7 +268,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     }
 
     // Method to return the bounds of the problem.
-    virtual bool get_bounds_info(Index n, Number *x_l, Number *x_u, Index m, Number *g_l, Number *g_u) override final
+    bool get_bounds_info(Index n, Number *x_l, Number *x_u, Index m, Number *g_l, Number *g_u) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -303,8 +302,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
     }
 
     // Method to return the starting point for the algorithm.
-    virtual bool get_starting_point(Index n, bool init_x, Number *x, bool init_z, Number *, Number *, Index m,
-                                    bool init_lambda, Number *) override final
+    bool get_starting_point(Index n, bool init_x, Number *x, bool init_z, Number *, Number *, Index m, bool init_lambda,
+                            Number *) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -339,7 +338,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     }
 
     // Method to return the objective value.
-    virtual bool eval_f(Index n, const Number *x, bool new_x, Number &obj_value) override final
+    bool eval_f(Index n, const Number *x, bool new_x, Number &obj_value) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -390,7 +389,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     }
 
     // Method to return the gradient of the objective.
-    virtual bool eval_grad_f(Index n, const Number *x, bool new_x, Number *grad_f) override final
+    bool eval_grad_f(Index n, const Number *x, bool new_x, Number *grad_f) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -426,7 +425,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
     }
 
     // Value of the constraints.
-    virtual bool eval_g(Index n, const Number *x, bool new_x, Index m, Number *g) override final
+    bool eval_g(Index n, const Number *x, bool new_x, Index m, Number *g) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -452,8 +451,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
     // Method to return:
     // 1) The structure of the jacobian (if "values" is NULL)
     // 2) The values of the jacobian (if "values" is not NULL)
-    virtual bool eval_jac_g(Index n, const Number *x, bool new_x, Index m, Index nele_jac, Index *iRow, Index *jCol,
-                            Number *values) override final
+    bool eval_jac_g(Index n, const Number *x, bool new_x, Index m, Index nele_jac, Index *iRow, Index *jCol,
+                    Number *values) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -486,8 +485,8 @@ struct ipopt_nlp final : Ipopt::TNLP {
     // Method to return:
     // 1) The structure of the hessian of the lagrangian (if "values" is NULL)
     // 2) The values of the hessian of the lagrangian (if "values" is not NULL)
-    virtual bool eval_h(Index n, const Number *x, bool new_x, Number obj_factor, Index m, const Number *lambda,
-                        bool new_lambda, Index nele_hess, Index *iRow, Index *jCol, Number *values) override final
+    bool eval_h(Index n, const Number *x, bool new_x, Number obj_factor, Index m, const Number *lambda, bool new_lambda,
+                Index nele_hess, Index *iRow, Index *jCol, Number *values) final
     {
         try {
             assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
@@ -590,9 +589,9 @@ struct ipopt_nlp final : Ipopt::TNLP {
     // Solution Methods.
     // This method is called when the algorithm is complete so the TNLP can store/write the solution.
     // NOTE: no need for try/catch here, nothing can throw.
-    virtual void finalize_solution(SolverReturn status, Index n, const Number *x, const Number *, const Number *,
-                                   Index m, const Number *g, const Number *, Number obj_value, const IpoptData *,
-                                   IpoptCalculatedQuantities *) override final
+    void finalize_solution(SolverReturn status, Index n, const Number *x, const Number *, const Number *, Index m,
+                           const Number *g, const Number *, Number obj_value, const IpoptData *,
+                           IpoptCalculatedQuantities *) final
     {
         assert(n == boost::numeric_cast<Index>(m_prob.get_nx()));
         assert(m == boost::numeric_cast<Index>(m_prob.get_nc()));

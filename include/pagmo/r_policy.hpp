@@ -147,24 +147,24 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner final : r_pol_inner_base {
     explicit r_pol_inner(const T &x) : m_value(x) {}
     explicit r_pol_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of r_policy.
-    virtual std::unique_ptr<r_pol_inner_base> clone() const override final
+    std::unique_ptr<r_pol_inner_base> clone() const final
     {
         return detail::make_unique<r_pol_inner>(m_value);
     }
     // The mandatory replace() method.
-    virtual individuals_group_t replace(const individuals_group_t &inds, const vector_double::size_type &nx,
-                                        const vector_double::size_type &nix, const vector_double::size_type &nobj,
-                                        const vector_double::size_type &nec, const vector_double::size_type &nic,
-                                        const vector_double &tol, const individuals_group_t &mig) const override final
+    individuals_group_t replace(const individuals_group_t &inds, const vector_double::size_type &nx,
+                                const vector_double::size_type &nix, const vector_double::size_type &nobj,
+                                const vector_double::size_type &nec, const vector_double::size_type &nic,
+                                const vector_double &tol, const individuals_group_t &mig) const final
     {
         return m_value.replace(inds, nx, nix, nobj, nec, nic, tol, mig);
     }
     // Optional methods.
-    virtual std::string get_name() const override final
+    std::string get_name() const final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string get_extra_info() const override final
+    std::string get_extra_info() const final
     {
         return get_extra_info_impl(m_value);
     }
@@ -189,16 +189,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner final : r_pol_inner_base {
         return "";
     }
     // Get the type at runtime.
-    virtual std::type_index get_type_index() const override final
+    std::type_index get_type_index() const final
     {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_ptr() const override final
+    const void *get_ptr() const final
     {
         return &m_value;
     }
-    virtual void *get_ptr() override final
+    void *get_ptr() final
     {
         return &m_value;
     }
