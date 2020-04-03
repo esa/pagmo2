@@ -196,29 +196,29 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
     explicit topo_inner(const T &x) : m_value(x) {}
     explicit topo_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of topology.
-    virtual std::unique_ptr<topo_inner_base> clone() const override final
+    std::unique_ptr<topo_inner_base> clone() const final
     {
         return detail::make_unique<topo_inner>(m_value);
     }
     // The mandatory methods.
-    virtual std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t n) const override final
+    std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t n) const final
     {
         return m_value.get_connections(n);
     }
-    virtual void push_back() override final
+    void push_back() final
     {
         m_value.push_back();
     }
     // Optional methods.
-    virtual bgl_graph_t to_bgl() const override final
+    bgl_graph_t to_bgl() const final
     {
         return to_bgl_impl(m_value);
     }
-    virtual std::string get_name() const override final
+    std::string get_name() const final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string get_extra_info() const override final
+    std::string get_extra_info() const final
     {
         return get_extra_info_impl(m_value);
     }
@@ -256,16 +256,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
         return "";
     }
     // Get the type at runtime.
-    virtual std::type_index get_type_index() const override final
+    std::type_index get_type_index() const final
     {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_ptr() const override final
+    const void *get_ptr() const final
     {
         return &m_value;
     }
-    virtual void *get_ptr() override final
+    void *get_ptr() final
     {
         return &m_value;
     }
