@@ -143,25 +143,25 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner final : bfe_inner_base {
     explicit bfe_inner(const T &x) : m_value(x) {}
     explicit bfe_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of bfe.
-    virtual std::unique_ptr<bfe_inner_base> clone() const override final
+    std::unique_ptr<bfe_inner_base> clone() const final
     {
         return detail::make_unique<bfe_inner>(m_value);
     }
     // Mandatory methods.
-    virtual vector_double operator()(const problem &p, const vector_double &dvs) const override final
+    vector_double operator()(const problem &p, const vector_double &dvs) const final
     {
         return m_value(p, dvs);
     }
     // Optional methods.
-    virtual std::string get_name() const override final
+    std::string get_name() const final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string get_extra_info() const override final
+    std::string get_extra_info() const final
     {
         return get_extra_info_impl(m_value);
     }
-    virtual thread_safety get_thread_safety() const override final
+    thread_safety get_thread_safety() const final
     {
         return get_thread_safety_impl(m_value);
     }
@@ -197,16 +197,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner final : bfe_inner_base {
         return thread_safety::basic;
     }
     // Get the type at runtime.
-    virtual std::type_index get_type_index() const override final
+    std::type_index get_type_index() const final
     {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_ptr() const override final
+    const void *get_ptr() const final
     {
         return &m_value;
     }
-    virtual void *get_ptr() override final
+    void *get_ptr() final
     {
         return &m_value;
     }

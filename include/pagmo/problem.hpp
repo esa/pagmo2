@@ -563,93 +563,93 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     explicit prob_inner(const T &x) : m_value(x) {}
     explicit prob_inner(T &&x) : m_value(std::move(x)) {}
     // The clone method, used in the copy constructor of problem.
-    virtual std::unique_ptr<prob_inner_base> clone() const override final
+    std::unique_ptr<prob_inner_base> clone() const final
     {
         return detail::make_unique<prob_inner>(m_value);
     }
     // Mandatory methods.
-    virtual vector_double fitness(const vector_double &dv) const override final
+    vector_double fitness(const vector_double &dv) const final
     {
         return m_value.fitness(dv);
     }
-    virtual std::pair<vector_double, vector_double> get_bounds() const override final
+    std::pair<vector_double, vector_double> get_bounds() const final
     {
         return m_value.get_bounds();
     }
     // optional methods
-    virtual vector_double batch_fitness(const vector_double &dv) const override final
+    vector_double batch_fitness(const vector_double &dv) const final
     {
         return batch_fitness_impl(m_value, dv);
     }
-    virtual bool has_batch_fitness() const override final
+    bool has_batch_fitness() const final
     {
         return has_batch_fitness_impl(m_value);
     }
-    virtual vector_double::size_type get_nobj() const override final
+    vector_double::size_type get_nobj() const final
     {
         return get_nobj_impl(m_value);
     }
-    virtual vector_double gradient(const vector_double &dv) const override final
+    vector_double gradient(const vector_double &dv) const final
     {
         return gradient_impl(m_value, dv);
     }
-    virtual bool has_gradient() const override final
+    bool has_gradient() const final
     {
         return has_gradient_impl(m_value);
     }
-    virtual sparsity_pattern gradient_sparsity() const override final
+    sparsity_pattern gradient_sparsity() const final
     {
         return gradient_sparsity_impl(m_value);
     }
-    virtual bool has_gradient_sparsity() const override final
+    bool has_gradient_sparsity() const final
     {
         return has_gradient_sparsity_impl(m_value);
     }
-    virtual std::vector<vector_double> hessians(const vector_double &dv) const override final
+    std::vector<vector_double> hessians(const vector_double &dv) const final
     {
         return hessians_impl(m_value, dv);
     }
-    virtual bool has_hessians() const override final
+    bool has_hessians() const final
     {
         return has_hessians_impl(m_value);
     }
-    virtual std::vector<sparsity_pattern> hessians_sparsity() const override final
+    std::vector<sparsity_pattern> hessians_sparsity() const final
     {
         return hessians_sparsity_impl(m_value);
     }
-    virtual bool has_hessians_sparsity() const override final
+    bool has_hessians_sparsity() const final
     {
         return has_hessians_sparsity_impl(m_value);
     }
-    virtual vector_double::size_type get_nec() const override final
+    vector_double::size_type get_nec() const final
     {
         return get_nec_impl(m_value);
     }
-    virtual vector_double::size_type get_nic() const override final
+    vector_double::size_type get_nic() const final
     {
         return get_nic_impl(m_value);
     }
-    virtual vector_double::size_type get_nix() const override final
+    vector_double::size_type get_nix() const final
     {
         return get_nix_impl(m_value);
     }
-    virtual void set_seed(unsigned seed) override final
+    void set_seed(unsigned seed) final
     {
         set_seed_impl(m_value, seed);
     }
-    virtual bool has_set_seed() const override final
+    bool has_set_seed() const final
     {
         return has_set_seed_impl(m_value);
     }
-    virtual std::string get_name() const override final
+    std::string get_name() const final
     {
         return get_name_impl(m_value);
     }
-    virtual std::string get_extra_info() const override final
+    std::string get_extra_info() const final
     {
         return get_extra_info_impl(m_value);
     }
-    virtual thread_safety get_thread_safety() const override final
+    thread_safety get_thread_safety() const final
     {
         return get_thread_safety_impl(m_value);
     }
@@ -916,16 +916,16 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         return thread_safety::basic;
     }
     // Get the type at runtime.
-    virtual std::type_index get_type_index() const override final
+    std::type_index get_type_index() const final
     {
         return std::type_index(typeid(T));
     }
     // Raw getters for the internal instance.
-    virtual const void *get_ptr() const override final
+    const void *get_ptr() const final
     {
         return &m_value;
     }
-    virtual void *get_ptr() override final
+    void *get_ptr() final
     {
         return &m_value;
     }
