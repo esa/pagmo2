@@ -57,7 +57,10 @@ public:
 
     // Serialization support.
     template <typename Archive>
-    void serialize(Archive &, unsigned);
+    void save(Archive &, unsigned) const;
+    template <typename Archive>
+    void load(Archive &, unsigned);
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 private:
     bool m_use_pool;

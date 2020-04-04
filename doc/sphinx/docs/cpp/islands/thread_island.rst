@@ -23,12 +23,20 @@ Thread island
 
    Constructor with *use_pool* flag.
 
-   The *use_pool* flag signals whether or not the island should use a common thread pool
+   The *use_pool* flag signals whether or not this island should use a common thread pool
    shared by all islands.
 
-   Using a thread pool avoids runtime overhead when
-   the number of islands evolving simultaneously is larger than the CPU
-   count (e.g., in a large :cpp:class:`~pagmo::archipelago`). A thread pool
+   Using a thread pool is more computationally-efficient, for at least
+   two reasons:
+
+   * it avoids runtime overhead when
+     the number of islands evolving simultaneously is larger than the CPU
+     count (e.g., in a large :cpp:class:`~pagmo::archipelago`);
+   * because the implementation uses the Intel TBB libraries, it integrates
+     better with other pagmo facilities built on top of TBB (e.g., the
+     :cpp:class:`~pagmo::thread_bfe` batch fitness evaluator).
+
+   A thread pool
    however also introduces a serializing behaviour because the number
    of evolutions actually running at the same time is limited by the CPU
    count (whereas without the thread pool an unlimited number of evolutions
@@ -77,11 +85,12 @@ Thread island
      * :cpp:func:`pagmo::island::set_algorithm()`, :cpp:func:`pagmo::island::set_population()`,
      * :cpp:func:`pagmo::algorithm::evolve()`.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned version)
+   .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
+   .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned version)
 
       Serialisation support.
 
-      This member function is used to implement the (de)serialisation of an island to/from an archive.
+      These member functions are used to implement the (de)serialisation of an island to/from an archive.
 
       :param ar: the input/output archive.
       :param version: the archive version.
