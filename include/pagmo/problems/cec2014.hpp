@@ -34,14 +34,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_PROBLEMS_CEC2014_HPP
 #define PAGMO_PROBLEMS_CEC2014_HPP
 
-#include <pagmo/config.hpp>
-
-#if !defined(PAGMO_ENABLE_CEC2014)
-
-#error The cec2014.hpp header was included but the CEC 2014 problem is not supported on the current platform.
-
-#endif
-
 #include <string>
 #include <utility>
 #include <vector>

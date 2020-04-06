@@ -46,17 +46,6 @@ see https://www.gnu.org/licenses/. */
 // clang-format on
 // End of defines instantiated by CMake.
 
-// NOTE: some compilers are not able to deal with the large data
-// arrays embedded in the CEC 2013/2014 problems. We thus implement
-// here some heuristic to signal the capability of compiling
-// these problems on the current platform.
-
-#if !defined(_MSC_VER) && !defined(__APPLE__) && !defined(__MINGW32__)
-
-#define PAGMO_ENABLE_CEC2014
-
-#endif
-
 #if defined(__clang__) && defined(_LIBCPP_VERSION)
 
 // When using clang + libc++, prefer the name-based
