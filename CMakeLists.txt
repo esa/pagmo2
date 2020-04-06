@@ -152,6 +152,8 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/minlp_rastrigin.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/luksan_vlcek1.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/wfg.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013_data.cpp"
     # UDA.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/null_algorithm.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
@@ -211,13 +213,11 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/type_name.cpp"
 )
 
-# Some compilers choke on the cec2013/2014 data arrays.
+# Some compilers choke on the 2014 data arrays.
 if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE AND NOT MINGW)
     set(PAGMO_SRC_FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013_data.cpp"
         "${PAGMO_SRC_FILES}"
     )
 endif()

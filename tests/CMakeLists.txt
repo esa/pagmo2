@@ -38,6 +38,7 @@ ADD_PAGMO_TESTCASE(bfe)
 ADD_PAGMO_TESTCASE(bee_colony)
 ADD_PAGMO_TESTCASE(cec2006)
 ADD_PAGMO_TESTCASE(cec2009)
+ADD_PAGMO_TESTCASE(cec2013)
 ADD_PAGMO_TESTCASE(compass_search)
 ADD_PAGMO_TESTCASE(constrained)
 ADD_PAGMO_TESTCASE(custom_comparisons)
@@ -118,9 +119,8 @@ if(PAGMO_WITH_IPOPT)
     ADD_PAGMO_TESTCASE(ipopt)
 endif()
 
-# Here are problematic tests. See config.hpp for an explanation.
+# Problematic test. See config.hpp for an explanation.
 if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE AND NOT MINGW)
-    ADD_PAGMO_TESTCASE(cec2013)
     ADD_PAGMO_TESTCASE(cec2014)
 endif()
 

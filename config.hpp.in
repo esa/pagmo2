@@ -53,7 +53,6 @@ see https://www.gnu.org/licenses/. */
 
 #if !defined(_MSC_VER) && !defined(__APPLE__) && !defined(__MINGW32__)
 
-#define PAGMO_ENABLE_CEC2013
 #define PAGMO_ENABLE_CEC2014
 
 #endif
