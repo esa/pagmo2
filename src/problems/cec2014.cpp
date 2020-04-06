@@ -32,6 +32,9 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <fstream>
+#include <limits>
+
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/cec2014.hpp>
@@ -98,6 +101,174 @@ cec2014::cec2014(unsigned prob_id, unsigned dim) : m_z(dim), m_y(dim), func_num(
         auto shuffle_data_dim = shuffle_func_it->second;
         auto shuffle_dim_it = shuffle_data_dim.find(dim);
         m_shuffle = shuffle_dim_it->second;
+    }
+
+    static bool dump_done = false;
+    if (!dump_done) {
+        std::cout << "Dumping\n";
+        std::ofstream out_file("cec2014_data.cpp");
+        out_file << std::defaultfloat;
+        out_file << std::setprecision(std::numeric_limits<double>::max_digits10);
+
+        constexpr char header[] = R"(/* Copyright 2017-2020 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
+#include <initializer_list>
+#include <iterator>
+#include <unordered_map>
+#include <vector>
+
+#include "cec2014_data.hpp"
+
+namespace pagmo
+{
+
+namespace detail
+{
+
+namespace cec2014_data
+{
+
+namespace
+{
+
+)";
+
+        out_file << header;
+
+        for (const auto &m : detail::cec2014_data::rotation_data) {
+            for (const auto &tmp : m.second) {
+                out_file << "const double rot_" << m.first << "_" << tmp.first << "[" << tmp.second.size() << "] = {";
+
+                for (decltype(tmp.second.size()) i = 0; i < tmp.second.size(); ++i) {
+                    out_file << tmp.second[i];
+                    if (i != tmp.second.size() - 1u) {
+                        out_file << ", ";
+                    }
+                }
+
+                out_file << "};\n\n";
+            }
+        }
+
+        for (const auto &m : detail::cec2014_data::shuffle_data) {
+            for (const auto &tmp : m.second) {
+                out_file << "const int shuffle_" << m.first << "_" << tmp.first << "[" << tmp.second.size() << "] = {";
+
+                for (decltype(tmp.second.size()) i = 0; i < tmp.second.size(); ++i) {
+                    out_file << tmp.second[i];
+                    if (i != tmp.second.size() - 1u) {
+                        out_file << ", ";
+                    }
+                }
+
+                out_file << "};\n\n";
+            }
+        }
+
+        for (const auto &tmp : detail::cec2014_data::shift_data) {
+            out_file << "const double shift_" << tmp.first << "[" << tmp.second.size() << "] = {";
+
+            for (decltype(tmp.second.size()) i = 0; i < tmp.second.size(); ++i) {
+                out_file << tmp.second[i];
+                if (i != tmp.second.size() - 1u) {
+                    out_file << ", ";
+                }
+            }
+
+            out_file << "};\n\n";
+        }
+
+        out_file
+            << R"(std::unordered_map<unsigned, std::unordered_map<unsigned, std::vector<double>>> build_cec2014_rotation_data() {
+    std::unordered_map<unsigned, std::unordered_map<unsigned, std::vector<double>>> retval;
+
+)";
+        for (const auto &m : detail::cec2014_data::rotation_data) {
+            for (const auto &tmp : m.second) {
+                out_file << "    retval[" << m.first << "].emplace(" << tmp.first
+                         << ", std::vector<double>(std::begin(rot_" << m.first << "_" << tmp.first << "), std::end(rot_"
+                         << m.first << "_" << tmp.first << ")));\n";
+            }
+        }
+        out_file << R"(
+    return retval;
+}
+
+)";
+
+        out_file
+            << R"(std::unordered_map<unsigned, std::unordered_map<unsigned, std::vector<int>>> build_cec2014_shuffle_data() {
+    std::unordered_map<unsigned, std::unordered_map<unsigned, std::vector<int>>> retval;
+
+)";
+        for (const auto &m : detail::cec2014_data::shuffle_data) {
+            for (const auto &tmp : m.second) {
+                out_file << "    retval[" << m.first << "].emplace(" << tmp.first
+                         << ", std::vector<int>(std::begin(shuffle_" << m.first << "_" << tmp.first
+                         << "), std::end(shuffle_" << m.first << "_" << tmp.first << ")));\n";
+            }
+        }
+        out_file << R"(
+    return retval;
+}
+
+)";
+
+        out_file << R"(std::unordered_map<unsigned, std::vector<double>> build_cec2014_shift_data() {
+    std::unordered_map<unsigned, std::vector<double>> retval;
+)";
+
+        for (const auto &tmp : detail::cec2014_data::shift_data) {
+            out_file << "    retval.emplace(" << tmp.first << ", std::vector<double>(std::begin(shift_" << tmp.first
+                     << "), std::end(shift_" << tmp.first << ")));\n";
+        }
+        out_file << R"(
+    return retval;
+}
+
+}
+
+const std::unordered_map<unsigned, std::unordered_map<unsigned, std::vector<double>>> rotation_data = build_cec2014_rotation_data();
+const std::unordered_map<unsigned, std::unordered_map<unsigned, std::vector<int>>> shuffle_data = build_cec2014_shuffle_data();
+const std::unordered_map<unsigned, std::vector<double>> shift_data = build_cec2014_shift_data();
+
+}
+
+}
+
+}
+
+)";
+
+        std::cout << "Dump end\n";
+
+        dump_done = true;
     }
 }
 
