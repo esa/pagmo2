@@ -19,7 +19,7 @@ if ("header" IN_LIST IPOPT_FIND_COMPONENTS)
     # The header component was requested.
     # The associated variable is IPOPT_INCLUDE_DIR.
     list(APPEND _IPOPT_FPHSA_ARGS IPOPT_INCLUDE_DIR)
-    find_path(IPOPT_INCLUDE_DIR NAMES IpIpoptNLP.hpp PATH_SUFFIXES coin)
+    find_path(IPOPT_INCLUDE_DIR NAMES IpIpoptNLP.hpp PATH_SUFFIXES coin coin-or)
 endif()
 
 if ("libipopt" IN_LIST IPOPT_FIND_COMPONENTS)
