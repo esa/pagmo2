@@ -18,6 +18,12 @@ Changes
   of the type-erased classes
   (`#411 <https://github.com/esa/pagmo2/pull/411>`__).
 
+Fix
+~~~
+
+- Fix build with recent Ipopt versions
+  (`#412 <https://github.com/esa/pagmo2/pull/412>`__).
+
 2.15.0 (2020-04-02)
 -------------------
 
