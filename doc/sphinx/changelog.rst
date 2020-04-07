@@ -3,6 +3,21 @@
 Changelog
 =========
 
+2.16.0 (unreleased)
+-------------------
+
+Changes
+~~~~~~~
+
+- Rework the way in which binary data is included in the
+  CEC2013/CEC2014 problem suites. As a result, these problems
+  are now available on all platforms
+  (`#412 <https://github.com/esa/pagmo2/pull/412>`__).
+
+- Various internal simplifications to the implementation
+  of the type-erased classes
+  (`#411 <https://github.com/esa/pagmo2/pull/411>`__).
+
 2.15.0 (2020-04-02)
 -------------------
 
