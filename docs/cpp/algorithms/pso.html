@@ -209,9 +209,9 @@
 <dd><p>Particle Swarm Optimization. </p>
 <p><img alt="../../../_images/pso.png" src="../../../_images/pso.png" /></p>
 <p>Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms. In PSO each point has memory of the position where it achieved the best performance <span class="math notranslate nohighlight">\(\mathbf x^l_i\)</span> (local memory) and of the best decision vector <span class="math notranslate nohighlight">\( \mathbf x^g \)</span> in a certain neighbourhood, and uses this information to update its position using the equations (constriction coefficient): <div class="math notranslate nohighlight">
-\[\begin{split} \begin{array}{l} \mathbf v_{i+1} = \omega \left( \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right) + \eta_2 \mathbf r_2 \cdot \left( \mathbf x_i - \mathbf x^g \right) \right) \\ \mathbf x_{i+1} = \mathbf x_i + \mathbf v_i \end{array} \end{split}\]</div>
+\[\]</div>
  or (inertia weight): <div class="math notranslate nohighlight">
-\[\begin{split} \begin{array}{l} \mathbf v_{i+1} = \omega \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right) + \eta_2 \mathbf r_2 \cdot \left( \mathbf x_i - \mathbf x^g \right) \\ \mathbf x_{i+1} = \mathbf x_i + \mathbf v_i \end{array} \end{split}\]</div>
+\[\]</div>
 </p>
 <p>The user can specify the values for <span class="math notranslate nohighlight">\(\omega, \eta_1, \eta_2\)</span> and the magnitude of the maximum velocity allowed (normalized with respect ot the bounds). The user can specify one of five variants where the velocity update rule differs on the definition of the random vectors <span class="math notranslate nohighlight">\(r_1\)</span> and <span class="math notranslate nohighlight">\(r_2\)</span>:</p>
 <p><ul class="simple">

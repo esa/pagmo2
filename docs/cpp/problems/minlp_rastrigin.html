@@ -207,13 +207,13 @@
 <dd><p>A MINLP version of the Rastrigin problem. </p>
 <p><img alt="../../../_images/rastrigin.png" src="../../../_images/rastrigin.png" /></p>
 <p>This is a scalable, box-constrained, mixed integer nonlinear programmng (MINLP) problem. The objective function is the generalised n-dimensional Rastrigin function: <div class="math notranslate nohighlight">
-\[ F\left(x_1,\ldots,x_n\right) = 10 \cdot n + \sum_{i=1}^n x_i^2 - 10\cdot\cos\left( 2\pi \cdot x_i \right) \]</div>
+\[\]</div>
 </p>
 <p>where we constraint the last <span class="math notranslate nohighlight">\(m\)</span> components of the decision vector to be integers. The variables are box bounded as follows: <span class="math notranslate nohighlight">\(\quad x_i \in [-5.12,5.12], \forall i = 1 .. n-m\)</span>, <span class="math notranslate nohighlight">\(\quad x_i \in [-10,-5], \forall i = m+1 .. n\)</span></p>
 <p>Gradients (dense) are also provided (also for the integer part) as: <div class="math notranslate nohighlight">
-\[ G_i\left(x_1,\ldots,x_n\right) = 2 x_i + 10 \cdot 2\pi \cdot\sin\left( 2\pi \cdot x_i \right) \]</div>
+\[\]</div>
  And Hessians (sparse as only the diagonal is non-zero) are: <div class="math notranslate nohighlight">
-\[ H_{ii}\left(x_1,\ldots,x_n\right) = 2 + 10 \cdot 4\pi^2 \cdot\cos\left( 2\pi \cdot x_i \right) \]</div>
+\[\]</div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>

@@ -223,9 +223,9 @@
 <span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><em class="property">class </em><code class="sig-name descname">van_der_corput</code><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Van der Corput sequence. </p>
 <p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math notranslate nohighlight">\(n \ge 1\)</span> is represented, in the base <span class="math notranslate nohighlight">\(b\)</span> by: <div class="math notranslate nohighlight">
-\[ n = \sum_{i=0}^{L-1}d_i(n) b^i, \]</div>
+\[\]</div>
  where <span class="math notranslate nohighlight">\(L\)</span> is the number of digits needed. The <span class="math notranslate nohighlight">\(n\)</span>-th number in a van der Corput sequence is thus defined as: <div class="math notranslate nohighlight">
-\[ g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}. \]</div>
+\[\]</div>
 </p>
 <p>so that, for example, if <span class="math notranslate nohighlight">\(b = 10\)</span>:</p>
 <p><span class="math notranslate nohighlight">\( seq = \{ 0, \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10}, \tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100}, \tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100}, \tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\)</span></p>
@@ -292,7 +292,7 @@
 <dd><p>Halton sequence. </p>
 <p>The Halton sequence is, essentially, a generalization of the van der Corput sequence to higher dimensions. It considers, along each dimension, a van der Corput sequence referred to co-prime numbers. Here, by default, we consider the sequence of all prime numbers starting from 2, 3, 5, …… so that, for example, for <code class="docutils literal notranslate"><span class="pre">dim</span></code> equal two the following sequence is generated:</p>
 <p><div class="math notranslate nohighlight">
-\[ seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\} \]</div>
+\[\]</div>
 </p>
 <p><p>See: </p>
 <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> <dl class="simple">

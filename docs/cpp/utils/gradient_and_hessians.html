@@ -229,7 +229,7 @@
 <p>otherwise compiler errors will be generated. The gradient returned will be dense and contain, in the lexicographic order requested by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">pagmo::problem::gradient()</span></a>, <span class="math notranslate nohighlight">\(\frac{df_i}{dx_j}\)</span>.</p>
 <p>The numerical approximation of each derivative is made by central difference, according to the formula:</p>
 <p><div class="math notranslate nohighlight">
-\[ \frac{df}{dx} \approx \frac{f(x+dx) - f(x-dx)}{2dx} + O(dx^2) \]</div>
+\[\]</div>
 </p>
 <p>The overall cost, in terms of calls to <code class="docutils literal notranslate"><span class="pre">f</span></code> will thus be <span class="math notranslate nohighlight">\(2n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the size of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <p><div class="admonition note">
@@ -267,11 +267,11 @@
 <p>otherwise compiler errors will be generated. The gradient returned will be dense and contain, in the lexicographic order requested by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">pagmo::problem::gradient()</span></a>, <span class="math notranslate nohighlight">\(\frac{df_i}{dx_j}\)</span>.</p>
 <p>The numerical approximation of each derivative is made by central difference, according to the formula:</p>
 <p><div class="math notranslate nohighlight">
-\[ \frac{df}{dx} \approx \frac 32 m_1 - \frac 35 m_2 +\frac 1{10} m_3 + O(dx^6) \]</div>
+\[\]</div>
 </p>
 <p>where:</p>
 <p><div class="math notranslate nohighlight">
-\[ m_i = \frac{f(x + i dx) - f(x-i dx)}{2i dx} \]</div>
+\[\]</div>
 </p>
 <p>The overall cost, in terms of calls to <code class="docutils literal notranslate"><span class="pre">f</span></code> will thus be <span class="math notranslate nohighlight">\(6n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the size of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <p><div class="admonition note">
