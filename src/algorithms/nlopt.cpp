@@ -69,7 +69,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nlopt.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -755,7 +754,7 @@ nlopt::nlopt(const nlopt &other)
       m_sc_stopval(other.m_sc_stopval), m_sc_ftol_rel(other.m_sc_ftol_rel), m_sc_ftol_abs(other.m_sc_ftol_abs),
       m_sc_xtol_rel(other.m_sc_xtol_rel), m_sc_xtol_abs(other.m_sc_xtol_abs), m_sc_maxeval(other.m_sc_maxeval),
       m_sc_maxtime(other.m_sc_maxtime), m_verbosity(other.m_verbosity), m_log(other.m_log),
-      m_loc_opt(other.m_loc_opt ? detail::make_unique<nlopt>(*other.m_loc_opt) : nullptr)
+      m_loc_opt(other.m_loc_opt ? std::make_unique<nlopt>(*other.m_loc_opt) : nullptr)
 {
 }
 
@@ -1003,7 +1002,7 @@ void nlopt::set_xtol_abs(double xtol_abs)
  */
 void nlopt::set_local_optimizer(nlopt n)
 {
-    m_loc_opt = detail::make_unique<nlopt>(std::move(n));
+    m_loc_opt = std::make_unique<nlopt>(std::move(n));
 }
 
 /// Unset the local optimizer.
@@ -1053,7 +1052,7 @@ void nlopt::load(Archive &ar, unsigned)
         bool with_local;
         ar >> with_local;
         if (with_local) {
-            m_loc_opt = detail::make_unique<nlopt>();
+            m_loc_opt = std::make_unique<nlopt>();
             ar >> *m_loc_opt;
         }
     } catch (...) {

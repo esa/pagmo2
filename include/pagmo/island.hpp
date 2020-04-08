@@ -52,7 +52,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/config.hpp>
 #include <pagmo/detail/archipelago_fwd.hpp>
 #include <pagmo/detail/island_fwd.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/task_queue.hpp>
 #include <pagmo/detail/type_name.hpp>
@@ -174,7 +173,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS isl_inner final : isl_inner_base {
     // The clone method, used in the copy constructor of island.
     std::unique_ptr<isl_inner_base> clone() const final
     {
-        return detail::make_unique<isl_inner>(m_value);
+        return std::make_unique<isl_inner>(m_value);
     }
     // The mandatory run_evolve() method.
     void run_evolve(island &isl) const final
@@ -289,7 +288,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     // As above, but the UDI is explicitly passed by the user.
     template <typename Isl, typename Algo, typename Pop>
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
-        : isl_ptr(detail::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+        : isl_ptr(std::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
@@ -309,7 +308,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     // As above, but the UDI is explicitly passed by the user.
     template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol>
     explicit island_data(ptag, Isl &&isl, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
-        : isl_ptr(detail::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
+        : isl_ptr(std::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
           s_pol(std::forward<SPol>(s))
@@ -523,8 +522,7 @@ public:
      * - the constructors of pagmo::algorithm and pagmo::population.
      */
     template <typename Algo, typename Pop, algo_pop_enabler<Algo, Pop> = 0>
-    explicit island(Algo &&a, Pop &&p)
-        : m_ptr(detail::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
+    explicit island(Algo &&a, Pop &&p) : m_ptr(std::make_unique<idata_t>(std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
 
@@ -562,8 +560,8 @@ public:
     template <typename Algo, typename Pop, typename RPol, typename SPol,
               algo_pop_pol_enabler<Algo, Pop, RPol, SPol> = 0>
     explicit island(Algo &&a, Pop &&p, RPol &&r, SPol &&s)
-        : m_ptr(detail::make_unique<idata_t>(idata_t::ptag{}, std::forward<Algo>(a), std::forward<Pop>(p),
-                                             std::forward<RPol>(r), std::forward<SPol>(s)))
+        : m_ptr(std::make_unique<idata_t>(idata_t::ptag{}, std::forward<Algo>(a), std::forward<Pop>(p),
+                                          std::forward<RPol>(r), std::forward<SPol>(s)))
     {
     }
 
@@ -605,7 +603,7 @@ public:
      */
     template <typename Isl, typename Algo, typename Pop, isl_algo_pop_enabler<Isl, Algo, Pop> = 0>
     explicit island(Isl &&isl, Algo &&a, Pop &&p)
-        : m_ptr(detail::make_unique<idata_t>(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
+        : m_ptr(std::make_unique<idata_t>(std::forward<Isl>(isl), std::forward<Algo>(a), std::forward<Pop>(p)))
     {
     }
 
@@ -648,8 +646,8 @@ public:
     template <typename Isl, typename Algo, typename Pop, typename RPol, typename SPol,
               isl_algo_pop_pol_enabler<Isl, Algo, Pop, RPol, SPol> = 0>
     explicit island(Isl &&isl, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
-        : m_ptr(detail::make_unique<idata_t>(idata_t::ptag{}, std::forward<Isl>(isl), std::forward<Algo>(a),
-                                             std::forward<Pop>(p), std::forward<RPol>(r), std::forward<SPol>(s)))
+        : m_ptr(std::make_unique<idata_t>(idata_t::ptag{}, std::forward<Isl>(isl), std::forward<Algo>(a),
+                                          std::forward<Pop>(p), std::forward<RPol>(r), std::forward<SPol>(s)))
     {
     }
 
