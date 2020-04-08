@@ -17,8 +17,7 @@ bash miniconda.sh -b -p $HOME/miniconda
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 
-# NOTE: the clang pins are hopefully temporary.
-conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel clang<10 clangdev<10"
+conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel"
 
 conda create -q -p $deps_dir -y
 source activate $deps_dir
