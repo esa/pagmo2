@@ -266,7 +266,7 @@ set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
 set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
 if(NOT CMAKE_CXX_STANDARD)
-    set_property(TARGET pagmo PROPERTY CXX_STANDARD 11)
+    set_property(TARGET pagmo PROPERTY CXX_STANDARD 17)
 endif()
 set_property(TARGET pagmo PROPERTY CXX_STANDARD_REQUIRED YES)
 set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
