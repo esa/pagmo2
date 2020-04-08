@@ -96,11 +96,8 @@ class has_fitness
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_fitness<T>::value;
 
 /// Detect \p get_nobj() method.
 /**
@@ -121,11 +118,8 @@ class has_get_nobj
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_get_nobj<T>::value;
 
 /// Detect \p get_bounds() method.
 /**
@@ -147,11 +141,8 @@ class has_bounds
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_bounds<T>::value;
 
 /// Detect \p get_nec() method.
 /**
@@ -172,11 +163,8 @@ class has_e_constraints
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_e_constraints<T>::value;
 
 /// Detect \p get_nic() method.
 /**
@@ -197,11 +185,8 @@ class has_i_constraints
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_i_constraints<T>::value;
 
 /// Detect \p get_nix() method.
 /**
@@ -222,11 +207,8 @@ class has_integer_part
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_integer_part<T>::value;
 
 /// Detect \p gradient() method.
 /**
@@ -247,11 +229,8 @@ class has_gradient
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_gradient<T>::value;
 
 /// Detect \p has_gradient() method.
 /**
@@ -272,11 +251,8 @@ class override_has_gradient
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool override_has_gradient<T>::value;
 
 /// Detect \p gradient_sparsity() method.
 /**
@@ -298,11 +274,8 @@ class has_gradient_sparsity
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_gradient_sparsity<T>::value;
 
 /// Detect \p hessians() method.
 /**
@@ -324,11 +297,8 @@ class has_hessians
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_hessians<T>::value;
 
 /// Detect \p has_hessians() method.
 /**
@@ -349,11 +319,8 @@ class override_has_hessians
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool override_has_hessians<T>::value;
 
 /// Detect \p hessians_sparsity() method.
 /**
@@ -375,11 +342,8 @@ class has_hessians_sparsity
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_hessians_sparsity<T>::value;
 
 /// Detect \p has_gradient_sparsity() method.
 /**
@@ -400,11 +364,8 @@ class override_has_gradient_sparsity
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool override_has_gradient_sparsity<T>::value;
 
 /// Detect \p has_hessians_sparsity() method.
 /**
@@ -425,11 +386,8 @@ class override_has_hessians_sparsity
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool override_has_hessians_sparsity<T>::value;
 
 // Detect the batch_fitness() member function.
 template <typename T>
@@ -440,11 +398,8 @@ class has_batch_fitness
     static const bool implementation_defined = std::is_same<vector_double, detected_t<batch_fitness_t, T>>::value;
 
 public:
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool has_batch_fitness<T>::value;
 
 // Detect the has_batch_fitness() member function.
 template <typename T>
@@ -455,11 +410,8 @@ class override_has_batch_fitness
     static const bool implementation_defined = std::is_same<bool, detected_t<has_batch_fitness_t, T>>::value;
 
 public:
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool override_has_batch_fitness<T>::value;
 
 namespace detail
 {
@@ -471,6 +423,7 @@ namespace detail
 template <typename>
 struct disable_udp_checks : std::false_type {
 };
+
 } // namespace detail
 
 /// Detect user-defined problems (UDP).
@@ -491,11 +444,8 @@ class is_udp
 
 public:
     /// Value of the type trait.
-    static const bool value = implementation_defined;
+    static constexpr bool value = implementation_defined;
 };
-
-template <typename T>
-const bool is_udp<T>::value;
 
 namespace detail
 {
@@ -576,13 +526,27 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         return m_value.get_bounds();
     }
     // optional methods
-    vector_double batch_fitness(const vector_double &dv) const final
+    vector_double batch_fitness([[maybe_unused]] const vector_double &dv) const final
     {
-        return batch_fitness_impl(m_value, dv);
+        if constexpr (pagmo::has_batch_fitness<T>::value) {
+            return m_value.batch_fitness(dv);
+        } else {
+            pagmo_throw(not_implemented_error,
+                        "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type '"
+                            + get_name_impl(m_value) + "'");
+        }
     }
     bool has_batch_fitness() const final
     {
-        return has_batch_fitness_impl(m_value);
+        if constexpr (detail::conjunction<pagmo::has_batch_fitness<T>, pagmo::override_has_batch_fitness<T>>::value) {
+            return m_value.has_batch_fitness();
+        } else {
+            // This covers the following cases:
+            // - has batch fitness, no override (returns true),
+            // - no batch fitness, no override (returns false),
+            // - no batch fitness, override (returns false).
+            return pagmo::has_batch_fitness<T>::value;
+        }
     }
     vector_double::size_type get_nobj() const final
     {
@@ -653,38 +617,6 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         return get_thread_safety_impl(m_value);
     }
     // Implementation of the optional methods.
-    template <typename U, enable_if_t<pagmo::has_batch_fitness<U>::value, int> = 0>
-    static vector_double batch_fitness_impl(const U &value, const vector_double &dv)
-    {
-        return value.batch_fitness(dv);
-    }
-    template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
-    [[noreturn]] static vector_double batch_fitness_impl(const U &value, const vector_double &)
-    {
-        pagmo_throw(not_implemented_error,
-                    "The batch_fitness() method has been invoked, but it is not implemented in a UDP of type '"
-                        + get_name_impl(value) + "'");
-    }
-    template <typename U,
-              enable_if_t<detail::conjunction<pagmo::has_batch_fitness<U>, pagmo::override_has_batch_fitness<U>>::value,
-                          int> = 0>
-    static bool has_batch_fitness_impl(const U &p)
-    {
-        return p.has_batch_fitness();
-    }
-    template <typename U,
-              enable_if_t<detail::conjunction<pagmo::has_batch_fitness<U>,
-                                              detail::negation<pagmo::override_has_batch_fitness<U>>>::value,
-                          int> = 0>
-    static bool has_batch_fitness_impl(const U &)
-    {
-        return true;
-    }
-    template <typename U, enable_if_t<!pagmo::has_batch_fitness<U>::value, int> = 0>
-    static bool has_batch_fitness_impl(const U &)
-    {
-        return false;
-    }
     template <typename U, enable_if_t<has_get_nobj<U>::value, int> = 0>
     static vector_double::size_type get_nobj_impl(const U &value)
     {
