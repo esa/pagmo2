@@ -14,16 +14,15 @@ fi
 export deps_dir=$HOME/local
 export PATH="$HOME/miniconda/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
-conda config --add channels conda-forge --force
+conda config --add channels conda-forge
+conda config --set channel_priority strict
 
-conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel"
+# NOTE: the clang pins are hopefully temporary.
+conda_pkgs="cmake eigen nlopt ipopt boost boost-cpp tbb tbb-devel clang<10 clangdev<10"
 
 conda create -q -p $deps_dir -y
 source activate $deps_dir
-# NOTE: install the GCC 4.8 version of the conda packages,
-# otherwise we have errors which I think are related to
-# ABI issues.
-conda install -c conda-forge/label/cf201901 $conda_pkgs -y
+conda install $conda_pkgs -y
 
 set +e
 set +x

@@ -14,7 +14,7 @@ Place it into a ``getting_started.cpp`` text file and compile it
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
+   $ g++ -O2 -DNDEBUG -std=c++17 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
 
 If you installed pagmo in a non-standard path, such as the ``.local`` directory
 in your ``$HOME`` on a Unix installation (e.g., ``/home/username/.local``),
@@ -23,17 +23,11 @@ E.g., you may need a command such as:
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
+   $ g++ -O2 -DNDEBUG -std=c++17 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
 
 If you installed pagmo with support for optional 3rd party libraries,
 you might need to add additional switches to the command-line invocation
-of the compiler. For instance, if you enabled the optional NLopt support,
-you will have to link your executable to the
-``nlopt`` library:
-
-.. code-block:: console
-
-   $ g++ -O2 -DNDEBUG -std=c++11 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -lnlopt
+of the compiler.
 
 We recommend to use pagmo's CMake support in order to simplify
 the build process of code depending on pagmo (see next section).
@@ -76,9 +70,8 @@ program presented earlier may look like this:
    target_link_libraries(getting_started Pagmo::pagmo)
 
    # This line indicates to your compiler
-   # that C++11 is needed for the compilation.
-   # Not strictly necessary with a recent-enough compiler.
-   set_property(TARGET getting_started PROPERTY CXX_STANDARD 11)
+   # that C++17 is needed for the compilation.
+   set_property(TARGET getting_started PROPERTY CXX_STANDARD 17)
 
 Place this ``CMakeLists.txt`` and the ``getting_started.cpp`` files
 in the same directory, and create a ``build`` subdirectory. From
