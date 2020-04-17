@@ -30,9 +30,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <cassert>
 #include <chrono>
-#include <cstddef>
 #include <exception>
-#include <functional>
 #include <future>
 #include <initializer_list>
 #include <iostream>

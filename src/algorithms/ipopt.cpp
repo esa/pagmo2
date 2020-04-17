@@ -29,9 +29,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstddef>
 #include <exception>
-#include <functional>
 #include <initializer_list>
 #include <iomanip>
 #include <iostream>
