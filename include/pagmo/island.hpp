@@ -232,12 +232,6 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS isl_inner final : isl_inner_base {
     T m_value;
 };
 
-PAGMO_DLL_PUBLIC void wait_f(const std::future<void> &) noexcept;
-
-PAGMO_DLL_PUBLIC bool future_has_exception(std::future<void> &) noexcept;
-
-PAGMO_DLL_PUBLIC bool future_running(const std::future<void> &);
-
 } // namespace detail
 
 } // namespace pagmo

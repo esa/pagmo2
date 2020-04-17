@@ -87,18 +87,6 @@ namespace
 // logging to record the migration time.
 const auto initial_timestamp = std::chrono::steady_clock::now();
 
-} // namespace
-
-// NOTE: this is just a simple wrapper to force noexcept behaviour on std::future::wait().
-// If f.wait() throws something, the program will terminate. A valid std::future should not
-// throw, but technically the standard does not guarantee that. Having this noexcept wrapper
-// simplifies reasoning about exception behaviour in wait(), wait_check(), etc.
-void wait_f(const std::future<void> &f) noexcept
-{
-    assert(f.valid());
-    f.wait();
-}
-
 // Small helper to determine if a future holds an exception.
 // The noexcept reasoning is the same as above. Here we could fail
 // because of memory errors, but there's not much we can do in such
@@ -125,11 +113,24 @@ bool future_has_exception(std::future<void> &f) noexcept
     return false;
 }
 
+// NOTE: this is just a simple wrapper to force noexcept behaviour on std::future::wait().
+// If f.wait() throws something, the program will terminate. A valid std::future should not
+// throw, but technically the standard does not guarantee that. Having this noexcept wrapper
+// simplifies reasoning about exception behaviour in wait(), wait_check(), etc.
+void wait_f(const std::future<void> &f) noexcept
+{
+    assert(f.valid());
+    f.wait();
+}
+
 // Small helper to check if a future is still running.
 bool future_running(const std::future<void> &f)
 {
+    assert(f.valid());
     return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
 }
+
+} // namespace
 
 } // namespace detail
 
