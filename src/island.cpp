@@ -200,16 +200,8 @@ island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, p
 namespace
 {
 
-// NOTE: in C++11 hashing of enums might not be available. Provide our own.
-struct island_status_hasher {
-    std::size_t operator()(evolve_status es) const noexcept
-    {
-        return std::hash<int>{}(static_cast<int>(es));
-    }
-};
-
 // A map to link a human-readable description to evolve_status.
-const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses
+const std::unordered_map<evolve_status, std::string> island_statuses
     = {{evolve_status::idle, "idle"},
        {evolve_status::busy, "busy"},
        {evolve_status::idle_error, "idle - **error occurred**"},

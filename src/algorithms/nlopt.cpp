@@ -123,15 +123,7 @@ nlopt_names_map_t nlopt_names_map_init()
 const nlopt_names_map_t nlopt_names = nlopt_names_map_init();
 
 // A map to link a human-readable description to NLopt return codes.
-// NOTE: in C++11 hashing of enums might not be available. Provide our own.
-struct nlopt_res_hasher {
-    std::size_t operator()(::nlopt_result res) const noexcept
-    {
-        return std::hash<int>{}(static_cast<int>(res));
-    }
-};
-
-using nlopt_result_map_t = std::unordered_map<::nlopt_result, std::string, nlopt_res_hasher>;
+using nlopt_result_map_t = std::unordered_map<::nlopt_result, std::string>;
 
 const nlopt_result_map_t nlopt_results = {
     {NLOPT_SUCCESS, "NLOPT_SUCCESS (value = " + std::to_string(NLOPT_SUCCESS) + ", Generic success return value)"},

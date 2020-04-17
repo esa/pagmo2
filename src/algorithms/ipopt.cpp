@@ -86,15 +86,7 @@ namespace
 {
 
 // A map to link a human-readable description to Ipopt return codes.
-// NOTE: in C++11 hashing of enums might not be available. Provide our own.
-struct ipopt_res_hasher {
-    std::size_t operator()(Ipopt::ApplicationReturnStatus res) const noexcept
-    {
-        return std::hash<int>{}(static_cast<int>(res));
-    }
-};
-
-using ipopt_result_map_t = std::unordered_map<Ipopt::ApplicationReturnStatus, std::string, ipopt_res_hasher>;
+using ipopt_result_map_t = std::unordered_map<Ipopt::ApplicationReturnStatus, std::string>;
 
 #define PAGMO_DETAIL_IPOPT_RES_ENTRY(name)                                                                             \
     {                                                                                                                  \
