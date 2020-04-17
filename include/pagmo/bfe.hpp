@@ -42,7 +42,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/type_name.hpp>
 #include <pagmo/detail/typeid_name_extract.hpp>
@@ -145,7 +144,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner final : bfe_inner_base {
     // The clone method, used in the copy constructor of bfe.
     std::unique_ptr<bfe_inner_base> clone() const final
     {
-        return detail::make_unique<bfe_inner>(m_value);
+        return std::make_unique<bfe_inner>(m_value);
     }
     // Mandatory methods.
     vector_double operator()(const problem &p, const vector_double &dvs) const final
@@ -258,8 +257,7 @@ class PAGMO_DLL_PUBLIC bfe
     {
     }
     template <typename T>
-    explicit bfe(T &&x, std::false_type)
-        : m_ptr(detail::make_unique<detail::bfe_inner<uncvref_t<T>>>(std::forward<T>(x)))
+    explicit bfe(T &&x, std::false_type) : m_ptr(std::make_unique<detail::bfe_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
     }
     // Implementation of the generic ctor.

@@ -30,4 +30,4 @@ Place it into a ``nsga2.cpp`` text file and compile it (for example) with:
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++11 nsga2.cpp -ltbb -lboost_serialization
+   $ g++ -O2 -DNDEBUG -std=c++17 nsga2.cpp -ltbb -lboost_serialization

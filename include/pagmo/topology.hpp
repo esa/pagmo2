@@ -45,7 +45,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/type_name.hpp>
 #include <pagmo/detail/typeid_name_extract.hpp>
@@ -198,7 +197,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
     // The clone method, used in the copy constructor of topology.
     std::unique_ptr<topo_inner_base> clone() const final
     {
-        return detail::make_unique<topo_inner>(m_value);
+        return std::make_unique<topo_inner>(m_value);
     }
     // The mandatory methods.
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t n) const final
@@ -313,7 +312,7 @@ private:
 public:
     // Generic constructor.
     template <typename T, generic_ctor_enabler<T> = 0>
-    explicit topology(T &&x) : m_ptr(detail::make_unique<detail::topo_inner<uncvref_t<T>>>(std::forward<T>(x)))
+    explicit topology(T &&x) : m_ptr(std::make_unique<detail::topo_inner<uncvref_t<T>>>(std::forward<T>(x)))
     {
         generic_ctor_impl();
     }

@@ -46,7 +46,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/archipelago_fwd.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/island.hpp>
@@ -548,7 +547,7 @@ public:
     template <typename... Args, push_back_enabler<Args &&...> = 0>
     void push_back(Args &&... args)
     {
-        push_back_impl(detail::make_unique<island>(std::forward<Args>(args)...));
+        push_back_impl(std::make_unique<island>(std::forward<Args>(args)...));
     }
     /// Evolve archipelago.
     /**

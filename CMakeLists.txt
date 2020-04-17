@@ -1,5 +1,8 @@
 # CMake version check.
 cmake_minimum_required(VERSION 3.3)
+# NOTE: policy for using the CheckIPOSupported module:
+# https://cmake.org/cmake/help/latest/policy/CMP0069.html
+cmake_policy(SET CMP0069 NEW)
 
 # Set default build type to "Release".
 # NOTE: this should be done before the project command since the latter can set
@@ -35,6 +38,10 @@ option(PAGMO_WITH_NLOPT "Enable wrappers for the NLopt algorithms." OFF)
 
 # Build option: enable Ipopt.
 option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
+
+# Build option: enable IPO.
+option(PAGMO_ENABLE_IPO "Enable IPO (requires CMake >= 3.9 and compiler support)." OFF)
+mark_as_advanced(PAGMO_ENABLE_IPO)
 
 # Detect if we can enable the fork_island UDI.
 include(CheckIncludeFileCXX)
@@ -155,6 +162,10 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/minlp_rastrigin.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/luksan_vlcek1.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/wfg.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013_data.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
     # UDA.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/null_algorithm.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de.cpp"
@@ -214,17 +225,6 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/type_name.cpp"
 )
 
-# Some compilers choke on the cec2013/2014 data arrays.
-if(NOT YACMA_COMPILER_IS_MSVC AND NOT APPLE AND NOT MINGW)
-    set(PAGMO_SRC_FILES
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2014_data.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2013_data.cpp"
-        "${PAGMO_SRC_FILES}"
-    )
-endif()
-
 # Optional and platform-dependent bits.
 if(PAGMO_WITH_FORK_ISLAND)
     set(PAGMO_SRC_FILES
@@ -269,7 +269,7 @@ set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
 set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
 if(NOT CMAKE_CXX_STANDARD)
-    set_property(TARGET pagmo PROPERTY CXX_STANDARD 11)
+    set_property(TARGET pagmo PROPERTY CXX_STANDARD 17)
 endif()
 set_property(TARGET pagmo PROPERTY CXX_STANDARD_REQUIRED YES)
 set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
@@ -281,6 +281,21 @@ target_include_directories(pagmo PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>)
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.9.0")
+    if (PAGMO_ENABLE_IPO)
+        include(CheckIPOSupported)
+        check_ipo_supported(RESULT _PAGMO_IPO_RESULT OUTPUT _PAGMO_IPO_OUTPUT)
+        if (_PAGMO_IPO_RESULT)
+            message(STATUS "IPO requested and supported, enabling.")
+            set_property(TARGET pagmo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+        else()
+            message(STATUS "IPO requested, but it is not supported by the compiler:\n${_PAGMO_IPO_OUTPUT}")
+        endif()
+        unset(_PAGMO_IPO_RESULT)
+        unset(_PAGMO_IPO_OUTPUT)
+    endif()
+endif()
 
 # Threads.
 target_link_libraries(pagmo PUBLIC Threads::Threads)
