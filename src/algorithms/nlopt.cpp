@@ -40,9 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstddef>
 #include <exception>
-#include <functional>
 #include <initializer_list>
 #include <iomanip>
 #include <iostream>
@@ -69,7 +67,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nlopt.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -124,15 +121,7 @@ nlopt_names_map_t nlopt_names_map_init()
 const nlopt_names_map_t nlopt_names = nlopt_names_map_init();
 
 // A map to link a human-readable description to NLopt return codes.
-// NOTE: in C++11 hashing of enums might not be available. Provide our own.
-struct nlopt_res_hasher {
-    std::size_t operator()(::nlopt_result res) const noexcept
-    {
-        return std::hash<int>{}(static_cast<int>(res));
-    }
-};
-
-using nlopt_result_map_t = std::unordered_map<::nlopt_result, std::string, nlopt_res_hasher>;
+using nlopt_result_map_t = std::unordered_map<::nlopt_result, std::string>;
 
 const nlopt_result_map_t nlopt_results = {
     {NLOPT_SUCCESS, "NLOPT_SUCCESS (value = " + std::to_string(NLOPT_SUCCESS) + ", Generic success return value)"},
@@ -755,7 +744,7 @@ nlopt::nlopt(const nlopt &other)
       m_sc_stopval(other.m_sc_stopval), m_sc_ftol_rel(other.m_sc_ftol_rel), m_sc_ftol_abs(other.m_sc_ftol_abs),
       m_sc_xtol_rel(other.m_sc_xtol_rel), m_sc_xtol_abs(other.m_sc_xtol_abs), m_sc_maxeval(other.m_sc_maxeval),
       m_sc_maxtime(other.m_sc_maxtime), m_verbosity(other.m_verbosity), m_log(other.m_log),
-      m_loc_opt(other.m_loc_opt ? detail::make_unique<nlopt>(*other.m_loc_opt) : nullptr)
+      m_loc_opt(other.m_loc_opt ? std::make_unique<nlopt>(*other.m_loc_opt) : nullptr)
 {
 }
 
@@ -1003,7 +992,7 @@ void nlopt::set_xtol_abs(double xtol_abs)
  */
 void nlopt::set_local_optimizer(nlopt n)
 {
-    m_loc_opt = detail::make_unique<nlopt>(std::move(n));
+    m_loc_opt = std::make_unique<nlopt>(std::move(n));
 }
 
 /// Unset the local optimizer.
@@ -1053,7 +1042,7 @@ void nlopt::load(Archive &ar, unsigned)
         bool with_local;
         ar >> with_local;
         if (with_local) {
-            m_loc_opt = detail::make_unique<nlopt>();
+            m_loc_opt = std::make_unique<nlopt>();
             ar >> *m_loc_opt;
         }
     } catch (...) {

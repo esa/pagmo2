@@ -30,9 +30,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <cassert>
 #include <chrono>
-#include <cstddef>
 #include <exception>
-#include <functional>
 #include <future>
 #include <initializer_list>
 #include <iostream>
@@ -53,7 +51,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
 #include <pagmo/detail/gte_getter.hpp>
-#include <pagmo/detail/make_unique.hpp>
 #include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -90,18 +87,6 @@ namespace
 // logging to record the migration time.
 const auto initial_timestamp = std::chrono::steady_clock::now();
 
-} // namespace
-
-// NOTE: this is just a simple wrapper to force noexcept behaviour on std::future::wait().
-// If f.wait() throws something, the program will terminate. A valid std::future should not
-// throw, but technically the standard does not guarantee that. Having this noexcept wrapper
-// simplifies reasoning about exception behaviour in wait(), wait_check(), etc.
-void wait_f(const std::future<void> &f) noexcept
-{
-    assert(f.valid());
-    f.wait();
-}
-
 // Small helper to determine if a future holds an exception.
 // The noexcept reasoning is the same as above. Here we could fail
 // because of memory errors, but there's not much we can do in such
@@ -128,11 +113,24 @@ bool future_has_exception(std::future<void> &f) noexcept
     return false;
 }
 
+// NOTE: this is just a simple wrapper to force noexcept behaviour on std::future::wait().
+// If f.wait() throws something, the program will terminate. A valid std::future should not
+// throw, but technically the standard does not guarantee that. Having this noexcept wrapper
+// simplifies reasoning about exception behaviour in wait(), wait_check(), etc.
+void wait_f(const std::future<void> &f) noexcept
+{
+    assert(f.valid());
+    f.wait();
+}
+
 // Small helper to check if a future is still running.
 bool future_running(const std::future<void> &f)
 {
+    assert(f.valid());
     return f.wait_for(std::chrono::duration<int>::zero()) != std::future_status::ready;
 }
+
+} // namespace
 
 } // namespace detail
 
@@ -166,11 +164,11 @@ void default_island_factory(const algorithm &algo, const population &pop, std::u
 #if defined(PAGMO_WITH_FORK_ISLAND)
     if (algo.get_thread_safety() < thread_safety::basic
         || pop.get_problem().get_thread_safety() < thread_safety::basic) {
-        ptr = detail::make_unique<isl_inner<fork_island>>();
+        ptr = std::make_unique<isl_inner<fork_island>>();
         return;
     }
 #endif
-    ptr = detail::make_unique<isl_inner<thread_island>>();
+    ptr = std::make_unique<isl_inner<thread_island>>();
 }
 
 } // namespace
@@ -182,7 +180,7 @@ std::function<void(const algorithm &, const population &, std::unique_ptr<detail
 // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
 // are both thread safe.
 island_data::island_data()
-    : isl_ptr(detail::make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
+    : isl_ptr(std::make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
       pop(std::make_shared<population>())
 {
 }
@@ -201,16 +199,8 @@ island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, p
 namespace
 {
 
-// NOTE: in C++11 hashing of enums might not be available. Provide our own.
-struct island_status_hasher {
-    std::size_t operator()(evolve_status es) const noexcept
-    {
-        return std::hash<int>{}(static_cast<int>(es));
-    }
-};
-
 // A map to link a human-readable description to evolve_status.
-const std::unordered_map<evolve_status, std::string, island_status_hasher> island_statuses
+const std::unordered_map<evolve_status, std::string> island_statuses
     = {{evolve_status::idle, "idle"},
        {evolve_status::busy, "busy"},
        {evolve_status::idle_error, "idle - **error occurred**"},
@@ -250,7 +240,7 @@ void island::wait_check_ignore()
  *
  * @throws unspecified any exception thrown by any invoked constructor or by memory allocation failures.
  */
-island::island() : m_ptr(detail::make_unique<idata_t>()) {}
+island::island() : m_ptr(std::make_unique<idata_t>()) {}
 
 /// Copy constructor.
 /**
@@ -265,8 +255,8 @@ island::island() : m_ptr(detail::make_unique<idata_t>()) {}
  * - copying the island's members.
  */
 island::island(const island &other)
-    : m_ptr(detail::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population(),
-                                         other.m_ptr->r_pol, other.m_ptr->s_pol))
+    : m_ptr(std::make_unique<idata_t>(other.m_ptr->isl_ptr->clone(), other.get_algorithm(), other.get_population(),
+                                      other.m_ptr->r_pol, other.m_ptr->s_pol))
 {
     // NOTE: the idata_t ctor will set the archi ptr to null. The archi ptr is never copied.
     assert(m_ptr->archi_ptr == nullptr);

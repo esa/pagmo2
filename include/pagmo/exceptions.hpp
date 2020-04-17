@@ -45,7 +45,7 @@ namespace detail
 template <typename Exception>
 struct ex_thrower {
     // Determine the type of the __LINE__ macro.
-    using line_type = decay_t<decltype(__LINE__)>;
+    using line_type = std::decay_t<decltype(__LINE__)>;
     explicit ex_thrower(const char *file, line_type line, const char *func) : m_file(file), m_line(line), m_func(func)
     {
     }
@@ -54,12 +54,12 @@ struct ex_thrower {
     {
         throw Exception(std::forward<Args>(args)...);
     }
-    template <
-        typename Str, typename... Args,
-        enable_if_t<conjunction<std::is_constructible<Exception, std::string, Args...>,
-                                disjunction<std::is_same<decay_t<Str>, std::string>, std::is_same<decay_t<Str>, char *>,
-                                            std::is_same<decay_t<Str>, const char *>>>::value,
-                    int> = 0>
+    template <typename Str, typename... Args,
+              enable_if_t<conjunction<std::is_constructible<Exception, std::string, Args...>,
+                                      disjunction<std::is_same<std::decay_t<Str>, std::string>,
+                                                  std::is_same<std::decay_t<Str>, char *>,
+                                                  std::is_same<std::decay_t<Str>, const char *>>>::value,
+                          int> = 0>
     [[noreturn]] void operator()(Str &&desc, Args &&... args) const
     {
         std::string msg("\nfunction: ");

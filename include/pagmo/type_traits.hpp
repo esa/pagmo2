@@ -44,15 +44,6 @@ namespace pagmo
 namespace detail
 {
 
-// http://en.cppreference.com/w/cpp/types/void_t
-template <typename... Ts>
-struct make_void {
-    typedef void type;
-};
-
-template <typename... Ts>
-using void_t = typename make_void<Ts...>::type;
-
 // http://en.cppreference.com/w/cpp/experimental/is_detected
 template <class Default, class AlwaysVoid, template <class...> class Op, class... Args>
 struct detector {
@@ -61,7 +52,7 @@ struct detector {
 };
 
 template <class Default, template <class...> class Op, class... Args>
-struct detector<Default, void_t<Op<Args...>>, Op, Args...> {
+struct detector<Default, std::void_t<Op<Args...>>, Op, Args...> {
     using value_t = std::true_type;
     using type = Op<Args...>;
 };
@@ -74,70 +65,23 @@ struct nonesuch {
     void operator=(nonesuch const &) = delete;
 };
 
-// http://en.cppreference.com/w/cpp/types/conjunction
-template <class...>
-struct conjunction : std::true_type {
-};
+// NOTE: we used to have custom implementations
+// of these utilities in pre-C++17, but now we don't
+// need them any more.
+template <typename... Args>
+using conjunction = std::conjunction<Args...>;
 
-template <class B1>
-struct conjunction<B1> : B1 {
-};
+template <typename... Args>
+using disjunction = std::disjunction<Args...>;
 
-template <class B1, class... Bn>
-struct conjunction<B1, Bn...> : std::conditional<B1::value != false, conjunction<Bn...>, B1>::type {
-};
+template <typename T>
+using negation = std::negation<T>;
 
-// http://en.cppreference.com/w/cpp/types/disjunction
-template <class...>
-struct disjunction : std::false_type {
-};
-
-template <class B1>
-struct disjunction<B1> : B1 {
-};
-
-template <class B1, class... Bn>
-struct disjunction<B1, Bn...> : std::conditional<B1::value != false, B1, disjunction<Bn...>>::type {
-};
-
-// http://en.cppreference.com/w/cpp/types/negation
-template <class B>
-struct negation : std::integral_constant<bool, !B::value> {
-};
-
-// std::index_sequence and std::make_index_sequence implementation for C++11. These are available
-// in the std library in C++14. Implementation taken from:
-// http://stackoverflow.com/questions/17424477/implementation-c14-make-integer-sequence
 template <std::size_t... Ints>
-struct index_sequence {
-    using type = index_sequence;
-    using value_type = std::size_t;
-    static constexpr std::size_t size() noexcept
-    {
-        return sizeof...(Ints);
-    }
-};
-
-template <class Sequence1, class Sequence2>
-struct merge_and_renumber;
-
-template <std::size_t... I1, std::size_t... I2>
-struct merge_and_renumber<index_sequence<I1...>, index_sequence<I2...>>
-    : index_sequence<I1..., (sizeof...(I1) + I2)...> {
-};
+using index_sequence = std::index_sequence<Ints...>;
 
 template <std::size_t N>
-struct make_index_sequence
-    : merge_and_renumber<typename make_index_sequence<N / 2>::type, typename make_index_sequence<N - N / 2>::type> {
-};
-
-template <>
-struct make_index_sequence<0> : index_sequence<> {
-};
-
-template <>
-struct make_index_sequence<1> : index_sequence<0> {
-};
+using make_index_sequence = std::make_index_sequence<N>;
 
 template <typename T, typename F, std::size_t... Is>
 void apply_to_each_item(T &&t, const F &f, index_sequence<Is...>)
@@ -182,13 +126,6 @@ using detected_t =
     typename detail::detector<detail::nonesuch, void, Op, Args...>::type;
 #endif
 
-/// Implementation of \p std::decay_t.
-/**
- * Implementation of \p std::decay_t, from C++14. See: http://en.cppreference.com/w/cpp/types/decay.
- */
-template <typename T>
-using decay_t = typename std::decay<T>::type;
-
 /// Implementation of \p std::enable_if_t.
 /**
  * Implementation of \p std::enable_if_t, from C++14. See: http://en.cppreference.com/w/cpp/types/enable_if.
@@ -198,25 +135,19 @@ using enable_if_t = typename std::enable_if<B, T>::type;
 
 namespace detail
 {
-/// SFINAE enabler for floating point types
-/**
- * A templated method or function with enable_if_is_floating_point<T> = 0 will only be available for
- * floating point types
- */
+
+// SFINAE enablers for floating point types
 template <typename T>
 using enable_if_is_floating_point = enable_if_t<std::is_floating_point<T>::value, int>;
-/// SFINAE enabler for floating point types
-/**
- * A templated method or function with enable_if_is_not_floating_point<T> = 0 will only be available for
- * non floating point types
- */
+
 template <typename T>
 using enable_if_is_not_floating_point = enable_if_t<!std::is_floating_point<T>::value, int>;
+
 } // namespace detail
 
 /// Remove reference and cv qualifiers from type \p T.
 template <typename T>
-using uncvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+using uncvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 
 /// Detect \p set_seed() method.
 /**
