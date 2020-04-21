@@ -21,8 +21,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMA
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
 enable_testing()
 
-# Build option: enable test set.
-option(PAGMO_BUILD_TESTS "Build test set." OFF)
+# Build option: enable the test suite.
+option(PAGMO_BUILD_TESTS "Build the test suite." OFF)
+
+# Build option: enable the benchmarks.
+option(PAGMO_BUILD_BENCHMARKS "Build the benchmarks." OFF)
 
 # Build option: enable tutorials.
 option(PAGMO_BUILD_TUTORIALS "Build tutorials." OFF)
@@ -359,6 +362,10 @@ endif()
 
 if(PAGMO_BUILD_TESTS)
     add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
+endif()
+
+if(PAGMO_BUILD_BENCHMARKS)
+    add_subdirectory("${CMAKE_SOURCE_DIR}/benchmarks")
 endif()
 
 if(PAGMO_BUILD_TUTORIALS)

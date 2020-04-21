@@ -392,7 +392,7 @@ BOOST_AUTO_TEST_CASE(island_name_info_stream)
     oss << isl;
     BOOST_CHECK(!oss.str().empty());
     BOOST_CHECK(isl.get_name() == "Thread island");
-    BOOST_CHECK(isl.get_extra_info() == "");
+    BOOST_CHECK(!isl.get_extra_info().empty());
     oss.str("");
     isl = island{udi_01{}, de{}, population{rosenbrock{}, 25}};
     oss << isl;

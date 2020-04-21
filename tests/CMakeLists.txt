@@ -10,7 +10,7 @@ function(ADD_PAGMO_TESTCASE arg1)
         return()
     endif()
     add_executable(${arg1} ${arg1}.cpp)
-    target_link_libraries(${arg1} pagmo Boost::unit_test_framework)
+    target_link_libraries(${arg1} PRIVATE pagmo PRIVATE Boost::unit_test_framework)
     target_compile_options(${arg1} PRIVATE
         "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
         "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"

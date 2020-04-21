@@ -26,8 +26,12 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <exception>
 #include <stdexcept>
+#include <string>
 #include <utility>
+
+#include <tbb/task_group.h>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/gte_getter.hpp>
@@ -41,83 +45,124 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-/// Run evolve.
-/**
- * This method will use copies of <tt>isl</tt>'s
- * algorithm and population, obtained via island::get_algorithm() and island::get_population(),
- * to evolve the input island's population. The evolved population will be assigned to \p isl
- * using island::set_population(), and the algorithm used for the evolution will be assigned
- * to \p isl using island::set_algorithm().
- *
- * @param isl the pagmo::island that will undergo evolution.
- *
- * @throws std::invalid_argument if <tt>isl</tt>'s algorithm or problem do not provide
- * at least the pagmo::thread_safety::basic thread safety guarantee.
- * @throws unspecified any exception thrown by:
- * - island::get_algorithm(), island::get_population(),
- * - island::set_algorithm(), island::set_population(),
- * - algorithm::evolve().
- */
-void thread_island::run_evolve(island &isl) const
+thread_island::thread_island() : thread_island(true) {}
+
+thread_island::thread_island(bool use_pool) : m_use_pool(use_pool) {}
+
+// Island's name.
+std::string thread_island::get_name() const
 {
-    // Init default-constructed algo/pop. We will move
-    // later into these variables the algo/pop from isl.
-    algorithm algo;
-    population pop;
-
-    {
-        // NOTE: run_evolve() is called from the separate
-        // thread of execution within pagmo::island. Since
-        // we need to extract copies of algorithm and population,
-        // which may be implemented in Python, we need to protect
-        // with a gte.
-        auto gte = detail::gte_getter();
-        (void)gte;
-
-        // Get copies of algo/pop from isl.
-        // NOTE: in case of exceptions, any pythonic object
-        // existing within this scope will be destroyed before the gte,
-        // while it is still safe to call into Python.
-        auto tmp_algo(isl.get_algorithm());
-        auto tmp_pop(isl.get_population());
-
-        // Check the thread safety levels.
-        if (tmp_algo.get_thread_safety() < thread_safety::basic) {
-            pagmo_throw(std::invalid_argument,
-                        "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
-                        "thread safety guarantee, but an algorithm of type '"
-                            + tmp_algo.get_name() + "' does not");
-        }
-
-        if (tmp_pop.get_problem().get_thread_safety() < thread_safety::basic) {
-            pagmo_throw(std::invalid_argument,
-                        "the 'thread_island' UDI requires a problem providing at least the 'basic' "
-                        "thread safety guarantee, but a problem of type '"
-                            + tmp_pop.get_problem().get_name() + "' does not");
-        }
-
-        // Move the copies into algo/pop. At this point, we know
-        // that algo and pop are not pythonic, as pythonic entities are never
-        // marked as thread-safe.
-        algo = std::move(tmp_algo);
-        pop = std::move(tmp_pop);
-    }
-
-    // Evolve and replace the island's population with the evolved population.
-    isl.set_population(algo.evolve(pop));
-    // Replace the island's algorithm with the algorithm used for the evolution.
-    // NOTE: if set_algorithm() fails, we will have the new population with the
-    // original algorithm, which is still a valid state for the island.
-    isl.set_algorithm(algo);
+    return "Thread island";
 }
 
-/// Serialization support.
-/**
- * This class is stateless, no data will be saved to or loaded from the archive.
- */
-template <typename Archive>
-void thread_island::serialize(Archive &, unsigned)
+// Island's extra info.
+std::string thread_island::get_extra_info() const
 {
+    return std::string("\tUsing pool: ") + (m_use_pool ? "yes" : "no");
+}
+
+// Run evolve.
+void thread_island::run_evolve(island &isl) const
+{
+    auto impl = [&isl]() {
+        // Init default-constructed algo/pop. We will move
+        // later into these variables the algo/pop from isl.
+        algorithm algo;
+        population pop;
+
+        {
+            // NOTE: run_evolve() is called from the separate
+            // thread of execution within pagmo::island. Since
+            // we need to extract copies of algorithm and population,
+            // which may be implemented in Python, we need to protect
+            // with a gte.
+            auto gte = detail::gte_getter();
+            (void)gte;
+
+            // Get copies of algo/pop from isl.
+            // NOTE: in case of exceptions, any pythonic object
+            // existing within this scope will be destroyed before the gte,
+            // while it is still safe to call into Python.
+            auto tmp_algo(isl.get_algorithm());
+            auto tmp_pop(isl.get_population());
+
+            // Check the thread safety levels.
+            if (tmp_algo.get_thread_safety() < thread_safety::basic) {
+                pagmo_throw(std::invalid_argument,
+                            "the 'thread_island' UDI requires an algorithm providing at least the 'basic' "
+                            "thread safety guarantee, but an algorithm of type '"
+                                + tmp_algo.get_name() + "' does not");
+            }
+
+            if (tmp_pop.get_problem().get_thread_safety() < thread_safety::basic) {
+                pagmo_throw(std::invalid_argument,
+                            "the 'thread_island' UDI requires a problem providing at least the 'basic' "
+                            "thread safety guarantee, but a problem of type '"
+                                + tmp_pop.get_problem().get_name() + "' does not");
+            }
+
+            // Move the copies into algo/pop. At this point, we know
+            // that algo and pop are not pythonic, as pythonic entities are never
+            // marked as thread-safe.
+            algo = std::move(tmp_algo);
+            pop = std::move(tmp_pop);
+        }
+
+        // Evolve and replace the island's population with the evolved population.
+        isl.set_population(algo.evolve(pop));
+        // Replace the island's algorithm with the algorithm used for the evolution.
+        // NOTE: if set_algorithm() fails, we will have the new population with the
+        // original algorithm, which is still a valid state for the island.
+        isl.set_algorithm(algo);
+    };
+
+    if (m_use_pool) {
+        // NOTE: do manual exception transport because
+        // TBB's exception transport is dependent upon
+        // the TBB library being compiled with certain
+        // flags:
+        // https://www.threadingbuildingblocks.org/docs/help/reference/environment/feature_macros.html
+
+        tbb::task_group tg;
+        std::exception_ptr eptr;
+
+        tg.run_and_wait([&impl, &eptr]() {
+            try {
+                impl();
+            } catch (...) {
+                eptr = std::current_exception();
+            }
+        });
+
+        if (eptr) {
+            std::rethrow_exception(eptr);
+        }
+    } else {
+        impl();
+    }
+}
+
+// Serialization support.
+template <typename Archive>
+void thread_island::save(Archive &ar, unsigned) const
+{
+    ar << m_use_pool;
+}
+
+template <typename Archive>
+void thread_island::load(Archive &ar, unsigned version)
+{
+    if (version > 0u) {
+        ar >> m_use_pool;
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: if loading from version 0,
+        // set the flag to false (as the version 0
+        // of thread_island had no support for
+        // a thread pool).
+        m_use_pool = false;
+        // LCOV_EXCL_STOP
+    }
 }
 
 } // namespace pagmo
