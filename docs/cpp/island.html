@@ -221,8 +221,10 @@ methods. The status of ongoing evolutions in the island can be queried via <a cl
 They establish how individuals are selected and replaced from the island when migration across islands occurs within
 the <a class="reference internal" href="archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>. If the island is not part of an <a class="reference internal" href="archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>,
 the replacement and selection policies play no role.</p>
-</p>
-<p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>) in conjunction with this class, but advanced users can implement their own UDI types. A user-defined island must implement the following method: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
+<p>Typically, pagmo users will employ an already-available UDI (such as <a class="reference internal" href="islands/thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a>) in
+conjunction with this class, but advanced users can implement their own UDI types. A user-defined
+island must implement the following method:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">run_evolve</span><span class="p">(</span><span class="n">island</span> <span class="o">&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 </pre></div>
 </div>
 </p>
@@ -251,7 +253,9 @@ Any other operation will result in undefined behaviour.</p>
 <dt id="_CPPv4N5pagmo6island6islandEv">
 <span id="_CPPv3N5pagmo6island6islandEv"></span><span id="_CPPv2N5pagmo6island6islandEv"></span><span id="pagmo::island::island"></span><span class="target" id="classpagmo_1_1island_1a716b2228d12ffeeaadbc6471cfded0e3"></span><code class="sig-name descname">island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6island6islandEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
-<p>The default constructor will initialise an island containing a UDI of type <a class="reference internal" href="islands/thread_island.html#classpagmo_1_1thread__island"><span class="std std-ref">pagmo::thread_island</span></a>, and default-constructed algorithm, population and replacement/selection policies.</p>
+<p><p>The default constructor will initialise an island containing a UDI of type <a class="reference internal" href="islands/thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a>,
+and default-constructed algorithm, population and replacement/selection policies.</p>
+</p>
 <p><dl class="simple">
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by any invoked constructor or by memory allocation failures. </p></li>
