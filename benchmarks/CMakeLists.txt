@@ -9,7 +9,7 @@ function(ADD_PAGMO_BENCHMARK arg1)
     )
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
     if(NOT CMAKE_CXX_STANDARD)
-        set_property(TARGET ${arg1} PROPERTY CXX_STANDARD 11)
+        set_property(TARGET ${arg1} PROPERTY CXX_STANDARD 17)
     endif()
     set_property(TARGET ${arg1} PROPERTY CXX_STANDARD_REQUIRED YES)
     set_property(TARGET ${arg1} PROPERTY CXX_EXTENSIONS NO)
