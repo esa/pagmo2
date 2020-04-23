@@ -57,6 +57,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 
 namespace pagmo
 {
@@ -404,6 +405,7 @@ void sga::perform_crossover(std::vector<vector_double> &X, const std::pair<vecto
         std::shuffle(X.begin(), X.end(), m_e);
         for (decltype(X.size()) i = 0u; i < X.size(); i += 2) {
             auto children = sbx_crossover_impl(X[i], X[i + 1], bounds, dim_i);
+            //auto children = detail::sbx_crossover(X[i], X[i + 1], bounds, dim_i, m_cr, m_eta_c, m_e);
             X[i] = children.first;
             X[i + 1] = children.second;
         }
@@ -546,101 +548,6 @@ void sga::perform_mutation(std::vector<vector_double> &X, const std::pair<vector
         // We fix chromosomes possibly created outside the bounds to stick to the bounds
         detail::force_bounds_stick(X[i], lb, ub);
     }
-}
-
-std::pair<vector_double, vector_double> sga::sbx_crossover_impl(const vector_double &parent1,
-                                                                const vector_double &parent2,
-                                                                const std::pair<vector_double, vector_double> &bounds,
-                                                                vector_double::size_type Di) const
-{
-    // Decision vector dimensions
-    auto D = parent1.size();
-    auto Dc = D - Di;
-    // Problem bounds
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
-    // declarations
-    double y1, y2, yl, yu, rand01, beta, alpha, betaq, c1, c2;
-    vector_double::size_type site1, site2;
-    // Initialize the child decision vectors
-    auto child1 = parent1;
-    auto child2 = parent2;
-    // Random distributions
-    std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
-
-    // This implements a Simulated Binary Crossover SBX and applies it to the non integer part of the decision
-    // vector
-    if (drng(m_e) <= m_cr) {
-        for (decltype(Dc) i = 0u; i < Dc; i++) {
-            if ((drng(m_e) <= 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
-                if (parent1[i] < parent2[i]) {
-                    y1 = parent1[i];
-                    y2 = parent2[i];
-                } else {
-                    y1 = parent2[i];
-                    y2 = parent1[i];
-                }
-                yl = lb[i];
-                yu = ub[i];
-                rand01 = drng(m_e);
-                beta = 1. + (2. * (y1 - yl) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
-                }
-                c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
-                beta = 1. + (2. * (yu - y2) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
-                }
-                c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
-                if (c1 < lb[i]) c1 = lb[i];
-                if (c2 < lb[i]) c2 = lb[i];
-                if (c1 > ub[i]) c1 = ub[i];
-                if (c2 > ub[i]) c2 = ub[i];
-                if (drng(m_e) <= .5) {
-                    child1[i] = c1;
-                    child2[i] = c2;
-                } else {
-                    child1[i] = c2;
-                    child2[i] = c1;
-                }
-            }
-        }
-    }
-    // This implements two-point binary crossover and applies it to the integer part of the chromosome
-    for (decltype(Dc) i = Dc; i < D; ++i) {
-        // in this loop we are sure Di is at least 1
-        std::uniform_int_distribution<vector_double::size_type> ra_num(0, Di - 1u);
-        if (drng(m_e) <= m_cr) {
-            site1 = ra_num(m_e);
-            site2 = ra_num(m_e);
-            if (site1 > site2) {
-                std::swap(site1, site2);
-            }
-            for (decltype(site1) j = 0u; j < site1; ++j) {
-                child1[j] = parent1[j];
-                child2[j] = parent2[j];
-            }
-            for (decltype(site2) j = site1; j < site2; ++j) {
-                child1[j] = parent2[j];
-                child2[j] = parent1[j];
-            }
-            for (decltype(Di) j = site2; j < Di; ++j) {
-                child1[j] = parent1[j];
-                child2[j] = parent2[j];
-            }
-        } else {
-            child1[i] = parent1[i];
-            child2[i] = parent2[i];
-        }
-    }
-    return std::make_pair(std::move(child1), std::move(child2));
 }
 
 } // namespace pagmo

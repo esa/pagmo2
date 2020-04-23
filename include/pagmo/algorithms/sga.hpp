@@ -268,8 +268,6 @@ private:
                                           const std::pair<vector_double, vector_double> &bounds,
                                           vector_double::size_type dimi) const;
     PAGMO_DLL_LOCAL std::pair<vector_double, vector_double>
-    sbx_crossover_impl(const vector_double &parent1, const vector_double &parent2,
-                       const std::pair<vector_double, vector_double> &bounds, vector_double::size_type Di) const;
 
     unsigned m_gen;
     double m_cr;
