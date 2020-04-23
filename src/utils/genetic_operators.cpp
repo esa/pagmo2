@@ -46,7 +46,7 @@ namespace detail
 {
 
 // Implementation of the binary crossover. 
-// Requires: distribution index eta_c [1, 100], crossover cr [0,1]
+// Requires: distribution index eta_c [1, 100], crossover cr [0,1] -> UB otherwise
 std::pair<vector_double, vector_double> sbx_crossover(const vector_double &parent1, const vector_double &parent2,
                                                       const std::pair<vector_double, vector_double> &bounds,
                                                       vector_double::size_type dim_i, const double p_cr, const double eta_c, detail::random_engine_type& random_engine) 

@@ -404,8 +404,7 @@ void sga::perform_crossover(std::vector<vector_double> &X, const std::pair<vecto
         assert(X.size() % 2u == 0u);
         std::shuffle(X.begin(), X.end(), m_e);
         for (decltype(X.size()) i = 0u; i < X.size(); i += 2) {
-            auto children = sbx_crossover_impl(X[i], X[i + 1], bounds, dim_i);
-            //auto children = detail::sbx_crossover(X[i], X[i + 1], bounds, dim_i, m_cr, m_eta_c, m_e);
+            auto children = detail::sbx_crossover(X[i], X[i + 1], bounds, dim_i, m_cr, m_eta_c, m_e);
             X[i] = children.first;
             X[i + 1] = children.second;
         }

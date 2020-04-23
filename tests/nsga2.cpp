@@ -168,6 +168,7 @@ BOOST_AUTO_TEST_CASE(nsga2_serialization_test)
     population pop{prob, 40u, 23u};
     algorithm algo{nsga2{100u, 0.95, 10., 0.01, 50., 32u}};
     algo.set_verbosity(1u);
+    algo.set_seed(1234u)
     pop = algo.evolve(pop);
 
     // Store the string representation of p.
@@ -218,7 +219,7 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
     // 4 - Evolve the population
     pop1 = algo1.evolve(pop);
 
-    // 5 new algorithm that is bfe enabled
+    // 5 - new algorithm that is bfe enabled
     nsga2 uda2{nsga2{100}};
     uda2.set_verbosity(1u);
     uda2.set_seed(23u);

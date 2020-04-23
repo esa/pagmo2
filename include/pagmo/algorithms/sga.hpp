@@ -267,8 +267,6 @@ private:
     PAGMO_DLL_LOCAL void perform_mutation(std::vector<vector_double> &X,
                                           const std::pair<vector_double, vector_double> &bounds,
                                           vector_double::size_type dimi) const;
-    PAGMO_DLL_LOCAL std::pair<vector_double, vector_double>
-
     unsigned m_gen;
     double m_cr;
     double m_eta_c;
