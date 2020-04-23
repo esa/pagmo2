@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -49,8 +50,9 @@ PAGMO_DLL_PUBLIC void polynomial_mutation(vector_double &, const std::pair<vecto
                                           detail::random_engine_type &);
 
 PAGMO_DLL_PUBLIC vector_double::size_type mo_tournament_selection(vector_double::size_type, vector_double::size_type,
-                                                               const std::vector<vector_double::size_type> &,
-                                                               const std::vector<double> &, detail::random_engine_type &);
+                                                                  const std::vector<vector_double::size_type> &,
+                                                                  const std::vector<double> &,
+                                                                  detail::random_engine_type &);
 
 } // namespace detail
 
