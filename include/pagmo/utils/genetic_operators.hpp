@@ -44,6 +44,10 @@ PAGMO_DLL_PUBLIC std::pair<vector_double, vector_double> sbx_crossover(const vec
                                                                        vector_double::size_type, const double,
                                                                        const double, detail::random_engine_type &);
 
+PAGMO_DLL_PUBLIC void polynomial_mutation(vector_double &, const std::pair<vector_double, vector_double> &,
+                                          vector_double::size_type, const double, const double,
+                                          detail::random_engine_type &);
+
 } // namespace detail
 
 } // namespace pagmo

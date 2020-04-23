@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -142,6 +143,58 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
         }
     }
     return std::make_pair(std::move(child1), std::move(child2));
+}
+
+// Performs polynomial mutation
+void polynomial_mutation(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
+                         vector_double::size_type dim_i, const double p_m, const double eta_m,
+                         detail::random_engine_type &random_engine)
+{
+    // Decision vector dimensions
+    auto dim = child.size();
+    auto dim_c = dim - dim_i;
+    // Problem bounds
+    const auto &lb = bounds.first;
+    const auto &ub = bounds.second;
+    // declarations
+    double rnd, delta1, delta2, mut_pow, deltaq;
+    double y, yl, yu, val, xy;
+    // Random distributions
+    std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+    // This implements the real polinomial mutation and applies it to the non integer part of the decision vector
+    for (decltype(dim_c) j = 0u; j < dim_c; ++j) {
+        if (drng(random_engine) <= p_m && lb[j] != ub[j]) {
+            y = child[j];
+            yl = lb[j];
+            yu = ub[j];
+            delta1 = (y - yl) / (yu - yl);
+            delta2 = (yu - y) / (yu - yl);
+            rnd = drng(random_engine);
+            mut_pow = 1. / (eta_m + 1.);
+            if (rnd <= 0.5) {
+                xy = 1. - delta1;
+                val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (eta_m + 1.)));
+                deltaq = std::pow(val, mut_pow) - 1.;
+            } else {
+                xy = 1. - delta2;
+                val = 2. * (1. - rnd) + 2. * (rnd - 0.5) * (std::pow(xy, (eta_m + 1.)));
+                deltaq = 1. - (std::pow(val, mut_pow));
+            }
+            y = y + deltaq * (yu - yl);
+            if (y < yl) y = yl;
+            if (y > yu) y = yu;
+            child[j] = y;
+        }
+    }
+
+    // This implements the integer mutation for an individual
+    for (decltype(dim) j = dim_c; j < dim; ++j) {
+        if (drng(random_engine) < p_m) {
+            // We need to draw a random integer in [lb, ub].
+            auto mutated = uniform_integral_from_range(lb[j], ub[j], random_engine);
+            child[j] = mutated;
+        }
+    }
 }
 
 } // namespace detail

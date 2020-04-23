@@ -216,8 +216,8 @@ population nsga2::evolve(population pop) const
                 parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                mutate(children.first, pop);
-                mutate(children.second, pop);
+                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
 
                 poptemp.push_back(children.first);
                 poptemp.push_back(children.second);
@@ -227,8 +227,8 @@ population nsga2::evolve(population pop) const
                 parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                mutate(children.first, pop);
-                mutate(children.second, pop);
+                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
                 poptemp.push_back(children.first);
@@ -269,8 +269,8 @@ population nsga2::evolve(population pop) const
                 parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                mutate(children.first, pop);
-                mutate(children.second, pop);
+                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
                 auto f1 = prob.fitness(children.first);
@@ -283,8 +283,8 @@ population nsga2::evolve(population pop) const
                 parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                mutate(children.first, pop);
-                mutate(children.second, pop);
+                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
                 f1 = prob.fitness(children.first);
@@ -366,57 +366,6 @@ vector_double::size_type nsga2::tournament_selection(vector_double::size_type id
     if (crowding_d[idx1] < crowding_d[idx2]) return idx2;
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
     return ((drng(m_e) > 0.5) ? idx1 : idx2);
-}
-
-void nsga2::mutate(vector_double &child, const pagmo::population &pop) const
-{
-    // Decision vector dimensions
-    auto D = pop.get_problem().get_nx();
-    auto Dc = pop.get_problem().get_ncx();
-    // Problem bounds
-    const auto bounds = pop.get_problem().get_bounds();
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
-    // declarations
-    double rnd, delta1, delta2, mut_pow, deltaq;
-    double y, yl, yu, val, xy;
-    // Random distributions
-    std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
-
-    // This implements the real polinomial mutation and applies it to the non integer part of the decision vector
-    for (decltype(Dc) j = 0u; j < Dc; ++j) {
-        if (drng(m_e) <= m_m && lb[j] != ub[j]) {
-            y = child[j];
-            yl = lb[j];
-            yu = ub[j];
-            delta1 = (y - yl) / (yu - yl);
-            delta2 = (yu - y) / (yu - yl);
-            rnd = drng(m_e);
-            mut_pow = 1. / (m_eta_m + 1.);
-            if (rnd <= 0.5) {
-                xy = 1. - delta1;
-                val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (m_eta_m + 1.)));
-                deltaq = std::pow(val, mut_pow) - 1.;
-            } else {
-                xy = 1. - delta2;
-                val = 2. * (1. - rnd) + 2. * (rnd - 0.5) * (std::pow(xy, (m_eta_m + 1.)));
-                deltaq = 1. - (std::pow(val, mut_pow));
-            }
-            y = y + deltaq * (yu - yl);
-            if (y < yl) y = yl;
-            if (y > yu) y = yu;
-            child[j] = y;
-        }
-    }
-
-    // This implements the integer mutation for an individual
-    for (decltype(D) j = Dc; j < D; ++j) {
-        if (drng(m_e) < m_m) {
-            // We need to draw a random integer in [lb, ub].
-            auto mutated = uniform_integral_from_range(lb[j], ub[j], m_e);
-            child[j] = mutated;
-        }
-    }
 }
 
 } // namespace pagmo

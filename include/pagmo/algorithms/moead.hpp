@@ -202,8 +202,6 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    // Performs polynomial mutation (same as nsgaII)
-    PAGMO_DLL_LOCAL void polynomial_mutation(vector_double &child, const population &pop, double rate) const;
     PAGMO_DLL_LOCAL std::vector<population::size_type>
     select_parents(population::size_type n, const std::vector<std::vector<population::size_type>> &neigh_idx,
                    bool whole_population) const;
