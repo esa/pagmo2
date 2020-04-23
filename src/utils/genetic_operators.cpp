@@ -145,7 +145,8 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
     return std::make_pair(std::move(child1), std::move(child2));
 }
 
-// Performs polynomial mutation
+// Performs polynomial mutation. Requires all sizes to be consistent. Does not check if input is well formed.
+// p_m is the mutation probability, eta_m the distibution index
 void polynomial_mutation(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
                          vector_double::size_type dim_i, const double p_m, const double eta_m,
                          detail::random_engine_type &random_engine)
@@ -195,6 +196,20 @@ void polynomial_mutation(vector_double &child, const std::pair<vector_double, ve
             child[j] = mutated;
         }
     }
+}
+
+// Multi-objective tournament selection. Requires all sizes to be consistent. Does not check if input is well formed.
+vector_double::size_type mo_tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
+                                                 const std::vector<vector_double::size_type> &non_domination_rank,
+                                                 const std::vector<double> &crowding_d,
+                                                 detail::random_engine_type &random_engine)
+{
+    if (non_domination_rank[idx1] < non_domination_rank[idx2]) return idx1;
+    if (non_domination_rank[idx1] > non_domination_rank[idx2]) return idx2;
+    if (crowding_d[idx1] > crowding_d[idx2]) return idx1;
+    if (crowding_d[idx1] < crowding_d[idx2]) return idx2;
+    std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
+    return ((drng(random_engine) > 0.5) ? idx1 : idx2);
 }
 
 } // namespace detail

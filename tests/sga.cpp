@@ -114,10 +114,10 @@ BOOST_AUTO_TEST_CASE(sga_evolve_test)
     // seed is controlled.
     std::vector<sga> udas = {
         //sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "gaussian", "tournament", 32u},
-        sga{10u, .90, 1., 0.1, 1., 2u, "sbx", "gaussian", "tournament", 32u},
+        //sga{10u, .90, 1., 0.1, 1., 2u, "sbx", "gaussian", "tournament", 32u},
         //sga{10u, .90, 1., 0.1, 1., 2u, "binomial", "gaussian", "tournament", 32u},
         //sga{10u, .90, 1., 0.1, 1., 2u, "single", "gaussian", "tournament", 32u},
-        //sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "polynomial", "tournament", 32u},
+        sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "polynomial", "tournament", 32u},
         //sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "uniform", "tournament", 32u},
         //sga{10u, .90, 1., 0.1, 1., 2u, "exponential", "gaussian", "truncated", 32u},
     };

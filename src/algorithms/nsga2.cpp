@@ -212,8 +212,8 @@ population nsga2::evolve(population pop) const
             std::vector<unsigned long> fidtemp;
             for (decltype(NP) i = 0u; i < NP; i += 4) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
-                parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
+                parent1_idx = detail::mo_tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
@@ -223,8 +223,8 @@ population nsga2::evolve(population pop) const
                 poptemp.push_back(children.second);
 
                 // We repeat with the shuffled list 2
-                parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
-                parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
+                parent1_idx = detail::mo_tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
@@ -265,8 +265,8 @@ population nsga2::evolve(population pop) const
             // bfe not available:
             for (decltype(NP) i = 0u; i < NP; i += 4) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
-                parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
+                parent1_idx = detail::mo_tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
@@ -279,8 +279,8 @@ population nsga2::evolve(population pop) const
                 popnew.push_back(children.second, f2);
 
                 // We repeat with the shuffled list 2
-                parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
-                parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
+                parent1_idx = detail::mo_tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
@@ -354,18 +354,6 @@ template <typename Archive>
 void nsga2::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_gen, m_cr, m_eta_c, m_m, m_eta_m, m_e, m_seed, m_verbosity, m_log, m_bfe);
-}
-
-vector_double::size_type nsga2::tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
-                                                     const std::vector<vector_double::size_type> &non_domination_rank,
-                                                     std::vector<double> &crowding_d) const
-{
-    if (non_domination_rank[idx1] < non_domination_rank[idx2]) return idx1;
-    if (non_domination_rank[idx1] > non_domination_rank[idx2]) return idx2;
-    if (crowding_d[idx1] > crowding_d[idx2]) return idx1;
-    if (crowding_d[idx1] < crowding_d[idx2]) return idx2;
-    std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
-    return ((drng(m_e) > 0.5) ? idx1 : idx2);
 }
 
 } // namespace pagmo

@@ -172,11 +172,6 @@ public:
     void serialize(Archive &, unsigned);
 
 private:
-    PAGMO_DLL_LOCAL vector_double::size_type
-    tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
-                         const std::vector<vector_double::size_type> &non_domination_rank,
-                         std::vector<double> &crowding_d) const;
-
     unsigned m_gen;
     double m_cr;
     double m_eta_c;
