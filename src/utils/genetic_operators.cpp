@@ -32,12 +32,11 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
 #endif
 
-#include <utility>
 #include <random>
+#include <utility>
 
-#include <pagmo/types.hpp>
 #include <pagmo/rng.hpp>
-
+#include <pagmo/types.hpp>
 
 namespace pagmo
 {
@@ -45,11 +44,15 @@ namespace pagmo
 namespace detail
 {
 
-// Implementation of the binary crossover. 
-// Requires: distribution index eta_c [1, 100], crossover cr [0,1] -> UB otherwise
+// Implementation of the binary crossover.
+// Requires the distribution index eta_c in [1, 100], crossover probability p_cr  in[0,1] -> undefined algo behaviour
+// otherwise Requires dimensions of the parent and bounds to be equal -> out of bound reads. dim_i is the integer
+// dimension (integer alleles assumed at the end of the chromosome)
+
 std::pair<vector_double, vector_double> sbx_crossover(const vector_double &parent1, const vector_double &parent2,
                                                       const std::pair<vector_double, vector_double> &bounds,
-                                                      vector_double::size_type dim_i, const double p_cr, const double eta_c, detail::random_engine_type& random_engine) 
+                                                      vector_double::size_type dim_i, const double p_cr,
+                                                      const double eta_c, detail::random_engine_type &random_engine)
 {
     // Decision vector dimensions
     auto dim = parent1.size();

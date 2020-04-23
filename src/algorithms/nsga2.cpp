@@ -49,6 +49,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/multi_objective.hpp>
 
 namespace pagmo
@@ -90,7 +91,8 @@ population nsga2::evolve(population pop) const
     // We store some useful variables
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
-    auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
+    const auto bounds = pop.get_problem().get_bounds();
+    auto dim_i = pop.get_problem().get_nix(); // integer dimension
     auto NP = pop.size();
 
     auto fevals0 = prob.get_fevals(); // discount for the fevals already made
@@ -130,7 +132,7 @@ population nsga2::evolve(population pop) const
     // Declarations
     std::vector<vector_double::size_type> best_idx(NP), shuffle1(NP), shuffle2(NP);
     vector_double::size_type parent1_idx, parent2_idx;
-    vector_double child1(dim), child2(dim);
+    std::pair<vector_double, vector_double> children;
 
     std::iota(shuffle1.begin(), shuffle1.end(), vector_double::size_type(0));
     std::iota(shuffle2.begin(), shuffle2.end(), vector_double::size_type(0));
@@ -212,23 +214,25 @@ population nsga2::evolve(population pop) const
                 // We create two offsprings using the shuffled list 1
                 parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
                 parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
-                crossover(child1, child2, parent1_idx, parent2_idx, pop);
-                mutate(child1, pop);
-                mutate(child2, pop);
+                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                                                 m_cr, m_eta_c, m_e);
+                mutate(children.first, pop);
+                mutate(children.second, pop);
 
-                poptemp.push_back(child1);
-                poptemp.push_back(child2);
+                poptemp.push_back(children.first);
+                poptemp.push_back(children.second);
 
                 // We repeat with the shuffled list 2
                 parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
                 parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
-                crossover(child1, child2, parent1_idx, parent2_idx, pop);
-                mutate(child1, pop);
-                mutate(child2, pop);
+                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                                                 m_cr, m_eta_c, m_e);
+                mutate(children.first, pop);
+                mutate(children.second, pop);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                poptemp.push_back(child1);
-                poptemp.push_back(child2);
+                poptemp.push_back(children.first);
+                poptemp.push_back(children.second);
 
             } // poptemp now contains 2NP individuals
 
@@ -263,28 +267,30 @@ population nsga2::evolve(population pop) const
                 // We create two offsprings using the shuffled list 1
                 parent1_idx = tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd);
                 parent2_idx = tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd);
-                crossover(child1, child2, parent1_idx, parent2_idx, pop);
-                mutate(child1, pop);
-                mutate(child2, pop);
+                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                                                 m_cr, m_eta_c, m_e);
+                mutate(children.first, pop);
+                mutate(children.second, pop);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                auto f1 = prob.fitness(child1);
-                auto f2 = prob.fitness(child2);
-                popnew.push_back(child1, f1);
-                popnew.push_back(child2, f2);
+                auto f1 = prob.fitness(children.first);
+                auto f2 = prob.fitness(children.second);
+                popnew.push_back(children.first, f1);
+                popnew.push_back(children.second, f2);
 
                 // We repeat with the shuffled list 2
                 parent1_idx = tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd);
                 parent2_idx = tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd);
-                crossover(child1, child2, parent1_idx, parent2_idx, pop);
-                mutate(child1, pop);
-                mutate(child2, pop);
+                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                                                 m_cr, m_eta_c, m_e);
+                mutate(children.first, pop);
+                mutate(children.second, pop);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                f1 = prob.fitness(child1);
-                f2 = prob.fitness(child2);
-                popnew.push_back(child1, f1);
-                popnew.push_back(child2, f2);
+                f1 = prob.fitness(children.first);
+                f2 = prob.fitness(children.second);
+                popnew.push_back(children.first, f1);
+                popnew.push_back(children.second, f2);
             } // popnew now contains 2NP individuals
         }
         // This method returns the sorted N best individuals in the population according to the crowded comparison
@@ -316,7 +322,6 @@ void nsga2::set_bfe(const bfe &b)
 {
     m_bfe = b;
 }
-
 
 /// Extra info
 /**
@@ -361,105 +366,6 @@ vector_double::size_type nsga2::tournament_selection(vector_double::size_type id
     if (crowding_d[idx1] < crowding_d[idx2]) return idx2;
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
     return ((drng(m_e) > 0.5) ? idx1 : idx2);
-}
-
-void nsga2::crossover(vector_double &child1, vector_double &child2, vector_double::size_type parent1_idx,
-                      vector_double::size_type parent2_idx, const pagmo::population &pop) const
-{
-    // Decision vector dimensions
-    auto D = pop.get_problem().get_nx();
-    auto Di = pop.get_problem().get_nix();
-    auto Dc = pop.get_problem().get_ncx();
-    // Problem bounds
-    const auto bounds = pop.get_problem().get_bounds();
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
-    // Parents decision vectors
-    vector_double parent1 = pop.get_x()[parent1_idx];
-    vector_double parent2 = pop.get_x()[parent2_idx];
-    // declarations
-    double y1, y2, yl, yu, rand01, beta, alpha, betaq, c1, c2;
-    vector_double::size_type site1, site2;
-    // Initialize the child decision vectors
-    child1 = parent1;
-    child2 = parent2;
-    // Random distributions
-    std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
-
-    // This implements a Simulated Binary Crossover SBX and applies it to the non integer part of the decision
-    // vector
-    if (drng(m_e) <= m_cr) {
-        for (decltype(Dc) i = 0u; i < Dc; i++) {
-            if ((drng(m_e) <= 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
-                if (parent1[i] < parent2[i]) {
-                    y1 = parent1[i];
-                    y2 = parent2[i];
-                } else {
-                    y1 = parent2[i];
-                    y2 = parent1[i];
-                }
-                yl = lb[i];
-                yu = ub[i];
-                rand01 = drng(m_e);
-                beta = 1. + (2. * (y1 - yl) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
-                }
-                c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
-
-                beta = 1. + (2. * (yu - y2) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(m_eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (m_eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (m_eta_c + 1.)));
-                }
-                c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
-
-                if (c1 < lb[i]) c1 = lb[i];
-                if (c2 < lb[i]) c2 = lb[i];
-                if (c1 > ub[i]) c1 = ub[i];
-                if (c2 > ub[i]) c2 = ub[i];
-                if (drng(m_e) <= .5) {
-                    child1[i] = c1;
-                    child2[i] = c2;
-                } else {
-                    child1[i] = c2;
-                    child2[i] = c1;
-                }
-            }
-        }
-    }
-    // This implements two-point binary crossover and applies it to the integer part of the chromosome
-    for (decltype(Dc) i = Dc; i < D; ++i) {
-        // in this loop we are sure Di is at least 1
-        std::uniform_int_distribution<vector_double::size_type> ra_num(0, Di - 1u);
-        if (drng(m_e) <= m_cr) {
-            site1 = ra_num(m_e);
-            site2 = ra_num(m_e);
-            if (site1 > site2) {
-                std::swap(site1, site2);
-            }
-            for (decltype(site1) j = 0u; j < site1; ++j) {
-                child1[j] = parent1[j];
-                child2[j] = parent2[j];
-            }
-            for (decltype(site2) j = site1; j < site2; ++j) {
-                child1[j] = parent2[j];
-                child2[j] = parent1[j];
-            }
-            for (decltype(Di) j = site2; j < Di; ++j) {
-                child1[j] = parent1[j];
-                child2[j] = parent2[j];
-            }
-        } else {
-            child1[i] = parent1[i];
-            child2[i] = parent2[i];
-        }
-    }
 }
 
 void nsga2::mutate(vector_double &child, const pagmo::population &pop) const

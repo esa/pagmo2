@@ -166,9 +166,9 @@ BOOST_AUTO_TEST_CASE(nsga2_serialization_test)
     // Make one evolution
     problem prob{zdt{1u, 30u}};
     population pop{prob, 40u, 23u};
-    algorithm algo{nsga2{100u, 0.95, 10., 0.01, 50., 32u}};
+    algorithm algo{nsga2{10u, 0.95, 10., 0.01, 50., 32u}};
     algo.set_verbosity(1u);
-    algo.set_seed(1234u)
+    algo.set_seed(1234u);
     pop = algo.evolve(pop);
 
     // Store the string representation of p.
@@ -205,22 +205,22 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
 {
     // 1 - Algorithm with bfe disabled
     problem prob{dtlz(1, 10, 2)};
-    nsga2 uda1{nsga2{100}};
+    nsga2 uda1{nsga2{10}};
     uda1.set_verbosity(1u);
     uda1.set_seed(23u);
     // 2 - Instantiate
     algorithm algo1{uda1};
 
     // 3 - Instantiate populations
-    population pop{prob, 24};
-    population pop1{prob, 24};
-    population pop2{prob, 24};
+    population pop{prob, 24, 32u};
+    population pop1{prob, 24, 456u};
+    population pop2{prob, 24, 67345u};
 
     // 4 - Evolve the population
     pop1 = algo1.evolve(pop);
 
     // 5 - new algorithm that is bfe enabled
-    nsga2 uda2{nsga2{100}};
+    nsga2 uda2{nsga2{10}};
     uda2.set_verbosity(1u);
     uda2.set_seed(23u);
     uda2.set_bfe(bfe{}); // This will use the default bfe.
