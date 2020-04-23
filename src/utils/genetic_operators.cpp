@@ -114,32 +114,19 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
                 }
             }
         }
-    }
-    // This implements two-point binary crossover and applies it to the integer part of the chromosome
-    for (decltype(dim_c) i = dim_c; i < dim; ++i) {
-        // in this loop we are sure dim_i is at least 1
-        std::uniform_int_distribution<vector_double::size_type> ra_num(0, dim_i - 1u);
-        if (drng(random_engine) < p_cr) {
+
+        // This implements two-point binary crossover and applies it to the integer part of the chromosome.
+        if (dim_i > 1) {
+            std::uniform_int_distribution<vector_double::size_type> ra_num(dim_c, dim - 1u);
             site1 = ra_num(random_engine);
             site2 = ra_num(random_engine);
             if (site1 > site2) {
                 std::swap(site1, site2);
             }
-            for (decltype(site1) j = 0u; j < site1; ++j) {
-                child1[j] = parent1[j];
-                child2[j] = parent2[j];
-            }
             for (decltype(site2) j = site1; j < site2; ++j) {
                 child1[j] = parent2[j];
                 child2[j] = parent1[j];
             }
-            for (decltype(dim_i) j = site2; j < dim_i; ++j) {
-                child1[j] = parent1[j];
-                child2[j] = parent2[j];
-            }
-        } else {
-            child1[i] = parent1[i];
-            child2[i] = parent2[i];
         }
     }
     return std::make_pair(std::move(child1), std::move(child2));
