@@ -72,7 +72,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
 
     // This implements a Simulated Binary Crossover SBX and applies it to the non integer part of the decision
     // vector
-    if (drng(random_engine) <= p_cr) {
+    if (drng(random_engine) < p_cr) {
         for (decltype(dim_c) i = 0u; i < dim_c; i++) {
             if ((drng(random_engine) <= 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
                 if (parent1[i] < parent2[i]) {
@@ -119,7 +119,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
     for (decltype(dim_c) i = dim_c; i < dim; ++i) {
         // in this loop we are sure dim_i is at least 1
         std::uniform_int_distribution<vector_double::size_type> ra_num(0, dim_i - 1u);
-        if (drng(random_engine) <= p_cr) {
+        if (drng(random_engine) < p_cr) {
             site1 = ra_num(random_engine);
             site2 = ra_num(random_engine);
             if (site1 > site2) {
@@ -164,7 +164,7 @@ void polynomial_mutation(vector_double &child, const std::pair<vector_double, ve
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
     // This implements the real polinomial mutation and applies it to the non integer part of the decision vector
     for (decltype(dim_c) j = 0u; j < dim_c; ++j) {
-        if (drng(random_engine) <= p_m && lb[j] != ub[j]) {
+        if (drng(random_engine) < p_m && lb[j] != ub[j]) {
             y = child[j];
             yl = lb[j];
             yu = ub[j];
