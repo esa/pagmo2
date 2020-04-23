@@ -74,7 +74,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
     // vector
     if (drng(random_engine) < p_cr) {
         for (decltype(dim_c) i = 0u; i < dim_c; i++) {
-            if ((drng(random_engine) <= 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
+            if ((drng(random_engine) < 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
                 if (parent1[i] < parent2[i]) {
                     y1 = parent1[i];
                     y2 = parent2[i];
@@ -87,7 +87,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
                 rand01 = drng(random_engine);
                 beta = 1. + (2. * (y1 - yl) / (y2 - y1));
                 alpha = 2. - std::pow(beta, -(eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
+                if (rand01 < (1. / alpha)) {
                     betaq = std::pow((rand01 * alpha), (1. / (eta_c + 1.)));
                 } else {
                     betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (eta_c + 1.)));
@@ -105,7 +105,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
                 if (c2 < lb[i]) c2 = lb[i];
                 if (c1 > ub[i]) c1 = ub[i];
                 if (c2 > ub[i]) c2 = ub[i];
-                if (drng(random_engine) <= .5) {
+                if (drng(random_engine) < .5) {
                     child1[i] = c1;
                     child2[i] = c2;
                 } else {
@@ -159,7 +159,7 @@ void polynomial_mutation(vector_double &child, const std::pair<vector_double, ve
             delta2 = (yu - y) / (yu - yl);
             rnd = drng(random_engine);
             mut_pow = 1. / (eta_m + 1.);
-            if (rnd <= 0.5) {
+            if (rnd < 0.5) {
                 xy = 1. - delta1;
                 val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (eta_m + 1.)));
                 deltaq = std::pow(val, mut_pow) - 1.;
@@ -196,7 +196,7 @@ vector_double::size_type mo_tournament_selection(vector_double::size_type idx1, 
     if (crowding_d[idx1] > crowding_d[idx2]) return idx1;
     if (crowding_d[idx1] < crowding_d[idx2]) return idx2;
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
-    return ((drng(random_engine) > 0.5) ? idx1 : idx2);
+    return ((drng(random_engine) < 0.5) ? idx1 : idx2);
 }
 
 } // namespace detail
