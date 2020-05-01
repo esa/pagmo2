@@ -19,7 +19,7 @@ Thread island
 
    .. cpp:function:: explicit thread_island(bool use_pool)
 
-   .. versionadded:: 2.15
+   .. versionadded:: 2.16
 
    Constructor with *use_pool* flag.
 
@@ -58,7 +58,7 @@ Thread island
 
    .. cpp:function:: std::string get_extra_info() const
 
-   .. versionadded:: 2.15
+   .. versionadded:: 2.16
 
    Island's extra info.
 
