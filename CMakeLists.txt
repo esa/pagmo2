@@ -43,6 +43,9 @@ option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
 option(PAGMO_ENABLE_IPO "Enable IPO (requires CMake >= 3.9 and compiler support)." OFF)
 mark_as_advanced(PAGMO_ENABLE_IPO)
 
+# Build static library instead of dynamic.
+option(PAGMO_BUILD_STATIC_LIBRARY "Build pagmo as a static library, instead of dynamic." OFF)
+
 # Detect if we can enable the fork_island UDI.
 include(CheckIncludeFileCXX)
 include(CheckCXXSymbolExists)
@@ -125,6 +128,27 @@ endif()
 
 # Boost setup.
 include(PagmoFindBoost)
+
+# Explanation: on MSVC, when building static libraries, it is good practice to link
+# to the static runtime. CMake, however, is hard-coded to link to the dynamic runtime.
+# Hence we hackishly replace the /MD flag with /MT. This is the approach suggested
+# in the CMake FAQ:
+#
+# https://gitlab.kitware.com/cmake/community/wikis/FAQ#how-can-i-build-my-msvc-application-with-a-static-runtime
+#
+# Note that at one point CMake added the possiblity to set this as a target property,
+# so in the future we should definitely migrate to that approach:
+#
+# https://cmake.org/cmake/help/git-master/prop_tgt/MSVC_RUNTIME_LIBRARY.html
+if(YACMA_COMPILER_IS_MSVC AND PAGMO_BUILD_STATIC_LIBRARY)
+    foreach(flag_var
+            CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+            CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+        if(${flag_var} MATCHES "/MD")
+            string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+        endif()
+    endforeach()
+endif()
 
 # List of source files.
 set(PAGMO_SRC_FILES
@@ -256,17 +280,27 @@ if(PAGMO_WITH_IPOPT)
 endif()
 
 # Setup of the pagmo library.
-add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-set_property(TARGET pagmo PROPERTY VERSION "6.0")
-set_property(TARGET pagmo PROPERTY SOVERSION 6)
+if(PAGMO_BUILD_STATIC_LIBRARY)
+    # Setup of the pagmo static library.
+    message(STATUS "pagmo will be built as a static library.")
+    set(PAGMO_STATIC_BUILD "#define PAGMO_STATIC_BUILD")
+    add_library(pagmo STATIC "${PAGMO_SRC_FILES}")
+else()
+    add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
+    set_property(TARGET pagmo PROPERTY VERSION "6.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 6)
+    set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
+    set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
+endif()
+
+# Setup common to both static and shared variants.
 target_compile_options(pagmo PRIVATE
     "$<$<CONFIG:Debug>:${PAGMO_CXX_FLAGS_DEBUG}>"
     "$<$<CONFIG:Release>:${PAGMO_CXX_FLAGS_RELEASE}>"
     "$<$<CONFIG:RelWithDebInfo>:${PAGMO_CXX_FLAGS_RELEASE}>"
     "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
 )
-set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
-set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
+
 # Let's setup the target C++ standard, but only if the user did not provide it manually.
 if(NOT CMAKE_CXX_STANDARD)
     set_property(TARGET pagmo PROPERTY CXX_STANDARD 17)
