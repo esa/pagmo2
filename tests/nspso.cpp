@@ -161,19 +161,6 @@ BOOST_AUTO_TEST_CASE(nspso_setters_getters_test)
     BOOST_CHECK(user_algo.get_extra_info().find("Verbosity") != std::string::npos);
 }
 
-BOOST_AUTO_TEST_CASE(nspso_zdt5_test)
-{
-    algorithm algo{nspso(10u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "max min", false, 24u)};
-    algo.set_verbosity(1u);
-    algo.set_seed(23456u);
-    population pop{zdt(5u, 10u), 20u, 24u};
-    pop = algo.evolve(pop);
-    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
-        auto x = pop.get_x()[i];
-        std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); });
-    }
-}
-
 BOOST_AUTO_TEST_CASE(nspso_serialization_test)
 {
     // Make one evolution
