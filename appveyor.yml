@@ -2,22 +2,25 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       BUILD_TYPE: "MSVC_2017"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      BUILD_TYPE: "MSVC_2017_static"
 
 install:
-- if [%BUILD_TYPE%]==[MSVC_2017] set PATH=C:\Miniconda37-x64\Scripts;%PATH%
-- if [%BUILD_TYPE%]==[MSVC_2017] conda config --add channels conda-forge --force
-- if [%BUILD_TYPE%]==[MSVC_2017] conda update --all -y
-- if [%BUILD_TYPE%]==[MSVC_2017] conda create -y --name pagmo python=3.7 cmake boost-cpp eigen nlopt tbb tbb-devel
-- if [%BUILD_TYPE%]==[MSVC_2017] call activate pagmo
+- set PATH=C:\Miniconda37-x64\Scripts;%PATH%
+- conda config --add channels conda-forge --force
+- conda update --all -y
+- conda create -y --name pagmo python=3.7 cmake boost-cpp eigen nlopt tbb tbb-devel
+- call activate pagmo
 
 build_script:
-- if [%BUILD_TYPE%]==[MSVC_2017] mkdir build
-- if [%BUILD_TYPE%]==[MSVC_2017] cd build
+- mkdir build
+- cd build
 - if [%BUILD_TYPE%]==[MSVC_2017] cmake -G "Visual Studio 15 2017 Win64" -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_ENABLE_IPO=yes ..
-- if [%BUILD_TYPE%]==[MSVC_2017] cmake --build . --config Release --target install
+- if [%BUILD_TYPE%]==[MSVC_2017_static] cmake -G "Visual Studio 15 2017 Win64" -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DPAGMO_BUILD_TESTS=YES -DPAGMO_BUILD_TUTORIALS=YES -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_BUILD_STATIC_LIBRARY=yes -DPAGMO_ENABLE_IPO=yes ..
+- cmake --build . --config Release --target install
 
 test_script:
-- if [%BUILD_TYPE%]==[MSVC_2017] ctest -VV --output-on-failure
+- ctest -VV --output-on-failure
 
 
 notifications:
