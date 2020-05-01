@@ -33,7 +33,7 @@ see https://www.gnu.org/licenses/. */
 
 // The visibility setup makes sense only for shared
 // library builds.
-#if defined(MPPP_STATIC_BUILD)
+#if defined(PAGMO_STATIC_BUILD)
 
 #define PAGMO_DLL_PUBLIC
 #define PAGMO_DLL_LOCAL
