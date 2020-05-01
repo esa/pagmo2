@@ -6,8 +6,22 @@ Changelog
 2.16.0 (unreleased)
 -------------------
 
+New
+~~~
+
+- Add a flag to build pagmo with link-time optimizations
+  (`#413 <https://github.com/esa/pagmo2/pull/413>`__).
+
+- The :cpp:class:`~pagmo::thread_island` UDI now can use
+  a thread pool
+  (`#409 <https://github.com/esa/pagmo2/pull/409>`__).
+
 Changes
 ~~~~~~~
+
+- **BREAKING**: pagmo now requires C++17
+  (`#414 <https://github.com/esa/pagmo2/pull/414>`__,
+  `#415 <https://github.com/esa/pagmo2/pull/415>`__).
 
 - Rework the way in which binary data is included in the
   CEC2013/CEC2014 problem suites. As a result, these problems
