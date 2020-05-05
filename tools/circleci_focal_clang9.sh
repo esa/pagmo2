@@ -18,5 +18,13 @@ CXX=clang++ CC=clang cmake ../ -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes 
 make -j2 VERBOSE=1
 ctest -V
 
+# Static build.
+cd ..
+mkdir build_static
+cd build_static
+CXX=clang++ CC=clang cmake ../ -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_BUILD_STATIC_LIBRARY=yes
+make -j2 VERBOSE=1
+ctest -V
+
 set +e
 set +x

@@ -29,6 +29,18 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_VISIBILITY_HPP
 #define PAGMO_DETAIL_VISIBILITY_HPP
 
+#include <pagmo/config.hpp>
+
+// The visibility setup makes sense only for shared
+// library builds.
+#if defined(PAGMO_STATIC_BUILD)
+
+#define PAGMO_DLL_PUBLIC
+#define PAGMO_DLL_LOCAL
+#define PAGMO_DLL_PUBLIC_INLINE_CLASS
+
+#else
+
 // Convenience macros for setting the visibility of entities
 // when building/using the shared library. Mostly inspired by:
 // https://gcc.gnu.org/wiki/Visibility
@@ -76,6 +88,8 @@ see https://www.gnu.org/licenses/. */
 #else
 
 #define PAGMO_DLL_PUBLIC_INLINE_CLASS PAGMO_DLL_PUBLIC
+
+#endif
 
 #endif
 
