@@ -9,6 +9,9 @@ Changelog
 New
 ~~~
 
+- pagmo can now be built as a static library
+  (`#426 <https://github.com/esa/pagmo2/pull/426>`__).
+
 - Add a flag to build pagmo with link-time optimizations
   (`#413 <https://github.com/esa/pagmo2/pull/413>`__).
 
