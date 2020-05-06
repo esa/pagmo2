@@ -103,6 +103,7 @@ endif()
 # about the 'override' attribute. Thus, we manually disable
 # the -Wsuggest-override debug flag.
 if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8")
+    include(CheckCXXCompilerFlag)
     set(CMAKE_REQUIRED_QUIET TRUE)
     check_cxx_compiler_flag("-Wno-suggest-override" _PAGMO_GCC_SUPPORTS_NO_OVERRIDE)
     unset(CMAKE_REQUIRED_QUIET)
