@@ -72,6 +72,15 @@ struct PAGMO_DLL_PUBLIC task_queue {
         m_cond.notify_one();
         return res;
     }
+    // factory method which returns a pointer to a task_queue from a static pool
+    static task_queue *from_pool()
+    {
+        static const auto pool_size = std::max(std::thread::hardware_concurrency(), 4u);
+        // Meyers Singleton task_queue pool, thread-safe init guaranteed in C++11 onwards
+        static std::vector<task_queue> pool(pool_size);
+        static std::atomic<unsigned long> index = 0;
+        return &pool[(index++) % pool.size()];
+    }
     // NOTE: we call this only from dtor, it is here in order to be able to test it.
     // So the exception handling in dtor will suffice, keep it in mind if things change.
     void stop();

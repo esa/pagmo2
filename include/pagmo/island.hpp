@@ -275,7 +275,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     template <typename Algo, typename Pop>
     explicit island_data(Algo &&a, Pop &&p)
         : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
-          pop(std::make_shared<population>(std::forward<Pop>(p)))
+          pop(std::make_shared<population>(std::forward<Pop>(p))), queue_ptr(task_queue::from_pool())
     {
         island_factory(*algo, *pop, isl_ptr);
     }
@@ -284,7 +284,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
         : isl_ptr(std::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
-          pop(std::make_shared<population>(std::forward<Pop>(p)))
+          pop(std::make_shared<population>(std::forward<Pop>(p))), queue_ptr(task_queue::from_pool())
     {
     }
     // A tag to distinguish ctors with policy arguments.
@@ -295,7 +295,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     explicit island_data(ptag, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
         : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
-          s_pol(std::forward<SPol>(s))
+          s_pol(std::forward<SPol>(s)), queue_ptr(task_queue::from_pool())
     {
         island_factory(*algo, *pop, isl_ptr);
     }
@@ -305,7 +305,7 @@ struct PAGMO_DLL_PUBLIC island_data {
         : isl_ptr(std::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
-          s_pol(std::forward<SPol>(s))
+          s_pol(std::forward<SPol>(s)), queue_ptr(task_queue::from_pool())
     {
     }
     // This is used only in the copy ctor of island. The island will come from the clone()
@@ -345,7 +345,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
     archipelago *archi_ptr = nullptr;
-    task_queue queue;
+    task_queue *queue_ptr;
 };
 } // namespace detail
 
