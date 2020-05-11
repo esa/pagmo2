@@ -7,12 +7,32 @@ C++ tutorial
   :maxdepth: 1
 
   cpp_tut_preliminaries
-  cpp_tut_first_problem
 
-Basics
-^^^^^^
+
+First Problem
+^^^^^^^^^^^^^
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 1
 
-  evolving_a_population
+  cpp_tut_first_problem
+  cpp_tut_first_problem_solving
+  cpp_tut_first_problem_parallel
+  cpp_tut_next_steps
+
+
+Additional Problems
+^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  cpp_tut_bin_packing
+
+Advanced Topics
+^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 1
+
+  cpp_tut_implement_optimizer

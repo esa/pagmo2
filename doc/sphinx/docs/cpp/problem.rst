@@ -1,3 +1,5 @@
+.. _cpp_problem:
+
 Problem
 =======
 

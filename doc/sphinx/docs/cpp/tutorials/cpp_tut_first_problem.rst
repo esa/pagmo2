@@ -1,3 +1,5 @@
+.. _cpp_tut_first_problem:
+
 Writing your first optimisation problem
 =======================================
 
@@ -10,7 +12,7 @@ A simple problem
 ----------------
 
 We will be considering the minimisation of
-the multidimensional objective function
+the multidimensional objective function (:ref:`Hock Schittkowsky No.71 <hock_schittkowsky>`)
 
 .. math::
 

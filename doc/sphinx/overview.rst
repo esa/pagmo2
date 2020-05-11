@@ -38,6 +38,8 @@ Overview
   (e.g., hypervolume computation, non-dominated
   sorting, plotting, etc.).
 
+.. _available_algorithms_problems:
+
 List of algorithms
 ------------------
 
@@ -64,6 +66,8 @@ to use :ref:`meta-problems <available_meta_problems>`
 to turn constrained problems into unconstrained ones, and multi-objective
 problems into single-objective ones.
 
+.. _heuristic_global_optimization:
+
 Heuristic Global Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ========================================================== ========================================= =========================
@@ -89,6 +93,8 @@ Multi-objective Hypervolume-based ACO (MHACO)              :cpp:class:`pagmo::ma
 Non-dominated Sorting PSO (NSPSO)                          :cpp:class:`pagmo::nspso`                 M-U
 ========================================================== ========================================= =========================
 
+.. _local_optimization:
+
 Local optimization 
 ^^^^^^^^^^^^^^^^^^
 ====================================================== ============================================================================================= ===============
@@ -111,6 +117,8 @@ Ipopt                                                  :cpp:class:`pagmo::ipopt`
 SNOPT (in pagmo_plugins_non_free affiliated package)   `pagmo::snopt7 <https://esa.github.io/pagmo_plugins_nonfree/cpp_snopt7.html>`__               S-CU
 WORHP (in pagmo_plugins_non_free affiliated package)   `pagmo::wohrp <https://esa.github.io/pagmo_plugins_nonfree/cpp_worhp.html>`__                 S-CU
 ====================================================== ============================================================================================= ===============
+
+.. _meta_algorithms:
 
 Meta-algorithms
 ^^^^^^^^^^^^^^^
@@ -148,7 +156,7 @@ according to the following flags:
 * U = Unconstrained
 * I = Integer programming
 * sto = Stochastic
-
+.. _available_meta_problems:
 Scalable problems
 ^^^^^^^^^^^^^^^^^
 ========================================================== ========================================= ===============
