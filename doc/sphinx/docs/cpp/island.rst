@@ -1,3 +1,5 @@
+.. _cpp_island:
+
 Island
 ======
 

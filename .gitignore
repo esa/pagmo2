@@ -1,10 +1,11 @@
 # Build dirs.
-build*
+*build*
 
 # Temp files.
 *~
 *.bak
 .DS_Store
+\.idea/
 
 # .orig files from patch.
 *.orig

@@ -1,16 +1,18 @@
-Writing your first optimisation problem
+.. _cpp_tut_first_problem:
+
+Writing your first optimization problem
 =======================================
 
-A fundamental requirement of any optimisation
-library is the ability to represent an optimisation
+A fundamental requirement of any optimization
+library is the ability to represent an optimization
 problem to be solved. In this section, our
 goal is to show how this is done in pagmo.
 
 A simple problem
 ----------------
 
-We will be considering the minimisation of
-the multidimensional objective function
+We will be considering the minimization of
+the multidimensional objective function (:ref:`Hock Schittkowsky No.71 <hock_schittkowsky>`)
 
 .. math::
 
@@ -31,7 +33,7 @@ and to the constraints
       25 - x_1 x_2 x_3 x_4 &\le 0.
    \end{align}
 
-In pagmo's taxonomy, this optimisation problem is
+In pagmo's taxonomy, this optimization problem is
 
 * *continuous* (because :math:`x_{1,2,3,4}` are real variables),
 * *deterministic* (as neither the objectives nor the constraints depend
@@ -56,7 +58,7 @@ the constraints at a later stage.
 The bare necessities
 --------------------
 
-In pagmo, an optimisation problem must provide
+In pagmo, an optimization problem must provide
 at the very least an objective function and
 the box bounds. Let's see how this is done
 for our simple example problem:
@@ -75,7 +77,7 @@ After the inclusion of the necessary header files, and a helpful
    using namespace pagmo;
 
 to reduce typing, we reach the definition
-of our optimisation
+of our optimization
 problem via a class called ``problem_v0``. As explained
 in the :ref:`section about type erasure <cpp_tut_type_erasure>`,
 this class does not need to derive from any base class.
@@ -98,7 +100,7 @@ it is used to return not only the value of the objective function,
 but also of the constraints (thus in some sense it computes the
 overall "fitness"
 of the input decision vector). In this specific case, however,
-our optimisation problem does not have constraints yet,
+our optimization problem does not have constraints yet,
 and thus the ``fitness()`` implementation just returns
 a vector of size 1 whose only element is the value
 of the (single) objective function:
@@ -130,7 +132,7 @@ via the sizes of the returned lower/upper bounds vectors
 Meet pagmo::problem
 -------------------
 
-After the definition of our optimisation problem, ``problem_v0``,
+After the definition of our optimization problem, ``problem_v0``,
 we encounter the ``main()`` function. In the ``main()``, the first
 thing we do is to construct a :cpp:class:`pagmo::problem` from an
 instance of ``problem_v0``:
@@ -140,12 +142,12 @@ instance of ``problem_v0``:
    problem p{problem_v0{}};
 
 :cpp:class:`pagmo::problem` is pagmo's
-:ref:`type-erased <cpp_tut_type_erasure>` interface to optimisation
+:ref:`type-erased <cpp_tut_type_erasure>` interface to optimization
 problems. It is a generic container which can store internally
-an instance of any class which "acts like" an optimisation problem,
+an instance of any class which "acts like" an optimization problem,
 that is, any class which provides (at least) the two member functions
 described earlier (``fitness()`` and ``get_bounds()``). In the pagmo
-jargon, we refer to classes which "act like" optimisation problems
+jargon, we refer to classes which "act like" optimization problems
 as *user-defined problems*, or UDPs.
 
 In addition to storing a UDP (which, by itself, would not be
@@ -201,11 +203,11 @@ summary that may look like this:
 
 Quite a mouthful! Do not worry about deciphering this
 output right now, as we will examine the more intricate
-aspects of the definition of an optimisation problem in due time.
+aspects of the definition of an optimization problem in due time.
 
 For now, let us just point out that, from our simple
 UDP definition, pagmo was able to infer
-on its own various properties of the optimisation problem
+on its own various properties of the optimization problem
 (e.g., the problem dimension, the number of objectives,
 the absence of constraints, etc.). pagmo is able to do this
 thanks to both introspection capabilities (based on template
@@ -229,7 +231,7 @@ Let us see the code:
    :diff: ../../../../../tutorials/first_udp_ver0.cpp
 
 In order to specify the type and number of constraints in our
-optimisation problem, we have to implement the two member
+optimization problem, we have to implement the two member
 functions ``get_nec()``, which returns the number of equality
 constraints, and ``get_nic()``, which returns the number of
 inequality constraints:

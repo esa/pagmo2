@@ -1,3 +1,5 @@
+.. _cpp_api_documentation:
+
 C++ API documentation
 =====================
 
