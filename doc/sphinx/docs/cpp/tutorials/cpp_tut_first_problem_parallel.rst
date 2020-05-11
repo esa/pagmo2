@@ -4,19 +4,19 @@ Parallelizing your first UDP
 ============================
 
 In the :ref:`definition section <cpp_tut_first_problem>`
-we showed how to make a User Defined Problem.
+we showed how a User Defined Problem is constructed.
 In the :ref:`previous section <cpp_tut_first_problem_solve>`
 we showed how to solve this problem with two different optimizers.
 
 If you executed the example from the previous section, you probably noticed that this setup executes almost immediately
 as the population and the number of generations is small.
-However, finding good solutions to optimisation problems often takes a much larger population and higher number of generations
+However, finding good solutions to optimization problems can take a much larger population and higher number of generations
 and hence significant amount of time.
-Thus, parallelisation of the optimisation can be extremely important.
+Thus, parallelization of the optimization can be extremely important.
 
-In pagmo parallelisation is achieved via :ref:`islands <cpp_island>` and :ref:`archipelagos <cpp_archipelago>`.
+In pagmo parallelization is achieved via :ref:`islands <cpp_island>` and :ref:`archipelagos <cpp_archipelago>`.
 **Islands** are used to asynchronously evolve populations. So one can launch multiple islands to evolve populations in parallel.
-An **archipelago** is a collection of islands, and we can use the different islands to evolve a population in parallel.
+An **archipelago** is a collection of islands which we can use to evolve a population in parallel.
 
 
 Archipelagos for Parallelization
@@ -30,8 +30,8 @@ The difference between the sequential and parallel solutions are as follows.
    :diff: ../../../../../tutorials/first_udp_ver1_solve.cpp
 
 Thus, as in the previous sections we create the problem and create the algorithm to solve the problem.
-However, instead of constructing a single population we construct a :cpp:class:'pagmo::archipelago'.
-An archipelago is a collection of :cpp:class:'pagmo::island' objects, in this case the archipelago consists of *16 islands*.
+However, instead of constructing a single population we construct a :cpp:class:`pagmo::archipelago`.
+An archipelago is a collection of :cpp:class:`pagmo::island` objects, in this case the archipelago consists of *16 islands*.
 Additional parameters required for constructing the islands is the problem (*prob*) and algorithm (*algo*)
 along with the population size of each island (*1000*).
 
@@ -39,7 +39,7 @@ along with the population size of each island (*1000*).
 
     archipelago archi{16, algo, p, 1000};;
 
-Next we call ``archi.evolve(1)`` this means that the population on each island is evolved **once** for 1000 generations
+Next we call ``archi.evolve(1)``, this function call evolves the population of each island **once** for 1000 generations
 (defined when setting up the algorithm).
 
 .. code-block:: c++
@@ -78,7 +78,7 @@ the following changes:
    :language: c++
    :diff: ../../../../../tutorials/first_udp_ver1_solve_parallel.cpp
 
-We construct a :cpp:class:'pagmo::fully_connected::fully_connected' topology.
+We construct a :cpp:class:`pagmo::fully_connected` topology.
 
 .. code-block:: c++
 

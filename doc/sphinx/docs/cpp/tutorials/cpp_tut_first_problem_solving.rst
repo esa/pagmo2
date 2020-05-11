@@ -19,29 +19,25 @@ i.e., your *population*.
 
 In this section we continue with the simple UDP
 from the :ref:`previous section <cpp_tut_first_problem>`
-and look at ways to minimise it. The following example shows the use with no
-multithreading of an algoritmic evolution.
+and look at ways to minimize it. The following example shows the use with of an evolutionary algorithm.
 
 As previously defined the problem is
 *continuous*, *deterministic*, *single objective* and *constrained*.
 Looking at the :ref:`algorithms table <available_algorithms_problems>`
-we can find multiple applicable optimisation algorithms.
+we can find multiple applicable optimization algorithms.
 
-From the :ref:`global optimisation heuristics <_heuristic_global_optimization>` we could use
+From the :ref:`global optimization heuristics <_heuristic_global_optimization>` we could use
 Extended Ant Colony Optimization (:cpp:class:`pagmo::gaco`) or
 Improved Harmony Search (:cpp:class:`pagmo::ihs`).
-There are other optimisation algorithms in the
-:ref:`local optimization  <_local_optimization>` and
-:ref:` meta algorithms <_meta_algorithms>` sections that could be used instead.
 
 Ant Colony Optimization
 -----------------------
 
 Lets see how we can optimize the problem from the :ref:`previous section <cpp_tut_first_problem>`.
-We import the necessary packages and define the problem (``problem_v0``), as in the previous section.
+We import the necessary packages and define the problem (``problem_v1``), as in the previous section.
 
 .. literalinclude:: ../../../../../tutorials/first_udp_ver1_solve.cpp
-   :caption: first_udp_ver0.cpp
+   :caption: first_udp_ver1_solve.cpp
    :language: c++
    :linenos:
 
@@ -51,20 +47,20 @@ In the ``main`` function we then specify the pagmo problem as was done before.
 
     problem prob{problem_v1{}};
 
-The code after that is the part that we are interested in.
-First we define the algorithm that we want to use for the optimization,
+The code after this is the part that we are interested in.
+First we define the algorithm that we want to use for the optimization (:cpp:class:`pagmo::gaco`),
 where *1000* is the number of generations.
 
 .. code-block:: c++
 
     algorithm algo{gaco(1000)};
 
-The next step is to initialize the population (i.e. a number of random solutions) for the problem.
-This is done by passing the problem *p* to the ``pop`` function together with the *population size*.
+The next step is to initialie the population (i.e. a number of random solutions) for the problem.
+This is done by passing the problem *prob* to the ``pop`` function together with the *population size*.
 
 .. code-block:: c++
 
-    population pop{p, 100};
+    population pop{prob, 100};
 
 Third to actually evolve (i.e. optimize) the population
 we pass the generated population (pop) to the ``algo.evolve`` function.
@@ -94,7 +90,7 @@ as well as the results of the objective function and constraints (*Champion fitn
 Improved Harmony Search
 -----------------------
 
-Switching to an alternative optimizer is straightforward.
+Switching to an alternative optimiser is straightforward.
 If we want to use the Improved Harmony Search instead of GACO,
 we include the header and change the algorithm definition:
 
