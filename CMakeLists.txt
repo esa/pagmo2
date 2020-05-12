@@ -258,8 +258,7 @@ set(PAGMO_SRC_FILES
     # Detail.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/gte_getter.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/type_name.cpp"
 )
@@ -353,10 +352,7 @@ target_link_libraries(pagmo PUBLIC Threads::Threads)
 target_link_libraries(pagmo PUBLIC Boost::boost Boost::serialization)
 
 # TBB.
-# NOTE: TBB is a private dependency because
-# all uses of TBB are limited to the .cpp files,
-# thus fully encapsulated in the pagmo library.
-target_link_libraries(pagmo PRIVATE TBB::tbb)
+target_link_libraries(pagmo PUBLIC TBB::tbb)
 
 if(PAGMO_WITH_EIGEN3)
     # Link pagmo to eigen3.

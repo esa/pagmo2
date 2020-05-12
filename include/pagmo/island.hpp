@@ -47,13 +47,14 @@ see https://www.gnu.org/licenses/. */
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_virtual_base_of.hpp>
 
+#include <tbb/task_group.h>
+
 #include <pagmo/algorithm.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/config.hpp>
 #include <pagmo/detail/archipelago_fwd.hpp>
 #include <pagmo/detail/island_fwd.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
-#include <pagmo/detail/task_queue.hpp>
 #include <pagmo/detail/type_name.hpp>
 #include <pagmo/detail/typeid_name_extract.hpp>
 #include <pagmo/detail/visibility.hpp>
@@ -270,12 +271,13 @@ PAGMO_DLL_PUBLIC extern std::function<void(const algorithm &, const population &
 // is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
 struct PAGMO_DLL_PUBLIC island_data {
     island_data();
+    ~island_data() { tg.wait(); }
     // This is the main ctor, from an algo and a population. The UDI type will be selected
     // by the island_factory functor.
     template <typename Algo, typename Pop>
     explicit island_data(Algo &&a, Pop &&p)
         : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
-          pop(std::make_shared<population>(std::forward<Pop>(p))), queue_ptr(task_queue::from_pool())
+          pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
         island_factory(*algo, *pop, isl_ptr);
     }
@@ -284,7 +286,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     explicit island_data(Isl &&isl, Algo &&a, Pop &&p)
         : isl_ptr(std::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
-          pop(std::make_shared<population>(std::forward<Pop>(p))), queue_ptr(task_queue::from_pool())
+          pop(std::make_shared<population>(std::forward<Pop>(p)))
     {
     }
     // A tag to distinguish ctors with policy arguments.
@@ -295,7 +297,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     explicit island_data(ptag, Algo &&a, Pop &&p, RPol &&r, SPol &&s)
         : algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
-          s_pol(std::forward<SPol>(s)), queue_ptr(task_queue::from_pool())
+          s_pol(std::forward<SPol>(s))
     {
         island_factory(*algo, *pop, isl_ptr);
     }
@@ -305,7 +307,7 @@ struct PAGMO_DLL_PUBLIC island_data {
         : isl_ptr(std::make_unique<isl_inner<uncvref_t<Isl>>>(std::forward<Isl>(isl))),
           algo(std::make_shared<algorithm>(std::forward<Algo>(a))),
           pop(std::make_shared<population>(std::forward<Pop>(p))), r_pol(std::forward<RPol>(r)),
-          s_pol(std::forward<SPol>(s)), queue_ptr(task_queue::from_pool())
+          s_pol(std::forward<SPol>(s))
     {
     }
     // This is used only in the copy ctor of island. The island will come from the clone()
@@ -345,7 +347,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
     archipelago *archi_ptr = nullptr;
-    task_queue *queue_ptr;
+    tbb::task_group tg;
 };
 } // namespace detail
 
