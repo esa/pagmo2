@@ -50,7 +50,7 @@ namespace detail
 // otherwise Requires dimensions of the parent and bounds to be equal -> out of bound reads. dim_i is the integer
 // dimension (integer alleles assumed at the end of the chromosome)
 
-std::pair<vector_double, vector_double> sbx_crossover(const vector_double &parent1, const vector_double &parent2,
+std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &parent1, const vector_double &parent2,
                                                       const std::pair<vector_double, vector_double> &bounds,
                                                       vector_double::size_type dim_i, const double p_cr,
                                                       const double eta_c, detail::random_engine_type &random_engine)
@@ -134,7 +134,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
 
 // Performs polynomial mutation. Requires all sizes to be consistent. Does not check if input is well formed.
 // p_m is the mutation probability, eta_m the distibution index
-void polynomial_mutation(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
+void polynomial_mutation_impl(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
                          vector_double::size_type dim_i, const double p_m, const double eta_m,
                          detail::random_engine_type &random_engine)
 {
@@ -186,7 +186,7 @@ void polynomial_mutation(vector_double &child, const std::pair<vector_double, ve
 }
 
 // Multi-objective tournament selection. Requires all sizes to be consistent. Does not check if input is well formed.
-vector_double::size_type mo_tournament_selection(vector_double::size_type idx1, vector_double::size_type idx2,
+vector_double::size_type mo_tournament_selection_impl(vector_double::size_type idx1, vector_double::size_type idx2,
                                                  const std::vector<vector_double::size_type> &non_domination_rank,
                                                  const std::vector<double> &crowding_d,
                                                  detail::random_engine_type &random_engine)

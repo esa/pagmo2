@@ -239,7 +239,7 @@ population moead::evolve(population pop) const
                 }
             }
             // 6 - We apply a further mutation using polynomial mutation
-            detail::polynomial_mutation(candidate, bounds, 0u, 1.0 / static_cast<double>(dim), m_eta_m, m_e);
+            detail::polynomial_mutation_impl(candidate, bounds, 0u, 1.0 / static_cast<double>(dim), m_eta_m, m_e);
             // 7- We evaluate the fitness function.
             auto new_f = prob.fitness(candidate);
             // 8 - We update the ideal point

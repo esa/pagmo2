@@ -212,23 +212,23 @@ population nsga2::evolve(population pop) const
             std::vector<unsigned long> fidtemp;
             for (decltype(NP) i = 0u; i < NP; i += 4) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = detail::mo_tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
-                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
+                children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
-                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
 
                 poptemp.push_back(children.first);
                 poptemp.push_back(children.second);
 
                 // We repeat with the shuffled list 2
-                parent1_idx = detail::mo_tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
-                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
+                children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
-                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
                 poptemp.push_back(children.first);
@@ -265,12 +265,12 @@ population nsga2::evolve(population pop) const
             // bfe not available:
             for (decltype(NP) i = 0u; i < NP; i += 4) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = detail::mo_tournament_selection(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
-                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
+                children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
-                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
                 auto f1 = prob.fitness(children.first);
@@ -279,12 +279,12 @@ population nsga2::evolve(population pop) const
                 popnew.push_back(children.second, f2);
 
                 // We repeat with the shuffled list 2
-                parent1_idx = detail::mo_tournament_selection(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
-                children = detail::sbx_crossover(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
+                children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                  m_cr, m_eta_c, m_e);
-                detail::polynomial_mutation(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
-                detail::polynomial_mutation(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
+                detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
                 f1 = prob.fitness(children.first);
