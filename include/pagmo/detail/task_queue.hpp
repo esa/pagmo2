@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <mutex>
 #include <queue>
+#include <shared_mutex>
 #include <stdexcept>
 #include <utility>
 
@@ -46,6 +47,45 @@ namespace pagmo
 
 namespace detail
 {
+
+struct task_queue;
+struct task_queue_thread;
+
+static std::mutex task_queue_thread_park_mutex{};
+static std::queue<std::unique_ptr<task_queue_thread>> task_queue_thread_park{};
+
+struct PAGMO_DLL_PUBLIC task_queue_thread {
+    task_queue_thread();
+    ~task_queue_thread();
+    static std::unique_ptr<task_queue_thread> get()
+    {
+        if (task_queue_thread_park.empty()) {
+            return std::make_unique<task_queue_thread>();
+        } else {
+            std::unique_lock lock{task_queue_thread_park_mutex};
+            // Repeat the emptiness check as the answer could have changed while
+            // waiting for the lock to be granted.
+            if (task_queue_thread_park.empty()) {
+                return std::make_unique<task_queue_thread>();
+            } else {
+                auto thread = std::move(task_queue_thread_park.front());
+                task_queue_thread_park.pop();
+                return thread;
+            }
+        }
+    }
+    // NOTE: we call this only from dtor, it is here in order to be able to test it.
+    // So the exception handling in dtor will suffice, keep it in mind if things change.
+    void stop();
+    void park();
+    void unpark(task_queue *queue);
+    // Data members.
+    bool m_park, m_stop;
+    std::condition_variable m_cond, m_park_cond;
+    std::mutex m_mutex, m_park_mutex;
+    task_queue *m_queue;
+    std::thread m_thread;
+};
 
 struct PAGMO_DLL_PUBLIC task_queue {
     task_queue();
@@ -61,26 +101,27 @@ struct PAGMO_DLL_PUBLIC task_queue {
         auto task = std::make_shared<p_task_type>(std::forward<F>(f));
         std::future<void> res = task->get_future();
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
-            if (m_stop) {
-                // Enqueueing is not allowed if the queue is stopped.
-                pagmo_throw(std::runtime_error, "cannot enqueue task while the task queue is stopping");
+            std::unique_lock<std::mutex> lock(m_thread->m_mutex);
+            if (m_thread->m_queue == nullptr) {
+                pagmo_throw(std::runtime_error, "cannot enqueue task if the thread is parked");
+            } else if (m_thread->m_queue != this) {
+                pagmo_throw(std::runtime_error, "cannot enqueue task if the thread is no longer watching this queue");
+            } else if (m_thread->m_park) {
+                pagmo_throw(std::runtime_error, "cannot enqueue task if the task queue thread is parking");
+            } else {
+                m_tasks.push([task]() { (*task)(); });
+                // NOTE: notify_one is noexcept.
+                m_thread->m_cond.notify_one();
             }
-            m_tasks.push([task]() { (*task)(); });
         }
-        // NOTE: notify_one is noexcept.
-        m_cond.notify_one();
         return res;
     }
     // NOTE: we call this only from dtor, it is here in order to be able to test it.
     // So the exception handling in dtor will suffice, keep it in mind if things change.
     void stop();
     // Data members.
-    bool m_stop;
-    std::condition_variable m_cond;
-    std::mutex m_mutex;
     std::queue<std::function<void()>> m_tasks;
-    std::thread m_thread;
+    std::unique_ptr<task_queue_thread> m_thread;
 };
 
 } // namespace detail
