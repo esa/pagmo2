@@ -234,6 +234,7 @@ vector_double::size_type mo_tournament_selection_impl(vector_double::size_type i
  * - lower bounds greater than upper bounds.
  * - integer part larger than bounds size.
  * - integer bounds not integers.
+ * - crossover probability or distribution index are not finite numbers.
  *
  * @returns the crossovered children
  */
@@ -265,14 +266,70 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
         }
     }
     if (!std::isfinite(p_cr)) {
-        pagmo_throw(std::invalid_argument,
-                    "Crossover probability is not finite, value is: " + std::to_string(p_cr));
+        pagmo_throw(std::invalid_argument, "Crossover probability is not finite, value is: " + std::to_string(p_cr));
     }
     if (!std::isfinite(eta_c)) {
         pagmo_throw(std::invalid_argument,
                     "Crossover distribution index is not finite, value is: " + std::to_string(eta_c));
     }
     return detail::sbx_crossover_impl(parent1, parent2, bounds, nix, p_cr, eta_c, random_engine);
+}
+
+/// Polynomial mutation
+/**
+ * This function performs the polynomial mutation proposed by Agrawal and Deb over some chromosome.
+ * 
+ * @see https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+ *
+ * Example:
+ * @code{.unparsed}
+ * detail::random_engine_type random_engine(32u);
+ * vector_double child = {-1.13, 3.21, 4}; 
+ * polynomial_mutation(child, {{-2,-2,-2}, {5,5,5}}, 1u, 0.9, 35, r_engine);
+ * @endcode
+ *
+ * @param dv chromosome to be mutated.
+ * @param bounds problem bounds.
+ * @param nix integer dimension of the problem.
+ * @param p_m mutation probability.
+ * @param eta_m mutation distribution index (siggested to be in [20, 100]).
+ * @param random_engine the pagmo random engine
+ *
+ * @throws std::invalid_argument if:
+ * - the *bounds* size is zero.
+ * - inconsistent lengths of *child* and *bounds*.
+ * - nans or infs in the bounds.
+ * - lower bounds greater than upper bounds.
+ * - integer part larger than bounds size.
+ * - integer bounds not integers.
+ * - mutation probability or distribution index are not finite numbers.
+ */
+void polynomial_mutation(vector_double &dv, const std::pair<vector_double, vector_double> &bounds,
+                         vector_double::size_type nix, const double p_m, const double eta_m,
+                         detail::random_engine_type &random_engine)
+{
+    detail::check_problem_bounds(bounds, nix);
+    if (dv.size() != bounds.first.size()) {
+        pagmo_throw(
+            std::invalid_argument,
+            "The length of the chromosome should be the same as that of the bounds: detected length is "
+                + std::to_string(dv.size()) + ", while the bounds length is "
+                + std::to_string(bounds.first.size()));
+    }
+    for (decltype(bounds.first.size()) i = 0u; i < bounds.first.size(); ++i) {
+        if (!(std::isfinite(bounds.first[i]) && std::isfinite(bounds.second[i]))) {
+            pagmo_throw(std::invalid_argument, "Infinite value detected in the bounds at position: " + std::to_string(i)
+                                                   + ". Cannot perform Simulated Binary Crossover.");
+        }
+    }
+    if (!std::isfinite(p_m)) {
+        pagmo_throw(std::invalid_argument, "Mutation probability is not finite, value is: " + std::to_string(p_m));
+    }
+    if (!std::isfinite(eta_m)) {
+        pagmo_throw(std::invalid_argument,
+                    "Mutation distribution index is not finite, value is: " + std::to_string(eta_m));
+    }
+    return detail::polynomial_mutation_impl(dv, bounds, nix, p_m, eta_m, random_engine);
 }
 
 } // namespace pagmo
