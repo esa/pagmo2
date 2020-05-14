@@ -40,21 +40,33 @@ namespace pagmo
 
 namespace detail
 {
-PAGMO_DLL_PUBLIC std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &, const vector_double &,
+std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &, const vector_double &,
+                                                           const std::pair<vector_double, vector_double> &,
+                                                           vector_double::size_type, const double, const double,
+                                                           detail::random_engine_type &);
+
+void polynomial_mutation_impl(vector_double &, const std::pair<vector_double, vector_double> &,
+                              vector_double::size_type, const double, const double, detail::random_engine_type &);
+
+vector_double::size_type mo_tournament_selection_impl(vector_double::size_type, vector_double::size_type,
+                                                      const std::vector<vector_double::size_type> &,
+                                                      const std::vector<double> &, detail::random_engine_type &);
+
+} // namespace detail
+
+PAGMO_DLL_PUBLIC std::pair<vector_double, vector_double> sbx_crossover(const vector_double &, const vector_double &,
                                                                        const std::pair<vector_double, vector_double> &,
                                                                        vector_double::size_type, const double,
                                                                        const double, detail::random_engine_type &);
 
-PAGMO_DLL_PUBLIC void polynomial_mutation_impl(vector_double &, const std::pair<vector_double, vector_double> &,
+PAGMO_DLL_PUBLIC void polynomial_mutation(vector_double &, const std::pair<vector_double, vector_double> &,
                                           vector_double::size_type, const double, const double,
                                           detail::random_engine_type &);
 
-PAGMO_DLL_PUBLIC vector_double::size_type mo_tournament_selection_impl(vector_double::size_type, vector_double::size_type,
+PAGMO_DLL_PUBLIC vector_double::size_type mo_tournament_selection(vector_double::size_type, vector_double::size_type,
                                                                   const std::vector<vector_double::size_type> &,
                                                                   const std::vector<double> &,
                                                                   detail::random_engine_type &);
-
-} // namespace detail
 
 } // namespace pagmo
 

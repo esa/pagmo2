@@ -33,11 +33,15 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #include <random>
+#include <string>
 #include <utility>
 
+#include <pagmo/exceptions.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 
 namespace pagmo
 {
@@ -47,17 +51,18 @@ namespace detail
 
 // Implementation of the binary crossover.
 // Requires the distribution index eta_c in [1, 100], crossover probability p_cr  in[0,1] -> undefined algo behaviour
-// otherwise Requires dimensions of the parent and bounds to be equal -> out of bound reads. dim_i is the integer
+// otherwise Requires dimensions of the parent and bounds to be equal -> out of bound reads. nix is the integer
 // dimension (integer alleles assumed at the end of the chromosome)
 
 std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &parent1, const vector_double &parent2,
-                                                      const std::pair<vector_double, vector_double> &bounds,
-                                                      vector_double::size_type dim_i, const double p_cr,
-                                                      const double eta_c, detail::random_engine_type &random_engine)
+                                                           const std::pair<vector_double, vector_double> &bounds,
+                                                           vector_double::size_type nix, const double p_cr,
+                                                           const double eta_c,
+                                                           detail::random_engine_type &random_engine)
 {
     // Decision vector dimensions
-    auto dim = parent1.size();
-    auto dim_c = dim - dim_i;
+    auto nx = parent1.size();
+    auto ncx = nx - nix;
     // Problem bounds
     const vector_double &lb = bounds.first;
     const vector_double &ub = bounds.second;
@@ -70,10 +75,10 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
     // Random distributions
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
 
-    // This implements a Simulated Binary Crossover SBX and applies it to the non integer part of the decision
-    // vector
-    if (drng(random_engine) < p_cr) {
-        for (decltype(dim_c) i = 0u; i < dim_c; i++) {
+    // This implements a Simulated Binary Crossover SBX
+    if (drng(random_engine) < p_cr) { // No crossever at all will happen with probability p_cr
+        for (decltype(ncx) i = 0u; i < ncx; i++) {
+            // Each chromosome value has 0.5 probability to be crossovered.
             if ((drng(random_engine) < 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
                 if (parent1[i] < parent2[i]) {
                     y1 = parent1[i];
@@ -115,9 +120,9 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
             }
         }
 
-        // This implements two-point binary crossover and applies it to the integer part of the chromosome.
-        if (dim_i > 1) {
-            std::uniform_int_distribution<vector_double::size_type> ra_num(dim_c, dim - 1u);
+        // This implements two-points binary crossover and applies it to the integer part of the chromosome.
+        if (nix > 1) {
+            std::uniform_int_distribution<vector_double::size_type> ra_num(ncx, nx - 1u);
             site1 = ra_num(random_engine);
             site2 = ra_num(random_engine);
             if (site1 > site2) {
@@ -135,12 +140,12 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
 // Performs polynomial mutation. Requires all sizes to be consistent. Does not check if input is well formed.
 // p_m is the mutation probability, eta_m the distibution index
 void polynomial_mutation_impl(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
-                         vector_double::size_type dim_i, const double p_m, const double eta_m,
-                         detail::random_engine_type &random_engine)
+                              vector_double::size_type nix, const double p_m, const double eta_m,
+                              detail::random_engine_type &random_engine)
 {
     // Decision vector dimensions
-    auto dim = child.size();
-    auto dim_c = dim - dim_i;
+    auto nx = child.size();
+    auto ncx = nx - nix;
     // Problem bounds
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
@@ -150,7 +155,7 @@ void polynomial_mutation_impl(vector_double &child, const std::pair<vector_doubl
     // Random distributions
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
     // This implements the real polinomial mutation and applies it to the non integer part of the decision vector
-    for (decltype(dim_c) j = 0u; j < dim_c; ++j) {
+    for (decltype(ncx) j = 0u; j < ncx; ++j) {
         if (drng(random_engine) < p_m && lb[j] != ub[j]) {
             y = child[j];
             yl = lb[j];
@@ -176,7 +181,7 @@ void polynomial_mutation_impl(vector_double &child, const std::pair<vector_doubl
     }
 
     // This implements the integer mutation for an individual
-    for (decltype(dim) j = dim_c; j < dim; ++j) {
+    for (decltype(nx) j = ncx; j < nx; ++j) {
         if (drng(random_engine) < p_m) {
             // We need to draw a random integer in [lb, ub].
             auto mutated = uniform_integral_from_range(lb[j], ub[j], random_engine);
@@ -187,9 +192,9 @@ void polynomial_mutation_impl(vector_double &child, const std::pair<vector_doubl
 
 // Multi-objective tournament selection. Requires all sizes to be consistent. Does not check if input is well formed.
 vector_double::size_type mo_tournament_selection_impl(vector_double::size_type idx1, vector_double::size_type idx2,
-                                                 const std::vector<vector_double::size_type> &non_domination_rank,
-                                                 const std::vector<double> &crowding_d,
-                                                 detail::random_engine_type &random_engine)
+                                                      const std::vector<vector_double::size_type> &non_domination_rank,
+                                                      const std::vector<double> &crowding_d,
+                                                      detail::random_engine_type &random_engine)
 {
     if (non_domination_rank[idx1] < non_domination_rank[idx2]) return idx1;
     if (non_domination_rank[idx1] > non_domination_rank[idx2]) return idx2;
@@ -200,4 +205,66 @@ vector_double::size_type mo_tournament_selection_impl(vector_double::size_type i
 }
 
 } // namespace detail
+
+/// Simulated Binary Crossover
+/**
+ * This function perform a simulated binary crossover (SBX) among two parents.
+ * The SBX crossover was designed to preserve average property and the spread factor
+ * property of one-point crossover in binary encoded chromosomes. The SBX will act as a simple
+ * two-points crossover over the integer part of the chromosome.
+ *
+ * Example:
+ * @code{.unparsed}
+ * detail::random_engine_type random_engine(32u);
+ * auto children = sbx_crossover({0.1, 0.2, 3}, {0.2, 2.2, -1}, {{-2,-2,-2}, {3,3,3}}, 1u, 0.9, 10, r_engine);
+ * @endcode
+ *
+ * @param parent1 first parent.
+ * @param parent2 second parent.
+ * @param bounds problem bounds.
+ * @param nix integer dimension of the problem.
+ * @param p_cr crossover probability.
+ * @param eta_c crossover distribution index.
+ * @param random_engine the pagmo random engine
+ *
+ * @throws std::invalid_argument if:
+ * - the *bounds* size is zero.
+ * - inconsistent lengths of *parent1*, *parent2* and *bounds*.
+ * - nans or infs in the bounds.
+ * - lower bounds greater than upper bounds.
+ * - integer part larger than bounds size.
+ * - integer bounds not integers.
+ *
+ * @returns the crossovered children
+ */
+std::pair<vector_double, vector_double> sbx_crossover(const vector_double &parent1, const vector_double &parent2,
+                                                      const std::pair<vector_double, vector_double> &bounds,
+                                                      vector_double::size_type nix, const double p_cr,
+                                                      const double eta_c, detail::random_engine_type &random_engine)
+{
+    // We reuse a check originally implemented for the pagmo::problem constructor. This allows to substantially shortens
+    // the explicit tests needed.
+    detail::check_problem_bounds(bounds, nix);
+    if (parent1.size() != parent2.size()) {
+        pagmo_throw(std::invalid_argument,
+                    "The length of the chromosomes of the parents should be equal: parent1 length is "
+                        + std::to_string(parent1.size()) + ", while parent2 length is "
+                        + std::to_string(parent2.size()));
+    }
+    if (parent1.size() != bounds.first.size()) {
+        pagmo_throw(
+            std::invalid_argument,
+            "The length of the chromosomes of the parents should be the same as that of the bounds: parent1 length is "
+                + std::to_string(parent1.size()) + ", while the bounds length is "
+                + std::to_string(bounds.first.size()));
+    }
+    for (decltype(bounds.first.size()) i = 0u; i < bounds.first.size(); ++i) {
+        if (!(std::isfinite(bounds.first[i])) && std::isfinite(bounds.second[i])) {
+            pagmo_throw(std::invalid_argument, "Infinite value detected in the bounds at position: " + std::to_string(i)
+                                                   + ". Cannot perform Simulated Binary Crossover.");
+        }
+    }
+    return detail::sbx_crossover_impl(parent1, parent2, bounds, nix, p_cr, eta_c, random_engine);
+}
+
 } // namespace pagmo
