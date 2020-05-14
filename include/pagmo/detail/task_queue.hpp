@@ -35,7 +35,6 @@ see https://www.gnu.org/licenses/. */
 #include <memory>
 #include <mutex>
 #include <queue>
-#include <shared_mutex>
 #include <stdexcept>
 #include <utility>
 
