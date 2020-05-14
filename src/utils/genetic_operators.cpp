@@ -225,7 +225,7 @@ vector_double::size_type mo_tournament_selection_impl(vector_double::size_type i
  * @param nix integer dimension of the problem.
  * @param p_cr crossover probability.
  * @param eta_c crossover distribution index.
- * @param random_engine the pagmo random engine
+ * @param random_engine the pagmo random engine.
  *
  * @throws std::invalid_argument if:
  * - the *bounds* size is zero.

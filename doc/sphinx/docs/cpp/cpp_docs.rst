@@ -139,6 +139,7 @@ Utilities
   utils/discrepancy
   utils/hypervolume
   utils/gradient_and_hessians
+  utils/genetic_operators
 
 Miscellanea
 ^^^^^^^^^^^

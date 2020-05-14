@@ -12,7 +12,7 @@ constrained optimization tasks.
 
 --------------------------------------------------------------------------
 
-.. doxygenfunction:: pagmo::sort_population_con(const std::vector<vector_double>&, vector_double::size_type, double)
+.. doxygenfunction:: pagmo::sort_population_con(const std::vector<vector_double> &input_f, vector_double::size_type neq, double tol)
 
 --------------------------------------------------------------------------
 
