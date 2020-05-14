@@ -32,6 +32,8 @@ see https://www.gnu.org/licenses/. */
 #include <thread>
 #include <utility>
 
+#include <tbb/concurrent_queue.h>
+
 #include <pagmo/detail/task_queue.hpp>
 
 namespace pagmo
@@ -97,6 +99,18 @@ task_queue_thread::task_queue_thread()
           }
       }))
 {
+}
+
+static tbb::concurrent_queue<std::unique_ptr<task_queue_thread>> task_queue_thread_park{};
+
+std::unique_ptr<task_queue_thread> task_queue_thread::get(task_queue *new_owner)
+{
+    std::unique_ptr<task_queue_thread> thread;
+    if (not task_queue_thread_park.try_pop(thread)) {
+        thread = std::make_unique<task_queue_thread>();
+    }
+    thread->unpark(new_owner);
+    return thread;
 }
 
 task_queue_thread::~task_queue_thread()

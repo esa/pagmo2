@@ -50,37 +50,16 @@ namespace detail
 struct task_queue;
 struct task_queue_thread;
 
-static std::mutex task_queue_thread_park_mutex{};
-static std::queue<std::unique_ptr<task_queue_thread>> task_queue_thread_park{};
-
 struct PAGMO_DLL_PUBLIC task_queue_thread {
     task_queue_thread();
     ~task_queue_thread();
-    static std::unique_ptr<task_queue_thread> get(task_queue *new_owner)
-    {
-        std::unique_ptr<task_queue_thread> thread;
-        if (task_queue_thread_park.empty()) {
-            thread = std::make_unique<task_queue_thread>();
-        } else {
-            std::unique_lock lock{task_queue_thread_park_mutex};
-            // Repeat the emptiness check as the answer could have changed while
-            // waiting for the lock to be granted.
-            if (task_queue_thread_park.empty()) {
-                thread = std::make_unique<task_queue_thread>();
-            } else {
-                thread = std::move(task_queue_thread_park.front());
-                task_queue_thread_park.pop();
-            }
-        }
-        thread->unpark(new_owner);
-        return thread;
-    }
+    static std::unique_ptr<task_queue_thread> get(task_queue *new_owner);
     // NOTE: we call this only from dtor, it is here in order to be able to test it.
     // So the exception handling in dtor will suffice, keep it in mind if things change.
     void stop(bool block = true);
     void park(bool block = true);
     void unpark(task_queue *queue);
-    enum tq_thread_state {WAITING_FOR_WORK, PARKING, PARKED, STOPPING, STOPPED };
+    enum tq_thread_state { WAITING_FOR_WORK, PARKING, PARKED, STOPPING, STOPPED };
     tq_thread_state state() const;
     // Data members.
     bool m_park_req, m_stop_req;
