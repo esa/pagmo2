@@ -63,11 +63,6 @@ PAGMO_DLL_PUBLIC void polynomial_mutation(vector_double &, const std::pair<vecto
                                           vector_double::size_type, const double, const double,
                                           detail::random_engine_type &);
 
-PAGMO_DLL_PUBLIC vector_double::size_type mo_tournament_selection(vector_double::size_type, vector_double::size_type,
-                                                                  const std::vector<vector_double::size_type> &,
-                                                                  const std::vector<double> &,
-                                                                  detail::random_engine_type &);
-
 } // namespace pagmo
 
 #endif
