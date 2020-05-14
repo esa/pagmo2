@@ -41,53 +41,47 @@ namespace detail
 {
 
 task_queue_thread::task_queue_thread()
-    : m_park(true), m_stop(false), m_queue(nullptr), m_thread(std::thread([this]() {
+    : m_park_req(false), m_stop_req(false), m_queue(nullptr), m_thread(std::thread([this]() {
           try {
               while (true) {
-                  // Wait for the thread to be awakened from parking by having
-                  // its new queue associated by a call to unpark(task_queue*)
                   {
-                      std::unique_lock<std::mutex> lock(this->m_mutex);
-                      while (!this->m_stop && this->m_queue == nullptr) {
-                          this->m_cond.wait(lock);
-                      }
+                      // Wait for the thread to be awakened from parking
+                      std::unique_lock<std::mutex> lock(m_mutex);
+                      m_unpark.wait(lock, [&]() { return state() != PARKED; });
+                      // Possible states here: STOPPED, WAITING_FOR_WORK, STOPPING (unlikely), PARKING (unlikely)
+                      if (state() == STOPPED) return;
                   }
-                  // Check if we've been asked to stop
-                  if (this->m_queue == nullptr && this->m_stop) return;
-                  // Otherwise we've been unparked, so set the flag accordingly
-                  // and inform the requesting thread
-                  {
-                      std::unique_lock<std::mutex> lock(this->m_park_mutex);
-                      this->m_park = false;
-                  }
-                  this->m_park_cond.notify_one();
-                  // Process work from the queue
+                  // Possible states here: WAITING_FOR_WORK, STOPPING (unlikely), PARKING (unlikely)
                   while (true) {
-                      std::unique_lock<std::mutex> lock(this->m_mutex);
-                      while (!this->m_park && !this->m_stop && this->m_queue->m_tasks.empty()) {
-                          this->m_cond.wait(lock);
-                      }
-                      if (this->m_queue->m_tasks.empty()) {
-                          // If we have no more tasks react to park or stop flags
-                          if (this->m_park) break;
-                          if (this->m_stop) return;
-                      } else {
+                      std::unique_lock<std::mutex> lock(m_mutex);
+                      m_main.wait(lock, [&]() { return state() != WAITING_FOR_WORK || !m_queue->m_tasks.empty(); });
+                      // Possible states here: WAITING_FOR_WORK, STOPPING, PARKING
+                      if (not m_queue->m_tasks.empty()) {
                           // NOTE: move constructor of std::function could throw, unfortunately.
-                          std::function<void()> task(std::move(this->m_queue->m_tasks.front()));
-                          this->m_queue->m_tasks.pop();
+                          std::function<void()> task(std::move(m_queue->m_tasks.front()));
+                          m_queue->m_tasks.pop();
                           lock.unlock();
 
                           task();
+                      } else if (state() != WAITING_FOR_WORK) {
+                          break;
                       }
                   }
-                  // We've been parked. Disassociate from the queue which
-                  // triggered this, and signal we've completed all work and are
-                  // now fully parked
-                  {
-                      std::unique_lock<std::mutex> lock(this->m_park_mutex);
-                      this->m_queue = nullptr;
+                  // Possible states here: STOPPING, PARKING
+                  if (state() == STOPPING) {
+                      // Disassociate from the queue and exit
+                      m_queue = nullptr;
+                      // Possible states here: STOPPED
+                      return;
+                  } else {
+                      std::unique_lock<std::mutex> lock(m_mutex);
+                      // Disassociate from the queue and reset the flag
+                      m_queue = nullptr;
+                      m_park_req = false;
                   }
-                  this->m_park_cond.notify_one();
+                  // Signal we've completed all work and are now fully parked
+                  m_parked.notify_all();
+                  // Possible states here: PARKED
               }
               // LCOV_EXCL_START
           } catch (...) {
@@ -120,35 +114,41 @@ task_queue_thread::~task_queue_thread()
 
 // NOTE: we call this only from dtor, it is here in order to be able to test it.
 // So the exception handling in dtor will suffice, keep it in mind if things change.
-void task_queue_thread::stop()
+void task_queue_thread::stop(bool block)
 {
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        if (m_stop) return;
-        m_stop = true;
+        m_stop_req = true;
     }
-    // Notify the thread that queue has been stopped, wait for it
-    // to consume the remaining tasks and exit.
-    m_cond.notify_one();
-    m_thread.join();
+    // Notify the thread of the stop request (wherever it might be waiting)
+    m_main.notify_all();
+    m_unpark.notify_all();
+
+    // Wait for it to consume the remaining tasks and exit.
+    if (block && m_thread.joinable()) {
+        m_thread.join();
+    }
 }
 
-void task_queue_thread::park()
+void task_queue_thread::park(bool block)
 {
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        if (m_park || m_queue == nullptr) {
-            pagmo_throw(std::runtime_error, "Cannot park a thread that's already parked");
+        // If needed, wait for the thread to be unparked
+        if (state() != WAITING_FOR_WORK) {
+            pagmo_throw(std::runtime_error, "cannot park thread that isn't waiting for work");
         }
-        m_park = true;
+        // Request that the thread park itself
+        m_park_req = true;
     }
-    // Notify the thread that queue has been parked
-    m_cond.notify_one();
-    // Wait for the thread to complete all work in this queue. We know this has
-    // happened when the thread resets its pointer to this task_queue
-    std::unique_lock<std::mutex> lock(m_park_mutex);
-    while (m_queue != nullptr) {
-        m_park_cond.wait(lock);
+    // Notify the thread that queue a park has been requested
+    m_main.notify_all();
+
+    if (block) {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        // Wait for the thread to complete all work in this queue. We know this has
+        // happened when the thread resets its pointer to this task_queue
+        m_parked.wait(lock, [&]() { return state() == PARKED; });
     }
 }
 
@@ -156,24 +156,42 @@ void task_queue_thread::unpark(task_queue *queue)
 {
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        if (!(m_park && m_queue == nullptr)) {
-            pagmo_throw(std::runtime_error, "Cannot unpark a thread that's not parked");
+        // If needed, wait for the thread to be parked
+        if (state() != PARKED) {
+            m_main.notify_all();
+            m_parked.wait(lock, [&]() { return state() == PARKED; });
         }
         m_queue = queue;
     }
-    // Notify the thread that queue has been unparked
-    m_cond.notify_one();
-    // Wait for the thread to come out of park
-    std::unique_lock<std::mutex> lock(m_park_mutex);
-    while (m_park) {
-        m_park_cond.wait(lock);
+    // Notify the thread it has a new owner
+    m_unpark.notify_all();
+}
+task_queue_thread::tq_thread_state task_queue_thread::state() const
+{
+    if (m_stop_req) {
+        if (m_queue == nullptr) {
+            return STOPPED;
+        } else {
+            return STOPPING;
+        }
+    } else {
+        if (m_park_req) {
+            if (m_queue == nullptr) {
+                pagmo_throw(std::runtime_error, "thread without queue found with park_req set, which shouldn't happen");
+            } else {
+                return PARKING;
+            }
+        } else {
+            if (m_queue == nullptr) {
+                return PARKED;
+            } else {
+                return WAITING_FOR_WORK;
+            }
+        }
     }
 }
 
-task_queue::task_queue() : m_thread(task_queue_thread::get())
-{
-    m_thread->unpark(this);
-}
+task_queue::task_queue() : m_thread(task_queue_thread::get(this)) {}
 
 task_queue::~task_queue()
 {

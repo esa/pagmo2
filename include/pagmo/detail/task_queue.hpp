@@ -56,32 +56,39 @@ static std::queue<std::unique_ptr<task_queue_thread>> task_queue_thread_park{};
 struct PAGMO_DLL_PUBLIC task_queue_thread {
     task_queue_thread();
     ~task_queue_thread();
-    static std::unique_ptr<task_queue_thread> get()
+    static std::unique_ptr<task_queue_thread> get(task_queue *new_owner)
     {
+        std::unique_ptr<task_queue_thread> thread;
         if (task_queue_thread_park.empty()) {
-            return std::make_unique<task_queue_thread>();
+            thread = std::make_unique<task_queue_thread>();
         } else {
             std::unique_lock lock{task_queue_thread_park_mutex};
             // Repeat the emptiness check as the answer could have changed while
             // waiting for the lock to be granted.
             if (task_queue_thread_park.empty()) {
-                return std::make_unique<task_queue_thread>();
+                thread = std::make_unique<task_queue_thread>();
             } else {
-                auto thread = std::move(task_queue_thread_park.front());
+                thread = std::move(task_queue_thread_park.front());
                 task_queue_thread_park.pop();
-                return thread;
             }
         }
+        thread->unpark(new_owner);
+        return thread;
     }
     // NOTE: we call this only from dtor, it is here in order to be able to test it.
     // So the exception handling in dtor will suffice, keep it in mind if things change.
-    void stop();
-    void park();
+    void stop(bool block = true);
+    void park(bool block = true);
     void unpark(task_queue *queue);
+    enum tq_thread_state {WAITING_FOR_WORK, PARKING, PARKED, STOPPING, STOPPED };
+    tq_thread_state state() const;
     // Data members.
-    bool m_park, m_stop;
-    std::condition_variable m_cond, m_park_cond;
-    std::mutex m_mutex, m_park_mutex;
+    bool m_park_req, m_stop_req;
+    // For us to tell the thread something's changed
+    std::condition_variable m_main, m_unpark;
+    // For the thread to tell us it's changed something
+    std::condition_variable m_parked;
+    std::mutex m_mutex;
     task_queue *m_queue;
     std::thread m_thread;
 };
@@ -101,16 +108,14 @@ struct PAGMO_DLL_PUBLIC task_queue {
         std::future<void> res = task->get_future();
         {
             std::unique_lock<std::mutex> lock(m_thread->m_mutex);
-            if (m_thread->m_queue == nullptr) {
-                pagmo_throw(std::runtime_error, "cannot enqueue task if the thread is parked");
+            if (m_thread->state() != task_queue_thread::WAITING_FOR_WORK) {
+                pagmo_throw(std::runtime_error, "no point enqueueing task if the thread is not waiting for work");
             } else if (m_thread->m_queue != this) {
-                pagmo_throw(std::runtime_error, "cannot enqueue task if the thread is no longer watching this queue");
-            } else if (m_thread->m_park) {
-                pagmo_throw(std::runtime_error, "cannot enqueue task if the task queue thread is parking");
+                pagmo_throw(std::runtime_error, "no point enqueueing task if the thread is not watching this queue");
             } else {
                 m_tasks.push([task]() { (*task)(); });
                 // NOTE: notify_one is noexcept.
-                m_thread->m_cond.notify_one();
+                m_thread->m_main.notify_one();
             }
         }
         return res;
