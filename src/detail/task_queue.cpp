@@ -44,22 +44,24 @@ task_queue_thread::task_queue_thread()
     : m_park(true), m_stop(false), m_queue(nullptr), m_thread(std::thread([this]() {
           try {
               while (true) {
+                  // Wait for the thread to be awakened from parking by having
+                  // its new queue associated by a call to unpark(task_queue*)
                   {
-                      // Wait for the thread to be awakened from parking by having
-                      // its new queue associated by a call to unpark(task_queue*)
                       std::unique_lock<std::mutex> lock(this->m_mutex);
-                      while (this->m_queue == nullptr) {
+                      while (!this->m_stop && this->m_queue == nullptr) {
                           this->m_cond.wait(lock);
                       }
                   }
-
+                  // Check if we've been asked to stop
+                  if (this->m_queue == nullptr && this->m_stop) return;
+                  // Otherwise we've been unparked, so set the flag accordingly
+                  // and inform the requesting thread
                   {
                       std::unique_lock<std::mutex> lock(this->m_park_mutex);
                       this->m_park = false;
                   }
-                  // Notify the queue which requested watching that we're now watching
                   this->m_park_cond.notify_one();
-
+                  // Process work from the queue
                   while (true) {
                       std::unique_lock<std::mutex> lock(this->m_mutex);
                       while (!this->m_park && !this->m_stop && this->m_queue->m_tasks.empty()) {
@@ -74,17 +76,17 @@ task_queue_thread::task_queue_thread()
                           std::function<void()> task(std::move(this->m_queue->m_tasks.front()));
                           this->m_queue->m_tasks.pop();
                           lock.unlock();
+
                           task();
                       }
                   }
-
-                  // Disassociate from the queue which triggered the park
-                  // and thus become fully parked
+                  // We've been parked. Disassociate from the queue which
+                  // triggered this, and signal we've completed all work and are
+                  // now fully parked
                   {
                       std::unique_lock<std::mutex> lock(this->m_park_mutex);
                       this->m_queue = nullptr;
                   }
-                  // Notify the queue which requested the park that we're parked
                   this->m_park_cond.notify_one();
               }
               // LCOV_EXCL_START
