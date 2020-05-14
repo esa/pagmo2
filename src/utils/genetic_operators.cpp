@@ -259,10 +259,18 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
                 + std::to_string(bounds.first.size()));
     }
     for (decltype(bounds.first.size()) i = 0u; i < bounds.first.size(); ++i) {
-        if (!(std::isfinite(bounds.first[i])) && std::isfinite(bounds.second[i])) {
+        if (!(std::isfinite(bounds.first[i]) && std::isfinite(bounds.second[i]))) {
             pagmo_throw(std::invalid_argument, "Infinite value detected in the bounds at position: " + std::to_string(i)
                                                    + ". Cannot perform Simulated Binary Crossover.");
         }
+    }
+    if (!std::isfinite(p_cr)) {
+        pagmo_throw(std::invalid_argument,
+                    "Crossover probability is not finite, value is: " + std::to_string(p_cr));
+    }
+    if (!std::isfinite(eta_c)) {
+        pagmo_throw(std::invalid_argument,
+                    "Crossover distribution index is not finite, value is: " + std::to_string(eta_c));
     }
     return detail::sbx_crossover_impl(parent1, parent2, bounds, nix, p_cr, eta_c, random_engine);
 }
