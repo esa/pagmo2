@@ -593,18 +593,20 @@ void population::push_back_impl(T &&x, U &&f)
     auto x_copy(std::forward<T>(x));
     auto f_copy(std::forward<U>(f));
 
+    // Here we make sure that if the push back is unsuccesfull, the population state is left unchanged.
     auto n = pop.size();
     try {
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
         m_f.push_back(std::move(f_copy));
+        // update_champion() either throws before modifying anything, or it completes successfully.
+        update_champion(pop.get_x(n+1), pop.get_f(n+1));
     } catch (...) {
         m_ID.resize(n);
         m_x.resize(n);
         m_f.resize(n);
     }
-    // update_champion() either throws before modfying anything, or it completes successfully. The rest is noexcept.
-    update_champion(pop.get_x(n+1), pop.get_f(n+1));
+    
 }
 
 // Short routine to update the champion. Does nothing if the problem is MO
