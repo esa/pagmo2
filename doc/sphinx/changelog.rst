@@ -38,6 +38,10 @@ Changes
 Fix
 ~~~
 
+- Avoid quadratic complexity
+  in :cpp:func:`pagmo::population::push_back()`
+  (`#434 <https://github.com/esa/pagmo2/pull/434>`__).
+
 - Fix build with recent Ipopt versions
   (`#412 <https://github.com/esa/pagmo2/pull/412>`__).
 

@@ -592,16 +592,21 @@ void population::push_back_impl(T &&x, U &&f)
     const auto new_id = std::uniform_int_distribution<unsigned long long>()(m_e);
     auto x_copy(std::forward<T>(x));
     auto f_copy(std::forward<U>(f));
-    // Reserve space in the vectors.
-    m_ID.reserve(m_ID.size() + 1u);
-    m_x.reserve(m_x.size() + 1u);
-    m_f.reserve(m_f.size() + 1u);
 
-    // update_champion() either throws before modfying anything, or it completes successfully. The rest is noexcept.
-    update_champion(x_copy, f_copy);
-    m_ID.push_back(new_id);
-    m_x.push_back(std::move(x_copy));
-    m_f.push_back(std::move(f_copy));
+    // Here we make sure that if the push back is unsuccessful, the population state is left unchanged.
+    const auto n = m_ID.size();
+    try {
+        m_ID.push_back(new_id);
+        m_x.push_back(std::move(x_copy));
+        m_f.push_back(std::move(f_copy));
+        // update_champion() either throws before modifying anything, or it completes successfully.
+        update_champion(m_x.back(), m_f.back());
+    } catch (...) {
+        m_ID.resize(n);
+        m_x.resize(n);
+        m_f.resize(n);
+        throw;
+    }
 }
 
 // Short routine to update the champion. Does nothing if the problem is MO
