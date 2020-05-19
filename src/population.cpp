@@ -593,8 +593,8 @@ void population::push_back_impl(T &&x, U &&f)
     auto x_copy(std::forward<T>(x));
     auto f_copy(std::forward<U>(f));
 
-    // Here we make sure that if the push back is unsuccessfull, the population state is left unchanged.
-    auto n = m_ID.size();
+    // Here we make sure that if the push back is unsuccessful, the population state is left unchanged.
+    const auto n = m_ID.size();
     try {
         m_ID.push_back(new_id);
         m_x.push_back(std::move(x_copy));
