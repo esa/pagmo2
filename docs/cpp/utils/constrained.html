@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="discrepancy.html">Low-discrepancy sequences</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hypervolume.html">Hypervolumes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gradient_and_hessians.html">Utilities for gradient and hessians</a></li>
+<li class="toctree-l3"><a class="reference internal" href="genetic_operators.html">Genetic Operators</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
@@ -223,28 +224,16 @@ constraints and the rest (if any) inequality constraints</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="function">
-<dt id="_CPPv4N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeEd">
-<span id="_CPPv3N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeEd"></span><span id="_CPPv2N5pagmo19sort_population_conERKNSt6vectorI13vector_doubleEEN13vector_double9size_typeEd"></span><span id="pagmo::sort_population_con__std::vector:vector_double:CR.vector_double::size_type.double"></span><span class="target" id="namespacepagmo_1a003293fe1c46b7f40db866f72650f058"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t">pop_size_t</a>&gt; <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">sort_population_con</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>input_f</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>neq</em>, double <em>tol</em> = 0.<span class="sig-paren">)</span><br /></dt>
-<dd><p>Sorts a population in a single-objective, constrained, case (from a scalar tolerance) </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of indexes containing the sorted population</p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">input_f</span></code>: an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of fitness vectors (containing objectives and constraints) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">neq</span></code>: number of equality constraints </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tol</span></code>: scalar tolerance to be accouted for in the constraints</p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: If the input fitness vectors do not have all the same size <span class="math notranslate nohighlight">\(n &gt;=1\)</span> </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: If <code class="docutils literal notranslate"><span class="pre">neq</span></code> is larger than <span class="math notranslate nohighlight">\(n - 1\)</span> (too many constraints) </p></li>
-</ul>
-</dd>
-</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Unable to resolve multiple matches for function “pagmo::sort_population_con” with arguments (const std::vector&lt;vector_double&gt; &amp;input_f, vector_double::size_type neq, double tol) in doxygen xml output for project “pagmo” from directory: ../doxygen/xml.
+Potential matches:
 </p>
-</dd></dl>
-
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pop_size_t</span><span class="o">&gt;</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">sort_population_con</span><span class="p">(</span><span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span><span class="p">,</span> <span class="n">const</span> <span class="n">vector_double</span><span class="o">&amp;</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pop_size_t</span><span class="o">&gt;</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">sort_population_con</span><span class="p">(</span><span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span><span class="p">,</span> <span class="n">double</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <hr class="docutils" />
 <dl class="function">
 <dt id="_CPPv4N5pagmo10compare_fcERK13vector_doubleRK13vector_doubleN13vector_double9size_typeERK13vector_double">

@@ -1,0 +1,312 @@
+ 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Genetic Operators &mdash; pagmo 2.16.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Generic utilities" href="../miscellanea/generic.html" />
+    <link rel="prev" title="Utilities for gradient and hessians" href="gradient_and_hessians.html" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pagmo
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.16.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="multi_objective.html">Multi-objective optimization utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="constrained.html">Constrained optimization utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="discrepancy.html">Low-discrepancy sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hypervolume.html">Hypervolumes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gradient_and_hessians.html">Utilities for gradient and hessians</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Genetic Operators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pagmo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
+        
+      <li>Genetic Operators</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/docs/cpp/utils/genetic_operators.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="genetic-operators">
+<h1>Genetic Operators<a class="headerlink" href="#genetic-operators" title="Permalink to this headline">¶</a></h1>
+<p>Some utilities to perform common genetic operations</p>
+<p><em>#include &lt;pagmo/utils/genetic_operators.hpp&gt;</em></p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.16.</span></p>
+</div>
+<dl class="function">
+<dt id="_CPPv4N5pagmo13sbx_crossoverERK13vector_doubleRK13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE">
+<span id="_CPPv3N5pagmo13sbx_crossoverERK13vector_doubleRK13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE"></span><span id="_CPPv2N5pagmo13sbx_crossoverERK13vector_doubleRK13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE"></span><span id="pagmo::sbx_crossover__vector_doubleCR.vector_doubleCR.std::pair:vector_double.vector_double:CR.vector_double::size_type.doubleC.doubleC.detail::random_engine_typeR"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">sbx_crossover</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>parent1</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>parent2</em>, <em class="property">const</em> std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>bounds</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em>, <em class="property">const</em> double <em>p_cr</em>, <em class="property">const</em> double <em>eta_c</em>, detail::random_engine_type &amp;<em>random_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13sbx_crossoverERK13vector_doubleRK13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent1</strong> – first parent.</p></li>
+<li><p><strong>parent2</strong> – second parent.</p></li>
+<li><p><strong>bounds</strong> – problem bounds.</p></li>
+<li><p><strong>nix</strong> – integer dimension of the problem.</p></li>
+<li><p><strong>p_cr</strong> – crossover probability.</p></li>
+<li><p><strong>eta_c</strong> – crossover distribution index.</p></li>
+<li><p><strong>random_engine</strong> – the pagmo random engine</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if the <em>bounds</em> size is zero.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>parent1</em>, <em>parent2</em> and <em>bounds</em> have unequal length.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>bounds</em> contain any nan or infs.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if any lower bound is greater than the corresponding upper bound.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>nix</em> is larger than bounds size.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if any of the integer bounds are not not integers.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>p_cr</em> or <em>eta_c</em> are not finite numbers.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This function perform a simulated binary crossover (SBX) among two parents.
+The SBX genetic operator was designed to preserve average property and the
+spread factor property of one-point crossover in binary encoded chromosomes.
+This version of the SBX will act as a simple two-points crossover over the
+integer part of the chromosome / decision vector.</p>
+<p>See: <a class="reference external" href="https://www.slideshare.net/paskorn/simulated-binary-crossover-presentation">https://www.slideshare.net/paskorn/simulated-binary-crossover-presentation</a></p>
+</dd></dl>
+
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.16.</span></p>
+</div>
+<dl class="function">
+<dt id="_CPPv4N5pagmo19polynomial_mutationER13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE">
+<span id="_CPPv3N5pagmo19polynomial_mutationER13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE"></span><span id="_CPPv2N5pagmo19polynomial_mutationER13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE"></span><span id="pagmo::polynomial_mutation__vector_doubleR.std::pair:vector_double.vector_double:CR.vector_double::size_type.doubleC.doubleC.detail::random_engine_typeR"></span>void <code class="sig-name descname">polynomial_mutation</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dv</em>, <em class="property">const</em> std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; &amp;<em>bounds</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>nix</em>, <em class="property">const</em> double <em>p_m</em>, <em class="property">const</em> double <em>eta_m</em>, detail::random_engine_type &amp;<em>random_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19polynomial_mutationER13vector_doubleRKNSt4pairI13vector_double13vector_doubleEEN13vector_double9size_typeEKdKdRN6detail18random_engine_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dv</strong> – decision vector to be mutated in place.</p></li>
+<li><p><strong>bounds</strong> – problem bounds.</p></li>
+<li><p><strong>nix</strong> – integer dimension of the problem.</p></li>
+<li><p><strong>m_cr</strong> – mutation probability.</p></li>
+<li><p><strong>m_c</strong> – mutation distribution index.</p></li>
+<li><p><strong>random_engine</strong> – the pagmo random engine</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if the <em>bounds</em> size is zero.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>dv</em>, and <em>bounds</em> have unequal length.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>bounds</em> contain any nan or infs.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if any lower bound is greater than the corresponding upper bound.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>nix</em> is larger than bounds size.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if any of the integer bounds are not not integers.</p></li>
+<li><p><strong>std::invalid_argument</strong> – if <em>m_cr</em> or <em>m_c</em> are not finite numbers.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This function performs the polynomial mutation proposed by Agrawal and Deb over some chromosome / decision vector.</p>
+<p>See: <a class="reference external" href="https://www.iitk.ac.in/kangal/papers/k2012016.pdf">https://www.iitk.ac.in/kangal/papers/k2012016.pdf</a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../miscellanea/generic.html" class="btn btn-neutral float-right" title="Generic utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gradient_and_hessians.html" class="btn btn-neutral float-left" title="Utilities for gradient and hessians" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, pagmo development team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
