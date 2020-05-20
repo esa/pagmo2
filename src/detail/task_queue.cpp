@@ -26,56 +26,64 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <cassert>
 #include <cstdlib>
-#include <functional>
+#include <future>
 #include <mutex>
-#include <thread>
 #include <utility>
 
 #include <pagmo/detail/task_queue.hpp>
 
-namespace pagmo
+namespace pagmo::detail
 {
 
-namespace detail
-{
+task_queue::task_queue()
+    : m_stop(false), m_thread([this]() {
+          try {
+              while (true) {
+                  std::unique_lock lock(this->m_mutex);
 
-task_queue::task_queue() : m_stop(false)
+                  // NOTE: stop waiting if either we are stopping the queue
+                  // or there are tasks to be consumed.
+                  // NOTE: wait() is noexcept.
+                  this->m_cond.wait(lock, [this]() { return this->m_stop || !this->m_tasks.empty(); });
+
+                  if (this->m_stop && this->m_tasks.empty()) {
+                      // If the stop flag was set, and we do not have more tasks,
+                      // just exit.
+                      break;
+                  }
+
+                  auto task(std::move(this->m_tasks.front()));
+                  this->m_tasks.pop();
+                  lock.unlock();
+                  task();
+              }
+              // LCOV_EXCL_START
+          } catch (...) {
+              // The errors we could get here are:
+              // - threading primitives,
+              // - queue popping (I guess unlikely, as the destructor of
+              //   std::packaged_task is noexcept).
+              // In any case, not much that can be done to recover from this, better to abort.
+              // NOTE: logging candidate.
+              std::abort();
+              // LCOV_EXCL_STOP
+          }
+      })
 {
-    m_thread = std::thread([this]() {
-        try {
-            while (true) {
-                std::unique_lock<std::mutex> lock(this->m_mutex);
-                while (!this->m_stop && this->m_tasks.empty()) {
-                    // Need to wait for something to happen only if the task
-                    // list is empty and we are not stopping.
-                    // NOTE: wait will be noexcept in C++14.
-                    this->m_cond.wait(lock);
-                }
-                if (this->m_stop && this->m_tasks.empty()) {
-                    // If the stop flag was set, and we do not have more tasks,
-                    // just exit.
-                    break;
-                }
-                // NOTE: move constructor of std::function could throw, unfortunately.
-                std::function<void()> task(std::move(this->m_tasks.front()));
-                this->m_tasks.pop();
-                lock.unlock();
-                task();
-            }
-            // LCOV_EXCL_START
-        } catch (...) {
-            // The errors we could get here are:
-            // - threading primitives,
-            // - move-construction of std::function,
-            // - queue popping (I guess unlikely, as the destructor of std::function
-            //   is noexcept).
-            // In any case, not much that can be done to recover from this, better to abort.
-            // NOTE: logging candidate.
-            std::abort();
-            // LCOV_EXCL_STOP
-        }
-    });
+}
+
+std::future<void> task_queue::enqueue_impl(task_type &&task)
+{
+    auto res = task.get_future();
+    {
+        std::unique_lock lock(m_mutex);
+        m_tasks.push(std::move(task));
+    }
+    // NOTE: notify_one is noexcept.
+    m_cond.notify_one();
+    return res;
 }
 
 task_queue::~task_queue()
@@ -83,7 +91,15 @@ task_queue::~task_queue()
     // NOTE: logging candidate (catch any exception,
     // log it and abort as there is not much we can do).
     try {
-        stop();
+        {
+            std::unique_lock lock(m_mutex);
+            assert(!m_stop);
+            m_stop = true;
+        }
+        // Notify the thread that queue has been stopped, wait for it
+        // to consume the remaining tasks and exit.
+        m_cond.notify_one();
+        m_thread.join();
         // LCOV_EXCL_START
     } catch (...) {
         std::abort();
@@ -91,24 +107,4 @@ task_queue::~task_queue()
     }
 }
 
-// NOTE: we call this only from dtor, it is here in order to be able to test it.
-// So the exception handling in dtor will suffice, keep it in mind if things change.
-void task_queue::stop()
-{
-    {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        if (m_stop) {
-            // Already stopped.
-            return;
-        }
-        m_stop = true;
-    }
-    // Notify the thread that queue has been stopped, wait for it
-    // to consume the remaining tasks and exit.
-    m_cond.notify_one();
-    m_thread.join();
-}
-
-} // namespace detail
-
-} // namespace pagmo
+} // namespace pagmo::detail
