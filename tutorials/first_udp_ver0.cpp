@@ -25,16 +25,16 @@ struct problem_v0 {
 int main()
 {
     // Construct a pagmo::problem from our example problem.
-    problem p{problem_v0{}};
+    problem prob{problem_v0{}};
 
     // Compute the value of the objective function
     // in the point (1, 2, 3, 4).
-    std::cout << "Value of the objfun in (1, 2, 3, 4): " << p.fitness({1, 2, 3, 4})[0] << '\n';
+    std::cout << "Value of the objfun in (1, 2, 3, 4): " << prob.fitness({1, 2, 3, 4})[0] << '\n';
 
     // Fetch the lower/upper bounds for the first variable.
-    std::cout << "Lower bounds: [" << p.get_lb()[0] << "]\n";
-    std::cout << "Upper bounds: [" << p.get_ub()[0] << "]\n\n";
+    std::cout << "Lower bounds: [" << prob.get_lb()[0] << "]\n";
+    std::cout << "Upper bounds: [" << prob.get_ub()[0] << "]\n\n";
 
     // Print p to screen.
-    std::cout << p << '\n';
+    std::cout << prob << '\n';
 }

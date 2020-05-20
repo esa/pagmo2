@@ -39,19 +39,19 @@ struct problem_v1 {
 int main()
 {
     // Construct a pagmo::problem from our example problem.
-    problem p{problem_v1{}};
+    problem prob{problem_v1{}};
 
     // Compute the value of the objective function, equality and
     // inequality constraints in the point (1, 2, 3, 4).
-    const auto fv = p.fitness({1, 2, 3, 4});
+    const auto fv = prob.fitness({1, 2, 3, 4});
     std::cout << "Value of the objfun in (1, 2, 3, 4): " << fv[0] << '\n';
     std::cout << "Value of the eq. constraint in (1, 2, 3, 4): " << fv[1] << '\n';
     std::cout << "Value of the ineq. constraint in (1, 2, 3, 4): " << fv[2] << '\n';
 
     // Fetch the lower/upper bounds for the first variable.
-    std::cout << "Lower bounds: [" << p.get_lb()[0] << "]\n";
-    std::cout << "Upper bounds: [" << p.get_ub()[0] << "]\n\n";
+    std::cout << "Lower bounds: [" << prob.get_lb()[0] << "]\n";
+    std::cout << "Upper bounds: [" << prob.get_ub()[0] << "]\n\n";
 
     // Print p to screen.
-    std::cout << p << '\n';
+    std::cout << prob << '\n';
 }
