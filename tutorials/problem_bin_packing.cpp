@@ -23,6 +23,7 @@ struct bin_packing {
         return 10;
     }
 
+    // Number of
     pagmo::vector_double::size_type get_nix() const
     {
         return 80;
@@ -30,8 +31,6 @@ struct bin_packing {
 
     // Implementation of the objective function and all constraints
     pagmo::vector_double fitness(const pagmo::vector_double &x_ij) const{
-//        dynamic variables: x_i,j where i in I and j in K
-
         //constants
         int B = 30; //size of bins
         double avail_K = 8; // number of bins

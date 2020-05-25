@@ -14,7 +14,7 @@ However, finding good solutions to optimization problems can take a much larger 
 and hence significant amount of time.
 Thus, parallelization of the optimization can be extremely important.
 
-In pagmo parallelization is achieved via :ref:`islands <cpp_island>` and :ref:`archipelagos <cpp_archipelago>`.
+In pagmo parallelization is achieved via :cpp:class:`pagmo::island` and :cpp:class:`pagmo::archipelago`.
 **Islands** are used to asynchronously evolve populations. So one can launch multiple islands to evolve populations in parallel.
 An **archipelago** is a collection of islands which we can use to evolve a population in parallel.
 
@@ -67,7 +67,7 @@ Topology
 
 When creating an archipelago the default is that the islands in the archipelago are not connect,
 i.e. the population on each island evolves independently.
-Creating dependencies between the islands is possible by changing the :ref:`topology <cpp_topology>` of the archipelago.
+Creating dependencies between the islands is possible by changing the :cpp:class:`pagmo::topology` of the archipelago.
 This allows individuals of the different populations to migrate to other islands and thus for the best individuals
 across all populations to propagate their features throughout the global population.
 

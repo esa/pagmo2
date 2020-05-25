@@ -1,3 +1,5 @@
+.. _capabilities:
+
 Capabilities
 ============
 
@@ -33,7 +35,12 @@ Overview
   clusters, GPUs, SIMD vectorization, etc.).
 * A library of ready-to-use optimisation problems
   for algorithmic testing and performance evaluation
-  (Rosenbrock, Rastrigin, Lennard-Jones, etc.).
+  (Rosenbrock, Rastrigin, Lennard-Jones, etc_docs) [julius@julius-Desktop sphinx]$ ./compile.sh 
+rm -rf _build/*
+warning: Tag 'TCL_SUBST' at line 270 of file 'Doxyfile' has become obsolete.
+         To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
+/home/julius/Projects/pagmo2/doc/sphinx/docs/cpp/problems/hock_schittkowsky_71.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+/home/julius/Projects/pagmo2/doc/sphinx/doc.).
 * A library of optimisation-oriented utilities
   (e.g., hypervolume computation, non-dominated
   sorting, plotting, etc.).

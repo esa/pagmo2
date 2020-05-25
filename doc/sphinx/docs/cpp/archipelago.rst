@@ -1,5 +1,3 @@
-.. _cpp_archipelago:
-
 Archipelago
 ===========
 

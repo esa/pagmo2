@@ -14,7 +14,7 @@
 
 using namespace pagmo;
 
-// Our simple example problem, version 1.
+// Our simple example problem, version 4.
 struct problem_v1 {
     // Number of equality constraints.
     vector_double::size_type get_nec() const

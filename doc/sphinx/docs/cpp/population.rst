@@ -1,5 +1,3 @@
-.. _cpp_population:
-
 Population
 ==========
 
