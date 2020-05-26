@@ -113,8 +113,8 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
             }
         }
 
-        // This implements two-points binary crossover and applies it to the integer part of the chromosome.
-        if (nix > 1) {
+        // This implements two-points crossover and applies it to the integer part of the chromosome.
+        if (nix > 0u) {
             std::uniform_int_distribution<vector_double::size_type> ra_num(ncx, nx - 1u);
             site1 = ra_num(random_engine);
             site2 = ra_num(random_engine);
