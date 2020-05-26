@@ -121,7 +121,7 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
             if (site1 > site2) {
                 std::swap(site1, site2);
             }
-            for (decltype(site2) j = site1; j < site2; ++j) {
+            for (decltype(site2) j = site1; j <= site2; ++j) {
                 child1[j] = parent2[j];
                 child2[j] = parent1[j];
             }
