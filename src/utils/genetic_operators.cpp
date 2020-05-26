@@ -98,13 +98,6 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
                     betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (eta_c + 1.)));
                 }
                 c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
-                beta = 1. + (2. * (yu - y2) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (eta_c + 1.)));
-                }
                 c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
                 if (c1 < lb[i]) c1 = lb[i];
                 if (c2 < lb[i]) c2 = lb[i];
