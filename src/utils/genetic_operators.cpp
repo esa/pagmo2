@@ -98,13 +98,6 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
                     betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (eta_c + 1.)));
                 }
                 c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
-                beta = 1. + (2. * (yu - y2) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(eta_c + 1.));
-                if (rand01 <= (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (eta_c + 1.)));
-                }
                 c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
                 if (c1 < lb[i]) c1 = lb[i];
                 if (c2 < lb[i]) c2 = lb[i];
@@ -120,15 +113,15 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
             }
         }
 
-        // This implements two-points binary crossover and applies it to the integer part of the chromosome.
-        if (nix > 1) {
+        // This implements two-points crossover and applies it to the integer part of the chromosome.
+        if (nix > 0u) {
             std::uniform_int_distribution<vector_double::size_type> ra_num(ncx, nx - 1u);
             site1 = ra_num(random_engine);
             site2 = ra_num(random_engine);
             if (site1 > site2) {
                 std::swap(site1, site2);
             }
-            for (decltype(site2) j = site1; j < site2; ++j) {
+            for (decltype(site2) j = site1; j <= site2; ++j) {
                 child1[j] = parent2[j];
                 child2[j] = parent1[j];
             }
