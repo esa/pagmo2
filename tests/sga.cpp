@@ -181,6 +181,8 @@ BOOST_AUTO_TEST_CASE(sga_serialization_test)
     problem prob{schwefel{20u}};
     population pop{prob, 20u, 23u};
     algorithm algo{sga{10u}};
+    algo.set_seed(32u);
+
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 

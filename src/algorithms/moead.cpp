@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/multi_objective.hpp>
 
 namespace pagmo
@@ -238,7 +239,7 @@ population moead::evolve(population pop) const
                 }
             }
             // 6 - We apply a further mutation using polynomial mutation
-            polynomial_mutation(candidate, pop, 1.0 / static_cast<double>(dim));
+            detail::polynomial_mutation_impl(candidate, bounds, 0u, 1.0 / static_cast<double>(dim), m_eta_m, m_e);
             // 7- We evaluate the fitness function.
             auto new_f = prob.fitness(candidate);
             // 8 - We update the ideal point
@@ -334,45 +335,6 @@ void moead::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_gen, m_weight_generation, m_decomposition, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit,
                     m_preserve_diversity, m_e, m_seed, m_verbosity, m_log);
-}
-
-// Performs polynomial mutation (same as nsgaII)
-void moead::polynomial_mutation(vector_double &child, const population &pop, double rate) const
-{
-    const auto &prob = pop.get_problem();
-    auto D = prob.get_nx(); // This getter does not return a const reference but a copy
-    const auto bounds = prob.get_bounds();
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
-    double rnd, delta1, delta2, mut_pow, deltaq;
-    double y, yl, yu, val, xy;
-    std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
-
-    // This implements the real polinomial mutation of an individual
-    for (decltype(D) j = 0u; j < D; ++j) {
-        if (drng(m_e) <= rate) {
-            y = child[j];
-            yl = lb[j];
-            yu = ub[j];
-            delta1 = (y - yl) / (yu - yl);
-            delta2 = (yu - y) / (yu - yl);
-            rnd = drng(m_e);
-            mut_pow = 1. / (m_eta_m + 1.);
-            if (rnd <= 0.5) {
-                xy = 1. - delta1;
-                val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (m_eta_m + 1.)));
-                deltaq = std::pow(val, mut_pow) - 1.;
-            } else {
-                xy = 1. - delta2;
-                val = 2. * (1. - rnd) + 2. * (rnd - 0.5) * (std::pow(xy, (m_eta_m + 1.)));
-                deltaq = 1. - (std::pow(val, mut_pow));
-            }
-            y = y + deltaq * (yu - yl);
-            if (y < yl) y = yl;
-            if (y > yu) y = yu;
-            child[j] = y;
-        }
-    }
 }
 
 std::vector<population::size_type>

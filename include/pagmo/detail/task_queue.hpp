@@ -26,88 +26,48 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_TASK_QUEUE_HPP
-#define PAGMO_TASK_QUEUE_HPP
+#ifndef PAGMO_DETAIL_TASK_QUEUE_HPP
+#define PAGMO_DETAIL_TASK_QUEUE_HPP
 
 #include <condition_variable>
-#include <functional>
 #include <future>
-#include <memory>
 #include <mutex>
 #include <queue>
-#include <stdexcept>
+#include <thread>
 #include <utility>
 
 #include <pagmo/detail/visibility.hpp>
-#include <pagmo/exceptions.hpp>
 
-namespace pagmo
+namespace pagmo::detail
 {
-
-namespace detail
-{
-
-struct task_queue;
-struct task_queue_thread;
-
-struct PAGMO_DLL_PUBLIC task_queue_thread {
-    task_queue_thread();
-    ~task_queue_thread();
-    static std::unique_ptr<task_queue_thread> get(task_queue *new_owner);
-    // NOTE: we call this only from dtor, it is here in order to be able to test it.
-    // So the exception handling in dtor will suffice, keep it in mind if things change.
-    void stop(bool block = true);
-    void park(bool block = true);
-    void unpark(task_queue *queue);
-    enum tq_thread_state { WAITING_FOR_WORK, PARKING, PARKED, STOPPING, STOPPED };
-    tq_thread_state state() const;
-    // Data members.
-    bool m_park_req, m_stop_req;
-    // For us to tell the thread something's changed
-    std::condition_variable m_main, m_unpark;
-    // For the thread to tell us it's changed something
-    std::condition_variable m_parked;
-    std::mutex m_mutex;
-    task_queue *m_queue;
-    std::thread m_thread;
-};
 
 struct PAGMO_DLL_PUBLIC task_queue {
     task_queue();
     ~task_queue();
+
+    // Make extra sure we never try to move/copy.
+    task_queue(const task_queue &) = delete;
+    task_queue(task_queue &&) = delete;
+    task_queue &operator=(const task_queue &) = delete;
+    task_queue &operator=(task_queue &&) = delete;
+
+    using task_type = std::packaged_task<void()>;
     // Main enqueue function.
+    std::future<void> enqueue_impl(task_type &&);
     template <typename F>
     std::future<void> enqueue(F &&f)
     {
-        using p_task_type = std::packaged_task<void()>;
-        // NOTE: here we have a 2-stage construction of the task:
-        // - std::packaged_task gives us the std::future machinery,
-        // - std::function (in m_tasks) gives the uniform type interface via type erasure.
-        auto task = std::make_shared<p_task_type>(std::forward<F>(f));
-        std::future<void> res = task->get_future();
-        {
-            std::unique_lock<std::mutex> lock(m_thread->m_mutex);
-            if (m_thread->state() != task_queue_thread::WAITING_FOR_WORK) {
-                pagmo_throw(std::runtime_error, "no point enqueueing task if the thread is not waiting for work");
-            } else if (m_thread->m_queue != this) {
-                pagmo_throw(std::runtime_error, "no point enqueueing task if the thread is not watching this queue");
-            } else {
-                m_tasks.push([task]() { (*task)(); });
-                // NOTE: notify_one is noexcept.
-                m_thread->m_main.notify_one();
-            }
-        }
-        return res;
+        return enqueue_impl(task_type(std::forward<F>(f)));
     }
-    // NOTE: we call this only from dtor, it is here in order to be able to test it.
-    // So the exception handling in dtor will suffice, keep it in mind if things change.
-    void stop();
+
     // Data members.
-    std::queue<std::function<void()>> m_tasks;
-    std::unique_ptr<task_queue_thread> m_thread;
+    bool m_stop;
+    std::condition_variable m_cond;
+    std::mutex m_mutex;
+    std::queue<task_type> m_tasks;
+    std::thread m_thread;
 };
 
-} // namespace detail
-} // namespace pagmo
+} // namespace pagmo::detail
 
 #endif

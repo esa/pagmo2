@@ -248,6 +248,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/constrained.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/discrepancy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/generic.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/genetic_operators.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/multi_objective.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hypervolume.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_algorithm.cpp"
