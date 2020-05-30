@@ -181,7 +181,7 @@ std::function<void(const algorithm &, const population &, std::unique_ptr<detail
 // are both thread safe.
 island_data::island_data()
     : isl_ptr(std::make_unique<isl_inner<thread_island>>()), algo(std::make_shared<algorithm>()),
-      pop(std::make_shared<population>())
+      pop(std::make_shared<population>()), queue(task_queue::unpark_or_construct())
 {
 }
 
@@ -192,8 +192,13 @@ island_data::island_data()
 island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, population &&p, const r_policy &r,
                          const s_policy &s)
     : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::move(a))),
-      pop(std::make_shared<population>(std::move(p))), r_pol(r), s_pol(s)
+      pop(std::make_shared<population>(std::move(p))), r_pol(r), s_pol(s), queue(task_queue::unpark_or_construct())
 {
+}
+
+island_data::~island_data()
+{
+    task_queue::park(std::move(queue));
 }
 
 namespace
@@ -339,7 +344,7 @@ void island::evolve(unsigned n)
         // Move assign a new future provided by the enqueue() method.
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
-        m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+        m_ptr->futures.back() = m_ptr->queue->enqueue([this, n]() {
             // Random engine for use in the migration logic.
             // Wrap it in an optional so that, if we don't need
             // it, we don't waste CPU/memory.

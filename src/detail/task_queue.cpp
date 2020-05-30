@@ -29,7 +29,6 @@ see https://www.gnu.org/licenses/. */
 #include <cassert>
 #include <cstdlib>
 #include <future>
-#include <mutex>
 #include <utility>
 
 #include <pagmo/detail/task_queue.hpp>
@@ -37,8 +36,11 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo::detail
 {
 
+std::mutex task_queue::park_q_mutex{};
+std::queue<std::unique_ptr<task_queue>> task_queue::park_q{};
+
 task_queue::task_queue()
-    : m_stop(false), m_thread([this]() {
+    : m_stop(false),m_mutex(), m_thread([this]() {
           try {
               while (true) {
                   std::unique_lock lock(this->m_mutex);
@@ -77,6 +79,7 @@ task_queue::task_queue()
 std::future<void> task_queue::enqueue_impl(task_type &&task)
 {
     auto res = task.get_future();
+    assert(!m_stop);
     {
         std::unique_lock lock(m_mutex);
         m_tasks.push(std::move(task));
@@ -105,6 +108,21 @@ task_queue::~task_queue()
         std::abort();
         // LCOV_EXCL_STOP
     }
+}
+
+void task_queue::park(std::unique_ptr<task_queue> &&tq)
+{
+    std::unique_lock lock(park_q_mutex);
+    park_q.push(std::move(tq));
+}
+
+std::unique_ptr<task_queue> task_queue::unpark_or_construct()
+{
+    std::unique_lock lock(park_q_mutex);
+    if (park_q.empty()) return std::make_unique<task_queue>();
+    auto tq = std::move(park_q.front());
+    park_q.pop();
+    return tq;
 }
 
 } // namespace pagmo::detail
