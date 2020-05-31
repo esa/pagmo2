@@ -67,10 +67,9 @@ struct PAGMO_DLL_PUBLIC task_queue {
     std::queue<task_type> m_tasks;
     std::thread m_thread;
 
-    static std::queue<std::unique_ptr<task_queue>> park_q;
-    static std::mutex park_q_mutex;
-    static void park(decltype(park_q)::value_type &&tq);
-    static decltype(park_q)::value_type unpark_or_construct();
+    static void park(std::unique_ptr<task_queue> &&tq);
+    static std::unique_ptr<task_queue> unpark_or_construct();
+    static void reset_park_q();
 };
 
 } // namespace pagmo::detail

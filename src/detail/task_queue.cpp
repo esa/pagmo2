@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #include <cassert>
 #include <cstdlib>
 #include <future>
+#include <tbb/concurrent_queue.h>
 #include <utility>
 
 #include <pagmo/detail/task_queue.hpp>
@@ -36,11 +37,8 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo::detail
 {
 
-std::mutex task_queue::park_q_mutex{};
-std::queue<std::unique_ptr<task_queue>> task_queue::park_q{};
-
 task_queue::task_queue()
-    : m_stop(false),m_mutex(), m_thread([this]() {
+    : m_stop(false), m_thread([this]() {
           try {
               while (true) {
                   std::unique_lock lock(this->m_mutex);
@@ -110,19 +108,39 @@ task_queue::~task_queue()
     }
 }
 
+// Glorified version of the initialise on first use idiom
+// Guaranteed to return nullptr if and only if reset is true
+auto &park_q(const bool reset = false)
+{
+    // Need to store a pointer to tbb container as tbb::concurrent_queue is not assignable
+    using part_q_t = tbb::concurrent_queue<std::unique_ptr<task_queue>>;
+    static auto q = std::unique_ptr<part_q_t>();
+
+    const bool q_is_null = !q;
+    if (reset) {
+        if (q_is_null) return q;
+        return q = std::unique_ptr<part_q_t>();
+    }
+    if (q_is_null) q = std::make_unique<part_q_t>();
+    return q;
+}
+
+// Used by the fork_island
+void task_queue::reset_park_q()
+{
+    park_q(true);
+}
+
 void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
-    std::unique_lock lock(park_q_mutex);
-    park_q.push(std::move(tq));
+    park_q()->push(std::move(tq));
 }
 
 std::unique_ptr<task_queue> task_queue::unpark_or_construct()
 {
-    std::unique_lock lock(park_q_mutex);
-    if (park_q.empty()) return std::make_unique<task_queue>();
-    auto tq = std::move(park_q.front());
-    park_q.pop();
-    return tq;
+    std::unique_ptr<task_queue> tq;
+    if (park_q()->try_pop(tq)) return tq;
+    return std::make_unique<task_queue>();
 }
 
 } // namespace pagmo::detail
