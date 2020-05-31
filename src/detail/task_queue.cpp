@@ -77,7 +77,6 @@ task_queue::task_queue()
 std::future<void> task_queue::enqueue_impl(task_type &&task)
 {
     auto res = task.get_future();
-    assert(!m_stop);
     {
         std::unique_lock lock(m_mutex);
         m_tasks.push(std::move(task));

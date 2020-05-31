@@ -296,9 +296,6 @@ void fork_island::run_evolve(island &isl) const
             = "An unrecoverable error was raised while handling another error in the child process "
               "of a fork_island. Giving up now.";
         try {
-            // fork() doesn't copy threads, so the parked task_queue objects are
-            // actually zombies with no associated threads. Delete the zombies.
-            pagmo::detail::task_queue::reset_park_q();
             // Close the read descriptor, we don't need to read anything from the parent.
             p.close_r();
             // Run the evolution.
