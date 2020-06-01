@@ -26,12 +26,13 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <boost/lockfree/queue.hpp>
 #include <cassert>
 #include <cstdlib>
 #include <future>
-#include <tbb/concurrent_queue.h>
 #include <utility>
 
+#include <boost/function.hpp>
 #include <pagmo/detail/task_queue.hpp>
 
 namespace pagmo::detail
@@ -108,23 +109,31 @@ task_queue::~task_queue()
 }
 
 // Glorified version of the initialise on first use idiom
-// Guaranteed to return nullptr if and only if reset is true
+// Guaranteed to return null ptr if and only if reset is true
 auto &park_q(const bool reset = false)
 {
-    // Need to store a pointer to tbb container as tbb::concurrent_queue is not assignable
-    using part_q_t = tbb::concurrent_queue<std::unique_ptr<task_queue>>;
-    static auto q = std::unique_ptr<part_q_t>();
+    // boost::lockfree::queue requires trivial destructor so we can't use unique_ptr's. However
+    // think of these pointers as "owning", they will be converted to unique_ptrs before being
+    // returned by unpark_or_construct and we make sure we delete them before resetting the queue
+    using park_q_t = boost::lockfree::queue<task_queue *>;
+    static auto q = std::unique_ptr<park_q_t>();
 
     const bool q_is_null = !q;
     if (reset) {
         if (q_is_null) return q;
-        return q = std::unique_ptr<part_q_t>();
+        // Manually destruct the parked task_queues
+        // Can't use unique_ptr as boost requires trivial destructor
+        const auto deleter = boost::function<void(task_queue *)>([](task_queue *tq) { delete tq; });
+        q->consume_all(deleter);
+        // Set and return null ptr
+        return q = std::unique_ptr<park_q_t>();
     }
-    if (q_is_null) q = std::make_unique<part_q_t>();
+    if (q_is_null)
+        // Create new park queue with initial capacity 16
+        q = std::make_unique<park_q_t>(16);
     return q;
 }
 
-// Used by the fork_island
 void task_queue::reset_park_q()
 {
     park_q(true);
@@ -132,13 +141,16 @@ void task_queue::reset_park_q()
 
 void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
-    park_q()->push(std::move(tq));
+    park_q()->push(tq.release());
 }
 
 std::unique_ptr<task_queue> task_queue::unpark_or_construct()
 {
-    std::unique_ptr<task_queue> tq;
-    if (park_q()->try_pop(tq)) return tq;
+    task_queue *tq;
+    // Try popping a task_queue out of the park, if that succeeds
+    // construct and return an owning pointer to the popped instance
+    if (park_q()->pop(tq)) return std::unique_ptr<task_queue>(tq);
+    // Otherwise return an owning pointer to a new task_queue
     return std::make_unique<task_queue>();
 }
 
