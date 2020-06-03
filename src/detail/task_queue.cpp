@@ -115,6 +115,7 @@ auto park_q = boost::lockfree::queue<task_queue *>(32);
 void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
     std::unique_lock lock(tq->m_mutex);
+    // wait for any remaining work to complete
     tq->m_park = true;
     tq->m_parked.wait(lock, [&]() { return tq->m_tasks.empty(); });
     park_q.push(tq.release());
@@ -127,6 +128,7 @@ std::unique_ptr<task_queue> task_queue::unpark_or_construct()
     if (tq == nullptr) {
         return std::make_unique<task_queue>();
     } else {
+        tq->m_park = false;
         return std::unique_ptr<task_queue>(tq);
     }
 }
