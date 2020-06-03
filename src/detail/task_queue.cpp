@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <future>
 #include <utility>
 
+#include <boost/lockfree/queue.hpp>
 #include <pagmo/detail/task_queue.hpp>
 
 namespace pagmo::detail
@@ -47,10 +48,10 @@ task_queue::task_queue()
                   // NOTE: wait() is noexcept.
                   this->m_cond.wait(lock, [this]() { return this->m_stop || !this->m_tasks.empty(); });
 
-                  if (this->m_stop && this->m_tasks.empty()) {
-                      // If the stop flag was set, and we do not have more tasks,
-                      // just exit.
-                      break;
+                  if (this->m_tasks.empty()) {
+                      // If we do not have more tasks check stop and park flags
+                      if (this->m_stop) break;
+                      if (this->m_park) m_parked.notify_all();
                   }
 
                   auto task(std::move(this->m_tasks.front()));
@@ -106,47 +107,26 @@ task_queue::~task_queue()
     }
 }
 
-// Glorified version of the initialise on first use idiom
-// Guaranteed to return nullptr if and only if reset is true
-auto get_park_q(const bool reset = false)
+namespace
 {
-    // Need to store a pointer to tbb container as tbb::concurrent_queue is not assignable
-    using part_q_t = std::queue<std::unique_ptr<task_queue>>;
-    static auto q = std::unique_ptr<part_q_t>();
-
-    static auto m = std::mutex();
-    std::unique_lock lock(m);
-
-    const bool q_is_null = !q;
-    if (reset) {
-        if (!q_is_null) q = std::unique_ptr<part_q_t>();
-    } else {
-        if (q_is_null) q = std::make_unique<part_q_t>();
-    }
-    return std::make_pair(q.get(), std::move(lock));
-}
-
-// Used by the fork_island
-void task_queue::reset_park_q()
-{
-    get_park_q(true);
+auto park_q = boost::lockfree::queue<task_queue *>(32);
 }
 
 void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
-    auto [park_q, lock] = get_park_q();
-    park_q->push(std::move(tq));
+    std::unique_lock lock(tq->m_mutex);
+    tq->m_parked.wait(lock, [&]() { return tq->m_tasks.empty(); });
+    park_q.push(tq.release());
 }
 
 std::unique_ptr<task_queue> task_queue::unpark_or_construct()
 {
-    auto [park_q, lock] = get_park_q();
-    if (park_q->empty()) {
+    task_queue *tq = nullptr;
+    park_q.pop(tq);
+    if (tq == nullptr) {
         return std::make_unique<task_queue>();
     } else {
-        auto tq = std::move(park_q->front());
-        park_q->pop();
-        return tq;
+        return std::unique_ptr<task_queue>(tq);
     }
 }
 

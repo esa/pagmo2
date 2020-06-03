@@ -61,15 +61,14 @@ struct PAGMO_DLL_PUBLIC task_queue {
     }
 
     // Data members.
-    bool m_stop;
-    std::condition_variable m_cond;
+    bool m_stop, m_park;
+    std::condition_variable m_cond, m_parked;
     std::mutex m_mutex;
     std::queue<task_type> m_tasks;
     std::thread m_thread;
 
     static void park(std::unique_ptr<task_queue> &&tq);
     static std::unique_ptr<task_queue> unpark_or_construct();
-    static void reset_park_q();
 };
 
 } // namespace pagmo::detail
