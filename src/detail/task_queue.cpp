@@ -115,6 +115,7 @@ auto park_q = boost::lockfree::queue<task_queue *>(32);
 void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
     std::unique_lock lock(tq->m_mutex);
+    tq->m_park = true;
     tq->m_parked.wait(lock, [&]() { return tq->m_tasks.empty(); });
     park_q.push(tq.release());
 }
