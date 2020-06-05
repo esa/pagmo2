@@ -52,7 +52,7 @@ task_queue::task_queue()
                   if (this->m_tasks.empty()) {
                       // If we do not have more tasks check stop and park flags
                       if (this->m_stop) break;
-                      if (this->m_park) m_parked.notify_one();
+                      if (this->m_park) this->m_parked.notify_one();
                   } else {
                       auto task(std::move(this->m_tasks.front()));
                       this->m_tasks.pop();
