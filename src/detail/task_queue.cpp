@@ -53,12 +53,12 @@ task_queue::task_queue()
                       // If we do not have more tasks check stop and park flags
                       if (this->m_stop) break;
                       if (this->m_park) m_parked.notify_one();
+                  } else {
+                      auto task(std::move(this->m_tasks.front()));
+                      this->m_tasks.pop();
+                      lock.unlock();
+                      task();
                   }
-
-                  auto task(std::move(this->m_tasks.front()));
-                  this->m_tasks.pop();
-                  lock.unlock();
-                  task();
               }
               // LCOV_EXCL_START
           } catch (...) {
