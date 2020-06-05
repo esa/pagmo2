@@ -145,4 +145,9 @@ std::unique_ptr<task_queue> task_queue::unpark_or_construct()
     }
 }
 
+void task_queue::set_destruct_parked_task_queues(bool new_value)
+{
+    park_q.m_destruct = new_value;
+}
+
 } // namespace pagmo::detail
