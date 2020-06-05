@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <future>
 #include <utility>
 
+#include <boost/function.hpp>
 #include <boost/lockfree/queue.hpp>
 #include <pagmo/detail/task_queue.hpp>
 
@@ -51,7 +52,7 @@ task_queue::task_queue()
                   if (this->m_tasks.empty()) {
                       // If we do not have more tasks check stop and park flags
                       if (this->m_stop) break;
-                      if (this->m_park) m_parked.notify_all();
+                      if (this->m_park) m_parked.notify_one();
                   }
 
                   auto task(std::move(this->m_tasks.front()));
@@ -109,22 +110,33 @@ task_queue::~task_queue()
 
 namespace
 {
-auto park_q = boost::lockfree::queue<task_queue *>(32);
-}
+// RAII helper to ensure destruction of parked task_queues
+struct queue_holder {
+    boost::lockfree::queue<task_queue *> m_queue{32};
+    bool m_destruct = true;
+    ~queue_holder() noexcept
+    {
+        static const auto deleter = boost::function<void(task_queue *)>([](task_queue *tq) { delete tq; });
+        if (m_destruct) m_queue.consume_all(deleter);
+    }
+};
+
+queue_holder park_q;
+} // namespace
 
 void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
     std::unique_lock lock(tq->m_mutex);
     // wait for any remaining work to complete
     tq->m_park = true;
-    tq->m_parked.wait(lock, [&]() { return tq->m_tasks.empty(); });
-    park_q.push(tq.release());
+    tq->m_parked.wait(lock, [&tq = std::as_const(tq)]() { return tq->m_tasks.empty(); });
+    park_q.m_queue.push(tq.release());
 }
 
 std::unique_ptr<task_queue> task_queue::unpark_or_construct()
 {
     task_queue *tq = nullptr;
-    park_q.pop(tq);
+    park_q.m_queue.pop(tq);
     if (tq == nullptr) {
         return std::make_unique<task_queue>();
     } else {
