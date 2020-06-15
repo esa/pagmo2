@@ -38,7 +38,7 @@ namespace pagmo::detail
 {
 
 task_queue::task_queue()
-    : m_stop(false), m_park(false), m_thread([this]() {
+    : m_status(task_queue_status::WAITING), m_thread([this]() {
           try {
               while (true) {
                   std::unique_lock lock(this->m_mutex);
@@ -46,12 +46,20 @@ task_queue::task_queue()
                   // NOTE: stop waiting if either we are stopping the queue
                   // or there are tasks to be consumed.
                   // NOTE: wait() is noexcept.
-                  this->m_cond.wait(lock, [this]() { return this->m_stop || !this->m_tasks.empty(); });
+                  this->m_cond.wait(lock, [this]() {
+                      return !(this->m_status == task_queue_status::PARKED && this->m_tasks.empty());
+                  });
 
                   if (this->m_tasks.empty()) {
                       // If we do not have more tasks check stop and park flags
-                      if (this->m_stop) break;
-                      if (this->m_park) this->m_parked.notify_one();
+                      if (this->m_status == task_queue_status::STOPPING) {
+                          this->m_status = task_queue_status::STOPPED;
+                          break;
+                      }
+                      if (this->m_status == task_queue_status::PARKING) {
+                          this->m_status = task_queue_status::PARKED;
+                          this->m_parked.notify_one();
+                      }
                   } else {
                       auto task(std::move(this->m_tasks.front()));
                       this->m_tasks.pop();
@@ -93,8 +101,8 @@ task_queue::~task_queue()
     try {
         {
             std::unique_lock lock(m_mutex);
-            assert(!m_stop);
-            m_stop = true;
+            assert(m_status != task_queue_status::STOPPING && m_status != task_queue_status::STOPPED);
+            m_status = task_queue_status::STOPPING;
         }
         // Notify the thread that queue has been stopped, wait for it
         // to consume the remaining tasks and exit.
@@ -126,7 +134,7 @@ void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
     std::unique_lock lock(tq->m_mutex);
     // wait for any remaining work to complete
-    tq->m_park = true;
+    tq->m_status = task_queue_status::PARKING;
     tq->m_parked.wait(lock, [&tq = std::as_const(tq)]() { return tq->m_tasks.empty(); });
     park_q.m_queue.push(tq.release());
 }
@@ -139,7 +147,7 @@ std::unique_ptr<task_queue> task_queue::unpark_or_construct()
         return std::make_unique<task_queue>();
     } else {
         std::unique_lock lock(tq->m_mutex);
-        tq->m_park = false;
+        tq->m_status = task_queue_status::WAITING;
         return std::unique_ptr<task_queue>(tq);
     }
 }
