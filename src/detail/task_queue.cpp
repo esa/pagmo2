@@ -138,7 +138,7 @@ void task_queue::park(std::unique_ptr<task_queue> &&tq)
     std::unique_lock lock(tq->m_mutex);
     // wait for any remaining work to complete
     tq->m_status = task_queue_status::PARKING;
-    tq->m_parked.wait(lock, [&tq = std::as_const(tq)]() { return tq->m_status == task_queue_status::PARKING; });
+    tq->m_parked.wait(lock, [&tq = std::as_const(tq)]() { return tq->m_status == task_queue_status::PARKED; });
     park_q.m_queue.push(tq.release());
 }
 
