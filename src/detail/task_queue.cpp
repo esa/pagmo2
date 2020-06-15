@@ -31,7 +31,6 @@ see https://www.gnu.org/licenses/. */
 #include <future>
 #include <utility>
 
-#include <boost/function.hpp>
 #include <boost/lockfree/queue.hpp>
 #include <pagmo/detail/task_queue.hpp>
 
@@ -39,7 +38,7 @@ namespace pagmo::detail
 {
 
 task_queue::task_queue()
-    : m_stop(false), m_thread([this]() {
+    : m_stop(false), m_park(false), m_thread([this]() {
           try {
               while (true) {
                   std::unique_lock lock(this->m_mutex);
@@ -116,8 +115,7 @@ struct queue_holder {
     bool m_destruct = true;
     ~queue_holder() noexcept
     {
-        static const auto deleter = boost::function<void(task_queue *)>([](task_queue *tq) { delete tq; });
-        if (m_destruct) m_queue.consume_all(deleter);
+        if (m_destruct) m_queue.consume_all([](task_queue *tq) { delete tq; });
     }
 };
 
@@ -140,6 +138,7 @@ std::unique_ptr<task_queue> task_queue::unpark_or_construct()
     if (tq == nullptr) {
         return std::make_unique<task_queue>();
     } else {
+        std::unique_lock lock(tq->m_mutex);
         tq->m_park = false;
         return std::unique_ptr<task_queue>(tq);
     }
