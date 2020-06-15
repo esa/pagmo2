@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
  - OS: [e.g. Linux]
- - Installation method: [e.g. conda, pip, source]
+ - Installation method: [e.g. conda, source]
  - Version: [e.g. 2.15]
 
 **Additional context**
