@@ -46,9 +46,8 @@ task_queue::task_queue()
                   // NOTE: stop waiting if either we are stopping the queue
                   // or there are tasks to be consumed.
                   // NOTE: wait() is noexcept.
-                  this->m_cond.wait(lock, [this]() {
-                      return !(this->m_status == task_queue_status::PARKED && this->m_tasks.empty());
-                  });
+                  this->m_cond.wait(
+                      lock, [this]() { return !this->m_tasks.empty() || this->m_status != task_queue_status::PARKED; });
 
                   if (this->m_tasks.empty()) {
                       // If we do not have more tasks check stop and park flags
@@ -84,6 +83,10 @@ task_queue::task_queue()
 
 std::future<void> task_queue::enqueue_impl(task_type &&task)
 {
+    if (m_status != task_queue_status::WAITING) {
+        throw std::runtime_error("Cannot enqueue to a task_queue which is not waiting");
+    }
+
     auto res = task.get_future();
     {
         std::unique_lock lock(m_mutex);
@@ -135,7 +138,7 @@ void task_queue::park(std::unique_ptr<task_queue> &&tq)
     std::unique_lock lock(tq->m_mutex);
     // wait for any remaining work to complete
     tq->m_status = task_queue_status::PARKING;
-    tq->m_parked.wait(lock, [&tq = std::as_const(tq)]() { return tq->m_tasks.empty(); });
+    tq->m_parked.wait(lock, [&tq = std::as_const(tq)]() { return tq->m_status == task_queue_status::PARKING; });
     park_q.m_queue.push(tq.release());
 }
 
