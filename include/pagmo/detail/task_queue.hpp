@@ -42,11 +42,13 @@ namespace pagmo::detail
 {
 
 enum class task_queue_status {
-    WAITING,  // Can transition to any of {PARKING, STOPPING}
-    PARKING,  // Can transition to any of {PARKED}
-    PARKED,   // Can transition to any of {WAITING, STOPPING}
-    STOPPING, // Can transition to any of {STOPPED}
-    STOPPED   // Can transition to any of {}
+    WAITING, // Another thread may impose a transition to {PARKING, STOPPING}
+    PARKING, // Another thread may impose a transition to {STOPPING}
+             // The task_queue will transition itself to {PARKED} when remaining work is complete
+
+    PARKED,   // Another thread may impose a transition to {WAITING, STOPPING}
+    STOPPING, // The task_queue will transition itself to {STOPPED} when remaining work is complete
+    STOPPED   // No transition to any other state is valid
 };
 
 struct PAGMO_DLL_PUBLIC task_queue {
