@@ -143,7 +143,7 @@ void task_queue::park(std::unique_ptr<task_queue> &&tq)
 {
     {
         std::unique_lock lock(tq->m_mutex);
-        assert(m_status == task_queue_status::WAITING);
+        assert(tq->m_status == task_queue_status::WAITING);
         tq->m_status = task_queue_status::PARKING;
     }
     tq->m_cond.notify_one();
