@@ -38,6 +38,9 @@ Changes
 Fix
 ~~~
 
+- Fixes in SBX and polynomial mutation
+  (`#436 <https://github.com/esa/pagmo2/pull/436>`__).
+
 - Avoid quadratic complexity
   in :cpp:func:`pagmo::population::push_back()`
   (`#434 <https://github.com/esa/pagmo2/pull/434>`__).
