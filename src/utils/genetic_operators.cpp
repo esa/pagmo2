@@ -43,6 +43,19 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/genetic_operators.hpp>
 
+namespace {
+// Helper function for implementation of the binary crossover.
+double sbx_betaq(double beta, double eta_c, double rand01)
+{
+    double alpha = 2. - std::pow(beta, -(eta_c + 1.));
+    if (rand01 < 1. / alpha) {
+        return std::pow(rand01 * alpha, 1. / (eta_c + 1.));
+    } else {
+        return std::pow(1. / (2. - rand01 * alpha), 1. / (eta_c + 1.));
+    }
+}
+}
+
 namespace pagmo
 {
 
@@ -66,8 +79,6 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
     // Problem bounds
     const vector_double &lb = bounds.first;
     const vector_double &ub = bounds.second;
-    // declarations
-    double y1, y2, yl, yu, rand01, beta, alpha, betaq, c1, c2;
     vector_double::size_type site1, site2;
     // Initialize the child decision vectors
     vector_double child1 = parent1;
@@ -80,6 +91,7 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
         for (decltype(ncx) i = 0u; i < ncx; i++) {
             // Each chromosome value has 0.5 probability to be crossovered.
             if ((drng(random_engine) < 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
+                double y1, y2, yl, yu, beta, betaq, c1, c2, rand01;
                 if (parent1[i] < parent2[i]) {
                     y1 = parent1[i];
                     y2 = parent2[i];
@@ -89,16 +101,16 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
                 }
                 yl = lb[i];
                 yu = ub[i];
+
                 rand01 = drng(random_engine);
                 beta = 1. + (2. * (y1 - yl) / (y2 - y1));
-                alpha = 2. - std::pow(beta, -(eta_c + 1.));
-                if (rand01 < (1. / alpha)) {
-                    betaq = std::pow((rand01 * alpha), (1. / (eta_c + 1.)));
-                } else {
-                    betaq = std::pow((1. / (2. - rand01 * alpha)), (1. / (eta_c + 1.)));
-                }
+                betaq = sbx_betaq(beta, eta_c, rand01);
                 c1 = 0.5 * ((y1 + y2) - betaq * (y2 - y1));
+
+                beta = 1. + (2. * (yu - y2) / (y2 - y1));
+                betaq = sbx_betaq(beta, eta_c, rand01);
                 c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
+
                 if (c1 < lb[i]) c1 = lb[i];
                 if (c2 < lb[i]) c2 = lb[i];
                 if (c1 > ub[i]) c1 = ub[i];
