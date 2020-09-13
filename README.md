@@ -10,6 +10,7 @@ pagmo
 
 [![Join the chat at https://gitter.im/pagmo2/Lobby](https://img.shields.io/badge/gitter-join--chat-green.svg?logo=gitter-white&style=for-the-badge)](https://gitter.im/pagmo2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02338/status.svg)](https://doi.org/10.21105/joss.02338)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1045337.svg)](https://doi.org/10.5281/zenodo.1045336)
 
 **IMPORTANT NOTICE**: pygmo, the Python bindings for pagmo, have been split off into a separate
@@ -20,8 +21,25 @@ a unified interface to optimization algorithms and to optimization problems and 
 massively parallel environments easy.
 
 If you are using pagmo as part of your research, teaching, or other activities, we would be grateful if you could star
-the repository and/or cite our work. The DOI of the latest version and other citation resources are available
-at [this link](https://doi.org/10.5281/zenodo.1045336).
+the repository and/or cite our work. For citation purposes, you can use the following BibTex entry, which refers
+to the [pagmo paper](https://doi.org/10.21105/joss.02338) in the Journal of Open Source Software:
+
+```bibtex
+@article{Biscani2020,
+  doi = {10.21105/joss.02338},
+  url = {https://doi.org/10.21105/joss.02338},
+  year = {2020},
+  publisher = {The Open Journal},
+  volume = {5},
+  number = {53},
+  pages = {2338},
+  author = {Francesco Biscani and Dario Izzo},
+  title = {A parallel global multiobjective framework for optimization: pagmo},
+  journal = {Journal of Open Source Software}
+}
+```
+
+The DOI of the latest version of the software is available at [this link](https://doi.org/10.5281/zenodo.1045336).
 
 The full documentation can be found [here](https://esa.github.io/pagmo2/).
 
