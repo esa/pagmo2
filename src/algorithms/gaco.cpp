@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/math/constants/constants.hpp>
-#include <boost/serialization/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/gaco.hpp>
@@ -50,6 +49,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
+
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
 
 namespace pagmo
 {
@@ -75,14 +78,12 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
                         + std::to_string(threshold) + " was detected");
     }
     if (threshold < 1 && gen != 0 && memory == true) {
-        pagmo_throw(std::invalid_argument,
-                    "If memory is active, the threshold parameter must be >=1 while a value of "
-                        + std::to_string(threshold) + " was detected");
+        pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
+                                               + std::to_string(threshold) + " was detected");
     }
     if (q < 0.) {
-        pagmo_throw(std::invalid_argument,
-                    "The convergence speed parameter must be >=0  while a value of " + std::to_string(q)
-                        + " was detected");
+        pagmo_throw(std::invalid_argument, "The convergence speed parameter must be >=0  while a value of "
+                                               + std::to_string(q) + " was detected");
     }
 }
 
@@ -153,9 +154,8 @@ population gaco::evolve(population pop) const
                     get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (n_obj != 1u) {
-        pagmo_throw(std::invalid_argument,
-                    "Multiple objectives detected in " + prob.get_name() + " instance. " + get_name()
-                        + " cannot deal with them");
+        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                               + get_name() + " cannot deal with them");
     }
 
     // ---------------------------------------------------------------------------------------------------------

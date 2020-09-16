@@ -38,8 +38,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <vector>
 
-#include <boost/serialization/optional.hpp>
-
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/exceptions.hpp>
@@ -48,6 +46,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
+
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
 
 namespace pagmo
 {

@@ -31,8 +31,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include <boost/serialization/optional.hpp>
-
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nspso.hpp>
 #include <pagmo/bfe.hpp>
@@ -44,6 +42,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/multi_objective.hpp>
+
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
 
 namespace pagmo
 {

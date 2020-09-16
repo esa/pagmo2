@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/math/constants/constants.hpp>
-#include <boost/serialization/optional.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/maco.hpp>
@@ -57,6 +56,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
 #include <pagmo/utils/multi_objective.hpp>
+
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
 
 namespace pagmo
 {
