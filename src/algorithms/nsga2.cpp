@@ -39,8 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
-#include <boost/serialization/optional.hpp>
-
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/exceptions.hpp>
@@ -51,6 +49,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/multi_objective.hpp>
+
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
 
 namespace pagmo
 {
@@ -215,7 +217,7 @@ population nsga2::evolve(population pop) const
                 parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
                 parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
-                                                 m_cr, m_eta_c, m_e);
+                                                      m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
 
@@ -226,7 +228,7 @@ population nsga2::evolve(population pop) const
                 parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
                 parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
-                                                 m_cr, m_eta_c, m_e);
+                                                      m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
@@ -268,7 +270,7 @@ population nsga2::evolve(population pop) const
                 parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
                 parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
-                                                 m_cr, m_eta_c, m_e);
+                                                      m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
@@ -282,7 +284,7 @@ population nsga2::evolve(population pop) const
                 parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
                 parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
-                                                 m_cr, m_eta_c, m_e);
+                                                      m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
