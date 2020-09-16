@@ -278,9 +278,9 @@ for our simple example problem:</p>
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">pagmo</span><span class="p">;</span>
 
 <span class="c1">// Our simple example problem, version 0.</span>
-<span class="k">struct</span> <span class="n">problem_v0</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="nc">problem_v0</span> <span class="p">{</span>
     <span class="c1">// Implementation of the objective function.</span>
-    <span class="n">vector_double</span> <span class="n">fitness</span><span class="p">(</span><span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span> <span class="k">const</span>
+    <span class="n">vector_double</span> <span class="nf">fitness</span><span class="p">(</span><span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
     <span class="p">}</span>
