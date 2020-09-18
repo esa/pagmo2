@@ -15,6 +15,8 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
    Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO) is a modified version of GACO for multi-objective optimization, based on the hypervolume measure.
    It extends the basic ideas of GACO by making use of hypervolume computation for ranking the individuals and storing them inside a solution archive from which future generations of individuals will be generated. In particular, the algorithm combines the concept of non-dominated fronts and hypervolume computation for ranking the individuals.
 
+   The paper that introduces MHACO: "MHACO: a Multi-Objective Hypervolume-Based Ant Colony Optimizer for Space Trajectory Optimization" by Giacomo Acciarini, Dario Izzo, Erwin Mooij (https://ieeexplore.ieee.org/document/9185694).
+
    Image credit: https://sites.psu.edu/paretomusings/2015/02/27/generating-data-sets-of-arbitrary-dimension-with-known-hypervolume/.
 
    This constructor will construct MHACO.
