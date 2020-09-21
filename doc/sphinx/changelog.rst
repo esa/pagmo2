@@ -38,6 +38,12 @@ Changes
 Fix
 ~~~
 
+- Fix an indexing bug in the PSO implementation
+  (`#448 <https://github.com/esa/pagmo2/pull/448>`__).
+
+- Fix build failure with Boost 1.74
+  (`#447 <https://github.com/esa/pagmo2/pull/447>`__).
+
 - Fixes in SBX and polynomial mutation
   (`#436 <https://github.com/esa/pagmo2/pull/436>`__).
 
