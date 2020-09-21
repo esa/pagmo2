@@ -124,12 +124,12 @@ endif()
 
 # NLopt
 if(PAGMO_WITH_NLOPT)
-    find_package(NLOPT REQUIRED COMPONENTS header libnlopt)
+    find_package(NLopt 2.6 REQUIRED NO_MODULE)
 endif()
 
 # Ipopt
 if(PAGMO_WITH_IPOPT)
-    find_package(IPOPT REQUIRED COMPONENTS header libipopt)
+    find_package(pagmo_IPOPT REQUIRED COMPONENTS header libipopt)
 endif()
 
 if(PAGMO_BUILD_TESTS)
@@ -365,12 +365,8 @@ endif()
 if(PAGMO_WITH_NLOPT)
     # Link pagmo to NLopt.
     # NOTE: we make use of some NLopt types in the
-    # public pagmo interface, but we don't use any
-    # function from the library in the public headers.
-    # Thus, depend publicly on the header,
-    # privately on the compiled library.
-    target_link_libraries(pagmo PUBLIC NLOPT::header)
-    target_link_libraries(pagmo PRIVATE NLOPT::libnlopt)
+    # public pagmo interface.
+    target_link_libraries(pagmo PUBLIC NLopt::nlopt)
     set(PAGMO_ENABLE_NLOPT "#define PAGMO_WITH_NLOPT")
 endif()
 
@@ -381,8 +377,8 @@ if(PAGMO_WITH_IPOPT)
     # function from the library in the public headers.
     # Thus, depend publicly on the header,
     # privately on the compiled library.
-    target_link_libraries(pagmo PUBLIC IPOPT::header)
-    target_link_libraries(pagmo PRIVATE IPOPT::libipopt)
+    target_link_libraries(pagmo PUBLIC pagmo::IPOPT::header)
+    target_link_libraries(pagmo PRIVATE pagmo::IPOPT::libipopt)
     set(PAGMO_ENABLE_IPOPT "#define PAGMO_WITH_IPOPT")
 endif()
 
@@ -435,19 +431,18 @@ install(TARGETS pagmo
 # Setup of the optional deps.
 set(_PAGMO_CONFIG_OPTIONAL_DEPS)
 if(PAGMO_WITH_EIGEN3)
-    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 REQUIRED)\n")
+    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 3.3 REQUIRED NO_MODULE)\n")
 endif()
 if(PAGMO_WITH_NLOPT)
-    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLOPT REQUIRED COMPONENTS header)\n")
+    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLopt 2.6 REQUIRED NO_MODULE)\n")
 endif()
 if(PAGMO_WITH_IPOPT)
-    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(IPOPT REQUIRED COMPONENTS header)\n")
+    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(pagmo_IPOPT REQUIRED COMPONENTS header)\n")
 endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/Findpagmo_IPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
     DESTINATION "lib/cmake/pagmo")
 install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
 # Take care of versioning.
