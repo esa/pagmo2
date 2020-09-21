@@ -119,9 +119,7 @@ find_package(TBB REQUIRED)
 
 # Eigen3
 if(PAGMO_WITH_EIGEN3)
-    find_package(Eigen3 REQUIRED)
-    message(STATUS "Eigen include directory: ${EIGEN3_INCLUDE_DIR}")
-    message(STATUS "Eigen version detected: ${EIGEN3_VERSION}")
+    find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 endif()
 
 # NLopt
@@ -360,7 +358,7 @@ target_link_libraries(pagmo PRIVATE TBB::tbb)
 
 if(PAGMO_WITH_EIGEN3)
     # Link pagmo to eigen3.
-    target_link_libraries(pagmo PUBLIC Eigen3::eigen3)
+    target_link_libraries(pagmo PUBLIC Eigen3::Eigen)
     set(PAGMO_ENABLE_EIGEN3 "#define PAGMO_WITH_EIGEN3")
 endif()
 
@@ -448,7 +446,7 @@ endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindEigen3.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindNLOPT.cmake"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/FindIPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
     DESTINATION "lib/cmake/pagmo")
 install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
