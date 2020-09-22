@@ -62,6 +62,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
 #include <pagmo/utils/multi_objective.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 
 // Algorithms.
 #include <pagmo/algorithms/bee_colony.hpp>
