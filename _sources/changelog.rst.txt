@@ -22,6 +22,12 @@ New
 Changes
 ~~~~~~~
 
+- NLopt support in pagmo now requires version 2.6 or greater
+  (`#451 <https://github.com/esa/pagmo2/pull/451>`__).
+
+- Eigen3 support in pagmo now requires version 3.3 or greater
+  (`#451 <https://github.com/esa/pagmo2/pull/451>`__).
+
 - **BREAKING**: pagmo now requires C++17
   (`#414 <https://github.com/esa/pagmo2/pull/414>`__,
   `#415 <https://github.com/esa/pagmo2/pull/415>`__).
@@ -37,6 +43,15 @@ Changes
 
 Fix
 ~~~
+
+- Various build system fixes/improvements
+  (`#451 <https://github.com/esa/pagmo2/pull/451>`__).
+
+- Fix an indexing bug in the PSO implementation
+  (`#448 <https://github.com/esa/pagmo2/pull/448>`__).
+
+- Fix build failure with Boost 1.74
+  (`#447 <https://github.com/esa/pagmo2/pull/447>`__).
 
 - Fixes in SBX and polynomial mutation
   (`#436 <https://github.com/esa/pagmo2/pull/436>`__).
