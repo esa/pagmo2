@@ -53,6 +53,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/constrained.hpp>
 #include <pagmo/utils/discrepancy.hpp>
 #include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/gradients_and_hessians.hpp>
 #include <pagmo/utils/hv_algos/hv_algorithm.hpp>
 #include <pagmo/utils/hv_algos/hv_bf_approx.hpp>
@@ -62,7 +63,6 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/hv_algos/hv_hvwfg.hpp>
 #include <pagmo/utils/hypervolume.hpp>
 #include <pagmo/utils/multi_objective.hpp>
-#include <pagmo/utils/genetic_operators.hpp>
 
 // Algorithms.
 #include <pagmo/algorithms/bee_colony.hpp>
@@ -144,6 +144,7 @@ see https://www.gnu.org/licenses/. */
 
 // Topologies.
 #include <pagmo/topologies/base_bgl_topology.hpp>
+#include <pagmo/topologies/free_form.hpp>
 #include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/topologies/ring.hpp>
 #include <pagmo/topologies/unconnected.hpp>
