@@ -167,7 +167,7 @@ vector_double unconstrain::fitness(const vector_double &x) const
                 }
             }
             for (decltype(nc) i = 0u; i < nc; ++i) {
-                if (!(c[i] < 0.)) {
+                if (!(c[i] <= 0.)) {
                     penalty += m_weights[i] * c[i];
                 }
             }
