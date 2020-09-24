@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -189,7 +189,7 @@
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p><em>#include &lt;pagmo/batch_evaluators/default_bfe.hpp&gt;</em></p>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo11default_bfeE">
 <span id="_CPPv3N5pagmo11default_bfeE"></span><span id="_CPPv2N5pagmo11default_bfeE"></span><span id="pagmo::default_bfe"></span><em class="property">class </em><code class="sig-name descname">default_bfe</code><a class="headerlink" href="#_CPPv4N5pagmo11default_bfeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
@@ -197,7 +197,7 @@ construct a <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" 
 <a class="reference internal" href="#_CPPv4N5pagmo11default_bfeE" title="pagmo::default_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">default_bfe</span></code></a> is the default UDBFE used by <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>, and,
 depending on the properties of the input <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">problem</span></code></a>, it will delegate the implementation
 of its call operator to <a class="reference internal" href="member_bfe.html#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> or <a class="reference internal" href="thread_bfe.html#_CPPv4N5pagmo10thread_bfeE" title="pagmo::thread_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_bfe</span></code></a>.</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11default_bfeclERK7problemRK13vector_double">
 <span id="_CPPv3NK5pagmo11default_bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo11default_bfeclERK7problemRK13vector_double"></span><span id="pagmo::default_bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>dvs</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11default_bfeclERK7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Call operator.</p>
@@ -232,7 +232,7 @@ thread safety level, an error will be raised.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11default_bfe8get_nameEv">
 <span id="_CPPv3NK5pagmo11default_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo11default_bfe8get_nameEv"></span><span id="pagmo::default_bfe::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11default_bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
@@ -242,7 +242,7 @@ thread safety level, an error will be raised.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo11default_bfe9serializeEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo11default_bfe9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo11default_bfe9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11default_bfe9serializeEvR7Archivej" title="pagmo::default_bfe::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11default_bfe9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialisation support.</p>

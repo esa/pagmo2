@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -206,15 +206,15 @@
             
   <div class="section" id="self-adaptive-differential-evolution-jde-and-ide">
 <h1>Self-adaptive Differential Evolution (jDE and iDE)<a class="headerlink" href="#self-adaptive-differential-evolution-jde-and-ide" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo4sadeE">
-<span id="_CPPv3N5pagmo4sadeE"></span><span id="_CPPv2N5pagmo4sadeE"></span><span id="pagmo::sade"></span><span class="target" id="classpagmo_1_1sade"></span><em class="property">class </em><code class="sig-name descname">sade</code><a class="headerlink" href="#_CPPv4N5pagmo4sadeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4sadeE"></span><span id="_CPPv2N5pagmo4sadeE"></span><span id="pagmo::sade"></span><span class="target" id="classpagmo_1_1sade"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">sade</code><a class="headerlink" href="#_CPPv4N5pagmo4sadeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Self-adaptive Differential Evolution Algorithm. </p>
 <p><p>.</p>
 <img alt="../../../_images/adaptation.jpg" src="../../../_images/adaptation.jpg" /></p>
 <p>Two different variants of the Differential Evolution algorithm exploiting the idea of self-adaptation.</p>
 <p>The original Differential Evolution algorithm (<a class="reference internal" href="de.html#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>) can be significantly improved introducing the idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters of the original differential evolution algorithm. In PaGMO we implement two different mechanisms we found effective. The first one, proposed by Brest et al., does not make use of the DE operators to produce new values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control. The resulting DE variant is often referred to as jDE. The second variant here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE operator to produce new CR anf F parameters for each individual. We refer to this variant as to iDE.</p>
-<p><div class="admonition warning">
+<p><p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>A moved-from pagmo::sade is destructible and assignable. Any other operation will result
 in undefined behaviour.</p>
@@ -241,16 +241,17 @@ Transactions on, 10(6), 646-657. Chicago</p>
 strategies for solving CEC2011 real-world numerical optimization problems. In Evolutionary Computation (CEC), 2011
 IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </div>
+</p>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo4sade13log_line_typeE">
 <span id="_CPPv3N5pagmo4sade13log_line_typeE"></span><span id="_CPPv2N5pagmo4sade13log_line_typeE"></span><span id="pagmo::sade::log_line_type"></span><span class="target" id="classpagmo_1_1sade_1ac246638f96c2350834ee9a3ca77d004f"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4sade13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, F, CR, dx, df) </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo4sade8log_typeE">
 <span id="_CPPv3N5pagmo4sade8log_typeE"></span><span id="_CPPv2N5pagmo4sade8log_typeE"></span><span id="pagmo::sade::log_type"></span><span class="target" id="classpagmo_1_1sade_1a470780aa5aa0aabfa78a4f59d96a1e70"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo4sade13log_line_typeE" title="pagmo::sade::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo4sade8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
@@ -259,7 +260,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4sade4sadeEjjjddbj">
 <span id="_CPPv3N5pagmo4sade4sadeEjjjddbj"></span><span id="_CPPv2N5pagmo4sade4sadeEjjjddbj"></span><span id="pagmo::sade::sade__unsigned.unsigned.unsigned.double.double.b.unsigned"></span><span class="target" id="classpagmo_1_1sade_1a7bce81d91e4a3394895ca85eb6fcdc76"></span><code class="sig-name descname">sade</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, unsigned <em>variant</em> = 2u, unsigned <em>variant_adptv</em> = 1u, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4sade4sadeEjjjddbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
@@ -303,9 +304,9 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade6evolveE10population">
-<span id="_CPPv3NK5pagmo4sade6evolveE10population"></span><span id="_CPPv2NK5pagmo4sade6evolveE10population"></span><span id="pagmo::sade::evolve__populationC"></span><span class="target" id="classpagmo_1_1sade_1a30ca8bf5705fd519fcffcb4fdc48d9c5"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4sade6evolveE10population"></span><span id="_CPPv2NK5pagmo4sade6evolveE10population"></span><span id="pagmo::sade::evolve__populationC"></span><span class="target" id="classpagmo_1_1sade_1a30ca8bf5705fd519fcffcb4fdc48d9c5"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <p><dl class="simple">
@@ -324,9 +325,9 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4sade8set_seedEj">
-<span id="_CPPv3N5pagmo4sade8set_seedEj"></span><span id="_CPPv2N5pagmo4sade8set_seedEj"></span><span id="pagmo::sade::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sade_1a4f1f76f70c053b529081d3e496da6fcf"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4sade8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4sade8set_seedEj"></span><span id="_CPPv2N5pagmo4sade8set_seedEj"></span><span id="pagmo::sade::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sade_1a4f1f76f70c053b529081d3e496da6fcf"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4sade8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -337,7 +338,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade8get_seedEv">
 <span id="_CPPv3NK5pagmo4sade8get_seedEv"></span><span id="_CPPv2NK5pagmo4sade8get_seedEv"></span><span id="pagmo::sade::get_seedC"></span><span class="target" id="classpagmo_1_1sade_1ad25a6714c69c45b544cef607f5d6fd0a"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
@@ -348,7 +349,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4sade13set_verbosityEj">
 <span id="_CPPv3N5pagmo4sade13set_verbosityEj"></span><span id="_CPPv2N5pagmo4sade13set_verbosityEj"></span><span id="pagmo::sade::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sade_1a2bf651ff4a6ef6bd7b303563c63cdb33"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4sade13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
@@ -377,7 +378,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade13get_verbosityEv">
 <span id="_CPPv3NK5pagmo4sade13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4sade13get_verbosityEv"></span><span id="pagmo::sade::get_verbosityC"></span><span class="target" id="classpagmo_1_1sade_1a5fcb205218dff3b6ab1c134efc68b7fd"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
@@ -388,7 +389,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade7get_genEv">
 <span id="_CPPv3NK5pagmo4sade7get_genEv"></span><span id="_CPPv2NK5pagmo4sade7get_genEv"></span><span id="pagmo::sade::get_genC"></span><span class="target" id="classpagmo_1_1sade_1afcb73bd7ab751c7b5a553f1b001c02ee"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
@@ -399,7 +400,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade8get_nameEv">
 <span id="_CPPv3NK5pagmo4sade8get_nameEv"></span><span id="_CPPv2NK5pagmo4sade8get_nameEv"></span><span id="pagmo::sade::get_nameC"></span><span class="target" id="classpagmo_1_1sade_1a508486dc18b7377b196c95db9edaf9f7"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
@@ -411,7 +412,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo4sade14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4sade14get_extra_infoEv"></span><span id="pagmo::sade::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sade_1a9f642eb12b18f61ebf3e710b575f4b9a"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
@@ -423,7 +424,7 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4sade7get_logEv">
 <span id="_CPPv3NK5pagmo4sade7get_logEv"></span><span id="_CPPv2NK5pagmo4sade7get_logEv"></span><span id="pagmo::sade::get_logC"></span><span class="target" id="classpagmo_1_1sade_1ab5aaf8e979c80ada070d2825e0d4db17"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo4sade8log_typeE" title="pagmo::sade::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4sade7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
@@ -434,9 +435,9 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo4sade9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo4sade9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4sade9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1sade_1a6df4afe1dcded0e292b99d9460494a46"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4sade9serializeEvR7Archivej" title="pagmo::sade::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4sade9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo4sade9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4sade9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1sade_1a6df4afe1dcded0e292b99d9460494a46"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4sade9serializeEvR7Archivej" title="pagmo::sade::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4sade9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

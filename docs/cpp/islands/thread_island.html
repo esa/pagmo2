@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -185,7 +185,7 @@
   <div class="section" id="thread-island">
 <h1>Thread island<a class="headerlink" href="#thread-island" title="Permalink to this headline">¶</a></h1>
 <p><em>#include &lt;pagmo/islands/thread_island.hpp&gt;</em></p>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo13thread_islandE">
 <span id="_CPPv3N5pagmo13thread_islandE"></span><span id="_CPPv2N5pagmo13thread_islandE"></span><span id="pagmo::thread_island"></span><em class="property">class </em><code class="sig-name descname">thread_island</code><a class="headerlink" href="#_CPPv4N5pagmo13thread_islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread island.</p>
@@ -195,7 +195,7 @@ thread of execution.</p>
 the constructors of <a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a>
 on non-POSIX platforms or when both the island’s problem and algorithm provide at least the
 <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safety5basicE" title="pagmo::thread_safety::basic"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">basic</span></code></a> thread safety guarantee.</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo13thread_island13thread_islandEb">
 <span id="_CPPv3N5pagmo13thread_island13thread_islandEb"></span><span id="_CPPv2N5pagmo13thread_island13thread_islandEb"></span><span id="pagmo::thread_island::thread_island__b"></span><em class="property">explicit</em> <code class="sig-name descname">thread_island</code><span class="sig-paren">(</span>bool <em>use_pool</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13thread_island13thread_islandEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -227,14 +227,14 @@ can be active at the same time, albeit with a performance penalty).</p>
 used by the island.</p>
 </dd>
 </dl>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo13thread_island13thread_islandEv">
 <span id="_CPPv3N5pagmo13thread_island13thread_islandEv"></span><span id="_CPPv2N5pagmo13thread_island13thread_islandEv"></span><span id="pagmo::thread_island::thread_island"></span><code class="sig-name descname">thread_island</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13thread_island13thread_islandEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <p>Default constructor, equivalent to the previous constructor
 with <em>use_pool</em> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13thread_island8get_nameEv">
 <span id="_CPPv3NK5pagmo13thread_island8get_nameEv"></span><span id="_CPPv2NK5pagmo13thread_island8get_nameEv"></span><span id="pagmo::thread_island::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -245,7 +245,7 @@ with <em>use_pool</em> set to <code class="docutils literal notranslate"><span c
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Thread</span> <span class="pre">island&quot;</span></code>.</p>
 </dd>
 </dl>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13thread_island14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo13thread_island14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo13thread_island14get_extra_infoEv"></span><span id="pagmo::thread_island::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -259,7 +259,7 @@ with <em>use_pool</em> set to <code class="docutils literal notranslate"><span c
 <dd class="field-odd"><p>a string containing extra info about this island instance.</p>
 </dd>
 </dl>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13thread_island10run_evolveER6island">
 <span id="_CPPv3NK5pagmo13thread_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo13thread_island10run_evolveER6island"></span><span id="pagmo::thread_island::run_evolve__islandRC"></span>void <code class="sig-name descname">run_evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<em>isl</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -289,12 +289,12 @@ at least the <a class="reference internal" href="../miscellanea/type_traits.html
 </ul>
 </dd>
 </dl>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0ENK5pagmo13thread_island4saveEvR7Archivej">
 <span id="_CPPv3I0ENK5pagmo13thread_island4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo13thread_island4saveER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo13thread_island4saveEvR7Archivej" title="pagmo::thread_island::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo13thread_island4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo13thread_island4loadEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo13thread_island4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo13thread_island4loadER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo13thread_island4loadEvR7Archivej" title="pagmo::thread_island::load::Archive">Archive</a> &amp;<em>ar</em>, unsigned <em>version</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo13thread_island4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialisation support.</p>

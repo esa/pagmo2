@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -212,7 +212,7 @@
 <img alt="../../../_images/lennard_jones.jpg" src="../../../_images/lennard_jones.jpg" />
 <p class="caption"><span class="caption-text">A cluster of atoms.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo13lennard_jonesE">
 <span id="_CPPv3N5pagmo13lennard_jonesE"></span><span id="_CPPv2N5pagmo13lennard_jonesE"></span><span id="pagmo::lennard_jones"></span><em class="property">class </em><code class="sig-name descname">lennard_jones</code><a class="headerlink" href="#_CPPv4N5pagmo13lennard_jonesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This is a box-constrained continuous single-objecive problem. It represents the minimization
@@ -221,7 +221,7 @@ The complexity for computing the objective function scales with the square of th
 <p>The decision vector contains <span class="math notranslate nohighlight">\([z_2, y_3, z_3, x_4, y_4, z_4, ....]\)</span> as the cartesian coordinates
 <span class="math notranslate nohighlight">\(x_1, y_1, z_1, x_2, y_2\)</span> and <span class="math notranslate nohighlight">\(x_3\)</span> are fixed to be zero.</p>
 <p>See: <a class="reference external" href="http://doye.chem.ox.ac.uk/jon/structures/LJ.html">http://doye.chem.ox.ac.uk/jon/structures/LJ.html</a></p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo13lennard_jones13lennard_jonesEj">
 <span id="_CPPv3N5pagmo13lennard_jones13lennard_jonesEj"></span><span id="_CPPv2N5pagmo13lennard_jones13lennard_jonesEj"></span><span id="pagmo::lennard_jones::lennard_jones__unsigned"></span><code class="sig-name descname">lennard_jones</code><span class="sig-paren">(</span>unsigned <em>atoms</em> = 3u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13lennard_jones13lennard_jonesEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a UDP representing the Lennard Jones Clusters global optimisation problem.</p>
@@ -235,7 +235,7 @@ The complexity for computing the objective function scales with the square of th
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13lennard_jones7fitnessERK13vector_double">
 <span id="_CPPv3NK5pagmo13lennard_jones7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo13lennard_jones7fitnessERK13vector_double"></span><span id="pagmo::lennard_jones::fitness__vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13lennard_jones7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Computes the fitness for this UDP. The complexity is <span class="math notranslate nohighlight">\(n^2\)</span>, where <span class="math notranslate nohighlight">\(n^2\)</span> is the number of atoms.</p>
@@ -249,7 +249,7 @@ The complexity for computing the objective function scales with the square of th
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13lennard_jones10get_boundsEv">
 <span id="_CPPv3NK5pagmo13lennard_jones10get_boundsEv"></span><span id="_CPPv2NK5pagmo13lennard_jones10get_boundsEv"></span><span id="pagmo::lennard_jones::get_boundsC"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13lennard_jones10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the box-bounds for this UDP.</p>
@@ -260,7 +260,7 @@ The complexity for computing the objective function scales with the square of th
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13lennard_jones8get_nameEv">
 <span id="_CPPv3NK5pagmo13lennard_jones8get_nameEv"></span><span id="_CPPv2NK5pagmo13lennard_jones8get_nameEv"></span><span id="pagmo::lennard_jones::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13lennard_jones8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the problem name.</p>
@@ -271,7 +271,7 @@ The complexity for computing the objective function scales with the square of th
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo13lennard_jones9serializeEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo13lennard_jones9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo13lennard_jones9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo13lennard_jones9serializeEvR7Archivej" title="pagmo::lennard_jones::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo13lennard_jones9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization.</p>

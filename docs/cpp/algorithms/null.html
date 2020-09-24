@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -206,16 +206,16 @@
             
   <div class="section" id="null-algorithm">
 <h1>Null algorithm<a class="headerlink" href="#null-algorithm" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp struct">
 <dt id="_CPPv4N5pagmo14null_algorithmE">
-<span id="_CPPv3N5pagmo14null_algorithmE"></span><span id="_CPPv2N5pagmo14null_algorithmE"></span><span id="pagmo::null_algorithm"></span><span class="target" id="structpagmo_1_1null__algorithm"></span><em class="property">struct </em><code class="sig-name descname">null_algorithm</code><a class="headerlink" href="#_CPPv4N5pagmo14null_algorithmE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14null_algorithmE"></span><span id="_CPPv2N5pagmo14null_algorithmE"></span><span id="pagmo::null_algorithm"></span><span class="target" id="structpagmo_1_1null__algorithm"></span><em class="property">struct </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">null_algorithm</code><a class="headerlink" href="#_CPPv4N5pagmo14null_algorithmE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Null algorithm. </p>
 <p>This algorithm is used to implement the default constructors of <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and of the meta-algorithms. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo14null_algorithm6evolveERK10population">
-<span id="_CPPv3NK5pagmo14null_algorithm6evolveERK10population"></span><span id="_CPPv2NK5pagmo14null_algorithm6evolveERK10population"></span><span id="pagmo::null_algorithm::evolve__populationCRC"></span><span class="target" id="structpagmo_1_1null__algorithm_1ab80a6401f4d84f571496db1ef740a46b"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14null_algorithm6evolveERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo14null_algorithm6evolveERK10population"></span><span id="_CPPv2NK5pagmo14null_algorithm6evolveERK10population"></span><span id="pagmo::null_algorithm::evolve__populationCRC"></span><span class="target" id="structpagmo_1_1null__algorithm_1ab80a6401f4d84f571496db1ef740a46b"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14null_algorithm6evolveERK10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve method. </p>
 <p>In the null algorithm, the evolve method just returns the input population.</p>
 <p><dl class="simple">
@@ -229,7 +229,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo14null_algorithm8get_nameEv">
 <span id="_CPPv3NK5pagmo14null_algorithm8get_nameEv"></span><span id="_CPPv2NK5pagmo14null_algorithm8get_nameEv"></span><span id="pagmo::null_algorithm::get_nameC"></span><span class="target" id="structpagmo_1_1null__algorithm_1a7f438765b0597ee2f0cf259a92b7cf63"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo14null_algorithm8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
@@ -240,9 +240,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo14null_algorithm9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14null_algorithm9serializeER7Archivej"></span><span class="target" id="structpagmo_1_1null__algorithm_1a79d1d6c2ff2265b0283e5f1a2270be1c"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archivej" title="pagmo::null_algorithm::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14null_algorithm9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14null_algorithm9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="structpagmo_1_1null__algorithm_1a79d1d6c2ff2265b0283e5f1a2270be1c"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archivej" title="pagmo::null_algorithm::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14null_algorithm9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialization support. </p>
 <p>This class is stateless, no data will be loaded or saved during serialization. </p>
 </dd></dl>

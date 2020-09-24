@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,17 +204,17 @@
             
   <div class="section" id="rosenbrock">
 <h1>Rosenbrock<a class="headerlink" href="#rosenbrock" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp struct">
 <dt id="_CPPv4N5pagmo10rosenbrockE">
-<span id="_CPPv3N5pagmo10rosenbrockE"></span><span id="_CPPv2N5pagmo10rosenbrockE"></span><span id="pagmo::rosenbrock"></span><span class="target" id="structpagmo_1_1rosenbrock"></span><em class="property">struct </em><code class="sig-name descname">rosenbrock</code><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrockE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10rosenbrockE"></span><span id="_CPPv2N5pagmo10rosenbrockE"></span><span id="pagmo::rosenbrock"></span><span class="target" id="structpagmo_1_1rosenbrock"></span><em class="property">struct </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">rosenbrock</code><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrockE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Rosenbrock problem. </p>
 <p><img alt="../../../_images/rosenbrock.png" src="../../../_images/rosenbrock.png" /></p>
 <p>This is a box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Rosenbrock function: <div class="math notranslate nohighlight">
-\[\]</div>
+\[ F\left(x_1,\ldots,x_n\right) = \sum_{i=1}^{n-1}\left[ 100\left(x_i^2-x_{i+1}\right)^2+\left(x_i-1\right)^2\right], \quad x_i \in \left[ -5,10 \right]. \]</div>
  The global minimum is in <span class="math notranslate nohighlight">\(x_i=1\)</span>, where <span class="math notranslate nohighlight">\( F\left( 1,\ldots,1 \right) = 0 \)</span>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE">
 <span id="_CPPv3N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE"></span><span id="pagmo::rosenbrock::rosenbrock__vector_double::size_type"></span><span class="target" id="structpagmo_1_1rosenbrock_1a4b2de683f5fe89f2c739d763f5622a2e"></span><code class="sig-name descname">rosenbrock</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>dim</em> = 2u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension. </p>
@@ -231,9 +231,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="pagmo::rosenbrock::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2a102b0d620936c2388d96199068f8c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="pagmo::rosenbrock::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2a102b0d620936c2388d96199068f8c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP.</p>
 <p><dl class="simple">
@@ -247,7 +247,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo10rosenbrock10get_boundsEv">
 <span id="_CPPv3NK5pagmo10rosenbrock10get_boundsEv"></span><span id="_CPPv2NK5pagmo10rosenbrock10get_boundsEv"></span><span id="pagmo::rosenbrock::get_boundsC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a64b83e134a1701c49f4fdfb9f936a6f8"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -258,7 +258,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo10rosenbrock8get_nameEv">
 <span id="_CPPv3NK5pagmo10rosenbrock8get_nameEv"></span><span id="_CPPv2NK5pagmo10rosenbrock8get_nameEv"></span><span id="pagmo::rosenbrock::get_nameC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2cf55a99b8b32a01105756fe1ed157b"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -269,9 +269,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double">
-<span id="_CPPv3NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="pagmo::rosenbrock::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a3c4e71e8765df8cc7b58350f66df0469"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="pagmo::rosenbrock::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a3c4e71e8765df8cc7b58350f66df0469"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradient. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the gradient of the fitness function in <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
@@ -284,7 +284,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo10rosenbrock10best_knownEv">
 <span id="_CPPv3NK5pagmo10rosenbrock10best_knownEv"></span><span id="_CPPv2NK5pagmo10rosenbrock10best_knownEv"></span><span id="pagmo::rosenbrock::best_knownC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a63c912dcbdbd147f4d4ccf193084a1f9"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
@@ -295,9 +295,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo10rosenbrock9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo10rosenbrock9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo10rosenbrock9serializeER7Archivej"></span><span class="target" id="structpagmo_1_1rosenbrock_1a49760dde62eb2398fcf1943897f2450a"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo10rosenbrock9serializeEvR7Archivej" title="pagmo::rosenbrock::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo10rosenbrock9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo10rosenbrock9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo10rosenbrock9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="structpagmo_1_1rosenbrock_1a49760dde62eb2398fcf1943897f2450a"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo10rosenbrock9serializeEvR7Archivej" title="pagmo::rosenbrock::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo10rosenbrock9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -313,7 +313,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo10rosenbrock17get_thread_safetyEv">
 <span id="_CPPv3NK5pagmo10rosenbrock17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo10rosenbrock17get_thread_safetyEv"></span><span id="pagmo::rosenbrock::get_thread_safetyC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ab4ff3f5879691cb655418fb1354ab63a"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="sig-name descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread safety level. </p>
@@ -327,7 +327,7 @@
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
+<dl class="cpp var">
 <dt id="_CPPv4N5pagmo10rosenbrock5m_dimE">
 <span id="_CPPv3N5pagmo10rosenbrock5m_dimE"></span><span id="_CPPv2N5pagmo10rosenbrock5m_dimE"></span><span id="pagmo::rosenbrock::m_dim__vector_double::size_type"></span><span class="target" id="structpagmo_1_1rosenbrock_1ac8c667aff0ff25c947bda0787dabbe03"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">m_dim</code><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrock5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>

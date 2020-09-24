@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -212,7 +212,7 @@
 <img alt="../../../_images/golomb_ruler.png" src="../../../_images/golomb_ruler.png" />
 <p class="caption"><span class="caption-text">The optimal (and perfect) Golomb ruler of order 4.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo12golomb_rulerE">
 <span id="_CPPv3N5pagmo12golomb_rulerE"></span><span id="_CPPv2N5pagmo12golomb_rulerE"></span><span id="pagmo::golomb_ruler"></span><em class="property">class </em><code class="sig-name descname">golomb_ruler</code><a class="headerlink" href="#_CPPv4N5pagmo12golomb_rulerE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>In mathematics, a Golomb ruler is a set of marks at integer positions along an imaginary ruler such that no two pairs
@@ -238,7 +238,7 @@ indicated with <span class="math notranslate nohighlight">\(d_i\)</span>. The ti
 <p>We transcribe the constraints as one single equality constraint: <span class="math notranslate nohighlight">\(c = 0\)</span> where <span class="math notranslate nohighlight">\(c\)</span> is the count of
 repeated distances.</p>
 <p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Golomb_ruler">https://en.wikipedia.org/wiki/Golomb_ruler</a></p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo12golomb_ruler12golomb_rulerEjj">
 <span id="_CPPv3N5pagmo12golomb_ruler12golomb_rulerEjj"></span><span id="_CPPv2N5pagmo12golomb_ruler12golomb_rulerEjj"></span><span id="pagmo::golomb_ruler::golomb_ruler__unsigned.unsigned"></span><code class="sig-name descname">golomb_ruler</code><span class="sig-paren">(</span>unsigned <em>order</em> = 3u, unsigned <em>upper_bound</em> = 10<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo12golomb_ruler12golomb_rulerEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a UDP representing the search for an optimal Golomb ruler.</p>
@@ -258,7 +258,7 @@ repeated distances.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12golomb_ruler7fitnessERK13vector_double">
 <span id="_CPPv3NK5pagmo12golomb_ruler7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo12golomb_ruler7fitnessERK13vector_double"></span><span id="pagmo::golomb_ruler::fitness__vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12golomb_ruler7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Computes the fitness for this UDP. The complexity is <span class="math notranslate nohighlight">\(n^2\)</span>, where <span class="math notranslate nohighlight">\(n^2\)</span> is the ruler order.</p>
@@ -272,7 +272,7 @@ repeated distances.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12golomb_ruler7get_necEv">
 <span id="_CPPv3NK5pagmo12golomb_ruler7get_necEv"></span><span id="_CPPv2NK5pagmo12golomb_ruler7get_necEv"></span><span id="pagmo::golomb_ruler::get_necC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12golomb_ruler7get_necEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The number of equality constraints of the UDP.</p>
@@ -283,7 +283,7 @@ repeated distances.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12golomb_ruler7get_nixEv">
 <span id="_CPPv3NK5pagmo12golomb_ruler7get_nixEv"></span><span id="_CPPv2NK5pagmo12golomb_ruler7get_nixEv"></span><span id="pagmo::golomb_ruler::get_nixC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12golomb_ruler7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The integer dimension of the problem.</p>
@@ -294,7 +294,7 @@ repeated distances.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12golomb_ruler10get_boundsEv">
 <span id="_CPPv3NK5pagmo12golomb_ruler10get_boundsEv"></span><span id="_CPPv2NK5pagmo12golomb_ruler10get_boundsEv"></span><span id="pagmo::golomb_ruler::get_boundsC"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12golomb_ruler10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the box-bounds for this UDP.</p>
@@ -305,7 +305,7 @@ repeated distances.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12golomb_ruler8get_nameEv">
 <span id="_CPPv3NK5pagmo12golomb_ruler8get_nameEv"></span><span id="_CPPv2NK5pagmo12golomb_ruler8get_nameEv"></span><span id="pagmo::golomb_ruler::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12golomb_ruler8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the problem name.</p>
@@ -316,7 +316,7 @@ repeated distances.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo12golomb_ruler9serializeEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo12golomb_ruler9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo12golomb_ruler9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo12golomb_ruler9serializeEvR7Archivej" title="pagmo::golomb_ruler::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo12golomb_ruler9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization.</p>

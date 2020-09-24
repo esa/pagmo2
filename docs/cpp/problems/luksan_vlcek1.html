@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,22 +204,22 @@
             
   <div class="section" id="luksan-vlcek-1">
 <h1>Luksan Vlcek 1<a class="headerlink" href="#luksan-vlcek-1" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp struct">
 <dt id="_CPPv4N5pagmo13luksan_vlcek1E">
-<span id="_CPPv3N5pagmo13luksan_vlcek1E"></span><span id="_CPPv2N5pagmo13luksan_vlcek1E"></span><span id="pagmo::luksan_vlcek1"></span><span class="target" id="structpagmo_1_1luksan__vlcek1"></span><em class="property">struct </em><code class="sig-name descname">luksan_vlcek1</code><a class="headerlink" href="#_CPPv4N5pagmo13luksan_vlcek1E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo13luksan_vlcek1E"></span><span id="_CPPv2N5pagmo13luksan_vlcek1E"></span><span id="pagmo::luksan_vlcek1"></span><span class="target" id="structpagmo_1_1luksan__vlcek1"></span><em class="property">struct </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">luksan_vlcek1</code><a class="headerlink" href="#_CPPv4N5pagmo13luksan_vlcek1E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Test problem from Luksan and Vlcek. </p>
 <p>Implementation of Example 5.1 in the report from Luksan and Vlcek.</p>
 <p>The problem is the Chained Rosenbrock function with trigonometric-exponential constraints.</p>
 <p>Its formulation can be written as:</p>
 <p><div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{rl} \mbox{find:} &amp; -5 \le x_i \le 5, \forall i=1..n \\ \mbox{to minimize: } &amp; \sum_{i=1}^{n-1}\left[100\left(x_i^2-x_{i+1}\right)^2 + \left(x_i-1\right)^2\right] \\ \mbox{subject to:} &amp; 3x_{k+1}^3+2x_{k+2}-5+\sin(x_{k+1}-x_{k+2})\sin(x_{k+1}+x_{k+2}) + \\ &amp; +4x_{k+1}-x_k\exp(x_k-x_{k+1})-3 = 0, \forall k=1..n-2 \end{array} \end{split}\]</div>
 </p>
 <p><p>See: Luksan, L., and Jan Vlcek. “Sparse and partially separable test problems for unconstrained and equality</p>
 <p>constrained optimization.” (1999). </p>
 <a class="reference external" href="http://hdl.handle.net/11104/0123965">http://hdl.handle.net/11104/0123965</a> </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo13luksan_vlcek113luksan_vlcek1Ej">
 <span id="_CPPv3N5pagmo13luksan_vlcek113luksan_vlcek1Ej"></span><span id="_CPPv2N5pagmo13luksan_vlcek113luksan_vlcek1Ej"></span><span id="pagmo::luksan_vlcek1::luksan_vlcek1__unsigned"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1af99b57f71db29a655389d3aaf63f6eec"></span><code class="sig-name descname">luksan_vlcek1</code><span class="sig-paren">(</span>unsigned <em>dim</em> = 3u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13luksan_vlcek113luksan_vlcek1Ej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension and bounds. </p>
@@ -237,9 +237,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13luksan_vlcek17fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo13luksan_vlcek17fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo13luksan_vlcek17fitnessERK13vector_double"></span><span id="pagmo::luksan_vlcek1::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1a2a089ce9b64032aba3cdadee0101cd7c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek17fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo13luksan_vlcek17fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo13luksan_vlcek17fitnessERK13vector_double"></span><span id="pagmo::luksan_vlcek1::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1a2a089ce9b64032aba3cdadee0101cd7c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek17fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP.</p>
 <p><dl class="simple">
@@ -253,7 +253,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13luksan_vlcek110get_boundsEv">
 <span id="_CPPv3NK5pagmo13luksan_vlcek110get_boundsEv"></span><span id="_CPPv2NK5pagmo13luksan_vlcek110get_boundsEv"></span><span id="pagmo::luksan_vlcek1::get_boundsC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1a272d8effc24cfbe205f193e9dd7bf48d"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek110get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -265,7 +265,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13luksan_vlcek17get_necEv">
 <span id="_CPPv3NK5pagmo13luksan_vlcek17get_necEv"></span><span id="_CPPv2NK5pagmo13luksan_vlcek17get_necEv"></span><span id="pagmo::luksan_vlcek1::get_necC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1aa1c1dd787a6b0025e0fa3aec23f71b44"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek17get_necEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Equality constraint dimension. </p>
@@ -276,9 +276,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13luksan_vlcek18gradientERK13vector_double">
-<span id="_CPPv3NK5pagmo13luksan_vlcek18gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo13luksan_vlcek18gradientERK13vector_double"></span><span id="pagmo::luksan_vlcek1::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1aef8e3179c5f379ec9d38c3b37df9ef2e"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek18gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo13luksan_vlcek18gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo13luksan_vlcek18gradientERK13vector_double"></span><span id="pagmo::luksan_vlcek1::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1aef8e3179c5f379ec9d38c3b37df9ef2e"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek18gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradients. </p>
 <p>It returns the fitness gradient.</p>
 <p>The gradient is represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">problem::gradient()</span></a>.</p>
@@ -293,7 +293,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13luksan_vlcek117gradient_sparsityEv">
 <span id="_CPPv3NK5pagmo13luksan_vlcek117gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo13luksan_vlcek117gradient_sparsityEv"></span><span id="pagmo::luksan_vlcek1::gradient_sparsityC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1a28708f6f626faf7fd49b41f4818c468c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a> <code class="sig-name descname">gradient_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek117gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradients sparsity. </p>
@@ -306,7 +306,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo13luksan_vlcek18get_nameEv">
 <span id="_CPPv3NK5pagmo13luksan_vlcek18get_nameEv"></span><span id="_CPPv2NK5pagmo13luksan_vlcek18get_nameEv"></span><span id="pagmo::luksan_vlcek1::get_nameC"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1ae8a1e82940eb2b2683c1c4a2afbb38cc"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo13luksan_vlcek18get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -317,9 +317,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo13luksan_vlcek19serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo13luksan_vlcek19serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo13luksan_vlcek19serializeER7Archivej"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1a7fedcf7bfb590a2bee6b60c842fb7eb6"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo13luksan_vlcek19serializeEvR7Archivej" title="pagmo::luksan_vlcek1::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo13luksan_vlcek19serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo13luksan_vlcek19serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo13luksan_vlcek19serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="structpagmo_1_1luksan__vlcek1_1a7fedcf7bfb590a2bee6b60c842fb7eb6"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo13luksan_vlcek19serializeEvR7Archivej" title="pagmo::luksan_vlcek1::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo13luksan_vlcek19serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -338,7 +338,7 @@
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
+<dl class="cpp var">
 <dt id="_CPPv4N5pagmo13luksan_vlcek15m_dimE">
 <span id="_CPPv3N5pagmo13luksan_vlcek15m_dimE"></span><span id="_CPPv2N5pagmo13luksan_vlcek15m_dimE"></span><span id="pagmo::luksan_vlcek1::m_dim__unsigned"></span><span class="target" id="structpagmo_1_1luksan__vlcek1_1aafed6995a6b8d4da578424ba114bbfd1"></span>unsigned <code class="sig-name descname">m_dim</code><a class="headerlink" href="#_CPPv4N5pagmo13luksan_vlcek15m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>

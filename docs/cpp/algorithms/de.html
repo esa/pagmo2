@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -206,15 +206,15 @@
             
   <div class="section" id="differential-evolution">
 <h1>Differential Evolution<a class="headerlink" href="#differential-evolution" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo2deE">
-<span id="_CPPv3N5pagmo2deE"></span><span id="_CPPv2N5pagmo2deE"></span><span id="pagmo::de"></span><span class="target" id="classpagmo_1_1de"></span><em class="property">class </em><code class="sig-name descname">de</code><a class="headerlink" href="#_CPPv4N5pagmo2deE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo2deE"></span><span id="_CPPv2N5pagmo2deE"></span><span id="pagmo::de"></span><span class="target" id="classpagmo_1_1de"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">de</code><a class="headerlink" href="#_CPPv4N5pagmo2deE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Differential Evolution Algorithm. </p>
 <p><img alt="../../../_images/de.png" src="../../../_images/de.png" /></p>
 <p>Differential Evolution is an heuristic optimizer developed by Rainer Storn and Kenneth Price.</p>
 <p>‘’A breakthrough happened, when Ken came up with the idea of using vector differences for perturbing the vector population. Since this seminal idea a lively discussion between Ken and Rainer and endless ruminations and computer simulations on both parts yielded many substantial improvements which make DE the versatile and robust tool it is today’’ (from the official web pages….)</p>
 <p>The implementation provided for PaGMO is based on the code provided in the official DE web site. <a class="reference internal" href="#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a> is suitable for box-constrained single-objective continuous optimization.</p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
 the allowed box-bounds, is here done by creating a random number in the bounds.</p>
@@ -224,16 +224,17 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <p>The official DE web site: <a class="reference external" href="http://www1.icsi.berkeley.edu/~storn/code.html">http://www1.icsi.berkeley.edu/~storn/code.html</a></p>
 <p>The paper that introduces Differential Evolution <a class="reference external" href="https://link.springer.com/article/10.1023%2FA%3A1008202821328">https://link.springer.com/article/10.1023%2FA%3A1008202821328</a></p>
 </div>
+</p>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo2de13log_line_typeE">
 <span id="_CPPv3N5pagmo2de13log_line_typeE"></span><span id="_CPPv2N5pagmo2de13log_line_typeE"></span><span id="pagmo::de::log_line_type"></span><span class="target" id="classpagmo_1_1de_1ac010a4a7bbe3253a6c4a50d84d96c94c"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo2de13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, dx, df) </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo2de8log_typeE">
 <span id="_CPPv3N5pagmo2de8log_typeE"></span><span id="_CPPv2N5pagmo2de8log_typeE"></span><span id="pagmo::de::log_type"></span><span class="target" id="classpagmo_1_1de_1ab53c7d8f0409804281678f71cca5893d"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo2de13log_line_typeE" title="pagmo::de::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo2de8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
@@ -242,7 +243,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo2de2deEjddjddj">
 <span id="_CPPv3N5pagmo2de2deEjddjddj"></span><span id="_CPPv2N5pagmo2de2deEjddjddj"></span><span id="pagmo::de::de__unsigned.double.double.unsigned.double.double.unsigned"></span><span class="target" id="classpagmo_1_1de_1a55f61e3151466b8b978f9b9589d359a2"></span><code class="sig-name descname">de</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>F</em> = 0.8, double <em>CR</em> = 0.9, unsigned <em>variant</em> = 2u, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de2deEjddjddj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
@@ -275,9 +276,9 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de6evolveE10population">
-<span id="_CPPv3NK5pagmo2de6evolveE10population"></span><span id="_CPPv2NK5pagmo2de6evolveE10population"></span><span id="pagmo::de::evolve__populationC"></span><span class="target" id="classpagmo_1_1de_1a1ab270156c0dddcd2012bd1463a324bf"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo2de6evolveE10population"></span><span id="_CPPv2NK5pagmo2de6evolveE10population"></span><span id="pagmo::de::evolve__populationC"></span><span class="target" id="classpagmo_1_1de_1a1ab270156c0dddcd2012bd1463a324bf"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <p><dl class="simple">
@@ -296,9 +297,9 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo2de8set_seedEj">
-<span id="_CPPv3N5pagmo2de8set_seedEj"></span><span id="_CPPv2N5pagmo2de8set_seedEj"></span><span id="pagmo::de::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de_1ab4ecb2c76114d70692fa04888970b991"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo2de8set_seedEj"></span><span id="_CPPv2N5pagmo2de8set_seedEj"></span><span id="pagmo::de::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de_1ab4ecb2c76114d70692fa04888970b991"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -309,7 +310,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de8get_seedEv">
 <span id="_CPPv3NK5pagmo2de8get_seedEv"></span><span id="_CPPv2NK5pagmo2de8get_seedEv"></span><span id="pagmo::de::get_seedC"></span><span class="target" id="classpagmo_1_1de_1ad25a980de97fb36cf6b8d1bec754448a"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the seed. </p>
@@ -320,7 +321,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo2de13set_verbosityEj">
 <span id="_CPPv3N5pagmo2de13set_verbosityEj"></span><span id="_CPPv2N5pagmo2de13set_verbosityEj"></span><span id="pagmo::de::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de_1ad0d1e3fa1993ccb22f36649c9478063a"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
@@ -348,7 +349,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de13get_verbosityEv">
 <span id="_CPPv3NK5pagmo2de13get_verbosityEv"></span><span id="_CPPv2NK5pagmo2de13get_verbosityEv"></span><span id="pagmo::de::get_verbosityC"></span><span class="target" id="classpagmo_1_1de_1a4d011ba8c065fb0a7805a2535ab8bef8"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
@@ -359,7 +360,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de7get_genEv">
 <span id="_CPPv3NK5pagmo2de7get_genEv"></span><span id="_CPPv2NK5pagmo2de7get_genEv"></span><span id="pagmo::de::get_genC"></span><span class="target" id="classpagmo_1_1de_1a28f12495162fb2a59cd11a8c0d6775a9"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
@@ -370,7 +371,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de8get_nameEv">
 <span id="_CPPv3NK5pagmo2de8get_nameEv"></span><span id="_CPPv2NK5pagmo2de8get_nameEv"></span><span id="pagmo::de::get_nameC"></span><span class="target" id="classpagmo_1_1de_1acb197065476522d09a7bd3ab663354e2"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
@@ -382,7 +383,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo2de14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo2de14get_extra_infoEv"></span><span id="pagmo::de::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de_1a6a399c0acc415ab90973478cc6da84f0"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
@@ -394,7 +395,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo2de7get_logEv">
 <span id="_CPPv3NK5pagmo2de7get_logEv"></span><span id="_CPPv2NK5pagmo2de7get_logEv"></span><span id="pagmo::de::get_logC"></span><span class="target" id="classpagmo_1_1de_1a37257d11a85756488f338b37185a3004"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo2de8log_typeE" title="pagmo::de::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo2de7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
@@ -405,9 +406,9 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo2de9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo2de9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo2de9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1de_1aba724b74dc2007271641a162c2f7e47f"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo2de9serializeEvR7Archivej" title="pagmo::de::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo2de9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo2de9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo2de9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1de_1aba724b74dc2007271641a162c2f7e47f"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo2de9serializeEvR7Archivej" title="pagmo::de::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo2de9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

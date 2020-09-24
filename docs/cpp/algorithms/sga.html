@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -206,14 +206,15 @@
             
   <div class="section" id="simple-genetic-algorithm">
 <h1>Simple Genetic Algorithm<a class="headerlink" href="#simple-genetic-algorithm" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo3sgaE">
-<span id="_CPPv3N5pagmo3sgaE"></span><span id="_CPPv2N5pagmo3sgaE"></span><span id="pagmo::sga"></span><span class="target" id="classpagmo_1_1sga"></span><em class="property">class </em><code class="sig-name descname">sga</code><a class="headerlink" href="#_CPPv4N5pagmo3sgaE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sgaE"></span><span id="_CPPv2N5pagmo3sgaE"></span><span id="pagmo::sga"></span><span class="target" id="classpagmo_1_1sga"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">sga</code><a class="headerlink" href="#_CPPv4N5pagmo3sgaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>A Simple Genetic Algorithm. </p>
 <p><img alt="../../../_images/sga.jpg" src="../../../_images/sga.jpg" /></p>
-<p><div class="versionadded">
+<p><p><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.2.</span></p>
 </div>
+</p>
 </p>
 <p>Approximately during the same decades as Evolutionary Strategies (see <a class="reference internal" href="sea.html#classpagmo_1_1sea"><span class="std std-ref">pagmo::sea</span></a>) were studied, a different group led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called “genetic algorithms” that were, essentially, leveraging on the same idea but introducing also crossover as a genetic operator. This led to a few decades of confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on whether the crossover was a useful operator or mutation only algorithms were to be preferred.</p>
 <p>In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between some selected crossover types, selection schemes and mutation types.</p>
@@ -232,7 +233,7 @@
 <p><em>Crossover</em>: four different crossover schemes are provided: “single”, “exponential”, “binomial”, “sbx”. The single point crossover, called “single”, works selecting a random point in the parent chromosome and inserting the partner chromosome thereafter. The exponential crossover is taken from the algorithm differential evolution, implemented, in pagmo, as <a class="reference internal" href="de.html#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>. It essentially selects a random point in the parent chromosome and inserts, in each successive gene, the partner values with probability <code class="docutils literal notranslate"><span class="pre">cr</span></code> up to when it stops. The binomial crossover inserts each gene from the partner with probability <code class="docutils literal notranslate"><span class="pre">cr</span></code>. The simulated binary crossover (called “sbx”), is taken from the NSGA-II algorithm, implemented in pagmo as <a class="reference internal" href="nsga2.html#classpagmo_1_1nsga2"><span class="std std-ref">pagmo::nsga2</span></a>, and makes use of an additional parameter called distribution index <code class="docutils literal notranslate"><span class="pre">eta_c</span></code>.</p>
 <p><em>Mutation</em>: three different mutations schemes are provided: “uniform”, “gaussian” and “polynomial”. Uniform mutation simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution with standard deviation proportional to the <code class="docutils literal notranslate"><span class="pre">m_param_m</span></code> and the bounds width. The last scheme is the polynomial mutation.</p>
 <p><em>Reinsertion</em>: the only reinsertion strategy provided is what we call pure elitism. After each generation all parents and children are put in the same pool and only the best are passed to the next generation.</p>
-<p><div class="admonition warning">
+<p><p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The algorithm is not suitable for multi-objective problems, nor for
 constrained optimization.</p>
@@ -252,16 +253,17 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="http://www.scholarpedia.org/article/Evolution_strategies">http://www.scholarpedia.org/article/Evolution_strategies</a></p>
 </div>
+</p>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo3sga13log_line_typeE">
 <span id="_CPPv3N5pagmo3sga13log_line_typeE"></span><span id="_CPPv2N5pagmo3sga13log_line_typeE"></span><span id="pagmo::sga::log_line_type"></span><span class="target" id="classpagmo_1_1sga_1af196a655daf079c0097dc807d49f1d88"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sga13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, improvement) </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo3sga8log_typeE">
 <span id="_CPPv3N5pagmo3sga8log_typeE"></span><span id="_CPPv2N5pagmo3sga8log_typeE"></span><span id="pagmo::sga::log_type"></span><span class="target" id="classpagmo_1_1sga_1a09fcc512df1d95b7a3bac7a7d0ac6ddb"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo3sga13log_line_typeE" title="pagmo::sga::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo3sga8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
@@ -270,7 +272,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj">
 <span id="_CPPv3N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj"></span><span id="_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj"></span><span id="pagmo::sga::sga__unsigned.double.double.double.double.unsigned.ss.ss.ss.unsigned"></span><span class="target" id="classpagmo_1_1sga_1ae107652b141930ba22ea8767ba7b03c4"></span><code class="sig-name descname">sga</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>cr</em> = .90, double <em>eta_c</em> = 1., double <em>m</em> = 0.02, double <em>param_m</em> = 1., unsigned <em>param_s</em> = 2u, std::string <em>crossover</em> = &quot;exponential&quot;, std::string <em>mutation</em> = &quot;polynomial&quot;, std::string <em>selection</em> = &quot;tournament&quot;, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
@@ -297,9 +299,9 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3sga6evolveE10population">
-<span id="_CPPv3NK5pagmo3sga6evolveE10population"></span><span id="_CPPv2NK5pagmo3sga6evolveE10population"></span><span id="pagmo::sga::evolve__populationC"></span><span class="target" id="classpagmo_1_1sga_1af71b2c4b9bc228573d24b6d2cfe790b7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga6evolveE10population"></span><span id="_CPPv2NK5pagmo3sga6evolveE10population"></span><span id="pagmo::sga::evolve__populationC"></span><span class="target" id="classpagmo_1_1sga_1af71b2c4b9bc228573d24b6d2cfe790b7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations</p>
 <p><dl class="simple">
@@ -317,9 +319,9 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo3sga8set_seedEj">
-<span id="_CPPv3N5pagmo3sga8set_seedEj"></span><span id="_CPPv2N5pagmo3sga8set_seedEj"></span><span id="pagmo::sga::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sga_1ab7ecb3eeb437aa5d706911c8265458d5"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sga8set_seedEj"></span><span id="_CPPv2N5pagmo3sga8set_seedEj"></span><span id="pagmo::sga::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sga_1ab7ecb3eeb437aa5d706911c8265458d5"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -330,7 +332,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3sga8get_seedEv">
 <span id="_CPPv3NK5pagmo3sga8get_seedEv"></span><span id="_CPPv2NK5pagmo3sga8get_seedEv"></span><span id="pagmo::sga::get_seedC"></span><span class="target" id="classpagmo_1_1sga_1a1ebc365ae8858de8070a7638fa43e7dc"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
@@ -341,7 +343,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo3sga13set_verbosityEj">
 <span id="_CPPv3N5pagmo3sga13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sga13set_verbosityEj"></span><span id="pagmo::sga::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sga_1af08dadcfa3655105bca658135a9460f1"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
@@ -381,7 +383,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3sga13get_verbosityEv">
 <span id="_CPPv3NK5pagmo3sga13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sga13get_verbosityEv"></span><span id="pagmo::sga::get_verbosityC"></span><span class="target" id="classpagmo_1_1sga_1a2b20e6f5d9da05a7f291c869c83c29e3"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
@@ -392,7 +394,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3sga8get_nameEv">
 <span id="_CPPv3NK5pagmo3sga8get_nameEv"></span><span id="_CPPv2NK5pagmo3sga8get_nameEv"></span><span id="pagmo::sga::get_nameC"></span><span class="target" id="classpagmo_1_1sga_1aa042a6ab989ca4a0de7b69788a9f74e9"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
@@ -403,7 +405,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3sga14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo3sga14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sga14get_extra_infoEv"></span><span id="pagmo::sga::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sga_1a64cd03149e55536c3605a44ec79a6efa"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
@@ -414,7 +416,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3sga7get_logEv">
 <span id="_CPPv3NK5pagmo3sga7get_logEv"></span><span id="_CPPv2NK5pagmo3sga7get_logEv"></span><span id="pagmo::sga::get_logC"></span><span class="target" id="classpagmo_1_1sga_1a1e042772ef93956f1d6873e4d173a0e2"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3sga8log_typeE" title="pagmo::sga::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3sga7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
@@ -426,9 +428,9 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo3sga9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo3sga9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3sga9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1sga_1ab57fc134debdb5dbfc7dec96c80ebd15"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3sga9serializeEvR7Archivej" title="pagmo::sga::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3sga9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3sga9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3sga9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1sga_1ab57fc134debdb5dbfc7dec96c80ebd15"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3sga9serializeEvR7Archivej" title="pagmo::sga::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3sga9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

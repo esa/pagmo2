@@ -32,7 +32,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -196,12 +196,12 @@
   <div class="section" id="archipelago">
 <h1>Archipelago<a class="headerlink" href="#archipelago" title="Permalink to this headline">¶</a></h1>
 <p><em>#include &lt;pagmo/archipelago.hpp&gt;</em></p>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo11archipelagoE">
-<span id="_CPPv3N5pagmo11archipelagoE"></span><span id="_CPPv2N5pagmo11archipelagoE"></span><span id="pagmo::archipelago"></span><span class="target" id="classpagmo_1_1archipelago"></span><em class="property">class </em><code class="sig-name descname">archipelago</code><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelagoE"></span><span id="_CPPv2N5pagmo11archipelagoE"></span><span id="pagmo::archipelago"></span><span class="target" id="classpagmo_1_1archipelago"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">archipelago</code><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Archipelago. </p>
 <p><img alt="../../_images/archi_no_text.png" src="../../_images/archi_no_text.png" /></p>
-<p><p>An archipelago is a collection of <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a> objects connected by a
+<p><p><p>An archipelago is a collection of <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a> objects connected by a
 <a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>. The islands in the archipelago can exchange individuals
 (i.e., candidate solutions) via a process called <em>migration</em>. The individuals migrate
 across the routes described by the topology, and the islands’ replacement
@@ -219,33 +219,35 @@ ongoing evolutions in the archipelago can be queried via <a class="reference int
 <p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::archipelago</span></code></a> are destruction
 and assignment. Any other operation will result in undefined behaviour.</p>
 </div>
+</p>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo11archipelago9size_typeE">
 <span id="_CPPv3N5pagmo11archipelago9size_typeE"></span><span id="_CPPv2N5pagmo11archipelago9size_typeE"></span><span class="target" id="classpagmo_1_1archipelago_1a16b60eff7da09b3bda3dffd4259250c3"></span><em class="property">using </em><code class="sig-name descname">size_type</code> = size_type_implementation<a class="headerlink" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The size type of the archipelago. </p>
 <p>This is an unsigned integer type used to represent the number of islands in the archipelago. </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo11archipelago13migrants_db_tE">
 <span id="_CPPv3N5pagmo11archipelago13migrants_db_tE"></span><span id="_CPPv2N5pagmo11archipelago13migrants_db_tE"></span><span class="target" id="classpagmo_1_1archipelago_1a387ac201cfef1b261431afa5b7f8132f"></span><em class="property">using </em><code class="sig-name descname">migrants_db_t</code> = std::vector&lt;<a class="reference internal" href="types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a>&gt;<a class="headerlink" href="#_CPPv4N5pagmo11archipelago13migrants_db_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Database of migrants. </p>
-<p><p>During the evolution of an archipelago, islands will periodically
+<p><p><p>During the evolution of an archipelago, islands will periodically
 store the individuals selected for migration in a <em>migrant database</em>.
 This is a vector of <a class="reference internal" href="types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">individuals_group_t</span></code></a> whose
 size is equal to the number of islands in the archipelago, and which
 contains the current candidate outgoing migrants for each island.</p>
+</p>
  </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo11archipelago17migration_entry_tE">
 <span id="_CPPv3N5pagmo11archipelago17migration_entry_tE"></span><span id="_CPPv2N5pagmo11archipelago17migration_entry_tE"></span><span class="target" id="classpagmo_1_1archipelago_1adcc1959729058e304cd657a0b0e483fc"></span><em class="property">using </em><code class="sig-name descname">migration_entry_t</code> = std::tuple&lt;double, unsigned long long, <a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a>, <a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a>&gt;<a class="headerlink" href="#_CPPv4N5pagmo11archipelago17migration_entry_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Entry for the migration log. </p>
-<p><p>Each time an individual migrates from an island (the source) to another
+<p><p><p>Each time an individual migrates from an island (the source) to another
 (the destination), an entry will be added to the migration log.
 The entry is a tuple containing:</p>
 <ul class="simple">
@@ -254,31 +256,34 @@ The entry is a tuple containing:</p>
 <li><p>the decision and fitness vectors of the individual that migrated,</p></li>
 <li><p>the indices of the source and destination islands.</p></li>
 </ul>
+</p>
  </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo11archipelago15migration_log_tE">
 <span id="_CPPv3N5pagmo11archipelago15migration_log_tE"></span><span id="_CPPv2N5pagmo11archipelago15migration_log_tE"></span><span class="target" id="classpagmo_1_1archipelago_1ae3cfda42c134e5940d8d2a975f97c295"></span><em class="property">using </em><code class="sig-name descname">migration_log_t</code> = std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo11archipelago17migration_entry_tE" title="pagmo::archipelago::migration_entry_t">migration_entry_t</a>&gt;<a class="headerlink" href="#_CPPv4N5pagmo11archipelago15migration_log_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Migration log. </p>
-<p><p>The migration log is a collection of <a class="reference internal" href="#_CPPv4N5pagmo11archipelago17migration_entry_tE" title="pagmo::archipelago::migration_entry_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">migration_entry_t</span></code></a> entries.</p>
+<p><p><p>The migration log is a collection of <a class="reference internal" href="#_CPPv4N5pagmo11archipelago17migration_entry_tE" title="pagmo::archipelago::migration_entry_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">migration_entry_t</span></code></a> entries.</p>
+</p>
  </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo11archipelago8iteratorE">
 <span id="_CPPv3N5pagmo11archipelago8iteratorE"></span><span id="_CPPv2N5pagmo11archipelago8iteratorE"></span><span class="target" id="classpagmo_1_1archipelago_1a39b9c4cae4e003a89ec3fbbaa59b8bad"></span><em class="property">using </em><code class="sig-name descname">iterator</code> = iterator_implementation<a class="headerlink" href="#_CPPv4N5pagmo11archipelago8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable iterator. </p>
 <p>Dereferencing a mutable iterator will yield a reference to an island within the archipelago.</p>
-<p><div class="admonition warning">
+<p><p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Mutable iterators are provided solely in order to allow calling non-const methods
 on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.</p>
 </div>
+</p>
  </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo11archipelago14const_iteratorE">
 <span id="_CPPv3N5pagmo11archipelago14const_iteratorE"></span><span id="_CPPv2N5pagmo11archipelago14const_iteratorE"></span><span class="target" id="classpagmo_1_1archipelago_1ab79f78f4f56b0261aca7faae2e640506"></span><em class="property">using </em><code class="sig-name descname">const_iterator</code> = const_iterator_implementation<a class="headerlink" href="#_CPPv4N5pagmo11archipelago14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const iterator. </p>
@@ -288,20 +293,21 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago11archipelagoEv">
 <span id="_CPPv3N5pagmo11archipelago11archipelagoEv"></span><span id="_CPPv2N5pagmo11archipelago11archipelagoEv"></span><span id="pagmo::archipelago::archipelago"></span><span class="target" id="classpagmo_1_1archipelago_1a6e4c9432ed87fae29c2d48fd16db9165"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago11archipelagoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
-<p><p>The default constructor will initialise an empty archipelago with a
+<p><p><p>The default constructor will initialise an empty archipelago with a
 default-constructed (i.e., <a class="reference internal" href="topologies/unconnected.html#_CPPv4N5pagmo11unconnectedE" title="pagmo::unconnected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">unconnected</span></code></a>) topology,
 a point-to-point <a class="reference internal" href="#_CPPv4N5pagmo14migration_typeE" title="pagmo::migration_type"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">migration_type</span></code></a> and a
 preserve <a class="reference internal" href="#_CPPv4N5pagmo16migrant_handlingE" title="pagmo::migrant_handling"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">migrant_handling</span></code></a> policy.</p>
+</p>
  </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago11archipelagoERK11archipelago">
-<span id="_CPPv3N5pagmo11archipelago11archipelagoERK11archipelago"></span><span id="_CPPv2N5pagmo11archipelago11archipelagoERK11archipelago"></span><span id="pagmo::archipelago::archipelago__archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1ace90a0b754f251d5d5815b71f0484593"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo11archipelago11archipelagoEv" title="pagmo::archipelago::archipelago">archipelago</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago11archipelagoERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago11archipelagoERK11archipelago"></span><span id="_CPPv2N5pagmo11archipelago11archipelagoERK11archipelago"></span><span id="pagmo::archipelago::archipelago__archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1ace90a0b754f251d5d5815b71f0484593"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo11archipelago11archipelagoERK11archipelago" title="pagmo::archipelago::archipelago">archipelago</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago11archipelagoERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy constructor. </p>
 <p>The copy constructor will perform a deep copy of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
 <p><dl class="simple">
@@ -317,9 +323,9 @@ preserve <a class="reference internal" href="#_CPPv4N5pagmo16migrant_handlingE" 
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago11archipelagoERR11archipelago">
-<span id="_CPPv3N5pagmo11archipelago11archipelagoERR11archipelago"></span><span id="_CPPv2N5pagmo11archipelago11archipelagoERR11archipelago"></span><span id="pagmo::archipelago::archipelago__archipelagoRR"></span><span class="target" id="classpagmo_1_1archipelago_1a173efb5413c97cb1c00a1edaa1614e40"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago11archipelagoEv" title="pagmo::archipelago::archipelago">archipelago</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago11archipelagoERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago11archipelagoERR11archipelago"></span><span id="_CPPv2N5pagmo11archipelago11archipelagoERR11archipelago"></span><span id="pagmo::archipelago::archipelago__archipelagoRR"></span><span class="target" id="classpagmo_1_1archipelago_1a173efb5413c97cb1c00a1edaa1614e40"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago11archipelagoERR11archipelago" title="pagmo::archipelago::archipelago">archipelago</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo11archipelago11archipelagoERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move constructor. </p>
 <p>The move constructor will wait for any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">other</span></code> to finish and it will then transfer the state of <code class="docutils literal notranslate"><span class="pre">other</span></code> into <code class="docutils literal notranslate"><span class="pre">this</span></code>. After the move, <code class="docutils literal notranslate"><span class="pre">other</span></code> is left in a state which is assignable and destructible.</p>
 <p><dl class="simple">
@@ -331,17 +337,18 @@ preserve <a class="reference internal" href="#_CPPv4N5pagmo16migrant_handlingE" 
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo">
-<span id="_CPPv3I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo"></span><span id="_CPPv2I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo"></span><span class="target" id="classpagmo_1_1archipelago_1ac397a30c8b1e997f7768fbe797643731"></span>template&lt;typename <code class="sig-name descname">Topo</code>, topo_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo" title="pagmo::archipelago::archipelago::Topo">Topo</a>&gt; = 0&gt;<br /><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo" title="pagmo::archipelago::archipelago::Topo">Topo</a> &amp;&amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo"></span><span id="_CPPv2I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo"></span>template&lt;typename <code class="sig-name descname">Topo</code>, topo_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo" title="pagmo::archipelago::archipelago::Topo">Topo</a>&gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1archipelago_1ac397a30c8b1e997f7768fbe797643731"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo" title="pagmo::archipelago::archipelago::Topo">Topo</a> &amp;&amp;<em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_17topo_ctor_enablerI4TopoEEN5pagmo11archipelago11archipelagoERR4Topo" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a topology. </p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">t</span></code> is not an <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>
 and it can be used to construct a <a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::topology</span></code></a>.</p>
 </div>
 <p>This constructor is equivalent to the default constructor, but it will additionally
 allow to select the archipelago’s topology.</p>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -356,15 +363,16 @@ allow to select the archipelago’s topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args">
-<span id="_CPPv3IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args"></span><span id="_CPPv2IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args"></span><span class="target" id="classpagmo_1_1archipelago_1a604b288ffe30d6ba1237faacf716f2d8"></span>template&lt;typename ...<code class="sig-name descname">Args</code>, n_ctor_enabler&lt;<em class="property">const</em> <a class="reference internal" href="#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;...&gt; = 0&gt;<br /><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>n</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args"></span><span id="_CPPv2IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args"></span>template&lt;typename ...<code class="sig-name descname">Args</code>, n_ctor_enabler&lt;<em class="property">const</em> <a class="reference internal" href="#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;...&gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1archipelago_1a604b288ffe30d6ba1237faacf716f2d8"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>n</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDp_14n_ctor_enablerIDpRK4ArgsEEN5pagmo11archipelago11archipelagoE9size_typeDpRK4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from <code class="docutils literal notranslate"><span class="pre">n</span></code> islands. </p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This constructor is enabled only if the parameter pack <code class="docutils literal notranslate"><span class="pre">args</span></code>
 can be used to construct a <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a>.</p>
 </div>
+</p>
 </p>
 <p>This constructor will first initialise an empty archipelago with a default-constructed topology, and then forward <code class="docutils literal notranslate"><span class="pre">n</span></code> times the input arguments <code class="docutils literal notranslate"><span class="pre">args</span></code> to the <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> method, thus creating and inserting <code class="docutils literal notranslate"><span class="pre">n</span></code> new islands into the archipelago.</p>
 <p>If, however, the parameter pack <code class="docutils literal notranslate"><span class="pre">args</span></code> contains an argument which would be interpreted as a seed by the invoked island constructor, then this seed will be used to initialise a random number generator that in turn will be used to generate the seeds of populations of the islands that will be created within the archipelago. In other words, passing a seed argument to this constructor will not generate <code class="docutils literal notranslate"><span class="pre">n</span></code> islands with the same seed, but <code class="docutils literal notranslate"><span class="pre">n</span></code> islands whose population seeds have been randomly generated starting from the supplied seed argument.</p>
@@ -382,11 +390,11 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args">
-<span id="_CPPv3I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args"></span><span id="_CPPv2I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args"></span><span class="target" id="classpagmo_1_1archipelago_1a0fc309f305bec72d1a418f656c87b5b4"></span>template&lt;typename <code class="sig-name descname">Topo</code>, typename ...<code class="sig-name descname">Args</code>, topo_n_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Topo">Topo</a>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;...&gt; = 0&gt;<br /><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Topo">Topo</a> &amp;&amp;<em>t</em>, <a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>n</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args"></span><span id="_CPPv2I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args"></span>template&lt;typename <code class="sig-name descname">Topo</code>, typename ...<code class="sig-name descname">Args</code>, topo_n_ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Topo">Topo</a>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;...&gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1archipelago_1a0fc309f305bec72d1a418f656c87b5b4"></span><code class="sig-name descname">archipelago</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Topo">Topo</a> &amp;&amp;<em>t</em>, <a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>n</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="pagmo::archipelago::archipelago::Args">Args</a>&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp_19topo_n_ctor_enablerI4TopoDpRK4ArgsEEN5pagmo11archipelago11archipelagoERR4Topo9size_typeDpRK4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a topology and <code class="docutils literal notranslate"><span class="pre">n</span></code> islands. </p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This constructor is enabled only  if <code class="docutils literal notranslate"><span class="pre">t</span></code>
 can be used to construct a <a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> and if the parameter pack <code class="docutils literal notranslate"><span class="pre">args</span></code>
@@ -394,6 +402,7 @@ can be used to construct a <a class="reference internal" href="island.html#_CPPv
 </div>
 <p>This constructor is equivalent to the previous one, but it will additionally
 allow to select the archipelago’s topology.</p>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -410,9 +419,9 @@ allow to select the archipelago’s topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelagoaSERK11archipelago">
-<span id="_CPPv3N5pagmo11archipelagoaSERK11archipelago"></span><span id="_CPPv2N5pagmo11archipelagoaSERK11archipelago"></span><span id="pagmo::archipelago::assign-operator__archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1a3aa2b9dfea293a37a0e6f98b312739a3"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoaSERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelagoaSERK11archipelago"></span><span id="_CPPv2N5pagmo11archipelagoaSERK11archipelago"></span><span id="pagmo::archipelago::assign-operator__archipelagoCR"></span><span class="target" id="classpagmo_1_1archipelago_1a3aa2b9dfea293a37a0e6f98b312739a3"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoaSERK11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy assignment. </p>
 <p>Copy assignment is implemented as copy construction followed by a move assignment.</p>
 <p><dl class="simple">
@@ -430,9 +439,9 @@ allow to select the archipelago’s topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelagoaSERR11archipelago">
-<span id="_CPPv3N5pagmo11archipelagoaSERR11archipelago"></span><span id="_CPPv2N5pagmo11archipelagoaSERR11archipelago"></span><span id="pagmo::archipelago::assign-operator__archipelagoRR"></span><span class="target" id="classpagmo_1_1archipelago_1a4222eb17bc3ccc52706f443185cac001"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoaSERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelagoaSERR11archipelago"></span><span id="_CPPv2N5pagmo11archipelagoaSERR11archipelago"></span><span id="pagmo::archipelago::assign-operator__archipelagoRR"></span><span class="target" id="classpagmo_1_1archipelago_1a4222eb17bc3ccc52706f443185cac001"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoaSERR11archipelago" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Move assignment. </p>
 <p>Move assignment will transfer the state of <code class="docutils literal notranslate"><span class="pre">other</span></code> into <code class="docutils literal notranslate"><span class="pre">this</span></code>, after any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">this</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> has finished. After the move, <code class="docutils literal notranslate"><span class="pre">other</span></code> is left in a state which is assignable and destructible.</p>
 <p><dl class="simple">
@@ -446,24 +455,25 @@ allow to select the archipelago’s topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelagoD0Ev">
 <span id="_CPPv3N5pagmo11archipelagoD0Ev"></span><span id="_CPPv2N5pagmo11archipelagoD0Ev"></span><span id="pagmo::archipelago::~archipelago"></span><span class="target" id="classpagmo_1_1archipelago_1a61c915ffa4616a3afe8b802d04db99ff"></span><code class="sig-name descname">~archipelago</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Destructor. </p>
 <p>The destructor will call <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">archipelago::wait_check()</span></a> internally, ignoring any exception that might be thrown, and run checks in debug mode. </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelagoixE9size_type">
-<span id="_CPPv3N5pagmo11archipelagoixE9size_type"></span><span id="_CPPv2N5pagmo11archipelagoixE9size_type"></span><span id="pagmo::archipelago::subscript-operator__size_type"></span><span class="target" id="classpagmo_1_1archipelago_1a0bb27d34acdc2ce204f0dc76ca1c08a1"></span><a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelagoixE9size_type"></span><span id="_CPPv2N5pagmo11archipelagoixE9size_type"></span><span id="pagmo::archipelago::subscript-operator__size_type"></span><span class="target" id="classpagmo_1_1archipelago_1a0bb27d34acdc2ce204f0dc76ca1c08a1"></span><a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable island access. </p>
 <p>This subscript operator can be used to access the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th island of the archipelago (that is, the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th island that was inserted via <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a>). References returned by this method are valid even after a <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> invocation. Assignment and destruction of the archipelago will invalidate island references obtained via this method.</p>
-<p><div class="admonition warning">
+<p><p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The mutable version of the subscript operator exists solely to allow calling non-const methods
 on the islands. Assigning an island via a reference obtained through this operator will result
 in undefined behaviour.</p>
 </div>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>a reference to the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th island of the archipelago.</p>
@@ -480,9 +490,9 @@ in undefined behaviour.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelagoixE9size_type">
-<span id="_CPPv3NK5pagmo11archipelagoixE9size_type"></span><span id="_CPPv2NK5pagmo11archipelagoixE9size_type"></span><span id="pagmo::archipelago::subscript-operator__size_typeC"></span><span class="target" id="classpagmo_1_1archipelago_1a03ccff5c33549a9a3b7d7cbf3a1aa354"></span><em class="property">const</em> <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <em>i</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11archipelagoixE9size_type"></span><span id="_CPPv2NK5pagmo11archipelagoixE9size_type"></span><span id="pagmo::archipelago::subscript-operator__size_typeC"></span><span class="target" id="classpagmo_1_1archipelago_1a03ccff5c33549a9a3b7d7cbf3a1aa354"></span><em class="property">const</em> <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island">island</a> &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelagoixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const island access. </p>
 <p>This subscript operator can be used to access the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th island of the archipelago (that is, the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th island that was inserted via <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a>). References returned by this method are valid even after a <a class="reference internal" href="#classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"><span class="std std-ref">push_back()</span></a> invocation. Assignment and destruction of the archipelago will invalidate island references obtained via this method.</p>
 <p><dl class="simple">
@@ -500,9 +510,9 @@ in undefined behaviour.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago4sizeEv">
-<span id="_CPPv3NK5pagmo11archipelago4sizeEv"></span><span id="_CPPv2NK5pagmo11archipelago4sizeEv"></span><span id="pagmo::archipelago::sizeC"></span><span class="target" id="classpagmo_1_1archipelago_1ab6d826e2a4369cc3f373936875b2488c"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a>::<a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11archipelago4sizeEv"></span><span id="_CPPv2NK5pagmo11archipelago4sizeEv"></span><span id="pagmo::archipelago::sizeC"></span><span class="target" id="classpagmo_1_1archipelago_1ab6d826e2a4369cc3f373936875b2488c"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago9size_typeE" title="pagmo::archipelago::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Size. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the number of islands in the archipelago. </p>
@@ -511,11 +521,11 @@ in undefined behaviour.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args">
-<span id="_CPPv3IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEDpRR4Args"></span><span id="_CPPv2IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEDpRR4Args"></span><span class="target" id="classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"></span>template&lt;typename ...<code class="sig-name descname">Args</code>, push_back_enabler&lt;<a class="reference internal" href="#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args" title="pagmo::archipelago::push_back::Args">Args</a>&amp;&amp;...&gt; = 0&gt;<br />void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args" title="pagmo::archipelago::push_back::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEDpRR4Args"></span><span id="_CPPv2IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEDpRR4Args"></span>template&lt;typename ...<code class="sig-name descname">Args</code>, push_back_enabler&lt;<a class="reference internal" href="#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args" title="pagmo::archipelago::push_back::Args">Args</a>&amp;&amp;...&gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1archipelago_1abba64cd4e29bf8aa2e8ee2236935fb15"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args" title="pagmo::archipelago::push_back::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDp_17push_back_enablerIDpRR4ArgsEEN5pagmo11archipelago9push_backEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add a new island. </p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This method is enabled only if the parameter pack <code class="docutils literal notranslate"><span class="pre">args</span></code>
 can be used to construct a <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a>.</p>
@@ -527,6 +537,7 @@ equal to the value of <a class="reference internal" href="#_CPPv4NK5pagmo11archi
 will also be called on the <a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> associated to this archipelago, so that
 the addition of a new island to the archipelago is mirrored by the addition of a new vertex
 to the topology.</p>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -548,7 +559,7 @@ to the topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago6evolveEj">
 <span id="_CPPv3N5pagmo11archipelago6evolveEj"></span><span id="_CPPv2N5pagmo11archipelago6evolveEj"></span><span id="pagmo::archipelago::evolve__unsigned"></span><span class="target" id="classpagmo_1_1archipelago_1abc5387cdb2d4ed095ceb25b2d114d61e"></span>void <code class="sig-name descname">evolve</code><span class="sig-paren">(</span>unsigned <em>n</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago6evolveEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evolve archipelago. </p>
@@ -566,14 +577,14 @@ to the topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago4waitEv">
-<span id="_CPPv3N5pagmo11archipelago4waitEv"></span><span id="_CPPv2N5pagmo11archipelago4waitEv"></span><span id="pagmo::archipelago::wait"></span><span class="target" id="classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"></span>void <code class="sig-name descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago4waitEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago4waitEv"></span><span id="_CPPv2N5pagmo11archipelago4waitEv"></span><span id="pagmo::archipelago::wait"></span><span class="target" id="classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"></span>void <code class="sig-name descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N5pagmo11archipelago4waitEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until all evolutions have finished. </p>
 <p>This method will call <a class="reference internal" href="island.html#classpagmo_1_1island_1ab6f4f2583e466c83a27eab6b7eb36855"><span class="std std-ref">island::wait()</span></a> on all the islands of the archipelago. Exceptions thrown by island evolutions can be re-raised via <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>: they will <strong>not</strong> be re-thrown by this method. Also, contrary to <a class="reference internal" href="#classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"><span class="std std-ref">wait_check()</span></a>, this method will <strong>not</strong> reset the status of the archipelago: after a call to <a class="reference internal" href="#classpagmo_1_1archipelago_1ae693366c18c9bd33319d715788bdd24e"><span class="std std-ref">wait()</span></a>, <a class="reference internal" href="#classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"><span class="std std-ref">status()</span></a> will always return either <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afaec2f993aec2c27fc750119ab17b16cdb"><span class="std std-ref">evolve_status::idle</span></a> or <a class="reference internal" href="island.html#namespacepagmo_1a63ec699ef819280210acf6d6048f43afa80794325dab4234ffbde9adf9774a8d1"><span class="std std-ref">evolve_status::idle_error</span></a>. </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago10wait_checkEv">
 <span id="_CPPv3N5pagmo11archipelago10wait_checkEv"></span><span id="_CPPv2N5pagmo11archipelago10wait_checkEv"></span><span id="pagmo::archipelago::wait_check"></span><span class="target" id="classpagmo_1_1archipelago_1a660f9322b645a5bead2157bcf22b100f"></span>void <code class="sig-name descname">wait_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago10wait_checkEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Block until all evolutions have finished and raise the first exception that was encountered. </p>
@@ -588,7 +599,7 @@ to the topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago6statusEv">
 <span id="_CPPv3NK5pagmo11archipelago6statusEv"></span><span id="_CPPv2NK5pagmo11archipelago6statusEv"></span><span id="pagmo::archipelago::statusC"></span><span class="target" id="classpagmo_1_1archipelago_1a751f203dd4501c41c91f650d38b3f37d"></span><a class="reference internal" href="island.html#_CPPv4N5pagmo13evolve_statusE" title="pagmo::evolve_status">evolve_status</a> <code class="sig-name descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago6statusEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Status of the archipelago. </p>
@@ -608,17 +619,18 @@ to the topology.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago5beginEv">
 <span id="_CPPv3N5pagmo11archipelago5beginEv"></span><span id="_CPPv2N5pagmo11archipelago5beginEv"></span><span id="pagmo::archipelago::begin"></span><span class="target" id="classpagmo_1_1archipelago_1a3ba80d233c2d080280c61d207d12ce79"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable begin iterator. </p>
 <p>This method will return a mutable iterator pointing to the beginning of the internal island container. That is, the returned iterator will either point to the first island of the archipelago (if <a class="reference internal" href="#classpagmo_1_1archipelago_1ab6d826e2a4369cc3f373936875b2488c"><span class="std std-ref">size()</span></a> is nonzero) or it will be the same iterator returned by <a class="reference internal" href="#classpagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"><span class="std std-ref">archipelago::end()</span></a> (is <a class="reference internal" href="#classpagmo_1_1archipelago_1ab6d826e2a4369cc3f373936875b2488c"><span class="std std-ref">size()</span></a> is zero).</p>
 <p>Adding an island to the archipelago will invalidate all existing iterators.</p>
-<p><div class="admonition warning">
+<p><p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Mutable iterators are provided solely in order to allow calling non-const methods
 on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.</p>
 </div>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>a mutable iterator to the beginning of the island container. </p>
@@ -627,17 +639,18 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago3endEv">
 <span id="_CPPv3N5pagmo11archipelago3endEv"></span><span id="_CPPv2N5pagmo11archipelago3endEv"></span><span id="pagmo::archipelago::end"></span><span class="target" id="classpagmo_1_1archipelago_1ad1a71671802d460d8b20c8b06e6cb025"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago8iteratorE" title="pagmo::archipelago::iterator">iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Mutable end iterator. </p>
 <p>This method will return a mutable iterator pointing to the end of the internal island container.</p>
 <p>Adding an island to the archipelago will invalidate all existing iterators.</p>
-<p><div class="admonition warning">
+<p><p><div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Mutable iterators are provided solely in order to allow calling non-const methods
 on the islands. Assigning an island via a mutable iterator will result in undefined behaviour.</p>
 </div>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>a mutable iterator to the end of the island container. </p>
@@ -646,7 +659,7 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago5beginEv">
 <span id="_CPPv3NK5pagmo11archipelago5beginEv"></span><span id="_CPPv2NK5pagmo11archipelago5beginEv"></span><span id="pagmo::archipelago::beginC"></span><span class="target" id="classpagmo_1_1archipelago_1a9da1d5dfadeac29db788564dedfafad4"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago5beginEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const begin iterator. </p>
@@ -659,7 +672,7 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago3endEv">
 <span id="_CPPv3NK5pagmo11archipelago3endEv"></span><span id="_CPPv2NK5pagmo11archipelago3endEv"></span><span id="pagmo::archipelago::endC"></span><span class="target" id="classpagmo_1_1archipelago_1a15cb73e9ddbf356ee86bb43f03ad7df2"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago14const_iteratorE" title="pagmo::archipelago::const_iterator">const_iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago3endEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Const end iterator. </p>
@@ -672,7 +685,7 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago15get_champions_fEv">
 <span id="_CPPv3NK5pagmo11archipelago15get_champions_fEv"></span><span id="_CPPv2NK5pagmo11archipelago15get_champions_fEv"></span><span id="pagmo::archipelago::get_champions_fC"></span><span class="target" id="classpagmo_1_1archipelago_1aa0629db7b33051cb7b8bf5147cd3560b"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_champions_f</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago15get_champions_fEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the fitness vectors of the islands’ champions. </p>
@@ -687,7 +700,7 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago15get_champions_xEv">
 <span id="_CPPv3NK5pagmo11archipelago15get_champions_xEv"></span><span id="_CPPv2NK5pagmo11archipelago15get_champions_xEv"></span><span id="pagmo::archipelago::get_champions_xC"></span><span class="target" id="classpagmo_1_1archipelago_1afe454a13e60113f0f3817f76366bc957"></span>std::vector&lt;<a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_champions_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago15get_champions_xEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the decision vectors of the islands’ champions. </p>
@@ -702,11 +715,11 @@ on the islands. Assigning an island via a mutable iterator will result in undefi
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago17get_migration_logEv">
-<span id="_CPPv3NK5pagmo11archipelago17get_migration_logEv"></span><span id="_CPPv2NK5pagmo11archipelago17get_migration_logEv"></span><span id="pagmo::archipelago::get_migration_logC"></span><span class="target" id="classpagmo_1_1archipelago_1a272f8132894f52fa574fd329b3552224"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a>::<a class="reference internal" href="#_CPPv4N5pagmo11archipelago15migration_log_tE" title="pagmo::archipelago::migration_log_t">migration_log_t</a> <code class="sig-name descname">get_migration_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago17get_migration_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11archipelago17get_migration_logEv"></span><span id="_CPPv2NK5pagmo11archipelago17get_migration_logEv"></span><span id="pagmo::archipelago::get_migration_logC"></span><span class="target" id="classpagmo_1_1archipelago_1a272f8132894f52fa574fd329b3552224"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago15migration_log_tE" title="pagmo::archipelago::migration_log_t">migration_log_t</a> <code class="sig-name descname">get_migration_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago17get_migration_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the migration log. </p>
-<p><p>Each time an individual migrates from an island (the source) to another
+<p><p><p>Each time an individual migrates from an island (the source) to another
 (the destination), an entry will be added to the migration log.
 The entry is a tuple containing:</p>
 <ul class="simple">
@@ -716,6 +729,7 @@ The entry is a tuple containing:</p>
 <li><p>the indices of the source and destination islands.</p></li>
 </ul>
 <p>The migration log is a collection of migration entries.</p>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>a copy of the migration log.</p>
@@ -728,15 +742,16 @@ The entry is a tuple containing:</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago15get_migrants_dbEv">
-<span id="_CPPv3NK5pagmo11archipelago15get_migrants_dbEv"></span><span id="_CPPv2NK5pagmo11archipelago15get_migrants_dbEv"></span><span id="pagmo::archipelago::get_migrants_dbC"></span><span class="target" id="classpagmo_1_1archipelago_1a3aff131cb2b0119112e8c29068a5c1cd"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago">archipelago</a>::<a class="reference internal" href="#_CPPv4N5pagmo11archipelago13migrants_db_tE" title="pagmo::archipelago::migrants_db_t">migrants_db_t</a> <code class="sig-name descname">get_migrants_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago15get_migrants_dbEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo11archipelago15get_migrants_dbEv"></span><span id="_CPPv2NK5pagmo11archipelago15get_migrants_dbEv"></span><span id="pagmo::archipelago::get_migrants_dbC"></span><span class="target" id="classpagmo_1_1archipelago_1a3aff131cb2b0119112e8c29068a5c1cd"></span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago13migrants_db_tE" title="pagmo::archipelago::migrants_db_t">migrants_db_t</a> <code class="sig-name descname">get_migrants_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago15get_migrants_dbEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the database of migrants. </p>
-<p><p>During the evolution of an archipelago, islands will periodically
+<p><p><p>During the evolution of an archipelago, islands will periodically
 store the individuals selected for migration in a <em>migrant database</em>.
 This is a vector of <a class="reference internal" href="types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">individuals_group_t</span></code></a> whose
 size is equal to the number of islands in the archipelago, and which
 contains the current candidate outgoing migrants for each island.</p>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>a copy of the database of migrants.</p>
@@ -749,11 +764,11 @@ contains the current candidate outgoing migrants for each island.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago15set_migrants_dbE13migrants_db_t">
-<span id="_CPPv3N5pagmo11archipelago15set_migrants_dbE13migrants_db_t"></span><span id="_CPPv2N5pagmo11archipelago15set_migrants_dbE13migrants_db_t"></span><span id="pagmo::archipelago::set_migrants_db__migrants_db_t"></span><span class="target" id="classpagmo_1_1archipelago_1aad9ee87d3f062538da6686a39f3bbb1d"></span>void <code class="sig-name descname">set_migrants_db</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago13migrants_db_tE" title="pagmo::archipelago::migrants_db_t">migrants_db_t</a> <em>mig</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago15set_migrants_dbE13migrants_db_t" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago15set_migrants_dbE13migrants_db_t"></span><span id="_CPPv2N5pagmo11archipelago15set_migrants_dbE13migrants_db_t"></span><span id="pagmo::archipelago::set_migrants_db__migrants_db_t"></span><span class="target" id="classpagmo_1_1archipelago_1aad9ee87d3f062538da6686a39f3bbb1d"></span>void <code class="sig-name descname">set_migrants_db</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11archipelago13migrants_db_tE" title="pagmo::archipelago::migrants_db_t">migrants_db_t</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago15set_migrants_dbE13migrants_db_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the database of migrants. </p>
-<p><p>During the evolution of an archipelago, islands will periodically
+<p><p><p>During the evolution of an archipelago, islands will periodically
 store the individuals selected for migration in a <em>migrant database</em>.
 This is a vector of <a class="reference internal" href="types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">individuals_group_t</span></code></a> whose
 size is equal to the number of islands in the archipelago, and which
@@ -764,6 +779,7 @@ with a new one.</p>
 of migrants without complaining. An invalid database of migrants
 will however result in exceptions being raised when migration
 occurs.</p>
+</p>
 </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -778,7 +794,7 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago12get_topologyEv">
 <span id="_CPPv3NK5pagmo11archipelago12get_topologyEv"></span><span id="_CPPv2NK5pagmo11archipelago12get_topologyEv"></span><span id="pagmo::archipelago::get_topologyC"></span><span class="target" id="classpagmo_1_1archipelago_1a431d9f65d9ab259463d920c379409cfd"></span><a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology">topology</a> <code class="sig-name descname">get_topology</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago12get_topologyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get a copy of the topology. </p>
@@ -793,9 +809,9 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago12set_topologyE8topology">
-<span id="_CPPv3N5pagmo11archipelago12set_topologyE8topology"></span><span id="_CPPv2N5pagmo11archipelago12set_topologyE8topology"></span><span id="pagmo::archipelago::set_topology__topology"></span><span class="target" id="classpagmo_1_1archipelago_1acc3e08c38c430cb119f9eb986fb12c49"></span>void <code class="sig-name descname">set_topology</code><span class="sig-paren">(</span><a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology">topology</a> <em>topo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago12set_topologyE8topology" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago12set_topologyE8topology"></span><span id="_CPPv2N5pagmo11archipelago12set_topologyE8topology"></span><span id="pagmo::archipelago::set_topology__topology"></span><span class="target" id="classpagmo_1_1archipelago_1acc3e08c38c430cb119f9eb986fb12c49"></span>void <code class="sig-name descname">set_topology</code><span class="sig-paren">(</span><a class="reference internal" href="topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology">topology</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago12set_topologyE8topology" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set a new topology. </p>
 <p>This function will first wait for any ongoing evolution in the archipelago to conclude, and it will then set a new topology for the archipelago.</p>
 <p>Note that it is the user’s responsibility to ensure that the new topology is consistent with the archipelago’s properties.</p>
@@ -812,7 +828,7 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago18get_migration_typeEv">
 <span id="_CPPv3NK5pagmo11archipelago18get_migration_typeEv"></span><span id="_CPPv2NK5pagmo11archipelago18get_migration_typeEv"></span><span id="pagmo::archipelago::get_migration_typeC"></span><span class="target" id="classpagmo_1_1archipelago_1aa253c537bd898b751a20069026688247"></span><a class="reference internal" href="#_CPPv4N5pagmo14migration_typeE" title="pagmo::migration_type">migration_type</a> <code class="sig-name descname">get_migration_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago18get_migration_typeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the migration type. </p>
@@ -823,9 +839,9 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago18set_migration_typeE14migration_type">
-<span id="_CPPv3N5pagmo11archipelago18set_migration_typeE14migration_type"></span><span id="_CPPv2N5pagmo11archipelago18set_migration_typeE14migration_type"></span><span id="pagmo::archipelago::set_migration_type__migration_type"></span><span class="target" id="classpagmo_1_1archipelago_1a99fd80e333039ce66def91cc58f68ce7"></span>void <code class="sig-name descname">set_migration_type</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo14migration_typeE" title="pagmo::migration_type">migration_type</a> <em>mt</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago18set_migration_typeE14migration_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago18set_migration_typeE14migration_type"></span><span id="_CPPv2N5pagmo11archipelago18set_migration_typeE14migration_type"></span><span id="pagmo::archipelago::set_migration_type__migration_type"></span><span class="target" id="classpagmo_1_1archipelago_1a99fd80e333039ce66def91cc58f68ce7"></span>void <code class="sig-name descname">set_migration_type</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo14migration_typeE" title="pagmo::migration_type">migration_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago18set_migration_typeE14migration_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set a new migration type. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -836,7 +852,7 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11archipelago20get_migrant_handlingEv">
 <span id="_CPPv3NK5pagmo11archipelago20get_migrant_handlingEv"></span><span id="_CPPv2NK5pagmo11archipelago20get_migrant_handlingEv"></span><span id="pagmo::archipelago::get_migrant_handlingC"></span><span class="target" id="classpagmo_1_1archipelago_1a55a06ffb33653ceee63354279d806065"></span><a class="reference internal" href="#_CPPv4N5pagmo16migrant_handlingE" title="pagmo::migrant_handling">migrant_handling</a> <code class="sig-name descname">get_migrant_handling</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11archipelago20get_migrant_handlingEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the migrant handling policy. </p>
@@ -847,9 +863,9 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11archipelago20set_migrant_handlingE16migrant_handling">
-<span id="_CPPv3N5pagmo11archipelago20set_migrant_handlingE16migrant_handling"></span><span id="_CPPv2N5pagmo11archipelago20set_migrant_handlingE16migrant_handling"></span><span id="pagmo::archipelago::set_migrant_handling__migrant_handling"></span><span class="target" id="classpagmo_1_1archipelago_1acba039b74328ba9cdd2f1da38cef361a"></span>void <code class="sig-name descname">set_migrant_handling</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo16migrant_handlingE" title="pagmo::migrant_handling">migrant_handling</a> <em>mh</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago20set_migrant_handlingE16migrant_handling" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo11archipelago20set_migrant_handlingE16migrant_handling"></span><span id="_CPPv2N5pagmo11archipelago20set_migrant_handlingE16migrant_handling"></span><span id="pagmo::archipelago::set_migrant_handling__migrant_handling"></span><span class="target" id="classpagmo_1_1archipelago_1acba039b74328ba9cdd2f1da38cef361a"></span>void <code class="sig-name descname">set_migrant_handling</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo16migrant_handlingE" title="pagmo::migrant_handling">migrant_handling</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11archipelago20set_migrant_handlingE16migrant_handling" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set a new migrant handling policy. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -860,9 +876,9 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0ENK5pagmo11archipelago4saveEvR7Archivej">
-<span id="_CPPv3I0ENK5pagmo11archipelago4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo11archipelago4saveER7Archivej"></span><span class="target" id="classpagmo_1_1archipelago_1a5d7391e5d365a107ce294f9ed1ef4402"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo11archipelago4saveEvR7Archivej" title="pagmo::archipelago::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo11archipelago4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo11archipelago4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo11archipelago4saveER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1archipelago_1a5d7391e5d365a107ce294f9ed1ef4402"></span>void <code class="sig-name descname">save</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo11archipelago4saveEvR7Archivej" title="pagmo::archipelago::save::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK5pagmo11archipelago4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Save to archive. </p>
 <p>This method will save to <code class="docutils literal notranslate"><span class="pre">ar</span></code> the islands of the archipelago.</p>
 <p><dl class="simple">
@@ -878,9 +894,9 @@ occurs.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo11archipelago4loadEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo11archipelago4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo11archipelago4loadER7Archivej"></span><span class="target" id="classpagmo_1_1archipelago_1a060cffa4a8eb18ea0c99befa1064d10a"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11archipelago4loadEvR7Archivej" title="pagmo::archipelago::load::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11archipelago4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo11archipelago4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo11archipelago4loadER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1archipelago_1a060cffa4a8eb18ea0c99befa1064d10a"></span>void <code class="sig-name descname">load</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11archipelago4loadEvR7Archivej" title="pagmo::archipelago::load::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11archipelago4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Load from archive. </p>
 <p>This method will load into <code class="docutils literal notranslate"><span class="pre">this</span></code> the content of <code class="docutils literal notranslate"><span class="pre">ar</span></code>, after any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">this</span></code> has finished.</p>
 <p><dl class="simple">
@@ -901,11 +917,11 @@ occurs.</p>
 
 <div class="section" id="types">
 <h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
-<dl class="enum">
+<dl class="cpp enum">
 <dt id="_CPPv4N5pagmo14migration_typeE">
 <span id="_CPPv3N5pagmo14migration_typeE"></span><span id="_CPPv2N5pagmo14migration_typeE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952c"></span><em class="property">enum </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">migration_type</code><a class="headerlink" href="#_CPPv4N5pagmo14migration_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Migration type. </p>
-<p><p>This enumeration represents the available migration policies
+<p><p><p>This enumeration represents the available migration policies
 in an <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>:</p>
 <ul class="simple">
 <li><p>with the point-to-point migration policy, during migration an island will
@@ -913,27 +929,28 @@ consider individuals from only one of the connecting islands;</p></li>
 <li><p>with the broadcast migration policy, during migration an island will consider
 individuals from <em>all</em> the connecting islands.</p></li>
 </ul>
+</p>
  </p>
 <p><em>Values:</em></p>
-<dl class="enumerator">
-<dt id="_CPPv4N5pagmo3p2pE">
-<span id="_CPPv3N5pagmo3p2pE"></span><span id="_CPPv2N5pagmo3p2pE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952ca705bcf0e77bc8b6fc8e66cbf3c055e6c"></span><code class="sig-name descname">p2p</code><a class="headerlink" href="#_CPPv4N5pagmo3p2pE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp enumerator">
+<dt id="_CPPv4N5pagmo14migration_type3p2pE">
+<span id="_CPPv3N5pagmo14migration_type3p2pE"></span><span id="_CPPv2N5pagmo14migration_type3p2pE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952ca705bcf0e77bc8b6fc8e66cbf3c055e6c"></span><em class="property">enumerator </em><code class="sig-name descname">p2p</code><a class="headerlink" href="#_CPPv4N5pagmo14migration_type3p2pE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Point-to-point migration. </p>
 </dd></dl>
 
-<dl class="enumerator">
-<dt id="_CPPv4N5pagmo9broadcastE">
-<span id="_CPPv3N5pagmo9broadcastE"></span><span id="_CPPv2N5pagmo9broadcastE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952cab605ea609b9dfcf295cfd5a7803dcd37"></span><code class="sig-name descname">broadcast</code><a class="headerlink" href="#_CPPv4N5pagmo9broadcastE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp enumerator">
+<dt id="_CPPv4N5pagmo14migration_type9broadcastE">
+<span id="_CPPv3N5pagmo14migration_type9broadcastE"></span><span id="_CPPv2N5pagmo14migration_type9broadcastE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952cab605ea609b9dfcf295cfd5a7803dcd37"></span><em class="property">enumerator </em><code class="sig-name descname">broadcast</code><a class="headerlink" href="#_CPPv4N5pagmo14migration_type9broadcastE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Broadcast migration. </p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="enum">
+<dl class="cpp enum">
 <dt id="_CPPv4N5pagmo16migrant_handlingE">
 <span id="_CPPv3N5pagmo16migrant_handlingE"></span><span id="_CPPv2N5pagmo16migrant_handlingE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9"></span><em class="property">enum </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">migrant_handling</code><a class="headerlink" href="#_CPPv4N5pagmo16migrant_handlingE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Migrant handling policy. </p>
-<p><p>This enumeration represents the available migrant handling
+<p><p><p>This enumeration represents the available migrant handling
 policies in an <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>.</p>
 <p>During migration,
 individuals are selected from the islands and copied into a migration
@@ -946,17 +963,18 @@ remains in the database;</p></li>
 <li><p>with the evict policy, the candidate migrants are
 removed from the database.</p></li>
 </ul>
+</p>
  </p>
 <p><em>Values:</em></p>
-<dl class="enumerator">
-<dt id="_CPPv4N5pagmo8preserveE">
-<span id="_CPPv3N5pagmo8preserveE"></span><span id="_CPPv2N5pagmo8preserveE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9aec4875cf2d241556a0965f7237864693"></span><code class="sig-name descname">preserve</code><a class="headerlink" href="#_CPPv4N5pagmo8preserveE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp enumerator">
+<dt id="_CPPv4N5pagmo16migrant_handling8preserveE">
+<span id="_CPPv3N5pagmo16migrant_handling8preserveE"></span><span id="_CPPv2N5pagmo16migrant_handling8preserveE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9aec4875cf2d241556a0965f7237864693"></span><em class="property">enumerator </em><code class="sig-name descname">preserve</code><a class="headerlink" href="#_CPPv4N5pagmo16migrant_handling8preserveE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Perserve migrants in the database. </p>
 </dd></dl>
 
-<dl class="enumerator">
-<dt id="_CPPv4N5pagmo5evictE">
-<span id="_CPPv3N5pagmo5evictE"></span><span id="_CPPv2N5pagmo5evictE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9aeb9885e11bb255862e765a54558fd1ad"></span><code class="sig-name descname">evict</code><a class="headerlink" href="#_CPPv4N5pagmo5evictE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp enumerator">
+<dt id="_CPPv4N5pagmo16migrant_handling5evictE">
+<span id="_CPPv3N5pagmo16migrant_handling5evictE"></span><span id="_CPPv2N5pagmo16migrant_handling5evictE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9aeb9885e11bb255862e765a54558fd1ad"></span><em class="property">enumerator </em><code class="sig-name descname">evict</code><a class="headerlink" href="#_CPPv4N5pagmo16migrant_handling5evictE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Evict migrants from the database. </p>
 </dd></dl>
 

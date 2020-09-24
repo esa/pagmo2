@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,20 +204,20 @@
             
   <div class="section" id="news-vendor-problem">
 <h1>News-vendor problem<a class="headerlink" href="#news-vendor-problem" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo9inventoryE">
-<span id="_CPPv3N5pagmo9inventoryE"></span><span id="_CPPv2N5pagmo9inventoryE"></span><span id="pagmo::inventory"></span><span class="target" id="classpagmo_1_1inventory"></span><em class="property">class </em><code class="sig-name descname">inventory</code><a class="headerlink" href="#_CPPv4N5pagmo9inventoryE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9inventoryE"></span><span id="_CPPv2N5pagmo9inventoryE"></span><span id="pagmo::inventory"></span><span class="target" id="classpagmo_1_1inventory"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">inventory</code><a class="headerlink" href="#_CPPv4N5pagmo9inventoryE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Stochastic Programming Test Problem: An Inventory Model. </p>
 <p><img alt="../../../_images/newsvendor.png" src="../../../_images/newsvendor.png" /></p>
 <p>This problem is a generalization of the simple inventory problem so-called of the “news-vendor”, widely used to introduce the main tools and techniques of stochastic programming Assume you are a newsvendor and each week, for the next <span class="math notranslate nohighlight">\( N\)</span> weeks, you need to decide how many journals to order (indicated with the decision variable <span class="math notranslate nohighlight">\( x_i \)</span>). The weekly journal demand is unknown to you and is indicated with the variable <span class="math notranslate nohighlight">\(d_i\)</span>. The cost of ordering journals before the week starts is <span class="math notranslate nohighlight">\( c\)</span>, the cost of ordering journals during the week (in order to meet an unforeseen demand) is <span class="math notranslate nohighlight">\( b \)</span> and the cost of having to hold unsold journals is <span class="math notranslate nohighlight">\( h \)</span>. The inventory level of journals will be defined by the succession: <div class="math notranslate nohighlight">
-\[\]</div>
+\[ I_i = [I_{i-1} + x_i - d_i]_+, I_1 = 0 \]</div>
  while the total cost of running the journal sales for <span class="math notranslate nohighlight">\(N\)</span> weeks will be: <div class="math notranslate nohighlight">
-\[\]</div>
+\[ J(\mathbf x, \mathbf d) = c \sum_{i=1}^N x_i+ b \sum_{i=1}^N [d_i - I_i - x_i]_+ + h \sum_{i=1}^N [I_i + x_i - d_i]_+ \]</div>
 </p>
 <p>See: www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo9inventory9inventoryEjjj">
 <span id="_CPPv3N5pagmo9inventory9inventoryEjjj"></span><span id="_CPPv2N5pagmo9inventory9inventoryEjjj"></span><span id="pagmo::inventory::inventory__unsigned.unsigned.unsigned"></span><span class="target" id="classpagmo_1_1inventory_1a133b69c4f8a0b0eff8248c917ee8eb5b"></span><code class="sig-name descname">inventory</code><span class="sig-paren">(</span>unsigned <em>weeks</em> = 4u, unsigned <em>sample_size</em> = 10u, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9inventory9inventoryEjjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from weeks, sample size and random seed. </p>
@@ -233,9 +233,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="pagmo::inventory::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1inventory_1a3f652838ce11812e571a7a4c5863e842"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="pagmo::inventory::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1inventory_1a3f652838ce11812e571a7a4c5863e842"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
 <p><dl class="simple">
@@ -249,7 +249,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory10get_boundsEv">
 <span id="_CPPv3NK5pagmo9inventory10get_boundsEv"></span><span id="_CPPv2NK5pagmo9inventory10get_boundsEv"></span><span id="pagmo::inventory::get_boundsC"></span><span class="target" id="classpagmo_1_1inventory_1aea31620a36e64107e9fda0d311e02f9d"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -261,7 +261,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo9inventory8set_seedEj">
 <span id="_CPPv3N5pagmo9inventory8set_seedEj"></span><span id="_CPPv2N5pagmo9inventory8set_seedEj"></span><span id="pagmo::inventory::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1inventory_1a630d20f12421d01bc67376bc72db4666"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9inventory8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
@@ -274,7 +274,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory8get_nameEv">
 <span id="_CPPv3NK5pagmo9inventory8get_nameEv"></span><span id="_CPPv2NK5pagmo9inventory8get_nameEv"></span><span id="pagmo::inventory::get_nameC"></span><span class="target" id="classpagmo_1_1inventory_1ac67fa712ba3011fa37f51a8664926188"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -285,7 +285,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo9inventory14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9inventory14get_extra_infoEv"></span><span id="pagmo::inventory::get_extra_infoC"></span><span class="target" id="classpagmo_1_1inventory_1a8c53c83a696a1e3d9576bd12f7480d8f"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
@@ -296,9 +296,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo9inventory9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9inventory9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1inventory_1a67d80911334d5989d815e0e0a5a42d4e"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="pagmo::inventory::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo9inventory9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9inventory9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1inventory_1a67d80911334d5989d815e0e0a5a42d4e"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="pagmo::inventory::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,13 +204,13 @@
             
   <div class="section" id="zdt-test-suite">
 <h1>ZDT test suite<a class="headerlink" href="#zdt-test-suite" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo3zdtE">
-<span id="_CPPv3N5pagmo3zdtE"></span><span id="_CPPv2N5pagmo3zdtE"></span><span id="pagmo::zdt"></span><span class="target" id="classpagmo_1_1zdt"></span><em class="property">class </em><code class="sig-name descname">zdt</code><a class="headerlink" href="#_CPPv4N5pagmo3zdtE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3zdtE"></span><span id="_CPPv2N5pagmo3zdtE"></span><span id="pagmo::zdt"></span><span class="target" id="classpagmo_1_1zdt"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">zdt</code><a class="headerlink" href="#_CPPv4N5pagmo3zdtE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>ZDT problem test suite. </p>
 <p>This widespread test suite was conceived for two-objective problems and takes its name from its authors Zitzler, Deb and Thiele.</p>
 <p>In their paper the authors propose a set of 6 different scalable problems all originating from a well thought combination of functions allowing, by construction, to measure the distance of any point to the Pareto front while creating interesting problems. They also suggest some dimensions for instantiating the problems, namely <span class="math notranslate nohighlight">\(m = [30, 30, 30, 10, 11, 10]\)</span>.</p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The ZDT5 problem is an integer problem, its fitness is computed rounding all the chromosome values,
 so that [1,0,1] or [0.97, 0.23, 0.57] will have the same fitness. Integer relaxation techniques are
@@ -222,31 +222,32 @@ thus not appropriate fot this type of fitness.</p>
 Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848</p>
 </div>
 </p>
+</p>
 <p>ZDT1:</p>
 <p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>-dimensional ( <span class="math notranslate nohighlight">\(n\)</span>&gt;1) multi-objecive problem. <div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
 </p>
 <p>ZDT2:</p>
 <p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>-dimension multi-objecive problem. <div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \left(x_1 / g(x)\right)^2 \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
 </p>
 <p>ZDT3:</p>
 <p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>-dimension multi-objecive problem. <div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} - x_1/g(x) \sin(10 \pi x_1) \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
 </p>
 <p>ZDT4:</p>
 <p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>-dimension multi-objecive problem. <div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{l} g\left(x\right) = 91 + \sum_{i=2}^{n} \left[x_i^2 - 10 \cos \left(4\pi x_i \right) \right] \\ F_1 \left(x\right) = x_1 \\ F_2 \left(x\right) = g(x) \left[ 1 - \sqrt{x_1 / g(x)} \right] x_1 \in [0,1], x_i \in \left[ -5,5 \right] i=2, \cdots, 10. \end{array} \end{split}\]</div>
 </p>
 <p>ZDT5</p>
 <p>This is a box-constrained integer <span class="math notranslate nohighlight">\(n\)</span>-dimension multi-objecive problem. The chromosome is a bitstring so that <span class="math notranslate nohighlight">\(x_i \in \left\{0,1\right\}\)</span>. Refer to the original paper for the formal definition.</p>
 <p>ZDT6</p>
 <p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>dimension multi-objecive problem. <div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left[\left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right)\right]^{0.25} \\ F_1 \left(x\right) = 1 - \exp(-4 x_1) \sin^6(6 \pi \ x_1) \\ F_2 \left(x\right) = g(x) \left[ 1 - (f_1(x) / g(x))^2 \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo3zdt3zdtEjj">
 <span id="_CPPv3N5pagmo3zdt3zdtEjj"></span><span id="_CPPv2N5pagmo3zdt3zdtEjj"></span><span id="pagmo::zdt::zdt__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1zdt_1a8d04654442b490a4bf0fbdd134decfc2"></span><code class="sig-name descname">zdt</code><span class="sig-paren">(</span>unsigned <em>prob_id</em> = 1u, unsigned <em>param</em> = 30u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3zdt3zdtEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor</p>
@@ -266,9 +267,9 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="pagmo::zdt::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a86cc24e606d8363b8e6bc384c37c4157"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="pagmo::zdt::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a86cc24e606d8363b8e6bc384c37c4157"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
 <p><dl class="simple">
@@ -282,7 +283,7 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt8get_nobjEv">
 <span id="_CPPv3NK5pagmo3zdt8get_nobjEv"></span><span id="_CPPv2NK5pagmo3zdt8get_nobjEv"></span><span id="pagmo::zdt::get_nobjC"></span><span class="target" id="classpagmo_1_1zdt_1a3fe23a0bc425d2c0fcf6ad00165a4e04"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Number of objectives. </p>
@@ -294,7 +295,7 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt10get_boundsEv">
 <span id="_CPPv3NK5pagmo3zdt10get_boundsEv"></span><span id="_CPPv2NK5pagmo3zdt10get_boundsEv"></span><span id="pagmo::zdt::get_boundsC"></span><span class="target" id="classpagmo_1_1zdt_1a7c3d9e810ffe9871040c818fc80806a3"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -306,7 +307,7 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt7get_nixEv">
 <span id="_CPPv3NK5pagmo3zdt7get_nixEv"></span><span id="_CPPv2NK5pagmo3zdt7get_nixEv"></span><span id="pagmo::zdt::get_nixC"></span><span class="target" id="classpagmo_1_1zdt_1a719c966aa3d09b8cf3c311c946851eba"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Integer dimension. </p>
@@ -318,7 +319,7 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt8get_nameEv">
 <span id="_CPPv3NK5pagmo3zdt8get_nameEv"></span><span id="_CPPv2NK5pagmo3zdt8get_nameEv"></span><span id="pagmo::zdt::get_nameC"></span><span class="target" id="classpagmo_1_1zdt_1ac8052693a3978e6876b32184fad51263"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -329,9 +330,9 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt10p_distanceERK10population">
-<span id="_CPPv3NK5pagmo3zdt10p_distanceERK10population"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK10population"></span><span id="pagmo::zdt::p_distance__populationCRC"></span><span class="target" id="classpagmo_1_1zdt_1a5c0d570b777c7beedc45f99660f09f56"></span>double <code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> &amp;<em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt10p_distanceERK10population"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK10population"></span><span id="pagmo::zdt::p_distance__populationCRC"></span><span class="target" id="classpagmo_1_1zdt_1a5c0d570b777c7beedc45f99660f09f56"></span>double <code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Distance from the Pareto front (of a population) </p>
 <p>Convergence metric for a given population (0 = on the optimal front)</p>
 <p>Takes the average across the input population of the p_distance</p>
@@ -346,9 +347,9 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt10p_distanceERK13vector_double">
-<span id="_CPPv3NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="pagmo::zdt::p_distance__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a15a2f1d5cac918093a1c923b3967b9e2"></span>double <code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="pagmo::zdt::p_distance__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a15a2f1d5cac918093a1c923b3967b9e2"></span>double <code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Distance from the Pareto front. </p>
 <p>Convergence metric for a given decision_vector (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure “a distance” of any point from the pareto front of any ZDT problem analytically without the need to precompute the front.</p>
@@ -365,9 +366,9 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo3zdt9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3zdt9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1zdt_1a05883c682a6498d0d4c46e128fb63472"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="pagmo::zdt::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3zdt9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3zdt9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1zdt_1a05883c682a6498d0d4c46e128fb63472"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="pagmo::zdt::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

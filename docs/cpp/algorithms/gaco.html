@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -206,15 +206,15 @@
             
   <div class="section" id="extended-ant-colony-optimization-gaco">
 <h1>Extended Ant Colony Optimization (gaco)<a class="headerlink" href="#extended-ant-colony-optimization-gaco" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo4gacoE">
-<span id="_CPPv3N5pagmo4gacoE"></span><span id="_CPPv2N5pagmo4gacoE"></span><span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><em class="property">class </em><code class="sig-name descname">gaco</code><a class="headerlink" href="#_CPPv4N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gacoE"></span><span id="_CPPv2N5pagmo4gacoE"></span><span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">gaco</code><a class="headerlink" href="#_CPPv4N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extended Ant Colony Opitmization. </p>
 <p><img alt="../../../_images/gaco.png" src="../../../_images/gaco.png" /></p>
 <p>Ant colony optimization is a class of optimization algorithms modeled on the actions of an ant colony. Artificial ‘ants’ (e.g. simulation agents) locate optimal solutions by moving through a parameter space representing all possible solutions. Real ants lay down pheromones directing each other to resources while exploring their environment. The simulated ‘ants’ similarly record their positions and the quality of their solutions, so that in later simulation iterations more ants locate better solutions.</p>
 <p>In pagmo we propose a version of this algorithm called extended ACO and originally described by Schlueter et al. Extended ACO generates future generations of ants by using the a multi-kernel gaussian distribution based on three parameters (i.e., pheromone values) which are computed depending on the quality of each previous solution. The solutions are ranked through an oracle penalty method.</p>
 <p>This algorithm can be applied to box-bounded single-objective, constrained and unconstrained optimization, with both continuous and integer variables.</p>
-<p><div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex mixed integer non-linear programming.
 Computers &amp; Operations Research.</p>
@@ -226,16 +226,17 @@ The main difference between the implemented version  and the original one lies i
 how two of the three pheromone values are computed (in particular, the weights and the standard deviations).</p>
 <p>Image credit: <a class="reference external" href="https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg">https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg</a></p>
 </div>
+</p>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo4gaco13log_line_typeE">
 <span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"></span><em class="property">typedef </em>std::tuple&lt;unsigned, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, unsigned, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp) </p>
 </dd></dl>
 
-<dl class="type">
+<dl class="cpp type">
 <dt id="_CPPv4N5pagmo4gaco8log_typeE">
 <span id="_CPPv3N5pagmo4gaco8log_typeE"></span><span id="_CPPv2N5pagmo4gaco8log_typeE"></span><span id="pagmo::gaco::log_type"></span><span class="target" id="classpagmo_1_1gaco_1a9c6ebb983637ac1c268b254cd538c83f"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="pagmo::gaco::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo4gaco8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
@@ -244,7 +245,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj">
 <span id="_CPPv3N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="pagmo::gaco::gaco__unsigned.unsigned.double.double.double.unsigned.unsigned.unsigned.unsigned.double.b.unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a673d54f99eab2bae23ce31e5c41c095d"></span><code class="sig-name descname">gaco</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, unsigned <em>ker</em> = 63u, double <em>q</em> = 1.0, double <em>oracle</em> = 0., double <em>acc</em> = 0.01, unsigned <em>threshold</em> = 1u, unsigned <em>n_gen_mark</em> = 7u, unsigned <em>impstop</em> = 100000u, unsigned <em>evalstop</em> = 100000u, double <em>focus</em> = 0., bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs the ACO user defined algorithm for single-objective optimization.</p>
@@ -272,9 +273,9 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco6evolveE10population">
-<span id="_CPPv3NK5pagmo4gaco6evolveE10population"></span><span id="_CPPv2NK5pagmo4gaco6evolveE10population"></span><span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1a5aa495b4690d6ea14ce7c9a62503a011"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco6evolveE10population"></span><span id="_CPPv2NK5pagmo4gaco6evolveE10population"></span><span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1a5aa495b4690d6ea14ce7c9a62503a011"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for the requested number of generations.</p>
 <p><dl class="simple">
@@ -292,9 +293,9 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco8set_seedEj">
-<span id="_CPPv3N5pagmo4gaco8set_seedEj"></span><span id="_CPPv2N5pagmo4gaco8set_seedEj"></span><span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4ea0b86dc02f3c4a2e10a63cc1dd73f0"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco8set_seedEj"></span><span id="_CPPv2N5pagmo4gaco8set_seedEj"></span><span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4ea0b86dc02f3c4a2e10a63cc1dd73f0"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -305,7 +306,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco8get_seedEv">
 <span id="_CPPv3NK5pagmo4gaco8get_seedEv"></span><span id="_CPPv2NK5pagmo4gaco8get_seedEv"></span><span id="pagmo::gaco::get_seedC"></span><span class="target" id="classpagmo_1_1gaco_1a448660cccce3b7af1154d2f6d7632c5d"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
@@ -316,7 +317,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco13set_verbosityEj">
 <span id="_CPPv3N5pagmo4gaco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4gaco13set_verbosityEj"></span><span id="pagmo::gaco::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
@@ -348,7 +349,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco13get_verbosityEv">
 <span id="_CPPv3NK5pagmo4gaco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4gaco13get_verbosityEv"></span><span id="pagmo::gaco::get_verbosityC"></span><span class="target" id="classpagmo_1_1gaco_1abb6cade7b7e96320498c4d7633bf865a"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
@@ -359,7 +360,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco7get_genEv">
 <span id="_CPPv3NK5pagmo4gaco7get_genEv"></span><span id="_CPPv2NK5pagmo4gaco7get_genEv"></span><span id="pagmo::gaco::get_genC"></span><span class="target" id="classpagmo_1_1gaco_1acb9c3c3d7a29943a3a6a39b266b5c4a8"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
@@ -370,7 +371,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco7set_bfeERK3bfe">
 <span id="_CPPv3N5pagmo4gaco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4gaco7set_bfeERK3bfe"></span><span id="pagmo::gaco::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1gaco_1a6b06d99293444ca6776c2ce19dbfc40e"></span>void <code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the batch function evaluation scheme. </p>
@@ -383,7 +384,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco8get_nameEv">
 <span id="_CPPv3NK5pagmo4gaco8get_nameEv"></span><span id="_CPPv2NK5pagmo4gaco8get_nameEv"></span><span id="pagmo::gaco::get_nameC"></span><span class="target" id="classpagmo_1_1gaco_1a89645ecde8e25dc44e713b43c121abeb"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
@@ -395,7 +396,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo4gaco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4gaco14get_extra_infoEv"></span><span id="pagmo::gaco::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gaco_1a017cfa405ec96a736d64a0ad8dfdb734"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
@@ -407,7 +408,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco7get_logEv">
 <span id="_CPPv3NK5pagmo4gaco7get_logEv"></span><span id="_CPPv2NK5pagmo4gaco7get_logEv"></span><span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
@@ -418,9 +419,9 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo4gaco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4gaco9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1gaco_1a9f27bf4c4c9150e287b470f4e60fc422"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="pagmo::gaco::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo4gaco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4gaco9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1gaco_1a9f27bf4c4c9150e287b470f4e60fc422"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="pagmo::gaco::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

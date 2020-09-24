@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -187,7 +187,7 @@
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p><em>#include &lt;pagmo/s_policies/select_best.hpp&gt;</em></p>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo11select_bestE">
 <span id="_CPPv3N5pagmo11select_bestE"></span><span id="_CPPv2N5pagmo11select_bestE"></span><span id="pagmo::select_best"></span><em class="property">class </em><code class="sig-name descname">select_best</code><a class="headerlink" href="#_CPPv4N5pagmo11select_bestE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This user-defined selection policy (UDSP) will select the <em>best</em>
@@ -205,7 +205,7 @@ via <a class="reference internal" href="../utils/multi_objective.html#_CPPv4N5pa
 more details on the selection algorithm implemented by this UDSP.</p>
 <p>Note that this user-defined selection policy currently does <em>not</em> support
 multi-objective constrained problems.</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo11select_best11select_bestEv">
 <span id="_CPPv3N5pagmo11select_best11select_bestEv"></span><span id="_CPPv2N5pagmo11select_best11select_bestEv"></span><span id="pagmo::select_best::select_best"></span><code class="sig-name descname">select_best</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11select_best11select_bestEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor.</p>
@@ -213,7 +213,7 @@ multi-objective constrained problems.</p>
 of 1 (that is, 1 individual will be selected from the input population).</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo11select_best11select_bestE1T">
 <span id="_CPPv3I0EN5pagmo11select_best11select_bestE1T"></span><span id="_CPPv2I0EN5pagmo11select_best11select_bestE1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">explicit</em> <code class="sig-name descname">select_best</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11select_best11select_bestE1T" title="pagmo::select_best::select_best::T">T</a> <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11select_best11select_bestE1T" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a migration rate.</p>
@@ -243,7 +243,7 @@ to convert the input absolute migration rate to <a class="reference internal" hr
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double">
 <span id="_CPPv3NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double"></span><span id="_CPPv2NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double"></span><span id="pagmo::select_best::select__individuals_group_tCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> <code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> &amp;<em>inds</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&amp;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&amp;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nobj</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nec</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nic</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11select_best6selectERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This member function will select individuals from <em>inds</em>.</p>
@@ -292,7 +292,7 @@ allocation errors in standard containers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11select_best8get_nameEv">
 <span id="_CPPv3NK5pagmo11select_best8get_nameEv"></span><span id="_CPPv2NK5pagmo11select_best8get_nameEv"></span><span id="pagmo::select_best::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11select_best8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the name of the policy.</p>
@@ -303,7 +303,7 @@ allocation errors in standard containers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo11select_best14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo11select_best14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11select_best14get_extra_infoEv"></span><span id="pagmo::select_best::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo11select_best14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
@@ -313,7 +313,7 @@ allocation errors in standard containers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo11select_best9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo11select_best9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej" title="pagmo::select_best::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo11select_best9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialisation support.</p>

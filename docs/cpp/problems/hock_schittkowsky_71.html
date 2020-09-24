@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,20 +204,20 @@
             
   <div class="section" id="hock-schittkowsky-no-71">
 <h1>Hock Schittkowsky No.71<a class="headerlink" href="#hock-schittkowsky-no-71" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp struct">
 <dt id="_CPPv4N5pagmo20hock_schittkowsky_71E">
-<span id="_CPPv3N5pagmo20hock_schittkowsky_71E"></span><span id="_CPPv2N5pagmo20hock_schittkowsky_71E"></span><span id="pagmo::hock_schittkowsky_71"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71"></span><em class="property">struct </em><code class="sig-name descname">hock_schittkowsky_71</code><a class="headerlink" href="#_CPPv4N5pagmo20hock_schittkowsky_71E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo20hock_schittkowsky_71E"></span><span id="_CPPv2N5pagmo20hock_schittkowsky_71E"></span><span id="pagmo::hock_schittkowsky_71"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71"></span><em class="property">struct </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">hock_schittkowsky_71</code><a class="headerlink" href="#_CPPv4N5pagmo20hock_schittkowsky_71E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem No.71 from the Hock Schittkowsky suite. </p>
 <p>Mainly used for testing and debugging during PaGMO development, this struct implements the problem No.71 from the Hock Schittkowsky suite:</p>
 <p><div class="math notranslate nohighlight">
-\[\]</div>
+\[\begin{split} \begin{array}{rl} \mbox{find: } &amp; 1 \le \mathbf x \le 5 \\ \mbox{to minimize: } &amp; x_1x_4(x_1+x_2+x_3) + x_3 \\ \mbox{subject to: } &amp; x_1^2+x_2^2+x_3^2+x_4^2 - 40 = 0 \\ &amp; 25 - x_1 x_2 x_3 x_4 \le 0 \end{array} \end{split}\]</div>
 </p>
 <p>See: W. Hock and K. Schittkowski. Test examples for nonlinear programming codes. Lecture Notes in Economics and Mathematical Systems, 187, 1981. doi: 10.1007/978-3-642-48320-2. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double"></span><span id="pagmo::hock_schittkowsky_71::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1addd6076a7623bf080f7b14d41e86420a"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double"></span><span id="pagmo::hock_schittkowsky_71::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1addd6076a7623bf080f7b14d41e86420a"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_717fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
 <p><dl class="simple">
@@ -231,7 +231,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_717get_necEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_717get_necEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_717get_necEv"></span><span id="pagmo::hock_schittkowsky_71::get_necC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1a3073fa70bc79d53efbc28e0186daaf60"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_717get_necEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Equality constraint dimension. </p>
@@ -243,7 +243,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_717get_nicEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_717get_nicEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_717get_nicEv"></span><span id="pagmo::hock_schittkowsky_71::get_nicC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1abd447c96d345a77e3ad1d6a5a5db91c7"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nic</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_717get_nicEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inequality constraint dimension. </p>
@@ -255,7 +255,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_7110get_boundsEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_7110get_boundsEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_7110get_boundsEv"></span><span id="pagmo::hock_schittkowsky_71::get_boundsC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1acfd7df8a7ed1e54a54d7be4188543b58"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_7110get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -267,9 +267,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_718gradientERK13vector_double">
-<span id="_CPPv3NK5pagmo20hock_schittkowsky_718gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_718gradientERK13vector_double"></span><span id="pagmo::hock_schittkowsky_71::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1abb00862cc5bf0cbfd84d2a431ed7e147"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_718gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo20hock_schittkowsky_718gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_718gradientERK13vector_double"></span><span id="pagmo::hock_schittkowsky_71::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1abb00862cc5bf0cbfd84d2a431ed7e147"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_718gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradients. </p>
 <p>It returns the fitness gradient for this UDP.</p>
 <p>The gradient is represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">problem::gradient()</span></a>.</p>
@@ -284,9 +284,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double">
-<span id="_CPPv3NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double"></span><span id="pagmo::hock_schittkowsky_71::hessians__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1a9ac28d2c7b7aa0f91e142630255b361f"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double"></span><span id="pagmo::hock_schittkowsky_71::hessians__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1a9ac28d2c7b7aa0f91e142630255b361f"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">hessians</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_718hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians. </p>
 <p>It returns the hessians for this UDP.</p>
 <p>The hessians are represented in a sparse form as required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae3df9979b1dfccb61910b6a2c9ed83c4"><span class="std std-ref">problem::hessians()</span></a>.</p>
@@ -301,7 +301,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_7117hessians_sparsityEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_7117hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_7117hessians_sparsityEv"></span><span id="pagmo::hock_schittkowsky_71::hessians_sparsityC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1a7c339f6cdf6149a404b1001d73374a5a"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a>&gt; <code class="sig-name descname">hessians_sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_7117hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians sparsity (only the diagonal elements are non zero) </p>
@@ -314,7 +314,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_718get_nameEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_718get_nameEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_718get_nameEv"></span><span id="pagmo::hock_schittkowsky_71::get_nameC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1aab9bd08c2a5ee670d589178ab6151daf"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_718get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -325,7 +325,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_7114get_extra_infoEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_7114get_extra_infoEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_7114get_extra_infoEv"></span><span id="pagmo::hock_schittkowsky_71::get_extra_infoC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1a7cc14955948df16fc2f0397af8ceaddf"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_7114get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
@@ -336,7 +336,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo20hock_schittkowsky_7110best_knownEv">
 <span id="_CPPv3NK5pagmo20hock_schittkowsky_7110best_knownEv"></span><span id="_CPPv2NK5pagmo20hock_schittkowsky_7110best_knownEv"></span><span id="pagmo::hock_schittkowsky_71::best_knownC"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1aad816f8b6eac8028d0174cd92857784b"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo20hock_schittkowsky_7110best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
@@ -347,9 +347,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo20hock_schittkowsky_719serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo20hock_schittkowsky_719serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo20hock_schittkowsky_719serializeER7Archivej"></span><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1abda63ea73a28c6297044300bbe067b01"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo20hock_schittkowsky_719serializeEvR7Archivej" title="pagmo::hock_schittkowsky_71::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo20hock_schittkowsky_719serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo20hock_schittkowsky_719serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo20hock_schittkowsky_719serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="structpagmo_1_1hock__schittkowsky__71_1abda63ea73a28c6297044300bbe067b01"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo20hock_schittkowsky_719serializeEvR7Archivej" title="pagmo::hock_schittkowsky_71::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo20hock_schittkowsky_719serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 </dd></dl>
 

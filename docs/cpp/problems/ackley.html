@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,17 +204,17 @@
             
   <div class="section" id="ackley">
 <h1>Ackley<a class="headerlink" href="#ackley" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp struct">
 <dt id="_CPPv4N5pagmo6ackleyE">
-<span id="_CPPv3N5pagmo6ackleyE"></span><span id="_CPPv2N5pagmo6ackleyE"></span><span id="pagmo::ackley"></span><span class="target" id="structpagmo_1_1ackley"></span><em class="property">struct </em><code class="sig-name descname">ackley</code><a class="headerlink" href="#_CPPv4N5pagmo6ackleyE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6ackleyE"></span><span id="_CPPv2N5pagmo6ackleyE"></span><span id="pagmo::ackley"></span><span class="target" id="structpagmo_1_1ackley"></span><em class="property">struct </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ackley</code><a class="headerlink" href="#_CPPv4N5pagmo6ackleyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Ackley problem. </p>
 <p><img alt="../../../_images/ackley.png" src="../../../_images/ackley.png" /></p>
 <p>This is a scalable box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Ackley function: <div class="math notranslate nohighlight">
-\[\]</div>
+\[ F\left(x_1,\ldots,x_n\right) = 20 + e - 20e^{-\frac 15 \sqrt{\frac 1n \sum_{i=1}^n x_i^2}} - e^{\frac 1n \sum_{i=1}^n \cos(2\pi x_i)}, \quad x_i \in \left[ -15,30 \right]. \]</div>
  The global minimum is in <span class="math notranslate nohighlight">\(x_i=0\)</span>, where <span class="math notranslate nohighlight">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo6ackley6ackleyEj">
 <span id="_CPPv3N5pagmo6ackley6ackleyEj"></span><span id="_CPPv2N5pagmo6ackley6ackleyEj"></span><span id="pagmo::ackley::ackley__unsigned"></span><span class="target" id="structpagmo_1_1ackley_1a65c0739045650ca36df98f6923054924"></span><code class="sig-name descname">ackley</code><span class="sig-paren">(</span>unsigned <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6ackley6ackleyEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension. </p>
@@ -232,9 +232,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="pagmo::ackley::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1ackley_1abdb321732aa832401874f463e713f239"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="pagmo::ackley::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1ackley_1abdb321732aa832401874f463e713f239"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
 <p><dl class="simple">
@@ -248,7 +248,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley10get_boundsEv">
 <span id="_CPPv3NK5pagmo6ackley10get_boundsEv"></span><span id="_CPPv2NK5pagmo6ackley10get_boundsEv"></span><span id="pagmo::ackley::get_boundsC"></span><span class="target" id="structpagmo_1_1ackley_1a3abbf3c1247899a753782f85403e531e"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -260,7 +260,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley8get_nameEv">
 <span id="_CPPv3NK5pagmo6ackley8get_nameEv"></span><span id="_CPPv2NK5pagmo6ackley8get_nameEv"></span><span id="pagmo::ackley::get_nameC"></span><span class="target" id="structpagmo_1_1ackley_1a8bc14c09f376f91d4f30b36dcc1daa23"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -271,7 +271,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley10best_knownEv">
 <span id="_CPPv3NK5pagmo6ackley10best_knownEv"></span><span id="_CPPv2NK5pagmo6ackley10best_knownEv"></span><span id="pagmo::ackley::best_knownC"></span><span class="target" id="structpagmo_1_1ackley_1a3177a91aab5aae11bc3cdf6b3aa2aef6"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
@@ -282,9 +282,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo6ackley9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6ackley9serializeER7Archivej"></span><span class="target" id="structpagmo_1_1ackley_1a2986783f02decfc472a2951eaf0c4491"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="pagmo::ackley::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6ackley9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6ackley9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="structpagmo_1_1ackley_1a2986783f02decfc472a2951eaf0c4491"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="pagmo::ackley::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -303,7 +303,7 @@
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
+<dl class="cpp var">
 <dt id="_CPPv4N5pagmo6ackley5m_dimE">
 <span id="_CPPv3N5pagmo6ackley5m_dimE"></span><span id="_CPPv2N5pagmo6ackley5m_dimE"></span><span id="pagmo::ackley::m_dim__unsigned"></span><span class="target" id="structpagmo_1_1ackley_1a1a14a07417d25ada811b9ea46c5e8ce8"></span>unsigned <code class="sig-name descname">m_dim</code><a class="headerlink" href="#_CPPv4N5pagmo6ackley5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>

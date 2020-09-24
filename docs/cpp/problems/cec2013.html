@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -204,13 +204,13 @@
             
   <div class="section" id="cec-2013-problem-suite-box-bound-single-objective">
 <h1>CEC 2013 Problem Suite (box-bound, single objective)<a class="headerlink" href="#cec-2013-problem-suite-box-bound-single-objective" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo7cec2013E">
-<span id="_CPPv3N5pagmo7cec2013E"></span><span id="_CPPv2N5pagmo7cec2013E"></span><span id="pagmo::cec2013"></span><span class="target" id="classpagmo_1_1cec2013"></span><em class="property">class </em><code class="sig-name descname">cec2013</code><a class="headerlink" href="#_CPPv4N5pagmo7cec2013E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7cec2013E"></span><span id="_CPPv2N5pagmo7cec2013E"></span><span id="pagmo::cec2013"></span><span class="target" id="classpagmo_1_1cec2013"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">cec2013</code><a class="headerlink" href="#_CPPv4N5pagmo7cec2013E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The CEC 2013 problems: Real-Parameter Single Objective Optimization Competition. </p>
 <p><img alt="../../../_images/cec2013.png" src="../../../_images/cec2013.png" /></p>
 <p>The 28 problems of the competition on real-parameter single objective optimization problems that was organized for the 2013 IEEE Congress on Evolutionary Computation.</p>
-<p><div class="admonition note">
+<p><p><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The code for these UDAs is adapted from the original C code distributed during the competition and
 linked below.</p>
@@ -219,10 +219,11 @@ linked below.</p>
 <p class="admonition-title">Note</p>
 <p>All problems are box-bounded, continuous, single objective problems.</p>
 </div>
+</p>
  </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo7cec20137cec2013Ejj">
 <span id="_CPPv3N5pagmo7cec20137cec2013Ejj"></span><span id="_CPPv2N5pagmo7cec20137cec2013Ejj"></span><span id="pagmo::cec2013::cec2013__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1cec2013_1a4c1ba7d1a4e21b43d75b44c87634a422"></span><code class="sig-name descname">cec2013</code><span class="sig-paren">(</span>unsigned <em>prob_id</em> = 1u, unsigned <em>dim</em> = 2u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7cec20137cec2013Ejj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
@@ -241,9 +242,9 @@ linked below.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7cec20137fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo7cec20137fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo7cec20137fitnessERK13vector_double"></span><span id="pagmo::cec2013::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1cec2013_1a19c2ade3113f3f639c1f94767c877765"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20137fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7cec20137fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo7cec20137fitnessERK13vector_double"></span><span id="pagmo::cec2013::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1cec2013_1a19c2ade3113f3f639c1f94767c877765"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20137fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
 <p><dl class="simple">
@@ -257,7 +258,7 @@ linked below.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7cec201310get_boundsEv">
 <span id="_CPPv3NK5pagmo7cec201310get_boundsEv"></span><span id="_CPPv2NK5pagmo7cec201310get_boundsEv"></span><span id="pagmo::cec2013::get_boundsC"></span><span class="target" id="classpagmo_1_1cec2013_1a39e6dc6de7860e47896bc06f8529dcb6"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec201310get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
@@ -269,7 +270,7 @@ linked below.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7cec20138get_nameEv">
 <span id="_CPPv3NK5pagmo7cec20138get_nameEv"></span><span id="_CPPv2NK5pagmo7cec20138get_nameEv"></span><span id="pagmo::cec2013::get_nameC"></span><span class="target" id="classpagmo_1_1cec2013_1ac7f62190b27b7be5743a3a07c712a88f"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7cec20138get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
@@ -280,9 +281,9 @@ linked below.</p>
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo7cec20139serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo7cec20139serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo7cec20139serializeER7Archivej"></span><span class="target" id="classpagmo_1_1cec2013_1a57c6bbb0b98f834fb69d2c0b8fc783d7"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo7cec20139serializeEvR7Archivej" title="pagmo::cec2013::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo7cec20139serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo7cec20139serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo7cec20139serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1cec2013_1a57c6bbb0b98f834fb69d2c0b8fc783d7"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo7cec20139serializeEvR7Archivej" title="pagmo::cec2013::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo7cec20139serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">

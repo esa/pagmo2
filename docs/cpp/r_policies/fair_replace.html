@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -187,7 +187,7 @@
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p><em>#include &lt;pagmo/r_policies/fair_replace.hpp&gt;</em></p>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo12fair_replaceE">
 <span id="_CPPv3N5pagmo12fair_replaceE"></span><span id="_CPPv2N5pagmo12fair_replaceE"></span><span id="pagmo::fair_replace"></span><em class="property">class </em><code class="sig-name descname">fair_replace</code><a class="headerlink" href="#_CPPv4N5pagmo12fair_replaceE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This user-defined replacement policy (UDRP) will replace individuals in
@@ -206,7 +206,7 @@ via <a class="reference internal" href="../utils/multi_objective.html#_CPPv4N5pa
 more details on the replacement algorithm implemented by this UDRP.</p>
 <p>Note that this user-defined replacement policy currently does <em>not</em> support
 multi-objective constrained problems.</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo12fair_replace12fair_replaceEv">
 <span id="_CPPv3N5pagmo12fair_replace12fair_replaceEv"></span><span id="_CPPv2N5pagmo12fair_replace12fair_replaceEv"></span><span id="pagmo::fair_replace::fair_replace"></span><code class="sig-name descname">fair_replace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo12fair_replace12fair_replaceEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor.</p>
@@ -214,7 +214,7 @@ multi-objective constrained problems.</p>
 (that is, 1 individual in the original population is considered for replacement).</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo12fair_replace12fair_replaceE1T">
 <span id="_CPPv3I0EN5pagmo12fair_replace12fair_replaceE1T"></span><span id="_CPPv2I0EN5pagmo12fair_replace12fair_replaceE1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><em class="property">explicit</em> <code class="sig-name descname">fair_replace</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo12fair_replace12fair_replaceE1T" title="pagmo::fair_replace::fair_replace::T">T</a> <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo12fair_replace12fair_replaceE1T" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a migration rate.</p>
@@ -244,7 +244,7 @@ to convert the input absolute migration rate to <a class="reference internal" hr
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12fair_replace7replaceERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_doubleRK19individuals_group_t">
 <span id="_CPPv3NK5pagmo12fair_replace7replaceERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_doubleRK19individuals_group_t"></span><span id="_CPPv2NK5pagmo12fair_replace7replaceERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_doubleRK19individuals_group_t"></span><span id="pagmo::fair_replace::replace__individuals_group_tCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_double::size_typeCR.vector_doubleCR.individuals_group_tCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> <code class="sig-name descname">replace</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> &amp;<em>inds</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&amp;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type&amp;, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nobj</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nec</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type &amp;<em>nic</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>tol</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo19individuals_group_tE" title="pagmo::individuals_group_t">individuals_group_t</a> &amp;<em>mig</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12fair_replace7replaceERK19individuals_group_tRKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERKN13vector_double9size_typeERK13vector_doubleRK19individuals_group_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This member function will replace individuals in <em>inds</em> with individuals from <em>mig</em>.</p>
@@ -296,7 +296,7 @@ allocation errors in standard containers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12fair_replace8get_nameEv">
 <span id="_CPPv3NK5pagmo12fair_replace8get_nameEv"></span><span id="_CPPv2NK5pagmo12fair_replace8get_nameEv"></span><span id="pagmo::fair_replace::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12fair_replace8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the name of the policy.</p>
@@ -307,7 +307,7 @@ allocation errors in standard containers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo12fair_replace14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo12fair_replace14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo12fair_replace14get_extra_infoEv"></span><span id="pagmo::fair_replace::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo12fair_replace14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
@@ -317,7 +317,7 @@ allocation errors in standard containers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo12fair_replace9serializeEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo12fair_replace9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo12fair_replace9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo12fair_replace9serializeEvR7Archivej" title="pagmo::fair_replace::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo12fair_replace9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Serialisation support.</p>

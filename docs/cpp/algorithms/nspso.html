@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -209,7 +209,7 @@
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.12.</span></p>
 </div>
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo5nspsoE">
 <span id="_CPPv3N5pagmo5nspsoE"></span><span id="_CPPv2N5pagmo5nspsoE"></span><span id="pagmo::nspso"></span><em class="property">class </em><code class="sig-name descname">nspso</code><a class="headerlink" href="#_CPPv4N5pagmo5nspsoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Non-dominated Sorting Particle Swarm Optimizer (NSPSO) is a modified version of PSO for multi-objective optimization.
@@ -220,7 +220,7 @@ It extends the basic ideas of PSO by making a better use of personal bests and o
 <li><p>See: Fonseca, M. Carlos and Fleming, J. Peter. “Genetic Algorithms for Multiobjective Optimization: Formulation, Discussion and Generalization”. Proceedings of the ICGA-93: Fifth International Conference on Genetic Algorithms (1993), vol. 3, pp. 416-423.</p></li>
 </ul>
 <p>This constructor will construct NSPSO.</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo5nspso5nspsoEjddddddjNSt6stringEj">
 <span id="_CPPv3N5pagmo5nspso5nspsoEjddddddjNSt6stringEj"></span><span id="_CPPv2N5pagmo5nspso5nspsoEjddddddjNSt6stringEj"></span><span id="pagmo::nspso::nspso__unsigned.double.double.double.double.double.double.unsigned.ss.unsigned"></span><code class="sig-name descname">nspso</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>min_w</em> = 0.95, double <em>max_w</em> = 10., double <em>c1</em> = 0.01, double <em>c2</em> = 0.5, double <em>chi</em> = 0.5, double <em>v_coeff</em> = 0.5, unsigned <em>leader_selection_range</em> = 2u, std::string <em>diversity_mechansim</em> = &quot;crowding distance&quot;, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nspso5nspsoEjddddddjNSt6stringEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
@@ -250,7 +250,7 @@ It extends the basic ideas of PSO by making a better use of personal bests and o
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5nspso6evolveE10population">
 <span id="_CPPv3NK5pagmo5nspso6evolveE10population"></span><span id="_CPPv2NK5pagmo5nspso6evolveE10population"></span><span id="pagmo::nspso::evolve__populationC"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method: evolves the population for the requested number of generations.</p>
@@ -267,7 +267,7 @@ It extends the basic ideas of PSO by making a better use of personal bests and o
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo5nspso8set_seedEj">
 <span id="_CPPv3N5pagmo5nspso8set_seedEj"></span><span id="_CPPv2N5pagmo5nspso8set_seedEj"></span><span id="pagmo::nspso::set_seed__unsigned"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nspso8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed.</p>
@@ -278,7 +278,7 @@ It extends the basic ideas of PSO by making a better use of personal bests and o
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo5nspso8get_seedEj">
 <span id="_CPPv3N5pagmo5nspso8get_seedEj"></span><span id="_CPPv2N5pagmo5nspso8get_seedEj"></span><span id="pagmo::nspso::get_seed__unsigned"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nspso8get_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed.</p>
@@ -289,7 +289,7 @@ It extends the basic ideas of PSO by making a better use of personal bests and o
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo5nspso13set_verbosityEj">
 <span id="_CPPv3N5pagmo5nspso13set_verbosityEj"></span><span id="_CPPv2N5pagmo5nspso13set_verbosityEj"></span><span id="pagmo::nspso::set_verbosity__unsigned"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nspso13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity: sets the verbosity level
@@ -328,7 +328,7 @@ ideal point of the current population follows cropped to its
 </td></tr></table></div>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5nspso13get_verbosityEv">
 <span id="_CPPv3NK5pagmo5nspso13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5nspso13get_verbosityEv"></span><span id="pagmo::nspso::get_verbosityC"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level.</p>
@@ -339,7 +339,7 @@ ideal point of the current population follows cropped to its
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5nspso7get_genEv">
 <span id="_CPPv3NK5pagmo5nspso7get_genEv"></span><span id="_CPPv2NK5pagmo5nspso7get_genEv"></span><span id="pagmo::nspso::get_genC"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations.</p>
@@ -350,7 +350,7 @@ ideal point of the current population follows cropped to its
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5nspso7get_logEv">
 <span id="_CPPv3NK5pagmo5nspso7get_logEv"></span><span id="_CPPv2NK5pagmo5nspso7get_logEv"></span><span id="pagmo::nspso::get_logC"></span><em class="property">const</em> log_type &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the log. A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <code class="docutils literal notranslate"><span class="pre">nspso::log_line_type</span></code> containing: Gen, Fevals, ideal_point as described in <code class="docutils literal notranslate"><span class="pre">nspso::set_verbosity</span></code>.</p>
@@ -361,7 +361,7 @@ ideal point of the current population follows cropped to its
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo5nspso7set_bfeERK3bfe">
 <span id="_CPPv3N5pagmo5nspso7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo5nspso7set_bfeERK3bfe"></span><span id="pagmo::nspso::set_bfe__bfeCR"></span>void <code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nspso7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the batch function evaluation scheme.</p>
@@ -372,7 +372,7 @@ ideal point of the current population follows cropped to its
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5nspso14get_extra_infoEv">
 <span id="_CPPv3NK5pagmo5nspso14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5nspso14get_extra_infoEv"></span><span id="pagmo::nspso::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. Returns extra information on the algorithm.</p>
@@ -383,7 +383,7 @@ ideal point of the current population follows cropped to its
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5nspso8get_nameEv">
 <span id="_CPPv3NK5pagmo5nspso8get_nameEv"></span><span id="_CPPv2NK5pagmo5nspso8get_nameEv"></span><span id="pagmo::nspso::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5nspso8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the problem name.</p>
@@ -394,7 +394,7 @@ ideal point of the current population follows cropped to its
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo5nspso9serializeEvR7Archivej">
 <span id="_CPPv3I0EN5pagmo5nspso9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo5nspso9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5nspso9serializeEvR7Archivej" title="pagmo::nspso::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5nspso9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization.</p>

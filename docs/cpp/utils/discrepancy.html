@@ -32,7 +32,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -190,7 +190,7 @@
 <span id="cpp-low-discrepancy-utils"></span><h1>Low-discrepancy sequences<a class="headerlink" href="#low-discrepancy-sequences" title="Permalink to this headline">¶</a></h1>
 <p>A number of utilities to generate and use low- discrepancy sequences</p>
 <hr class="docutils" />
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE">
 <span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span>std::vector&lt;double&gt; <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">sample_from_simplex</code><span class="sig-paren">(</span>std::vector&lt;double&gt; <em>in</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sample from a simplex. </p>
@@ -222,14 +222,14 @@
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo14van_der_corputE">
-<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><em class="property">class </em><code class="sig-name descname">van_der_corput</code><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">van_der_corput</code><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Van der Corput sequence. </p>
 <p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math notranslate nohighlight">\(n \ge 1\)</span> is represented, in the base <span class="math notranslate nohighlight">\(b\)</span> by: <div class="math notranslate nohighlight">
-\[\]</div>
+\[ n = \sum_{i=0}^{L-1}d_i(n) b^i, \]</div>
  where <span class="math notranslate nohighlight">\(L\)</span> is the number of digits needed. The <span class="math notranslate nohighlight">\(n\)</span>-th number in a van der Corput sequence is thus defined as: <div class="math notranslate nohighlight">
-\[\]</div>
+\[ g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}. \]</div>
 </p>
 <p>so that, for example, if <span class="math notranslate nohighlight">\(b = 10\)</span>:</p>
 <p><span class="math notranslate nohighlight">\( seq = \{ 0, \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10}, \tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100}, \tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100}, \tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\)</span></p>
@@ -238,7 +238,7 @@
 <p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Van_der_Corput_sequence">https://en.wikipedia.org/wiki/Van_der_Corput_sequence</a> </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo14van_der_corput14van_der_corputEjj">
 <span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><code class="sig-name descname">van_der_corput</code><span class="sig-paren">(</span>unsigned <em>b</em> = 2u, unsigned <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
@@ -257,7 +257,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo14van_der_corputclEv">
 <span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span>double <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
@@ -268,9 +268,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1van__der__corput_1ab44a224bb8ab618d0b440a8c103cb304"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="pagmo::van_der_corput::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14van_der_corput9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1van__der__corput_1ab44a224bb8ab618d0b440a8c103cb304"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="pagmo::van_der_corput::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
@@ -290,13 +290,13 @@
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="class">
+<dl class="cpp class">
 <dt id="_CPPv4N5pagmo6haltonE">
-<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><em class="property">class </em><code class="sig-name descname">halton</code><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">halton</code><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Halton sequence. </p>
 <p>The Halton sequence is, essentially, a generalization of the van der Corput sequence to higher dimensions. It considers, along each dimension, a van der Corput sequence referred to co-prime numbers. Here, by default, we consider the sequence of all prime numbers starting from 2, 3, 5, …… so that, for example, for <code class="docutils literal notranslate"><span class="pre">dim</span></code> equal two the following sequence is generated:</p>
 <p><div class="math notranslate nohighlight">
-\[\]</div>
+\[ seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\} \]</div>
 </p>
 <p><p>See: </p>
 <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> <dl class="simple">
@@ -309,7 +309,7 @@
 </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo6halton6haltonEjj">
 <span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><code class="sig-name descname">halton</code><span class="sig-paren">(</span>unsigned <em>dim</em> = 2u, unsigned <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
@@ -328,7 +328,7 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4N5pagmo6haltonclEv">
 <span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
@@ -339,9 +339,9 @@
 </p>
 </dd></dl>
 
-<dl class="function">
+<dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo6halton9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6halton9serializeER7Archivej"></span><span class="target" id="classpagmo_1_1halton_1ac12d114cc25697e1c437e4d5d0a7d3a3"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="pagmo::halton::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6halton9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6halton9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1halton_1ac12d114cc25697e1c437e4d5d0a7d3a3"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="pagmo::halton::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
 <p><dl class="simple">
