@@ -32,7 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <cmath>
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -142,8 +142,8 @@ BOOST_AUTO_TEST_CASE(unconstrain_fitness_test)
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., -1.}) == vector_double(2, 2.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 0., 1., 0., 0.}) == vector_double(2, 1.));
         vector_double nan_fitness = p0.fitness(vector_double{0., 0., std::numeric_limits<double>::quiet_NaN(), 1., -1., 1.});
-        BOOST_CHECK(boost::math::isnan(nan_fitness[0]));
-        BOOST_CHECK(boost::math::isnan(nan_fitness[1]));
+        BOOST_CHECK(std::isnan(nan_fitness[0]));
+        BOOST_CHECK(std::isnan(nan_fitness[1]));
     }
     {
         unconstrain p0{my_udp{}, "ignore_c"};
