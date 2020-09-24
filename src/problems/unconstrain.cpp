@@ -81,7 +81,7 @@ void unconstrain::generic_ctor_impl(const std::string &method, const vector_doub
     // 3 - We throw if the method selected is not supported
     if (method != "death penalty" && method != "kuri" && method != "weighted" && method != "ignore_c"
         && method != "ignore_o") {
-        pagmo_throw(std::invalid_argument, "The method " + method + " is not supported (did you mispell?)");
+        pagmo_throw(std::invalid_argument, "The method " + method + " is not supported (did you misspell?)");
     }
     // 4 - We throw if a non empty weight vector is passed but the method weghted is not selected
     if (weights.size() != 0u && method != "weighted") {
@@ -167,7 +167,7 @@ vector_double unconstrain::fitness(const vector_double &x) const
                 }
             }
             for (decltype(nc) i = 0u; i < nc; ++i) {
-                if (c[i] > 0.) {
+                if (!(c[i] < 0.)) {
                     penalty += m_weights[i] * c[i];
                 }
             }
