@@ -1,0 +1,5 @@
+*.aux
+*.auxlock
+*.log
+*.gz
+*.pdf
