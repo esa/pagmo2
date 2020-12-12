@@ -5,7 +5,7 @@ message(STATUS "Requested IPOPT components: ${pagmo_IPOPT_FIND_COMPONENTS}")
 # Check the components that were passed to find_package().
 set(_pagmo_IPOPT_ALLOWED_COMPONENTS header libipopt)
 foreach(_pagmo_IPOPT_CUR_COMPONENT ${pagmo_IPOPT_FIND_COMPONENTS})
-    if(NOT ${_pagmo_IPOPT_CUR_COMPONENT} IN_LIST _pagmo_IPOPT_ALLOWED_COMPONENTS)
+    if(NOT "${_pagmo_IPOPT_CUR_COMPONENT}" IN_LIST _pagmo_IPOPT_ALLOWED_COMPONENTS)
         message(FATAL_ERROR "'${_pagmo_IPOPT_CUR_COMPONENT}' is not a valid component for IPOPT.")
     endif()
 endforeach()
