@@ -69,10 +69,6 @@ program presented earlier may look like this:
    add_executable(getting_started getting_started.cpp)
    target_link_libraries(getting_started Pagmo::pagmo)
 
-   # This line indicates to your compiler
-   # that C++17 is needed for the compilation.
-   set_property(TARGET getting_started PROPERTY CXX_STANDARD 17)
-
 Place this ``CMakeLists.txt`` and the ``getting_started.cpp`` files
 in the same directory, and create a ``build`` subdirectory. From
 the ``build`` subdirectory, execute these commands to produce
