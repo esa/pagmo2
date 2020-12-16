@@ -34,7 +34,7 @@ Additionally, pagmo has the following **optional** dependencies:
 
 Additionally, `CMake <https://cmake.org/>`__ is the build system used by
 pagmo and it must also be available when
-installing from source (the minimum required version is 3.3).
+installing from source (the minimum required version is 3.8).
 
 Packages
 --------

@@ -293,10 +293,6 @@ program presented earlier may look like this:</p>
 <span class="c"># dependencies are transitively linked to &#39;getting_started&#39;.</span>
 <span class="nb">add_executable</span><span class="p">(</span><span class="s">getting_started</span> <span class="s">getting_started.cpp</span><span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">getting_started</span> <span class="s">Pagmo::pagmo</span><span class="p">)</span>
-
-<span class="c"># This line indicates to your compiler</span>
-<span class="c"># that C++17 is needed for the compilation.</span>
-<span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">getting_started</span> <span class="s">PROPERTY</span> <span class="s">CXX_STANDARD</span> <span class="s">17</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Place this <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and the <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> files
