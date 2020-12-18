@@ -27,3 +27,5 @@ ADD_PAGMO_TUTORIAL(problem_basic)
 ADD_PAGMO_TUTORIAL(problem_basic_gh)
 ADD_PAGMO_TUTORIAL(problem_basic_s)
 ADD_PAGMO_TUTORIAL(problem_bin_packing)
+ADD_PAGMO_TUTORIAL(problem_bin_packing_EGOP)
+

@@ -9,7 +9,7 @@ The aim is to minimze the number of containers that have to be used.  This is a 
 Since then bin packing has been extended in many different ways: 2D bin packing, 3D bin packing, packing by weight or cost etc.
 Problems similar to bin packing or application of bpp can be found in many different domains (computer science, logistic, job shop scheduling etc.).
 Thus, it is still a very relevant problem with several new solvers being applied/tested/introduced every year 
-(Feng et al. "*An Enhance Grasshopper Optimization Algorithm to the Bin Packing Problem*"; 
+(Feng et al. "*An Enhanced Grasshopper Optimization Algorithm to the Bin Packing Problem*"; 
 Abdel-Basset et al. "*An improved nature inspired meta-heuristic algorithm for 1-D bin packing problem*").
 
 Here we consider a 1D version of bin packing, where we have a set of objects that need to be packed into a set of bins. 
@@ -40,7 +40,7 @@ For the bin packing problem we need to know 4 things.
 The bounds and constraints are fairly straightforwards. All items have to be packed into one of the bins, i.e. between 0 and *max_bin_num - 1*.
 The sum of the items in a bin cannot be larger than the size of the bins.  
 
-Just like in the :ref:'First Problem<cpp_tut_first_problem>' we have to implement 4 functions: 
+Just like in the :ref:`First Problem<cpp_tut_first_problem>` we have to implement 4 functions: 
 
 - ``fitness()``
 - ``get_bounds()``
@@ -95,8 +95,8 @@ return vector which represents the inequality. Each inequality number has to be 
     }
     
 Besides the fitness and the constraints we need to make sure that the bounds are also correct. We do not want that the 
-genetic algorithm starts packing an item into a non existent bin. Therefore, the ``get_bounds()`` function returns the 
-lower and upper bound for each item. In our case the lower bound is 0 (i.e. Bin 0)
+genetic algorithm starts packing items into a non existent bins. Therefore, the ``get_bounds()`` function returns the 
+lower and upper bound for each item. In our case the lower bound is 0 (i.e. Bin 1) and the upper bound is number of bins - 1.
 
 .. code-block:: c++
 
@@ -106,6 +106,17 @@ lower and upper bound for each item. In our case the lower bound is 0 (i.e. Bin 
         std::vector<double> upper(num_items, num_bins-1);
         return {lower, upper};
     }
+
+The ``get_nix()`` function returns the integer dimension of the problem, i.e. the size of the solution. In this case its given by the number of items.
+
+.. code-block:: c++
+
+    // Integer dimension of the problem - i.e. into which bin each item is packed
+    pagmo::vector_double::size_type get_nix() const {
+        return pagmo::vector_double::size_type(num_items);
+    }
+    
+Lastly, we need the number of inequalities, which is equal to the number of bins, as we need one inequality per bin. 
     
 .. code-block:: c++
     
@@ -114,15 +125,13 @@ lower and upper bound for each item. In our case the lower bound is 0 (i.e. Bin 
         return pagmo::vector_double::size_type(num_bins);
     }
 
-.. code-block:: c++
-
-    // Integer dimension of the problem - i.e. "the chromosomes, where each item is packed"
-    pagmo::vector_double::size_type get_nix() const {
-        return pagmo::vector_double::size_type(num_items);
-    }
-
+We can again solve this problem with :ref:gaco or :ref:ihs. 
+Combining the problem definition plus soliving it with gaco or ihs results in the following code. 
 
 .. literalinclude:: ../../../../../tutorials/problem_bin_packing.cpp
-   :caption: first_udp_ver0.cpp
+   :caption: problem_bin_packing.cpp
    :language: c++
    :linenos:
+   
+Solving the problem with either ihs or gaco will result in a solution that occupies 3 bins, i.e. finding an optimal solution. 
+

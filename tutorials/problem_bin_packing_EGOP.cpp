@@ -7,6 +7,7 @@
 #include <pagmo/archipelago.hpp>
 #include <pagmo/topologies/fully_connected.hpp>
 #include <pagmo/algorithms/ihs.hpp>
+#include <EGOP.h>
 
 struct bin_packing {
     // constants of the bin packing problem (bpp)
@@ -71,7 +72,6 @@ struct bin_packing {
     }
 };
 
-
 int main(){
 
     int size_bins = 7;
@@ -84,39 +84,39 @@ int main(){
     // 2 - Define the topology of the archipelago
     pagmo::algorithm algo{pagmo::ihs(100)};
 
-    // 3 - Define the topology of the archipelago
-    pagmo::fully_connected topo{};
-
-    // 4 - Instantiate an archipelago with 16 islands having each 100 individuals.
-    pagmo::archipelago archi{topo, 16, algo, prob, 100};
-
-    // 5 - Run the evolution in parallel on the 8 separate islands 10 times.
-    archi.evolve(100);
-
-    // 6 - Wait for the evolutions to finish.
-    archi.wait_check();
-
-    // 7 - Get the best solution across all islands.
-    // The first number in the champion vector is the number of islands used.
-    pagmo::population champion;
-    for (const auto &isl : archi) {
-        if (champion.size() == 0){
-            champion = isl.get_population();
-        }
-        if (champion.champion_f()[0] > isl.get_population().champion_f()[0]){
-            champion = isl.get_population();
-        }
-    }
-
-    // 8 - Print the solution
-    for (int i=0; i < champion.champion_x().size(); i++){
-        std::cout << "Item " << i << " is mapped to: " << champion.champion_x()[i] << std::endl;
-    }
-    // 9 - Print fitness value
-    std::cout << "Number of Islands used: " <<   champion.champion_f()[0] << std::endl;
-
-    // 10 - Print space left in each bin.
-    for (int i=1; i < champion.champion_f().size(); i++){
-        std::cout << "Space left in bin " << i << " : " << -champion.champion_f()[i] << std::endl;
-    }
+//    // 3 - Define the topology of the archipelago
+//    pagmo::fully_connected topo{};
+//
+//    // 4 - Instantiate an archipelago with 16 islands having each 100 individuals.
+//    pagmo::archipelago archi{topo, 16, algo, prob, 100};
+//
+//    // 5 - Run the evolution in parallel on the 8 separate islands 10 times.
+//    archi.evolve(100);
+//
+//    // 6 - Wait for the evolutions to finish.
+//    archi.wait_check();
+//
+//    // 7 - Get the best solution across all islands.
+//    // The first number in the champion vector is the number of islands used.
+//    pagmo::population champion;
+//    for (const auto &isl : archi) {
+//        if (champion.size() == 0){
+//            champion = isl.get_population();
+//        }
+//        if (champion.champion_f()[0] > isl.get_population().champion_f()[0]){
+//            champion = isl.get_population();
+//        }
+//    }
+//
+//    // 8 - Print the solution
+//    for (int i=0; i < champion.champion_x().size(); i++){
+//        std::cout << "Item " << i << " is mapped to: " << champion.champion_x()[i] << std::endl;
+//    }
+//    // 9 - Print fitness value
+//    std::cout << "Number of Islands used: " <<   champion.champion_f()[0] << std::endl;
+//
+//    // 10 - Print space left in each bin.
+//    for (int i=1; i < champion.champion_f().size(); i++){
+//        std::cout << "Space left in bin " << i << " : " << -champion.champion_f()[i] << std::endl;
+//    }
 }
