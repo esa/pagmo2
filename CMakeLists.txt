@@ -1,5 +1,5 @@
 # CMake version check.
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.8)
 # NOTE: policy for using the CheckIPOSupported module:
 # https://cmake.org/cmake/help/latest/policy/CMP0069.html
 cmake_policy(SET CMP0069 NEW)
@@ -314,12 +314,8 @@ target_compile_options(pagmo PRIVATE
     "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
 )
 
-# Let's setup the target C++ standard, but only if the user did not provide it manually.
-if(NOT CMAKE_CXX_STANDARD)
-    set_property(TARGET pagmo PROPERTY CXX_STANDARD 17)
-endif()
-set_property(TARGET pagmo PROPERTY CXX_STANDARD_REQUIRED YES)
-set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
+# Set the minimum C++ standard to C++17
+target_compile_features(pagmo PUBLIC cxx_std_17)
 # NOTE: make sure the include directories from the current build
 # are included first, so that if there is already a pagmo installation
 # in the prefix path we don't risk including the headers from that
