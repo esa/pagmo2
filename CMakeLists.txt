@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(pagmo VERSION 2.16.0 LANGUAGES CXX C)
+project(pagmo VERSION 2.16.1 LANGUAGES CXX C)
 
 # Setup module path.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/yacma")
@@ -314,8 +314,11 @@ target_compile_options(pagmo PRIVATE
     "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
 )
 
-# Set the minimum C++ standard to C++17
+# Set the minimum C++ standard to C++17, both when building
+# and consuming pagmo.
 target_compile_features(pagmo PUBLIC cxx_std_17)
+# Enforce vanilla C++17 when compiling pagmo.
+set_property(TARGET pagmo PROPERTY CXX_EXTENSIONS NO)
 # NOTE: make sure the include directories from the current build
 # are included first, so that if there is already a pagmo installation
 # in the prefix path we don't risk including the headers from that
@@ -345,6 +348,8 @@ target_link_libraries(pagmo PUBLIC Threads::Threads)
 
 # Boost.
 target_link_libraries(pagmo PUBLIC Boost::boost Boost::serialization)
+# NOTE: quench warnings from Boost when building the library.
+target_compile_definitions(pagmo PRIVATE BOOST_ALLOW_DEPRECATED_HEADERS)
 
 # TBB.
 # NOTE: TBB is a private dependency because

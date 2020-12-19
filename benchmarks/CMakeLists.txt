@@ -8,7 +8,8 @@ function(ADD_PAGMO_BENCHMARK arg1)
         "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
     )
     # Set the minimum C++ standard to C++17
-    target_compile_features(${arg1} PUBLIC cxx_std_17)
+    target_compile_features(${arg1} PRIVATE cxx_std_17)
+    set_property(TARGET ${arg1} PROPERTY CXX_EXTENSIONS NO)
 endfunction()
 
 ADD_PAGMO_BENCHMARK(thread_island_pool)
