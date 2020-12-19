@@ -348,6 +348,8 @@ target_link_libraries(pagmo PUBLIC Threads::Threads)
 
 # Boost.
 target_link_libraries(pagmo PUBLIC Boost::boost Boost::serialization)
+# NOTE: quench warnings from Boost when building the library.
+target_compile_definitions(pagmo PRIVATE BOOST_ALLOW_DEPRECATED_HEADERS)
 
 # TBB.
 # NOTE: TBB is a private dependency because
