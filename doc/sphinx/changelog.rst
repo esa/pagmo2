@@ -3,6 +3,23 @@
 Changelog
 =========
 
+2.16.1 (unreleased)
+-------------------
+
+Changes
+~~~~~~~
+
+- pagmo now requires CMake >= 3.8
+  (`#458 <https://github.com/esa/pagmo2/pull/458>`__).
+
+Fix
+~~~
+
+- Various build system fixes/improvements
+  (`#459 <https://github.com/esa/pagmo2/pull/459>`__,
+  `#458 <https://github.com/esa/pagmo2/pull/458>`__,
+  `#457 <https://github.com/esa/pagmo2/pull/457>`__).
+
 2.16.0 (2020-09-25)
 -------------------
 
