@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start &mdash; pagmo 2.16.0 documentation</title>
+  <title>Quick start &mdash; pagmo 2.16.1 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                2.16.0
+                2.16.1
               </div>
             
           
@@ -267,7 +267,7 @@ the build process of code depending on pagmo (see next section).</p>
 <p>As a part of the pagmo installation, a group of CMake files is installed into
 <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX/lib/cmake/pagmo</span></code>.
 This bundle, which is known in the CMake lingo as a
-<a class="reference external" href="https://cmake.org/cmake/help/v3.3/manual/cmake-packages.7.html">config-file package</a>,
+<a class="reference external" href="https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html">config-file package</a>,
 facilitates the detection and use of pagmo from other CMake-based projects.
 pagmo’s config-file package, once loaded, provides
 an imported target called <code class="docutils literal notranslate"><span class="pre">Pagmo::pagmo</span></code> which encapsulates all the information
@@ -278,10 +278,7 @@ path of the compiler, and that the libraries
 on which pagmo depends are brought into the link chain.</p>
 <p>For instance, a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file for the simple <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code>
 program presented earlier may look like this:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># pagmo needs at least CMake 3.3.</span>
-<span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.3</span><span class="p">)</span>
-
-<span class="c"># The name of our project.</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># The name of our project.</span>
 <span class="nb">project</span><span class="p">(</span><span class="s">sample_project</span><span class="p">)</span>
 
 <span class="c"># Look for an installation of pagmo in the system.</span>
