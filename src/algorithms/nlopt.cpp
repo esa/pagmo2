@@ -155,7 +155,7 @@ extern "C" {
 // Wrappers to connect our objfun/constraints calculation machinery to NLopt's. Declared here,
 // defined later in order to avoid circular deps.
 // NOTE: these functions need to be passed to the NLopt C API, and as such they need to be
-// declated within an 'extern "C"' block (otherwise, it might be UB to pass C++ function pointers
+// declared within an 'extern "C"' block (otherwise, it might be UB to pass C++ function pointers
 // to a C API).
 // https://www.reddit.com/r/cpp/comments/4fqfy7/using_c11_capturing_lambdas_w_vanilla_c_api/d2b9bh0/
 double nlopt_objfun_wrapper(unsigned, const double *, double *, void *);
