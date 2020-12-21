@@ -6,6 +6,12 @@ Changelog
 2.16.1 (unreleased)
 -------------------
 
+New
+~~~
+
+- The pagmo conda package now enables Ipopt on Windows
+  (`#460 <https://github.com/esa/pagmo2/pull/460>`__).
+
 Changes
 ~~~~~~~
 
@@ -16,7 +22,8 @@ Fix
 ~~~
 
 - Various build system fixes/improvements
-  (`#459 <https://github.com/esa/pagmo2/pull/459>`__,
+  (`#460 <https://github.com/esa/pagmo2/pull/460>`__,
+  `#459 <https://github.com/esa/pagmo2/pull/459>`__,
   `#458 <https://github.com/esa/pagmo2/pull/458>`__,
   `#457 <https://github.com/esa/pagmo2/pull/457>`__).
 

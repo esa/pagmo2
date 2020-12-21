@@ -26,7 +26,7 @@ if ("libipopt" IN_LIST pagmo_IPOPT_FIND_COMPONENTS)
     # The libipopt component was requested.
     # The associated variable is PAGMO_IPOPT_LIBRARY.
     list(APPEND _pagmo_IPOPT_FPHSA_ARGS PAGMO_IPOPT_LIBRARY)
-    find_library(PAGMO_IPOPT_LIBRARY NAMES ipopt)
+    find_library(PAGMO_IPOPT_LIBRARY NAMES ipopt ipopt-3)
 endif()
 
 # Run the standard find_package() machinery.
