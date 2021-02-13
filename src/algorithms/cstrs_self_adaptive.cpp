@@ -80,6 +80,12 @@ std::pair<vector_double, vector_double> penalized_udp::get_bounds() const
     return m_pop_ptr->get_problem().get_bounds();
 }
 
+// The integer dimension is unchanged
+vector_double::size_type penalized_udp::get_nix() const
+{
+    return m_pop_ptr->get_problem().get_nix();
+}
+
 // The fitness computation
 vector_double penalized_udp::fitness(const vector_double &x) const
 {
