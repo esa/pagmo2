@@ -669,7 +669,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         // in the problem is set to true, and m_has_gradient_sparsity is unconditionally false if the UDP
         // does not implement gradient_sparsity() (see implementation of the three overloads below).
         assert(false); // LCOV_EXCL_LINE
-        throw;
+        std::terminate();
     }
     template <typename U, enable_if_t<detail::conjunction<pagmo::has_gradient_sparsity<U>,
                                                           pagmo::override_has_gradient_sparsity<U>>::value,
@@ -733,7 +733,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         // in the problem is set to true, and m_has_hessians_sparsity is unconditionally false if the UDP
         // does not implement hessians_sparsity() (see implementation of the three overloads below).
         assert(false); // LCOV_EXCL_LINE
-        throw;
+        std::terminate();
     }
     template <typename U, enable_if_t<detail::conjunction<pagmo::has_hessians_sparsity<U>,
                                                           pagmo::override_has_hessians_sparsity<U>>::value,
