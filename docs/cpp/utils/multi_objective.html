@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Multi-objective optimization utilities &mdash; pagmo 2.16.1 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
   
+
   
+  
+
   
 
   
@@ -31,7 +34,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
@@ -55,7 +57,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pagmo
+            <a href="../../../index.html" class="icon icon-home"> pagmo
           
 
           
@@ -159,6 +161,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -172,7 +176,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../../../_sources/docs/cpp/utils/multi_objective.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -400,7 +404,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng">
-<span id="_CPPv3I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span><span id="_CPPv2I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span>template&lt;typename <code class="sig-name descname">Rng</code>&gt;<br /><span class="target" id="namespacepagmo_1a894b3b3929be6f212b466e889035d2a2"></span>std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">decomposition_weights</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_f</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_w</em>, <em class="property">const</em> std::string &amp;<em>method</em>, <a class="reference internal" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="pagmo::decomposition_weights::Rng">Rng</a> &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span><span id="_CPPv2I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span>template&lt;typename <code class="sig-name descname">Rng</code>&gt;<br /><span class="target" id="namespacepagmo_1a894b3b3929be6f212b466e889035d2a2"></span><em class="property">inline</em> std::vector&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">decomposition_weights</code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_f</em>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <em>n_w</em>, <em class="property">const</em> std::string &amp;<em>method</em>, <a class="reference internal" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="pagmo::decomposition_weights::Rng">Rng</a> &amp;<em>r_engine</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decomposition weights generation. </p>
 <p>Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:<ul class="simple">
 <li><p>”grid” generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases</p></li>
@@ -486,37 +490,29 @@ weight generation methods are guaranteed to generate the canonical weights [1,0,
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="constrained.html" class="btn btn-neutral float-right" title="Constrained optimization utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../s_policies/select_best.html" class="btn btn-neutral float-left" title="Best selection policy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="constrained.html" class="btn btn-neutral float-right" title="Constrained optimization utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../s_policies/select_best.html" class="btn btn-neutral float-left" title="Best selection policy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2017-2020, pagmo development team
+        &#169; Copyright 2017-2020, pagmo development team.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

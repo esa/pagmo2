@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Improved Harmony Search (IHS) &mdash; pagmo 2.16.1 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
   
+
   
+  
+
   
 
   
@@ -31,7 +34,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
@@ -55,7 +57,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pagmo
+            <a href="../../../index.html" class="icon icon-home"> pagmo
           
 
           
@@ -177,6 +179,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -190,7 +194,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../../../_sources/docs/cpp/algorithms/ihs.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -314,7 +318,7 @@ harmony search.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo3ihs13set_verbosityEj">
-<span id="_CPPv3N5pagmo3ihs13set_verbosityEj"></span><span id="_CPPv2N5pagmo3ihs13set_verbosityEj"></span><span id="pagmo::ihs::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3ihs13set_verbosityEj"></span><span id="_CPPv2N5pagmo3ihs13set_verbosityEj"></span><span id="pagmo::ihs::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"></span><em class="property">inline</em> void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm’s verbosity. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal notranslate"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"><span class="std std-ref">get_log()</span></a>.</p>
 <p>Example (verbosity 100, a constrained problem): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">ppar</span><span class="p">:</span>            <span class="n">bw</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>
@@ -343,7 +347,7 @@ harmony search.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3ihs13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3ihs13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3ihs13get_verbosityEv"></span><span id="pagmo::ihs::get_verbosityC"></span><span class="target" id="classpagmo_1_1ihs_1abf72adfdc7358b2a1b1e434eec2f3d65"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3ihs13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3ihs13get_verbosityEv"></span><span id="pagmo::ihs::get_verbosityC"></span><span class="target" id="classpagmo_1_1ihs_1abf72adfdc7358b2a1b1e434eec2f3d65"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
@@ -367,7 +371,7 @@ harmony search.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3ihs8get_seedEv">
-<span id="_CPPv3NK5pagmo3ihs8get_seedEv"></span><span id="_CPPv2NK5pagmo3ihs8get_seedEv"></span><span id="pagmo::ihs::get_seedC"></span><span class="target" id="classpagmo_1_1ihs_1a9508242003ca610c14a67de8b1f6b021"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3ihs8get_seedEv"></span><span id="_CPPv2NK5pagmo3ihs8get_seedEv"></span><span id="pagmo::ihs::get_seedC"></span><span class="target" id="classpagmo_1_1ihs_1a9508242003ca610c14a67de8b1f6b021"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
@@ -378,7 +382,7 @@ harmony search.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3ihs8get_nameEv">
-<span id="_CPPv3NK5pagmo3ihs8get_nameEv"></span><span id="_CPPv2NK5pagmo3ihs8get_nameEv"></span><span id="pagmo::ihs::get_nameC"></span><span class="target" id="classpagmo_1_1ihs_1af1b16999df2c5002d7f897510a0a643c"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3ihs8get_nameEv"></span><span id="_CPPv2NK5pagmo3ihs8get_nameEv"></span><span id="pagmo::ihs::get_nameC"></span><span class="target" id="classpagmo_1_1ihs_1af1b16999df2c5002d7f897510a0a643c"></span><em class="property">inline</em> std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <p><dl class="simple">
@@ -402,7 +406,7 @@ harmony search.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3ihs7get_logEv">
-<span id="_CPPv3NK5pagmo3ihs7get_logEv"></span><span id="_CPPv2NK5pagmo3ihs7get_logEv"></span><span id="pagmo::ihs::get_logC"></span><span class="target" id="classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3ihs8log_typeE" title="pagmo::ihs::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3ihs7get_logEv"></span><span id="_CPPv2NK5pagmo3ihs7get_logEv"></span><span id="pagmo::ihs::get_logC"></span><span class="target" id="classpagmo_1_1ihs_1a6f0510ebdb4eff4e07ff92da4bcafcc1"></span><em class="property">inline</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo3ihs8log_typeE" title="pagmo::ihs::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3ihs7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the optimisation log. </p>
 <p>See <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for a description of the optimisation log. Logging is turned on/off via <a class="reference internal" href="#classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"><span class="std std-ref">set_verbosity()</span></a>.</p>
 <p><dl class="simple">
@@ -440,37 +444,29 @@ harmony search.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="ipopt.html" class="btn btn-neutral float-right" title="Ipopt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gwo.html" class="btn btn-neutral float-left" title="Grey Wolf Optimizer (gwo)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="ipopt.html" class="btn btn-neutral float-right" title="Ipopt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gwo.html" class="btn btn-neutral float-left" title="Grey Wolf Optimizer (gwo)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2017-2020, pagmo development team
+        &#169; Copyright 2017-2020, pagmo development team.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
