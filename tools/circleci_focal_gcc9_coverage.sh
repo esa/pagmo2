@@ -27,7 +27,9 @@ cd build
 # GCC build with coverage.
 cmake ../ -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DCMAKE_CXX_FLAGS="--coverage" -DPAGMO_ENABLE_IPO=yes
 make -j2 VERBOSE=1
-ctest -V
+# NOTE: skip the torture tests because they take
+# a lot of time when code coverage is turned on.
+ctest -V -j2 -E torture
 
 # Upload coverage data.
 bash <(curl -s https://codecov.io/bash) -x gcov-9
