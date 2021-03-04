@@ -3,6 +3,16 @@
 Changelog
 =========
 
+2.17.0 (unreleased)
+-------------------
+
+Fix
+~~~
+
+- Enable support in the build system for the latest
+  TBB version (oneTBB)
+  (`#469 <https://github.com/esa/pagmo2/pull/469>`__).
+
 2.16.1 (2020-12-22)
 -------------------
 
