@@ -114,8 +114,18 @@ if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8")
     unset(_PAGMO_GCC_SUPPORTS_NO_OVERRIDE)
 endif()
 
-# TBB.
-find_package(TBB REQUIRED)
+# TBB. Try to find it first in config mode (supported
+# since version 2021 after the oneTBB rename), and, if this
+# fails, fall back to our own FindTBB.cmake. This is of course
+# not an ideal solution, but it should work until oneTBB
+# becomes widely deployed.
+find_package(TBB QUIET CONFIG)
+if(NOT TBB_FOUND)
+    message(STATUS "TBB not found using config mode, retrying in module mode.")
+    find_package(TBB REQUIRED MODULE)
+else()
+    message(STATUS "TBB found using config mode.")
+endif()
 
 # Eigen3
 if(PAGMO_WITH_EIGEN3)
