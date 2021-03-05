@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(pagmo VERSION 2.16.1 LANGUAGES CXX C)
+project(pagmo VERSION 2.17.0 LANGUAGES CXX C)
 
 # Setup module path.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/yacma")
@@ -114,8 +114,18 @@ if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8")
     unset(_PAGMO_GCC_SUPPORTS_NO_OVERRIDE)
 endif()
 
-# TBB.
-find_package(TBB REQUIRED)
+# TBB. Try to find it first in config mode (supported
+# since version 2021 after the oneTBB rename), and, if this
+# fails, fall back to our own FindTBB.cmake. This is of course
+# not an ideal solution, but it should work until oneTBB
+# becomes widely deployed.
+find_package(TBB QUIET CONFIG)
+if(NOT TBB_FOUND)
+    message(STATUS "TBB not found using config mode, retrying in module mode.")
+    find_package(TBB REQUIRED MODULE)
+else()
+    message(STATUS "TBB found using config mode.")
+endif()
 
 # Eigen3
 if(PAGMO_WITH_EIGEN3)
@@ -300,8 +310,8 @@ if(PAGMO_BUILD_STATIC_LIBRARY)
     add_library(pagmo STATIC "${PAGMO_SRC_FILES}")
 else()
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "6.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 6)
+    set_property(TARGET pagmo PROPERTY VERSION "7.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 7)
     set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 endif()
