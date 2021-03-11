@@ -167,11 +167,17 @@ population gwo::evolve(population pop) const
             auto fit = pop.get_f()[i];
             // Update alpha, beta and delta
             if (fit[0] < alpha_score) {
+                delta_score = beta_score;
+                delta_pos = beta_pos;
+                beta_score = alpha_score;
+                beta_pos = alpha_pos;
                 alpha_score = fit[0];
                 alpha_pos = agents_position[i];
             }
 
             if (fit[0] > alpha_score && fit[0] < beta_score) {
+                delta_score = beta_score;
+                delta_pos = beta_pos;
                 beta_score = fit[0];
                 beta_pos = agents_position[i];
             }
