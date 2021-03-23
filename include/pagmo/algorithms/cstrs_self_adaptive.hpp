@@ -95,6 +95,9 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
     // The bounds are unchanged
     std::pair<vector_double, vector_double> get_bounds() const;
 
+    // The integer dimension is unchanged
+    vector_double::size_type get_nix() const;
+
     // The fitness computation
     vector_double fitness(const vector_double &) const;
 
