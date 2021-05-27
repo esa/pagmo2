@@ -119,6 +119,27 @@ pagmo on OSX with Homebrew, it is sufficient to execute the following command:
 
    $ brew install pagmo
 
+vcpkg
+^^^^^
+
+You can download and install pagmo2 using the vcpkg dependency manager:
+
+.. code-block:: console
+
+    $ git clone https://github.com/Microsoft/vcpkg.git
+    $ cd vcpkg
+    $ ./bootstrap-vcpkg.sh    # add -disableMetrics to opt out of telemetry
+    $ ./vcpkg install pagmo2  # or use pagmo2[nlopt] for the NLopt wrappers
+
+Then you may direct cmake or msbuild to use the provided vcpkg toolchain file. Please visit
+the `vcpkg build system documentation
+<https://github.com/microsoft/vcpkg/blob/master/docs/users/integration.md>`_ for
+details.
+
+The pagmo2 port in vcpkg is kept up to date by Microsoft team members and community
+contributors. If the version is out of date, please create an issue or pull
+request on the `vcpkg repository <https://github.com/Microsoft/vcpkg>`_.
+
 
 Installation from source
 ------------------------
