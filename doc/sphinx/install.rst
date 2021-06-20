@@ -80,20 +80,6 @@ recommended to use an AUR helper like
 See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers>`__ page on
 the Arch Linux wiki for more info.
 
-.. note::
-
-   To install pagmo with optional dependency support like nlopt or ipopt,
-   make sure to install the optional dependencies before installing the pagmo
-   package.
-
-Install optional dependencies:
-
-.. code-block:: console
-
-    $ yay -S coin-or-ipopt eigen nlopt
-
-Install pagmo:
-
 .. code-block:: console
 
     $ yay -S pagmo
