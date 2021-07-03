@@ -270,6 +270,7 @@ PAGMO_DLL_PUBLIC extern std::function<void(const algorithm &, const population &
 // is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
 struct PAGMO_DLL_PUBLIC island_data {
     island_data();
+    ~island_data();
     // This is the main ctor, from an algo and a population. The UDI type will be selected
     // by the island_factory functor.
     template <typename Algo, typename Pop>
@@ -345,7 +346,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
     archipelago *archi_ptr = nullptr;
-    task_queue queue;
+    std::unique_ptr<task_queue> queue = task_queue::unpark_or_construct();
 };
 } // namespace detail
 

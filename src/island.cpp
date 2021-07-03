@@ -196,6 +196,11 @@ island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, p
 {
 }
 
+island_data::~island_data()
+{
+    task_queue::park(std::move(queue));
+}
+
 namespace
 {
 
@@ -339,7 +344,7 @@ void island::evolve(unsigned n)
         // Move assign a new future provided by the enqueue() method.
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
-        m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+        m_ptr->futures.back() = m_ptr->queue->enqueue([this, n]() {
             // Random engine for use in the migration logic.
             // Wrap it in an optional so that, if we don't need
             // it, we don't waste CPU/memory.

@@ -41,6 +41,16 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo::detail
 {
 
+enum class task_queue_status {
+    WAITING, // Another thread may impose a transition to {PARKING, STOPPING}
+    PARKING, // Another thread may impose a transition to {STOPPING}
+             // The task_queue will transition itself to {PARKED} when remaining work is complete
+
+    PARKED,   // Another thread may impose a transition to {WAITING, STOPPING}
+    STOPPING, // The task_queue will transition itself to {STOPPED} when remaining work is complete
+    STOPPED   // No transition to any other state is valid
+};
+
 struct PAGMO_DLL_PUBLIC task_queue {
     task_queue();
     ~task_queue();
@@ -61,11 +71,15 @@ struct PAGMO_DLL_PUBLIC task_queue {
     }
 
     // Data members.
-    bool m_stop;
-    std::condition_variable m_cond;
+    task_queue_status m_status;
+    std::condition_variable m_cond, m_parked;
     std::mutex m_mutex;
     std::queue<task_type> m_tasks;
     std::thread m_thread;
+
+    static void park(std::unique_ptr<task_queue> &&);
+    static std::unique_ptr<task_queue> unpark_or_construct();
+    static void set_destruct_parked_task_queues(bool);
 };
 
 } // namespace pagmo::detail
