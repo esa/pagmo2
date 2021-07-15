@@ -2,7 +2,6 @@ pagmo
 =====
 
 [![Build Status](https://img.shields.io/circleci/project/github/esa/pagmo2/master.svg?style=for-the-badge)](https://circleci.com/gh/esa/pagmo2)
-[![Build Status](https://img.shields.io/travis/esa/pagmo2/master.svg?logo=travis&style=for-the-badge)](https://travis-ci.org/esa/pagmo2)
 [![Build Status](https://img.shields.io/appveyor/ci/ci4esa/pagmo2/master.svg?logo=appveyor&style=for-the-badge)](https://ci.appveyor.com/project/ci4esa/pagmo2)
 [![Code Coverage](https://img.shields.io/codecov/c/github/esa/pagmo2.svg?style=for-the-badge)](https://codecov.io/github/esa/pagmo2?branch=master)
 
