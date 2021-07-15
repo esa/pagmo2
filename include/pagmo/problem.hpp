@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <atomic>
 #include <cassert>
+#include <exception>
 #include <iostream>
 #include <memory>
 #include <string>
