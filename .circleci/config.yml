@@ -33,14 +33,6 @@ jobs:
     - run:
         name: Build and test
         command: bash ./tools/circleci_focal_clang9.sh
-  bionic_clang6_release:
-    docker:
-    - image: circleci/buildpack-deps:bionic
-    steps:
-    - checkout
-    - run:
-        name: Build and test
-        command: bash ./tools/circleci_bionic_clang6_release.sh
 
 workflows:
   version: 2.1
@@ -49,5 +41,4 @@ workflows:
     - focal_gcc9_coverage
     - focal_gcc9_asan
     - focal_clang9
-    - bionic_clang6_release
     - focal_gcc9_docs
