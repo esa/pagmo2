@@ -7,18 +7,17 @@ set -x
 set -e
 
 # Core deps.
-sudo apt-get install build-essential wget doxygen graphviz
+sudo apt-get install build-essential wget
 
 # Install conda+deps.
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 export deps_dir=$HOME/local
 export PATH="$HOME/miniconda/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
-conda config --add channels conda-forge --force
-conda_pkgs="cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.7 sphinx'<4.1.0' sphinx_rtd_theme breathe"
-conda create -q -p $deps_dir -y
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda create -y -q -p $deps_dir cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.8 sphinx'<4.1.0' sphinx_rtd_theme breathe doxygen graphviz
 source activate $deps_dir
-conda install $conda_pkgs -y
 
 # Create the build dir and cd into it.
 mkdir build
