@@ -15,7 +15,7 @@ export deps_dir=$HOME/local
 export PATH="$HOME/miniconda/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
 conda config --add channels conda-forge --force
-conda_pkgs="cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.7 sphinx sphinx_rtd_theme breathe"
+conda_pkgs="cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.7 sphinx'<4.1.0' sphinx_rtd_theme breathe"
 conda create -q -p $deps_dir -y
 source activate $deps_dir
 conda install $conda_pkgs -y
