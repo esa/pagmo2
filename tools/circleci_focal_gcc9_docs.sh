@@ -44,13 +44,7 @@ echo "Doxygen ran successfully";
 # Copy the images into the xml output dir (this is needed by sphinx).
 cp images/* xml/;
 cd ../sphinx/;
-export SPHINX_OUTPUT=`make html linkcheck 2>&1 | grep -v "Duplicate declaration" | grep -v "is deprecated" >/dev/null`;
-if [[ "${SPHINX_OUTPUT}" != "" ]]; then
-    echo "Sphinx encountered some problem:";
-    echo "${SPHINX_OUTPUT}";
-    exit 1;
-fi
-echo "Sphinx ran successfully";
+make html linkcheck
 
 if [[ ! -z "${CI_PULL_REQUEST}" ]]; then
     echo "Testing a pull request, the generated documentation will not be uploaded.";
