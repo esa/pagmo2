@@ -63,8 +63,6 @@ namespace pagmo
  *
  * .. seealso::
  *
- *    The official DE web site: http://www1.icsi.berkeley.edu/~storn/code.html
- *
  *    The paper that introduces Differential Evolution https://link.springer.com/article/10.1023%2FA%3A1008202821328
  *
  * \endverbatim

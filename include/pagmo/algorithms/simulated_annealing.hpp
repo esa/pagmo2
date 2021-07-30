@@ -104,7 +104,7 @@ public:
      *
      * @throws std::invalid_argument if \p Ts or \p Tf are not finite and positive, \p start_range is not in (0,1],
      * \p n_T_adj or n_range_adj \p are not strictly positive
-     * @throws if \p Tf > \p Ts
+     * @throws std::invalid_argument if \p Tf > \p Ts
      */
     simulated_annealing(double Ts = 10., double Tf = .1, unsigned n_T_adj = 10u, unsigned n_range_adj = 1u,
                         unsigned bin_size = 20u, double start_range = 1., unsigned seed = pagmo::random_device::next());

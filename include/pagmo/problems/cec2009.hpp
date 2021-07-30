@@ -75,10 +75,6 @@ typedef void (cec2009::*func_ptr)(vector_double &, const vector_double &) const;
  *
  *    All problems are continuous, multi objective problems.
  *
- * .. seealso:
- *
- *    http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm
- *
  * \endverbatim
  *
  */
@@ -96,9 +92,6 @@ public:
      * yield the CF problems.
      * @param dim problem dimension. Default is 30, which is the setting used by the competition. But all the
      * problems are scalable in terms of decision variable's dimension.
-     *
-     * @see http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm
-     *
      */
     cec2009(unsigned prob_id = 1u, bool is_constrained = false, unsigned dim = 30u);
     // Inequality constraint dimension

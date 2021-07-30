@@ -270,7 +270,7 @@ private:
     // The "default" constructor from n islands. Just forward
     // the input arguments to n calls to push_back().
     template <typename... Args>
-    void n_ctor(size_type n, const Args &... args)
+    void n_ctor(size_type n, const Args &...args)
     {
         for (size_type i = 0; i < n; ++i) {
             // NOTE: we don't perfectly forward, in order to avoid moving twice
@@ -450,7 +450,7 @@ public:
      * @throws unspecified any exception thrown by archipelago::push_back().
      */
     template <typename... Args, n_ctor_enabler<const Args &...> = 0>
-    explicit archipelago(size_type n, const Args &... args)
+    explicit archipelago(size_type n, const Args &...args)
         : // NOTE: explicitly delegate to the default constructor, so that
           // we get the default migration type and migrant handling.
           archipelago()
@@ -487,7 +487,7 @@ public:
      * the constructor from a topology.
      */
     template <typename Topo, typename... Args, topo_n_ctor_enabler<Topo, const Args &...> = 0>
-    explicit archipelago(Topo &&t, size_type n, const Args &... args) : archipelago(std::forward<Topo>(t))
+    explicit archipelago(Topo &&t, size_type n, const Args &...args) : archipelago(std::forward<Topo>(t))
     {
         n_ctor(n, args...);
     }
@@ -545,7 +545,7 @@ public:
      * - the invoked constructor of pagmo::island.
      */
     template <typename... Args, push_back_enabler<Args &&...> = 0>
-    void push_back(Args &&... args)
+    void push_back(Args &&...args)
     {
         push_back_impl(std::make_unique<island>(std::forward<Args>(args)...));
     }
