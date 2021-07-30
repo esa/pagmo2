@@ -121,8 +121,8 @@ PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
  *
  * @returns an <tt>std:vector</tt> containing the weight vectors
  *
- * @throws if \p nf and \p nw are not compatible with the selected weight generation method or if \p method
- * is not one of "grid", "random" or "low discrepancy"
+ * @throws std::invalid_argument if \p nf and \p nw are not compatible with the selected weight generation method or if
+ *\p method is not one of "grid", "random" or "low discrepancy"
  */
 template <typename Rng>
 inline std::vector<vector_double> decomposition_weights(vector_double::size_type n_f, vector_double::size_type n_w,
