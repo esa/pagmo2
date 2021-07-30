@@ -34,7 +34,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -215,7 +214,7 @@
 </div>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo4macoE">
-<span id="_CPPv3N5pagmo4macoE"></span><span id="_CPPv2N5pagmo4macoE"></span><span id="pagmo::maco"></span><em class="property">class </em><code class="sig-name descname">maco</code><a class="headerlink" href="#_CPPv4N5pagmo4macoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4macoE"></span><span id="_CPPv2N5pagmo4macoE"></span><span id="pagmo::maco"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">maco</span></code><a class="headerlink" href="#_CPPv4N5pagmo4macoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><a class="reference internal image-reference" href="../../../_images/maco.gif"><img alt="MACO-GIF" class="align-center" src="../../../_images/maco.gif" style="width: 251.99999999999997px; height: 251.99999999999997px;" /></a>
 <p>Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO) is a modified version of GACO for multi-objective optimization, based on the hypervolume measure.
 It extends the basic ideas of GACO by making use of hypervolume computation for ranking the individuals and storing them inside a solution archive from which future generations of individuals will be generated. In particular, the algorithm combines the concept of non-dominated fronts and hypervolume computation for ranking the individuals.</p>
@@ -224,7 +223,7 @@ It extends the basic ideas of GACO by making use of hypervolume computation for 
 <p>This constructor will construct MHACO.</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4maco4macoEjjdjjjdbj">
-<span id="_CPPv3N5pagmo4maco4macoEjjdjjjdbj"></span><span id="_CPPv2N5pagmo4maco4macoEjjdjjjdbj"></span><span id="pagmo::maco::maco__unsigned.unsigned.double.unsigned.unsigned.unsigned.double.b.unsigned"></span><code class="sig-name descname">maco</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 100u, unsigned <em>ker</em> = 63u, double <em>q</em> = 1.0, unsigned <em>threshold</em> = 1u, unsigned <em>n_gen_mark</em> = 7u, unsigned <em>evalstop</em> = 100000u, double <em>focus</em> = 0., bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco4macoEjjdjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4maco4macoEjjdjjjdbj"></span><span id="_CPPv2N5pagmo4maco4macoEjjdjjjdbj"></span><span id="pagmo::maco::maco__unsigned.unsigned.double.unsigned.unsigned.unsigned.double.b.unsigned"></span><code class="sig-name descname"><span class="pre">maco</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">gen</span></em> <span class="pre">=</span> <span class="pre">100u</span>, <span class="pre">unsigned</span> <em><span class="pre">ker</span></em> <span class="pre">=</span> <span class="pre">63u</span>, <span class="pre">double</span> <em><span class="pre">q</span></em> <span class="pre">=</span> <span class="pre">1.0</span>, <span class="pre">unsigned</span> <em><span class="pre">threshold</span></em> <span class="pre">=</span> <span class="pre">1u</span>, <span class="pre">unsigned</span> <em><span class="pre">n_gen_mark</span></em> <span class="pre">=</span> <span class="pre">7u</span>, <span class="pre">unsigned</span> <em><span class="pre">evalstop</span></em> <span class="pre">=</span> <span class="pre">100000u</span>, <span class="pre">double</span> <em><span class="pre">focus</span></em> <span class="pre">=</span> <span class="pre">0.</span>, <span class="pre">bool</span> <em><span class="pre">memory</span></em> <span class="pre">=</span> <span class="pre">false</span>, <span class="pre">unsigned</span> <em><span class="pre">seed</span></em> <span class="pre">=</span> <span class="pre">pagmo</span><span class="pre">::</span><span class="pre">random_device</span><span class="pre">::</span><span class="pre">next</span><span class="pre">(</span><span class="pre">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco4macoEjjdjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -251,7 +250,7 @@ It extends the basic ideas of GACO by making use of hypervolume computation for 
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4maco6evolveE10population">
-<span id="_CPPv3NK5pagmo4maco6evolveE10population"></span><span id="_CPPv2NK5pagmo4maco6evolveE10population"></span><span id="pagmo::maco::evolve__populationC"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <em>pop</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4maco6evolveE10population"></span><span id="_CPPv2NK5pagmo4maco6evolveE10population"></span><span id="pagmo::maco::evolve__populationC"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a> <code class="sig-name descname"><span class="pre">evolve</span></code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a> <em><span class="pre">pop</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4maco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method: evolves the population for the requested number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -268,7 +267,7 @@ It extends the basic ideas of GACO by making use of hypervolume computation for 
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4maco8set_seedEj">
-<span id="_CPPv3N5pagmo4maco8set_seedEj"></span><span id="_CPPv2N5pagmo4maco8set_seedEj"></span><span id="pagmo::maco::set_seed__unsigned"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4maco8set_seedEj"></span><span id="_CPPv2N5pagmo4maco8set_seedEj"></span><span id="pagmo::maco::set_seed__unsigned"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">seed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -279,7 +278,7 @@ It extends the basic ideas of GACO by making use of hypervolume computation for 
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4maco8get_seedEj">
-<span id="_CPPv3N5pagmo4maco8get_seedEj"></span><span id="_CPPv2N5pagmo4maco8get_seedEj"></span><span id="pagmo::maco::get_seed__unsigned"></span>unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco8get_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4maco8get_seedEj"></span><span id="_CPPv2N5pagmo4maco8get_seedEj"></span><span id="pagmo::maco::get_seed__unsigned"></span><span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">seed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco8get_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -290,7 +289,7 @@ It extends the basic ideas of GACO by making use of hypervolume computation for 
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4maco13set_verbosityEj">
-<span id="_CPPv3N5pagmo4maco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4maco13set_verbosityEj"></span><span id="pagmo::maco::set_verbosity__unsigned"></span>void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4maco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4maco13set_verbosityEj"></span><span id="pagmo::maco::set_verbosity__unsigned"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_verbosity</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by <code class="docutils literal notranslate"><span class="pre">get_log()</span></code>. <em>level</em> can be:
 - 0: no verbosity.
 - &gt;0: will print and log one line each <em>level</em> generations.
@@ -322,7 +321,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 </td></tr></table></div>
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4maco13get_verbosityEv">
-<span id="_CPPv3NK5pagmo4maco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4maco13get_verbosityEv"></span><span id="pagmo::maco::get_verbosityC"></span>unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4maco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4maco13get_verbosityEv"></span><span id="pagmo::maco::get_verbosityC"></span><span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_verbosity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4maco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -333,7 +332,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4maco7get_genEv">
-<span id="_CPPv3NK5pagmo4maco7get_genEv"></span><span id="_CPPv2NK5pagmo4maco7get_genEv"></span><span id="pagmo::maco::get_genC"></span>unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4maco7get_genEv"></span><span id="_CPPv2NK5pagmo4maco7get_genEv"></span><span id="pagmo::maco::get_genC"></span><span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_gen</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4maco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -344,7 +343,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4maco7get_logEv">
-<span id="_CPPv3NK5pagmo4maco7get_logEv"></span><span id="_CPPv2NK5pagmo4maco7get_logEv"></span><span id="pagmo::maco::get_logC"></span><em class="property">const</em> log_type &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4maco7get_logEv"></span><span id="_CPPv2NK5pagmo4maco7get_logEv"></span><span id="pagmo::maco::get_logC"></span><em class="property"><span class="pre">const</span></em> <span class="pre">log_type</span> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_log</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4maco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the log. A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <code class="docutils literal notranslate"><span class="pre">maco::log_line_type</span></code> containing: Gen, Fevals, ideal_point as described in <code class="docutils literal notranslate"><span class="pre">maco::set_verbosity</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -355,7 +354,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4maco7set_bfeERK3bfe">
-<span id="_CPPv3N5pagmo4maco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4maco7set_bfeERK3bfe"></span><span id="pagmo::maco::set_bfe__bfeCR"></span>void <code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4maco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4maco7set_bfeERK3bfe"></span><span id="pagmo::maco::set_bfe__bfeCR"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_bfe</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="pre">bfe</span></a> <span class="pre">&amp;</span><em><span class="pre">b</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4maco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the batch function evaluation scheme.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -366,7 +365,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4maco14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo4maco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4maco14get_extra_infoEv"></span><span id="pagmo::maco::get_extra_infoC"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4maco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4maco14get_extra_infoEv"></span><span id="pagmo::maco::get_extra_infoC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4maco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. Returns extra information on the algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -377,7 +376,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4maco8get_nameEv">
-<span id="_CPPv3NK5pagmo4maco8get_nameEv"></span><span id="_CPPv2NK5pagmo4maco8get_nameEv"></span><span id="pagmo::maco::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4maco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4maco8get_nameEv"></span><span id="_CPPv2NK5pagmo4maco8get_nameEv"></span><span id="pagmo::maco::get_nameC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4maco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the problem name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -388,7 +387,7 @@ Example (verbosity 1, where Gen, is the generation number, Fevals the number of 
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo4maco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4maco9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej" title="pagmo::maco::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo4maco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4maco9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej" title="pagmo::maco::serialize::Archive"><span class="pre">Archive</span></a> <span class="pre">&amp;</span><em><span class="pre">ar</span></em>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4maco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization.</p>
 <p>This method will save/load this into the archive <em>ar</em>.</p>
 <dl class="field-list simple">

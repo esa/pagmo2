@@ -212,7 +212,7 @@
 <h1>Extended Ant Colony Optimization (gaco)<a class="headerlink" href="#extended-ant-colony-optimization-gaco" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo4gacoE">
-<span id="_CPPv3N5pagmo4gacoE"></span><span id="_CPPv2N5pagmo4gacoE"></span><span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">gaco</code><a class="headerlink" href="#_CPPv4N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gacoE"></span><span id="_CPPv2N5pagmo4gacoE"></span><span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">gaco</span></code><a class="headerlink" href="#_CPPv4N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extended Ant Colony Opitmization. </p>
 <p><img alt="../../../_images/gaco.png" src="../../../_images/gaco.png" /></p>
 <p>Ant colony optimization is a class of optimization algorithms modeled on the actions of an ant colony. Artificial ‘ants’ (e.g. simulation agents) locate optimal solutions by moving through a parameter space representing all possible solutions. Real ants lay down pheromones directing each other to resources while exploring their environment. The simulated ‘ants’ similarly record their positions and the quality of their solutions, so that in later simulation iterations more ants locate better solutions.</p>
@@ -233,97 +233,92 @@ how two of the three pheromone values are computed (in particular, the weights a
 </p>
  </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Types</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt id="_CPPv4N5pagmo4gaco13log_line_typeE">
-<span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"></span><em class="property">typedef </em>std::tuple&lt;unsigned, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type, double, unsigned, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">tuple</span><span class="pre">&lt;</span><span class="pre">unsigned</span><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">unsigned</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_line_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt id="_CPPv4N5pagmo4gaco8log_typeE">
-<span id="_CPPv3N5pagmo4gaco8log_typeE"></span><span id="_CPPv2N5pagmo4gaco8log_typeE"></span><span id="pagmo::gaco::log_type"></span><span class="target" id="classpagmo_1_1gaco_1a9c6ebb983637ac1c268b254cd538c83f"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="pagmo::gaco::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo4gaco8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco8log_typeE"></span><span id="_CPPv2N5pagmo4gaco8log_typeE"></span><span id="pagmo::gaco::log_type"></span><span class="target" id="classpagmo_1_1gaco_1a9c6ebb983637ac1c268b254cd538c83f"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><a class="reference internal" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="pagmo::gaco::log_line_type"><span class="pre">log_line_type</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo4gaco8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj">
-<span id="_CPPv3N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="pagmo::gaco::gaco__unsigned.unsigned.double.double.double.unsigned.unsigned.unsigned.unsigned.double.b.unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a673d54f99eab2bae23ce31e5c41c095d"></span><code class="sig-name descname">gaco</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, unsigned <em>ker</em> = 63u, double <em>q</em> = 1.0, double <em>oracle</em> = 0., double <em>acc</em> = 0.01, unsigned <em>threshold</em> = 1u, unsigned <em>n_gen_mark</em> = 7u, unsigned <em>impstop</em> = 100000u, unsigned <em>evalstop</em> = 100000u, double <em>focus</em> = 0., bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="pagmo::gaco::gaco__unsigned.unsigned.double.double.double.unsigned.unsigned.unsigned.unsigned.double.b.unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a673d54f99eab2bae23ce31e5c41c095d"></span><code class="sig-name descname"><span class="pre">gaco</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">gen</span></em> <span class="pre">=</span> <span class="pre">1u</span>, <span class="pre">unsigned</span> <em><span class="pre">ker</span></em> <span class="pre">=</span> <span class="pre">63u</span>, <span class="pre">double</span> <em><span class="pre">q</span></em> <span class="pre">=</span> <span class="pre">1.0</span>, <span class="pre">double</span> <em><span class="pre">oracle</span></em> <span class="pre">=</span> <span class="pre">0.</span>, <span class="pre">double</span> <em><span class="pre">acc</span></em> <span class="pre">=</span> <span class="pre">0.01</span>, <span class="pre">unsigned</span> <em><span class="pre">threshold</span></em> <span class="pre">=</span> <span class="pre">1u</span>, <span class="pre">unsigned</span> <em><span class="pre">n_gen_mark</span></em> <span class="pre">=</span> <span class="pre">7u</span>, <span class="pre">unsigned</span> <em><span class="pre">impstop</span></em> <span class="pre">=</span> <span class="pre">100000u</span>, <span class="pre">unsigned</span> <em><span class="pre">evalstop</span></em> <span class="pre">=</span> <span class="pre">100000u</span>, <span class="pre">double</span> <em><span class="pre">focus</span></em> <span class="pre">=</span> <span class="pre">0.</span>, <span class="pre">bool</span> <em><span class="pre">memory</span></em> <span class="pre">=</span> <span class="pre">false</span>, <span class="pre">unsigned</span> <em><span class="pre">seed</span></em> <span class="pre">=</span> <span class="pre">pagmo</span><span class="pre">::</span><span class="pre">random_device</span><span class="pre">::</span><span class="pre">next</span><span class="pre">(</span><span class="pre">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs the ACO user defined algorithm for single-objective optimization.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">gen</span></code>: Generations: number of generations to evolve. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">ker</span></code>: Kernel: number of solutions stored in the solution archive. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">q</span></code>: Convergence speed parameter: this parameter is useful for managing the convergence speed towards the found minima (the smaller the faster). </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">oracle</span></code>: Oracle parameter: this is the oracle parameter used in the penalty method. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">acc</span></code>: Accuracy parameter: for maintaining a minimum penalty function’s values distances. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">threshold</span></code>: Threshold parameter: when the generations reach the threshold then q is set to 0.01 automatically. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">n_gen_mark</span></code>: Standard deviations convergence speed parameter: this parameters determines the convergence speed of the standard deviations values. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">impstop</span></code>: Improvement stopping criterion: if a positive integer is assigned here, the algorithm will count the runs without improvements, if this number will exceed impstop value, the algorithm will be stopped. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">evalstop</span></code>: Evaluation stopping criterion: same as previous one, but with function evaluations. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">focus</span></code>: Focus parameter: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the current best solutions. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">memory</span></code>: Memory parameter: if true, memory is activated in the algorithm for multiple calls </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random).</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> – <strong>[in]</strong> Generations: number of generations to evolve. </p></li>
+<li><p><strong>ker</strong> – <strong>[in]</strong> Kernel: number of solutions stored in the solution archive. </p></li>
+<li><p><strong>q</strong> – <strong>[in]</strong> Convergence speed parameter: this parameter is useful for managing the convergence speed towards the found minima (the smaller the faster). </p></li>
+<li><p><strong>oracle</strong> – <strong>[in]</strong> Oracle parameter: this is the oracle parameter used in the penalty method. </p></li>
+<li><p><strong>acc</strong> – <strong>[in]</strong> Accuracy parameter: for maintaining a minimum penalty function’s values distances. </p></li>
+<li><p><strong>threshold</strong> – <strong>[in]</strong> Threshold parameter: when the generations reach the threshold then q is set to 0.01 automatically. </p></li>
+<li><p><strong>n_gen_mark</strong> – <strong>[in]</strong> Standard deviations convergence speed parameter: this parameters determines the convergence speed of the standard deviations values. </p></li>
+<li><p><strong>impstop</strong> – <strong>[in]</strong> Improvement stopping criterion: if a positive integer is assigned here, the algorithm will count the runs without improvements, if this number will exceed impstop value, the algorithm will be stopped. </p></li>
+<li><p><strong>evalstop</strong> – <strong>[in]</strong> Evaluation stopping criterion: same as previous one, but with function evaluations. </p></li>
+<li><p><strong>focus</strong> – <strong>[in]</strong> Focus parameter: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the current best solutions. </p></li>
+<li><p><strong>memory</strong> – <strong>[in]</strong> Memory parameter: if true, memory is activated in the algorithm for multiple calls </p></li>
+<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random).</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">acc</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">impstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">evalstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">focus</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">ker</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">oracle</span></code> is not positive, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( \in [1,gen] \)</span> when <span class="math notranslate nohighlight">\(memory=false\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( &gt;=1 \)</span> when <span class="math notranslate nohighlight">\(memory=true\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">q</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span> </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">acc</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">impstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">evalstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">focus</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">ker</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">oracle</span></code> is not positive, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( \in [1,gen] \)</span> when <span class="math notranslate nohighlight">\(memory=false\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( &gt;=1 \)</span> when <span class="math notranslate nohighlight">\(memory=true\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">q</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span> </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco6evolveE10population">
-<span id="_CPPv3NK5pagmo4gaco6evolveE10population"></span><span id="_CPPv2NK5pagmo4gaco6evolveE10population"></span><span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1a5aa495b4690d6ea14ce7c9a62503a011"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco6evolveE10population"></span><span id="_CPPv2NK5pagmo4gaco6evolveE10population"></span><span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1a5aa495b4690d6ea14ce7c9a62503a011"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a> <code class="sig-name descname"><span class="pre">evolve</span></code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for the requested number of generations.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if pop.get_problem() is stochastic. </p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if pop.get_problem() is stochastic. </p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>evolved population </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco8set_seedEj">
-<span id="_CPPv3N5pagmo4gaco8set_seedEj"></span><span id="_CPPv2N5pagmo4gaco8set_seedEj"></span><span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4ea0b86dc02f3c4a2e10a63cc1dd73f0"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco8set_seedEj"></span><span id="_CPPv2N5pagmo4gaco8set_seedEj"></span><span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4ea0b86dc02f3c4a2e10a63cc1dd73f0"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – the seed controlling the algorithm stochastic behaviour </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco8get_seedEv">
-<span id="_CPPv3NK5pagmo4gaco8get_seedEv"></span><span id="_CPPv2NK5pagmo4gaco8get_seedEv"></span><span id="pagmo::gaco::get_seedC"></span><span class="target" id="classpagmo_1_1gaco_1a448660cccce3b7af1154d2f6d7632c5d"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco8get_seedEv"></span><span id="_CPPv2NK5pagmo4gaco8get_seedEv"></span><span id="pagmo::gaco::get_seedC"></span><span class="target" id="classpagmo_1_1gaco_1a448660cccce3b7af1154d2f6d7632c5d"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the seed controlling the algorithm stochastic behaviour </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco13set_verbosityEj">
-<span id="_CPPv3N5pagmo4gaco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4gaco13set_verbosityEj"></span><span id="pagmo::gaco::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"></span><em class="property">inline</em> void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4gaco13set_verbosityEj"></span><span id="pagmo::gaco::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_verbosity</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -344,101 +339,95 @@ how two of the three pheromone values are computed (in particular, the weights a
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function value found until that generation, Kernel is the kernel size, Oracle is the oracle parameter value, dx is the flatness in the individuals, dp is the flatness in the penalty function values.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>level</strong> – verbosity level </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco13get_verbosityEv">
-<span id="_CPPv3NK5pagmo4gaco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4gaco13get_verbosityEv"></span><span id="pagmo::gaco::get_verbosityC"></span><span class="target" id="classpagmo_1_1gaco_1abb6cade7b7e96320498c4d7633bf865a"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4gaco13get_verbosityEv"></span><span id="pagmo::gaco::get_verbosityC"></span><span class="target" id="classpagmo_1_1gaco_1abb6cade7b7e96320498c4d7633bf865a"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_verbosity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the verbosity level </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco7get_genEv">
-<span id="_CPPv3NK5pagmo4gaco7get_genEv"></span><span id="_CPPv2NK5pagmo4gaco7get_genEv"></span><span id="pagmo::gaco::get_genC"></span><span class="target" id="classpagmo_1_1gaco_1acb9c3c3d7a29943a3a6a39b266b5c4a8"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco7get_genEv"></span><span id="_CPPv2NK5pagmo4gaco7get_genEv"></span><span id="pagmo::gaco::get_genC"></span><span class="target" id="classpagmo_1_1gaco_1acb9c3c3d7a29943a3a6a39b266b5c4a8"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_gen</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of generations to evolve for </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4gaco7set_bfeERK3bfe">
-<span id="_CPPv3N5pagmo4gaco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4gaco7set_bfeERK3bfe"></span><span id="pagmo::gaco::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1gaco_1a6b06d99293444ca6776c2ce19dbfc40e"></span>void <code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4gaco7set_bfeERK3bfe"></span><span id="pagmo::gaco::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1gaco_1a6b06d99293444ca6776c2ce19dbfc40e"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_bfe</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="pre">bfe</span></a> <span class="pre">&amp;</span><em><span class="pre">b</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the batch function evaluation scheme. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: batch function evaluation object </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>b</strong> – batch function evaluation object </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco8get_nameEv">
-<span id="_CPPv3NK5pagmo4gaco8get_nameEv"></span><span id="_CPPv2NK5pagmo4gaco8get_nameEv"></span><span id="pagmo::gaco::get_nameC"></span><span class="target" id="classpagmo_1_1gaco_1a89645ecde8e25dc44e713b43c121abeb"></span><em class="property">inline</em> std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco8get_nameEv"></span><span id="_CPPv2NK5pagmo4gaco8get_nameEv"></span><span id="pagmo::gaco::get_nameC"></span><span class="target" id="classpagmo_1_1gaco_1a89645ecde8e25dc44e713b43c121abeb"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>Returns the name of the algorithm.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p><code class="docutils literal notranslate"> <span class="pre">std::string</span> </code> containing the algorithm name </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"> <span class="pre">std::string</span> </code> containing the algorithm name </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo4gaco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4gaco14get_extra_infoEv"></span><span id="pagmo::gaco::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gaco_1a017cfa405ec96a736d64a0ad8dfdb734"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4gaco14get_extra_infoEv"></span><span id="pagmo::gaco::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gaco_1a017cfa405ec96a736d64a0ad8dfdb734"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>Returns extra information on the algorithm.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"> <span class="pre">std::string</span> </code> containing extra info on the algorithm </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"> <span class="pre">std::string</span> </code> containing extra info on the algorithm </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4gaco7get_logEv">
-<span id="_CPPv3NK5pagmo4gaco7get_logEv"></span><span id="_CPPv2NK5pagmo4gaco7get_logEv"></span><span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"></span><em class="property">inline</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco7get_logEv"></span><span id="_CPPv2NK5pagmo4gaco7get_logEv"></span><span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type"><span class="pre">log_type</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_log</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing: gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp as described in <a class="reference internal" href="#classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"><span class="std std-ref">gaco::set_verbosity</span></a> <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing the logged values gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing: gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp as described in <a class="reference internal" href="#classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"><span class="std std-ref">gaco::set_verbosity</span></a> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing the logged values gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo4gaco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4gaco9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1gaco_1a9f27bf4c4c9150e287b470f4e60fc422"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="pagmo::gaco::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo4gaco9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4gaco9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1gaco_1a9f27bf4c4c9150e287b470f4e60fc422"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="pagmo::gaco::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4gaco9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of the UDP and of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

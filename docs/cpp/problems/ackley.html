@@ -210,106 +210,99 @@
 <h1>Ackley<a class="headerlink" href="#ackley" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp struct">
 <dt id="_CPPv4N5pagmo6ackleyE">
-<span id="_CPPv3N5pagmo6ackleyE"></span><span id="_CPPv2N5pagmo6ackleyE"></span><span id="pagmo::ackley"></span><span class="target" id="structpagmo_1_1ackley"></span><em class="property">struct </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ackley</code><a class="headerlink" href="#_CPPv4N5pagmo6ackleyE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6ackleyE"></span><span id="_CPPv2N5pagmo6ackleyE"></span><span id="pagmo::ackley"></span><span class="target" id="structpagmo_1_1ackley"></span><em class="property"><span class="pre">struct</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">ackley</span></code><a class="headerlink" href="#_CPPv4N5pagmo6ackleyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Ackley problem. </p>
 <p><img alt="../../../_images/ackley.png" src="../../../_images/ackley.png" /></p>
 <p>This is a scalable box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Ackley function: <div class="math notranslate nohighlight">
 \[ F\left(x_1,\ldots,x_n\right) = 20 + e - 20e^{-\frac 15 \sqrt{\frac 1n \sum_{i=1}^n x_i^2}} - e^{\frac 1n \sum_{i=1}^n \cos(2\pi x_i)}, \quad x_i \in \left[ -15,30 \right]. \]</div>
  The global minimum is in <span class="math notranslate nohighlight">\(x_i=0\)</span>, where <span class="math notranslate nohighlight">\( F\left( 0,\ldots,0 \right) = 0 \)</span>. </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo6ackley6ackleyEj">
-<span id="_CPPv3N5pagmo6ackley6ackleyEj"></span><span id="_CPPv2N5pagmo6ackley6ackleyEj"></span><span id="pagmo::ackley::ackley__unsigned"></span><span class="target" id="structpagmo_1_1ackley_1a65c0739045650ca36df98f6923054924"></span><code class="sig-name descname">ackley</code><span class="sig-paren">(</span>unsigned <em>dim</em> = 1u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6ackley6ackleyEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6ackley6ackleyEj"></span><span id="_CPPv2N5pagmo6ackley6ackleyEj"></span><span id="pagmo::ackley::ackley__unsigned"></span><span class="target" id="structpagmo_1_1ackley_1a65c0739045650ca36df98f6923054924"></span><code class="sig-name descname"><span class="pre">ackley</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">dim</span></em> <span class="pre">=</span> <span class="pre">1u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6ackley6ackleyEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension. </p>
 <p>Constructs an Ackley problem</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: the problem dimensions.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dim</strong> – the problem dimensions.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">dim</span></code> is &lt; 1 </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">dim</span></code> is &lt; 1 </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="pagmo::ackley::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1ackley_1abdb321732aa832401874f463e713f239"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo6ackley7fitnessERK13vector_double"></span><span id="pagmo::ackley::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1ackley_1abdb321732aa832401874f463e713f239"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley10get_boundsEv">
-<span id="_CPPv3NK5pagmo6ackley10get_boundsEv"></span><span id="_CPPv2NK5pagmo6ackley10get_boundsEv"></span><span id="pagmo::ackley::get_boundsC"></span><span class="target" id="structpagmo_1_1ackley_1a3abbf3c1247899a753782f85403e531e"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6ackley10get_boundsEv"></span><span id="_CPPv2NK5pagmo6ackley10get_boundsEv"></span><span id="pagmo::ackley::get_boundsC"></span><span class="target" id="structpagmo_1_1ackley_1a3abbf3c1247899a753782f85403e531e"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the lower and upper bounds for each of the decision vector components </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley8get_nameEv">
-<span id="_CPPv3NK5pagmo6ackley8get_nameEv"></span><span id="_CPPv2NK5pagmo6ackley8get_nameEv"></span><span id="pagmo::ackley::get_nameC"></span><span class="target" id="structpagmo_1_1ackley_1a8bc14c09f376f91d4f30b36dcc1daa23"></span><em class="property">inline</em> std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6ackley8get_nameEv"></span><span id="_CPPv2NK5pagmo6ackley8get_nameEv"></span><span id="pagmo::ackley::get_nameC"></span><span class="target" id="structpagmo_1_1ackley_1a8bc14c09f376f91d4f30b36dcc1daa23"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing the problem name </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the problem name </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo6ackley10best_knownEv">
-<span id="_CPPv3NK5pagmo6ackley10best_knownEv"></span><span id="_CPPv2NK5pagmo6ackley10best_knownEv"></span><span id="pagmo::ackley::best_knownC"></span><span class="target" id="structpagmo_1_1ackley_1a3177a91aab5aae11bc3cdf6b3aa2aef6"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">best_known</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6ackley10best_knownEv"></span><span id="_CPPv2NK5pagmo6ackley10best_knownEv"></span><span id="pagmo::ackley::best_knownC"></span><span class="target" id="structpagmo_1_1ackley_1a3177a91aab5aae11bc3cdf6b3aa2aef6"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">best_known</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo6ackley10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the decision vector corresponding to the best solution for this problem. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the decision vector corresponding to the best solution for this problem. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo6ackley9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6ackley9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="structpagmo_1_1ackley_1a2986783f02decfc472a2951eaf0c4491"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="pagmo::ackley::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6ackley9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6ackley9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="structpagmo_1_1ackley_1a2986783f02decfc472a2951eaf0c4491"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="pagmo::ackley::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6ackley9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of the UDP and of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt id="_CPPv4N5pagmo6ackley5m_dimE">
-<span id="_CPPv3N5pagmo6ackley5m_dimE"></span><span id="_CPPv2N5pagmo6ackley5m_dimE"></span><span id="pagmo::ackley::m_dim__unsigned"></span><span class="target" id="structpagmo_1_1ackley_1a1a14a07417d25ada811b9ea46c5e8ce8"></span>unsigned <code class="sig-name descname">m_dim</code><a class="headerlink" href="#_CPPv4N5pagmo6ackley5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6ackley5m_dimE"></span><span id="_CPPv2N5pagmo6ackley5m_dimE"></span><span id="pagmo::ackley::m_dim__unsigned"></span><span class="target" id="structpagmo_1_1ackley_1a1a14a07417d25ada811b9ea46c5e8ce8"></span><span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">m_dim</span></code><a class="headerlink" href="#_CPPv4N5pagmo6ackley5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>
 </dd></dl>
 

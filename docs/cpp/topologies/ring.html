@@ -198,19 +198,19 @@
 <img alt="../../../_images/ring.png" src="../../../_images/ring.png" />
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo4ringE">
-<span id="_CPPv3N5pagmo4ringE"></span><span id="_CPPv2N5pagmo4ringE"></span><span id="pagmo::ring"></span><em class="property">class </em><code class="sig-name descname">ring</code> : <em class="property">public</em> <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology">base_bgl_topology</a><a class="headerlink" href="#_CPPv4N5pagmo4ringE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4ringE"></span><span id="_CPPv2N5pagmo4ringE"></span><span id="pagmo::ring"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ring</span></code> <span class="pre">:</span> <em class="property"><span class="pre">public</span></em> <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="pre">base_bgl_topology</span></a><a class="headerlink" href="#_CPPv4N5pagmo4ringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This user-defined topology (UDT) represents a bidirectional ring (that is, a ring
 in which each node connects to both the previous and the following nodes).</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4ring4ringEv">
-<span id="_CPPv3N5pagmo4ring4ringEv"></span><span id="_CPPv2N5pagmo4ring4ringEv"></span><span id="pagmo::ring::ring"></span><code class="sig-name descname">ring</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring4ringEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4ring4ringEv"></span><span id="_CPPv2N5pagmo4ring4ringEv"></span><span id="pagmo::ring::ring"></span><code class="sig-name descname"><span class="pre">ring</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring4ringEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor.</p>
 <p>Equivalent to the constructor from edge weight with <em>w</em> = 1.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4ring4ringEd">
-<span id="_CPPv3N5pagmo4ring4ringEd"></span><span id="_CPPv2N5pagmo4ring4ringEd"></span><span id="pagmo::ring::ring__double"></span><em class="property">explicit</em> <code class="sig-name descname">ring</code><span class="sig-paren">(</span>double <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring4ringEd" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4ring4ringEd"></span><span id="_CPPv2N5pagmo4ring4ringEd"></span><span id="pagmo::ring::ring__double"></span><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">ring</span></code><span class="sig-paren">(</span><span class="pre">double</span> <em><span class="pre">w</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring4ringEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from edge weight.</p>
 <p>New edges created via <a class="reference internal" href="#_CPPv4N5pagmo4ring9push_backEv" title="pagmo::ring::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a> will have
 a weight of <em>w</em>.</p>
@@ -226,7 +226,7 @@ a weight of <em>w</em>.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4ring4ringENSt6size_tEd">
-<span id="_CPPv3N5pagmo4ring4ringENSt6size_tEd"></span><span id="_CPPv2N5pagmo4ring4ringENSt6size_tEd"></span><span id="pagmo::ring::ring__std::s.double"></span><em class="property">explicit</em> <code class="sig-name descname">ring</code><span class="sig-paren">(</span>std::size_t <em>n</em>, double <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring4ringENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4ring4ringENSt6size_tEd"></span><span id="_CPPv2N5pagmo4ring4ringENSt6size_tEd"></span><span id="pagmo::ring::ring__std::s.double"></span><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">ring</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">n</span></em>, <span class="pre">double</span> <em><span class="pre">w</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring4ringENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from number of vertices and edge weight.</p>
 <p>This constructor will initialise a ring topology with <em>n</em> vertices and whose
 edges will have a weight of <em>w</em>.</p>
@@ -250,7 +250,7 @@ will also have a weight of <em>w</em>.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo4ring9push_backEv">
-<span id="_CPPv3N5pagmo4ring9push_backEv"></span><span id="_CPPv2N5pagmo4ring9push_backEv"></span><span id="pagmo::ring::push_back"></span>void <code class="sig-name descname">push_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4ring9push_backEv"></span><span id="_CPPv2N5pagmo4ring9push_backEv"></span><span id="pagmo::ring::push_back"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">push_back</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4ring9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add the next vertex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
@@ -261,7 +261,7 @@ will also have a weight of <em>w</em>.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4ring10get_weightEv">
-<span id="_CPPv3NK5pagmo4ring10get_weightEv"></span><span id="_CPPv2NK5pagmo4ring10get_weightEv"></span><span id="pagmo::ring::get_weightC"></span>double <code class="sig-name descname">get_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4ring10get_weightEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4ring10get_weightEv"></span><span id="_CPPv2NK5pagmo4ring10get_weightEv"></span><span id="pagmo::ring::get_weightC"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">get_weight</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4ring10get_weightEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the weight <em>w</em> used when constructing this topology.</p>
@@ -271,7 +271,7 @@ will also have a weight of <em>w</em>.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo4ring8get_nameEv">
-<span id="_CPPv3NK5pagmo4ring8get_nameEv"></span><span id="_CPPv2NK5pagmo4ring8get_nameEv"></span><span id="pagmo::ring::get_nameC"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo4ring8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4ring8get_nameEv"></span><span id="_CPPv2NK5pagmo4ring8get_nameEv"></span><span id="pagmo::ring::get_nameC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo4ring8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the name of the topology.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -282,7 +282,7 @@ will also have a weight of <em>w</em>.</p>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo4ring9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo4ring9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4ring9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br />void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4ring9serializeEvR7Archivej" title="pagmo::ring::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4ring9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo4ring9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo4ring9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo4ring9serializeEvR7Archivej" title="pagmo::ring::serialize::Archive"><span class="pre">Archive</span></a> <span class="pre">&amp;</span><em><span class="pre">ar</span></em>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo4ring9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This function implements the serialisation of a <a class="reference internal" href="#_CPPv4N5pagmo4ringE" title="pagmo::ring"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ring</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

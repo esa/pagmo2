@@ -210,7 +210,7 @@
 <h1>Decompose<a class="headerlink" href="#decompose" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo9decomposeE">
-<span id="_CPPv3N5pagmo9decomposeE"></span><span id="_CPPv2N5pagmo9decomposeE"></span><span id="pagmo::decompose"></span><span class="target" id="classpagmo_1_1decompose"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">decompose</code><a class="headerlink" href="#_CPPv4N5pagmo9decomposeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9decomposeE"></span><span id="_CPPv2N5pagmo9decomposeE"></span><span id="pagmo::decompose"></span><span class="target" id="classpagmo_1_1decompose"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">decompose</span></code><a class="headerlink" href="#_CPPv4N5pagmo9decomposeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The decompose meta-problem. </p>
 <p><img alt="../../../_images/decompose.png" src="../../../_images/decompose.png" /></p>
 <p>This meta-problem <em>decomposes</em> a multi-objective input user-defined problem, resulting in a single-objective user-defined problem with a fitness function combining the original fitness functions. In particular, three different <em>decomposition methods</em> are here made available:</p>
@@ -250,42 +250,39 @@ derivative-free optimization.</p>
 </p>
  </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo9decompose9decomposeEv">
-<span id="_CPPv3N5pagmo9decompose9decomposeEv"></span><span id="_CPPv2N5pagmo9decompose9decomposeEv"></span><span id="pagmo::decompose::decompose"></span><span class="target" id="classpagmo_1_1decompose_1aa6d29b6fdc71a8b802c8633dbf4c25b6"></span><code class="sig-name descname">decompose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9decompose9decomposeEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9decompose9decomposeEv"></span><span id="_CPPv2N5pagmo9decompose9decomposeEv"></span><span id="pagmo::decompose::decompose"></span><span class="target" id="classpagmo_1_1decompose_1aa6d29b6fdc71a8b802c8633dbf4c25b6"></span><code class="sig-name descname"><span class="pre">decompose</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9decompose9decomposeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The default constructor will initialize <code class="docutils literal notranslate"><span class="pre">this</span></code> with a 2-objectives <a class="reference internal" href="null.html#structpagmo_1_1null__problem"><span class="std std-ref">pagmo::null_problem</span></a>, weight vector <code class="docutils literal notranslate"><span class="pre">[0.5,</span> <span class="pre">0.5]</span></code> and reference point <code class="docutils literal notranslate"><span class="pre">[0.,</span> <span class="pre">0.]</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the other constructor. </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the other constructor. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb"></span>template&lt;typename <code class="sig-name descname">T</code>, ctor_enabler&lt;<a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="pagmo::decompose::decompose::T">T</a>&gt; = 0&gt;<br /><span class="target" id="classpagmo_1_1decompose_1adbd72847955fe14a3b24841a6bda8c40"></span><em class="property">inline</em> <em class="property">explicit</em> <code class="sig-name descname">decompose</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="pagmo::decompose::decompose::T">T</a> &amp;&amp;<em>p</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>weight</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>z</em>, <em class="property">const</em> std::string &amp;<em>method</em> = &quot;weighted&quot;, bool <em>adapt_ideal</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">T</span></code><span class="pre">,</span> <span class="pre">ctor_enabler</span><span class="pre">&lt;</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="pagmo::decompose::decompose::T"><span class="pre">T</span></a><span class="pre">&gt;</span> <span class="pre">=</span> <span class="pre">0</span><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1decompose_1adbd72847955fe14a3b24841a6bda8c40"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">decompose</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="pagmo::decompose::decompose::T"><span class="pre">T</span></a> <span class="pre">&amp;</span><span class="pre">&amp;</span><em><span class="pre">p</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">weight</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">z</span></em>, <em class="property"><span class="pre">const</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <span class="pre">&amp;</span><em><span class="pre">method</span></em> <span class="pre">=</span> <span class="pre">&quot;weighted&quot;</span>, <span class="pre">bool</span> <em><span class="pre">adapt_ideal</span></em> <span class="pre">=</span> <span class="pre">false</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9decompose9decomposeERR1TRK13vector_doubleRK13vector_doubleRKNSt6stringEb" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from problem. </p>
-<p><p><div class="admonition note">
+<p>Wraps a user-defined problem (UDP) or a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> so that its fitness will be decomposed using one of three decomposition methods. <a class="reference internal" href="#classpagmo_1_1decompose"><span class="std std-ref">pagmo::decompose</span></a> objects are user-defined problems that can be used to define a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This constructor is enabled only if <code class="docutils literal notranslate"><span class="pre">T</span></code> can be used to construct a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a>.</p>
 </div>
-</p>
-</p>
-<p>Wraps a user-defined problem (UDP) or a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> so that its fitness will be decomposed using one of three decomposition methods. <a class="reference internal" href="#classpagmo_1_1decompose"><span class="std std-ref">pagmo::decompose</span></a> objects are user-defined problems that can be used to define a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: the input UDP or <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">weight</span></code>: the vector of weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span>. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code>: the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span>. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code>: an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the decomposition method chosen. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">adapt_ideal</span></code>: when <code class="docutils literal notranslate"><span class="pre">true</span></code>, the reference point is adapted at each fitness evaluation to be the ideal point.</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – the input UDP or <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p></li>
+<li><p><strong>weight</strong> – the vector of weights <span class="math notranslate nohighlight">\(\boldsymbol \lambda\)</span>. </p></li>
+<li><p><strong>z</strong> – the reference point <span class="math notranslate nohighlight">\(\mathbf z^*\)</span>. </p></li>
+<li><p><strong>method</strong> – an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the decomposition method chosen. </p></li>
+<li><p><strong>adapt_ideal</strong> – when <code class="docutils literal notranslate"><span class="pre">true</span></code>, the reference point is adapted at each fitness evaluation to be the ideal point.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if either:<ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if either:<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> is single objective or constrained,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">method</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">[&quot;weighted&quot;,</span> <span class="pre">&quot;tchebycheff&quot;,</span> <span class="pre">&quot;bi&quot;]</span></code>,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">weight</span></code> is not of size <span class="math notranslate nohighlight">\(n\)</span>,</p></li>
@@ -293,230 +290,211 @@ derivative-free optimization.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">weight</span></code> is not such that <span class="math notranslate nohighlight">\(\lambda_i &gt; 0, \forall i=1..n\)</span>,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">weight</span></code> is not such that <span class="math notranslate nohighlight">\(\sum_i \lambda_i = 1\)</span>. </p></li>
 </ul>
-</p></li>
-</ul>
+</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9decompose7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9decompose7fitnessERK13vector_double"></span><span id="pagmo::decompose::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1decompose_1a70c1c71940fd7f6df0a4eb2a32ecd268"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9decompose7fitnessERK13vector_double"></span><span id="pagmo::decompose::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1decompose_1a70c1c71940fd7f6df0a4eb2a32ecd268"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>The fitness values returned by the inner problem will be combined using the decomposition method selected during construction.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the decomposed fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#classpagmo_1_1decompose_1a5e5365ca3ef8da5d0ca28269a31730b5"><span class="std std-ref">decompose::original_fitness()</span></a>, or by the fitness decomposition. </p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="#classpagmo_1_1decompose_1a5e5365ca3ef8da5d0ca28269a31730b5"><span class="std std-ref">decompose::original_fitness()</span></a>, or by the fitness decomposition. </p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the decomposed fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose16original_fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9decompose16original_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9decompose16original_fitnessERK13vector_double"></span><span id="pagmo::decompose::original_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1decompose_1a5e5365ca3ef8da5d0ca28269a31730b5"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">original_fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose16original_fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose16original_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9decompose16original_fitnessERK13vector_double"></span><span id="pagmo::decompose::original_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1decompose_1a5e5365ca3ef8da5d0ca28269a31730b5"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">original_fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose16original_fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness of the original problem. </p>
 <p>Returns the fitness of the original multi-objective problem used to construct the decomposed problem.</p>
-<p><p><div class="admonition note">
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is <em>not</em> the fitness of the decomposed problem. Such a fitness is instead returned by calling
 <a class="reference internal" href="#_CPPv4NK5pagmo9decompose7fitnessERK13vector_double" title="pagmo::decompose::fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">decompose::fitness()</span></code></a>.</p>
 </div>
-</p>
-</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the fitness of the original multi-objective problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – input decision vector.</p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: input decision vector.</p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the original fitness computation. </p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the original fitness computation. </p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the fitness of the original multi-objective problem.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose8get_nobjEv">
-<span id="_CPPv3NK5pagmo9decompose8get_nobjEv"></span><span id="_CPPv2NK5pagmo9decompose8get_nobjEv"></span><span id="pagmo::decompose::get_nobjC"></span><span class="target" id="classpagmo_1_1decompose_1a1539cef2a3fce2058926be926427830e"></span><em class="property">inline</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose8get_nobjEv"></span><span id="_CPPv2NK5pagmo9decompose8get_nobjEv"></span><span id="pagmo::decompose::get_nobjC"></span><span class="target" id="classpagmo_1_1decompose_1a1539cef2a3fce2058926be926427830e"></span><em class="property"><span class="pre">inline</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nobj</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Number of objectives. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>one. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>one. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose7get_nixEv">
-<span id="_CPPv3NK5pagmo9decompose7get_nixEv"></span><span id="_CPPv2NK5pagmo9decompose7get_nixEv"></span><span id="pagmo::decompose::get_nixC"></span><span class="target" id="classpagmo_1_1decompose_1a04746b994c0475cbf7b5412974bd742b"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose7get_nixEv"></span><span id="_CPPv2NK5pagmo9decompose7get_nixEv"></span><span id="pagmo::decompose::get_nixC"></span><span class="target" id="classpagmo_1_1decompose_1a04746b994c0475cbf7b5412974bd742b"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Integer dimension. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the integer dimension of the inner problem. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the integer dimension of the inner problem. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose10get_boundsEv">
-<span id="_CPPv3NK5pagmo9decompose10get_boundsEv"></span><span id="_CPPv2NK5pagmo9decompose10get_boundsEv"></span><span id="pagmo::decompose::get_boundsC"></span><span class="target" id="classpagmo_1_1decompose_1af9c3fa6df6b1719b685e7aee1162ede5"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose10get_boundsEv"></span><span id="_CPPv2NK5pagmo9decompose10get_boundsEv"></span><span id="pagmo::decompose::get_boundsC"></span><span class="target" id="classpagmo_1_1decompose_1af9c3fa6df6b1719b685e7aee1162ede5"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>Forwards the bounds computations to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws</dt>
+<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref">problem::get_bounds()</span></a>. </p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref">problem::get_bounds()</span></a>. </p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the lower and upper bounds for each of the decision vector components.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose5get_zEv">
-<span id="_CPPv3NK5pagmo9decompose5get_zEv"></span><span id="_CPPv2NK5pagmo9decompose5get_zEv"></span><span id="pagmo::decompose::get_zC"></span><span class="target" id="classpagmo_1_1decompose_1a1689e38f4a38654aea7c101f41026ae1"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">get_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose5get_zEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose5get_zEv"></span><span id="_CPPv2NK5pagmo9decompose5get_zEv"></span><span id="pagmo::decompose::get_zC"></span><span class="target" id="classpagmo_1_1decompose_1a1689e38f4a38654aea7c101f41026ae1"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">get_z</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose5get_zEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the current reference point. </p>
 <p>The reference point to be used for the decomposition. This is only used for Tchebycheff and boundary interception decomposition methods.</p>
-<p><p><div class="admonition note">
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The reference point is adapted (and thus may change) at each call of the fitness.</p>
 </div>
-</p>
-</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the reference point. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the reference point. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose8get_nameEv">
-<span id="_CPPv3NK5pagmo9decompose8get_nameEv"></span><span id="_CPPv2NK5pagmo9decompose8get_nameEv"></span><span id="pagmo::decompose::get_nameC"></span><span class="target" id="classpagmo_1_1decompose_1aa992301914cfd44d1299826208a0977a"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose8get_nameEv"></span><span id="_CPPv2NK5pagmo9decompose8get_nameEv"></span><span id="pagmo::decompose::get_nameC"></span><span class="target" id="classpagmo_1_1decompose_1aa992301914cfd44d1299826208a0977a"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
 <p>This method will append <code class="docutils literal notranslate"><span class="pre">[decomposed]</span></code> to the name of the inner problem.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing the problem name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the problem name. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo9decompose14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9decompose14get_extra_infoEv"></span><span id="pagmo::decompose::get_extra_infoC"></span><span class="target" id="classpagmo_1_1decompose_1ac85db2b026a5a10fae0ba74837019be0"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9decompose14get_extra_infoEv"></span><span id="pagmo::decompose::get_extra_infoC"></span><span class="target" id="classpagmo_1_1decompose_1ac85db2b026a5a10fae0ba74837019be0"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra information. </p>
 <p>This method will add info about the decomposition method to the extra info provided by the inner problem.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra information on the problem. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing extra information on the problem. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose12has_set_seedEv">
-<span id="_CPPv3NK5pagmo9decompose12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9decompose12has_set_seedEv"></span><span id="pagmo::decompose::has_set_seedC"></span><span class="target" id="classpagmo_1_1decompose_1a49a10572ed78d7498c2844dab03f9b22"></span>bool <code class="sig-name descname">has_set_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9decompose12has_set_seedEv"></span><span id="pagmo::decompose::has_set_seedC"></span><span class="target" id="classpagmo_1_1decompose_1a49a10572ed78d7498c2844dab03f9b22"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_set_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1decompose_1a49a10572ed78d7498c2844dab03f9b22"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1decompose_1a49a10572ed78d7498c2844dab03f9b22"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a flag signalling wether the inner problem is stochastic. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a flag signalling wether the inner problem is stochastic. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo9decompose8set_seedEj">
-<span id="_CPPv3N5pagmo9decompose8set_seedEj"></span><span id="_CPPv2N5pagmo9decompose8set_seedEj"></span><span id="pagmo::decompose::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1decompose_1affe9758f72a4989fea7b52a00cf4479d"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9decompose8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9decompose8set_seedEj"></span><span id="_CPPv2N5pagmo9decompose8set_seedEj"></span><span id="pagmo::decompose::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1decompose_1affe9758f72a4989fea7b52a00cf4479d"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9decompose8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1decompose_1affe9758f72a4989fea7b52a00cf4479d"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1decompose_1affe9758f72a4989fea7b52a00cf4479d"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed to be set.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – seed to be set.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::not_implemented_error</span></code>: if the inner problem is not stochastic. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::not_implemented_error</strong> – if the inner problem is not stochastic. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo9decompose17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9decompose17get_thread_safetyEv"></span><span id="pagmo::decompose::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1decompose_1aa03457fb6be27b97faa6abb0a78b5473"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety">thread_safety</a> <code class="sig-name descname">get_thread_safety</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9decompose17get_thread_safetyEv"></span><span id="pagmo::decompose::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1decompose_1aa03457fb6be27b97faa6abb0a78b5473"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="pre">thread_safety</span></a> <code class="sig-name descname"><span class="pre">get_thread_safety</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem’s thread safety level. </p>
 <p>The thread safety of a meta-problem is defined by the thread safety of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the thread safety level of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the thread safety level of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9decompose17get_inner_problemEv">
-<span id="_CPPv3NK5pagmo9decompose17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo9decompose17get_inner_problemEv"></span><span id="pagmo::decompose::get_inner_problemC"></span><span class="target" id="classpagmo_1_1decompose_1a3fcbcf37a4cebe0739595005516bdeaf"></span><em class="property">const</em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="sig-name descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9decompose17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo9decompose17get_inner_problemEv"></span><span id="pagmo::decompose::get_inner_problemC"></span><span class="target" id="classpagmo_1_1decompose_1aac546ac0ece53b17562b13c4fd53972c"></span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="pre">problem</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_inner_problem</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9decompose17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo9decompose17get_inner_problemEv">
-<span id="_CPPv3N5pagmo9decompose17get_inner_problemEv"></span><span id="_CPPv2N5pagmo9decompose17get_inner_problemEv"></span><span id="pagmo::decompose::get_inner_problem"></span><span class="target" id="classpagmo_1_1decompose_1a33da1aa8353b93d73738dd97d61100a7"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem">problem</a> &amp;<code class="sig-name descname">get_inner_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9decompose17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9decompose17get_inner_problemEv"></span><span id="_CPPv2N5pagmo9decompose17get_inner_problemEv"></span><span id="pagmo::decompose::get_inner_problem"></span><span class="target" id="classpagmo_1_1decompose_1aec1ee2e947b0f37424d708c157b07f1f"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="pre">problem</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_inner_problem</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9decompose17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><p><div class="admonition note">
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The ability to extract a non const reference is provided only in order to allow to call
 non-const methods on the internal <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> instance. Assigning a new
 <code class="xref py py-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code> via this reference is undefined behaviour.</p>
 </div>
-</p>
-</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo9decompose9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo9decompose9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9decompose9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1decompose_1a7a330f423014474a81c7a1a3a15de225"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9decompose9serializeEvR7Archivej" title="pagmo::decompose::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9decompose9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo9decompose9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9decompose9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1decompose_1a7a330f423014474a81c7a1a3a15de225"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9decompose9serializeEvR7Archivej" title="pagmo::decompose::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9decompose9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the inner problem and of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of the inner problem and of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

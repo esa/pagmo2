@@ -196,7 +196,7 @@
 <hr class="docutils" />
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo17estimate_sparsityE16sparsity_pattern4FuncRK13vector_doubled">
-<span id="_CPPv3I0EN5pagmo17estimate_sparsityE4FuncRK13vector_doubled"></span><span id="_CPPv2I0EN5pagmo17estimate_sparsityE4FuncRK13vector_doubled"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="namespacepagmo_1a89858d9cbc732abffd0f9cd22bd68c16"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern">sparsity_pattern</a> <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">estimate_sparsity</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo17estimate_sparsityE16sparsity_pattern4FuncRK13vector_doubled" title="pagmo::estimate_sparsity::Func">Func</a> <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo17estimate_sparsityE16sparsity_pattern4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo17estimate_sparsityE4FuncRK13vector_doubled"></span><span id="_CPPv2I0EN5pagmo17estimate_sparsityE4FuncRK13vector_doubled"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Func</span></code><span class="pre">&gt;</span><br /><span class="target" id="namespacepagmo_1a89858d9cbc732abffd0f9cd22bd68c16"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="pre">sparsity_pattern</span></a> <code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">estimate_sparsity</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo17estimate_sparsityE16sparsity_pattern4FuncRK13vector_doubled" title="pagmo::estimate_sparsity::Func"><span class="pre">Func</span></a> <em><span class="pre">f</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">x</span></em>, <span class="pre">double</span> <em><span class="pre">dx</span></em> <span class="pre">=</span> <span class="pre">1e-8</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo17estimate_sparsityE16sparsity_pattern4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Heuristic to estimate the sparsity pattern. </p>
 <p>A numerical estimation of the sparsity pattern of same callable object is made by numerically computing it around a given input point and detecting the components that are changed.</p>
 <p>The callable function <code class="docutils literal notranslate"><span class="pre">f</span></code> must have the prototype:</p>
@@ -206,27 +206,27 @@
 </p>
 <p>otherwise compiler errors will be generated.</p>
 <p>Note that estimate_sparsity may fail to detect the real sparsity as it only considers one variation around the input point. It is of use, though, in tests or cases where its not possible to write the sparsity or where the user is confident the estimate will be correct.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the sparsity_pattern of <code class="docutils literal notranslate"><span class="pre">f</span></code> as detected around <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">f</span></code>: instance of the callable object. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: decision vector to test the sparisty around. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dx</span></code>: To detect the sparsity each component of the input decision vector <code class="docutils literal notranslate"><span class="pre">x</span></code> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|, 1) * \)</span> <code class="docutils literal notranslate"><span class="pre">dx</span></code>. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – instance of the callable object. </p></li>
+<li><p><strong>x</strong> – decision vector to test the sparisty around. </p></li>
+<li><p><strong>dx</strong> – To detect the sparsity each component of the input decision vector <code class="docutils literal notranslate"><span class="pre">x</span></code> will be changed by <span class="math notranslate nohighlight">\(\max(|x_i|, 1) * \)</span> <code class="docutils literal notranslate"><span class="pre">dx</span></code>. </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">f</span></code> returns fitness vectors of different sizes when perturbing <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">f</span></code> returns fitness vectors of different sizes when perturbing <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the sparsity_pattern of <code class="docutils literal notranslate"><span class="pre">f</span></code> as detected around <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo17estimate_gradientE13vector_double4FuncRK13vector_doubled">
-<span id="_CPPv3I0EN5pagmo17estimate_gradientE4FuncRK13vector_doubled"></span><span id="_CPPv2I0EN5pagmo17estimate_gradientE4FuncRK13vector_doubled"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="namespacepagmo_1a698b7c8e4ddad0637ffe6ed693dd90b8"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">estimate_gradient</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo17estimate_gradientE13vector_double4FuncRK13vector_doubled" title="pagmo::estimate_gradient::Func">Func</a> <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo17estimate_gradientE13vector_double4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo17estimate_gradientE4FuncRK13vector_doubled"></span><span id="_CPPv2I0EN5pagmo17estimate_gradientE4FuncRK13vector_doubled"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Func</span></code><span class="pre">&gt;</span><br /><span class="target" id="namespacepagmo_1a698b7c8e4ddad0637ffe6ed693dd90b8"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">estimate_gradient</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo17estimate_gradientE13vector_double4FuncRK13vector_doubled" title="pagmo::estimate_gradient::Func"><span class="pre">Func</span></a> <em><span class="pre">f</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">x</span></em>, <span class="pre">double</span> <em><span class="pre">dx</span></em> <span class="pre">=</span> <span class="pre">1e-8</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo17estimate_gradientE13vector_double4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Numerical computation of the gradient (low-order) </p>
 <p>A numerical estimation of the gradient of same callable function is made numerically.</p>
 <p>The callable function <code class="docutils literal notranslate"><span class="pre">f</span></code> must have the prototype:</p>
@@ -240,32 +240,33 @@
 \[ \frac{df}{dx} \approx \frac{f(x+dx) - f(x-dx)}{2dx} + O(dx^2) \]</div>
 </p>
 <p>The overall cost, in terms of calls to <code class="docutils literal notranslate"><span class="pre">f</span></code> will thus be <span class="math notranslate nohighlight">\(2n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the size of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
-<p><p><div class="admonition note">
+<p><p></p>
+ </p>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The gradient returned is assumed as dense: elements equal to zero are not excluded.</p>
 </div>
-</p>
- <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the gradient of <code class="docutils literal notranslate"><span class="pre">f</span></code> approximated around <code class="docutils literal notranslate"><span class="pre">x</span></code> in the format required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">pagmo::problem::gradient()</span></a>.</p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">f</span></code>: instance of the callable object. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: decision vector to test the sparisty around. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dx</span></code>: To detect the numerical derivative each component of the input decision vector <code class="docutils literal notranslate"><span class="pre">x</span></code> will be varied by <span class="math notranslate nohighlight">\(\max(|x_i|,1) * \)</span> <code class="docutils literal notranslate"><span class="pre">dx</span></code>. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – instance of the callable object. </p></li>
+<li><p><strong>x</strong> – decision vector to test the sparisty around. </p></li>
+<li><p><strong>dx</strong> – To detect the numerical derivative each component of the input decision vector <code class="docutils literal notranslate"><span class="pre">x</span></code> will be varied by <span class="math notranslate nohighlight">\(\max(|x_i|,1) * \)</span> <code class="docutils literal notranslate"><span class="pre">dx</span></code>. </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">f</span></code> returns vectors of different sizes when perturbing <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">f</span></code> returns vectors of different sizes when perturbing <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the gradient of <code class="docutils literal notranslate"><span class="pre">f</span></code> approximated around <code class="docutils literal notranslate"><span class="pre">x</span></code> in the format required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">pagmo::problem::gradient()</span></a>.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo19estimate_gradient_hE13vector_double4FuncRK13vector_doubled">
-<span id="_CPPv3I0EN5pagmo19estimate_gradient_hE4FuncRK13vector_doubled"></span><span id="_CPPv2I0EN5pagmo19estimate_gradient_hE4FuncRK13vector_doubled"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="namespacepagmo_1a890e456701a084a01bd7810bebc9c18a"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">estimate_gradient_h</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo19estimate_gradient_hE13vector_double4FuncRK13vector_doubled" title="pagmo::estimate_gradient_h::Func">Func</a> <em>f</em>, <em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> &amp;<em>x</em>, double <em>dx</em> = 1e-2<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo19estimate_gradient_hE13vector_double4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo19estimate_gradient_hE4FuncRK13vector_doubled"></span><span id="_CPPv2I0EN5pagmo19estimate_gradient_hE4FuncRK13vector_doubled"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Func</span></code><span class="pre">&gt;</span><br /><span class="target" id="namespacepagmo_1a890e456701a084a01bd7810bebc9c18a"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">estimate_gradient_h</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo19estimate_gradient_hE13vector_double4FuncRK13vector_doubled" title="pagmo::estimate_gradient_h::Func"><span class="pre">Func</span></a> <em><span class="pre">f</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">x</span></em>, <span class="pre">double</span> <em><span class="pre">dx</span></em> <span class="pre">=</span> <span class="pre">1e-2</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo19estimate_gradient_hE13vector_double4FuncRK13vector_doubled" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Numerical computation of the gradient (high-order) </p>
 <p>A numerical estimation of the gradient of same callable function is made numerically.</p>
 <p>The callable function <code class="docutils literal notranslate"><span class="pre">f</span></code> must have the prototype:</p>
@@ -283,26 +284,27 @@
 \[ m_i = \frac{f(x + i dx) - f(x-i dx)}{2i dx} \]</div>
 </p>
 <p>The overall cost, in terms of calls to <code class="docutils literal notranslate"><span class="pre">f</span></code> will thus be <span class="math notranslate nohighlight">\(6n\)</span> where <span class="math notranslate nohighlight">\(n\)</span> is the size of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
-<p><p><div class="admonition note">
+<p><p></p>
+ </p>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The gradient returned is assumed as dense: elements equal to zero are not excluded.</p>
 </div>
-</p>
- <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the gradient of <code class="docutils literal notranslate"><span class="pre">f</span></code> approximated around <code class="docutils literal notranslate"><span class="pre">x</span></code> in the format required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">pagmo::problem::gradient()</span></a>.</p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">f</span></code>: instance of the callable object. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: decision vector to test the sparisty around. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dx</span></code>: To detect the numerical derivative each component of the input decision vector <code class="docutils literal notranslate"><span class="pre">x</span></code> will be varied by <span class="math notranslate nohighlight">\(\max(|x_i|,1) * \)</span> <code class="docutils literal notranslate"><span class="pre">dx</span></code>. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – instance of the callable object. </p></li>
+<li><p><strong>x</strong> – decision vector to test the sparisty around. </p></li>
+<li><p><strong>dx</strong> – To detect the numerical derivative each component of the input decision vector <code class="docutils literal notranslate"><span class="pre">x</span></code> will be varied by <span class="math notranslate nohighlight">\(\max(|x_i|,1) * \)</span> <code class="docutils literal notranslate"><span class="pre">dx</span></code>. </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">f</span></code> returns vectors of different sizes when perturbing <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">f</span></code> returns vectors of different sizes when perturbing <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the gradient of <code class="docutils literal notranslate"><span class="pre">f</span></code> approximated around <code class="docutils literal notranslate"><span class="pre">x</span></code> in the format required by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref">pagmo::problem::gradient()</span></a>.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

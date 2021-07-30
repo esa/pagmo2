@@ -196,7 +196,7 @@
 <hr class="docutils" />
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE">
-<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span>std::vector&lt;double&gt; <code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">sample_from_simplex</code><span class="sig-paren">(</span>std::vector&lt;double&gt; <em>in</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">sample_from_simplex</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">double</span><span class="pre">&gt;</span> <em><span class="pre">in</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sample from a simplex. </p>
 <p>Samples a point on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex from a <span class="math notranslate nohighlight">\(n-1\)</span> dimensional point</p>
 <p>In order to generate a uniform distribution on a simplex, that is to sample a <span class="math notranslate nohighlight">\(n\)</span>-dimensional point <span class="math notranslate nohighlight">\(\mathbf x\)</span> such that <span class="math notranslate nohighlight">\(\sum_{i=1}^{n} x_i = 1\)</span> one can follow the following approach: take <span class="math notranslate nohighlight">\(n-1\)</span> random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of <span class="math notranslate nohighlight">\(n+1\)</span> numbers. Sort the list and record the differences between two consecutive elements. This creates a list of <span class="math notranslate nohighlight">\(n\)</span> number that, by construction, will sum up to 1. Moreover this sampling is uniform. As an example the following code would generate points distributed on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex:</p>
@@ -208,27 +208,28 @@
 </pre></div>
 </div>
 </p>
-<p><p>See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p>
-<dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> containing the projected point of <span class="math notranslate nohighlight">\(n\)</span> dimensions.</p>
+<p>
+See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>in</strong> – a <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> containing a point in <span class="math notranslate nohighlight">\(n+1\)</span> dimensions. </p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">in</span></code>: a <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> containing a point in <span class="math notranslate nohighlight">\(n+1\)</span> dimensions. </p></li>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if the input vector elements are not in [0,1] </p></li>
+<li><p><strong>std::invalid_argument</strong> – if the input vector has size 0 or 1.</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the input vector elements are not in [0,1] </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the input vector has size 0 or 1.</p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> containing the projected point of <span class="math notranslate nohighlight">\(n\)</span> dimensions.</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo14van_der_corputE">
-<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">van_der_corput</code><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">van_der_corput</span></code><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Van der Corput sequence. </p>
 <p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math notranslate nohighlight">\(n \ge 1\)</span> is represented, in the base <span class="math notranslate nohighlight">\(b\)</span> by: <div class="math notranslate nohighlight">
 \[ n = \sum_{i=0}^{L-1}d_i(n) b^i, \]</div>
@@ -241,53 +242,49 @@
 <p><span class="math notranslate nohighlight">\( seq = \{0, \tfrac{1}{2}, \tfrac{1}{4}, \tfrac{3}{4}, \tfrac{1}{8}, \tfrac{5}{8}, \tfrac{3}{8}, \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16}, \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \)</span></p>
 <p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Van_der_Corput_sequence">https://en.wikipedia.org/wiki/Van_der_Corput_sequence</a> </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo14van_der_corput14van_der_corputEjj">
-<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><code class="sig-name descname">van_der_corput</code><span class="sig-paren">(</span>unsigned <em>b</em> = 2u, unsigned <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><code class="sig-name descname"><span class="pre">van_der_corput</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">b</span></em> <span class="pre">=</span> <span class="pre">2u</span>, <span class="pre">unsigned</span> <em><span class="pre">n</span></em> <span class="pre">=</span> <span class="pre">0u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
 <p>Consruct a van der Corput lowp-discrepancy sequence with base <code class="docutils literal notranslate"><span class="pre">b</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: base </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: position of the starting element</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>b</strong> – base </p></li>
+<li><p><strong>n</strong> – position of the starting element</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the base is 0u or 1u </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if the base is 0u or 1u </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo14van_der_corputclEv">
-<span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span>double <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">operator()</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the next number in the sequence </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the next number in the sequence </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14van_der_corput9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1van__der__corput_1ab44a224bb8ab618d0b440a8c103cb304"></span><em class="property">inline</em> void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="pagmo::van_der_corput::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo14van_der_corput9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1van__der__corput_1ab44a224bb8ab618d0b440a8c103cb304"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="pagmo::van_der_corput::serialize::Archive"><span class="pre">Archive</span></a> <span class="pre">&amp;</span><em><span class="pre">ar</span></em>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo14van_der_corput9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>
@@ -296,69 +293,66 @@
 <hr class="docutils" />
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo6haltonE">
-<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">halton</code><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">halton</span></code><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Halton sequence. </p>
 <p>The Halton sequence is, essentially, a generalization of the van der Corput sequence to higher dimensions. It considers, along each dimension, a van der Corput sequence referred to co-prime numbers. Here, by default, we consider the sequence of all prime numbers starting from 2, 3, 5, …… so that, for example, for <code class="docutils literal notranslate"><span class="pre">dim</span></code> equal two the following sequence is generated:</p>
 <p><div class="math notranslate nohighlight">
 \[ seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\} \]</div>
 </p>
-<p><p>See: </p>
-<a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> <dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: selects which element of the sequence to return </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: dimensions of the returned point</p></li>
-</ul>
+<p>
+See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> <dl class="field-list simple">
+<dt class="field-odd">param n</dt>
+<dd class="field-odd"><p>selects which element of the sequence to return </p>
+</dd>
+<dt class="field-even">param dim</dt>
+<dd class="field-even"><p>dimensions of the returned point</p>
 </dd>
 </dl>
 </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo6halton6haltonEjj">
-<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><code class="sig-name descname">halton</code><span class="sig-paren">(</span>unsigned <em>dim</em> = 2u, unsigned <em>n</em> = 0u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><code class="sig-name descname"><span class="pre">halton</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">dim</span></em> <span class="pre">=</span> <span class="pre">2u</span>, <span class="pre">unsigned</span> <em><span class="pre">n</span></em> <span class="pre">=</span> <span class="pre">0u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
 <p>Consruct a Halton low-discrepancy sequence with dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: dimension </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code>: position of the starting element</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> – dimension </p></li>
+<li><p><strong>n</strong> – position of the starting element</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: all exceptions thrown by <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – all exceptions thrown by <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo6haltonclEv">
-<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">operator()</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the next number in the sequence </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the next number in the sequence </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo6halton9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6halton9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1halton_1ac12d114cc25697e1c437e4d5d0a7d3a3"></span><em class="property">inline</em> void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="pagmo::halton::serialize::Archive">Archive</a> &amp;<em>ar</em>, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6halton9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo6halton9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1halton_1ac12d114cc25697e1c437e4d5d0a7d3a3"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="pagmo::halton::serialize::Archive"><span class="pre">Archive</span></a> <span class="pre">&amp;</span><em><span class="pre">ar</span></em>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6halton9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> or of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> or of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

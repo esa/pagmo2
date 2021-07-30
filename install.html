@@ -34,7 +34,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -101,6 +100,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#arch-linux">Arch Linux</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#freebsd">FreeBSD</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#homebrew">Homebrew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vcpkg">vcpkg</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-from-source">Installation from source</a></li>
@@ -249,17 +249,6 @@ recommended to use an AUR helper like
 <a class="reference external" href="https://aur.archlinux.org/packages/pikaur/">pikaur</a> for ease of installation.
 See the <a class="reference external" href="https://wiki.archlinux.org/index.php/AUR_helpers">AUR helpers</a> page on
 the Arch Linux wiki for more info.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>To install pagmo with optional dependency support like nlopt or ipopt,
-make sure to install the optional dependencies before installing the pagmo
-package.</p>
-</div>
-<p>Install optional dependencies:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>yay -S coin-or-ipopt eigen nlopt
-</pre></div>
-</div>
-<p>Install pagmo:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>yay -S pagmo
 </pre></div>
 </div>
@@ -279,6 +268,22 @@ pagmo on OSX with Homebrew, it is sufficient to execute the following command:</
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew install pagmo
 </pre></div>
 </div>
+</div>
+<div class="section" id="vcpkg">
+<h3>vcpkg<a class="headerlink" href="#vcpkg" title="Permalink to this headline">¶</a></h3>
+<p>You can download and install pagmo2 using the vcpkg dependency manager:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone https://github.com/Microsoft/vcpkg.git
+<span class="gp">$ </span><span class="nb">cd</span> vcpkg
+<span class="gp">$ </span>./bootstrap-vcpkg.sh    <span class="c1"># add -disableMetrics to opt out of telemetry</span>
+<span class="gp">$ </span>./vcpkg install pagmo2  <span class="c1"># or use pagmo2[nlopt] for the NLopt wrappers</span>
+</pre></div>
+</div>
+<p>Then you may direct cmake or msbuild to use the provided vcpkg toolchain file. Please visit
+the <a class="reference external" href="https://github.com/microsoft/vcpkg/blob/master/docs/users/integration.md">vcpkg build system documentation</a> for
+details.</p>
+<p>The pagmo2 port in vcpkg is kept up to date by Microsoft team members and community
+contributors. If the version is out of date, please create an issue or pull
+request on the <a class="reference external" href="https://github.com/Microsoft/vcpkg">vcpkg repository</a>.</p>
 </div>
 </div>
 <div class="section" id="installation-from-source">

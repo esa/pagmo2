@@ -210,7 +210,7 @@
 <h1>ZDT test suite<a class="headerlink" href="#zdt-test-suite" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo3zdtE">
-<span id="_CPPv3N5pagmo3zdtE"></span><span id="_CPPv2N5pagmo3zdtE"></span><span id="pagmo::zdt"></span><span class="target" id="classpagmo_1_1zdt"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">zdt</code><a class="headerlink" href="#_CPPv4N5pagmo3zdtE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3zdtE"></span><span id="_CPPv2N5pagmo3zdtE"></span><span id="pagmo::zdt"></span><span class="target" id="classpagmo_1_1zdt"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">zdt</span></code><a class="headerlink" href="#_CPPv4N5pagmo3zdtE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>ZDT problem test suite. </p>
 <p>This widespread test suite was conceived for two-objective problems and takes its name from its authors Zitzler, Deb and Thiele.</p>
 <p>In their paper the authors propose a set of 6 different scalable problems all originating from a well thought combination of functions allowing, by construction, to measure the distance of any point to the Pareto front while creating interesting problems. They also suggest some dimensions for instantiating the problems, namely <span class="math notranslate nohighlight">\(m = [30, 30, 30, 10, 11, 10]\)</span>.</p>
@@ -250,142 +250,138 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 \[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left[\left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right)\right]^{0.25} \\ F_1 \left(x\right) = 1 - \exp(-4 x_1) \sin^6(6 \pi \ x_1) \\ F_2 \left(x\right) = g(x) \left[ 1 - (f_1(x) / g(x))^2 \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
  </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo3zdt3zdtEjj">
-<span id="_CPPv3N5pagmo3zdt3zdtEjj"></span><span id="_CPPv2N5pagmo3zdt3zdtEjj"></span><span id="pagmo::zdt::zdt__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1zdt_1a8d04654442b490a4bf0fbdd134decfc2"></span><code class="sig-name descname">zdt</code><span class="sig-paren">(</span>unsigned <em>prob_id</em> = 1u, unsigned <em>param</em> = 30u<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3zdt3zdtEjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3zdt3zdtEjj"></span><span id="_CPPv2N5pagmo3zdt3zdtEjj"></span><span id="pagmo::zdt::zdt__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1zdt_1a8d04654442b490a4bf0fbdd134decfc2"></span><code class="sig-name descname"><span class="pre">zdt</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">prob_id</span></em> <span class="pre">=</span> <span class="pre">1u</span>, <span class="pre">unsigned</span> <em><span class="pre">param</span></em> <span class="pre">=</span> <span class="pre">30u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3zdt3zdtEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor</p>
 <p>Will construct one problem from the ZDT test-suite.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">prob_id</span></code>: problem number. Must be in [1, .., 6] </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">param</span></code>: problem parameter, representing the problem dimension except for ZDT5 where it represents the number of binary strings</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prob_id</strong> – problem number. Must be in [1, .., 6] </p></li>
+<li><p><strong>param</strong> – problem parameter, representing the problem dimension except for ZDT5 where it represents the number of binary strings</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">id</span></code> is not in [1,..,6] </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if <code class="docutils literal notranslate"><span class="pre">param</span></code> is not at least 2. </p></li>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">id</span></code> is not in [1,..,6] </p></li>
+<li><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">param</span></code> is not at least 2. </p></li>
 </ul>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="pagmo::zdt::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a86cc24e606d8363b8e6bc384c37c4157"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt7fitnessERK13vector_double"></span><span id="pagmo::zdt::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a86cc24e606d8363b8e6bc384c37c4157"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt8get_nobjEv">
-<span id="_CPPv3NK5pagmo3zdt8get_nobjEv"></span><span id="_CPPv2NK5pagmo3zdt8get_nobjEv"></span><span id="pagmo::zdt::get_nobjC"></span><span class="target" id="classpagmo_1_1zdt_1a3fe23a0bc425d2c0fcf6ad00165a4e04"></span><em class="property">inline</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nobj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt8get_nobjEv"></span><span id="_CPPv2NK5pagmo3zdt8get_nobjEv"></span><span id="pagmo::zdt::get_nobjC"></span><span class="target" id="classpagmo_1_1zdt_1a3fe23a0bc425d2c0fcf6ad00165a4e04"></span><em class="property"><span class="pre">inline</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nobj</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Number of objectives. </p>
 <p>It returns the number of objectives.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the number of objectives </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of objectives </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt10get_boundsEv">
-<span id="_CPPv3NK5pagmo3zdt10get_boundsEv"></span><span id="_CPPv2NK5pagmo3zdt10get_boundsEv"></span><span id="pagmo::zdt::get_boundsC"></span><span class="target" id="classpagmo_1_1zdt_1a7c3d9e810ffe9871040c818fc80806a3"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt10get_boundsEv"></span><span id="_CPPv2NK5pagmo3zdt10get_boundsEv"></span><span id="pagmo::zdt::get_boundsC"></span><span class="target" id="classpagmo_1_1zdt_1a7c3d9e810ffe9871040c818fc80806a3"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the lower and upper bounds for each of the decision vector components </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt7get_nixEv">
-<span id="_CPPv3NK5pagmo3zdt7get_nixEv"></span><span id="_CPPv2NK5pagmo3zdt7get_nixEv"></span><span id="pagmo::zdt::get_nixC"></span><span class="target" id="classpagmo_1_1zdt_1a719c966aa3d09b8cf3c311c946851eba"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>::size_type <code class="sig-name descname">get_nix</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt7get_nixEv"></span><span id="_CPPv2NK5pagmo3zdt7get_nixEv"></span><span id="pagmo::zdt::get_nixC"></span><span class="target" id="classpagmo_1_1zdt_1a719c966aa3d09b8cf3c311c946851eba"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Integer dimension. </p>
 <p>It returns the integer dimension for this UDP.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the integer dimension of the UDP </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the integer dimension of the UDP </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt8get_nameEv">
-<span id="_CPPv3NK5pagmo3zdt8get_nameEv"></span><span id="_CPPv2NK5pagmo3zdt8get_nameEv"></span><span id="pagmo::zdt::get_nameC"></span><span class="target" id="classpagmo_1_1zdt_1ac8052693a3978e6876b32184fad51263"></span>std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt8get_nameEv"></span><span id="_CPPv2NK5pagmo3zdt8get_nameEv"></span><span id="pagmo::zdt::get_nameC"></span><span class="target" id="classpagmo_1_1zdt_1ac8052693a3978e6876b32184fad51263"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing the problem name </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the problem name </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt10p_distanceERK10population">
-<span id="_CPPv3NK5pagmo3zdt10p_distanceERK10population"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK10population"></span><span id="pagmo::zdt::p_distance__populationCRC"></span><span class="target" id="classpagmo_1_1zdt_1a5c0d570b777c7beedc45f99660f09f56"></span>double <code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt10p_distanceERK10population"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK10population"></span><span id="pagmo::zdt::p_distance__populationCRC"></span><span class="target" id="classpagmo_1_1zdt_1a5c0d570b777c7beedc45f99660f09f56"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">p_distance</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Distance from the Pareto front (of a population) </p>
 <p>Convergence metric for a given population (0 = on the optimal front)</p>
 <p>Takes the average across the input population of the p_distance</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the p_distance </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pop</strong> – population to be assigned a pareto distance </p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be assigned a pareto distance </p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the p_distance </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo3zdt10p_distanceERK13vector_double">
-<span id="_CPPv3NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="pagmo::zdt::p_distance__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a15a2f1d5cac918093a1c923b3967b9e2"></span>double <code class="sig-name descname">p_distance</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="_CPPv2NK5pagmo3zdt10p_distanceERK13vector_double"></span><span id="pagmo::zdt::p_distance__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1zdt_1a15a2f1d5cac918093a1c923b3967b9e2"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">p_distance</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo3zdt10p_distanceERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Distance from the Pareto front. </p>
 <p>Convergence metric for a given decision_vector (0 = on the optimal front)</p>
 <p>Introduced by Martens and Izzo, this metric is able to measure “a distance” of any point from the pareto front of any ZDT problem analytically without the need to precompute the front.</p>
 <p><p>See: Märtens, Marcus, and Dario Izzo. “The asynchronous island model</p>
-<p>and NSGA-II: study of a new migration operator and its performance.” Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013. </p>
-<dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the p_distance</p>
+<p>and NSGA-II: study of a new migration operator and its performance.” Proceedings of the 15th annual conference on Genetic and evolutionary computation. ACM, 2013.</p>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – input decision vector </p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: input decision vector </p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the p_distance</p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo3zdt9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3zdt9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1zdt_1a05883c682a6498d0d4c46e128fb63472"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="pagmo::zdt::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3zdt9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo3zdt9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1zdt_1a05883c682a6498d0d4c46e128fb63472"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="pagmo::zdt::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3zdt9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of the UDP and of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

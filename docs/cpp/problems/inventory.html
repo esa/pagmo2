@@ -210,7 +210,7 @@
 <h1>News-vendor problem<a class="headerlink" href="#news-vendor-problem" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo9inventoryE">
-<span id="_CPPv3N5pagmo9inventoryE"></span><span id="_CPPv2N5pagmo9inventoryE"></span><span id="pagmo::inventory"></span><span class="target" id="classpagmo_1_1inventory"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">inventory</code><a class="headerlink" href="#_CPPv4N5pagmo9inventoryE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9inventoryE"></span><span id="_CPPv2N5pagmo9inventoryE"></span><span id="pagmo::inventory"></span><span class="target" id="classpagmo_1_1inventory"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">inventory</span></code><a class="headerlink" href="#_CPPv4N5pagmo9inventoryE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Stochastic Programming Test Problem: An Inventory Model. </p>
 <p><img alt="../../../_images/newsvendor.png" src="../../../_images/newsvendor.png" /></p>
 <p>This problem is a generalization of the simple inventory problem so-called of the “news-vendor”, widely used to introduce the main tools and techniques of stochastic programming Assume you are a newsvendor and each week, for the next <span class="math notranslate nohighlight">\( N\)</span> weeks, you need to decide how many journals to order (indicated with the decision variable <span class="math notranslate nohighlight">\( x_i \)</span>). The weekly journal demand is unknown to you and is indicated with the variable <span class="math notranslate nohighlight">\(d_i\)</span>. The cost of ordering journals before the week starts is <span class="math notranslate nohighlight">\( c\)</span>, the cost of ordering journals during the week (in order to meet an unforeseen demand) is <span class="math notranslate nohighlight">\( b \)</span> and the cost of having to hold unsold journals is <span class="math notranslate nohighlight">\( h \)</span>. The inventory level of journals will be defined by the succession: <div class="math notranslate nohighlight">
@@ -220,102 +220,96 @@
 </p>
 <p>See: www2.isye.gatech.edu/people/faculty/Alex_Shapiro/SPbook.pdf </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo9inventory9inventoryEjjj">
-<span id="_CPPv3N5pagmo9inventory9inventoryEjjj"></span><span id="_CPPv2N5pagmo9inventory9inventoryEjjj"></span><span id="pagmo::inventory::inventory__unsigned.unsigned.unsigned"></span><span class="target" id="classpagmo_1_1inventory_1a133b69c4f8a0b0eff8248c917ee8eb5b"></span><em class="property">inline</em> <code class="sig-name descname">inventory</code><span class="sig-paren">(</span>unsigned <em>weeks</em> = 4u, unsigned <em>sample_size</em> = 10u, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9inventory9inventoryEjjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9inventory9inventoryEjjj"></span><span id="_CPPv2N5pagmo9inventory9inventoryEjjj"></span><span id="pagmo::inventory::inventory__unsigned.unsigned.unsigned"></span><span class="target" id="classpagmo_1_1inventory_1a133b69c4f8a0b0eff8248c917ee8eb5b"></span><em class="property"><span class="pre">inline</span></em> <code class="sig-name descname"><span class="pre">inventory</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">weeks</span></em> <span class="pre">=</span> <span class="pre">4u</span>, <span class="pre">unsigned</span> <em><span class="pre">sample_size</span></em> <span class="pre">=</span> <span class="pre">10u</span>, <span class="pre">unsigned</span> <em><span class="pre">seed</span></em> <span class="pre">=</span> <span class="pre">pagmo</span><span class="pre">::</span><span class="pre">random_device</span><span class="pre">::</span><span class="pre">next</span><span class="pre">(</span><span class="pre">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9inventory9inventoryEjjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from weeks, sample size and random seed. </p>
 <p>Given the numer of weeks (i.e. prolem dimension), the sample size to approximate the expected value and a starting random seed, we construct the inventory prolem</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">weeks</span></code>: dimension of the problem corresponding to the numer of weeks to plan the inventory for. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sample_size</span></code>: dimension of the sample used to approximate the expected value </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: starting random seed to build the pseudorandom sequences used to generate the sample </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weeks</strong> – dimension of the problem corresponding to the numer of weeks to plan the inventory for. </p></li>
+<li><p><strong>sample_size</strong> – dimension of the sample used to approximate the expected value </p></li>
+<li><p><strong>seed</strong> – starting random seed to build the pseudorandom sequences used to generate the sample </p></li>
 </ul>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="pagmo::inventory::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1inventory_1a3f652838ce11812e571a7a4c5863e842"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a> <code class="sig-name descname">fitness</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9inventory7fitnessERK13vector_double"></span><span id="pagmo::inventory::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1inventory_1a3f652838ce11812e571a7a4c5863e842"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>: the decision vector.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory10get_boundsEv">
-<span id="_CPPv3NK5pagmo9inventory10get_boundsEv"></span><span id="_CPPv2NK5pagmo9inventory10get_boundsEv"></span><span id="pagmo::inventory::get_boundsC"></span><span class="target" id="classpagmo_1_1inventory_1aea31620a36e64107e9fda0d311e02f9d"></span>std::pair&lt;<a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double">vector_double</a>&gt; <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9inventory10get_boundsEv"></span><span id="_CPPv2NK5pagmo9inventory10get_boundsEv"></span><span id="pagmo::inventory::get_boundsC"></span><span class="target" id="classpagmo_1_1inventory_1aea31620a36e64107e9fda0d311e02f9d"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>It returns the box-bounds for this UDP.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the lower and upper bounds for each of the decision vector components </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the lower and upper bounds for each of the decision vector components </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo9inventory8set_seedEj">
-<span id="_CPPv3N5pagmo9inventory8set_seedEj"></span><span id="_CPPv2N5pagmo9inventory8set_seedEj"></span><span id="pagmo::inventory::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1inventory_1a630d20f12421d01bc67376bc72db4666"></span><em class="property">inline</em> void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9inventory8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo9inventory8set_seedEj"></span><span id="_CPPv2N5pagmo9inventory8set_seedEj"></span><span id="pagmo::inventory::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1inventory_1a630d20f12421d01bc67376bc72db4666"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">seed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9inventory8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the random number generator seed </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – the random number generator seed </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory8get_nameEv">
-<span id="_CPPv3NK5pagmo9inventory8get_nameEv"></span><span id="_CPPv2NK5pagmo9inventory8get_nameEv"></span><span id="pagmo::inventory::get_nameC"></span><span class="target" id="classpagmo_1_1inventory_1ac67fa712ba3011fa37f51a8664926188"></span><em class="property">inline</em> std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9inventory8get_nameEv"></span><span id="_CPPv2NK5pagmo9inventory8get_nameEv"></span><span id="pagmo::inventory::get_nameC"></span><span class="target" id="classpagmo_1_1inventory_1ac67fa712ba3011fa37f51a8664926188"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing the problem name </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the problem name </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo9inventory14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo9inventory14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9inventory14get_extra_infoEv"></span><span id="pagmo::inventory::get_extra_infoC"></span><span class="target" id="classpagmo_1_1inventory_1a8c53c83a696a1e3d9576bd12f7480d8f"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo9inventory14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9inventory14get_extra_infoEv"></span><span id="pagmo::inventory::get_extra_infoC"></span><span class="target" id="classpagmo_1_1inventory_1a8c53c83a696a1e3d9576bd12f7480d8f"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9inventory14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra info on the problem </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing extra info on the problem </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo9inventory9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9inventory9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1inventory_1a67d80911334d5989d815e0e0a5a42d4e"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="pagmo::inventory::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo9inventory9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo9inventory9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1inventory_1a67d80911334d5989d815e0e0a5a42d4e"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="pagmo::inventory::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9inventory9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDP and of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of the UDP and of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

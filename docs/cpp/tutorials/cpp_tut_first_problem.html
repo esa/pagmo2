@@ -279,7 +279,7 @@ for our simple example problem:</p>
 <span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;pagmo/types.hpp&gt;</span><span class="cp"></span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">pagmo</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="nn">pagmo</span><span class="p">;</span>
 
 <span class="c1">// Our simple example problem, version 0.</span>
 <span class="k">struct</span> <span class="nc">problem_v0</span> <span class="p">{</span>
@@ -316,7 +316,7 @@ for our simple example problem:</p>
 </div>
 <p>Let’s analyse this code.</p>
 <p>After the inclusion of the necessary header files, and a helpful</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">pagmo</span><span class="p">;</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="nn">pagmo</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>to reduce typing, we reach the definition
@@ -507,11 +507,11 @@ optimisation problem, we have to implement the two member
 functions <code class="docutils literal notranslate"><span class="pre">get_nec()</span></code>, which returns the number of equality
 constraints, and <code class="docutils literal notranslate"><span class="pre">get_nic()</span></code>, which returns the number of
 inequality constraints:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span> <span class="n">get_nec</span><span class="p">()</span> <span class="k">const</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span> <span class="nf">get_nec</span><span class="p">()</span> <span class="k">const</span>
 <span class="p">{</span>
    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span> <span class="n">get_nic</span><span class="p">()</span> <span class="k">const</span>
+<span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span> <span class="nf">get_nic</span><span class="p">()</span> <span class="k">const</span>
 <span class="p">{</span>
    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>

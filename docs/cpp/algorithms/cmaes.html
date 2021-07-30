@@ -213,7 +213,7 @@
 <p><em>#include &lt;pagmo/algorithms/cmaes.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo5cmaesE">
-<span id="_CPPv3N5pagmo5cmaesE"></span><span id="_CPPv2N5pagmo5cmaesE"></span><span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">cmaes</code><a class="headerlink" href="#_CPPv4N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaesE"></span><span id="_CPPv2N5pagmo5cmaesE"></span><span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">cmaes</span></code><a class="headerlink" href="#_CPPv4N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Covariance Matrix Adaptation Evolutionary Strategy. </p>
 <p><img alt="../../../_images/cmaes.png" src="../../../_images/cmaes.png" /></p>
 <p>CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization. The version implemented in PaGMO is the “classic” version described in the 2006 paper titled “The CMA evolution strategy: a comparing review.”.</p>
@@ -241,10 +241,10 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 </p>
  </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Types</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt id="_CPPv4N5pagmo5cmaes13log_line_typeE">
-<span id="_CPPv3N5pagmo5cmaes13log_line_typeE"></span><span id="_CPPv2N5pagmo5cmaes13log_line_typeE"></span><span id="pagmo::cmaes::log_line_type"></span><span class="target" id="classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes13log_line_typeE"></span><span id="_CPPv2N5pagmo5cmaes13log_line_typeE"></span><span id="pagmo::cmaes::log_line_type"></span><span class="target" id="classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">tuple</span><span class="pre">&lt;</span><span class="pre">unsigned</span><span class="pre">,</span> <span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_line_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single data line for the algorithm’s log. </p>
 <p>A log data line is a tuple consisting of:<ul class="simple">
 <li><p>the generation number,</p></li>
@@ -258,91 +258,88 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp type">
 <dt id="_CPPv4N5pagmo5cmaes8log_typeE">
-<span id="_CPPv3N5pagmo5cmaes8log_typeE"></span><span id="_CPPv2N5pagmo5cmaes8log_typeE"></span><span id="pagmo::cmaes::log_type"></span><span class="target" id="classpagmo_1_1cmaes_1ac89577e5fc6ecf0593b3aed4b1ce3b09"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="pagmo::cmaes::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes8log_typeE"></span><span id="_CPPv2N5pagmo5cmaes8log_typeE"></span><span id="pagmo::cmaes::log_type"></span><span class="target" id="classpagmo_1_1cmaes_1ac89577e5fc6ecf0593b3aed4b1ce3b09"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><a class="reference internal" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="pagmo::cmaes::log_line_type"><span class="pre">log_line_type</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Log type. </p>
 <p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"><span class="std std-ref">cmaes::set_verbosity()</span></a>). </p>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo5cmaes5cmaesEjdddddddbbj">
-<span id="_CPPv3N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="_CPPv2N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="pagmo::cmaes::cmaes__unsigned.double.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a8fa184916260c788cee226051c6dbc52"></span><code class="sig-name descname">cmaes</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1, double <em>cc</em> = -1, double <em>cs</em> = -1, double <em>c1</em> = -1, double <em>cmu</em> = -1, double <em>sigma0</em> = 0.5, double <em>ftol</em> = 1e-6, double <em>xtol</em> = 1e-6, bool <em>memory</em> = false, bool <em>force_bounds</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes5cmaesEjdddddddbbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="_CPPv2N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="pagmo::cmaes::cmaes__unsigned.double.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a8fa184916260c788cee226051c6dbc52"></span><code class="sig-name descname"><span class="pre">cmaes</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">gen</span></em> <span class="pre">=</span> <span class="pre">1</span>, <span class="pre">double</span> <em><span class="pre">cc</span></em> <span class="pre">=</span> <span class="pre">-</span><span class="pre">1</span>, <span class="pre">double</span> <em><span class="pre">cs</span></em> <span class="pre">=</span> <span class="pre">-</span><span class="pre">1</span>, <span class="pre">double</span> <em><span class="pre">c1</span></em> <span class="pre">=</span> <span class="pre">-</span><span class="pre">1</span>, <span class="pre">double</span> <em><span class="pre">cmu</span></em> <span class="pre">=</span> <span class="pre">-</span><span class="pre">1</span>, <span class="pre">double</span> <em><span class="pre">sigma0</span></em> <span class="pre">=</span> <span class="pre">0.5</span>, <span class="pre">double</span> <em><span class="pre">ftol</span></em> <span class="pre">=</span> <span class="pre">1e-6</span>, <span class="pre">double</span> <em><span class="pre">xtol</span></em> <span class="pre">=</span> <span class="pre">1e-6</span>, <span class="pre">bool</span> <em><span class="pre">memory</span></em> <span class="pre">=</span> <span class="pre">false</span>, <span class="pre">bool</span> <em><span class="pre">force_bounds</span></em> <span class="pre">=</span> <span class="pre">false</span>, <span class="pre">unsigned</span> <em><span class="pre">seed</span></em> <span class="pre">=</span> <span class="pre">pagmo</span><span class="pre">::</span><span class="pre">random_device</span><span class="pre">::</span><span class="pre">next</span><span class="pre">(</span><span class="pre">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes5cmaesEjdddddddbbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs cmaes</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">gen</span></code>: number of generations. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cc</span></code>: backward time horizon for the evolution path (by default is automatically assigned) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cs</span></code>: makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">c1</span></code>: learning rate for the rank-one update of the covariance matrix (by default is automatically assigned) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cmu</span></code>: learning rate for the rank- <span class="math notranslate nohighlight">\(\mu\)</span> update of the covariance matrix (by default is automatically assigned) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sigma0</span></code>: initial step-size </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ftol</span></code>: stopping criteria on the x tolerance (default is 1e-6) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">xtol</span></code>: stopping criteria on the f tolerance (default is 1e-6) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code>: when true the adapted parameters are not reset between successive calls to the evolve method </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">force_bounds</span></code>: when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation mechanism will worsen </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random) </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> – number of generations. </p></li>
+<li><p><strong>cc</strong> – backward time horizon for the evolution path (by default is automatically assigned) </p></li>
+<li><p><strong>cs</strong> – makes partly up for the small variance loss in case the indicator is zero (by default is automatically assigned) </p></li>
+<li><p><strong>c1</strong> – learning rate for the rank-one update of the covariance matrix (by default is automatically assigned) </p></li>
+<li><p><strong>cmu</strong> – learning rate for the rank- <span class="math notranslate nohighlight">\(\mu\)</span> update of the covariance matrix (by default is automatically assigned) </p></li>
+<li><p><strong>sigma0</strong> – initial step-size </p></li>
+<li><p><strong>ftol</strong> – stopping criteria on the x tolerance (default is 1e-6) </p></li>
+<li><p><strong>xtol</strong> – stopping criteria on the f tolerance (default is 1e-6) </p></li>
+<li><p><strong>memory</strong> – when true the adapted parameters are not reset between successive calls to the evolve method </p></li>
+<li><p><strong>force_bounds</strong> – when true the box bounds are enforced. The fitness will never be called outside the bounds but the covariance matrix adaptation mechanism will worsen </p></li>
+<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random) </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if cc, cs, c1 and cmu are not in [0, 1] </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if cc, cs, c1 and cmu are not in [0, 1] </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes6evolveE10population">
-<span id="_CPPv3NK5pagmo5cmaes6evolveE10population"></span><span id="_CPPv2NK5pagmo5cmaes6evolveE10population"></span><span id="pagmo::cmaes::evolve__populationC"></span><span class="target" id="classpagmo_1_1cmaes_1a367e24bfeeedad519c3e10b7f2ba7545"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes6evolveE10population"></span><span id="_CPPv2NK5pagmo5cmaes6evolveE10population"></span><span id="pagmo::cmaes::evolve__populationC"></span><span class="target" id="classpagmo_1_1cmaes_1a367e24bfeeedad519c3e10b7f2ba7545"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a> <code class="sig-name descname"><span class="pre">evolve</span></code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if the problem is multi-objective or constrained </p></li>
+<li><p><strong>std::invalid_argument</strong> – if the problem is unbounded </p></li>
+<li><p><strong>std::invalid_argument</strong> – if the population size is not at least 5 </p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is unbounded </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the population size is not at least 5 </p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>evolved population </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo5cmaes8set_seedEj">
-<span id="_CPPv3N5pagmo5cmaes8set_seedEj"></span><span id="_CPPv2N5pagmo5cmaes8set_seedEj"></span><span id="pagmo::cmaes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1afde1f56cb7e6a43a60b7b3f2eaeaa20a"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes8set_seedEj"></span><span id="_CPPv2N5pagmo5cmaes8set_seedEj"></span><span id="pagmo::cmaes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1afde1f56cb7e6a43a60b7b3f2eaeaa20a"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – the seed controlling the algorithm stochastic behaviour </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes8get_seedEv">
-<span id="_CPPv3NK5pagmo5cmaes8get_seedEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_seedEv"></span><span id="pagmo::cmaes::get_seedC"></span><span class="target" id="classpagmo_1_1cmaes_1ab320ad394c73f09e95e988d421cdb7fd"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes8get_seedEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_seedEv"></span><span id="pagmo::cmaes::get_seedC"></span><span class="target" id="classpagmo_1_1cmaes_1ab320ad394c73f09e95e988d421cdb7fd"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the seed controlling the algorithm stochastic behaviour </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo5cmaes13set_verbosityEj">
-<span id="_CPPv3N5pagmo5cmaes13set_verbosityEj"></span><span id="_CPPv2N5pagmo5cmaes13set_verbosityEj"></span><span id="pagmo::cmaes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"></span><em class="property">inline</em> void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes13set_verbosityEj"></span><span id="_CPPv2N5pagmo5cmaes13set_verbosityEj"></span><span id="pagmo::cmaes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_verbosity</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -362,88 +359,84 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function currently in the population, dx is the norm of the distance to the population mean of the mutant vectors, df is the population flatness evaluated as the distance between the fitness of the best and of the worst individual and sigma is the current step-size</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>level</strong> – verbosity level </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes13get_verbosityEv">
-<span id="_CPPv3NK5pagmo5cmaes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5cmaes13get_verbosityEv"></span><span id="pagmo::cmaes::get_verbosityC"></span><span class="target" id="classpagmo_1_1cmaes_1abb75103d18a3de5fcf5e56e15aeed305"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5cmaes13get_verbosityEv"></span><span id="pagmo::cmaes::get_verbosityC"></span><span class="target" id="classpagmo_1_1cmaes_1abb75103d18a3de5fcf5e56e15aeed305"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_verbosity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the verbosity level </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes7get_genEv">
-<span id="_CPPv3NK5pagmo5cmaes7get_genEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_genEv"></span><span id="pagmo::cmaes::get_genC"></span><span class="target" id="classpagmo_1_1cmaes_1a0dd03ac06f3f5f237fb3a04f63297590"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes7get_genEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_genEv"></span><span id="pagmo::cmaes::get_genC"></span><span class="target" id="classpagmo_1_1cmaes_1a0dd03ac06f3f5f237fb3a04f63297590"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_gen</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the number of generations to evolve for </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of generations to evolve for </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes8get_nameEv">
-<span id="_CPPv3NK5pagmo5cmaes8get_nameEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_nameEv"></span><span id="pagmo::cmaes::get_nameC"></span><span class="target" id="classpagmo_1_1cmaes_1ab0cdd96f967001586b26a7ba1de1e67e"></span><em class="property">inline</em> std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes8get_nameEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_nameEv"></span><span id="pagmo::cmaes::get_nameC"></span><span class="target" id="classpagmo_1_1cmaes_1ab0cdd96f967001586b26a7ba1de1e67e"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the algorithm name </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo5cmaes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5cmaes14get_extra_infoEv"></span><span id="pagmo::cmaes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cmaes_1ab170be072ec464872e7adabcc9d7f276"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5cmaes14get_extra_infoEv"></span><span id="pagmo::cmaes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cmaes_1ab170be072ec464872e7adabcc9d7f276"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra info on the algorithm </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing extra info on the algorithm </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo5cmaes7get_logEv">
-<span id="_CPPv3NK5pagmo5cmaes7get_logEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_logEv"></span><span id="pagmo::cmaes::get_logC"></span><span class="target" id="classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"></span><em class="property">inline</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="pagmo::cmaes::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes7get_logEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_logEv"></span><span id="pagmo::cmaes::get_logC"></span><span class="target" id="classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="pagmo::cmaes::log_type"><span class="pre">log_type</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_log</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"><span class="std std-ref">cmaes::set_verbosity</span></a> <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> containing the logged values Gen, Fevals, Best, dx, df, sigma </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"><span class="std std-ref">cmaes::set_verbosity</span></a> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> containing the logged values Gen, Fevals, Best, dx, df, sigma </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo5cmaes9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo5cmaes9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo5cmaes9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1cmaes_1a14d9da11f6531c683588d0fcd75093ac"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5cmaes9serializeEvR7Archivej" title="pagmo::cmaes::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5cmaes9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo5cmaes9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo5cmaes9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1cmaes_1a14d9da11f6531c683588d0fcd75093ac"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo5cmaes9serializeEvR7Archivej" title="pagmo::cmaes::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo5cmaes9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>

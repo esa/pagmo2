@@ -34,7 +34,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -212,7 +211,7 @@
 <h1>Particle Swarm Optimization Generational (GPSO)<a class="headerlink" href="#particle-swarm-optimization-generational-gpso" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
 <dt id="_CPPv4N5pagmo7pso_genE">
-<span id="_CPPv3N5pagmo7pso_genE"></span><span id="_CPPv2N5pagmo7pso_genE"></span><span id="pagmo::pso_gen"></span><span class="target" id="classpagmo_1_1pso__gen"></span><em class="property">class </em><code class="sig-prename descclassname">pagmo<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">pso_gen</code><a class="headerlink" href="#_CPPv4N5pagmo7pso_genE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_genE"></span><span id="_CPPv2N5pagmo7pso_genE"></span><span id="pagmo::pso_gen"></span><span class="target" id="classpagmo_1_1pso__gen"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">pso_gen</span></code><a class="headerlink" href="#_CPPv4N5pagmo7pso_genE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Particle Swarm Optimization. </p>
 <p>As opposed to the main PSO algorithm implemented in pagmo, this version of Particle Swarm Optimization is generational. In other words, the velocity is first calculated for all particles, then the position is updated.</p>
 <p><p><div class="admonition note">
@@ -236,71 +235,68 @@ constrained optimization.</p>
 </p>
  </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Types</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt id="_CPPv4N5pagmo7pso_gen13log_line_typeE">
-<span id="_CPPv3N5pagmo7pso_gen13log_line_typeE"></span><span id="_CPPv2N5pagmo7pso_gen13log_line_typeE"></span><span id="pagmo::pso_gen::log_line_type"></span><span class="target" id="classpagmo_1_1pso__gen_1a184356b2a7aeadaf2968bf74a6d87c92"></span><em class="property">typedef </em>std::tuple&lt;unsigned, unsigned long long, double, double, double, double&gt; <code class="sig-name descname">log_line_type</code><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_gen13log_line_typeE"></span><span id="_CPPv2N5pagmo7pso_gen13log_line_typeE"></span><span id="pagmo::pso_gen::log_line_type"></span><span class="target" id="classpagmo_1_1pso__gen_1a184356b2a7aeadaf2968bf74a6d87c92"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">tuple</span><span class="pre">&lt;</span><span class="pre">unsigned</span><span class="pre">,</span> <span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_line_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist.) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt id="_CPPv4N5pagmo7pso_gen8log_typeE">
-<span id="_CPPv3N5pagmo7pso_gen8log_typeE"></span><span id="_CPPv2N5pagmo7pso_gen8log_typeE"></span><span id="pagmo::pso_gen::log_type"></span><span class="target" id="classpagmo_1_1pso__gen_1a2e0e23660955d0e4573207921798e1b6"></span><em class="property">typedef </em>std::vector&lt;<a class="reference internal" href="#_CPPv4N5pagmo7pso_gen13log_line_typeE" title="pagmo::pso_gen::log_line_type">log_line_type</a>&gt; <code class="sig-name descname">log_type</code><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_gen8log_typeE"></span><span id="_CPPv2N5pagmo7pso_gen8log_typeE"></span><span id="pagmo::pso_gen::log_type"></span><span class="target" id="classpagmo_1_1pso__gen_1a2e0e23660955d0e4573207921798e1b6"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><a class="reference internal" href="#_CPPv4N5pagmo7pso_gen13log_line_typeE" title="pagmo::pso_gen::log_line_type"><span class="pre">log_line_type</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo7pso_gen7pso_genEjddddjjjbj">
-<span id="_CPPv3N5pagmo7pso_gen7pso_genEjddddjjjbj"></span><span id="_CPPv2N5pagmo7pso_gen7pso_genEjddddjjjbj"></span><span id="pagmo::pso_gen::pso_gen__unsigned.double.double.double.double.unsigned.unsigned.unsigned.b.unsigned"></span><span class="target" id="classpagmo_1_1pso__gen_1a2affa6c6094dae2238c23b61b48b32e2"></span><code class="sig-name descname">pso_gen</code><span class="sig-paren">(</span>unsigned <em>gen</em> = 1u, double <em>omega</em> = 0.7298, double <em>eta1</em> = 2.05, double <em>eta2</em> = 2.05, double <em>max_vel</em> = 0.5, unsigned <em>variant</em> = 5u, unsigned <em>neighb_type</em> = 2u, unsigned <em>neighb_param</em> = 4u, bool <em>memory</em> = false, unsigned <em>seed</em> = pagmo::random_device::next()<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen7pso_genEjddddjjjbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_gen7pso_genEjddddjjjbj"></span><span id="_CPPv2N5pagmo7pso_gen7pso_genEjddddjjjbj"></span><span id="pagmo::pso_gen::pso_gen__unsigned.double.double.double.double.unsigned.unsigned.unsigned.b.unsigned"></span><span class="target" id="classpagmo_1_1pso__gen_1a2affa6c6094dae2238c23b61b48b32e2"></span><code class="sig-name descname"><span class="pre">pso_gen</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">gen</span></em> <span class="pre">=</span> <span class="pre">1u</span>, <span class="pre">double</span> <em><span class="pre">omega</span></em> <span class="pre">=</span> <span class="pre">0.7298</span>, <span class="pre">double</span> <em><span class="pre">eta1</span></em> <span class="pre">=</span> <span class="pre">2.05</span>, <span class="pre">double</span> <em><span class="pre">eta2</span></em> <span class="pre">=</span> <span class="pre">2.05</span>, <span class="pre">double</span> <em><span class="pre">max_vel</span></em> <span class="pre">=</span> <span class="pre">0.5</span>, <span class="pre">unsigned</span> <em><span class="pre">variant</span></em> <span class="pre">=</span> <span class="pre">5u</span>, <span class="pre">unsigned</span> <em><span class="pre">neighb_type</span></em> <span class="pre">=</span> <span class="pre">2u</span>, <span class="pre">unsigned</span> <em><span class="pre">neighb_param</span></em> <span class="pre">=</span> <span class="pre">4u</span>, <span class="pre">bool</span> <em><span class="pre">memory</span></em> <span class="pre">=</span> <span class="pre">false</span>, <span class="pre">unsigned</span> <em><span class="pre">seed</span></em> <span class="pre">=</span> <span class="pre">pagmo</span><span class="pre">::</span><span class="pre">random_device</span><span class="pre">::</span><span class="pre">next</span><span class="pre">(</span><span class="pre">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen7pso_genEjddddjjjbj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Allows to specify in detail all the parameters of the algorithm.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">gen</span></code>: number of generations </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">omega</span></code>: particles’ inertia weight, or alternatively, the constriction coefficient (definition depends on the variant used) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">eta1</span></code>: magnitude of the force, applied to the particle’s velocity, in the direction of its previous best position </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">eta2</span></code>: magnitude of the force, applied to the particle’s velocity, in the direction of the best position in its neighborhood </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">max_vel</span></code>: maximum allowed particle velocity (as a fraction of the box bounds) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">variant</span></code>: algorithm variant to use (one of 1 .. 6) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">neighb_type</span></code>: swarm topology to use (one of 1 .. 4) [gbest, lbest, Von Neumann, adaptive random] </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">neighb_param</span></code>: the neighbourhood parameter. If the lbest topology is selected (neighb_type=2), it represents each particle’s indegree (also outdegree) in the swarm topology. Particles have neighbours up to a radius of k = neighb_param / 2 in the ring. If the Randomly-varying neighbourhood topology is selected (neighb_type=4), it represents each particle’s maximum outdegree in the swarm topology. The minimum outdegree is 1 (the particle always connects back to itself). If neighb_type is 1 or 3 this parameter is ignored. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">memory</span></code>: when true the particle velocities are not reset between successive calls to evolve </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: seed used by the internal random number generator (default is random)</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> – number of generations </p></li>
+<li><p><strong>omega</strong> – particles’ inertia weight, or alternatively, the constriction coefficient (definition depends on the variant used) </p></li>
+<li><p><strong>eta1</strong> – magnitude of the force, applied to the particle’s velocity, in the direction of its previous best position </p></li>
+<li><p><strong>eta2</strong> – magnitude of the force, applied to the particle’s velocity, in the direction of the best position in its neighborhood </p></li>
+<li><p><strong>max_vel</strong> – maximum allowed particle velocity (as a fraction of the box bounds) </p></li>
+<li><p><strong>variant</strong> – algorithm variant to use (one of 1 .. 6) </p></li>
+<li><p><strong>neighb_type</strong> – swarm topology to use (one of 1 .. 4) [gbest, lbest, Von Neumann, adaptive random] </p></li>
+<li><p><strong>neighb_param</strong> – the neighbourhood parameter. If the lbest topology is selected (neighb_type=2), it represents each particle’s indegree (also outdegree) in the swarm topology. Particles have neighbours up to a radius of k = neighb_param / 2 in the ring. If the Randomly-varying neighbourhood topology is selected (neighb_type=4), it represents each particle’s maximum outdegree in the swarm topology. The minimum outdegree is 1 (the particle always connects back to itself). If neighb_type is 1 or 3 this parameter is ignored. </p></li>
+<li><p><strong>memory</strong> – when true the particle velocities are not reset between successive calls to evolve </p></li>
+<li><p><strong>seed</strong> – seed used by the internal random number generator (default is random)</p></li>
 </ul>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval, vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if omega is not in the [0,1] interval, eta1, eta2 are not in the [0,1] interval, vcoeff is not in ]0,1], variant is not one of 1 .. 6, neighb_type is not one of 1 .. 4, neighb_param is zero </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7pso_gen6evolveE10population">
-<span id="_CPPv3NK5pagmo7pso_gen6evolveE10population"></span><span id="_CPPv2NK5pagmo7pso_gen6evolveE10population"></span><span id="pagmo::pso_gen::evolve__populationC"></span><span class="target" id="classpagmo_1_1pso__gen_1aa76d7d94209de86de4098b023b49428e"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a> <code class="sig-name descname">evolve</code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population">population</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7pso_gen6evolveE10population"></span><span id="_CPPv2NK5pagmo7pso_gen6evolveE10population"></span><span id="pagmo::pso_gen::evolve__populationC"></span><span class="target" id="classpagmo_1_1pso__gen_1aa76d7d94209de86de4098b023b49428e"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a> <code class="sig-name descname"><span class="pre">evolve</span></code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>evolved population </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pop</span></code>: population to be evolved </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if the problem is multi-objective or constrained </p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>: if the problem is multi-objective or constrained </p></li>
-</ul>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>evolved population </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo7pso_gen13set_verbosityEj">
-<span id="_CPPv3N5pagmo7pso_gen13set_verbosityEj"></span><span id="_CPPv2N5pagmo7pso_gen13set_verbosityEj"></span><span id="pagmo::pso_gen::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1pso__gen_1aa26199738d0c7d0fbc23b33f88f26427"></span><em class="property">inline</em> void <code class="sig-name descname">set_verbosity</code><span class="sig-paren">(</span>unsigned <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_gen13set_verbosityEj"></span><span id="_CPPv2N5pagmo7pso_gen13set_verbosityEj"></span><span id="pagmo::pso_gen::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1pso__gen_1aa26199738d0c7d0fbc23b33f88f26427"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_verbosity</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1pso__gen_1a100b792fceca2be96d5dbbf7b11ac378"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0u: no verbosity</p></li>
@@ -322,114 +318,106 @@ constrained optimization.</p>
 </div>
 </p>
 <p>Gen is the generation number, Fevals the number of fitness evaluation made, gbest the global best, Mean Vel. the average mean normalized velocity of particles, Mean lbest the average of the local best fitness of particles and Avg. Dist. the average normalized distance among particles. Normalization is made with respect to the problem bounds.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code>: verbosity level </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>level</strong> – verbosity level </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7pso_gen13get_verbosityEv">
-<span id="_CPPv3NK5pagmo7pso_gen13get_verbosityEv"></span><span id="_CPPv2NK5pagmo7pso_gen13get_verbosityEv"></span><span id="pagmo::pso_gen::get_verbosityC"></span><span class="target" id="classpagmo_1_1pso__gen_1a742f7ce53c6bff9bbc1c0c1afc66b7a7"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_verbosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7pso_gen13get_verbosityEv"></span><span id="_CPPv2NK5pagmo7pso_gen13get_verbosityEv"></span><span id="pagmo::pso_gen::get_verbosityC"></span><span class="target" id="classpagmo_1_1pso__gen_1a742f7ce53c6bff9bbc1c0c1afc66b7a7"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_verbosity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the verbosity level </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the verbosity level </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo7pso_gen7set_bfeERK3bfe">
-<span id="_CPPv3N5pagmo7pso_gen7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo7pso_gen7set_bfeERK3bfe"></span><span id="pagmo::pso_gen::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1pso__gen_1a093f8a3a5224cf7de916763e8be8f3ef"></span>void <code class="sig-name descname">set_bfe</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe">bfe</a> &amp;<em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_gen7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo7pso_gen7set_bfeERK3bfe"></span><span id="pagmo::pso_gen::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1pso__gen_1a093f8a3a5224cf7de916763e8be8f3ef"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_bfe</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="pre">bfe</span></a> <span class="pre">&amp;</span><em><span class="pre">b</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the batch function evaluation scheme. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: batch function evaluation object </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>b</strong> – batch function evaluation object </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N5pagmo7pso_gen8set_seedEj">
-<span id="_CPPv3N5pagmo7pso_gen8set_seedEj"></span><span id="_CPPv2N5pagmo7pso_gen8set_seedEj"></span><span id="pagmo::pso_gen::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1pso__gen_1ae6b8eb11df6cd4371e1993140a6b50a2"></span>void <code class="sig-name descname">set_seed</code><span class="sig-paren">(</span>unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo7pso_gen8set_seedEj"></span><span id="_CPPv2N5pagmo7pso_gen8set_seedEj"></span><span id="pagmo::pso_gen::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1pso__gen_1ae6b8eb11df6cd4371e1993140a6b50a2"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo7pso_gen8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>: the seed controlling the algorithm stochastic behaviour </p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – the seed controlling the algorithm stochastic behaviour </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7pso_gen8get_seedEv">
-<span id="_CPPv3NK5pagmo7pso_gen8get_seedEv"></span><span id="_CPPv2NK5pagmo7pso_gen8get_seedEv"></span><span id="pagmo::pso_gen::get_seedC"></span><span class="target" id="classpagmo_1_1pso__gen_1ab77d01d9d9e02df7a700dd6d47e252fa"></span><em class="property">inline</em> unsigned <code class="sig-name descname">get_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7pso_gen8get_seedEv"></span><span id="_CPPv2NK5pagmo7pso_gen8get_seedEv"></span><span id="pagmo::pso_gen::get_seedC"></span><span class="target" id="classpagmo_1_1pso__gen_1ab77d01d9d9e02df7a700dd6d47e252fa"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the seed. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>the seed controlling the algorithm stochastic behaviour </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the seed controlling the algorithm stochastic behaviour </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7pso_gen8get_nameEv">
-<span id="_CPPv3NK5pagmo7pso_gen8get_nameEv"></span><span id="_CPPv2NK5pagmo7pso_gen8get_nameEv"></span><span id="pagmo::pso_gen::get_nameC"></span><span class="target" id="classpagmo_1_1pso__gen_1a7b6ea166099dfa61bc4b679bbd17cff5"></span><em class="property">inline</em> std::string <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7pso_gen8get_nameEv"></span><span id="_CPPv2NK5pagmo7pso_gen8get_nameEv"></span><span id="pagmo::pso_gen::get_nameC"></span><span class="target" id="classpagmo_1_1pso__gen_1a7b6ea166099dfa61bc4b679bbd17cff5"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing the algorithm name </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing the algorithm name </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7pso_gen14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo7pso_gen14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo7pso_gen14get_extra_infoEv"></span><span id="pagmo::pso_gen::get_extra_infoC"></span><span class="target" id="classpagmo_1_1pso__gen_1aed478bb3d073b37b3340aeaa9811d51d"></span>std::string <code class="sig-name descname">get_extra_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7pso_gen14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo7pso_gen14get_extra_infoEv"></span><span id="pagmo::pso_gen::get_extra_infoC"></span><span class="target" id="classpagmo_1_1pso__gen_1aed478bb3d073b37b3340aeaa9811d51d"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>a string containing extra info on the algorithm </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string containing extra info on the algorithm </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK5pagmo7pso_gen7get_logEv">
-<span id="_CPPv3NK5pagmo7pso_gen7get_logEv"></span><span id="_CPPv2NK5pagmo7pso_gen7get_logEv"></span><span id="pagmo::pso_gen::get_logC"></span><span class="target" id="classpagmo_1_1pso__gen_1a100b792fceca2be96d5dbbf7b11ac378"></span><em class="property">inline</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4N5pagmo7pso_gen8log_typeE" title="pagmo::pso_gen::log_type">log_type</a> &amp;<code class="sig-name descname">get_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo7pso_gen7get_logEv"></span><span id="_CPPv2NK5pagmo7pso_gen7get_logEv"></span><span id="pagmo::pso_gen::get_logC"></span><span class="target" id="classpagmo_1_1pso__gen_1a100b792fceca2be96d5dbbf7b11ac378"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo7pso_gen8log_typeE" title="pagmo::pso_gen::log_type"><span class="pre">log_type</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_log</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo7pso_gen7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1pso__gen_1a184356b2a7aeadaf2968bf74a6d87c92"><span class="std std-ref">pso_gen::log_line_type</span></a> containing: Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist. as described in <a class="reference internal" href="#classpagmo_1_1pso__gen_1aa26199738d0c7d0fbc23b33f88f26427"><span class="std std-ref">pso_gen::set_verbosity</span></a> <dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1pso__gen_1a184356b2a7aeadaf2968bf74a6d87c92"><span class="std std-ref">pso_gen::log_line_type</span></a> containing the logged values </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1pso__gen_1a184356b2a7aeadaf2968bf74a6d87c92"><span class="std std-ref">pso_gen::log_line_type</span></a> containing: Gen, Fevals, gbest, Mean Vel., Mean lbest, Avg. Dist. as described in <a class="reference internal" href="#classpagmo_1_1pso__gen_1aa26199738d0c7d0fbc23b33f88f26427"><span class="std std-ref">pso_gen::set_verbosity</span></a> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1pso__gen_1a184356b2a7aeadaf2968bf74a6d87c92"><span class="std std-ref">pso_gen::log_line_type</span></a> containing the logged values </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN5pagmo7pso_gen9serializeEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo7pso_gen9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo7pso_gen9serializeER7Archivej"></span>template&lt;typename <code class="sig-name descname">Archive</code>&gt;<br /><span class="target" id="classpagmo_1_1pso__gen_1a42706b4d5614d72e97084f3acb88fbbf"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo7pso_gen9serializeEvR7Archivej" title="pagmo::pso_gen::serialize::Archive">Archive</a>&amp;, unsigned<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo7pso_gen9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo7pso_gen9serializeER7Archivej"></span><span id="_CPPv2I0EN5pagmo7pso_gen9serializeER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1pso__gen_1a42706b4d5614d72e97084f3acb88fbbf"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">serialize</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo7pso_gen9serializeEvR7Archivej" title="pagmo::pso_gen::serialize::Archive"><span class="pre">Archive</span></a><span class="pre">&amp;</span>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo7pso_gen9serializeEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Object serialization. </p>
 <p>This method will save/load <code class="docutils literal notranslate"><span class="pre">this</span></code> into the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ar</span></code>: target archive.</p></li>
-</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ar</strong> – target archive.</p>
 </dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">unspecified</span></code>: any exception thrown by the serialization of the UDA and of primitive types. </p></li>
-</ul>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the serialization of the UDA and of primitive types. </p>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>
