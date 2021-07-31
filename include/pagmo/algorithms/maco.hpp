@@ -41,6 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -106,11 +107,12 @@ public:
         return m_log;
     }
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     PAGMO_DLL_LOCAL void pheromone_computation(const unsigned gen, vector_double &prob_cumulative,
                                                vector_double &omega_vec, vector_double &sigma_vec,
                                                const population &popul, std::vector<vector_double> &sol_archive) const;

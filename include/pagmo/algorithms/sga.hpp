@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -255,11 +256,12 @@ public:
         return m_log;
     }
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     PAGMO_DLL_LOCAL std::vector<vector_double::size_type> perform_selection(const std::vector<vector_double> &F) const;
     PAGMO_DLL_LOCAL void perform_crossover(std::vector<vector_double> &X,
                                            const std::pair<vector_double, vector_double> &bounds,

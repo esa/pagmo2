@@ -38,7 +38,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
@@ -192,6 +191,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -353,12 +355,17 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
     {
         return &m_value;
     }
+
+private:
+    friend class boost::serialization::access;
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, boost::serialization::base_object<algo_inner_base>(*this), m_value);
     }
+
+public:
     T m_value;
 };
 
@@ -366,14 +373,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS algo_inner final : algo_inner_base {
 
 } // namespace pagmo
 
-namespace boost
-{
-
-template <typename T>
-struct is_virtual_base_of<pagmo::detail::algo_inner_base, pagmo::detail::algo_inner<T>> : false_type {
-};
-
-} // namespace boost
+// Disable Boost.Serialization tracking for the implementation
+// details of algorithm.
+BOOST_CLASS_TRACKING(pagmo::detail::algo_inner_base, boost::serialization::track_never)
 
 namespace pagmo
 {
@@ -719,38 +721,25 @@ public:
      */
     void *get_ptr();
 
-    /// Save to archive.
-    /**
-     * This method will save \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
-     */
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
         detail::to_archive(ar, m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
     }
-    /// Load from archive.
-    /**
-     * This method will load a pagmo::algorithm from \p ar into \p this.
-     *
-     * @param ar source archive.
-     *
-     * @throws unspecified any exception thrown by the deserialization of the UDA and of primitive types.
-     */
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        algorithm tmp;
-        detail::from_archive(ar, tmp.m_ptr, tmp.m_has_set_seed, tmp.m_has_set_verbosity, tmp.m_name,
-                             tmp.m_thread_safety);
-        *this = std::move(tmp);
+        try {
+            detail::from_archive(ar, m_ptr, m_has_set_seed, m_has_set_verbosity, m_name, m_thread_safety);
+        } catch (...) {
+            *this = algorithm{};
+            throw;
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     // Two small helpers to make sure that whenever we require
     // access to the pointer it actually points to something.
     detail::algo_inner_base const *ptr() const
@@ -764,7 +753,6 @@ private:
         return m_ptr.get();
     }
 
-private:
     std::unique_ptr<detail::algo_inner_base> m_ptr;
     // Various algorithm properties determined at construction time
     // from the concrete algorithm. These will be constant for the lifetime
@@ -783,8 +771,5 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const algorithm &);
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(algorithm)
-
-// Disable tracking for the serialisation of algorithm.
-BOOST_CLASS_TRACKING(pagmo::algorithm, boost::serialization::track_never)
 
 #endif

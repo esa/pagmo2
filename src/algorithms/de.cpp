@@ -377,14 +377,7 @@ std::string de::get_extra_info() const
            + "\n\tVerbosity: " + std::to_string(m_verbosity) + "\n\tSeed: " + std::to_string(m_seed);
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void de::serialize(Archive &ar, unsigned)
 {

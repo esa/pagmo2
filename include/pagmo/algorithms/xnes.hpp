@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -225,11 +226,12 @@ public:
         return m_log;
     }
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     // Eigen stores indexes and sizes as signed types, while PaGMO
     // uses STL containers thus sizes and indexes are unsigned. To
     // make the conversion as painless as possible this template is provided
