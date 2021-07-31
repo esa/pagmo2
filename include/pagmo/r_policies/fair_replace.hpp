@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/base_sr_policy.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/r_policy.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -66,7 +67,9 @@ public:
     }
     std::string get_extra_info() const;
 
-    // Serialization support.
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 };
