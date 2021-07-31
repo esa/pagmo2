@@ -171,14 +171,7 @@ std::string dtlz::get_name() const
     return "DTLZ" + std::to_string(m_prob_id);
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void dtlz::serialize(Archive &ar, unsigned)
 {

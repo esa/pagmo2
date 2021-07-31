@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -179,11 +180,12 @@ public:
      */
     problem &get_inner_problem();
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     PAGMO_DLL_LOCAL vector_double translate_back(const vector_double &) const;
     PAGMO_DLL_LOCAL vector_double apply_translation(const vector_double &) const;
 

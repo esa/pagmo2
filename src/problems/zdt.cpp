@@ -223,14 +223,7 @@ double zdt::p_distance(const vector_double &x) const
     return retval;
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void zdt::serialize(Archive &ar, unsigned)
 {

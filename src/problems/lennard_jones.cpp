@@ -121,14 +121,7 @@ std::string lennard_jones::get_name() const
     return "Lennard Jones Cluster (" + std::to_string(m_atoms) + " atoms)";
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void lennard_jones::serialize(Archive &ar, unsigned)
 {

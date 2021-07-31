@@ -69,10 +69,7 @@ std::pair<vector_double, vector_double> null_problem::get_bounds() const
     return {{0.}, {1.}};
 }
 
-/// Serialization
-/**
- * @param ar the target serialization archive.
- */
+// Serialization
 template <typename Archive>
 void null_problem::serialize(Archive &ar, unsigned)
 {
