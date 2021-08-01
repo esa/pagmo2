@@ -29,13 +29,6 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_EIGEN_S11N_HPP
 #define PAGMO_DETAIL_EIGEN_S11N_HPP
 
-#include <boost/config.hpp>
-#include <boost/mpl/comparison.hpp>
-#include <boost/mpl/greater.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/integral_c.hpp>
-#include <boost/static_assert.hpp>
-
 #include <pagmo/detail/eigen.hpp>
 #include <pagmo/s11n.hpp>
 
@@ -84,16 +77,6 @@ inline void serialize(Archive &ar, Eigen::Matrix<S, R, C, O, MR, MC> &cb, unsign
 {
     split_free(ar, cb, version);
 }
-
-// Set the tracking to track_never for all Eigen matrices.
-template <class S, int R, int C, int O, int MR, int MC>
-struct tracking_level<Eigen::Matrix<S, R, C, O, MR, MC>> {
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<track_never> type;
-    BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
-    BOOST_STATIC_ASSERT(
-        (mpl::greater<implementation_level<Eigen::Matrix<S, R, C, O, MR, MC>>, mpl::int_<primitive_type>>::value));
-};
 
 } // namespace serialization
 

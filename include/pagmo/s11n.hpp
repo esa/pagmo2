@@ -36,10 +36,6 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <tuple>
 
-#include <boost/config.hpp>
-#include <boost/mpl/greater.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/integral_c.hpp>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
@@ -52,7 +48,6 @@ see https://www.gnu.org/licenses/. */
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
-#include <boost/static_assert.hpp>
 
 // Include the archives.
 #include <boost/archive/binary_iarchive.hpp>
@@ -104,15 +99,6 @@ inline void serialize(Archive &ar, std::tuple<Args...> &t, unsigned version)
     pagmo::detail::tuple_s11n<sizeof...(Args)>::serialize(ar, t, version);
 }
 
-// Set the tracking to track_never for all tuples.
-template <typename... Args>
-struct tracking_level<std::tuple<Args...>> {
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<track_never> type;
-    BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
-    BOOST_STATIC_ASSERT((mpl::greater<implementation_level<std::tuple<Args...>>, mpl::int_<primitive_type>>::value));
-};
-
 // Implement serialization for the Mersenne twister engine.
 template <class Archive, class UIntType, std::size_t w, std::size_t n, std::size_t m, std::size_t r, UIntType a,
           std::size_t u, UIntType d, std::size_t s, UIntType b, std::size_t t, UIntType c, std::size_t l, UIntType f>
@@ -147,19 +133,6 @@ inline void serialize(Archive &ar, std::mersenne_twister_engine<UIntType, w, n, 
 {
     split_free(ar, e, version);
 }
-
-// Set the tracking to track_never for all Mersenne twister engines.
-template <class UIntType, std::size_t w, std::size_t n, std::size_t m, std::size_t r, UIntType a, std::size_t u,
-          UIntType d, std::size_t s, UIntType b, std::size_t t, UIntType c, std::size_t l, UIntType f>
-struct tracking_level<std::mersenne_twister_engine<UIntType, w, n, m, r, a, u, d, s, b, t, c, l, f>> {
-    typedef mpl::integral_c_tag tag;
-    typedef mpl::int_<track_never> type;
-    BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
-    BOOST_STATIC_ASSERT(
-        (mpl::greater<
-            implementation_level<std::mersenne_twister_engine<UIntType, w, n, m, r, a, u, d, s, b, t, c, l, f>>,
-            mpl::int_<primitive_type>>::value));
-};
 
 } // namespace serialization
 
