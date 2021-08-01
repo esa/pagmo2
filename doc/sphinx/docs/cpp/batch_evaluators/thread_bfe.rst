@@ -42,10 +42,4 @@ Multithreaded BFE
 
       :return: a human-readable name for this :cpp:class:`~pagmo::thread_bfe`.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &, unsigned)
-
-      Serialisation support.
-
-      Note that :cpp:class:`~pagmo::thread_bfe` is stateless, and thus this (de)serialisation function is empty and performs no work.
-
 .. cpp:namespace-pop::

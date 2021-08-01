@@ -255,16 +255,6 @@ Batch fitness evaluator
 
       :return: a pointer to the internal UDBFE.
 
-   .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
-   .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
-
-      Serialisation support.
-
-      These two member functions are used to implement the (de)serialisation of an evaluator to/from an archive.
-
-      :param ar: the input/output archive.
-
-      :exception unspecified: any exception raised by the (de)serialisation of primitive types or of the UDBFE.
 
 Functions
 ---------

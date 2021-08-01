@@ -97,13 +97,4 @@ Fully connected
 
       :exception unspecified: any exception thrown by the public BGL API.
 
-   .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
-   .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
-
-      These functions implement the (de)serialisation of a :cpp:class:`~pagmo::fully_connected` topology.
-
-      :param ar: the input/output archive.
-
-      :exception unspecified: any exception thrown by the (de)serialisation of primitive types.
-
 .. cpp:namespace-pop::

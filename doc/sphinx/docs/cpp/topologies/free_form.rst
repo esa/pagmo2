@@ -76,12 +76,4 @@ Free-form topology
 
       :return: ``"Free form"``.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      This function implements the serialisation of a :cpp:class:`~pagmo::free_form`.
-
-      :param ar: the input/output archive.
-
-      :exception unspecified: any exception thrown by the serialisation of a :cpp:class:`~pagmo::base_bgl_topology`.
-
 .. cpp:namespace-pop::

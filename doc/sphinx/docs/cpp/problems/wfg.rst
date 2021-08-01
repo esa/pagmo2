@@ -108,15 +108,3 @@ WFG problem test suite
       Returns the problem name.
 
       :return: a string containing the problem name: "WFG *prob_id*".
-
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      Object serialization.
-
-      This method will save/load this into the archive *ar*.
-
-      :param ar: target archive.
-      :exception unspecified: any exception thrown by the serialization of primitive types.
-
-
-
