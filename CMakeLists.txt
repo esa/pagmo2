@@ -80,8 +80,8 @@ endif()
 if(YACMA_COMPILER_IS_MSVC)
   # Disable the idiotic minmax macros on MSVC, some annoying warnings,
   # enable the bigobj option and the WIN32_LEAN_AND_MEAN definition.
-  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
-  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/wd4701" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/wd4701" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
   # Enable strict conformance mode, if supported.
   set(CMAKE_REQUIRED_QUIET TRUE)
   check_cxx_compiler_flag("/permissive-" _PAGMO_MSVC_SUPPORTS_STRICT_CONFORMANCE)
