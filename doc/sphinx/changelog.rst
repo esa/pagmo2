@@ -3,6 +3,23 @@
 Changelog
 =========
 
+2.18.0 (unreleased)
+-------------------
+
+Changes
+~~~~~~~
+
+- Various internal changes/improvements in the
+  serialisation functions
+  (`#480 <https://github.com/esa/pagmo2/pull/480>`__).
+
+Fix
+~~~
+
+- Do not force the static runtime on MSVC when building pagmo
+  as a static library
+  (`#474 <https://github.com/esa/pagmo2/pull/474>`__).
+
 2.17.0 (2021-03-05)
 -------------------
 
