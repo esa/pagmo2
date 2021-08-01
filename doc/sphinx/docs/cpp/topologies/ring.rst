@@ -63,13 +63,4 @@ Ring
 
       :return: ``"Ring"``.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      This function implements the serialisation of a :cpp:class:`~pagmo::ring`.
-
-      :param ar: the input/output archive.
-
-      :exception unspecified: any exception thrown by the serialisation of a :cpp:class:`~pagmo::base_bgl_topology`
-         or of primitive types.
-
 .. cpp:namespace-pop::

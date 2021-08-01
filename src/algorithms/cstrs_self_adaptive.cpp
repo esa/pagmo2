@@ -540,14 +540,7 @@ thread_safety cstrs_self_adaptive::get_thread_safety() const
     return std::min(m_algorithm.get_thread_safety(), thread_safety::basic);
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDA and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void cstrs_self_adaptive::serialize(Archive &ar, unsigned)
 {

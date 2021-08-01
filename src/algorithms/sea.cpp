@@ -178,14 +178,7 @@ std::string sea::get_extra_info() const
            + "\n\tSeed: " + std::to_string(m_seed);
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void sea::serialize(Archive &ar, unsigned)
 {

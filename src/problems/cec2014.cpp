@@ -356,14 +356,7 @@ std::string cec2014::get_name() const
     return retval;
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void cec2014::serialize(Archive &ar, unsigned)
 {

@@ -113,11 +113,3 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
 
       :return: a string containing the problem name: "MHACO: Multi-objective Hypervolume-based Ant Colony Optimization".
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      Object serialization.
-
-      This method will save/load this into the archive *ar*.
-
-      :param ``ar``: target archive.
-      :exception unspecified: unspecified any exception thrown by the serialization of the UDA and of primitive types.

@@ -33,10 +33,4 @@ Unconnected topology
 
       :return: ``"Unconnected"``.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &, unsigned)
-
-      Serialisation support.
-
-      This class is stateless, no data will be loaded or saved during serialization.
-
 .. cpp:namespace-pop::

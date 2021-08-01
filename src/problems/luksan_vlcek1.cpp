@@ -148,14 +148,7 @@ sparsity_pattern luksan_vlcek1::gradient_sparsity() const
     return retval;
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void luksan_vlcek1::serialize(Archive &ar, unsigned)
 {

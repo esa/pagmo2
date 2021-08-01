@@ -285,14 +285,7 @@ problem &decompose::get_inner_problem()
     return m_problem;
 }
 
-/// Object serialization.
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
- */
+// Object serialization.
 template <typename Archive>
 void decompose::serialize(Archive &ar, unsigned)
 {

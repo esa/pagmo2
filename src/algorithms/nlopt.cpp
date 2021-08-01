@@ -1004,12 +1004,7 @@ void nlopt::unset_local_optimizer()
     m_loc_opt.reset(nullptr);
 }
 
-/// Save to archive.
-/**
- * @param ar the target archive.
- *
- * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::not_population_based.
- */
+// Save to archive.
 template <typename Archive>
 void nlopt::save(Archive &ar, unsigned) const
 {
@@ -1023,31 +1018,18 @@ void nlopt::save(Archive &ar, unsigned) const
     }
 }
 
-/// Load from archive.
-/**
- * In case of exceptions, \p this will be reset to a default-constructed state.
- *
- * @param ar the source archive.
- *
- * @throws unspecified any exception thrown by the deserialization of primitive types or
- * pagmo::not_population_based.
- */
+// Load from archive.
 template <typename Archive>
 void nlopt::load(Archive &ar, unsigned)
 {
-    try {
-        detail::from_archive(ar, boost::serialization::base_object<not_population_based>(*this), m_algo,
-                             m_last_opt_result, m_sc_stopval, m_sc_ftol_rel, m_sc_ftol_abs, m_sc_xtol_rel,
-                             m_sc_xtol_abs, m_sc_maxeval, m_sc_maxtime, m_verbosity, m_log);
-        bool with_local;
-        ar >> with_local;
-        if (with_local) {
-            m_loc_opt = std::make_unique<nlopt>();
-            ar >> *m_loc_opt;
-        }
-    } catch (...) {
-        *this = nlopt{};
-        throw;
+    detail::from_archive(ar, boost::serialization::base_object<not_population_based>(*this), m_algo, m_last_opt_result,
+                         m_sc_stopval, m_sc_ftol_rel, m_sc_ftol_abs, m_sc_xtol_rel, m_sc_xtol_abs, m_sc_maxeval,
+                         m_sc_maxtime, m_verbosity, m_log);
+    bool with_local;
+    ar >> with_local;
+    if (with_local) {
+        m_loc_opt = std::make_unique<nlopt>();
+        ar >> *m_loc_opt;
     }
 }
 

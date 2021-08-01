@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/free_form_fwd.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
 #include <pagmo/topology.hpp>
 #include <pagmo/type_traits.hpp>
@@ -61,6 +62,9 @@ public:
 
     std::string get_name() const;
 
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 };

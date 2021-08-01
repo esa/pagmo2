@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -99,12 +100,14 @@ struct PAGMO_DLL_PUBLIC rastrigin {
     // Optimal solution
     vector_double best_known() const;
 
-    // Object serialization
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
-
     /// Problem dimensions
     unsigned m_dim;
+
+private:
+    // Object serialization
+    friend class boost::serialization::access;
+    template <typename Archive>
+    void serialize(Archive &, unsigned);
 };
 
 } // namespace pagmo

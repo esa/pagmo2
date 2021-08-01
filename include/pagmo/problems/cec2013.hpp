@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -84,11 +85,13 @@ public:
     std::pair<vector_double, vector_double> get_bounds() const;
     // Problem name
     std::string get_name() const;
+
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     PAGMO_DLL_LOCAL void sphere_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                                      int r_flag) const; /* Sphere */
     PAGMO_DLL_LOCAL void ellips_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,

@@ -64,13 +64,14 @@ public:
     double get_weight() const;
     std::size_t num_vertices() const;
 
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void save(Archive &, unsigned) const;
     template <typename Archive>
     void load(Archive &, unsigned);
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     double m_weight;
     std::atomic<std::size_t> m_num_vertices;
 };

@@ -48,14 +48,3 @@ Lennard Jones Cluster
 
       :return: a string containing the problem name: "Lennard Jones Cluster (*atoms* atoms)".
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      Object serialization.
-
-      This method will save/load this into the archive *ar*.
-
-      :param ar: target archive.
-      :exception unspecified: any exception thrown by the serialization of the UDP and of primitive types.
-
-
-

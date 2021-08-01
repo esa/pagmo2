@@ -87,21 +87,16 @@ public:
     van_der_corput(unsigned b = 2u, unsigned n = 0u);
     // Returns the next number in the sequence
     double operator()();
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of primitive types.
-     */
+
+private:
+    friend class boost::serialization::access;
+    // Object serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, m_base, m_counter);
     }
 
-private:
     // Base of the sequence
     unsigned m_base;
     // Element of the sequence to compute
@@ -144,21 +139,16 @@ public:
     halton(unsigned dim = 2u, unsigned n = 0u);
     // Returns the next number in the sequence
     std::vector<double> operator()();
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of pagmo::van_der_corput or of primitive types.
-     */
+
+private:
+    friend class boost::serialization::access;
+    // Object serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, m_dim, m_vdc);
     }
 
-private:
     // Dimension of the sequence
     unsigned m_dim;
     // van der Corput sequences used for each dimension

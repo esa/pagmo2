@@ -395,17 +395,17 @@ public:
     // Unset the local optimizer.
     void unset_local_optimizer();
 
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     // Save to archive.
     template <typename Archive>
     void save(Archive &, unsigned) const;
-
     // Load from archive.
     template <typename Archive>
     void load(Archive &, unsigned);
-
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     std::string m_algo;
     mutable ::nlopt_result m_last_opt_result = NLOPT_SUCCESS;
     // Stopping criteria.

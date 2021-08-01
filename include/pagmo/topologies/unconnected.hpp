@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/topology.hpp>
 #include <pagmo/types.hpp>
 
@@ -49,7 +50,9 @@ struct PAGMO_DLL_PUBLIC unconnected {
 
     std::string get_name() const;
 
-    // Serialization.
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 };

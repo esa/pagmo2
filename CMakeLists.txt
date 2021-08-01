@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(pagmo VERSION 2.17.0 LANGUAGES CXX C)
+project(pagmo VERSION 2.18.0 LANGUAGES CXX C)
 
 # Setup module path.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/yacma")
@@ -80,8 +80,8 @@ endif()
 if(YACMA_COMPILER_IS_MSVC)
   # Disable the idiotic minmax macros on MSVC, some annoying warnings,
   # enable the bigobj option and the WIN32_LEAN_AND_MEAN definition.
-  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
-  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/wd4701" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/wd4701" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
   # Enable strict conformance mode, if supported.
   set(CMAKE_REQUIRED_QUIET TRUE)
   check_cxx_compiler_flag("/permissive-" _PAGMO_MSVC_SUPPORTS_STRICT_CONFORMANCE)
@@ -289,8 +289,8 @@ if(PAGMO_BUILD_STATIC_LIBRARY)
     add_library(pagmo STATIC "${PAGMO_SRC_FILES}")
 else()
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "7.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 7)
+    set_property(TARGET pagmo PROPERTY VERSION "8.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 8)
     set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 endif()

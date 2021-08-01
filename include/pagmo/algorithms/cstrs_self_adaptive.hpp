@@ -43,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -379,11 +380,12 @@ public:
         return m_algorithm;
     }
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     // Inner algorithm
     algorithm m_algorithm;
     unsigned m_iters;

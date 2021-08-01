@@ -180,13 +180,4 @@ Base BGL topology
 
       :exception unspecified: any exception thrown by the public BGL API.
 
-   .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned)
-   .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
-
-      These functions implement the serialisation of a :cpp:class:`~pagmo::base_bgl_topology`.
-
-      :param ar: the input/output archive.
-
-      :exception unspecified: any exception thrown by the public BGL API.
-
 .. cpp:namespace-pop::

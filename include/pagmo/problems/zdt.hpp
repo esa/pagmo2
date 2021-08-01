@@ -184,11 +184,12 @@ public:
      */
     double p_distance(const vector_double &) const;
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     PAGMO_DLL_LOCAL vector_double zdt1_fitness(const vector_double &) const;
     PAGMO_DLL_LOCAL vector_double zdt2_fitness(const vector_double &) const;
     PAGMO_DLL_LOCAL vector_double zdt3_fitness(const vector_double &) const;
@@ -200,7 +201,6 @@ private:
     PAGMO_DLL_LOCAL double zdt5_p_distance(const vector_double &) const;
     PAGMO_DLL_LOCAL double zdt6_p_distance(const vector_double &) const;
 
-private:
     // Problem dimensions
     unsigned m_prob_id;
     unsigned m_param;

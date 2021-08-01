@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/island.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -66,10 +67,13 @@ public:
     {
         return m_pid.load();
     }
+
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     mutable std::atomic<pid_t> m_pid;
 };
 

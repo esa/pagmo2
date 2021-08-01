@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -118,11 +119,13 @@ public:
     }
     // Problem name
     std::string get_name() const;
+
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     /// Ruler Order.
     unsigned m_order;
     /// Maximum distance between consecutive ticks.

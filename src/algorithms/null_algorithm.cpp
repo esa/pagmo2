@@ -48,10 +48,7 @@ population null_algorithm::evolve(const population &pop) const
     return pop;
 }
 
-/// Serialization support.
-/**
- * This class is stateless, no data will be loaded or saved during serialization.
- */
+// Serialization support.
 template <typename Archive>
 void null_algorithm::serialize(Archive &, unsigned)
 {
