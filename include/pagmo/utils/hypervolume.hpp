@@ -180,28 +180,21 @@ public:
     // Find the most contributing individual
     unsigned long long greatest_contributor(const vector_double &) const;
 
-    /// Object serialization
-    /**
-     * This method will save/load \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+private:
+    friend class boost::serialization::access;
+    // Object serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, m_points, m_copy_points, m_verify);
     }
 
-private:
     // Verify after construct method
     PAGMO_DLL_LOCAL void verify_after_construct() const;
 
     // Verify before compute method
     PAGMO_DLL_LOCAL void verify_before_compute(const vector_double &, hv_algorithm &) const;
 
-private:
     mutable std::vector<vector_double> m_points;
     bool m_copy_points;
     bool m_verify;
