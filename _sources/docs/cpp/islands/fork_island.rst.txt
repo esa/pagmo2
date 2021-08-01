@@ -89,10 +89,4 @@ Fork island
       :return: a signed integral value representing the process ID of the child process, if an evolution is ongoing. Otherwise,
          ``0`` will be returned.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &, unsigned)
-
-      Serialisation support.
-
-      Note that :cpp:class:`~pagmo::fork_island` is stateless, and thus this (de)serialisation function is empty and performs no work.
-
 .. cpp:namespace-pop::

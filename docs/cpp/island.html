@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Island &mdash; pagmo 2.17.0 documentation</title>
+  <title>Island &mdash; pagmo 2.18.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                2.17.0
+                2.18.0
               </div>
             
           
@@ -1044,41 +1044,6 @@ methods on the internal UDI instance. Assigning a new UDI via this pointer is un
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a pointer to the internal UDI. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0ENK5pagmo6island4saveEvR7Archivej">
-<span id="_CPPv3I0ENK5pagmo6island4saveER7Archivej"></span><span id="_CPPv2I0ENK5pagmo6island4saveER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1island_1a938c0b694b154bd04678c3934cc6a6fe"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0ENK5pagmo6island4saveEvR7Archivej" title="pagmo::island::save::Archive"><span class="pre">Archive</span></a> <span class="pre">&amp;</span><em><span class="pre">ar</span></em>, <span class="pre">unsigned</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4I0ENK5pagmo6island4saveEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Save to archive. </p>
-<p>This method will save <code class="docutils literal notranslate"><span class="pre">this</span></code> to the archive <code class="docutils literal notranslate"><span class="pre">ar</span></code>.</p>
-<p>It is safe to call this method while the island is evolving.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ar</strong> – the target archive.</p>
-</dd>
-<dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by:<ul class="simple">
-<li><p>the serialization of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type,</p></li>
-<li><p><a class="reference internal" href="#classpagmo_1_1island_1a30018f1e9d6c87543556091aa159444c"><span class="std std-ref">get_algorithm()</span></a> and <a class="reference internal" href="#classpagmo_1_1island_1ae1604d03cebda0964ad34bd030cb3c2d"><span class="std std-ref">get_population()</span></a>. </p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0EN5pagmo6island4loadEvR7Archivej">
-<span id="_CPPv3I0EN5pagmo6island4loadER7Archivej"></span><span id="_CPPv2I0EN5pagmo6island4loadER7Archivej"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">Archive</span></code><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1island_1af538257d07ef2fe6bdbea82e8b721bcd"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo6island4loadEvR7Archivej" title="pagmo::island::load::Archive"><span class="pre">Archive</span></a> <span class="pre">&amp;</span><em><span class="pre">ar</span></em>, <span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo6island4loadEvR7Archivej" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Load from archive. </p>
-<p>This method will load into <code class="docutils literal notranslate"><span class="pre">this</span></code> the content of <code class="docutils literal notranslate"><span class="pre">ar</span></code>. This method will wait until any ongoing evolution in <code class="docutils literal notranslate"><span class="pre">this</span></code> is finished before returning.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ar</strong> – the source archive.</p>
-</dd>
-<dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the deserialization of <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>, <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> and of the UDI type. </p>
 </dd>
 </dl>
 </dd></dl>
