@@ -236,11 +236,6 @@ private:
     double m_reduction_coeff;
     unsigned m_verbosity;
     mutable log_type m_log;
-    // Deleting the methods load save public in base as to avoid conflict with serialize
-    template <typename Archive>
-    void load(Archive &, unsigned) = delete;
-    template <typename Archive>
-    void save(Archive &, unsigned) const = delete;
 };
 
 } // namespace pagmo

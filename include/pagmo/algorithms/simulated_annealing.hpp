@@ -219,11 +219,6 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
-    // Deleting the methods load save public in base as to avoid conflict with serialize
-    template <typename Archive>
-    void load(Archive &ar, unsigned) = delete;
-    template <typename Archive>
-    void save(Archive &ar, unsigned) const = delete;
 };
 
 } // namespace pagmo
