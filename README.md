@@ -3,7 +3,7 @@ pagmo
 
 [![Build Status](https://img.shields.io/circleci/project/github/esa/pagmo2/master.svg?style=for-the-badge)](https://circleci.com/gh/esa/pagmo2)
 [![Build Status](https://img.shields.io/github/workflow/status/esa/pagmo2/GitHub%20CI?style=for-the-badge)](https://github.com/esa/pagmo2/actions?query=workflow%3A%22GitHub+CI%22)
-[![Build Status](https://img.shields.io/travis/com/bluescarni/heyoka?style=for-the-badge)](https://travis-ci.com/bluescarni/heyoka)
+[![Build Status](https://img.shields.io/travis/com/esa/pagmo2?style=for-the-badge)](https://travis-ci.com/esa/pagmo2)
 [![Code Coverage](https://img.shields.io/codecov/c/github/esa/pagmo2.svg?style=for-the-badge)](https://codecov.io/github/esa/pagmo2?branch=master)
 
 [![Anaconda-Server Badge](https://img.shields.io/conda/vn/conda-forge/pagmo.svg?style=for-the-badge)](https://anaconda.org/conda-forge/pagmo)
