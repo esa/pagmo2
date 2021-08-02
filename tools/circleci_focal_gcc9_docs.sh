@@ -26,7 +26,7 @@ cd build
 # GCC build.
 cmake ../ -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_ENABLE_IPO=yes
 make -j2 VERBOSE=1
-ctest -V
+ctest -V -j4
 
 # Build the documentation.
 

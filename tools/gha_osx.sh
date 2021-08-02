@@ -23,7 +23,7 @@ cd build
 # GCC build.
 CXX=clang++ CC=clang cmake ../ -DCMAKE_PREFIX_PATH=$deps_dir -DCMAKE_BUILD_TYPE=Debug -DBoost_NO_BOOST_CMAKE=ON -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_ENABLE_IPO=yes
 make -j2 VERBOSE=1
-ctest -V -j2
+ctest -V -j4
 
 set +e
 set +x

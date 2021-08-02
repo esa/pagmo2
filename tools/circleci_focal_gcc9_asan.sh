@@ -30,7 +30,7 @@ make -j2 VERBOSE=1
 # gives spurious warnings in the address sanitizer.
 # Also, enable the custom suppression file for ASAN
 # in order to suppress spurious warnings from TBB code.
-LSAN_OPTIONS=suppressions=/home/circleci/project/tools/lsan.supp ctest -j2 -V -E fork_island
+LSAN_OPTIONS=suppressions=/home/circleci/project/tools/lsan.supp ctest -j4 -V -E fork_island
 
 set +e
 set +x
