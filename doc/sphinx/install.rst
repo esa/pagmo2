@@ -7,16 +7,11 @@ Dependencies
 ------------
 
 pagmo is written in modern C++, and it requires a compiler able to understand
-at least C++17. pagmo is known to run on the following setups:
+at least C++17. pagmo is currently tested on the following setups:
 
-* GCC 7 and later versions on GNU/Linux,
-* Clang 4 and later versions on GNU/Linux,
-* MSVC 2015 and later versions on Windows,
-* Clang 4 and later versions on Windows
-  (with the ``clang-cl`` driver for MSVC),
-* MinGW GCC 8 on Windows,
-* Clang on OSX (Xcode 6.4 and later),
-* Clang on FreeBSD.
+* GCC 9 on GNU/Linux,
+* Clang 11 on OSX,
+* MSVC 2017 on Windows.
 
 The pagmo C++ library has the following **mandatory** dependencies:
 
