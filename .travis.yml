@@ -1,0 +1,17 @@
+language: cpp
+
+# Do not build branches of the form "pr/*". By prefixing pull requests coming
+# from branches inside the repository with pr/, this avoids building both the
+# branch push _and_ the pull request.
+branches:
+  except: /pr\/.*/
+
+matrix:
+    - os: linux
+      arch: ppc64le
+      dist: focal
+script:
+    - tools/travis_ubuntu_ppc64.sh
+
+notifications:
+  email: false
