@@ -13,6 +13,8 @@ at least C++17. pagmo is currently tested on the following setups:
 * Clang 11 on OSX,
 * MSVC 2017 on Windows.
 
+The officially-supported architectures are 64-bit x86, ARM and PowerPC.
+
 The pagmo C++ library has the following **mandatory** dependencies:
 
 * the `Boost <https://www.boost.org/>`__ C++ libraries (at least version 1.60),

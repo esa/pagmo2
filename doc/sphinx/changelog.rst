@@ -6,6 +6,12 @@ Changelog
 2.18.0 (unreleased)
 -------------------
 
+New
+~~~
+
+- pagmo now officially supports 64-bit ARM and PowerPC processors
+  (`#481 <https://github.com/esa/pagmo2/pull/481>`__).
+
 Changes
 ~~~~~~~
 
