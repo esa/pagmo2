@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -50,7 +50,7 @@ struct ex_thrower {
     {
     }
     template <typename... Args, enable_if_t<std::is_constructible<Exception, Args...>::value, int> = 0>
-    [[noreturn]] void operator()(Args &&... args) const
+    [[noreturn]] void operator()(Args &&...args) const
     {
         throw Exception(std::forward<Args>(args)...);
     }
@@ -60,7 +60,7 @@ struct ex_thrower {
                                                   std::is_same<std::decay_t<Str>, char *>,
                                                   std::is_same<std::decay_t<Str>, const char *>>>::value,
                           int> = 0>
-    [[noreturn]] void operator()(Str &&desc, Args &&... args) const
+    [[noreturn]] void operator()(Str &&desc, Args &&...args) const
     {
         std::string msg("\nfunction: ");
         msg += m_func;
