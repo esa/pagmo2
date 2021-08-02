@@ -69,6 +69,28 @@ include(CheckCXXCompilerFlag)
 # Threading setup.
 include(YACMAThreadingSetup)
 
+# NOTE: on Unix systems, the correct library installation path
+# could be something other than just "lib", such as "lib64",
+# "lib32", etc., depending on platform/configuration. Apparently,
+# CMake provides this information via the GNUInstallDirs module.
+# Let's enable this for now on all Unixes except OSX.
+# NOTE: potentially, this could be applicable to Cygwin as well.
+#
+# https://cmake.org/cmake/help/v3.15/module/GNUInstallDirs.html
+# https://cmake.org/pipermail/cmake/2013-July/055375.html
+if(UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+    set(_PAGMO_INSTALL_LIBDIR_DEFAULT "${CMAKE_INSTALL_LIBDIR}")
+else()
+    set(_PAGMO_INSTALL_LIBDIR_DEFAULT "lib")
+endif()
+if(NOT PAGMO_INSTALL_LIBDIR)
+    set(PAGMO_INSTALL_LIBDIR "${_PAGMO_INSTALL_LIBDIR_DEFAULT}" CACHE STRING
+        "Library installation directory." FORCE)
+endif()
+mark_as_advanced(PAGMO_INSTALL_LIBDIR)
+message(STATUS "Library installation directory: ${PAGMO_INSTALL_LIBDIR}")
+
 # Assemble the flags.
 set(PAGMO_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
 set(PAGMO_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
@@ -413,8 +435,8 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION
 # Installation of the library.
 install(TARGETS pagmo
     EXPORT pagmo_export
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION "${PAGMO_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${PAGMO_INSTALL_LIBDIR}"
     RUNTIME DESTINATION bin
 )
 
@@ -431,10 +453,10 @@ if(PAGMO_WITH_IPOPT)
 endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/Findpagmo_IPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
-    DESTINATION "lib/cmake/pagmo")
-install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
+    DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
+install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 # Take care of versioning.
 include(CMakePackageConfigHelpers)
 # NOTE: SameMinorVersion available only
@@ -446,7 +468,7 @@ else()
     write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
         COMPATIBILITY SameMinorVersion)
 endif()
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "lib/cmake/pagmo")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 
 # Uninstall target
 if(NOT TARGET uninstall)
