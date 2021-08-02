@@ -372,3 +372,5 @@ texinfo_documents = [
 
 # def setup(app):
 #     app.add_stylesheet("pagmo.css")  # also can be a full URL
+
+linkcheck_workers = 1

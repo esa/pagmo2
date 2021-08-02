@@ -25,14 +25,15 @@ jobs:
     - run:
         name: Build and test
         command: bash ./tools/circleci_focal_gcc9_docs.sh
-  focal_clang9:
-    docker:
-    - image: circleci/buildpack-deps:focal
+  ubuntu_arm64:
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
     steps:
     - checkout
     - run:
         name: Build and test
-        command: bash ./tools/circleci_focal_clang9.sh
+        command: bash ./tools/circleci_ubuntu_arm64.sh
 
 workflows:
   version: 2.1
@@ -40,5 +41,5 @@ workflows:
     jobs:
     - focal_gcc9_coverage
     - focal_gcc9_asan
-    - focal_clang9
     - focal_gcc9_docs
+    - ubuntu_arm64
