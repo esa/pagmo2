@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -424,7 +424,8 @@ void hypervolume::verify_after_construct() const
     for (const auto &point : m_points) {
         for (auto value : point) {
             if (std::isnan(value)) {
-                pagmo_throw(std::invalid_argument, "A nan value has been encountered in the hypervolume points. Cannot construct the hypervolume object");
+                pagmo_throw(std::invalid_argument, "A nan value has been encountered in the hypervolume points. Cannot "
+                                                   "construct the hypervolume object");
             }
         }
     }
