@@ -25,14 +25,6 @@ jobs:
     - run:
         name: Build and test
         command: bash ./tools/circleci_focal_gcc9_docs.sh
-  focal_clang9:
-    docker:
-    - image: circleci/buildpack-deps:focal
-    steps:
-    - checkout
-    - run:
-        name: Build and test
-        command: bash ./tools/circleci_focal_clang9.sh
 
 workflows:
   version: 2.1
@@ -40,5 +32,4 @@ workflows:
     jobs:
     - focal_gcc9_coverage
     - focal_gcc9_asan
-    - focal_clang9
     - focal_gcc9_docs

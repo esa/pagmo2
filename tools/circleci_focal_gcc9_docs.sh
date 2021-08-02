@@ -7,7 +7,7 @@ set -x
 set -e
 
 # Core deps.
-sudo apt-get install build-essential wget
+sudo apt-get install wget
 
 # Install conda+deps.
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
@@ -16,7 +16,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
 conda config --add channels conda-forge
 conda config --set channel_priority strict
-conda create -y -q -p $deps_dir cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.8 sphinx'<4.1.0' sphinx_rtd_theme breathe doxygen graphviz
+conda create -y -q -p $deps_dir c-compiler cxx-compiler cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.8 sphinx'<4.1.0' sphinx_rtd_theme breathe doxygen graphviz
 source activate $deps_dir
 
 # Create the build dir and cd into it.
