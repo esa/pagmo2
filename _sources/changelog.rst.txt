@@ -15,6 +15,9 @@ New
 Changes
 ~~~~~~~
 
+- pagmo's build system now honours the ``CMAKE_INSTALL_LIBDIR``
+  setting on Linux to determine the library installation path
+  (`#482 <https://github.com/esa/pagmo2/pull/482>`__).
 - Various internal changes/improvements in the
   serialisation functions
   (`#480 <https://github.com/esa/pagmo2/pull/480>`__).
