@@ -16,7 +16,7 @@ at least C++17. pagmo is currently tested on the following setups:
 The pagmo C++ library has the following **mandatory** dependencies:
 
 * the `Boost <https://www.boost.org/>`__ C++ libraries (at least version 1.60),
-* the `Intel TBB <https://www.threadingbuildingblocks.org/>`__ library.
+* the `Intel TBB <https://github.com/oneapi-src/oneTBB/>`__ library.
 
 Additionally, pagmo has the following **optional** dependencies:
 
