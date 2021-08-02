@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -197,21 +200,21 @@
 <p><em>#include &lt;pagmo/topologies/fully_connected.hpp&gt;</em></p>
 <img alt="../../../_images/fully_connected.png" src="../../../_images/fully_connected.png" />
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo15fully_connectedE">
-<span id="_CPPv3N5pagmo15fully_connectedE"></span><span id="_CPPv2N5pagmo15fully_connectedE"></span><span id="pagmo::fully_connected"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">fully_connected</span></code><a class="headerlink" href="#_CPPv4N5pagmo15fully_connectedE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connectedE">
+<span id="_CPPv3N5pagmo15fully_connectedE"></span><span id="_CPPv2N5pagmo15fully_connectedE"></span><span id="pagmo::fully_connected"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fully_connected</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connectedE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This user-defined topology (UDT) represents a <em>complete graph</em> (that is, a topology in which
 all vertices connect to all other vertices). The edge weight is configurable at construction,
 and it will be the same for all the edges in the topology.</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedEv">
-<span id="_CPPv3N5pagmo15fully_connected15fully_connectedEv"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedEv"></span><span id="pagmo::fully_connected::fully_connected"></span><code class="sig-name descname"><span class="pre">fully_connected</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connected15fully_connectedEv">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedEv"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedEv"></span><span id="pagmo::fully_connected::fully_connected"></span><span class="sig-name descname"><span class="n"><span class="pre">fully_connected</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor.</p>
 <p>Equivalent to the constructor from edge weight with <em>w</em> = 1.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedEd">
-<span id="_CPPv3N5pagmo15fully_connected15fully_connectedEd"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedEd"></span><span id="pagmo::fully_connected::fully_connected__double"></span><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">fully_connected</span></code><span class="sig-paren">(</span><span class="pre">double</span> <em><span class="pre">w</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEd" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connected15fully_connectedEd">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedEd"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedEd"></span><span id="pagmo::fully_connected::fully_connected__double"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fully_connected</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from edge weight.</p>
 <p>Equivalent to the constructor from number of vertices <em>n</em> = 0 and edge
 weight <em>w</em>.</p>
@@ -226,8 +229,8 @@ weight <em>w</em>.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd">
-<span id="_CPPv3N5pagmo15fully_connected15fully_connectedENSt6size_tEd"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedENSt6size_tEd"></span><span id="pagmo::fully_connected::fully_connected__std::s.double"></span><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">fully_connected</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">n</span></em>, <span class="pre">double</span> <em><span class="pre">w</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedENSt6size_tEd"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedENSt6size_tEd"></span><span id="pagmo::fully_connected::fully_connected__std::s.double"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fully_connected</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from number of vertices and edge weight.</p>
 <p>This constructor will initialise a <a class="reference internal" href="#_CPPv4N5pagmo15fully_connectedE" title="pagmo::fully_connected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fully_connected</span></code></a> topology
 with <em>n</em> vertices and whose edges will all have a weight of <em>w</em>.</p>
@@ -245,25 +248,25 @@ with <em>n</em> vertices and whose edges will all have a weight of <em>w</em>.</
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected">
-<span id="_CPPv3N5pagmo15fully_connected15fully_connectedERK15fully_connected"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedERK15fully_connected"></span><span id="pagmo::fully_connected::fully_connected__fully_connectedCR"></span><code class="sig-name descname"><span class="pre">fully_connected</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected" title="pagmo::fully_connected::fully_connected"><span class="pre">fully_connected</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedERK15fully_connected"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedERK15fully_connected"></span><span id="pagmo::fully_connected::fully_connected__fully_connectedCR"></span><span class="sig-name descname"><span class="n"><span class="pre">fully_connected</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected" title="pagmo::fully_connected::fully_connected"><span class="n"><span class="pre">fully_connected</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERK15fully_connected" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected">
-<span id="_CPPv3N5pagmo15fully_connected15fully_connectedERR15fully_connected"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedERR15fully_connected"></span><span id="pagmo::fully_connected::fully_connected__fully_connectedRR"></span><code class="sig-name descname"><span class="pre">fully_connected</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected" title="pagmo::fully_connected::fully_connected"><span class="pre">fully_connected</span></a><span class="pre">&amp;</span><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected">
+<span id="_CPPv3N5pagmo15fully_connected15fully_connectedERR15fully_connected"></span><span id="_CPPv2N5pagmo15fully_connected15fully_connectedERR15fully_connected"></span><span id="pagmo::fully_connected::fully_connected__fully_connectedRR"></span><span class="sig-name descname"><span class="n"><span class="pre">fully_connected</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected" title="pagmo::fully_connected::fully_connected"><span class="n"><span class="pre">fully_connected</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected15fully_connectedERR15fully_connected" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><a class="reference internal" href="#_CPPv4N5pagmo15fully_connectedE" title="pagmo::fully_connected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fully_connected</span></code></a> is copy and move constructible.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo15fully_connected9push_backEv">
-<span id="_CPPv3N5pagmo15fully_connected9push_backEv"></span><span id="_CPPv2N5pagmo15fully_connected9push_backEv"></span><span id="pagmo::fully_connected::push_back"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">push_back</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo15fully_connected9push_backEv">
+<span id="_CPPv3N5pagmo15fully_connected9push_backEv"></span><span id="_CPPv2N5pagmo15fully_connected9push_backEv"></span><span id="pagmo::fully_connected::push_back"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo15fully_connected9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add a new vertex.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE">
-<span id="_CPPv3NK5pagmo15fully_connected15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo15fully_connected15get_connectionsENSt6size_tE"></span><span id="pagmo::fully_connected::get_connections__std::sC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_connections</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE">
+<span id="_CPPv3NK5pagmo15fully_connected15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo15fully_connected15get_connectionsENSt6size_tE"></span><span id="pagmo::fully_connected::get_connections__std::sC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_connections</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected15get_connectionsENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the list of connections to the <em>i</em>-th vertex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -280,8 +283,8 @@ itself) and the corresponding edge weights.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo15fully_connected8get_nameEv">
-<span id="_CPPv3NK5pagmo15fully_connected8get_nameEv"></span><span id="_CPPv2NK5pagmo15fully_connected8get_nameEv"></span><span id="pagmo::fully_connected::get_nameC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo15fully_connected8get_nameEv">
+<span id="_CPPv3NK5pagmo15fully_connected8get_nameEv"></span><span id="_CPPv2NK5pagmo15fully_connected8get_nameEv"></span><span id="pagmo::fully_connected::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Fully</span> <span class="pre">connected&quot;</span></code>.</p>
@@ -290,8 +293,8 @@ itself) and the corresponding edge weights.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo15fully_connected14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo15fully_connected14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo15fully_connected14get_extra_infoEv"></span><span id="pagmo::fully_connected::get_extra_infoC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo15fully_connected14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo15fully_connected14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo15fully_connected14get_extra_infoEv"></span><span id="pagmo::fully_connected::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a human-readable string containing additional info about this topology.</p>
@@ -300,8 +303,8 @@ itself) and the corresponding edge weights.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo15fully_connected10get_weightEv">
-<span id="_CPPv3NK5pagmo15fully_connected10get_weightEv"></span><span id="_CPPv2NK5pagmo15fully_connected10get_weightEv"></span><span id="pagmo::fully_connected::get_weightC"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">get_weight</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected10get_weightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo15fully_connected10get_weightEv">
+<span id="_CPPv3NK5pagmo15fully_connected10get_weightEv"></span><span id="_CPPv2NK5pagmo15fully_connected10get_weightEv"></span><span id="pagmo::fully_connected::get_weightC"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_weight</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected10get_weightEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the weight <em>w</em> used when constructing this topology.</p>
@@ -310,8 +313,8 @@ itself) and the corresponding edge weights.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo15fully_connected12num_verticesEv">
-<span id="_CPPv3NK5pagmo15fully_connected12num_verticesEv"></span><span id="_CPPv2NK5pagmo15fully_connected12num_verticesEv"></span><span id="pagmo::fully_connected::num_verticesC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <code class="sig-name descname"><span class="pre">num_vertices</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected12num_verticesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo15fully_connected12num_verticesEv">
+<span id="_CPPv3NK5pagmo15fully_connected12num_verticesEv"></span><span id="_CPPv2NK5pagmo15fully_connected12num_verticesEv"></span><span id="pagmo::fully_connected::num_verticesC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_vertices</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected12num_verticesEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of vertices in the topology.</p>
@@ -320,8 +323,8 @@ itself) and the corresponding edge weights.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo15fully_connected6to_bglEv">
-<span id="_CPPv3NK5pagmo15fully_connected6to_bglEv"></span><span id="_CPPv2NK5pagmo15fully_connected6to_bglEv"></span><span id="pagmo::fully_connected::to_bglC"></span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="pre">bgl_graph_t</span></a> <code class="sig-name descname"><span class="pre">to_bgl</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo15fully_connected6to_bglEv">
+<span id="_CPPv3NK5pagmo15fully_connected6to_bglEv"></span><span id="_CPPv2NK5pagmo15fully_connected6to_bglEv"></span><span id="pagmo::fully_connected::to_bglC"></span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="n"><span class="pre">bgl_graph_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_bgl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo15fully_connected6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>

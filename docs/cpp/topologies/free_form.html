@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -196,34 +199,34 @@
 </div>
 <p><em>#include &lt;pagmo/topologies/free_form.hpp&gt;</em></p>
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo9free_formE">
-<span id="_CPPv3N5pagmo9free_formE"></span><span id="_CPPv2N5pagmo9free_formE"></span><span id="pagmo::free_form"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">free_form</span></code> <span class="pre">:</span> <em class="property"><span class="pre">public</span></em> <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="pre">base_bgl_topology</span></a><a class="headerlink" href="#_CPPv4N5pagmo9free_formE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_formE">
+<span id="_CPPv3N5pagmo9free_formE"></span><span id="_CPPv2N5pagmo9free_formE"></span><span id="pagmo::free_form"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><a class="headerlink" href="#_CPPv4N5pagmo9free_formE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This user-defined topology (UDT) represents a graph in which
 vertices and edges can be manipulated freely. It is implemented
 as a simple extension of <a class="reference internal" href="base_bgl_topology.html#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a>
 in which the <a class="reference internal" href="#_CPPv4N5pagmo9free_form9push_backEv" title="pagmo::free_form::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a> function
 adds a vertex without connections.</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9free_form9free_formEv">
-<span id="_CPPv3N5pagmo9free_form9free_formEv"></span><span id="_CPPv2N5pagmo9free_form9free_formEv"></span><span id="pagmo::free_form::free_form"></span><code class="sig-name descname"><span class="pre">free_form</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_form9free_formEv">
+<span id="_CPPv3N5pagmo9free_form9free_formEv"></span><span id="_CPPv2N5pagmo9free_form9free_formEv"></span><span id="pagmo::free_form::free_form"></span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor.</p>
 <p>The default constructor initialises an empty topology.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9free_form9free_formERK9free_form">
-<span id="_CPPv3N5pagmo9free_form9free_formERK9free_form"></span><span id="_CPPv2N5pagmo9free_form9free_formERK9free_form"></span><span id="pagmo::free_form::free_form__free_formCR"></span><code class="sig-name descname"><span class="pre">free_form</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo9free_form9free_formERK9free_form" title="pagmo::free_form::free_form"><span class="pre">free_form</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERK9free_form" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_form9free_formERK9free_form">
+<span id="_CPPv3N5pagmo9free_form9free_formERK9free_form"></span><span id="_CPPv2N5pagmo9free_form9free_formERK9free_form"></span><span id="pagmo::free_form::free_form__free_formCR"></span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9free_form9free_formERK9free_form" title="pagmo::free_form::free_form"><span class="n"><span class="pre">free_form</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERK9free_form" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9free_form9free_formERR9free_form">
-<span id="_CPPv3N5pagmo9free_form9free_formERR9free_form"></span><span id="_CPPv2N5pagmo9free_form9free_formERR9free_form"></span><span id="pagmo::free_form::free_form__free_formRR"></span><code class="sig-name descname"><span class="pre">free_form</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9free_form9free_formERR9free_form" title="pagmo::free_form::free_form"><span class="pre">free_form</span></a><span class="pre">&amp;</span><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERR9free_form" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_form9free_formERR9free_form">
+<span id="_CPPv3N5pagmo9free_form9free_formERR9free_form"></span><span id="_CPPv2N5pagmo9free_form9free_formERR9free_form"></span><span id="pagmo::free_form::free_form__free_formRR"></span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9free_form9free_formERR9free_form" title="pagmo::free_form::free_form"><span class="n"><span class="pre">free_form</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERR9free_form" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy and move constructors.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9free_form9free_formE11bgl_graph_t">
-<span id="_CPPv3N5pagmo9free_form9free_formE11bgl_graph_t"></span><span id="_CPPv2N5pagmo9free_form9free_formE11bgl_graph_t"></span><span id="pagmo::free_form::free_form__bgl_graph_t"></span><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">free_form</span></code><span class="sig-paren">(</span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="pre">bgl_graph_t</span></a> <em><span class="pre">g</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formE11bgl_graph_t" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_form9free_formE11bgl_graph_t">
+<span id="_CPPv3N5pagmo9free_form9free_formE11bgl_graph_t"></span><span id="_CPPv2N5pagmo9free_form9free_formE11bgl_graph_t"></span><span id="pagmo::free_form::free_form__bgl_graph_t"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="n"><span class="pre">bgl_graph_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">g</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formE11bgl_graph_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from a <a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">bgl_graph_t</span></code></a>.</p>
 <p>The internal graph of the topology will be set to <em>g</em>.</p>
 <dl class="field-list simple">
@@ -238,13 +241,13 @@ a weight outside the <span class="math notranslate nohighlight">\(\left[ 0, 1 \r
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9free_form9free_formERK8topology">
-<span id="_CPPv3N5pagmo9free_form9free_formERK8topology"></span><span id="_CPPv2N5pagmo9free_form9free_formERK8topology"></span><span id="pagmo::free_form::free_form__topologyCR"></span><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">free_form</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="pre">topology</span></a> <span class="pre">&amp;</span><em><span class="pre">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERK8topology" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_form9free_formERK8topology">
+<span id="_CPPv3N5pagmo9free_form9free_formERK8topology"></span><span id="_CPPv2N5pagmo9free_form9free_formERK8topology"></span><span id="pagmo::free_form::free_form__topologyCR"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9free_formERK8topology" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I0EN5pagmo9free_form9free_formERK1T">
-<span id="_CPPv3I0EN5pagmo9free_form9free_formERK1T"></span><span id="_CPPv2I0EN5pagmo9free_form9free_formERK1T"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">T</span></code><span class="pre">&gt;</span><br /><em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">free_form</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="pagmo::free_form::free_form::T"><span class="pre">T</span></a> <span class="pre">&amp;</span><em><span class="pre">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo9free_form9free_formERK1T">
+<span id="_CPPv3I0EN5pagmo9free_form9free_formERK1T"></span><span id="_CPPv2I0EN5pagmo9free_form9free_formERK1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free_form</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="pagmo::free_form::free_form::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo9free_form9free_formERK1T" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The constructor from <code class="docutils literal notranslate"><span class="pre">T</span></code> does not participate in overload resolution
@@ -271,8 +274,8 @@ the constructor from <a class="reference internal" href="../topology.html#_CPPv4
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9free_form9push_backEv">
-<span id="_CPPv3N5pagmo9free_form9push_backEv"></span><span id="_CPPv2N5pagmo9free_form9push_backEv"></span><span id="pagmo::free_form::push_back"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">push_back</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9free_form9push_backEv">
+<span id="_CPPv3N5pagmo9free_form9push_backEv"></span><span id="_CPPv2N5pagmo9free_form9push_backEv"></span><span id="pagmo::free_form::push_back"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9free_form9push_backEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add a new vertex.</p>
 <p>The newly-added vertex will not be connected to any other vertex.</p>
 <dl class="field-list simple">
@@ -283,8 +286,8 @@ the constructor from <a class="reference internal" href="../topology.html#_CPPv4
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9free_form8get_nameEv">
-<span id="_CPPv3NK5pagmo9free_form8get_nameEv"></span><span id="_CPPv2NK5pagmo9free_form8get_nameEv"></span><span id="pagmo::free_form::get_nameC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9free_form8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9free_form8get_nameEv">
+<span id="_CPPv3NK5pagmo9free_form8get_nameEv"></span><span id="_CPPv2NK5pagmo9free_form8get_nameEv"></span><span id="pagmo::free_form::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9free_form8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the name of the topology.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>

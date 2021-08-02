@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,6 +33,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -176,77 +179,43 @@
 you will be able to compile and run your first C++ pagmo program:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">getting_started.cpp</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
-<div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithms/sade.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/archipelago.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problems/schwefel.hpp&gt;</span><span class="cp"></span>
-
-<span class="k">using</span> <span class="k">namespace</span> <span class="nn">pagmo</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="c1">// 1 - Instantiate a pagmo problem constructing it from a UDP</span>
-    <span class="c1">// (i.e., a user-defined problem, in this case the 30-dimensional</span>
-    <span class="c1">// generalised Schwefel test function).</span>
-    <span class="n">problem</span> <span class="n">prob</span><span class="p">{</span><span class="n">schwefel</span><span class="p">(</span><span class="mi">30</span><span class="p">)};</span>
-
-    <span class="c1">// 2 - Instantiate a pagmo algorithm (self-adaptive differential</span>
-    <span class="c1">// evolution, 100 generations).</span>
-    <span class="n">algorithm</span> <span class="n">algo</span><span class="p">{</span><span class="n">sade</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
-
-    <span class="c1">// 3 - Instantiate an archipelago with 16 islands having each 20 individuals.</span>
-    <span class="n">archipelago</span> <span class="n">archi</span><span class="p">{</span><span class="mi">16u</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="mi">20u</span><span class="p">};</span>
-
-    <span class="c1">// 4 - Run the evolution in parallel on the 16 separate islands 10 times.</span>
-    <span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
-
-    <span class="c1">// 5 - Wait for the evolutions to finish.</span>
-    <span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span>
-
-    <span class="c1">// 6 - Print the fitness of the best solution in each island.</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">isl</span> <span class="p">:</span> <span class="n">archi</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 4</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithms/sade.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 5</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/archipelago.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 6</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 7</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/problems/schwefel.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="k">using</span> <span class="k">namespace</span> <span class="nn">pagmo</span><span class="p">;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="linenos">12</span><span class="p">{</span>
+<span class="linenos">13</span>    <span class="c1">// 1 - Instantiate a pagmo problem constructing it from a UDP</span>
+<span class="linenos">14</span>    <span class="c1">// (i.e., a user-defined problem, in this case the 30-dimensional</span>
+<span class="linenos">15</span>    <span class="c1">// generalised Schwefel test function).</span>
+<span class="linenos">16</span>    <span class="n">problem</span> <span class="n">prob</span><span class="p">{</span><span class="n">schwefel</span><span class="p">(</span><span class="mi">30</span><span class="p">)};</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>    <span class="c1">// 2 - Instantiate a pagmo algorithm (self-adaptive differential</span>
+<span class="linenos">19</span>    <span class="c1">// evolution, 100 generations).</span>
+<span class="linenos">20</span>    <span class="n">algorithm</span> <span class="n">algo</span><span class="p">{</span><span class="n">sade</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>    <span class="c1">// 3 - Instantiate an archipelago with 16 islands having each 20 individuals.</span>
+<span class="linenos">23</span>    <span class="n">archipelago</span> <span class="n">archi</span><span class="p">{</span><span class="mi">16u</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="mi">20u</span><span class="p">};</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span>    <span class="c1">// 4 - Run the evolution in parallel on the 16 separate islands 10 times.</span>
+<span class="linenos">26</span>    <span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>    <span class="c1">// 5 - Wait for the evolutions to finish.</span>
+<span class="linenos">29</span>    <span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span>    <span class="c1">// 6 - Print the fitness of the best solution in each island.</span>
+<span class="linenos">32</span>    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="nl">isl</span> <span class="p">:</span> <span class="n">archi</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">33</span>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">34</span>    <span class="p">}</span>
+<span class="linenos">35</span><span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 </div>
 <p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> text file and compile it
 (for example) with:</p>

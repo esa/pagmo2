@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -209,22 +212,22 @@
   <div class="section" id="translate">
 <h1>Translate<a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo9translateE">
-<span id="_CPPv3N5pagmo9translateE"></span><span id="_CPPv2N5pagmo9translateE"></span><span id="pagmo::translate"></span><span class="target" id="classpagmo_1_1translate"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">translate</span></code><a class="headerlink" href="#_CPPv4N5pagmo9translateE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translateE">
+<span id="_CPPv3N5pagmo9translateE"></span><span id="_CPPv2N5pagmo9translateE"></span><span id="pagmo::translate"></span><span class="target" id="classpagmo_1_1translate"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo9translateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The translate meta-problem. </p>
 <p>This meta-problem translates the whole search space of an input problem by a fixed translation vector. <a class="reference internal" href="#classpagmo_1_1translate"><span class="std std-ref">pagmo::translate</span></a> objects are user-defined problems that can be used in the definition of a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9translate9translateEv">
-<span id="_CPPv3N5pagmo9translate9translateEv"></span><span id="_CPPv2N5pagmo9translate9translateEv"></span><span id="pagmo::translate::translate"></span><span class="target" id="classpagmo_1_1translate_1a12fdc156f59b6dc0f0a8e2f136a3b998"></span><code class="sig-name descname"><span class="pre">translate</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate9translateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translate9translateEv">
+<span id="_CPPv3N5pagmo9translate9translateEv"></span><span id="_CPPv2N5pagmo9translate9translateEv"></span><span id="pagmo::translate::translate"></span><span class="target" id="classpagmo_1_1translate_1a12fdc156f59b6dc0f0a8e2f136a3b998"></span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate9translateEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The constructor will initialize a non-translated default-constructed <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">T</span></code><span class="pre">,</span> <span class="pre">ctor_enabler</span><span class="pre">&lt;</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="pre">T</span></a><span class="pre">&gt;</span> <span class="pre">=</span> <span class="pre">0</span><span class="pre">&gt;</span><br /><span class="target" id="classpagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">explicit</span></em> <code class="sig-name descname"><span class="pre">translate</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="pre">T</span></a> <span class="pre">&amp;</span><span class="pre">&amp;</span><em><span class="pre">p</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double">
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from problem and translation vector. </p>
 <p>Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a translation vector.</p>
 <div class="admonition note">
@@ -248,8 +251,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate7fitnessERK13vector_double"></span><span id="pagmo::translate::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6f0a98f5545aaad0e5f9ae79584f1634"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo9translate7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate7fitnessERK13vector_double"></span><span id="pagmo::translate::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6f0a98f5545aaad0e5f9ae79584f1634"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness. </p>
 <p>The fitness computation is forwarded to the inner UDP, after the translation of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <dl class="field-list simple">
@@ -266,8 +269,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="pagmo::translate::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1afe782c6d57d081d046541cd671a9d688"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">batch_fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="pagmo::translate::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1afe782c6d57d081d046541cd671a9d688"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Batch fitness. </p>
 <p>The batch fitness computation is forwarded to the inner UDP, after the translation of <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 <dl class="field-list simple">
@@ -284,8 +287,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate17has_batch_fitnessEv">
-<span id="_CPPv3NK5pagmo9translate17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo9translate17has_batch_fitnessEv"></span><span id="pagmo::translate::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1translate_1acaee97533cb1780e60a1de8e1fd9bf6d"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_batch_fitness</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate17has_batch_fitnessEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17has_batch_fitnessEv">
+<span id="_CPPv3NK5pagmo9translate17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo9translate17has_batch_fitnessEv"></span><span id="pagmo::translate::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1translate_1acaee97533cb1780e60a1de8e1fd9bf6d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_batch_fitness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17has_batch_fitnessEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Check if the inner problem can compute fitnesses in batch mode. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -295,8 +298,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate10get_boundsEv">
-<span id="_CPPv3NK5pagmo9translate10get_boundsEv"></span><span id="_CPPv2NK5pagmo9translate10get_boundsEv"></span><span id="pagmo::translate::get_boundsC"></span><span class="target" id="classpagmo_1_1translate_1a57cbe9656d04f37fb8b199168d50e19c"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate10get_boundsEv">
+<span id="_CPPv3NK5pagmo9translate10get_boundsEv"></span><span id="_CPPv2NK5pagmo9translate10get_boundsEv"></span><span id="pagmo::translate::get_boundsC"></span><span class="target" id="classpagmo_1_1translate_1a57cbe9656d04f37fb8b199168d50e19c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bounds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>The box-bounds returned by this method are the translated box-bounds of the inner UDP.</p>
 <dl class="field-list simple">
@@ -310,8 +313,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate8get_nobjEv">
-<span id="_CPPv3NK5pagmo9translate8get_nobjEv"></span><span id="_CPPv2NK5pagmo9translate8get_nobjEv"></span><span id="pagmo::translate::get_nobjC"></span><span class="target" id="classpagmo_1_1translate_1a6ef8be609202ad93bb05ad9ebd443dab"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nobj</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8get_nobjEv">
+<span id="_CPPv3NK5pagmo9translate8get_nobjEv"></span><span id="_CPPv2NK5pagmo9translate8get_nobjEv"></span><span id="pagmo::translate::get_nobjC"></span><span class="target" id="classpagmo_1_1translate_1a6ef8be609202ad93bb05ad9ebd443dab"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nobj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nobjEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Number of objectives. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -321,8 +324,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate7get_necEv">
-<span id="_CPPv3NK5pagmo9translate7get_necEv"></span><span id="_CPPv2NK5pagmo9translate7get_necEv"></span><span id="pagmo::translate::get_necC"></span><span class="target" id="classpagmo_1_1translate_1aa32e748c0ab0041047ff1579ad1a4f7d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nec</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_necEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7get_necEv">
+<span id="_CPPv3NK5pagmo9translate7get_necEv"></span><span id="_CPPv2NK5pagmo9translate7get_necEv"></span><span id="pagmo::translate::get_necC"></span><span class="target" id="classpagmo_1_1translate_1aa32e748c0ab0041047ff1579ad1a4f7d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nec</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_necEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Equality constraint dimension. </p>
 <p>Returns the number of equality constraints of the inner problem.</p>
 <dl class="field-list simple">
@@ -333,8 +336,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate7get_nicEv">
-<span id="_CPPv3NK5pagmo9translate7get_nicEv"></span><span id="_CPPv2NK5pagmo9translate7get_nicEv"></span><span id="pagmo::translate::get_nicC"></span><span class="target" id="classpagmo_1_1translate_1a0cd1d8acdec031ed3207a5b547ff423d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nic</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nicEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7get_nicEv">
+<span id="_CPPv3NK5pagmo9translate7get_nicEv"></span><span id="_CPPv2NK5pagmo9translate7get_nicEv"></span><span id="pagmo::translate::get_nicC"></span><span class="target" id="classpagmo_1_1translate_1a0cd1d8acdec031ed3207a5b547ff423d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nicEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Inequality constraint dimension. </p>
 <p>Returns the number of inequality constraints of the inner problem.</p>
 <dl class="field-list simple">
@@ -345,8 +348,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate7get_nixEv">
-<span id="_CPPv3NK5pagmo9translate7get_nixEv"></span><span id="_CPPv2NK5pagmo9translate7get_nixEv"></span><span id="pagmo::translate::get_nixC"></span><span class="target" id="classpagmo_1_1translate_1a4ab2186da73f89fb1e48f671d2d676f1"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">get_nix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7get_nixEv">
+<span id="_CPPv3NK5pagmo9translate7get_nixEv"></span><span id="_CPPv2NK5pagmo9translate7get_nixEv"></span><span id="pagmo::translate::get_nixC"></span><span class="target" id="classpagmo_1_1translate_1a4ab2186da73f89fb1e48f671d2d676f1"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nixEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Integer dimension. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -356,8 +359,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate12has_gradientEv">
-<span id="_CPPv3NK5pagmo9translate12has_gradientEv"></span><span id="_CPPv2NK5pagmo9translate12has_gradientEv"></span><span id="pagmo::translate::has_gradientC"></span><span class="target" id="classpagmo_1_1translate_1a6897e3618b5b67ba3db8d05f1f027744"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_gradient</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_gradientEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate12has_gradientEv">
+<span id="_CPPv3NK5pagmo9translate12has_gradientEv"></span><span id="_CPPv2NK5pagmo9translate12has_gradientEv"></span><span id="pagmo::translate::has_gradientC"></span><span class="target" id="classpagmo_1_1translate_1a6897e3618b5b67ba3db8d05f1f027744"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_gradientEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the inner problem has gradients. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a6897e3618b5b67ba3db8d05f1f027744"><span class="std std-ref"><span class="pre">has_gradient()</span></span></a></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -368,8 +371,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate8gradientERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8gradientERK13vector_double"></span><span id="pagmo::translate::gradient__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6b30b636047caec8d4335bc04efd1426"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">gradient</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8gradientERK13vector_double">
+<span id="_CPPv3NK5pagmo9translate8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8gradientERK13vector_double"></span><span id="pagmo::translate::gradient__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6b30b636047caec8d4335bc04efd1426"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradients. </p>
 <p>The gradients computation is forwarded to the inner problem, after the translation of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <dl class="field-list simple">
@@ -386,8 +389,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate21has_gradient_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="pagmo::translate::has_gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1ae80bdb88858e008dd06191c7682a8475"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_gradient_sparsity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate21has_gradient_sparsityEv">
+<span id="_CPPv3NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="pagmo::translate::has_gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1ae80bdb88858e008dd06191c7682a8475"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the inner problem has gradient sparisty implemented. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1ae80bdb88858e008dd06191c7682a8475"><span class="std std-ref"><span class="pre">has_gradient_sparsity()</span></span></a></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -398,8 +401,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate17gradient_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate17gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17gradient_sparsityEv"></span><span id="pagmo::translate::gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a9642bee5dcea46bb3932d8eae7bc0522"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="pre">sparsity_pattern</span></a> <code class="sig-name descname"><span class="pre">gradient_sparsity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate17gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17gradient_sparsityEv">
+<span id="_CPPv3NK5pagmo9translate17gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17gradient_sparsityEv"></span><span id="pagmo::translate::gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a9642bee5dcea46bb3932d8eae7bc0522"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="n"><span class="pre">sparsity_pattern</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17gradient_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradient sparsity. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">gradient_sparsity</span></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -410,8 +413,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate12has_hessiansEv">
-<span id="_CPPv3NK5pagmo9translate12has_hessiansEv"></span><span id="_CPPv2NK5pagmo9translate12has_hessiansEv"></span><span id="pagmo::translate::has_hessiansC"></span><span class="target" id="classpagmo_1_1translate_1a02c67bd09eb2b74b52d2ba0856d07eb0"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_hessians</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_hessiansEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate12has_hessiansEv">
+<span id="_CPPv3NK5pagmo9translate12has_hessiansEv"></span><span id="_CPPv2NK5pagmo9translate12has_hessiansEv"></span><span id="pagmo::translate::has_hessiansC"></span><span class="target" id="classpagmo_1_1translate_1a02c67bd09eb2b74b52d2ba0856d07eb0"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_hessiansEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the inner problem has hessians. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a02c67bd09eb2b74b52d2ba0856d07eb0"><span class="std std-ref"><span class="pre">has_hessians()</span></span></a></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -422,8 +425,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate8hessiansERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate8hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8hessiansERK13vector_double"></span><span id="pagmo::translate::hessians__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1aa55e75fde69a2a3e250cf21fa66cbae9"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">hessians</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8hessiansERK13vector_double">
+<span id="_CPPv3NK5pagmo9translate8hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8hessiansERK13vector_double"></span><span id="pagmo::translate::hessians__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1aa55e75fde69a2a3e250cf21fa66cbae9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hessians</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8hessiansERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aa55e75fde69a2a3e250cf21fa66cbae9"><span class="std std-ref"><span class="pre">hessians()</span></span></a></code> computation is forwarded to the inner problem, after the translation of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <dl class="field-list simple">
@@ -440,8 +443,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate21has_hessians_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="pagmo::translate::has_hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1af3dbbfb0c05dac819e0346a552308839"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_hessians_sparsity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate21has_hessians_sparsityEv">
+<span id="_CPPv3NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="pagmo::translate::has_hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1af3dbbfb0c05dac819e0346a552308839"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Checks if the inner problem has hessians sparisty implemented. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1af3dbbfb0c05dac819e0346a552308839"><span class="std std-ref"><span class="pre">has_hessians_sparsity()</span></span></a></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -452,8 +455,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate17hessians_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate17hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17hessians_sparsityEv"></span><span id="pagmo::translate::hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a31fda495e3f85b8d70ce3a56eb6b018f"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="pre">sparsity_pattern</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">hessians_sparsity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17hessians_sparsityEv">
+<span id="_CPPv3NK5pagmo9translate17hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17hessians_sparsityEv"></span><span id="pagmo::translate::hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a31fda495e3f85b8d70ce3a56eb6b018f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="n"><span class="pre">sparsity_pattern</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hessians_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17hessians_sparsityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Hessians sparsity. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a31fda495e3f85b8d70ce3a56eb6b018f"><span class="std std-ref"><span class="pre">hessians_sparsity()</span></span></a></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -464,8 +467,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate12has_set_seedEv">
-<span id="_CPPv3NK5pagmo9translate12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9translate12has_set_seedEv"></span><span id="pagmo::translate::has_set_seedC"></span><span class="target" id="classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">has_set_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate12has_set_seedEv">
+<span id="_CPPv3NK5pagmo9translate12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9translate12has_set_seedEv"></span><span id="pagmo::translate::has_set_seedC"></span><span class="target" id="classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_set_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem.</p>
 <dl class="field-list simple">
@@ -476,8 +479,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9translate8set_seedEj">
-<span id="_CPPv3N5pagmo9translate8set_seedEj"></span><span id="_CPPv2N5pagmo9translate8set_seedEj"></span><span id="pagmo::translate::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translate8set_seedEj">
+<span id="_CPPv3N5pagmo9translate8set_seedEj"></span><span id="_CPPv2N5pagmo9translate8set_seedEj"></span><span id="pagmo::translate::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem.</p>
 <dl class="field-list simple">
@@ -491,8 +494,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate8get_nameEv">
-<span id="_CPPv3NK5pagmo9translate8get_nameEv"></span><span id="_CPPv2NK5pagmo9translate8get_nameEv"></span><span id="pagmo::translate::get_nameC"></span><span class="target" id="classpagmo_1_1translate_1a93fdfc4edd4c48d61ddc01423a289a40"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8get_nameEv">
+<span id="_CPPv3NK5pagmo9translate8get_nameEv"></span><span id="_CPPv2NK5pagmo9translate8get_nameEv"></span><span id="pagmo::translate::get_nameC"></span><span class="target" id="classpagmo_1_1translate_1a93fdfc4edd4c48d61ddc01423a289a40"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
 <p>This method will add <code class="docutils literal notranslate"><span class="pre">[translated]</span></code> to the name provided by the inner problem.</p>
 <dl class="field-list simple">
@@ -506,8 +509,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo9translate14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9translate14get_extra_infoEv"></span><span id="pagmo::translate::get_extra_infoC"></span><span class="target" id="classpagmo_1_1translate_1a6175b32f23cf3025111559c7cd67e113"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo9translate14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9translate14get_extra_infoEv"></span><span id="pagmo::translate::get_extra_infoC"></span><span class="target" id="classpagmo_1_1translate_1a6175b32f23cf3025111559c7cd67e113"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>This method will append a description of the translation vector to the extra info provided by the inner problem.</p>
 <dl class="field-list simple">
@@ -521,8 +524,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate15get_translationEv">
-<span id="_CPPv3NK5pagmo9translate15get_translationEv"></span><span id="_CPPv2NK5pagmo9translate15get_translationEv"></span><span id="pagmo::translate::get_translationC"></span><span class="target" id="classpagmo_1_1translate_1aee2dbbe2253998783027a4c558091707"></span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_translation</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate15get_translationEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate15get_translationEv">
+<span id="_CPPv3NK5pagmo9translate15get_translationEv"></span><span id="_CPPv2NK5pagmo9translate15get_translationEv"></span><span id="pagmo::translate::get_translationC"></span><span class="target" id="classpagmo_1_1translate_1aee2dbbe2253998783027a4c558091707"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_translation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate15get_translationEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the translation vector. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -532,8 +535,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo9translate17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9translate17get_thread_safetyEv"></span><span id="pagmo::translate::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1translate_1ac9c29ddf424c68af95ef00e7a01a60d2"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="pre">thread_safety</span></a> <code class="sig-name descname"><span class="pre">get_thread_safety</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17get_thread_safetyEv">
+<span id="_CPPv3NK5pagmo9translate17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9translate17get_thread_safetyEv"></span><span id="pagmo::translate::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1translate_1ac9c29ddf424c68af95ef00e7a01a60d2"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem’s thread safety level. </p>
 <p>The thread safety of a meta-problem is defined by the thread safety of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
@@ -544,8 +547,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo9translate17get_inner_problemEv">
-<span id="_CPPv3NK5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problemC"></span><span class="target" id="classpagmo_1_1translate_1a10ede4f438bbad743dbf118b44161a85"></span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="pre">problem</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_inner_problem</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17get_inner_problemEv">
+<span id="_CPPv3NK5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problemC"></span><span class="target" id="classpagmo_1_1translate_1a10ede4f438bbad743dbf118b44161a85"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
@@ -556,8 +559,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo9translate17get_inner_problemEv">
-<span id="_CPPv3N5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2N5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problem"></span><span class="target" id="classpagmo_1_1translate_1a8f258f7f6c7e065429dea4e11846f339"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="pre">problem</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_inner_problem</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translate17get_inner_problemEv">
+<span id="_CPPv3N5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2N5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problem"></span><span class="target" id="classpagmo_1_1translate_1a8f258f7f6c7e065429dea4e11846f339"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <div class="admonition note">

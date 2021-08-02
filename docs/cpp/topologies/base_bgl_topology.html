@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -196,8 +199,8 @@
 </div>
 <p><em>#include &lt;pagmo/topologies/base_bgl_topology.hpp&gt;</em></p>
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo17base_bgl_topologyE">
-<span id="_CPPv3N5pagmo17base_bgl_topologyE"></span><span id="_CPPv2N5pagmo17base_bgl_topologyE"></span><span id="pagmo::base_bgl_topology"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">base_bgl_topology</span></code><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topologyE">
+<span id="_CPPv3N5pagmo17base_bgl_topologyE"></span><span id="_CPPv2N5pagmo17base_bgl_topologyE"></span><span id="pagmo::base_bgl_topology"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">base_bgl_topology</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This class provides the basic building blocks to implement
 user-defined topologies (UDTs) based on the Boost Graph Library (BGL).</p>
 <p>Note that, by itself, this class does <strong>not</strong> satisfy all the requirements
@@ -211,30 +214,30 @@ concurrently with any other member function.</p>
 <p><a class="reference external" href="https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/index.html">https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/index.html</a></p>
 </div>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv">
-<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyEv"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyEv"></span><span id="pagmo::base_bgl_topology::base_bgl_topology"></span><code class="sig-name descname"><span class="pre">base_bgl_topology</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv">
+<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyEv"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyEv"></span><span id="pagmo::base_bgl_topology::base_bgl_topology"></span><span class="sig-name descname"><span class="n"><span class="pre">base_bgl_topology</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Default constructor.</p>
 <p>The default constructor will initialize an empty graph with no vertices and no edges.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology">
-<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::base_bgl_topology__base_bgl_topologyCR"></span><code class="sig-name descname"><span class="pre">base_bgl_topology</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology" title="pagmo::base_bgl_topology::base_bgl_topology"><span class="pre">base_bgl_topology</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::base_bgl_topology__base_bgl_topologyCR"></span><span class="sig-name descname"><span class="n"><span class="pre">base_bgl_topology</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology" title="pagmo::base_bgl_topology::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERK17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology">
-<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::base_bgl_topology__base_bgl_topologyRR"></span><code class="sig-name descname"><span class="pre">base_bgl_topology</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology" title="pagmo::base_bgl_topology::base_bgl_topology"><span class="pre">base_bgl_topology</span></a><span class="pre">&amp;</span><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::base_bgl_topology__base_bgl_topologyRR"></span><span class="sig-name descname"><span class="n"><span class="pre">base_bgl_topology</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology" title="pagmo::base_bgl_topology::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology17base_bgl_topologyERR17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology">
-<span id="_CPPv3N5pagmo17base_bgl_topologyaSERK17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topologyaSERK17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::assign-operator__base_bgl_topologyCR"></span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="pre">base_bgl_topology</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">operator=</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="pre">base_bgl_topology</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topologyaSERK17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topologyaSERK17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::assign-operator__base_bgl_topologyCR"></span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyaSERK17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology">
-<span id="_CPPv3N5pagmo17base_bgl_topologyaSERR17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topologyaSERR17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::assign-operator__base_bgl_topologyRR"></span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="pre">base_bgl_topology</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">operator=</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="pre">base_bgl_topology</span></a><span class="pre">&amp;</span><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology">
+<span id="_CPPv3N5pagmo17base_bgl_topologyaSERR17base_bgl_topology"></span><span id="_CPPv2N5pagmo17base_bgl_topologyaSERR17base_bgl_topology"></span><span id="pagmo::base_bgl_topology::assign-operator__base_bgl_topologyRR"></span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><span class="n"><span class="pre">base_bgl_topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topologyaSERR17base_bgl_topology" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><a class="reference internal" href="#_CPPv4N5pagmo17base_bgl_topologyE" title="pagmo::base_bgl_topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">base_bgl_topology</span></code></a> is copy/move constructible, and copy/move assignable.
 Copy construction/assignment will perform deep copies, move operations will leave the moved-from object in
 an unspecified but valid state.</p>
@@ -246,8 +249,8 @@ an unspecified but valid state.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv">
-<span id="_CPPv3NK5pagmo17base_bgl_topology12num_verticesEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology12num_verticesEv"></span><span id="pagmo::base_bgl_topology::num_verticesC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <code class="sig-name descname"><span class="pre">num_vertices</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv">
+<span id="_CPPv3NK5pagmo17base_bgl_topology12num_verticesEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology12num_verticesEv"></span><span id="pagmo::base_bgl_topology::num_verticesC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_vertices</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology12num_verticesEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the number of vertices in the topology.</p>
@@ -256,8 +259,8 @@ an unspecified but valid state.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE">
-<span id="_CPPv3NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::are_adjacent__std::s.std::sC"></span><span class="pre">bool</span> <code class="sig-name descname"><span class="pre">are_adjacent</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em>, <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">j</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE">
+<span id="_CPPv3NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::are_adjacent__std::s.std::sC"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">are_adjacent</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology12are_adjacentENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Check if two vertices are adjacent.</p>
 <p>Two vertices <em>i</em> and <em>j</em> are adjacent if there is a directed edge connecting <em>i</em> to <em>j</em>.</p>
 <dl class="field-list simple">
@@ -280,8 +283,8 @@ an unspecified but valid state.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE">
-<span id="_CPPv3NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE"></span><span id="pagmo::base_bgl_topology::get_connections__std::sC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_connections</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE">
+<span id="_CPPv3NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE"></span><span id="pagmo::base_bgl_topology::get_connections__std::sC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_connections</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology15get_connectionsENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fetch the edges connecting to <em>i</em>.</p>
 <p>This function will return a pair of vectors of equal size, containing:</p>
 <ul class="simple">
@@ -305,8 +308,8 @@ an unspecified but valid state.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE">
-<span id="_CPPv3NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::get_edge_weight__std::s.std::sC"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">get_edge_weight</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em>, <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">j</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE">
+<span id="_CPPv3NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE"></span><span id="_CPPv2NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::get_edge_weight__std::s.std::sC"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_edge_weight</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology15get_edge_weightENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -336,8 +339,8 @@ an unspecified but valid state.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology10add_vertexEv">
-<span id="_CPPv3N5pagmo17base_bgl_topology10add_vertexEv"></span><span id="_CPPv2N5pagmo17base_bgl_topology10add_vertexEv"></span><span id="pagmo::base_bgl_topology::add_vertex"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">add_vertex</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology10add_vertexEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology10add_vertexEv">
+<span id="_CPPv3N5pagmo17base_bgl_topology10add_vertexEv"></span><span id="_CPPv2N5pagmo17base_bgl_topology10add_vertexEv"></span><span id="pagmo::base_bgl_topology::add_vertex"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_vertex</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology10add_vertexEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add a vertex.</p>
 <p>This function will add a new vertex to the topology. The newly-added vertex
 will be disjoint from any other vertex in the topology (i.e., there are no
@@ -350,8 +353,8 @@ connections to/from the new vertex).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd">
-<span id="_CPPv3N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd"></span><span id="pagmo::base_bgl_topology::add_edge__std::s.std::s.double"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">add_edge</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em>, <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">j</span></em>, <span class="pre">double</span> <em><span class="pre">w</span></em> <span class="pre">=</span> <span class="pre">1</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd">
+<span id="_CPPv3N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd"></span><span id="pagmo::base_bgl_topology::add_edge__std::s.std::s.double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_edge</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology8add_edgeENSt6size_tENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Add a new edge.</p>
 <p>This function will add a new edge of weight <em>w</em> connecting <em>i</em> to <em>j</em>.</p>
 <dl class="field-list simple">
@@ -378,8 +381,8 @@ connections to/from the new vertex).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE">
-<span id="_CPPv3N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE"></span><span id="_CPPv2N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::remove_edge__std::s.std::s"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">remove_edge</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em>, <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">j</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE">
+<span id="_CPPv3N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE"></span><span id="_CPPv2N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE"></span><span id="pagmo::base_bgl_topology::remove_edge__std::s.std::s"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_edge</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology11remove_edgeENSt6size_tENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Remove an existing edge.</p>
 <p>This function will remove the edge connecting <em>i</em> to <em>j</em>.</p>
 <dl class="field-list simple">
@@ -404,8 +407,8 @@ connections to/from the new vertex).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd">
-<span id="_CPPv3N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd"></span><span id="pagmo::base_bgl_topology::set_weight__std::s.std::s.double"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_weight</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">i</span></em>, <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">j</span></em>, <span class="pre">double</span> <em><span class="pre">w</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd">
+<span id="_CPPv3N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd"></span><span id="pagmo::base_bgl_topology::set_weight__std::s.std::s.double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_weight</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">j</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology10set_weightENSt6size_tENSt6size_tEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Set the weight of an edge.</p>
 <p>This function will set to <em>w</em> the weight of the edge connecting <em>i</em> to <em>j</em>.</p>
 <dl class="field-list simple">
@@ -432,8 +435,8 @@ connections to/from the new vertex).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd">
-<span id="_CPPv3N5pagmo17base_bgl_topology15set_all_weightsEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology15set_all_weightsEd"></span><span id="pagmo::base_bgl_topology::set_all_weights__double"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_all_weights</span></code><span class="sig-paren">(</span><span class="pre">double</span> <em><span class="pre">w</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd">
+<span id="_CPPv3N5pagmo17base_bgl_topology15set_all_weightsEd"></span><span id="_CPPv2N5pagmo17base_bgl_topology15set_all_weightsEd"></span><span id="pagmo::base_bgl_topology::set_all_weights__double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_all_weights</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17base_bgl_topology15set_all_weightsEd" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This function will set the weights of all edges in the topology to <em>w</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -449,8 +452,8 @@ connections to/from the new vertex).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo17base_bgl_topology14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology14get_extra_infoEv"></span><span id="pagmo::base_bgl_topology::get_extra_infoC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo17base_bgl_topology14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology14get_extra_infoEv"></span><span id="pagmo::base_bgl_topology::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a string containing human-readable information about the topology.</p>
@@ -462,8 +465,8 @@ connections to/from the new vertex).</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo17base_bgl_topology6to_bglEv">
-<span id="_CPPv3NK5pagmo17base_bgl_topology6to_bglEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology6to_bglEv"></span><span id="pagmo::base_bgl_topology::to_bglC"></span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="pre">bgl_graph_t</span></a> <code class="sig-name descname"><span class="pre">to_bgl</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo17base_bgl_topology6to_bglEv">
+<span id="_CPPv3NK5pagmo17base_bgl_topology6to_bglEv"></span><span id="_CPPv2NK5pagmo17base_bgl_topology6to_bglEv"></span><span id="pagmo::base_bgl_topology::to_bglC"></span><a class="reference internal" href="../topology.html#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="n"><span class="pre">bgl_graph_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_bgl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo17base_bgl_topology6to_bglEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>

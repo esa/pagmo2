@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,6 +33,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -198,8 +201,8 @@ the BSDs, but <em>not</em> Microsoft Windows, unless some POSIX compatibility la
 on the system).</p>
 </div>
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo11fork_islandE">
-<span id="_CPPv3N5pagmo11fork_islandE"></span><span id="_CPPv2N5pagmo11fork_islandE"></span><span id="pagmo::fork_island"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">fork_island</span></code><a class="headerlink" href="#_CPPv4N5pagmo11fork_islandE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo11fork_islandE">
+<span id="_CPPv3N5pagmo11fork_islandE"></span><span id="_CPPv2N5pagmo11fork_islandE"></span><span id="pagmo::fork_island"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fork_island</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo11fork_islandE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This user-defined island (UDI) will use the POSIX <code class="docutils literal notranslate"><span class="pre">fork()</span></code> system call to offload the evolution
 of a population to a child process.</p>
 <p>Generally speaking, users are encouraged to use <a class="reference internal" href="thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a> rather than
@@ -231,25 +234,25 @@ specific <code class="docutils literal notranslate"><span class="pre">fork()</sp
 code which is not <a class="reference external" href="http://man7.org/linux/man-pages/man7/signal-safety.7.html">asynchronous-safe</a>.</p>
 </div>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo11fork_island11fork_islandEv">
-<span id="_CPPv3N5pagmo11fork_island11fork_islandEv"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandEv"></span><span id="pagmo::fork_island::fork_island"></span><code class="sig-name descname"><span class="pre">fork_island</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo11fork_island11fork_islandEv">
+<span id="_CPPv3N5pagmo11fork_island11fork_islandEv"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandEv"></span><span id="pagmo::fork_island::fork_island"></span><span class="sig-name descname"><span class="n"><span class="pre">fork_island</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island">
-<span id="_CPPv3N5pagmo11fork_island11fork_islandERK11fork_island"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandERK11fork_island"></span><span id="pagmo::fork_island::fork_island__fork_islandCR"></span><code class="sig-name descname"><span class="pre">fork_island</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island" title="pagmo::fork_island::fork_island"><span class="pre">fork_island</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island">
+<span id="_CPPv3N5pagmo11fork_island11fork_islandERK11fork_island"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandERK11fork_island"></span><span id="pagmo::fork_island::fork_island__fork_islandCR"></span><span class="sig-name descname"><span class="n"><span class="pre">fork_island</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island" title="pagmo::fork_island::fork_island"><span class="n"><span class="pre">fork_island</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandERK11fork_island" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island">
-<span id="_CPPv3N5pagmo11fork_island11fork_islandERR11fork_island"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island"></span><span id="pagmo::fork_island::fork_island__fork_islandRR"></span><code class="sig-name descname"><span class="pre">fork_island</span></code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island" title="pagmo::fork_island::fork_island"><span class="pre">fork_island</span></a><span class="pre">&amp;</span><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island">
+<span id="_CPPv3N5pagmo11fork_island11fork_islandERR11fork_island"></span><span id="_CPPv2N5pagmo11fork_island11fork_islandERR11fork_island"></span><span id="pagmo::fork_island::fork_island__fork_islandRR"></span><span class="sig-name descname"><span class="n"><span class="pre">fork_island</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island" title="pagmo::fork_island::fork_island"><span class="n"><span class="pre">fork_island</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo11fork_island11fork_islandERR11fork_island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><a class="reference internal" href="#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> is default, copy and move-constructible. The copy and move constructor are equivalent
 to the default constructor.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo11fork_island10run_evolveER6island">
-<span id="_CPPv3NK5pagmo11fork_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo11fork_island10run_evolveER6island"></span><span id="pagmo::fork_island::run_evolve__islandRC"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">run_evolve</span></code><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><span class="pre">island</span></a> <span class="pre">&amp;</span><em><span class="pre">isl</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11fork_island10run_evolveER6island">
+<span id="_CPPv3NK5pagmo11fork_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo11fork_island10run_evolveER6island"></span><span id="pagmo::fork_island::run_evolve__islandRC"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><span class="n"><span class="pre">island</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">isl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This method will fork the calling process, and, in the child process, the <a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">population</span></code></a> of <em>isl</em> will be
 evolved using the <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">algorithm</span></code></a> of <em>isl</em>. At the end of the evolution, the evolved population and the
 algorithm used for the evolution will be sent back to the parent process, where they will replace, in <em>isl</em>, the original
@@ -276,8 +279,8 @@ error is generated in the child process.</p></li>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo11fork_island8get_nameEv">
-<span id="_CPPv3NK5pagmo11fork_island8get_nameEv"></span><span id="_CPPv2NK5pagmo11fork_island8get_nameEv"></span><span id="pagmo::fork_island::get_nameC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11fork_island8get_nameEv">
+<span id="_CPPv3NK5pagmo11fork_island8get_nameEv"></span><span id="_CPPv2NK5pagmo11fork_island8get_nameEv"></span><span id="pagmo::fork_island::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the string <code class="docutils literal notranslate"><span class="pre">&quot;Fork</span> <span class="pre">island&quot;</span></code>.</p>
@@ -286,8 +289,8 @@ error is generated in the child process.</p></li>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo11fork_island14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo11fork_island14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11fork_island14get_extra_infoEv"></span><span id="pagmo::fork_island::get_extra_infoC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11fork_island14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo11fork_island14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11fork_island14get_extra_infoEv"></span><span id="pagmo::fork_island::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>if an evolution is ongoing, this method will return a string
@@ -297,8 +300,8 @@ representation of the ID of the child process. Otherwise, the <code class="docut
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo11fork_island13get_child_pidEv">
-<span id="_CPPv3NK5pagmo11fork_island13get_child_pidEv"></span><span id="_CPPv2NK5pagmo11fork_island13get_child_pidEv"></span><span id="pagmo::fork_island::get_child_pidC"></span><span class="pre">pid_t</span> <code class="sig-name descname"><span class="pre">get_child_pid</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island13get_child_pidEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11fork_island13get_child_pidEv">
+<span id="_CPPv3NK5pagmo11fork_island13get_child_pidEv"></span><span id="_CPPv2NK5pagmo11fork_island13get_child_pidEv"></span><span id="pagmo::fork_island::get_child_pidC"></span><span class="n"><span class="pre">pid_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_child_pid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11fork_island13get_child_pidEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a signed integral value representing the process ID of the child process, if an evolution is ongoing. Otherwise,

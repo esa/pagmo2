@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,6 +33,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -196,63 +199,36 @@ i.e., your <em>population</em>.</p>
 you will be able to compile and run
 C++ pagmo programs. The following example shows the use with no
 multithreading of an algoritmic evolution:</p>
-<div class="highlight-c++ notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithms/nsga2.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/population.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pagmo/problems/dtlz.hpp&gt;</span><span class="cp"></span>
-
-<span class="k">using</span> <span class="k">namespace</span> <span class="nn">pagmo</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="c1">// 1 - Instantiate a pagmo problem constructing it from a UDP</span>
-    <span class="c1">// (user defined problem).</span>
-    <span class="n">problem</span> <span class="n">prob</span><span class="p">{</span><span class="n">dtlz</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)};</span>
-
-    <span class="c1">// 2 - Instantiate a pagmo algorithm</span>
-    <span class="n">algorithm</span> <span class="n">algo</span><span class="p">{</span><span class="n">nsga2</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
-
-    <span class="c1">// 3 - Instantiate a population</span>
-    <span class="n">population</span> <span class="n">pop</span><span class="p">{</span><span class="n">prob</span><span class="p">,</span> <span class="mi">24</span><span class="p">};</span>
-
-    <span class="c1">// 4 - Evolve the population</span>
-    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">);</span>
-
-    <span class="c1">// 5 - Output the population</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The population: </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">pop</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 4</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/algorithms/nsga2.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 5</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/population.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 6</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 7</span><span class="cp">#include</span> <span class="cpf">&lt;pagmo/problems/dtlz.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="k">using</span> <span class="k">namespace</span> <span class="nn">pagmo</span><span class="p">;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="linenos">12</span><span class="p">{</span>
+<span class="linenos">13</span>    <span class="c1">// 1 - Instantiate a pagmo problem constructing it from a UDP</span>
+<span class="linenos">14</span>    <span class="c1">// (user defined problem).</span>
+<span class="linenos">15</span>    <span class="n">problem</span> <span class="n">prob</span><span class="p">{</span><span class="n">dtlz</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)};</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="c1">// 2 - Instantiate a pagmo algorithm</span>
+<span class="linenos">18</span>    <span class="n">algorithm</span> <span class="n">algo</span><span class="p">{</span><span class="n">nsga2</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="c1">// 3 - Instantiate a population</span>
+<span class="linenos">21</span>    <span class="n">population</span> <span class="n">pop</span><span class="p">{</span><span class="n">prob</span><span class="p">,</span> <span class="mi">24</span><span class="p">};</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>    <span class="c1">// 4 - Evolve the population</span>
+<span class="linenos">24</span>    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">);</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>    <span class="c1">// 5 - Output the population</span>
+<span class="linenos">27</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The population: </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">pop</span><span class="p">;</span>
+<span class="linenos">28</span><span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>Place it into a <code class="docutils literal notranslate"><span class="pre">nsga2.cpp</span></code> text file and compile it (for example) with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++17 nsga2.cpp -ltbb -lboost_serialization
 </pre></div>

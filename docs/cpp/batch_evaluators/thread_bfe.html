@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,6 +33,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -193,15 +196,15 @@
 </div>
 <p><em>#include &lt;pagmo/batch_evaluators/thread_bfe.hpp&gt;</em></p>
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo10thread_bfeE">
-<span id="_CPPv3N5pagmo10thread_bfeE"></span><span id="_CPPv2N5pagmo10thread_bfeE"></span><span id="pagmo::thread_bfe"></span><em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">thread_bfe</span></code><a class="headerlink" href="#_CPPv4N5pagmo10thread_bfeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo10thread_bfeE">
+<span id="_CPPv3N5pagmo10thread_bfeE"></span><span id="_CPPv2N5pagmo10thread_bfeE"></span><span id="pagmo::thread_bfe"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_bfe</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10thread_bfeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
 construct a <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.
 <a class="reference internal" href="#_CPPv4N5pagmo10thread_bfeE" title="pagmo::thread_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_bfe</span></code></a> will use multiple threads of execution to parallelise
 the evaluation of the fitnesses of a batch of input decision vectors.</p>
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10thread_bfeclE7problemRK13vector_double">
-<span id="_CPPv3NK5pagmo10thread_bfeclE7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo10thread_bfeclE7problemRK13vector_double"></span><span id="pagmo::thread_bfe::call-operator__problem.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">operator()</span></code><span class="sig-paren">(</span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="pre">problem</span></a> <em><span class="pre">p</span></em>, <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <span class="pre">&amp;</span><em><span class="pre">dvs</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10thread_bfeclE7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10thread_bfeclE7problemRK13vector_double">
+<span id="_CPPv3NK5pagmo10thread_bfeclE7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo10thread_bfeclE7problemRK13vector_double"></span><span id="pagmo::thread_bfe::call-operator__problem.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dvs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10thread_bfeclE7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will use the input problem <em>p</em> to evaluate
 the fitnesses of the decision vectors stored contiguously in <em>dvs</em>. The fitness evaluation
@@ -233,8 +236,8 @@ the <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem7f
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10thread_bfe8get_nameEv">
-<span id="_CPPv3NK5pagmo10thread_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo10thread_bfe8get_nameEv"></span><span id="pagmo::thread_bfe::get_nameC"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10thread_bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10thread_bfe8get_nameEv">
+<span id="_CPPv3NK5pagmo10thread_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo10thread_bfe8get_nameEv"></span><span id="pagmo::thread_bfe::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10thread_bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a human-readable name for this <a class="reference internal" href="#_CPPv4N5pagmo10thread_bfeE" title="pagmo::thread_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_bfe</span></code></a>.</p>

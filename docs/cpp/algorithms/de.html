@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,6 +33,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -210,8 +213,8 @@
   <div class="section" id="differential-evolution">
 <h1>Differential Evolution<a class="headerlink" href="#differential-evolution" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo2deE">
-<span id="_CPPv3N5pagmo2deE"></span><span id="_CPPv2N5pagmo2deE"></span><span id="pagmo::de"></span><span class="target" id="classpagmo_1_1de"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">de</span></code><a class="headerlink" href="#_CPPv4N5pagmo2deE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2deE">
+<span id="_CPPv3N5pagmo2deE"></span><span id="_CPPv2N5pagmo2deE"></span><span id="pagmo::de"></span><span class="target" id="classpagmo_1_1de"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">de</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo2deE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Differential Evolution Algorithm. </p>
 <p><img alt="../../../_images/de.png" src="../../../_images/de.png" /></p>
 <p>Differential Evolution is an heuristic optimizer developed by Rainer Storn and Kenneth Price.</p>
@@ -231,14 +234,14 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
-<dt id="_CPPv4N5pagmo2de13log_line_typeE">
-<span id="_CPPv3N5pagmo2de13log_line_typeE"></span><span id="_CPPv2N5pagmo2de13log_line_typeE"></span><span id="pagmo::de::log_line_type"></span><span class="target" id="classpagmo_1_1de_1ac010a4a7bbe3253a6c4a50d84d96c94c"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">tuple</span><span class="pre">&lt;</span><span class="pre">unsigned</span><span class="pre">,</span> <span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">,</span> <span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_line_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo2de13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2de13log_line_typeE">
+<span id="_CPPv3N5pagmo2de13log_line_typeE"></span><span id="_CPPv2N5pagmo2de13log_line_typeE"></span><span id="pagmo::de::log_line_type"></span><span class="target" id="classpagmo_1_1de_1ac010a4a7bbe3253a6c4a50d84d96c94c"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo2de13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, dx, df) </p>
 </dd></dl>
 
 <dl class="cpp type">
-<dt id="_CPPv4N5pagmo2de8log_typeE">
-<span id="_CPPv3N5pagmo2de8log_typeE"></span><span id="_CPPv2N5pagmo2de8log_typeE"></span><span id="pagmo::de::log_type"></span><span class="target" id="classpagmo_1_1de_1ab53c7d8f0409804281678f71cca5893d"></span><em class="property"><span class="pre">typedef</span> </em><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><a class="reference internal" href="#_CPPv4N5pagmo2de13log_line_typeE" title="pagmo::de::log_line_type"><span class="pre">log_line_type</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">log_type</span></code><a class="headerlink" href="#_CPPv4N5pagmo2de8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2de8log_typeE">
+<span id="_CPPv3N5pagmo2de8log_typeE"></span><span id="_CPPv2N5pagmo2de8log_typeE"></span><span id="pagmo::de::log_type"></span><span class="target" id="classpagmo_1_1de_1ab53c7d8f0409804281678f71cca5893d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo2de13log_line_typeE" title="pagmo::de::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo2de8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -246,8 +249,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo2de2deEjddjddj">
-<span id="_CPPv3N5pagmo2de2deEjddjddj"></span><span id="_CPPv2N5pagmo2de2deEjddjddj"></span><span id="pagmo::de::de__unsigned.double.double.unsigned.double.double.unsigned"></span><span class="target" id="classpagmo_1_1de_1a55f61e3151466b8b978f9b9589d359a2"></span><code class="sig-name descname"><span class="pre">de</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">gen</span></em> <span class="pre">=</span> <span class="pre">1u</span>, <span class="pre">double</span> <em><span class="pre">F</span></em> <span class="pre">=</span> <span class="pre">0.8</span>, <span class="pre">double</span> <em><span class="pre">CR</span></em> <span class="pre">=</span> <span class="pre">0.9</span>, <span class="pre">unsigned</span> <em><span class="pre">variant</span></em> <span class="pre">=</span> <span class="pre">2u</span>, <span class="pre">double</span> <em><span class="pre">ftol</span></em> <span class="pre">=</span> <span class="pre">1e-6</span>, <span class="pre">double</span> <em><span class="pre">xtol</span></em> <span class="pre">=</span> <span class="pre">1e-6</span>, <span class="pre">unsigned</span> <em><span class="pre">seed</span></em> <span class="pre">=</span> <span class="pre">pagmo</span><span class="pre">::</span><span class="pre">random_device</span><span class="pre">::</span><span class="pre">next</span><span class="pre">(</span><span class="pre">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de2deEjddjddj" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2de2deEjddjddj">
+<span id="_CPPv3N5pagmo2de2deEjddjddj"></span><span id="_CPPv2N5pagmo2de2deEjddjddj"></span><span id="pagmo::de::de__unsigned.double.double.unsigned.double.double.unsigned"></span><span class="target" id="classpagmo_1_1de_1a55f61e3151466b8b978f9b9589d359a2"></span><span class="sig-name descname"><span class="n"><span class="pre">de</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">F</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.8</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CR</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.9</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">variant</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de2deEjddjddj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs de</p>
 <p>The following variants (mutation variants) are available to create a new candidate individual: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>                               <span class="mf">2.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>
@@ -280,8 +283,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de6evolveE10population">
-<span id="_CPPv3NK5pagmo2de6evolveE10population"></span><span id="_CPPv2NK5pagmo2de6evolveE10population"></span><span id="pagmo::de::evolve__populationC"></span><span class="target" id="classpagmo_1_1de_1a1ab270156c0dddcd2012bd1463a324bf"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a> <code class="sig-name descname"><span class="pre">evolve</span></code><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="pre">population</span></a><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de6evolveE10population">
+<span id="_CPPv3NK5pagmo2de6evolveE10population"></span><span id="_CPPv2NK5pagmo2de6evolveE10population"></span><span id="pagmo::de::evolve__populationC"></span><span class="target" id="classpagmo_1_1de_1a1ab270156c0dddcd2012bd1463a324bf"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <dl class="field-list simple">
@@ -301,8 +304,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo2de8set_seedEj">
-<span id="_CPPv3N5pagmo2de8set_seedEj"></span><span id="_CPPv2N5pagmo2de8set_seedEj"></span><span id="pagmo::de::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de_1ab4ecb2c76114d70692fa04888970b991"></span><span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2de8set_seedEj">
+<span id="_CPPv3N5pagmo2de8set_seedEj"></span><span id="_CPPv2N5pagmo2de8set_seedEj"></span><span id="pagmo::de::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de_1ab4ecb2c76114d70692fa04888970b991"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -312,8 +315,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de8get_seedEv">
-<span id="_CPPv3NK5pagmo2de8get_seedEv"></span><span id="_CPPv2NK5pagmo2de8get_seedEv"></span><span id="pagmo::de::get_seedC"></span><span class="target" id="classpagmo_1_1de_1ad25a980de97fb36cf6b8d1bec754448a"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_seed</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de8get_seedEv">
+<span id="_CPPv3NK5pagmo2de8get_seedEv"></span><span id="_CPPv2NK5pagmo2de8get_seedEv"></span><span id="pagmo::de::get_seedC"></span><span class="target" id="classpagmo_1_1de_1ad25a980de97fb36cf6b8d1bec754448a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -323,8 +326,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo2de13set_verbosityEj">
-<span id="_CPPv3N5pagmo2de13set_verbosityEj"></span><span id="_CPPv2N5pagmo2de13set_verbosityEj"></span><span id="pagmo::de::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de_1ad0d1e3fa1993ccb22f36649c9478063a"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">void</span> <code class="sig-name descname"><span class="pre">set_verbosity</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">level</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2de13set_verbosityEj">
+<span id="_CPPv3N5pagmo2de13set_verbosityEj"></span><span id="_CPPv2N5pagmo2de13set_verbosityEj"></span><span id="pagmo::de::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de_1ad0d1e3fa1993ccb22f36649c9478063a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1de_1a37257d11a85756488f338b37185a3004"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -349,8 +352,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de13get_verbosityEv">
-<span id="_CPPv3NK5pagmo2de13get_verbosityEv"></span><span id="_CPPv2NK5pagmo2de13get_verbosityEv"></span><span id="pagmo::de::get_verbosityC"></span><span class="target" id="classpagmo_1_1de_1a4d011ba8c065fb0a7805a2535ab8bef8"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_verbosity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de13get_verbosityEv">
+<span id="_CPPv3NK5pagmo2de13get_verbosityEv"></span><span id="_CPPv2NK5pagmo2de13get_verbosityEv"></span><span id="pagmo::de::get_verbosityC"></span><span class="target" id="classpagmo_1_1de_1a4d011ba8c065fb0a7805a2535ab8bef8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -360,8 +363,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de7get_genEv">
-<span id="_CPPv3NK5pagmo2de7get_genEv"></span><span id="_CPPv2NK5pagmo2de7get_genEv"></span><span id="pagmo::de::get_genC"></span><span class="target" id="classpagmo_1_1de_1a28f12495162fb2a59cd11a8c0d6775a9"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">unsigned</span> <code class="sig-name descname"><span class="pre">get_gen</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de7get_genEv">
+<span id="_CPPv3NK5pagmo2de7get_genEv"></span><span id="_CPPv2NK5pagmo2de7get_genEv"></span><span id="pagmo::de::get_genC"></span><span class="target" id="classpagmo_1_1de_1a28f12495162fb2a59cd11a8c0d6775a9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the generations. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -371,8 +374,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de8get_nameEv">
-<span id="_CPPv3NK5pagmo2de8get_nameEv"></span><span id="_CPPv2NK5pagmo2de8get_nameEv"></span><span id="pagmo::de::get_nameC"></span><span class="target" id="classpagmo_1_1de_1acb197065476522d09a7bd3ab663354e2"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de8get_nameEv">
+<span id="_CPPv3NK5pagmo2de8get_nameEv"></span><span id="_CPPv2NK5pagmo2de8get_nameEv"></span><span id="pagmo::de::get_nameC"></span><span class="target" id="classpagmo_1_1de_1acb197065476522d09a7bd3ab663354e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -383,8 +386,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo2de14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo2de14get_extra_infoEv"></span><span id="pagmo::de::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de_1a6a399c0acc415ab90973478cc6da84f0"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_extra_info</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de14get_extra_infoEv">
+<span id="_CPPv3NK5pagmo2de14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo2de14get_extra_infoEv"></span><span id="pagmo::de::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de_1a6a399c0acc415ab90973478cc6da84f0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -395,8 +398,8 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo2de7get_logEv">
-<span id="_CPPv3NK5pagmo2de7get_logEv"></span><span id="_CPPv2NK5pagmo2de7get_logEv"></span><span id="pagmo::de::get_logC"></span><span class="target" id="classpagmo_1_1de_1a37257d11a85756488f338b37185a3004"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4N5pagmo2de8log_typeE" title="pagmo::de::log_type"><span class="pre">log_type</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">get_log</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo2de7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo2de7get_logEv">
+<span id="_CPPv3NK5pagmo2de7get_logEv"></span><span id="_CPPv2NK5pagmo2de7get_logEv"></span><span id="pagmo::de::get_logC"></span><span class="target" id="classpagmo_1_1de_1a37257d11a85756488f338b37185a3004"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo2de8log_typeE" title="pagmo::de::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo2de7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1de_1ac010a4a7bbe3253a6c4a50d84d96c94c"><span class="std std-ref">de::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df as described in <a class="reference internal" href="#classpagmo_1_1de_1ad0d1e3fa1993ccb22f36649c9478063a"><span class="std std-ref">de::set_verbosity</span></a> </p>
 <dl class="field-list simple">

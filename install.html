@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,6 +33,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -185,21 +188,17 @@
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <p>pagmo is written in modern C++, and it requires a compiler able to understand
-at least C++17. pagmo is known to run on the following setups:</p>
+at least C++17. pagmo is currently tested on the following setups:</p>
 <ul class="simple">
-<li><p>GCC 7 and later versions on GNU/Linux,</p></li>
-<li><p>Clang 4 and later versions on GNU/Linux,</p></li>
-<li><p>MSVC 2015 and later versions on Windows,</p></li>
-<li><p>Clang 4 and later versions on Windows
-(with the <code class="docutils literal notranslate"><span class="pre">clang-cl</span></code> driver for MSVC),</p></li>
-<li><p>MinGW GCC 8 on Windows,</p></li>
-<li><p>Clang on OSX (Xcode 6.4 and later),</p></li>
-<li><p>Clang on FreeBSD.</p></li>
+<li><p>GCC 9 on GNU/Linux,</p></li>
+<li><p>Clang 11 on OSX,</p></li>
+<li><p>MSVC 2017 on Windows.</p></li>
 </ul>
+<p>The officially-supported architectures are 64-bit x86, ARM and PowerPC.</p>
 <p>The pagmo C++ library has the following <strong>mandatory</strong> dependencies:</p>
 <ul class="simple">
 <li><p>the <a class="reference external" href="https://www.boost.org/">Boost</a> C++ libraries (at least version 1.60),</p></li>
-<li><p>the <a class="reference external" href="https://www.threadingbuildingblocks.org/">Intel TBB</a> library.</p></li>
+<li><p>the <a class="reference external" href="https://github.com/oneapi-src/oneTBB/">Intel TBB</a> library.</p></li>
 </ul>
 <p>Additionally, pagmo has the following <strong>optional</strong> dependencies:</p>
 <ul class="simple">

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -209,8 +212,8 @@
   <div class="section" id="rosenbrock">
 <h1>Rosenbrock<a class="headerlink" href="#rosenbrock" title="Permalink to this headline">¶</a></h1>
 <dl class="cpp struct">
-<dt id="_CPPv4N5pagmo10rosenbrockE">
-<span id="_CPPv3N5pagmo10rosenbrockE"></span><span id="_CPPv2N5pagmo10rosenbrockE"></span><span id="pagmo::rosenbrock"></span><span class="target" id="structpagmo_1_1rosenbrock"></span><em class="property"><span class="pre">struct</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">rosenbrock</span></code><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrockE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo10rosenbrockE">
+<span id="_CPPv3N5pagmo10rosenbrockE"></span><span id="_CPPv2N5pagmo10rosenbrockE"></span><span id="pagmo::rosenbrock"></span><span class="target" id="structpagmo_1_1rosenbrock"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">rosenbrock</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrockE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Rosenbrock problem. </p>
 <p><img alt="../../../_images/rosenbrock.png" src="../../../_images/rosenbrock.png" /></p>
 <p>This is a box-constrained continuous single-objective problem. The objective function is the generalised n-dimensional Rosenbrock function: <div class="math notranslate nohighlight">
@@ -219,8 +222,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE">
-<span id="_CPPv3N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE"></span><span id="pagmo::rosenbrock::rosenbrock__vector_double::size_type"></span><span class="target" id="structpagmo_1_1rosenbrock_1a4b2de683f5fe89f2c739d763f5622a2e"></span><code class="sig-name descname"><span class="pre">rosenbrock</span></code><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <em><span class="pre">dim</span></em> <span class="pre">=</span> <span class="pre">2u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE">
+<span id="_CPPv3N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE"></span><span id="pagmo::rosenbrock::rosenbrock__vector_double::size_type"></span><span class="target" id="structpagmo_1_1rosenbrock_1a4b2de683f5fe89f2c739d763f5622a2e"></span><span class="sig-name descname"><span class="n"><span class="pre">rosenbrock</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrock10rosenbrockEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from dimension. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -233,8 +236,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="pagmo::rosenbrock::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2a102b0d620936c2388d96199068f8c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">fitness</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock7fitnessERK13vector_double"></span><span id="pagmo::rosenbrock::fitness__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2a102b0d620936c2388d96199068f8c"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock7fitnessERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Fitness computation. </p>
 <p>Computes the fitness for this UDP.</p>
 <dl class="field-list simple">
@@ -248,8 +251,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10rosenbrock10get_boundsEv">
-<span id="_CPPv3NK5pagmo10rosenbrock10get_boundsEv"></span><span id="_CPPv2NK5pagmo10rosenbrock10get_boundsEv"></span><span id="pagmo::rosenbrock::get_boundsC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a64b83e134a1701c49f4fdfb9f936a6f8"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">pair</span><span class="pre">&lt;</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">,</span> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10rosenbrock10get_boundsEv">
+<span id="_CPPv3NK5pagmo10rosenbrock10get_boundsEv"></span><span id="_CPPv2NK5pagmo10rosenbrock10get_boundsEv"></span><span id="pagmo::rosenbrock::get_boundsC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a64b83e134a1701c49f4fdfb9f936a6f8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bounds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock10get_boundsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -259,8 +262,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10rosenbrock8get_nameEv">
-<span id="_CPPv3NK5pagmo10rosenbrock8get_nameEv"></span><span id="_CPPv2NK5pagmo10rosenbrock8get_nameEv"></span><span id="pagmo::rosenbrock::get_nameC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2cf55a99b8b32a01105756fe1ed157b"></span><em class="property"><span class="pre">inline</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">string</span> <code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10rosenbrock8get_nameEv">
+<span id="_CPPv3NK5pagmo10rosenbrock8get_nameEv"></span><span id="_CPPv2NK5pagmo10rosenbrock8get_nameEv"></span><span id="pagmo::rosenbrock::get_nameC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ae2cf55a99b8b32a01105756fe1ed157b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -270,8 +273,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double">
-<span id="_CPPv3NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="pagmo::rosenbrock::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a3c4e71e8765df8cc7b58350f66df0469"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">gradient</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">&amp;</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double">
+<span id="_CPPv3NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo10rosenbrock8gradientERK13vector_double"></span><span id="pagmo::rosenbrock::gradient__vector_doubleCRC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a3c4e71e8765df8cc7b58350f66df0469"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock8gradientERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gradient. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -284,8 +287,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10rosenbrock10best_knownEv">
-<span id="_CPPv3NK5pagmo10rosenbrock10best_knownEv"></span><span id="_CPPv2NK5pagmo10rosenbrock10best_knownEv"></span><span id="pagmo::rosenbrock::best_knownC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a63c912dcbdbd147f4d4ccf193084a1f9"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a> <code class="sig-name descname"><span class="pre">best_known</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10rosenbrock10best_knownEv">
+<span id="_CPPv3NK5pagmo10rosenbrock10best_knownEv"></span><span id="_CPPv2NK5pagmo10rosenbrock10best_knownEv"></span><span id="pagmo::rosenbrock::best_knownC"></span><span class="target" id="structpagmo_1_1rosenbrock_1a63c912dcbdbd147f4d4ccf193084a1f9"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">best_known</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock10best_knownEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Optimal solution. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -295,8 +298,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5pagmo10rosenbrock17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo10rosenbrock17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo10rosenbrock17get_thread_safetyEv"></span><span id="pagmo::rosenbrock::get_thread_safetyC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ab4ff3f5879691cb655418fb1354ab63a"></span><em class="property"><span class="pre">inline</span></em> <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="pre">thread_safety</span></a> <code class="sig-name descname"><span class="pre">get_thread_safety</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10rosenbrock17get_thread_safetyEv">
+<span id="_CPPv3NK5pagmo10rosenbrock17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo10rosenbrock17get_thread_safetyEv"></span><span id="pagmo::rosenbrock::get_thread_safetyC"></span><span class="target" id="structpagmo_1_1rosenbrock_1ab4ff3f5879691cb655418fb1354ab63a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10rosenbrock17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread safety level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -309,8 +312,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
-<dt id="_CPPv4N5pagmo10rosenbrock5m_dimE">
-<span id="_CPPv3N5pagmo10rosenbrock5m_dimE"></span><span id="_CPPv2N5pagmo10rosenbrock5m_dimE"></span><span id="pagmo::rosenbrock::m_dim__vector_double::size_type"></span><span class="target" id="structpagmo_1_1rosenbrock_1ac8c667aff0ff25c947bda0787dabbe03"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="pre">vector_double</span></a><span class="pre">::</span><span class="pre">size_type</span> <code class="sig-name descname"><span class="pre">m_dim</span></code><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrock5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo10rosenbrock5m_dimE">
+<span id="_CPPv3N5pagmo10rosenbrock5m_dimE"></span><span id="_CPPv2N5pagmo10rosenbrock5m_dimE"></span><span id="pagmo::rosenbrock::m_dim__vector_double::size_type"></span><span class="target" id="structpagmo_1_1rosenbrock_1ac8c667aff0ff25c947bda0787dabbe03"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">m_dim</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10rosenbrock5m_dimE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Problem dimensions. </p>
 </dd></dl>
 

@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +33,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -195,8 +198,8 @@
 <p>A number of utilities to generate and use low- discrepancy sequences</p>
 <hr class="docutils" />
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE">
-<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">sample_from_simplex</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">double</span><span class="pre">&gt;</span> <em><span class="pre">in</span></em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE">
+<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sample_from_simplex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sample from a simplex. </p>
 <p>Samples a point on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex from a <span class="math notranslate nohighlight">\(n-1\)</span> dimensional point</p>
 <p>In order to generate a uniform distribution on a simplex, that is to sample a <span class="math notranslate nohighlight">\(n\)</span>-dimensional point <span class="math notranslate nohighlight">\(\mathbf x\)</span> such that <span class="math notranslate nohighlight">\(\sum_{i=1}^{n} x_i = 1\)</span> one can follow the following approach: take <span class="math notranslate nohighlight">\(n-1\)</span> random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of <span class="math notranslate nohighlight">\(n+1\)</span> numbers. Sort the list and record the differences between two consecutive elements. This creates a list of <span class="math notranslate nohighlight">\(n\)</span> number that, by construction, will sum up to 1. Moreover this sampling is uniform. As an example the following code would generate points distributed on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex:</p>
@@ -228,8 +231,8 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 
 <hr class="docutils" />
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo14van_der_corputE">
-<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">van_der_corput</span></code><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo14van_der_corputE">
+<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">van_der_corput</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Van der Corput sequence. </p>
 <p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math notranslate nohighlight">\(n \ge 1\)</span> is represented, in the base <span class="math notranslate nohighlight">\(b\)</span> by: <div class="math notranslate nohighlight">
 \[ n = \sum_{i=0}^{L-1}d_i(n) b^i, \]</div>
@@ -244,8 +247,8 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo14van_der_corput14van_der_corputEjj">
-<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><code class="sig-name descname"><span class="pre">van_der_corput</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">b</span></em> <span class="pre">=</span> <span class="pre">2u</span>, <span class="pre">unsigned</span> <em><span class="pre">n</span></em> <span class="pre">=</span> <span class="pre">0u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo14van_der_corput14van_der_corputEjj">
+<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><span class="sig-name descname"><span class="n"><span class="pre">van_der_corput</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
 <p>Consruct a van der Corput lowp-discrepancy sequence with base <code class="docutils literal notranslate"><span class="pre">b</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
 <dl class="field-list simple">
@@ -262,8 +265,8 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo14van_der_corputclEv">
-<span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span><span class="pre">double</span> <code class="sig-name descname"><span class="pre">operator()</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo14van_der_corputclEv">
+<span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -277,8 +280,8 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 
 <hr class="docutils" />
 <dl class="cpp class">
-<dt id="_CPPv4N5pagmo6haltonE">
-<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pagmo</span><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">halton</span></code><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo6haltonE">
+<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">halton</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Halton sequence. </p>
 <p>The Halton sequence is, essentially, a generalization of the van der Corput sequence to higher dimensions. It considers, along each dimension, a van der Corput sequence referred to co-prime numbers. Here, by default, we consider the sequence of all prime numbers starting from 2, 3, 5, …… so that, for example, for <code class="docutils literal notranslate"><span class="pre">dim</span></code> equal two the following sequence is generated:</p>
 <p><div class="math notranslate nohighlight">
@@ -297,8 +300,8 @@ See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_se
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo6halton6haltonEjj">
-<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><code class="sig-name descname"><span class="pre">halton</span></code><span class="sig-paren">(</span><span class="pre">unsigned</span> <em><span class="pre">dim</span></em> <span class="pre">=</span> <span class="pre">2u</span>, <span class="pre">unsigned</span> <em><span class="pre">n</span></em> <span class="pre">=</span> <span class="pre">0u</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo6halton6haltonEjj">
+<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><span class="sig-name descname"><span class="n"><span class="pre">halton</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
 <p>Consruct a Halton low-discrepancy sequence with dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
 <dl class="field-list simple">
@@ -315,8 +318,8 @@ See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_se
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5pagmo6haltonclEv">
-<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span><span class="pre">std</span><span class="pre">::</span><span class="pre">vector</span><span class="pre">&lt;</span><span class="pre">double</span><span class="pre">&gt;</span> <code class="sig-name descname"><span class="pre">operator()</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo6haltonclEv">
+<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
