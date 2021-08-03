@@ -42,7 +42,7 @@ of package managers on several platforms.
 Conda
 ^^^^^
 
-pagmo is available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows
+pagmo is available via the `conda <https://docs.conda.io/en/latest/>`__ package manager for Linux, OSX and Windows
 thanks to the infrastructure provided by `conda-forge <https://conda-forge.org/>`__.
 Two packages are available:
 
@@ -63,7 +63,7 @@ to the channels, and then we can immediately install pagmo:
 The conda packages for pagmo are maintained by the core development team,
 and they are regularly updated when new pagmo versions are released.
 
-Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
+Please refer to the `conda documentation <https://docs.conda.io/en/latest/>`__ for instructions on how to setup and manage
 your conda installation.
 
 Arch Linux
