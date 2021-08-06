@@ -21,8 +21,8 @@ source activate $deps_dir
 mkdir build
 cd build
 
-# GCC build with address sanitizer.
-cmake ../ -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DCMAKE_CXX_FLAGS="-fsanitize=address"
+# GCC build.
+cmake ../ -DCMAKE_BUILD_TYPE=Debug -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes
 make -j2 VERBOSE=1
 # Run the tests, except the fork island which
 # gives spurious warnings in the address sanitizer.
