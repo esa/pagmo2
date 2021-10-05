@@ -181,12 +181,12 @@ population pso::evolve(population pop) const
     // Copy the particle positions and their fitness
     // If calling from memory, the positions from last run may not be the same as the best population
     // so it is make a correction here
-    if (m_memory && m_memory_X) {
-        X = *m_memory_X;
-        lbX = *m_memory_lbX;
+    if (m_memory && m_memory_data) {
+        X = m_memory_data->m_X;
+        lbX = m_memory_data->m_lbX;
 
-        fit = *m_memory_fit;
-        lbfit = *m_memory_lbfit;
+        fit = m_memory_data->m_fit;
+        lbfit = m_memory_data->m_lbfit;
     } else {
         for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
             X[i] = pop.get_x()[i];
@@ -208,10 +208,10 @@ population pso::evolve(population pop) const
     }
 
     // Initialize the Swarm's topology
-    if (m_memory && m_memory_neighb) {
-        neighb = *m_memory_neighb;
-        best_fit = *m_memory_best_fit;
-        best_neighb = *m_memory_best_neighb;
+    if (m_memory && m_memory_data) {
+        neighb = m_memory_data->m_neighb;
+        best_fit = m_memory_data->m_best_fit;
+        best_neighb = m_memory_data->m_best_neighb;
     } else {
         switch (m_neighb_type) {
             case 1:
@@ -458,13 +458,7 @@ population pso::evolve(population pop) const
 
     // Keep memory variables only if asked for
     if (m_memory) {
-        m_memory_X = X;
-        m_memory_lbX = lbX;
-        m_memory_fit = fit;
-        m_memory_lbfit = lbfit;
-        m_memory_best_fit = best_fit;
-        m_memory_neighb = neighb;
-        m_memory_best_neighb = best_neighb;
+        m_memory_data = pso::memory{X, lbX, fit, lbfit, best_fit, neighb, best_neighb};
     }
 
     return pop;
