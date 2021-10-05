@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
@@ -254,9 +255,17 @@ private:
     unsigned m_neighb_param;
     // memory
     bool m_memory;
+    // Particle position for memory usage only
+    mutable std::optional<std::vector<vector_double>> m_memory_X;
+    mutable std::optional<std::vector<vector_double>> m_memory_lbX;
+    mutable std::optional<std::vector<vector_double>> m_memory_fit;
+    mutable std::optional<std::vector<vector_double>> m_memory_lbfit;
+    mutable std::optional<vector_double> m_memory_best_fit;
+    using population_size_t = decltype(std::declval<population>().size());
+    mutable std::optional<std::vector<std::vector<population_size_t>>> m_memory_neighb;
+    mutable std::optional<vector_double> m_memory_best_neighb;
     // paricles' velocities
     mutable std::vector<vector_double> m_V;
-
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;

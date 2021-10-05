@@ -179,12 +179,22 @@ population pso::evolve(population pop) const
     }
 
     // Copy the particle positions and their fitness
-    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
-        X[i] = pop.get_x()[i];
-        lbX[i] = pop.get_x()[i];
+    // If calling from memory, the positions from last run may not be the same as the best population
+    // so it is make a correction here
+    if (m_memory && m_memory_X) {
+        X = *m_memory_X;
+        lbX = *m_memory_lbX;
 
-        fit[i] = pop.get_f()[i];
-        lbfit[i] = pop.get_f()[i];
+        fit = *m_memory_fit;
+        lbfit = *m_memory_lbfit;
+    } else {
+        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+            X[i] = pop.get_x()[i];
+            lbX[i] = pop.get_x()[i];
+
+            fit[i] = pop.get_f()[i];
+            lbfit[i] = pop.get_f()[i];
+        }
     }
 
     // Initialize the particle velocities if necessary
@@ -198,25 +208,31 @@ population pso::evolve(population pop) const
     }
 
     // Initialize the Swarm's topology
-    switch (m_neighb_type) {
-        case 1:
-            initialize_topology__gbest(pop, best_neighb, best_fit, neighb);
-            break;
-        case 3:
-            initialize_topology__von(neighb);
-            break;
-        case 4:
-            initialize_topology__adaptive_random(neighb);
-            // need to track improvements in best found fitness, to know when to rewire
-            best_fit = pop.get_f()[pop.best_idx()];
-            break;
-        case 2:
-        default:
-            initialize_topology__lbest(neighb);
+    if (m_memory && m_memory_neighb) {
+        neighb = *m_memory_neighb;
+        best_fit = *m_memory_best_fit;
+        best_neighb = *m_memory_best_neighb;
+    } else {
+        switch (m_neighb_type) {
+            case 1:
+                initialize_topology__gbest(pop, best_neighb, best_fit, neighb);
+                break;
+            case 3:
+                initialize_topology__von(neighb);
+                break;
+            case 4:
+                initialize_topology__adaptive_random(neighb);
+                // need to track improvements in best found fitness, to know when to rewire
+                best_fit = pop.get_f()[pop.best_idx()];
+                break;
+            case 2:
+            default:
+                initialize_topology__lbest(neighb);
+        }
     }
     // auxiliary variables specific to the Fully Informed Particle Swarm variant
     double acceleration_coefficient = m_eta1 + m_eta2;
-    double sum_forces;
+    double sum_forces = 0.;
 
     double r1 = 0.;
     double r2 = 0.;
@@ -439,6 +455,18 @@ population pso::evolve(population pop) const
     for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
         pop.set_xf(i, lbX[i], lbfit[i]);
     }
+
+    // Keep memory variables only if asked for
+    if (m_memory) {
+        m_memory_X = X;
+        m_memory_lbX = lbX;
+        m_memory_fit = fit;
+        m_memory_lbfit = lbfit;
+        m_memory_best_fit = best_fit;
+        m_memory_neighb = neighb;
+        m_memory_best_neighb = best_neighb;
+    }
+
     return pop;
 }
 
