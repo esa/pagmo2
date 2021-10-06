@@ -203,25 +203,27 @@ BOOST_AUTO_TEST_CASE(pso_memory_test)
             auto log1 = ([&]() {
                 auto n_generations = 1u;
                 auto memory = true;
-                pso user_algo{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed};
-                user_algo.set_verbosity(1u);
+                algorithm algo{
+                    pso{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed}};
+                algo.set_verbosity(1u);
                 problem prob{rosenbrock{25u}};
                 population pop{prob, pop_size, seed};
-                pop = user_algo.evolve(pop);
-                pop = user_algo.evolve(pop);
-                pop = user_algo.evolve(pop);
-                return user_algo.get_log();
+                pop = algo.evolve(pop);
+                pop = algo.evolve(pop);
+                pop = algo.evolve(pop);
+                return algo.extract<pso>()->get_log();
             })();
 
             auto log2 = ([&]() {
                 auto n_generations = 3u;
                 auto memory = false;
-                pso user_algo{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed};
-                user_algo.set_verbosity(1u);
+                algorithm algo{
+                    pso{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed}};
+                algo.set_verbosity(1u);
                 problem prob{rosenbrock{25u}};
                 population pop{prob, pop_size, seed};
-                pop = user_algo.evolve(pop);
-                return user_algo.get_log();
+                pop = algo.evolve(pop);
+                return algo.extract<pso>()->get_log();
             })();
 
             // indexes 0 (Gen) and 1 (Fevals) may be different
@@ -233,6 +235,49 @@ BOOST_AUTO_TEST_CASE(pso_memory_test)
             BOOST_CHECK_CLOSE(std::get<4>(log1[0]), std::get<4>(log2[2]), 1e-8);
             // Check index 5 (Avg. Dist.)
             BOOST_CHECK_CLOSE(std::get<5>(log1[0]), std::get<5>(log2[2]), 1e-8);
+
+            // Make sure serializing and deserializing the results will give the same answer
+            auto serialize_and_deserialize = [](algorithm &algo) {
+                std::stringstream ss;
+                {
+                    boost::archive::binary_oarchive oarchive(ss);
+                    oarchive << algo;
+                }
+                algo = algorithm{};
+                {
+                    boost::archive::binary_iarchive iarchive(ss);
+                    iarchive >> algo;
+                }
+            };
+            auto log3 = ([&]() {
+                auto n_generations = 1u;
+                auto memory = true;
+                algorithm algo{
+                    pso{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                serialize_and_deserialize(algo);
+                pop = algo.evolve(pop);
+                serialize_and_deserialize(algo);
+                pop = algo.evolve(pop);
+                return algo.extract<pso>()->get_log();
+            })();
+            // While comparing the serialized vs non-serialized versions, all logs must be the same.
+            BOOST_CHECK_EQUAL(log1.size(), log3.size());
+            // Check index 0 (Gen)
+            BOOST_CHECK_EQUAL(std::get<0>(log1[0]), std::get<0>(log3[0]));
+            // Check index 1 (Fevals)
+            BOOST_CHECK_EQUAL(std::get<1>(log1[0]), std::get<1>(log3[0]));
+            // Check index 2 (gbest)
+            BOOST_CHECK_CLOSE(std::get<2>(log1[0]), std::get<2>(log3[0]), 1e-8);
+            // Check index 3 (Mean Vel.)
+            BOOST_CHECK_CLOSE(std::get<3>(log1[0]), std::get<3>(log3[0]), 1e-8);
+            // Check index 4 (Mean lbest)
+            BOOST_CHECK_CLOSE(std::get<4>(log1[0]), std::get<4>(log3[0]), 1e-8);
+            // Check index 5 (Avg. Dist.)
+            BOOST_CHECK_CLOSE(std::get<5>(log1[0]), std::get<5>(log3[0]), 1e-8);
         }
     }
 }

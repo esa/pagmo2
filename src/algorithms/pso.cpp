@@ -503,8 +503,15 @@ std::string pso::get_extra_info() const
 template <typename Archive>
 void pso::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e,
-                    m_seed, m_verbosity, m_log);
+    detail::archive(ar, m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param,
+                    m_memory, m_memory_data, m_V, m_e, m_seed, m_verbosity, m_log);
+}
+
+// Object'm memory serialization
+template <typename Archive>
+void pso::memory::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_X, m_lbX, m_fit, m_lbfit, m_best_fit, m_neighb, m_best_neighb);
 }
 
 /**
