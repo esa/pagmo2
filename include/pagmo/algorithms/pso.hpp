@@ -227,14 +227,12 @@ public:
 
 private:
     struct memory {
-        using population_size_t = decltype(std::declval<population>().size());
-
         std::vector<vector_double> m_X;
         std::vector<vector_double> m_lbX;
         std::vector<vector_double> m_fit;
         std::vector<vector_double> m_lbfit;
         vector_double m_best_fit;
-        std::vector<std::vector<population_size_t>> m_neighb;
+        std::vector<std::vector<population::size_type>> m_neighb;
         vector_double m_best_neighb;
 
         // Object serialization
