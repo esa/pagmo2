@@ -190,10 +190,10 @@ BOOST_AUTO_TEST_CASE(pso_memory_test)
 {
     // We check here that when memory is true calling evolve(pop) two times on 1 gen
     // is the same as calling 1 time evolve with 2 gens
-    auto omega = 0.5d;
-    auto eta1 = 0.5d;
-    auto eta2 = 0.5d;
-    auto max_vel = 0.5d;
+    auto omega = 0.5;
+    auto eta1 = 0.5;
+    auto eta2 = 0.5;
+    auto max_vel = 0.5;
     auto neighb_param = 4u;
     auto seed = 42u;
     auto pop_size = 10u;

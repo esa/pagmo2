@@ -30,10 +30,8 @@ see https://www.gnu.org/licenses/. */
 #define PAGMO_ALGORITHMS_PSO_HPP
 
 #include <boost/optional.hpp>
-#include <boost/serialization/optional.hpp>
 #include <string>
 #include <tuple>
-#include <type_traits>
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
