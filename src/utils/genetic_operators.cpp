@@ -285,7 +285,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
 /**
  * This function performs the polynomial mutation proposed by Agrawal and Deb over some chromosome.
  *
- * @see https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+ * @see https://dl.acm.org/doi/10.1504/IJAISC.2014.059280
  *
  * Example:
  * @code{.unparsed}
