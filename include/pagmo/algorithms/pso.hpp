@@ -225,6 +225,7 @@ public:
 
 private:
     struct memory {
+        std::vector<vector_double> m_V;
         std::vector<vector_double> m_X;
         std::vector<vector_double> m_lbX;
         std::vector<vector_double> m_fit;
@@ -271,8 +272,6 @@ private:
     bool m_memory;
     mutable boost::optional<pso::memory> m_memory_data;
 
-    // particles' velocities
-    mutable std::vector<vector_double> m_V;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;
