@@ -58,7 +58,7 @@ Some utilities to perform common genetic operations
 
    This function performs the polynomial mutation proposed by Agrawal and Deb over some chromosome / decision vector.
   
-   See: https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+   See: https://www.egr.msu.edu/~kdeb/papers/k2012016.pdf
 
    
 
